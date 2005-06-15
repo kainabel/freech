@@ -20,7 +20,7 @@
 ?>
 <?php
   include_once 'config.inc.php';
-  include_once "language/$cfg[lang].php";
+  include_once "language/$cfg[lang].inc.php";
   
   /* Prints the indexbar out.
    * Args: $_n_threads  The total number of threads

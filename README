@@ -1,0 +1,40 @@
+About Tefinch   [http://www.debain.org/tefinch]
+- - - - - - -
+
+This forum has been written 2003 by Samuel Abels and was rewritten in 2005
+by Robert Weidlich and Samuel Abels. For more information see the AUTHORS file.
+It is free software as distributed under the terms of the GPL which you should
+have received along with this package.
+
+Have Fun!
+-Samuel
+
+
+
+Additional Notes
+- - - - - - - - -
+
+If you have translated Tefinch to a new language, send us the translation!
+
+
+
+Prerequirements for Installation
+- - - - - - - - - - - - - - - - -
+
+ * A running MySQL database (4.1 or greater).
+ * A webserver with PHP4 support.
+
+
+
+Installation Instructions
+- - - - - - - - - - - - - -
+
+- Copy the contents of the "src/" directory to your webserver.
+
+- Edit the file "config.inc.php" according to your needs. It should be self explaining.
+
+- Create your database tables using the file mysql_nested.sql. If you have a rented webspace,
+  you usually do this by loading the file in the phpMyAdmin tool provided by your webspace
+  provider.
+
+- Done. You can now open the webpage.

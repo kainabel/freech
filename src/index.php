@@ -29,6 +29,16 @@
   $db = new TefinchDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
                       $cfg[db_name], $cfg[db_tablebase]);
   //$db->insert_entry(1, 2, "Samuel", "Testtitle4", "Testtext");
+
+  // Remove Escapes, which are added by the magic-quotes
+  function stripslashes_deep($value) {
+    return (is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value));
+  }
+  if (get_magic_quotes_gpc()) {
+     $_GET    = array_map('stripslashes_deep', $_GET);
+     $_POST  = array_map('stripslashes_deep', $_POST);
+     $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
+  }
   
   $_GET[hs]       = $_GET[hs] ? $_GET[hs] * 1 : 0;
   $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;

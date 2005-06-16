@@ -1,6 +1,6 @@
 <?php
   /*
-  Ammerum.
+  Tefinch.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify

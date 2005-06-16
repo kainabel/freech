@@ -1,6 +1,6 @@
 <?php
   /*
-  Ammerum.
+  Tefinch.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -32,18 +32,18 @@
   define("INDENT_DRAW_DASH",  1);
   define("INDENT_DRAW_SPACE", 2);
   
-  class AmmerumDB {
+  class TefinchDB {
     var $db;
     var $dh;
     var $tablebase;
     var $timeformat = '%y-%m-%d %H:%i';
     var $threadsperpage = 4;
     
-    function AmmerumDB($_host, $_user, $_pass, $_db, $_tablebase) {
+    function TefinchDB($_host, $_user, $_pass, $_db, $_tablebase) {
       $this->db        = $_db;
       $this->tablebase = $_tablebase;
       $this->dh        = mysql_connect($_host, $_user, $_pass)
-        or die("AmmerumDB::AmmerumDB(): Error: Can't connect."
+        or die("TefinchDB::TefinchDB(): Error: Can't connect."
              . " Please check username, password and hostname.");
       mysql_select_db($this->db)
         or die("Error: db_connect(): No database with the given name found.");
@@ -61,13 +61,13 @@
      ***********************************************************************/
     function _lock_write($table) {
       $sql = "LOCK TABLE $table WRITE";
-      //mysql_query($sql) or die("AmmerumDB::lock_write(): Failed!\n");
+      //mysql_query($sql) or die("TefinchDB::lock_write(): Failed!\n");
     }
     
     
     function _unlock_write() {
       $sql = "UNLOCK TABLES";
-      //mysql_query($sql) or die("AmmerumDB::unlock_write(): Failed!\n");
+      //mysql_query($sql) or die("TefinchDB::unlock_write(): Failed!\n");
     }
     
     
@@ -77,7 +77,7 @@
         $sql = "SELECT rgt FROM $table WHERE lft=0";
       else
         $sql = "SELECT rgt FROM $table WHERE id=$id";
-      $res = mysql_query($sql) or die("AmmerumDB::_get_rightmost(): Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::_get_rightmost(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->rgt ? $row->rgt : 0;
     }
@@ -89,7 +89,7 @@
         $sql = "SELECT threadid FROM $table WHERE lft=0";
       else
         $sql = "SELECT threadid FROM $table WHERE id=$id";
-      $res = mysql_query($sql) or die("AmmerumDB::_get_threadid(): Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::_get_threadid(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->threadid ? $row->threadid : 0;
     }
@@ -106,7 +106,7 @@
       $sql  = "SELECT id FROM $table";
       $sql .= " WHERE lft<=$lft AND rgt>=$rgt AND lft!=0";
       $sql .= " ORDER BY lft LIMIT 1";
-      $res = mysql_query($sql) or die("AmmerumDB::_is_parent(): Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::_is_parent(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->id;
     }
@@ -138,7 +138,7 @@
       $sql .= "DATE_FORMAT(created, '$this->timeformat') AS time";
       $sql .= " FROM $forum";
       $sql .= " WHERE id=$id";
-      $res = mysql_query($sql) or die("AmmerumDB::get_entry(): Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::get_entry(): Failed.");
       $row = mysql_fetch_object($res);
       return $row;
     }
@@ -166,9 +166,9 @@
       $rightmost = $this->_get_rightmost($forum, $parent);
       
       $sql = "SET AUTOCOMMIT=0;";
-      mysql_query($sql) or die("AmmerumDB::insert_entry(): AC0 failed.");
+      mysql_query($sql) or die("TefinchDB::insert_entry(): AC0 failed.");
       $sql = "BEGIN;";
-      mysql_query($sql) or die("AmmerumDB::insert_entry(): Begin failed.");
+      mysql_query($sql) or die("TefinchDB::insert_entry(): Begin failed.");
       
       // Update all higher-value nodes to make space for a new node.
       $sql  = "UPDATE $forum";
@@ -180,7 +180,7 @@
       $sql .= "                ELSE rgt END";
       $sql .= " WHERE rgt >= $rightmost";
       $sql .= " ORDER BY rgt DESC";
-      mysql_query($sql) or die("AmmerumDB::insert_entry(): Update failed.");
+      mysql_query($sql) or die("TefinchDB::insert_entry(): Update failed.");
       
       // Insert the new node.
       $name  = mysql_escape_string($_name);
@@ -190,17 +190,17 @@
       $sql .= " (lft, rgt, name, title, text, created)";
       $sql .= " VALUES ($rightmost, $rightmost + 1,";
       $sql .= "         '$name', '$title', '$text', NULL)";
-      mysql_query($sql) or die("AmmerumDB::insert_entry(): Insert failed.");
+      mysql_query($sql) or die("TefinchDB::insert_entry(): Insert failed.");
       $newid = mysql_insert_id();
       
       // Set the thread id.
       // FIXME: Is there a better way to do this?
       $threadid = $this->_get_toplevel($forum, $rightmost, $rightmost + 1);
       $sql = "UPDATE $forum SET threadid=$threadid WHERE id=$newid";
-      mysql_query($sql) or die("AmmerumDB::insert_entry(): Threadid failed.");
+      mysql_query($sql) or die("TefinchDB::insert_entry(): Threadid failed.");
       
       $sql = "COMMIT;";
-      mysql_query($sql) or die("AmmerumDB::insert_entry(): Commit failed.");
+      mysql_query($sql) or die("TefinchDB::insert_entry(): Commit failed.");
       
       $this->_unlock_write();
       return $newid;
@@ -237,7 +237,7 @@
       if ($id != 1) {
         // Get the range of children below the given node.
         $sql = "SELECT lft,rgt FROM $forum WHERE id=$id";
-        $res = mysql_query($sql) or die("AmmerumDB::foreach_child(): 1: Fail.");
+        $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 1: Fail.");
         $row = mysql_fetch_object($res);
         $leftmost  = $row ? $row->lft : 0;
         $rightmost = $row ? $row->rgt : 0;
@@ -249,7 +249,7 @@
         $sql .= " WHERE t1.id=t1.threadid AND t1.lft!=0";
         $sql .= " ORDER BY threadid DESC";
         $sql .= " LIMIT $offset, $this->threadsperpage";
-        $res = mysql_query($sql) or die("AmmerumDB::foreach_child(): 2: Fail.");
+        $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 2: Fail.");
       }
       
       // Build the SQL request to grab the complete threads.
@@ -276,7 +276,7 @@
       $sql .= ") ORDER BY t1.threadid DESC,t1.lft";
       
       // Walk through those threads.
-      $res = mysql_query($sql) or die("AmmerumDB::foreach_child(): 3 Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed.");
       $indent  = 0;
       $indents = array();
       $parents = array();
@@ -370,7 +370,7 @@
         $sql .= " ORDER BY created";
       $sql .= " DESC LIMIT $_n";
       $res = mysql_query($sql)
-               or die("AmmerumDB::foreach_latest_entry(): Failed.");
+               or die("TefinchDB::foreach_latest_entry(): Failed.");
       while ($row = mysql_fetch_object($res))
         $_func($row, $_data);
     }
@@ -382,7 +382,7 @@
       $sql  = "SELECT COUNT(DISTINCT threadid) AS threads";
       $sql .= " FROM $forum t1";
       $sql .= " WHERE t1.lft!=0";
-      $res = mysql_query($sql) or die("AmmerumDB::get_n_threads(): Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::get_n_threads(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->threads;
     }
@@ -399,7 +399,7 @@
       $sql .= " WHERE t1.threadid<$threadid";
       $sql .= " ORDER BY threadid DESC LIMIT 1";
       $res = mysql_query($sql)
-              or die("AmmerumDB::get_previous_thread_id(): Failed.");
+              or die("TefinchDB::get_previous_thread_id(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->threadid;
     }
@@ -415,7 +415,7 @@
       $sql  = "SELECT threadid FROM $forum t1";
       $sql .= " WHERE t1.threadid>$threadid";
       $sql .= " ORDER BY threadid LIMIT 1";
-      $res = mysql_query($sql) or die("AmmerumDB::get_next_thread_id(): Fail.");
+      $res = mysql_query($sql) or die("TefinchDB::get_next_thread_id(): Fail.");
       $row = mysql_fetch_object($res);
       return $row->threadid;
     }
@@ -426,7 +426,7 @@
       $forum  = $this->tablebase . ($_forum * 1);
       $id     = $_id * 1;
       $sql = "SELECT lft,rgt FROM $forum WHERE id=$id";
-      $res = mysql_query($sql) or die("AmmerumDB::get_n_children(): Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::get_n_children(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->rgt - $row->lft;
     }

@@ -1,6 +1,6 @@
 <?php
   /*
-  Ammerum.
+  Tefinch.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@
   include_once 'httpquery.inc.php';
   include_once 'messages.inc.php';
   
-  $db = new AmmerumDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
+  $db = new TefinchDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
                       $cfg[db_name], $cfg[db_tablebase]);
   //$db->insert_entry(1, 2, "Samuel", "Testtitle4", "Testtext");
   
@@ -37,7 +37,7 @@
                               array('forum_id', 'fold', 'swap', 'hs'));
   print("<html>\n"
       . "<head>\n"
-      . "<title>Ammerum2</title>"
+      . "<title>Tefinch</title>"
       . "</head>\n"
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
       . " alink='#5566DD'>\n");

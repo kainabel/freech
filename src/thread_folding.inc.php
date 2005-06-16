@@ -32,7 +32,7 @@
       else
         $this->default = UNFOLDED;
       
-      $_swapped = explode(',', $_swapped, 1000);
+      $_swapped = explode('.', $_swapped, 1000);
       $i = 0;
       while ($_swapped[$i] != '') {
         $this->swapped[$_swapped[$i] * 1] = $_swapped[$i] * 1;
@@ -47,7 +47,7 @@
     
     
     function get_string() {
-      return implode(',', $this->swapped);
+      return implode('.', $this->swapped);
     }
     
     
@@ -62,7 +62,7 @@
     
     function get_string_swap($_id = '') {
       if (!$_id)
-        return implode(',', $this->swapped);
+        return implode('.', $this->swapped);
       $id = $_id * 1;
       $swapped = $this->swapped;
       if ($swapped[$id] == $id)
@@ -70,7 +70,7 @@
       else
         $swapped[$id] = $id;
       ksort($swapped);
-      return implode(',', $swapped);
+      return implode('.', $swapped);
     }
   }
 ?>

@@ -20,6 +20,7 @@
   */
 
   include_once "language/$cfg[lang].inc.php";
+  include_once "mysql_nested.inc.php";
 
   function _escape($_string) {
     return htmlentities($_string,ENT_QUOTES);    
@@ -45,7 +46,7 @@
      $_name, $_subject, $_message allow to give default values
      $_hint is useful to print an error message
   */
-  function compose($_name,$_subject,$_message,$_hint) {
+  function msg_compose ($_name,$_subject,$_message,$_hint) {
     global $lang;
     global $queryvars;
     $holdvars   = array_merge($cfg[urlvars],
@@ -70,7 +71,7 @@
         . "</form>\n"); 
   }
   /* Show a preview of the message */
-  function preview ($_name,$_subject,$_message) {
+  function msg_preview ($_name,$_subject,$_message) {
     global $lang;
     global $queryvars;    
     $holdvars   = array_merge($cfg[urlvars],
@@ -78,11 +79,12 @@
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");
-         message_print(_escape($_name),
+         msg_print(_escape($_name),
                        _escape($_subject),
                        _escape_msg($_message),
                        time(),
-                       $_POST[msg_id]);
+                       $_POST[msg_id],
+                       $_POST[forum_id]);
     print("<p><form action='?".build_url($queryvars, $holdvars, $query)."' method='POST'>\n"
         . "<input type='hidden' name='name' value='"._escape($_name)."'>\n"
         . "<input type='hidden' name='subject' value='"._escape($_subject)."'>\n"
@@ -92,9 +94,26 @@
         . "<input type='submit' name='edit' value='$lang[change]'>\n"
         . "<input type='submit' name='send' value='$lang[send]'></p></table>\n");
   }
-  /* print out a message well formated */
-  function message_print ($_name,$_subject,$_message,$_time,$_msg_id) {
+  function msg_created ($_queryvars,$_holdvars,$_forum,$_parent_msg,$_msg_id) {
     global $lang;
+    // Give some status info and the usual links
+    print("<p><h2>$lang[entrysuccess]</h2><br>");
+    print("<a href='?".build_url($_queryvars, $_holdvars, 
+        array('msg_id'=>$_msg_id,'forum_id'=>$_forum,'read'=>1))
+        ."'>$lang[backtoentry]</a><br>");
+    if ($_parent_msg) 
+      print("<a href='?".build_url($queryvars, $holdvars, 
+        array('msg_id'=>$_parent_msg,'forum_id'=>$_forum,'read'=>1))
+        ."'>$lang[backtoparent]</a><br>");
+    print("<a href='?".build_url($queryvars, $holdvars, 
+        array('forum_id'=>$_forum,'list'=>1))
+        ."'>$lang[backtoindex]</a></p>");  
+  }
+  /* print out a message well formated */
+  function msg_print ($_name,$_subject,$_message,$_time,$_msg_id,$_forum_id) {
+    global $lang;
+    global $queryvars;
+    global $db;
     print("<p><table border='0' cellpadding='5' cellspacing='0' width='100%'>\n"
          ."<tbody><tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr valign='middle'><td>\n"
@@ -102,6 +121,14 @@
          ."<br><b>$_subject</b><br><i>$_name</i></td><td></td></tr></tbody>\n"
          ."</table></td></tr><tr><td><br>\n"
          .$_message
-         ."<br></td></tr></tbody></table></p>\n");
+         ."<br></td></tr><tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>");
+    $folding   = new ThreadFolding($_GET[fold], $_GET[swap]);
+    $db->foreach_child_in_thread($_forum_id,
+                                 $_msg_id,
+                                 0,
+                                 $folding,
+                                 print_row,
+                                 array($folding,$_queryvars));
+    print("</table></td></tr></tbody></table></p>\n");
   }
 ?>

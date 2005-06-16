@@ -154,6 +154,10 @@
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
     print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
+    // TODO, WORKING
+    print("&lt;&lt;&#032;$lang[entry]&#032;&gt;&gt;");
+    
+    print("&nbsp;&lt;&lt;&#032;$lang[thread]&#032;&gt;&gt;");
     
     $query = "";
     $query[write] = 1;

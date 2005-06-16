@@ -89,6 +89,7 @@
   
   function print_row($_row, $_indents, $_data) {
     global $cfg;
+    global $lang;
     
     list($folding, $queryvars) = $_data;
     $holdvars = array_merge($cfg[urlvars],
@@ -116,10 +117,12 @@
     $query = "";
     $query[msg_id] = $_row->id;
     $query[read] = 1;
-    print("<td align='left'>"
-        . "<font size='-1'>"
-        . "&nbsp;<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
-        . "$_row->title</a>&nbsp;");
+    print("<td align='left'><font size='-1'>&nbsp;");
+    if ($_row->active)
+      print("<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
+          . "$_row->title</a>&nbsp;");
+    else
+      print($lang[blockedtitle]."&nbsp;");
     if ($_row->leaftype == PARENT_WITH_CHILDREN_FOLDED) {
       print("(".( ceil (($_row->rgt - $_row->lft)/2)-1 ) .")");
     }
@@ -136,7 +139,10 @@
     print("<td><img src='img/null.png' alt='' width=4 height=23 /></td>\n");
     
     // User name.
-    print("<td align='left'><font size='-1'>$_row->name&nbsp;</font></td>\n");
+    print("<td align='left'><font size='-1'>");
+    if ($_row->active) print $_row->name;
+                  else print("------");
+    print("&nbsp;</font></td>\n");
     
     // Date.
     print("<td align='right' nowrap><font size='-1' color='red'>"
@@ -152,7 +158,7 @@
   
   function print_row_simple($_row, $_data) {
     global $cfg;
-    
+    if (!$_row->active) return;
     list($folding, $queryvars) = $_data;
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'fold', 'swap', 'hs'));

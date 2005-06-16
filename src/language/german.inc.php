@@ -34,6 +34,12 @@
   $lang[writemessage]     = "Neues Thema";
   $lang[noentries]        = "(Bisher keine Beiträge)"; // Not used
   $lang[entryindex]       = "Beitragsübersicht";
+
+  $lang[blockedtitle]     = "Gesperrter Beitrag";
+  $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
+                           ."eine rechtswidrige &Auml;u&szlig;erung oder verletzte "
+                           ."grob die Nutzungsbedingungen f&uuml;r unsere "
+                           . "Diskussionsforen. Er ist daher gel&ouml;scht worden.";
   
   // Compose
   $lang[writeamessage]    = "Neuen Beitrag für das Forum schreiben";

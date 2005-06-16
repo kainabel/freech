@@ -53,65 +53,58 @@
          $re = $entry->title;
       }
     }
-    compose('',$re,'','');
+    msg_compose('',$re,'','');
   } elseif (($_POST['preview'] === $lang['preview'] || $_POST['send'] === $lang['send'])
        && ( ctype_space($_POST['name']) 
          || ctype_space($_POST['subject']) 
          || ctype_space($_POST['message']) ) ) {
     // Check if everything is filled out
-    compose(_escape($_POST['name']),
+    msg_compose(_escape($_POST['name']),
             _escape($_POST['subject']),
             _escape($_POST['message']),
             $lang['somethingmissing']);
   } elseif ($_POST['preview'] === $lang['preview']) {
     // preview the article, escaping is done in preview()
-    preview($_POST['name'],$_POST['subject'],$_POST['message']);
+    msg_preview($_POST['name'],$_POST['subject'],$_POST['message']);
   } elseif ($_POST['edit'] === $lang['change']) {
     // Edit the message
-    compose(_escape($_POST['name']),_escape($_POST['subject']),_escape($_POST['message']),'');
+    msg_compose(_escape($_POST['name']),_escape($_POST['subject']),_escape($_POST['message']),'');
   } elseif ($_POST['send'] === $lang['send']) {
     // insert the message into db
-    $db->insert_entry($_GET['forum_id'],
-                 $_POST['msg_id'] ? $_POST['msg_id'] : 0,
-                 _escape($_POST['name']),
-                 _escape($_POST['subject']),
-                 _escape_msg($_POST['message']));
-    // Give some status info and the usual links
-    print("<p><h2>$lang[entrysuccess]</h2><br>");
-    // Need to know msg_id of created message TODO
-    /* print("<a href='?".build_url($queryvars, $holdvars, 
-        array('msg_id'=>????,'forum_id'=>$_POST['forum_id'],'read'=>1))
-        ."'>$lang[backtoentry]</a><br>"); */
-    if ($_POST[msg_id]) 
-      print("<a href='?".build_url($queryvars, $holdvars, 
-        array('msg_id'=>$_POST[msg_id],'forum_id'=>$_POST[forum_id],'read'=>1))
-        ."'>$lang[backtoparent]</a><br>");
-    print("<a href='?".build_url($queryvars, $holdvars, 
-        array('forum_id'=>$_POST[forum_id],'list'=>1))
-        ."'>$lang[backtoindex]</a></p>");
+    $newmsg_id = $db->insert_entry($_GET['forum_id'],
+                                   $_POST['msg_id'] ? $_POST['msg_id'] : 0,
+                                   _escape($_POST['name']),
+                                   _escape($_POST['subject']),
+                                   _escape_msg($_POST['message']));
+    msg_created ($queryvars,
+              $holdvars,
+              $_POST[forum_id],
+              $_POST[msg_id] ? $_POST[msg_id] : 0,
+              $newmsg_id);
   } elseif ($_POST['quote'] === $lang['quote']) {
     // insert a quote
     $entry = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
-    // add a line "user wrote date" and add "> " at the beginning of each line
-    $text = _unescape($entry->name)." ".$lang[wrote]." "._unescape($entry->time)."\n\n"
-            .preg_replace("/^/m","> ",_unescape(strip_tags($entry->text)));
-    compose(_escape($_POST['name']),
-            _escape($_POST['subject']),
-            _escape($text."\n\n".$_POST['message']),'');
+    if ($_GET['msg_id'] && $entry->active)
+      // add a line "user wrote date" and add "> " at the beginning of each line
+      $text = _unescape($entry->name)." ".$lang[wrote]." "._unescape($entry->time)."\n\n"
+              .preg_replace("/^/m","> ",_unescape(strip_tags($entry->text)))."\n\n";
+    msg_compose(_escape($_POST['name']),
+                _escape($_POST['subject']),
+                _escape($text.$_POST['message']),'');
   } elseif ($_GET['read'] === '1') {
     // read a message
     $entry = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
     // print top navi-bars
-    heading_print($queryvars,$entry->title);
+    if ($entry->active)
+      heading_print($queryvars,$entry->title);
+    else
+      heading_print($queryvars,$lang[blockedtitle]);
     messageindex_print($queryvars,$entry->id);
     // TODO
     if ($entry->active)
-      message_print ($entry->name,$entry->title,$entry->text,$entry->time,$entry->id);
+      msg_print ($entry->name,$entry->title,$entry->text,$entry->time,$entry->id,$_GET[forum_id]);
     else
-      print "<h2>Gesperrter Beitrag</h2><p>Der an dieser Stelle platzierte "
-           ."Kommentar enthielt eine rechtswidrige &Auml;u&szlig;erung oder verletzte "
-           ."grob die Nutzungsbedingungen f&uuml;r unsere Diskussionsforen. Er "
-           ."ist daher gel&ouml;scht worden.";
+      msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$entry->id,$_GET[forum_id]);
     messageindex_print($queryvars,$entry->id);      
   } elseif ($_GET['llist']) {
     $n_threads = $db->get_n_threads($_GET[forum_id]);
@@ -136,7 +129,6 @@
     $folding   = new ThreadFolding($_GET[fold], $_GET[swap]);
     heading_print($queryvars,'');
     threadindex_print($n_threads, $_GET[hs], $tpp, $ppi, $folding, $queryvars);
-  
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
     $db->foreach_child($_GET[forum_id],
                        1,

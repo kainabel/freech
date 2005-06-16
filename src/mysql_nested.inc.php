@@ -332,10 +332,11 @@
      * through all children of the top level node. */
     function foreach_child_in_thread($_forum, $_id, $_offset,
                                      $_fold, $_func, $_data) {
+      global $cfg;
       $id    = $_id    * 1;
-      $forum = $_forum * 1;
-      $threadid = _get_threadid($forum, $id);
-      foreach_child($_forum, $threadid, $_offset, $_fold, $_func, $_data);
+      $forum = $cfg[db_tablebase] . ($_forum * 1);
+      $threadid = $this->_get_threadid($forum, $id);
+      $this->foreach_child($_forum, $threadid, $_offset, $_fold, $_func, $_data);
     }
     
     

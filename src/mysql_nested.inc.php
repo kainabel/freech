@@ -253,13 +253,16 @@
       }
       
       // Build the SQL request to grab the complete threads.
+      $numrows = mysql_num_rows($res);
       $sql  = "SELECT t1.id,t1.lft,t1.rgt,t1.name,t1.title,t1.active,t1.text,";
       $sql .= "DATE_FORMAT(t1.created, '$this->timeformat') AS time";
       $sql .= " FROM $forum t1";
-      $sql .= " WHERE t1.lft!=0 AND (";
+      $sql .= " WHERE t1.lft!=0";
+      if ($id != 1 || $numrows > 0)
+        $sql .= " AND (";
       
       if ($id != 1)
-        $sql .= "t1.lft BETWEEN $leftmost AND $rightmost";
+        $sql .= " t1.lft BETWEEN $leftmost AND $rightmost";
       else {
         $first = 1;
         while ($row = mysql_fetch_object($res)) {
@@ -273,10 +276,12 @@
         }
       }
       
-      $sql .= ") ORDER BY t1.threadid DESC,t1.lft";
+      if ($id != 1 || $numrows > 0)
+        $sql .= ")";
+      $sql .= " ORDER BY t1.threadid DESC,t1.lft";
       
       // Walk through those threads.
-      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed. |$sql|" . mysql_error());
       $indent  = 0;
       $indents = array();
       $parents = array();

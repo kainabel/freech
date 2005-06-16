@@ -57,8 +57,9 @@
   function build_url($_urlvars, $_allowedvars, $_addvars) {
     foreach ($_allowedvars as $var)
       $vars[$var] = $_urlvars[$var];
-    foreach ($_addvars as $key => $val)
-      $vars[$key] = $val;
+    if ($_addvars)
+      foreach ($_addvars as $key => $val)
+        $vars[$key] = $val;
     return http_build_query($vars);
   }
 ?>

@@ -27,12 +27,12 @@
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
   $lang[next]             = "&Auml;ltere";
-  $lang[prev]             = "Neurere";
+  $lang[prev]             = "Neuere";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
-  $lang[noentries]        = "(Bisher keine Beiträge)"; // Not used
+  $lang[noentries]        = "(Bisher keine Beiträge)";
   $lang[entryindex]       = "Beitragsübersicht";
 
   $lang[blockedtitle]     = "Gesperrter Beitrag";

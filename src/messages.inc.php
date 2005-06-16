@@ -47,6 +47,7 @@
      $_hint is useful to print an error message
   */
   function msg_compose ($_name,$_subject,$_message,$_hint) {
+    global $cfg;
     global $lang;
     global $queryvars;
     $holdvars   = array_merge($cfg[urlvars],
@@ -102,10 +103,10 @@
         array('msg_id'=>$_msg_id,'forum_id'=>$_forum,'read'=>1))
         ."'>$lang[backtoentry]</a><br>");
     if ($_parent_msg) 
-      print("<a href='?".build_url($queryvars, $holdvars, 
+      print("<a href='?".build_url($_queryvars, $_holdvars, 
         array('msg_id'=>$_parent_msg,'forum_id'=>$_forum,'read'=>1))
         ."'>$lang[backtoparent]</a><br>");
-    print("<a href='?".build_url($queryvars, $holdvars, 
+    print("<a href='?".build_url($_queryvars, $_holdvars, 
         array('forum_id'=>$_forum,'list'=>1))
         ."'>$lang[backtoindex]</a></p>");  
   }

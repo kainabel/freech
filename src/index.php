@@ -136,6 +136,11 @@
                        $folding,
                        print_row,
                        array($folding, $queryvars));
+    if ($n_threads == 0) {
+      print("<tr><td height='4'></td></tr>");
+      print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
+      print("<tr><td height='4'></td></tr>");
+    }
     print("</table>\n");
   
     threadindex_print($n_threads, $_GET[hs], $tpp, $ppi, $folding, $queryvars);

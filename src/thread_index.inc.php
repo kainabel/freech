@@ -88,7 +88,21 @@
           . build_url($_queryvars, $holdvars, $query)
           . "'><font color='#FFFFFF'>$pages</font></a>\n");
     }
-    
+
+    if ($activepage > 1)
+      print("&nbsp;<a href='?"
+        . build_url($_queryvars, $holdvars, array ( hs => ( $activepage - 2)*$_tpp ))
+        . "'><font color='#FFFFFF'>$lang[prev]</font></a>\n");
+    else
+      print("&nbsp;<font color='#FFFFFF'>$lang[prev]</font></a>\n");
+
+    if ($activepage < $pages)
+      print("&nbsp;<a href='?"
+        . build_url($_queryvars, $holdvars, array ( hs => ($activepage)*$_tpp ))
+        . "'><font color='#FFFFFF'>$lang[next]</font></a>\n");
+    else
+      print("&nbsp;<font color='#FFFFFF'>$lang[next]</font></a>\n");
+
     $fold  = $_folding->get_default();
     $swap  = $_folding->get_string_swap();
     
@@ -125,4 +139,72 @@
     print("\t</tr>\n");
     print("</table>\n");
   }
+  
+  /* same as above, but shown, if a message is read */
+  function messageindex_print($_queryvars,$_msg_id) {
+    global $lang;
+    global $cfg;
+    
+    $holdvars   = array_merge($cfg[urlvars],
+                              array('forum_id', 'fold', 'swap', 'hs'));
+    
+    // Print "index".
+    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'"
+        . " bgcolor='#003399'>\n");
+    print("\t<tr>\n");
+    print("\t\t<td align='left'>\n");
+    print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
+    
+    $query = "";
+    $query[write] = 1;
+    print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, 
+                      array_merge($holdvars,array('msg_id')),
+                       $query)
+          . "'><font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
+    print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query)
+          . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");
+        
+    print("</b></font>\n");
+    print("\t\t</td>\n");
+    print("\t</tr>\n");
+    print("</table>\n");
+  } 
+  
+  function heading_print($_queryvars,$_title) {
+    global $lang;
+    global $cfg;
+    
+    $holdvars   = array_merge($cfg[urlvars],
+                              array('forum_id', 'fold', 'swap', 'hs'));
+    
+    // Print "index".
+    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'>\n");
+    print("\t<tr>\n");
+    print("\t\t<td align='left'>\n");
+    print("\t\t<font size='-1'>\n");
+    
+    $query = "";
+    $query['list'] = 1;
+    if ($_GET['read'] === '1' || $_GET['llist']) print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query) . "'>forum</a>\n"
+          . "&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
+    else print "&nbsp;&nbsp;forum";
+    
+    print("</font>\n");
+    print("\t\t</td>\n");
+    print("\t\t<td align='right'>\n");
+    print("\t\t<font size='-1'>\n");
+    
+    $query = "";
+    $query['llist'] = 1;
+    print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query) . "'>$lang[entryindex]</a>\n");
+    print("</font>\n");
+    print("\t\t</td>\n");        
+    print("\t</tr>\n");
+    print("</table>\n");
+  } 
+   
 ?>

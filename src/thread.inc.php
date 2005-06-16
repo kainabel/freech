@@ -20,6 +20,7 @@
 ?>
 <?php
   include_once 'httpquery.inc.php';
+  include_once 'mysql_nested.inc.php';
   
   // Draws the indent according to the given array.
   function _print_indent($_indents) {
@@ -98,7 +99,6 @@
     
     print("<td align='center' width=8>");
     print("<img src='img/null.png' width=8 height=23 alt='' />");
-    //print("|$_row->id: $_row->lft, $_row->rgt|");
     print("</td>\n");
     
     // Inner table.
@@ -115,12 +115,15 @@
     // Title.
     $query = "";
     $query[msg_id] = $_row->id;
+    $query[read] = 1;
     print("<td align='left'>"
         . "<font size='-1'>"
         . "&nbsp;<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
-        . "$_row->title"
-        . "</a>&nbsp;"
-        . "</font>"
+        . "$_row->title</a>&nbsp;");
+    if ($_row->leaftype == PARENT_WITH_CHILDREN_FOLDED) {
+      print("(".( ceil (($_row->rgt - $_row->lft)/2)-1 ) .")");
+    }
+    print("</font>"
         . "</td>\n");
     
     // End inner table.
@@ -146,4 +149,53 @@
     
     print("</tr>\n");
   }
+  
+  function print_row_simple($_row, $_data) {
+    global $cfg;
+    
+    list($folding, $queryvars) = $_data;
+    $holdvars = array_merge($cfg[urlvars],
+                            array('forum_id', 'fold', 'swap', 'hs'));
+    
+    // Open a new row.
+    print("<tr valign='middle' bgcolor='#ffffff'>\n");
+    
+    print("<td align='center' width=8>");
+    print("<img src='img/null.png' width=8 height=23 alt='' />");
+    print("</td>\n");
+    
+    // Inner table.
+    print("<td align='left'>\n");
+    
+    // Title.
+    $query = "";
+    $query[msg_id] = $_row->id;
+    $query[read] = 1;
+    print("<td align='left'>"
+        . "<font size='-1'>"
+        . "&nbsp;<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
+        . "$_row->title</a>&nbsp;"
+        . "</font>"
+        . "</td>\n");
+    
+    print("</td>\n");
+    
+    // Some space.
+    print("<td>&nbsp;</td>");
+    print("<td><img src='img/null.png' alt='' width=4 height=23 /></td>\n");
+    
+    // User name.
+    print("<td align='left'><font size='-1'>$_row->name&nbsp;</font></td>\n");
+    
+    // Date.
+    print("<td align='right' nowrap><font size='-1' color='red'>"
+        . "$_row->time"
+        . "</font></td>\n");
+    
+    print("<td align='center' width=8>");
+    print("<img src='img/null.png' width=8 height=23 alt='' />");
+    print("</td>\n");
+    
+    print("</tr>\n");
+  } 
 ?>

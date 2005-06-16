@@ -26,32 +26,36 @@
   $lang[index]            = "Seite";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
-  
-  // all below are not yet used.
+  $lang[next]             = "&Auml;ltere";
+  $lang[prev]             = "Neurere";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
-  $lang[noentries]        = "(Bisher keine BeitrÃ¤ge)";
+  $lang[noentries]        = "(Bisher keine Beiträge)"; // Not used
+  $lang[entryindex]       = "Beitragsübersicht";
   
   // Compose
-  $lang[writeamessage]    = "Neuen Beitrag fÃ¼r das Forum schreiben";
-  $lang[writeananswer]    = "Antwort fÃ¼r das Forum schreiben";
-  $lang[required]         = "(bitte unbedingt ausfÃ¼llen)";
+  $lang[writeamessage]    = "Neuen Beitrag für das Forum schreiben";
+  $lang[writeananswer]    = "Antwort für das Forum schreiben";
+  $lang[required]         = "(bitte unbedingt ausfüllen)";
   $lang[name]             = "Name";
-  $lang[msgtitle]         = "Ãœberschrift";
+  $lang[msgtitle]         = "Überschrift";
   $lang[msgbody]          = "Beitrag";
   $lang[msgimage]         = "Bild";
   $lang[preview]          = "Vorschau";
+  $lang[quote]            = "Zitat einfügen";
+  $lang[answer]           = "Re: ";
+  $lang[wrote]            = "schrieb am";
   
   // Preview
   $lang[reallysend]       = "Vorschau";
-  $lang[somethingmissing] = "Achtung! Ihr Beitrag ist nicht vollstÃ¤ndig.";
-  $lang[onlywhitespace]   = "Achtung! Ihr Beitrag enthÃ¤lt keinen sichtbaren Text.";
-  $lang[messagetoolong]   = "Ihr Beitrag ist lÃ¤nger als $cfg[maxlength] Zeichen.<br />Bitte kÃ¼rzen sie den Text.";
-  $lang[forgotname]       = "Bitte einen Namen eingeben.";
-  $lang[forgottitle]      = "Bitte einen Titel eingeben.";
-  $lang[forgottext]       = "Sie haben keinen Text eingegeben.";
+  $lang[somethingmissing] = "Achtung! Ihr Beitrag ist nicht vollständig.";
+  $lang[onlywhitespace]   = "Achtung! Ihr Beitrag enthält keinen sichtbaren Text."; // Not used
+  $lang[messagetoolong]   = "Ihr Beitrag ist länger als $cfg[maxlength] Zeichen.<br />Bitte kürzen sie den Text."; // Not used
+  $lang[forgotname]       = "Bitte einen Namen eingeben."; // Not used
+  $lang[forgottitle]      = "Bitte einen Titel eingeben."; // Not used
+  $lang[forgottext]       = "Sie haben keinen Text eingegeben."; // Not used
   $lang[change]           = "Bearbeiten";
   $lang[send]             = "Abschicken";
   

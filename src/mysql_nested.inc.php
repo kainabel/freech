@@ -361,18 +361,18 @@
       $forum  = $this->tablebase . ($_forum * 1);
       $id     = $_id * 1;
       $n      = $_n  * 1;
-      $sql  = "SELECT id,name,title,text,active";
-      $sql .= "DATE_FORMAT(t1.created, '$this->timeformat') AS time";
+      $sql  = "SELECT id,name,title,text,active,";
+      $sql .= "DATE_FORMAT(created, '$this->timeformat') AS time";
       $sql .= " FROM $forum";
       if ($updates)
         $sql .= " ORDER BY updated";
       else
-        $sql .= " ORDER BY creation";
-      $sql .= " LIMIT $n";
+        $sql .= " ORDER BY created";
+      $sql .= " DESC LIMIT $_n";
       $res = mysql_query($sql)
                or die("AmmerumDB::foreach_latest_entry(): Failed.");
       while ($row = mysql_fetch_object($res))
-        $func($row, $data);
+        $_func($row, $_data);
     }
     
     

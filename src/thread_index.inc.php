@@ -68,7 +68,7 @@
     // Print the numbers. Print the active number using another color.
     for ($i = $pageoffset; $i <= $pageoffset + $_ppi && $i <= $pages; $i++) {
       if ($i == $activepage)
-        print(" $i\n");
+        print(" <font color='#FFFFFF'>$i</font>\n");
       else {
         $query     = "";
         $query[hs] = ($i - 1) * $_tpp;
@@ -144,6 +144,8 @@
   function messageindex_print($_queryvars,$_msg_id) {
     global $lang;
     global $cfg;
+    global $db;
+    global $queryvars;
     
     $holdvars   = array_merge($cfg[urlvars],
                               array('forum_id', 'fold', 'swap', 'hs'));
@@ -155,21 +157,48 @@
     print("\t\t<td align='left'>\n");
     print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
     // TODO, WORKING
-    print("&lt;&lt;&#032;$lang[entry]&#032;&gt;&gt;");
+    print("&lt;&lt;");
+    print("&#032;$lang[entry]&#032;");
+    print("&gt;&gt;");
     
-    print("&nbsp;&lt;&lt;&#032;$lang[thread]&#032;&gt;&gt;");
+    print("&nbsp;");
+    if ($previd = $db->get_previous_thread_id($queryvars['forum_id'],$queryvars['msg_id'])) {
+      print("<a href=''>&lt;&lt;</a>");
+    } else {
+      print("&lt;&lt;");
+    }
+    print("&#032;$lang[thread]&#032;");
+    print("&gt;&gt;");
     
     $query = "";
     $query[write] = 1;
     print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, 
+          . build_url($queryvars, 
                       array_merge($holdvars,array('msg_id')),
                        $query)
           . "'><font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
     print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
+          . build_url($queryvars, $holdvars, $query)
           . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");
-        
+    if ($db->get_n_children($queryvars['forum_id'],
+                            $db->_get_threadid($db->tablebase.$queryvars['forum_id'],
+                                               $queryvars['msg_id'])) > 1) {
+      $query = "";
+      $query[read] = 1;
+      print ("&nbsp;<a href='?");
+      if ($queryvars['thread'] === "0") {
+        print build_url($queryvars, 
+                      array_merge($holdvars,array('msg_id')),
+                       $query)."'><font color='#FFFFFF'>$lang[showthread]</font>";
+      } else {
+        $query[thread] = '0';
+        print build_url($queryvars, 
+                      array_merge($holdvars,array('msg_id')),
+                       $query)."'><font color='#FFFFFF'>$lang[hidethread]</font>";
+      }
+      print ("</a>");
+    }
+     
     print("</b></font>\n");
     print("\t\t</td>\n");
     print("\t</tr>\n");

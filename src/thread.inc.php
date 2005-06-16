@@ -118,11 +118,14 @@
     $query[msg_id] = $_row->id;
     $query[read] = 1;
     print("<td align='left'><font size='-1'>&nbsp;");
-    if ($_row->active)
+    if (!$_row->active)
+      print($lang[blockedtitle]."&nbsp;");
+    elseif ($_row->id === $_GET[msg_id])
+      print("<font color='green'>$_row->title</font>");
+    else
       print("<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
           . "$_row->title</a>&nbsp;");
-    else
-      print($lang[blockedtitle]."&nbsp;");
+
     if ($_row->leaftype == PARENT_WITH_CHILDREN_FOLDED) {
       print("(".( ceil (($_row->rgt - $_row->lft)/2)-1 ) .")");
     }
@@ -140,12 +143,16 @@
     
     // User name.
     print("<td align='left'><font size='-1'>");
-    if ($_row->active) print $_row->name;
-                  else print("------");
+    if (!$_row->active) print("------");
+      elseif ($_row->id === $_GET[msg_id]) print("<font color='green'>$_row->name</font>");
+      else print $_row->name;
     print("&nbsp;</font></td>\n");
     
     // Date.
-    print("<td align='right' nowrap><font size='-1' color='red'>"
+    if ($_row->id === $_GET[msg_id]) $color = 'green';
+                                else $color = 'red';
+    // TODO: Nur Beiträge der letzten 24h rot.
+    print("<td align='right' nowrap><font size='-1' color='$color'>"
         . "$_row->time"
         . "</font></td>\n");
     

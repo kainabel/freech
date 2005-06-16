@@ -34,6 +34,8 @@
   $lang[writemessage]     = "Neues Thema";
   $lang[noentries]        = "(Bisher keine Beiträge)";
   $lang[entryindex]       = "Beitragsübersicht";
+  $lang[hidethread]       = "Thread-Anzeige ausblenden";
+  $lang[showthread]       = "Thread-Anzeige einblenden";
 
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "

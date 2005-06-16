@@ -34,7 +34,7 @@
   $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
   parse_str($_SERVER['QUERY_STRING'], $queryvars);
   $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'fold', 'swap', 'hs', 'thread'));
   print("<html>\n"
       . "<head>\n"
       . "<title>Tefinch</title>"
@@ -42,10 +42,10 @@
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
       . " alink='#5566DD'>\n");
   // Choose action
-  if ($_GET['write'] === '1') {
+  if ($queryvars['write'] === '1') {
     // if writing an answer insert the title of the answered message
-    if ($_GET['msg_id']) {
-      $entry = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
+    if ($queryvars['msg_id']) {
+      $entry = $db->get_entry($queryvars['forum_id'], $queryvars['msg_id']);
       // add a 'Re: ' if necessary
       if (strpos($entry->title,$lang[answer]) !== 0 and $entry->title != "") { 
          $re = $lang[answer].$entry->title;
@@ -71,42 +71,45 @@
     msg_compose(_escape($_POST['name']),_escape($_POST['subject']),_escape($_POST['message']),'');
   } elseif ($_POST['send'] === $lang['send']) {
     // insert the message into db
-    $newmsg_id = $db->insert_entry($_GET['forum_id'],
-                                   $_POST['msg_id'] ? $_POST['msg_id'] : 0,
+    $newmsg_id = $db->insert_entry($queryvars['forum_id'],
+                                   $queryvars['msg_id'] ? $queryvars['msg_id'] : 0,
                                    _escape($_POST['name']),
                                    _escape($_POST['subject']),
                                    _escape_msg($_POST['message']));
-    msg_created ($queryvars,
-              $holdvars,
-              $_POST[forum_id],
-              $_POST[msg_id] ? $_POST[msg_id] : 0,
-              $newmsg_id);
+    msg_created($newmsg_id,$queryvars);
   } elseif ($_POST['quote'] === $lang['quote']) {
     // insert a quote
-    $entry = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
-    if ($_GET['msg_id'] && $entry->active)
+    $entry = $db->get_entry($queryvars['forum_id'], $queryvars['msg_id']);
+    if ($queryvars['msg_id'] && $entry->active)
       // add a line "user wrote date" and add "> " at the beginning of each line
       $text = _unescape($entry->name)." ".$lang[wrote]." "._unescape($entry->time)."\n\n"
               .preg_replace("/^/m","> ",_unescape(strip_tags($entry->text)))."\n\n";
     msg_compose(_escape($_POST['name']),
                 _escape($_POST['subject']),
                 _escape($text.$_POST['message']),'');
-  } elseif ($_GET['read'] === '1') {
+  } elseif ($queryvars['read'] === '1') {
     // read a message
-    $entry = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
+    $entry = $db->get_entry($queryvars['forum_id'], $queryvars['msg_id']);
     // print top navi-bars
     if ($entry->active)
       heading_print($queryvars,$entry->title);
     else
       heading_print($queryvars,$lang[blockedtitle]);
     messageindex_print($queryvars,$entry->id);
-    // TODO
+    if ($queryvars['thread']) {
+      $thread = 1;
+    } elseif ($queryvars['thread'] === "0") {
+      $thread = 0;
+    } else {
+      $thread = 1;
+    }
+    // TODO: Wenn keine Antwort auf ein Thema vorhanden ist, dann Thread ausblenden
     if ($entry->active)
-      msg_print ($entry->name,$entry->title,$entry->text,$entry->time,$entry->id,$_GET[forum_id]);
+      msg_print ($entry->name,$entry->title,$entry->text,$entry->time,$thread);
     else
-      msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$entry->id,$_GET[forum_id]);
+      msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$thread);
     messageindex_print($queryvars,$entry->id);      
-  } elseif ($_GET['llist']) {
+  } elseif ($queryvars['llist']) {
     $n_threads = $db->get_n_threads($_GET[forum_id]);
     $tpp       = $db->get_n_threads_per_page();
     $ppi       = 5;
@@ -121,7 +124,7 @@
                               array($folding, $queryvars));
     print("</table>\n");
     threadindex_print($n_threads, $_GET[hs], $tpp, $ppi, $folding, $queryvars);      
-  } elseif ($_GET['list'] === '1' || $_GET['forum_id']) {
+  } elseif ($queryvars['list'] === '1' || $queryvars['forum_id']) {
     // show the message-tree
     $n_threads = $db->get_n_threads($_GET[forum_id]);
     $tpp       = $db->get_n_threads_per_page();

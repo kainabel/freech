@@ -234,6 +234,8 @@
       $id     = $_id     * 1;
       $offset = $_offset * 1;
       
+      //print("ID: $_id<br/>\n");
+      
       if ($id != 1) {
         // Get the range of children below the given node.
         $sql = "SELECT lft,rgt FROM $forum WHERE id=$id";
@@ -266,6 +268,12 @@
       else {
         $first = 1;
         while ($row = mysql_fetch_object($res)) {
+          /*
+          if ($_fold->is_folded($row->id))
+            print("$row->id: Folded<br/>\n");
+          else
+            print("$row->id: Unfolded<br/>\n");
+           */
           if (!$first)
             $sql .= " OR ";
           if ($_fold->is_folded($row->id))
@@ -318,7 +326,9 @@
         
         // Indent.
         $parents[$indent] = $row;
-        if (!$this->_is_leaf($row) && !$_fold->is_folded($row->id)) {
+        if ($row->leaftype == PARENT_WITH_CHILDREN_UNFOLDED
+          || $row->leaftype == CHILD_WITH_CHILDREN
+          || $row->leaftype == BRANCHBOTTOM_CHILD_WITH_CHILDREN) {
           if ($row->leaftype == CHILD_WITHOUT_CHILDREN
            || $row->leaftype == CHILD_WITH_CHILDREN)
             $indents[$indent] = INDENT_DRAW_DASH;

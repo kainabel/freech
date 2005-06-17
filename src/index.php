@@ -73,7 +73,7 @@
     // Check if everything is filled out
     msg_compose($_POST['name'],$_POST['subject'],$_POST['message'],$lang['somethingmissing'],$queryvars);
   } elseif ($_POST['preview'] === $lang['preview']) {
-    // preview the article, escaping is done in preview()
+    // preview the article
     msg_preview($_POST['name'],$_POST['subject'],$_POST['message'],$queryvars);
   } elseif ($_POST['edit'] === $lang['change']) {
     // Edit the message
@@ -102,26 +102,50 @@
                             $db->_get_threadid($db->tablebase.$queryvars['forum_id'],
                             $queryvars['msg_id'])) > 1) $haschild = 1;
                       else $haschild = 0;
+    // print treeview or not
+    $folding   = new ThreadFolding($queryvars[fold], $queryvars[swap]);
+    if ($queryvars['thread'] === "0" || ! $haschild)
+      $thread = 0;
+    elseif ($queryvars['thread'] === '1')
+      $thread = 1;
+    elseif ($folding->is_folded($queryvars['msg_id'])) {
+      $thread = 0;
+      $queryvars['thread'] = '0';
+    } else
+      $thread = 1; 
     // print top navi-bars
     if ($entry->active)
       heading_print($queryvars,$entry->title);
     else
       heading_print($queryvars,$lang[blockedtitle]);
-
-    messageindex_print($entry->id,0,0,0,0,$haschild,$queryvars);
-    if ($queryvars['thread'] === "0" || ! $haschild)
-      $thread = 0;
-    else 
-      $thread = 1;
-
-    if ($entry->active)
+    // TODO: Verhalten bei gesperrten Beiträgen. Heise 'übergeht' diese.
+    /* Mögliche Lösung: ermittelten (nächsten/vorherigen) Beitrag abrufen, active-Flag
+                        prüfen; wenn gesperrt, dann noch eine weitere next-/prev-id
+                        ermitteln und wieder auf active prüfen.
+    */
+    $prev_thread_id = $db->get_previous_thread_id($queryvars[forum_id], $queryvars[msg_id]);
+    $next_thread_id = $db->get_next_thread_id($queryvars[forum_id], $queryvars[msg_id]);
+    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,0,0,$haschild,$queryvars);
+    if ($entry->active) {
       msg_print (_unescape($entry->name),
                  _unescape($entry->title),
                  _unescape($entry->text),
-                 $entry->time,$thread,$queryvars);
-    else
-      msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$thread);
-    messageindex_print($entry->id,0,0,0,0,$haschild,$queryvars);      
+                 $entry->time,$queryvars);
+      if ($thread) {
+        print("<tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>");
+        $folding   = new ThreadFolding(0,0);
+        $db->foreach_child_in_thread($queryvars['forum_id'],
+                                     $queryvars['msg_id'],
+                                     0,
+                                     $folding,
+                                     print_row,
+                                     array($folding,$queryvars));
+        print("</table></td></tr>");
+    }
+
+    } else
+      msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$thread,$queryvars);
+    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,0,0,$haschild,$queryvars);      
   } elseif ($queryvars['llist']) {
     // TODO: seperate Navibars
     $n_threads = $db->get_n_threads($queryvars[forum_id]);

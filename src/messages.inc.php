@@ -32,7 +32,7 @@
      make quotes red */
   function _escape_msg($_string) {
     foreach ( explode("\n",$_string) as $line ) {
-      if (strpos($line,"&gt; ") === 0) {
+      if (strpos($line,"> ") === 0) {
         $text .= $line."\n";
       } else {
         $text .= wordwrap($line,80)."\n";
@@ -76,7 +76,7 @@
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");
          // TODO: time mit format
-         msg_print($_name,$_subject,$_message,time(),0,$_queryvars);
+         msg_print($_name,$_subject,$_message,time(),$_queryvars);
     print("<p><form action='?".build_url($_queryvars, $holdvars,'')
         ."' method='POST'>\n"
         . "<input type='hidden' name='name' value='"._escape($_name)."'>\n"
@@ -91,7 +91,7 @@
   function msg_created ($_msg_id,$_queryvars) {
     global $lang;
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'msg_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'fold', 'swap', 'hs'));
     // Give some status info and the usual links
     print("<p><h2>$lang[entrysuccess]</h2><br>");
     print("<a href='?".build_url($_queryvars, $holdvars, 
@@ -109,7 +109,7 @@
     $_name, $_subject, $_message, $_time - values which are shown
     $_showthread - whether to show (1) or to hide (0) the messagetree
   */
-  function msg_print ($_name,$_subject,$_message,$_time,$_showthread,$_queryvars) {
+  function msg_print ($_name,$_subject,$_message,$_time,$_queryvars) {
     global $lang;
     global $db;
     print("<p><table border='0' cellpadding='5' cellspacing='0' width='100%'>\n"
@@ -119,18 +119,6 @@
          ."<br><b>"._escape($_subject)."</b><br><i>"._escape($_name)."</i></td><td></td></tr></tbody>\n"
          ."</table></td></tr><tr><td><br>\n"
          .preg_replace("/^(&gt;&nbsp;.*)/m","<font color='red'>$1</font>",nl2br(_escape_msg($_message)))
-         ."<br></td></tr>");
-    if ($_showthread) {
-      print("<tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>");
-      $folding   = new ThreadFolding($_queryvars['fold'], $_queryvars['swap']);
-      $db->foreach_child_in_thread($_queryvars['forum_id'],
-                                   $_queryvars['msg_id'],
-                                   0,
-                                   $folding,
-                                   print_row,
-                                   array($folding,$_queryvars));
-      print("</table></td></tr>");
-    }
-    print("</tbody></table></p>\n");
+         ."<br></td></tr></tbody></table></p>\n");
   }
 ?>

@@ -34,7 +34,7 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'fold', 'swap', 'hs', 'list'));
     
     $pages      = ceil($_n_threads / $_tpp);
     $activepage = ceil($_offset / $_tpp) + 1;
@@ -156,20 +156,31 @@
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
     print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
-    // TODO, WORKING
+    // TODO: need get_next_msg_id and get_prev_msg_id in mysql_nested.inc.php
     print("&lt;&lt;");
     print("&#032;$lang[entry]&#032;");
     print("&gt;&gt;");
     
     print("&nbsp;");
-    if ($_prev_thread_id > 0) {
-      print("<a href=''>&lt;&lt;</a>");
+    if ($_next_thread_id > 0) {
+      $query = "";
+      $query[msg_id] = $_next_thread_id * 1;
+      $query[read] = 1;
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
+           ."<font color='#FFFFFF'>&lt;&lt;</font></a>");
     } else {
       print("&lt;&lt;");
     }
     print("&#032;$lang[thread]&#032;");
+    if ($_prev_thread_id > 0) {
+      $query = "";
+      $query[msg_id] = $_prev_thread_id * 1;
+      $query[read] = 1;
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
+           ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
+    } else {
     print("&gt;&gt;");
-    
+    }
     $query = "";
     $query[write] = 1;
     print("&nbsp;&nbsp;<a href='?"
@@ -183,6 +194,7 @@
       $query[read] = 1;
       print ("&nbsp;<a href='?");
       if ($_queryvars['thread'] === "0") {
+        $query[thread] = '1';
         print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
               ."'><font color='#FFFFFF'>$lang[showthread]</font>";
       } else {

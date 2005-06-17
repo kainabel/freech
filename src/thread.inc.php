@@ -56,9 +56,15 @@
       
     case PARENT_WITH_CHILDREN_UNFOLDED:
       $query = "";
-      $swap = $_folding->get_string_swap($_row->id);
-      $query[swap] = $swap ? $swap : '';
-      $query[fold] = $_folding->get_default();
+      if ($_queryvars['read'] === '1') {
+        $query[thread] = '0';
+        $holdvars = array_merge($holdvars,
+                                array('read','msg_id','thread'));
+      } else {
+        $swap = $_folding->get_string_swap($_row->id);
+        $query[swap] = $swap ? $swap : '';
+        $query[fold] = $_folding->get_default();
+      }
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
       print("<img src='img/m.png' border=0 width=9 height=21 alt='' />");
       print("</a>");
@@ -120,7 +126,7 @@
     print("<td align='left'><font size='-1'>&nbsp;");
     if (!$_row->active)
       print($lang[blockedtitle]."&nbsp;");
-    elseif ($_row->id === $_GET[msg_id])
+    elseif ($_row->id === $queryvars[msg_id] && $queryvars[read] === '1')
       print("<font color='green'>$_row->title</font>");
     else
       print("<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
@@ -144,12 +150,12 @@
     // User name.
     print("<td align='left'><font size='-1'>");
     if (!$_row->active) print("------");
-      elseif ($_row->id === $_GET[msg_id]) print("<font color='green'>$_row->name</font>");
+      elseif ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') print("<font color='green'>$_row->name</font>");
       else print $_row->name;
     print("&nbsp;</font></td>\n");
     
     // Date.
-    if ($_row->id === $_GET[msg_id]) $color = 'green';
+    if ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') $color = 'green';
                                 else $color = 'red';
     // TODO: Nur Beiträge der letzten 24h rot.
     print("<td align='right' nowrap><font size='-1' color='$color'>"

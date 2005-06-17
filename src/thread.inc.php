@@ -138,7 +138,7 @@
     print("</td>\n");
     
     // Some space.
-    print("<td>&nbsp;</td>");
+    //print("<td>&nbsp;</td>");
     print("<td><img src='img/null.png' alt='' width=4 height=23 /></td>\n");
     
     // User name.

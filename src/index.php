@@ -163,6 +163,7 @@
     threadindex_print($n_threads, $queryvars[hs], $tpp, $ppi, $folding, $queryvars);
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
     $db->foreach_latest_entry($queryvars[forum_id],
+                              0,
                               $tpp,
                               0,
                               print_row_simple,

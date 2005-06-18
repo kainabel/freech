@@ -429,6 +429,7 @@
     
     /* Returns latest entries from the given forum.
      * $_forum:   The forum id.
+     * $_offset:  The offset of the first entry.
      * $_n:       The number of entries.
      * $_updates: Whether an updated entry is treated like a newly inserted one.
      * $_func:    A reference to the function to which each row will be
@@ -445,10 +446,16 @@
      *            - time
      *  $data: The data given this function in $_data.
      */
-    function foreach_latest_entry($_forum, $_n, $_updates, $_func, $_data) {
+    function foreach_latest_entry($_forum,
+                                  $_offset,
+                                  $_n,
+                                  $_updates,
+                                  $_func,
+                                  $_data) {
       $forum  = $this->tablebase . ($_forum * 1);
-      $id     = $_id * 1;
-      $n      = $_n  * 1;
+      $id     = $_id     * 1;
+      $offset = $_offset * 1;
+      $n      = $_n      * 1;
       $sql  = "SELECT id,name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
@@ -457,7 +464,7 @@
         $sql .= " ORDER BY updated";
       else
         $sql .= " ORDER BY created";
-      $sql .= " DESC LIMIT $_n";
+      $sql .= " DESC LIMIT $offset, $_n";
       $res = mysql_query($sql)
                or die("TefinchDB::foreach_latest_entry(): Failed.");
       while ($row = mysql_fetch_object($res))

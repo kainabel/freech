@@ -39,9 +39,13 @@
 
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
-                           ."eine rechtswidrige &Auml;u&szlig;erung oder verletzte "
-                           ."grob die Nutzungsbedingungen f&uuml;r unsere "
-                           . "Diskussionsforen. Er ist daher gel&ouml;scht worden.";
+                           ."eine rechtswidrige Äußerung oder verletzte "
+                           ."grob die Nutzungsbedingungen für unsere "
+                           . "Diskussionsforen. Er ist daher gelöscht worden.";
+  
+  $lang[noentrytitle]     = "Dieser Beitrag ist nicht vorhanden";
+  $lang[noentrybody]      = "Der von ihnen angeforderte Eintrag existiert in diesem"
+                           ." Forum nicht";
   
   // Compose
   $lang[writeamessage]    = "Neuen Beitrag für das Forum schreiben";

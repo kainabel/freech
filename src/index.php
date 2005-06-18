@@ -116,6 +116,8 @@
     // print top navi-bars
     if ($entry->active)
       heading_print($queryvars,$entry->title);
+    elseif (!$entry)
+      heading_print($queryvars,$lang[noentrytitle]);    
     else
       heading_print($queryvars,$lang[blockedtitle]);
     messageindex_print($entry->id,
@@ -140,11 +142,17 @@
                                      print_row,
                                      array($folding,$queryvars));
         print("</table></td></tr>");
-    }
-
+      }
+    } elseif (! $entry) {
+      msg_print ('',$lang[noentrytitle],$lang[noentrybody],'',0,$queryvars);
     } else
       msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$thread,$queryvars);
-    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,$prev_entry_id,$next_entry_id,$haschild,$queryvars);      
+    messageindex_print($entry->id,
+                       $entry->prev_thread,
+                       $entry->next_thread,
+                       $entry->prev_entry,
+                       $entry->next_entry,
+                       $haschild,$queryvars);      
   } elseif ($queryvars['llist']) {
     // TODO: seperate Navibars
     $n_threads = $db->get_n_threads($queryvars[forum_id]);

@@ -1,7 +1,7 @@
 CREATE TABLE forum1 (
   id       int(11)          auto_increment,
   threadid int(11) NOT NULL,
-  lft      int(11) NOT NULL UNIQUE CHECK(lft > 0),
+  lft      int(11) NOT NULL CHECK(lft > 0),
   rgt      int(11) NOT NULL UNIQUE CHECK(rgt > 1),
   name     varchar(255),
   title    varchar(255),

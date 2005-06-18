@@ -157,9 +157,23 @@
     print("\t\t<td align='left'>\n");
     print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
     // TODO: need get_next_msg_id and get_prev_msg_id in mysql_nested.inc.php
+    if ($_prev_entry_id > 0) {
+      $query = "";
+      $query[msg_id] = $_prev_entry_id * 1;
+      $query[read] = 1;
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
+           ."<font color='#FFFFFF'>&lt;&lt;</font></a>");
+    } else 
     print("&lt;&lt;");
     print("&#032;$lang[entry]&#032;");
-    print("&gt;&gt;");
+    if ($_next_entry_id > 0) {
+      $query = "";
+      $query[msg_id] = $_next_entry_id * 1;
+      $query[read] = 1;
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
+           ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
+    } else
+      print("&gt;&gt;");
     
     print("&nbsp;");
     if ($_next_thread_id > 0) {

@@ -29,7 +29,7 @@
   $db = new TefinchDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
                       $cfg[db_name], $cfg[db_tablebase]);
   //$db->insert_entry(1, 2, "Samuel", "Testtitle4", "Testtext");
-
+  $db->timeformat = $cfg[timeformat];
   // Remove Escapes, which are added by the magic-quotes
   function stripslashes_deep($value) {
     return (is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value));
@@ -125,7 +125,9 @@
     */
     $prev_thread_id = $db->get_previous_thread_id($queryvars[forum_id], $queryvars[msg_id]);
     $next_thread_id = $db->get_next_thread_id($queryvars[forum_id], $queryvars[msg_id]);
-    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,0,0,$haschild,$queryvars);
+    $prev_entry_id = $db->get_previous_entry_id($queryvars[forum_id], $queryvars[msg_id]);
+    $next_entry_id = $db->get_next_entry_id($queryvars[forum_id], $queryvars[msg_id]);
+    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,$prev_entry_id,$next_entry_id,$haschild,$queryvars);
     if ($entry->active) {
       msg_print (_unescape($entry->name),
                  _unescape($entry->title),
@@ -145,7 +147,7 @@
 
     } else
       msg_print ('',$lang[blockedtitle],$lang[blockedentry],'',$thread,$queryvars);
-    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,0,0,$haschild,$queryvars);      
+    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,$prev_entry_id,$next_entry_id,$haschild,$queryvars);      
   } elseif ($queryvars['llist']) {
     // TODO: seperate Navibars
     $n_threads = $db->get_n_threads($queryvars[forum_id]);

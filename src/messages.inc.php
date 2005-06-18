@@ -70,13 +70,13 @@
   /* Show a preview of the message */
   function msg_preview ($_name,$_subject,$_message,$_queryvars) {
     global $lang;
+    global $cfg;
     $holdvars   = array_merge($cfg[urlvars],
                               array('forum_id', 'msg_id', 'fold', 'swap', 'hs'));
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");
-         // TODO: time mit format
-         msg_print($_name,$_subject,$_message,time(),$_queryvars);
+         msg_print($_name,$_subject,$_message,date(preg_replace("/%/","",$cfg[timeformat]),time()),$_queryvars);
     print("<p><form action='?".build_url($_queryvars, $holdvars,'')
         ."' method='POST'>\n"
         . "<input type='hidden' name='name' value='"._escape($_name)."'>\n"

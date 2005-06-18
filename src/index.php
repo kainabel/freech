@@ -118,16 +118,13 @@
       heading_print($queryvars,$entry->title);
     else
       heading_print($queryvars,$lang[blockedtitle]);
-    // TODO: Verhalten bei gesperrten Beiträgen. Heise 'übergeht' diese.
-    /* Mögliche Lösung: ermittelten (nächsten/vorherigen) Beitrag abrufen, active-Flag
-                        prüfen; wenn gesperrt, dann noch eine weitere next-/prev-id
-                        ermitteln und wieder auf active prüfen.
-    */
-    $prev_thread_id = $db->get_previous_thread_id($queryvars[forum_id], $queryvars[msg_id]);
-    $next_thread_id = $db->get_next_thread_id($queryvars[forum_id], $queryvars[msg_id]);
-    $prev_entry_id = $db->get_previous_entry_id($queryvars[forum_id], $queryvars[msg_id]);
-    $next_entry_id = $db->get_next_entry_id($queryvars[forum_id], $queryvars[msg_id]);
-    messageindex_print($entry->id,$prev_thread_id,$next_thread_id,$prev_entry_id,$next_entry_id,$haschild,$queryvars);
+    messageindex_print($entry->id,
+                       $entry->prev_thread,
+                       $entry->next_thread,
+                       $entry->prev_entry,
+                       $entry->next_entry,
+                       $haschild,
+                       $queryvars);
     if ($entry->active) {
       msg_print (_unescape($entry->name),
                  _unescape($entry->title),

@@ -117,6 +117,73 @@
     }
     
     
+    /* Given the id of any node, this function returns the id of the previous
+     * entry in the same thread, or 0 if there is no previous entry.
+     */
+    function _get_prev_entry_id($_forum, $_threadid, $_lft) {
+      $lft      = $_lft * 1;
+      $threadid = $_threadid * 1;
+      $forum    = $this->tablebase . ($_forum * 1);
+      $sql  = "SELECT id FROM $forum t1";
+      $sql .= " WHERE t1.threadid=$threadid AND lft<$lft AND active=1";
+      $sql .= " ORDER BY lft DESC LIMIT 1";
+      $res = mysql_query($sql)
+              or die("TefinchDB::get_previous_entry_id(): Failed.");
+      $row = mysql_fetch_object($res);
+      return $row->id;
+    }
+    
+    
+    /* Given the id of any node, this function returns the id of the next
+     * entry in the same thread, or 0 if there is no next entry.
+     */
+    function _get_next_entry_id($_forum, $_threadid, $_lft) {
+      $lft      = $_lft * 1;
+      $threadid = $_threadid * 1;
+      $forum    = $this->tablebase . ($_forum * 1);
+      $sql  = "SELECT id FROM $forum t1";
+      $sql .= " WHERE t1.threadid=$threadid AND lft>$lft AND active=1";
+      $sql .= " ORDER BY lft LIMIT 1";
+      $res = mysql_query($sql)
+              or die("TefinchDB::get_next_entry_id(): Failed.");
+      $row = mysql_fetch_object($res);
+      return $row->id;
+    }
+    
+    
+    /* Given the id of any node, this function returns the id of the previous
+     * thread in the given forum, or 0 if there is no previous thread.
+     * The threadid equals the id of the toplevel node in a thread.
+     */
+    function _get_prev_thread_id($_forum, $_threadid) {
+      $threadid = $_threadid * 1;
+      $forum    = $this->tablebase . ($_forum * 1);
+      $sql  = "SELECT threadid FROM $forum t1";
+      $sql .= " WHERE t1.threadid<$threadid AND active=1";
+      $sql .= " ORDER BY threadid DESC LIMIT 1";
+      $res = mysql_query($sql)
+              or die("TefinchDB::get_previous_thread_id(): Failed.");
+      $row = mysql_fetch_object($res);
+      return $row->threadid;
+    }
+    
+    
+    /* Given the id of any node, this function returns the id of the next
+     * thread in the given forum, or 0 if there is no next thread.
+     * The threadid equals the id of the toplevel node in a thread.
+     */
+    function _get_next_thread_id($_forum, $_threadid) {
+      $threadid = $_threadid * 1;
+      $forum    = $this->tablebase . ($_forum * 1);
+      $sql  = "SELECT threadid FROM $forum t1";
+      $sql .= " WHERE t1.threadid>$threadid AND active=1";
+      $sql .= " ORDER BY threadid LIMIT 1";
+      $res = mysql_query($sql) or die("TefinchDB::get_next_thread_id(): Fail.");
+      $row = mysql_fetch_object($res);
+      return $row->threadid;
+    }
+    
+    
     /***********************************************************************
      * Public API.
      ***********************************************************************/
@@ -131,16 +198,20 @@
      *            - active
      *            - time
      */
-    function get_entry($_forum, $_id) {
-      $forum = $this->tablebase . ($_forum * 1);
+    function get_entry($_f, $_id) {
+      $forum = $this->tablebase . ($_f * 1);
       $id    = $_id * 1;
-      $sql  = "SELECT id,name,title,text,active,";
+      $sql  = "SELECT id,threadid tid,lft,name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $forum";
       $sql .= " WHERE id=$id";
       $res = mysql_query($sql) or die("TefinchDB::get_entry(): Failed.");
       $row = mysql_fetch_object($res);
+      $row->prev_thread = $this->_get_prev_thread_id($_f, $row->tid);
+      $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
+      $row->prev_entry  = $this->_get_prev_entry_id($_f,  $row->tid, $row->lft);
+      $row->next_entry  = $this->_get_next_entry_id($_f,  $row->tid, $row->lft);
       return $row;
     }
     
@@ -403,73 +474,6 @@
       $res = mysql_query($sql) or die("TefinchDB::get_n_threads(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->threads;
-    }
-    
-    
-    /* Given the id of any node, this function returns the id of the previous
-     * entry in the same thread, or 0 if there is no previous entry.
-     */
-    function get_previous_entry_id($_forum, $_id) {
-      $id       = $_id * 1;
-      $forum    = $this->tablebase . ($_forum * 1);
-      $threadid = $this->_get_threadid($forum, $id);
-      $sql  = "SELECT id FROM $forum t1";
-      $sql .= " WHERE t1.threadid=$threadid AND id<$id";
-      $sql .= " ORDER BY lft DESC LIMIT 1";
-      $res = mysql_query($sql)
-              or die("TefinchDB::get_previous_entry_id(): Failed.");
-      $row = mysql_fetch_object($res);
-      return $row->id;
-    }
-    
-    
-    /* Given the id of any node, this function returns the id of the next
-     * entry in the same thread, or 0 if there is no next entry.
-     */
-    function get_next_entry_id($_forum, $_id) {
-      $id       = $_id * 1;
-      $forum    = $this->tablebase . ($_forum * 1);
-      $threadid = $this->_get_threadid($forum, $id);
-      $sql  = "SELECT id FROM $forum t1";
-      $sql .= " WHERE t1.threadid=$threadid AND id>$id";
-      $sql .= " ORDER BY lft LIMIT 1";
-      $res = mysql_query($sql)
-              or die("TefinchDB::get_next_entry_id(): Failed.");
-      $row = mysql_fetch_object($res);
-      return $row->id;
-    }
-    
-    
-    /* Given the id of any node, this function returns the id of the previous
-     * thread in the given forum, or 0 if there is no previous thread.
-     * The threadid equals the id of the toplevel node in a thread.
-     */
-    function get_previous_thread_id($_forum, $id) {
-      $forum    = $this->tablebase . ($_forum * 1);
-      $threadid = $this->_get_threadid($forum, $id);
-      $sql  = "SELECT threadid FROM $forum t1";
-      $sql .= " WHERE t1.threadid<$threadid";
-      $sql .= " ORDER BY threadid DESC LIMIT 1";
-      $res = mysql_query($sql)
-              or die("TefinchDB::get_previous_thread_id(): Failed.");
-      $row = mysql_fetch_object($res);
-      return $row->threadid;
-    }
-    
-    
-    /* Given the id of any node, this function returns the id of the next
-     * thread in the given forum, or 0 if there is no next thread.
-     * The threadid equals the id of the toplevel node in a thread.
-     */
-    function get_next_thread_id($_forum, $id) {
-      $forum    = $this->tablebase . ($_forum * 1);
-      $threadid = $this->_get_threadid($forum, $id);
-      $sql  = "SELECT threadid FROM $forum t1";
-      $sql .= " WHERE t1.threadid>$threadid";
-      $sql .= " ORDER BY threadid LIMIT 1";
-      $res = mysql_query($sql) or die("TefinchDB::get_next_thread_id(): Fail.");
-      $row = mysql_fetch_object($res);
-      return $row->threadid;
     }
     
     

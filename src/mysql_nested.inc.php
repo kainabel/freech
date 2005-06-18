@@ -362,7 +362,7 @@
       $sql .= " ORDER BY t1.threadid DESC,t1.lft";
       
       // Walk through those threads.
-      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed. |$sql|" . mysql_error());
+      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed.");
       $indent  = 0;
       $indents = array();
       $parents = array();

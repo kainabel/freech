@@ -7,7 +7,6 @@
   
   $cfg[lang]         = 'german';      // Forum language. The language files are in the
                                       // "language/" subfolder.
-  $cfg[timeformat]   = '%y-%m-%d %H:%i';
   $cfg[urlvars]      = array('sid');  // Lets you append additional variables to every
                                       // URL. If unsure leave unchanged.
 ?>

@@ -29,7 +29,7 @@
   $db = new TefinchDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
                       $cfg[db_name], $cfg[db_tablebase]);
   //$db->insert_entry(1, 2, "Samuel", "Testtitle4", "Testtext");
-  $db->timeformat = $cfg[timeformat];
+  $db->set_timeformat($lang[dateformat]);
   // Remove Escapes, which are added by the magic-quotes
   function stripslashes_deep($value) {
     return (is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value));

@@ -17,6 +17,20 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  
+  Contains:
+  
+  Private:
+   * function _escape($_string)
+   * function _escape_msg($_string)
+  Semiprivate:
+   * function _unescape($_string)
+  Public:
+   * function msg_compose ($_name,$_subject,$_message,$_hint,$_queryvars)
+   * function msg_preview ($_name,$_subject,$_message,$_queryvars)
+   * function msg_created ($_newmsg_id,$_queryvars)
+   * function msg_print ($_name,$_subject,$_message,$_time,$_queryvars)
+  
   */
 
   include_once "language/$cfg[lang].inc.php";
@@ -25,11 +39,8 @@
   function _escape($_string) {
     return htmlentities($_string,ENT_QUOTES);    
   }
-  function _unescape($_string) {
-    return html_entity_decode($_string,ENT_QUOTES);
-  }
-  /* Escape special characters in the posting, wrap lines, if not quoted,
-     make quotes red */
+  
+  /* Escape special characters in the posting, wrap lines */
   function _escape_msg($_string) {
     foreach ( explode("\n",$_string) as $line ) {
       if (strpos($line,"> ") === 0) {
@@ -40,6 +51,11 @@
     }
     return preg_replace("/ /","&nbsp;",_escape($text));
   }
+    
+  function _unescape($_string) {
+    return html_entity_decode($_string,ENT_QUOTES);
+  }
+
   /* print out a form to compose the message
      $_name, $_subject, $_message allow to give default values
      $_hint is useful to print an error message
@@ -76,7 +92,7 @@
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");
-         msg_print($_name,$_subject,$_message,date(preg_replace("/%/","",$cfg[timeformat]),time()),$_queryvars);
+         msg_print($_name,$_subject,$_message,date(preg_replace("/%/","",$lang[dateformat]),time()),$_queryvars);
     print("<p><form action='?".build_url($_queryvars, $holdvars,'')
         ."' method='POST'>\n"
         . "<input type='hidden' name='name' value='"._escape($_name)."'>\n"
@@ -88,14 +104,14 @@
   /* Show created message 
     $_msg_id - id of the created message
   */
-  function msg_created ($_msg_id,$_queryvars) {
+  function msg_created ($_newmsg_id,$_queryvars) {
     global $lang;
     $holdvars   = array_merge($cfg[urlvars],
                               array('forum_id', 'fold', 'swap', 'hs'));
     // Give some status info and the usual links
     print("<p><h2>$lang[entrysuccess]</h2><br>");
     print("<a href='?".build_url($_queryvars, $holdvars, 
-        array('msg_id'=>$_msg_id,'forum_id'=>$_queryvars['forum_id'],'read'=>1))
+        array('msg_id'=>$_newmsg_id,'forum_id'=>$_queryvars['forum_id'],'read'=>1))
         ."'>$lang[backtoentry]</a><br>");
     if ($_queryvars['msg_id']) 
       print("<a href='?".build_url($_queryvars, $holdvars, 

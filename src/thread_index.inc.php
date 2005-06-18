@@ -156,7 +156,7 @@
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
     print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
-    // TODO: need get_next_msg_id and get_prev_msg_id in mysql_nested.inc.php
+
     if ($_prev_entry_id > 0) {
       $query = "";
       $query[msg_id] = $_prev_entry_id * 1;

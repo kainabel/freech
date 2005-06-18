@@ -28,11 +28,11 @@
     while ($_indents[$i]) {
       switch ($_indents[$i]) {
       case INDENT_DRAW_DASH:
-        print("<img src='img/l.png' width=20 height=23 alt='' />");
+        print("<img src='img/l.png' width=20 height=23 alt='|' />");
         break;
       
       case INDENT_DRAW_SPACE:
-        print("<img src='img/null.png' width=20 height=23 alt='' />");
+        print("<img src='img/null.png' width=20 height=23 alt='&nbsp;' />");
         break;
       
       default:
@@ -66,7 +66,7 @@
         $query[fold] = $_folding->get_default();
       }
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
-      print("<img src='img/m.png' border=0 width=9 height=21 alt='' />");
+      print("<img src='img/m.png' border=0 width=9 height=21 alt='0' />");
       print("</a>");
       break;
       
@@ -76,18 +76,18 @@
       $query[swap] = $swap ? $swap : '';
       $query[fold] = $_folding->get_default();
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
-      print("<img src='img/p.png' border=0 width=9 height=21 alt='' />");
+      print("<img src='img/p.png' border=0 width=9 height=21 alt='0' />");
       print("</a>");
       break;
       
     case BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN:
     case BRANCHBOTTOM_CHILD_WITH_CHILDREN:
-      print("<img src='img/e.png' width=20 height=23 alt='' />");
+      print("<img src='img/e.png' width=20 height=23 alt='+' />");
       break;
       
     case CHILD_WITHOUT_CHILDREN:
     case CHILD_WITH_CHILDREN:
-      print("<img src='img/x.png' width=20 height=23 alt='' />");
+      print("<img src='img/x.png' width=20 height=23 alt='+' />");
       break;
     }
   }
@@ -155,9 +155,11 @@
     print("&nbsp;</font></td>\n");
     
     // Date.
-    if ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') $color = 'green';
-                                else $color = 'red';
-    // TODO: Nur Beiträge der letzten 24h rot.
+    if ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') 
+      $color = 'green';
+    elseif (time() - $_row->unixtime < 864000)
+      $color = 'red';
+    else $color = 'black';
     print("<td align='right' nowrap><font size='-1' color='$color'>"
         . "$_row->time"
         . "</font></td>\n");
@@ -207,6 +209,9 @@
     print("<td align='left'><font size='-1'>$_row->name&nbsp;</font></td>\n");
     
     // Date.
+    if (time() - $_row->unixtime < 864000) $color = 'red';
+                                      else $color = 'black';
+    
     print("<td align='right' nowrap><font size='-1' color='red'>"
         . "$_row->time"
         . "</font></td>\n");

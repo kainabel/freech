@@ -22,7 +22,7 @@
 // German language file, 2003 by Samuel Abels
 
   // Forum
-  $lang[dateformat]       = "d.m.Y H:i"; //FIXME
+  $lang[dateformat]       = "%y-%m-%d %H:%i";
   $lang[index]            = "Seite";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";

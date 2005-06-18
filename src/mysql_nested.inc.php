@@ -135,7 +135,8 @@
       $forum = $this->tablebase . ($_forum * 1);
       $id    = $_id * 1;
       $sql  = "SELECT id,name,title,text,active,";
-      $sql .= "DATE_FORMAT(created, '$this->timeformat') AS time";
+      $sql .= "UNIX_TIMESTAMP(created) unixtime,";
+      $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $forum";
       $sql .= " WHERE id=$id";
       $res = mysql_query($sql) or die("TefinchDB::get_entry(): Failed.");
@@ -257,7 +258,8 @@
       // Build the SQL request to grab the complete threads.
       $numrows = mysql_num_rows($res);
       $sql  = "SELECT t1.id,t1.lft,t1.rgt,t1.name,t1.title,t1.active,t1.text,";
-      $sql .= "DATE_FORMAT(t1.created, '$this->timeformat') AS time";
+      $sql .= "UNIX_TIMESTAMP(t1.created) unixtime,";
+      $sql .= "DATE_FORMAT(t1.created, '$this->timeformat') time";
       $sql .= " FROM $forum t1";
       $sql .= " WHERE t1.lft!=0";
       if ($id != 1 || $numrows > 0)
@@ -377,7 +379,8 @@
       $id     = $_id * 1;
       $n      = $_n  * 1;
       $sql  = "SELECT id,name,title,text,active,";
-      $sql .= "DATE_FORMAT(created, '$this->timeformat') AS time";
+      $sql .= "UNIX_TIMESTAMP(created) unixtime,";
+      $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $forum";
       if ($updates)
         $sql .= " ORDER BY updated";
@@ -394,7 +397,7 @@
     /* Returns the total number of threads in the given forum. */
     function get_n_threads($_forum) {
       $forum  = $this->tablebase . ($_forum * 1);
-      $sql  = "SELECT COUNT(DISTINCT threadid) AS threads";
+      $sql  = "SELECT COUNT(DISTINCT threadid) threads";
       $sql .= " FROM $forum t1";
       $sql .= " WHERE t1.lft!=0";
       $res = mysql_query($sql) or die("TefinchDB::get_n_threads(): Failed.");

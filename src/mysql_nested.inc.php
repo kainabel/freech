@@ -457,7 +457,7 @@
         $sql .= " ORDER BY created";
       $sql .= " DESC LIMIT $offset, $this->threadsperpage";
       $res = mysql_query($sql)
-               or die("TefinchDB::foreach_latest_entry(): Failed: $sql");
+               or die("TefinchDB::foreach_latest_entry(): Failed.");
       while ($row = mysql_fetch_object($res))
         $_func($row, $_data);
     }

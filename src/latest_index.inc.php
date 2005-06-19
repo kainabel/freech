@@ -20,18 +20,18 @@
 ?>
 <?php
   include_once 'httpquery.inc.php';
+  include_once 'thread_index.inc.php';
   
-  function latest_index_print() {
-    global $lang;
-    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
-        . " bgcolor='#003399'>\n");
-    print("\t<tr>\n");
-    print("\t\t<td align='left'>\n");
-    print("\t\t<font color='#FFFFFF' size='-1'><b>$lang[index]\n");
-    //FIXME
-    print("</b></font>\n");
-    print("\t\t</td>\n");
-    print("\t</tr>\n");
-    print("</table>\n");
+  function latest_index_print($_n_entries,
+                              $_offset,
+                              $_epp,
+                              $_ppi,
+                              $_queryvars) {
+    thread_index_print($_n_entries,
+                       $_offset,
+                       $_epp,
+                       $_ppi,
+                       '',
+                       $_queryvars);
   }
 ?>

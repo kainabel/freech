@@ -9,4 +9,10 @@
                                       // "language/" subfolder.
   $cfg[urlvars]      = array('sid');  // Lets you append additional variables to every
                                       // URL. If unsure leave unchanged.
+  
+  // *************************************************************
+  // Forum appearance preferences.
+  $cfg[tpp]          = 8;             // Maximum number of threads shown per page.
+  $cfg[ppi]          = 5;             // Maximum number of pages shown in the index
+                                      // before the [...] button is shown.
 ?>

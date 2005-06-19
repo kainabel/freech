@@ -109,29 +109,31 @@
     else
       print("&nbsp;<font color='#FFFFFF'>$lang[next]</font></a>\n");
 
-    $fold  = $_folding->get_default();
-    $swap  = $_folding->get_string_swap();
+    if ($_folding) {
+      $fold  = $_folding->get_default();
+      $swap  = $_folding->get_string_swap();
+      
+      if ($fold == UNFOLDED && $swap == '')
+        print("&nbsp;&nbsp;$lang[unfoldall]\n");
+      else {
+        $query = "";
+        $query[fold] = UNFOLDED;
+        $query[swap] = '';
+        print("&nbsp;&nbsp;<a href='?"
+            . build_url($_queryvars, $holdvars, $query)
+            . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
+      }
     
-    if ($fold == UNFOLDED && $swap == '')
-      print("&nbsp;&nbsp;$lang[unfoldall]\n");
-    else {
-      $query = "";
-      $query[fold] = UNFOLDED;
-      $query[swap] = '';
-      print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
-    }
-    
-    if ($fold == FOLDED && $swap == '')
-      print("&nbsp;&nbsp;$lang[foldall]\n");
-    else {
-      $query = "";
-      $query[fold] = FOLDED;
-      $query[swap] = '';
-      print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
+      if ($fold == FOLDED && $swap == '')
+        print("&nbsp;&nbsp;$lang[foldall]\n");
+      else {
+        $query = "";
+        $query[fold] = FOLDED;
+        $query[swap] = '';
+        print("&nbsp;&nbsp;<a href='?"
+            . build_url($_queryvars, $holdvars, $query)
+            . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
+      }
     }
     
     $query = "";

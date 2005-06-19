@@ -463,7 +463,19 @@
     }
     
     
-    /* Returns the total number of threads in the given forum. */
+    /* Returns the total number of entries in the given forum. */
+    function get_n_entries($_forum) {
+      $forum  = $this->tablebase . ($_forum * 1);
+      $sql  = "SELECT COUNT(id) entries";
+      $sql .= " FROM $forum t1";
+      $sql .= " WHERE t1.lft!=0";
+      $res = mysql_query($sql) or die("TefinchDB::get_n_entries(): Failed.");
+      $row = mysql_fetch_object($res);
+      return $row->entries;
+    }
+    
+    
+     /* Returns the total number of threads in the given forum. */
     function get_n_threads($_forum) {
       $forum  = $this->tablebase . ($_forum * 1);
       $sql  = "SELECT COUNT(DISTINCT threadid) threads";
@@ -473,8 +485,8 @@
       $row = mysql_fetch_object($res);
       return $row->threads;
     }
-    
-    
+
+
     /* Returns the number of nodes below $id. */
     function get_n_children($_forum, $_id) {
       $forum  = $this->tablebase . ($_forum * 1);

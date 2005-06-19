@@ -39,6 +39,7 @@
   
   $db = new TefinchDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
                       $cfg[db_name], $cfg[db_tablebase]);
+  $db->set_n_threads_per_page($cfg[tpp]);
   $db->set_timeformat($lang[dateformat]);
   
   if (get_magic_quotes_gpc()) {
@@ -184,7 +185,13 @@
                         $_queryvars);      
   } elseif ($_queryvars['llist']) {
     heading_print($_queryvars,'');
-    latest_index_print(); //FIXME
+    $n_entries = $db->get_n_entries($_queryvars[forum_id]);
+    latest_index_print($n_entries,
+                       $_queryvars[hs],
+                       $db->get_n_threads_per_page(),
+                       $cfg[ppi],
+                       '',
+                       $_queryvars);
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
     $db->foreach_latest_entry($_queryvars[forum_id],
                               $_queryvars[hs],
@@ -192,16 +199,20 @@
                               latest_print_row,
                               $_queryvars);
     print("</table>\n");
-    latest_index_print(); //FIXME
+    latest_index_print($n_entries,
+                       $_queryvars[hs],
+                       $db->get_n_threads_per_page(),
+                       $cfg[ppi],
+                       '',
+                       $_queryvars);
     footer_print($queryvars);
   } elseif ($_queryvars['list'] === '1' || $_queryvars['forum_id']) {
     // show the message-tree
     $n_threads = $db->get_n_threads($_queryvars[forum_id]);
     $tpp       = $db->get_n_threads_per_page();
-    $ppi       = 5;
     $folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
     heading_print($_queryvars,'');
-    thread_index_print($n_threads, $_queryvars[hs], $tpp, $ppi, $folding, $_queryvars);
+    thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
     $db->foreach_child($_queryvars[forum_id],
                        1,
@@ -216,7 +227,7 @@
     }
     print("</table>\n");
   
-    thread_index_print($n_threads, $_queryvars[hs], $tpp, $ppi, $folding, $_queryvars);
+    thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
   } else {
     /* Wenn oben aus der Bedingung "|| $_queryvars['forum_id']" entfernt wird, dann ist
        hier Platz für eine Art Forenübersicht, auf der man zuerst landet und von

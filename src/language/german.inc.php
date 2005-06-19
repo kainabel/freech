@@ -30,6 +30,8 @@
   $lang[prev]             = "Neuere";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
+  $lang[threadview]       = "In Thread-Darstellung anzeigen";
+  $lang[plainview]        = "In Eingangsreihenfolge anzeigen";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
   $lang[noentries]        = "(Bisher keine Beiträge)";

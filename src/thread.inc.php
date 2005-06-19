@@ -173,10 +173,9 @@
   
   function print_row_simple($_row, $_data) {
     global $cfg;
-    if (!$_row->active) return;
     list($folding, $queryvars) = $_data;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'fold', 'swap', 'hs'));
+                            array('forum_id', 'fold', 'swap', 'hs', 'thread'));
     
     // Open a new row.
     print("<tr valign='middle' bgcolor='#ffffff'>\n");

@@ -153,23 +153,22 @@
                        $entry->prev_entry,
                        $entry->next_entry,
                        $haschild,$queryvars);      
-  } elseif ($queryvars['llist']) {
-    // TODO: seperate Navibars
-    $n_threads = $db->get_n_threads($queryvars[forum_id]);
+  } elseif (($queryvars['list'] || $queryvars['forum_id'] ) && $queryvars['thread'] === '0') {
+    $n_threads = ceil( ($db->get_n_children($queryvars[forum_id],1)-1)/2);
     $tpp       = $db->get_n_threads_per_page();
     $ppi       = 5;
-    $folding   = new ThreadFolding($queryvars[fold], $queryvars[swap]);
-    heading_print($queryvars,$lang[entryindex]);
+    heading_print($queryvars,'');
     threadindex_print($n_threads, $queryvars[hs], $tpp, $ppi, $folding, $queryvars);
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
     $db->foreach_latest_entry($queryvars[forum_id],
-                              0,
+                              $queryvars[hs],
                               $tpp,
                               0,
                               print_row_simple,
                               array($folding, $queryvars));
     print("</table>\n");
-    threadindex_print($n_threads, $queryvars[hs], $tpp, $ppi, $folding, $queryvars);      
+    threadindex_print($n_threads, $queryvars[hs], $tpp, $ppi, $folding, $queryvars);
+    print_footer($queryvars);     
   } elseif ($queryvars['list'] === '1' || $queryvars['forum_id']) {
     // show the message-tree
     $n_threads = $db->get_n_threads($queryvars[forum_id]);
@@ -193,6 +192,7 @@
     print("</table>\n");
   
     threadindex_print($n_threads, $queryvars[hs], $tpp, $ppi, $folding, $queryvars);
+    print_footer($queryvars);
   } else {
     /* Wenn oben aus der Bedingung "|| $queryvars['forum_id']" entfernt wird, dann ist
        hier Platz für eine Art Forenübersicht, auf der man zuerst landet und von

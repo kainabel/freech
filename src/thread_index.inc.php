@@ -34,7 +34,7 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs', 'list'));
+                              array('forum_id', 'fold', 'swap', 'hs', 'list', 'thread'));
     
     $pages      = ceil($_n_threads / $_tpp);
     $activepage = ceil($_offset / $_tpp) + 1;
@@ -103,31 +103,32 @@
     else
       print("&nbsp;<font color='#FFFFFF'>$lang[next]</font></a>\n");
 
-    $fold  = $_folding->get_default();
-    $swap  = $_folding->get_string_swap();
+    if ($_folding) {
+      $fold  = $_folding->get_default();
+      $swap  = $_folding->get_string_swap();
     
-    if ($fold == UNFOLDED && $swap == '')
-      print("&nbsp;&nbsp;$lang[unfoldall]\n");
-    else {
-      $query = "";
-      $query[fold] = UNFOLDED;
-      $query[swap] = '';
-      print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
-    }
+      if ($fold == UNFOLDED && $swap == '')
+        print("&nbsp;&nbsp;$lang[unfoldall]\n");
+      else {
+        $query = "";
+        $query[fold] = UNFOLDED;
+        $query[swap] = '';
+        print("&nbsp;&nbsp;<a href='?"
+            . build_url($_queryvars, $holdvars, $query)
+            . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
+      }
     
-    if ($fold == FOLDED && $swap == '')
-      print("&nbsp;&nbsp;$lang[foldall]\n");
-    else {
-      $query = "";
-      $query[fold] = FOLDED;
-      $query[swap] = '';
-      print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
-    }
-    
+      if ($fold == FOLDED && $swap == '')
+        print("&nbsp;&nbsp;$lang[foldall]\n");
+      else {
+        $query = "";
+        $query[fold] = FOLDED;
+        $query[swap] = '';
+        print("&nbsp;&nbsp;<a href='?"
+            . build_url($_queryvars, $holdvars, $query)
+            . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
+      }
+    }    
     $query = "";
     $query[write] = 1;
     print("&nbsp;&nbsp;<a href='?"
@@ -148,7 +149,7 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'fold', 'swap', 'hs', 'thread'));
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='5' border='0'"
@@ -230,10 +231,10 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'fold', 'swap', 'hs', 'thread'));
     
     // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'>\n");
+    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'>\n");
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
     print("\t\t<font size='-1'>\n");
@@ -247,17 +248,34 @@
     
     print("</font>\n");
     print("\t\t</td>\n");
-    print("\t\t<td align='right'>\n");
-    print("\t\t<font size='-1'>\n");
-    
-    $query = "";
-    $query['llist'] = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query) . "'>$lang[entryindex]</a>\n");
-    print("</font>\n");
-    print("\t\t</td>\n");        
     print("\t</tr>\n");
     print("</table>\n");
-  } 
+  }
+  function print_footer($_queryvars) {
+    global $lang;
+    global $cfg;
+    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'>\n");
+    print("\t<tr>\n");
+    print("\t\t<td align='left'>\n");
+    print("\t\t<font size='-1'>\n");
+    
+    $holdvars   = array_merge($cfg[urlvars],
+                              array('forum_id', 'fold', 'swap', 'hs', 'list'));
+    $query = "";
+    if ($_queryvars[thread] === '0') {
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[threadview]</a>");
+      print("&nbsp;&nbsp;&nbsp;");
+      print("$lang[plainview]");
+    } else {
+      print("$lang[threadview]");
+      print("&nbsp;&nbsp;&nbsp;");
+      $query[thread] = '0';
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[plainview]</a>");
+    }    
+    print("</font>\n");
+    print("\t\t</td>\n");
+    print("\t</tr>\n");
+    print("</table>\n");  
+  }
    
 ?>

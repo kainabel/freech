@@ -341,12 +341,6 @@
       else {
         $first = 1;
         while ($row = mysql_fetch_object($res)) {
-          /*
-          if ($_fold->is_folded($row->id))
-            print("$row->id: Folded<br/>\n");
-          else
-            print("$row->id: Unfolded<br/>\n");
-           */
           if (!$first)
             $sql .= " OR ";
           if ($_fold->is_folded($row->id))
@@ -448,14 +442,11 @@
      */
     function foreach_latest_entry($_forum,
                                   $_offset,
-                                  $_n,
                                   $_updates,
                                   $_func,
                                   $_data) {
       $forum  = $this->tablebase . ($_forum * 1);
-      $id     = $_id     * 1;
       $offset = $_offset * 1;
-      $n      = $_n      * 1;
       $sql  = "SELECT id,name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
@@ -464,9 +455,9 @@
         $sql .= " ORDER BY updated";
       else
         $sql .= " ORDER BY created";
-      $sql .= " DESC LIMIT $offset, $_n";
+      $sql .= " DESC LIMIT $offset, $this->threadsperpage";
       $res = mysql_query($sql)
-               or die("TefinchDB::foreach_latest_entry(): Failed.");
+               or die("TefinchDB::foreach_latest_entry(): Failed: $sql");
       while ($row = mysql_fetch_object($res))
         $_func($row, $_data);
     }

@@ -27,14 +27,20 @@
    *       $_offset     The offset in threads.
    *       $_tpp        Number of threads per page.
    *       $_ppi        Pages per index.
+   *       $_folding    The object indicating the current folding status.
+   *       $_queryvars  Variables that are appended to every link.
    */
-  function threadindex_print($_n_threads, $_offset, $_tpp, $_ppi,
-                             $_folding, $_queryvars) {
+  function thread_index_print($_n_threads,
+                              $_offset,
+                              $_tpp,
+                              $_ppi,
+                              $_folding,
+                              $_queryvars) {
     global $lang;
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs', 'list', 'thread'));
+                              array('forum_id', 'fold', 'swap', 'hs', 'list'));
     
     $pages      = ceil($_n_threads / $_tpp);
     $activepage = ceil($_offset / $_tpp) + 1;
@@ -48,7 +54,7 @@
       $pageoffset = 1;
     
     // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'"
+    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
         . " bgcolor='#003399'>\n");
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
@@ -103,32 +109,31 @@
     else
       print("&nbsp;<font color='#FFFFFF'>$lang[next]</font></a>\n");
 
-    if ($_folding) {
-      $fold  = $_folding->get_default();
-      $swap  = $_folding->get_string_swap();
+    $fold  = $_folding->get_default();
+    $swap  = $_folding->get_string_swap();
     
-      if ($fold == UNFOLDED && $swap == '')
-        print("&nbsp;&nbsp;$lang[unfoldall]\n");
-      else {
-        $query = "";
-        $query[fold] = UNFOLDED;
-        $query[swap] = '';
-        print("&nbsp;&nbsp;<a href='?"
-            . build_url($_queryvars, $holdvars, $query)
-            . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
-      }
+    if ($fold == UNFOLDED && $swap == '')
+      print("&nbsp;&nbsp;$lang[unfoldall]\n");
+    else {
+      $query = "";
+      $query[fold] = UNFOLDED;
+      $query[swap] = '';
+      print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query)
+          . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
+    }
     
-      if ($fold == FOLDED && $swap == '')
-        print("&nbsp;&nbsp;$lang[foldall]\n");
-      else {
-        $query = "";
-        $query[fold] = FOLDED;
-        $query[swap] = '';
-        print("&nbsp;&nbsp;<a href='?"
-            . build_url($_queryvars, $holdvars, $query)
-            . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
-      }
-    }    
+    if ($fold == FOLDED && $swap == '')
+      print("&nbsp;&nbsp;$lang[foldall]\n");
+    else {
+      $query = "";
+      $query[fold] = FOLDED;
+      $query[swap] = '';
+      print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query)
+          . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
+    }
+    
     $query = "";
     $query[write] = 1;
     print("&nbsp;&nbsp;<a href='?"
@@ -141,117 +146,9 @@
     print("</table>\n");
   }
   
-  /* same as above, but shown, if a message is read */
-  function messageindex_print($_msg_id,$_prev_thread_id,$_next_thread_id,
-                              $_prev_entry_id,$_next_entry_id,$_has_child,
-                              $_queryvars) {
-    global $lang;
-    global $cfg;
-    
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs', 'thread'));
-    
-    // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'"
-        . " bgcolor='#003399'>\n");
-    print("\t<tr>\n");
-    print("\t\t<td align='left'>\n");
-    print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
-
-    if ($_prev_entry_id > 0) {
-      $query = "";
-      $query[msg_id] = $_prev_entry_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&lt;&lt;</font></a>");
-    } else 
-    print("&lt;&lt;");
-    print("&#032;$lang[entry]&#032;");
-    if ($_next_entry_id > 0) {
-      $query = "";
-      $query[msg_id] = $_next_entry_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
-    } else
-      print("&gt;&gt;");
-    
-    print("&nbsp;");
-    if ($_next_thread_id > 0) {
-      $query = "";
-      $query[msg_id] = $_next_thread_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&lt;&lt;</font></a>");
-    } else {
-      print("&lt;&lt;");
-    }
-    print("&#032;$lang[thread]&#032;");
-    if ($_prev_thread_id > 0) {
-      $query = "";
-      $query[msg_id] = $_prev_thread_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
-    } else {
-    print("&gt;&gt;");
-    }
-    $query = "";
-    $query[write] = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-          . "'><font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");
-    if ($_has_child) {
-      $query = "";
-      $query[read] = 1;
-      print ("&nbsp;<a href='?");
-      if ($_queryvars['thread'] === "0") {
-        $query[thread] = '1';
-        print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-              ."'><font color='#FFFFFF'>$lang[showthread]</font>";
-      } else {
-        $query[thread] = '0';
-        print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-              ."'><font color='#FFFFFF'>$lang[hidethread]</font>";
-      }
-      print ("</a>");
-    }
-     
-    print("</b></font>\n");
-    print("\t\t</td>\n");
-    print("\t</tr>\n");
-    print("</table>\n");
-  } 
   
-  function heading_print($_queryvars,$_title) {
-    global $lang;
-    global $cfg;
-    
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs', 'thread'));
-    
-    // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'>\n");
-    print("\t<tr>\n");
-    print("\t\t<td align='left'>\n");
-    print("\t\t<font size='-1'>\n");
-    
-    $query = "";
-    $query['list'] = 1;
-    if ($_GET['read'] === '1' || $_GET['llist']) print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query) . "'>forum</a>\n"
-          . "&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
-    else print "&nbsp;&nbsp;forum";
-    
-    print("</font>\n");
-    print("\t\t</td>\n");
-    print("\t</tr>\n");
-    print("</table>\n");
-  }
-  function print_footer($_queryvars) {
+  // FIXME: Elsewhere?
+  function footer_print($_queryvars) {
     global $lang;
     global $cfg;
     print("<table width='100%' cellspacing='0' cellpadding='3' border='0'>\n");
@@ -277,5 +174,4 @@
     print("\t</tr>\n");
     print("</table>\n");  
   }
-   
 ?>

@@ -23,7 +23,7 @@
   include_once 'mysql_nested.inc.php';
   
   // Draws the indent according to the given array.
-  function _print_indent($_indents) {
+  function _thread_print_indent($_indents) {
     $i = 0;
     while ($_indents[$i]) {
       switch ($_indents[$i]) {
@@ -44,7 +44,7 @@
   
   
   // Draws the appropriate tree image.
-  function _print_treeimage($_row, $_folding, $_queryvars) {
+  function _thread_print_treeimage($_row, $_folding, $_queryvars) {
     global $cfg;
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'fold', 'swap', 'hs'));
@@ -82,18 +82,18 @@
       
     case BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN:
     case BRANCHBOTTOM_CHILD_WITH_CHILDREN:
-      print("<img src='img/e.png' width=20 height=23 alt='+' />");
+      print("<img src='img/e.png' width=20 height=23 alt='`-' />");
       break;
       
     case CHILD_WITHOUT_CHILDREN:
     case CHILD_WITH_CHILDREN:
-      print("<img src='img/x.png' width=20 height=23 alt='+' />");
+      print("<img src='img/x.png' width=20 height=23 alt='|-' />");
       break;
     }
   }
   
   
-  function print_row($_row, $_indents, $_data) {
+  function thread_print_row($_row, $_indents, $_data) {
     global $cfg;
     global $lang;
     
@@ -115,8 +115,8 @@
     
     // Draw the tree components.
     print("<td align='left'>");
-    _print_indent($_indents);
-    _print_treeimage($_row, $folding, $queryvars);
+    _thread_print_indent($_indents);
+    _thread_print_treeimage($_row, $folding, $queryvars);
     print("</td>\n");
     
     // Title.
@@ -170,55 +170,4 @@
     
     print("</tr>\n");
   }
-  
-  function print_row_simple($_row, $_data) {
-    global $cfg;
-    list($folding, $queryvars) = $_data;
-    $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'fold', 'swap', 'hs', 'thread'));
-    
-    // Open a new row.
-    print("<tr valign='middle' bgcolor='#ffffff'>\n");
-    
-    print("<td align='center' width=8>");
-    print("<img src='img/null.png' width=8 height=23 alt='' />");
-    print("</td>\n");
-    
-    // Inner table.
-    print("<td align='left'>\n");
-    
-    // Title.
-    $query = "";
-    $query[msg_id] = $_row->id;
-    $query[read] = 1;
-    print("<td align='left'>"
-        . "<font size='-1'>"
-        . "&nbsp;<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
-        . "$_row->title</a>&nbsp;"
-        . "</font>"
-        . "</td>\n");
-    
-    print("</td>\n");
-    
-    // Some space.
-    print("<td>&nbsp;</td>");
-    print("<td><img src='img/null.png' alt='' width=4 height=23 /></td>\n");
-    
-    // User name.
-    print("<td align='left'><font size='-1'>$_row->name&nbsp;</font></td>\n");
-    
-    // Date.
-    if (time() - $_row->unixtime < 864000) $color = 'red';
-                                      else $color = 'black';
-    
-    print("<td align='right' nowrap><font size='-1' color='red'>"
-        . "$_row->time"
-        . "</font></td>\n");
-    
-    print("<td align='center' width=8>");
-    print("<img src='img/null.png' width=8 height=23 alt='' />");
-    print("</td>\n");
-    
-    print("</tr>\n");
-  } 
 ?>

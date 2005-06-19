@@ -91,7 +91,7 @@
   if ($_queryvars['write'] == '1' AND $_queryvars['msg_id']) {
     // Write an answer.
     $entry = $db->get_entry($_queryvars[forum_id], $_queryvars[msg_id]);
-    message_compose_reply($entry->title, '', $_queryvars);
+    message_compose_reply(string_unescape($entry->title), '', $_queryvars);
   } elseif ($_queryvars['write'] == '1') {
     message_compose('', '', '', '', FALSE, $_queryvars);
   // Send, with incomplete data.

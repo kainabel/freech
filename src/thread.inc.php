@@ -157,7 +157,7 @@
     // Date.
     if ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') 
       $color = 'green';
-    elseif (time() - $_row->unixtime < 864000)
+    elseif ((time() - $_row->unixtime) < 86400)
       $color = 'red';
     else $color = 'black';
     print("<td align='right' nowrap><font size='-1' color='$color'>"

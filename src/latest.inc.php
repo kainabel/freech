@@ -58,10 +58,10 @@
     print("<td align='left'><font size='-1'>$_row->name&nbsp;</font></td>\n");
     
     // Date.
-    if (time() - $_row->unixtime < 864000) $color = 'red';
-                                      else $color = 'black';
+    if ((time() - $_row->unixtime) < 86400) $color = 'red';
+                                     else $color = 'black';
     
-    print("<td align='right' nowrap><font size='-1' color='red'>"
+    print("<td align='right' nowrap><font size='-1' color='$color'>"
         . "$_row->time"
         . "</font></td>\n");
     

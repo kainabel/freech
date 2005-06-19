@@ -23,10 +23,16 @@
   include_once "string.inc.php";
   
   /* Print out a form to compose the message.
-     $_name, $_subject, $_message allow to give default values
-     $_hint is useful to print an error message
-  */
-  function message_compose($_name, $_subject, $_message, $_hint, $_queryvars) {
+   * $_name, $_subject, $_message allow to give default values
+   * $_hint is useful to print an error message
+   * $_quotebutton: When TRUE, the "Quote" button is shown.
+   */
+  function message_compose($_name,
+                           $_subject,
+                           $_message,
+                           $_hint,
+                           $_quotebutton,
+                           $_queryvars) {
     global $cfg;
     global $lang;
     $holdvars = array_merge($cfg[urlvars],
@@ -43,9 +49,12 @@
         . string_escape($_subject)."' maxlength='80'></p>\n"
         . "<p><b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<textarea name='message' cols='80' rows='20' wrap='virtual'>"
-        . string_escape($_message)."</textarea></p>\n"
-        . "<input type='submit' name='quote' value='$lang[quote]'>&nbsp;\n"
-        . "<input type='submit' name='preview' value='$lang[preview]'>&nbsp;\n"
+        . string_escape($_message)."</textarea></p>\n");
+    if ($_quotebutton) {
+      print("<input type='hidden' name='msg_id' value='$_queryvars[msg_id]'>\n");
+      print("<input type='submit' name='quote' value='$lang[quote]'>&nbsp;\n");
+    }
+    print("<input type='submit' name='preview' value='$lang[preview]'>&nbsp;\n"
         . "<input type='submit' name='send' value='$lang[send]'>\n"
         . "</form>\n"); 
   }
@@ -54,7 +63,7 @@
   /* Same as above, but grabs the title from the database instead, leaving
    * all other fields empty.
    */
-  function message_reply($_title, $_hint, $_queryvars) {
+  function message_compose_reply($_title, $_hint, $_queryvars) {
     global $lang;
     // Prepend 'Re: ' if necessary
     if (strpos($_title, $lang[answer]) !== 0) { 
@@ -62,6 +71,6 @@
     } else { 
        $_title = $_title;
     }
-    message_compose('', $_title, '', $_hint, $_queryvars);
+    message_compose('', $_title, '', $_hint, TRUE, $_queryvars);
   }
 ?>

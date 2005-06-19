@@ -65,7 +65,9 @@
   // Write an answer.
   if ($_queryvars['write'] == '1' AND $_queryvars['msg_id']) {
     $entry = $db->get_entry($_queryvars[forum_id], $_queryvars[msg_id]);
-    message_reply($entry->title, '', $_queryvars);
+    message_compose_reply($entry->title, '', $_queryvars);
+  } elseif ($_queryvars['write'] == '1') {
+    message_compose('', '', '', '', FALSE, $_queryvars);
   // Send, with incomplete data.
   } elseif (($_POST['preview'] || $_POST['send'])
            && ( ctype_space($_POST['name'])
@@ -75,14 +77,24 @@
                     $_POST['subject'],
                     $_POST['message'],
                     $lang['somethingmissing'],
+                    $_POST[msg_id] ? TRUE : FALSE,
                     $_queryvars);
-  } elseif ($_POST['preview'] === $lang['preview']) {
+  } elseif ($_POST['preview']) {
     // Preview the article.
-    message_preview($_POST['name'],$_POST['subject'],$_POST['message'],$_queryvars);
-  } elseif ($_POST['edit'] === $lang['change']) {
+    message_preview($_POST['name'],
+                    $_POST['subject'],
+                    $_POST['message'],
+                    $_POST['msg_id'],
+                    $_queryvars);
+  } elseif ($_POST['edit']) {
     // Edit the message.
-    message_compose($_POST['name'],$_POST['subject'],$_POST['message'],'',$_queryvars);
-  } elseif ($_POST['send'] === $lang['send']) {
+    message_compose($_POST['name'],
+                    $_POST['subject'],
+                    $_POST['message'],
+                    '',
+                    $_POST[msg_id] ? TRUE : FALSE,
+                    $_queryvars);
+  } elseif ($_POST['send']) {
     // Insert the message into db.
     $newmsg_id = $db->insert_entry($_queryvars['forum_id'],
                                    $_queryvars['msg_id'],
@@ -90,7 +102,7 @@
                                    $_POST['subject'],
                                    $_POST['message']);
     message_created($newmsg_id, $_queryvars);
-  } elseif ($_POST['quote'] === $lang['quote']) {
+  } elseif ($_POST['quote']) {
     // Insert a quote.
     $entry = $db->get_entry($_queryvars['forum_id'], $_queryvars['msg_id']);
     if ($_queryvars['msg_id'] && $entry->active) {
@@ -102,7 +114,7 @@
             . preg_replace("/^/m","> ", string_unescape($text)) . "\n\n";
     }
     $text .= $_POST['message'];
-    message_compose($_POST['name'], $_POST['subject'], $text, '', $_queryvars);
+    message_compose($_POST['name'], $_POST['subject'], $text, '', FALSE, $_queryvars);
   } elseif ($_queryvars['read'] === '1') {
     // read a message
     $entry = $db->get_entry($_queryvars['forum_id'], $_queryvars['msg_id']);

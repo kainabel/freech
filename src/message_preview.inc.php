@@ -25,11 +25,15 @@
   include_once "message.inc.php";
   
   /* Show a preview of the message */
-  function message_preview($_name, $_subject, $_message, $_queryvars) {
+  function message_preview($_name,
+                           $_subject,
+                           $_message,
+                           $_msg_id,
+                           $_queryvars) {
     global $cfg;
     global $lang;
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'msg_id', 'fold', 'swap', 'hs'));
+    $holdvars = array_merge($cfg[urlvars],
+                            array('forum_id', 'msg_id', 'fold', 'swap', 'hs'));
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");
@@ -43,6 +47,7 @@
         . "<input type='hidden' name='name' value='".string_escape($_name)."'>\n"
         . "<input type='hidden' name='subject' value='".string_escape($_subject)."'>\n"
         . "<input type='hidden' name='message' value='".string_escape($_message)."'>\n"
+        . "<input type='hidden' name='msg_id' value='$_msg_id'>\n"
         . "<input type='submit' name='edit' value='$lang[change]'>\n"
         . "<input type='submit' name='send' value='$lang[send]'></p></table>\n");
   }

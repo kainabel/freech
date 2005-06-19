@@ -161,14 +161,15 @@
     $holdvars   = array_merge($cfg[urlvars],
                               array('forum_id', 'fold', 'swap', 'hs', 'list'));
     $query = "";
-    if ($_queryvars[thread] === '0') {
+    if ($_COOKIE[view] === 'plain') {
+      $query[changeview] = 't';
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[threadview]</a>");
       print("&nbsp;&nbsp;&nbsp;");
       print("$lang[plainview]");
     } else {
+      $query[changeview] = 'c';
       print("$lang[threadview]");
       print("&nbsp;&nbsp;&nbsp;");
-      $query[thread] = '0';
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[plainview]</a>");
     }    
     print("</font>\n");

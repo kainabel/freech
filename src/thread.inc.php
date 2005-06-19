@@ -59,7 +59,7 @@
       if ($_queryvars['read'] === '1') {
         $query[thread] = '0';
         $holdvars = array_merge($holdvars,
-                                array('read','msg_id','thread'));
+                                array('read','msg_id'));
       } else {
         $swap = $_folding->get_string_swap($_row->id);
         $query[swap] = $swap ? $swap : '';

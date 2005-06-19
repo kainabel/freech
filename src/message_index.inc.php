@@ -100,12 +100,12 @@
       $query = "";
       $query[read] = 1;
       print ("&nbsp;<a href='?");
-      if ($_queryvars['thread'] === "0") {
-        $query[thread] = '1';
+      if ($_COOKIE[thread] === 'hide') {
+        $query[showthread] = '1';
         print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
               ."'><font color='#FFFFFF'>$lang[showthread]</font>";
       } else {
-        $query[thread] = '0';
+        $query[showthread] = '-1';
         print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
               ."'><font color='#FFFFFF'>$lang[hidethread]</font>";
       }
@@ -142,6 +142,7 @@
     
     print("</font>\n");
     print("\t\t</td>\n");
+    /* FIXME: only useful, if more than one forum exists
     print("\t\t<td align='right'>\n");
     print("\t\t<font size='-1'>\n");
     
@@ -150,7 +151,7 @@
     print("&nbsp;&nbsp;<a href='?"
           . build_url($_queryvars, $holdvars, $query) . "'>$lang[entryindex]</a>\n");
     print("</font>\n");
-    print("\t\t</td>\n");        
+    print("\t\t</td>\n");*/
     print("\t</tr>\n");
     print("</table>\n");
   } 

@@ -52,10 +52,34 @@
   $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
   $_queryvars     = $_GET;
   
+  // process cookie-changes
+  if ($_GET['changeview'] === 't') {
+    if ($_COOKIE['view'] != 'thread') {
+      setcookie('view','thread');
+      $_COOKIE[view] = 'thread';
+    }
+  } elseif ($_GET['changeview'] === 'c') {
+    if ($_COOKIE['view'] != 'plain') {
+      setcookie('view','plain');
+      $_COOKIE[view] = 'plain';
+    }
+  }
+  if ($_GET['showthread'] === '-1') {
+    if ($_COOKIE['thread'] != 'hide') {
+      setcookie('thread','hide');
+      $_COOKIE[thread] = 'hide';
+    }
+  } elseif ($_GET['showthread'] === '1') {
+    if ($_COOKIE['thread'] != 'show') {
+      setcookie('thread','show');
+      $_COOKIE[thread] = 'show';
+    }
+  }
+
   // Print the page header.
   //parse_str($_SERVER['QUERY_STRING'], $_queryvars);
   $holdvars = array_merge($cfg[urlvars],
-                          array('forum_id', 'fold', 'swap', 'hs', 'thread'));
+                          array('forum_id', 'fold', 'swap', 'hs'));
   print("<html>\n"
       . "<head>\n"
       . "<title>Tefinch</title>"
@@ -63,8 +87,9 @@
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
       . " alink='#5566DD'>\n");
   
-  // Write an answer.
+  // Choose an action  
   if ($_queryvars['write'] == '1' AND $_queryvars['msg_id']) {
+    // Write an answer.
     $entry = $db->get_entry($_queryvars[forum_id], $_queryvars[msg_id]);
     message_compose_reply($entry->title, '', $_queryvars);
   } elseif ($_queryvars['write'] == '1') {
@@ -126,15 +151,14 @@
                       else $haschild = 0;
     // print treeview or not
     $folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
-    if ($_queryvars['thread'] === "0" || ! $haschild)
+    if ($_COOKIE[thread] === 'hide' OR ! $haschild)
       $thread = 0;
-    elseif ($_queryvars['thread'] === '1')
-      $thread = 1;
-    elseif ($folding->is_folded($_queryvars['msg_id'])) {
-      $thread = 0;
-      $_queryvars['thread'] = '0';
-    } else
+    elseif ($_COOKIE[thread] === 'show')
       $thread = 1; 
+    elseif ($folding->is_folded($_queryvars['msg_id']))
+      $thread = 0;
+    else
+      $thread = 1;
     // print top navi-bars
     if ($entry->active)
       heading_print($_queryvars,$entry->title);
@@ -183,12 +207,13 @@
                         $entry->next_entry,
                         $haschild,
                         $_queryvars);      
-  } elseif ($_queryvars['llist']) {
+  } elseif (($_queryvars['list'] || $_queryvars['forum_id'] ) && $_COOKIE['view'] === 'plain') {
     heading_print($_queryvars,'');
     $n_entries = $db->get_n_entries($_queryvars[forum_id]);
+    $tpp = $db->get_n_threads_per_page();
     latest_index_print($n_entries,
                        $_queryvars[hs],
-                       $db->get_n_threads_per_page(),
+                       $tpp,
                        $cfg[ppi],
                        '',
                        $_queryvars);
@@ -201,11 +226,11 @@
     print("</table>\n");
     latest_index_print($n_entries,
                        $_queryvars[hs],
-                       $db->get_n_threads_per_page(),
+                       $tpp,
                        $cfg[ppi],
                        '',
                        $_queryvars);
-    footer_print($queryvars);
+    footer_print($_queryvars);
   } elseif ($_queryvars['list'] === '1' || $_queryvars['forum_id']) {
     // show the message-tree
     $n_threads = $db->get_n_threads($_queryvars[forum_id]);
@@ -228,6 +253,7 @@
     print("</table>\n");
   
     thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
+    footer_print($_queryvars);    
   } else {
     /* Wenn oben aus der Bedingung "|| $_queryvars['forum_id']" entfernt wird, dann ist
        hier Platz für eine Art Forenübersicht, auf der man zuerst landet und von

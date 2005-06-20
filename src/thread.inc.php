@@ -19,8 +19,9 @@
   */
 ?>
 <?php
+  include_once 'config.inc.php';
   include_once 'httpquery.inc.php';
-  include_once 'mysql_nested.inc.php';
+  include_once "mysql_$cfg[db_backend].inc.php";
   
   // Draws the indent according to the given array.
   function _thread_print_indent($_indents) {

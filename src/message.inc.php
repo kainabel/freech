@@ -20,7 +20,6 @@
 ?>
 <?php
   include_once "language/$cfg[lang].inc.php";
-  include_once "mysql_nested.inc.php";
   include_once "string.inc.php";
   
   /* Escape special characters in the posting, wrap lines */

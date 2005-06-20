@@ -285,10 +285,7 @@
      * Args: $_forum   The forum id.
      *       $_id      The node whose children we want to print.
      *       $_offset  The offset.
-     *       $_fold    Defines the logic being used for $_swapped (FOLDED or
-     *                 UNFOLDED).
-     *       $_swapped An array holding all nodes whose children will or wont be
-     *                 skipped.
+     *       $_fold    An object identifying folded nodes.
      *       $_func    A reference to the function to which each row will be
      *                 passed.
      *       $_data    Passed through to $_func as an argument.

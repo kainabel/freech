@@ -19,8 +19,8 @@
   */
 ?>
 <?php
+  include_once "config.inc.php";
   include_once "language/$cfg[lang].inc.php";
-  include_once "mysql_nested.inc.php";
   include_once "string.inc.php";
   include_once "message.inc.php";
   

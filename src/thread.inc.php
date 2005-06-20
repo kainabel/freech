@@ -150,9 +150,12 @@
     
     // User name.
     print("<td align='left'><font size='-1'>");
-    if (!$_row->active) print("------");
-      elseif ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') print("<font color='green'>$_row->name</font>");
-      else print $_row->name;
+    if (!$_row->active)
+      print("------");
+    elseif ($_row->id === $_GET[msg_id] && $queryvars[read] === '1')
+      print("<font color='green'>$_row->name</font>");
+    else
+      print $_row->name;
     print("&nbsp;</font></td>\n");
     
     // Date.

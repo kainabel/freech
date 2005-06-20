@@ -448,6 +448,7 @@
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $forum";
+      $sql .= " WHERE lft!=0";
       if ($updates)
         $sql .= " ORDER BY updated";
       else

@@ -387,7 +387,7 @@
         
         // Parent node types.
         if ($this->_is_parent($row)
-          && !$this->_has_children($row, $nextrow))
+          && !$this->_has_children($row))
           $row->leaftype = PARENT_WITHOUT_CHILDREN;
         else if ($this->_is_parent($row) && !$_fold->is_folded($row->id))
           $row->leaftype = PARENT_WITH_CHILDREN_UNFOLDED;

@@ -1,4 +1,4 @@
-CREATE TABLE forum1 (
+CREATE TABLE tefinch1 (
   id       int(11)          auto_increment,
   threadid int(11) NOT NULL,
   lft      int(11) NOT NULL CHECK(lft > 0),
@@ -17,4 +17,4 @@ CREATE TABLE forum1 (
   CONSTRAINT order_okay CHECK (lft < rgt)
 ) TYPE=innoDB;
 
-INSERT INTO forum1 (lft, rgt) VALUES (0, 1);
+INSERT INTO tefinch1 (lft, rgt) VALUES (0, 1);

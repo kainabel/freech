@@ -91,7 +91,7 @@
   if ($_queryvars['write'] == '1' AND $_queryvars['msg_id']) {
     // Write an answer.
     $entry = $db->get_entry($_queryvars[forum_id], $_queryvars[msg_id]);
-    message_compose_reply(string_unescape($entry->title), '', $_queryvars);
+    message_compose_reply($entry->title, '', $_queryvars);
   } elseif ($_queryvars['write'] == '1') {
     message_compose('', '', '', '', FALSE, $_queryvars);
   // Send, with incomplete data.
@@ -143,12 +143,14 @@
     message_compose($_POST['name'], $_POST['subject'], $text, '', FALSE, $_queryvars);
   } elseif ($_queryvars['read'] === '1') {
     // read a message
-    $entry = $db->get_entry($_queryvars['forum_id'], $_queryvars['msg_id']);
-    // TODO: geht das einfacher? bsp: $entry->rgt - $entry->lgt ??
+    $entry = $db->get_entry($_queryvars['forum_id'], $db->_get_threadid($_queryvars['msg_id']));
+    /* FIXME
     if ($db->get_n_children($_queryvars['forum_id'],
-                            $db->_get_threadid($db->tablebase.$_queryvars['forum_id'],
-                            $_queryvars['msg_id'])) > 1) $haschild = 1;
-                      else $haschild = 0;
+                             $db->_get_threadid($db->tablebase.$_queryvars['forum_id'],
+                             $_queryvars['msg_id'])) > 1*/
+      $haschild = 1;
+    /*else
+      $haschild = 0;*/
     // print treeview or not
     $folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
     if ($_COOKIE[thread] === 'hide' OR ! $haschild)

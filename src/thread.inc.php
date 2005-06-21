@@ -113,7 +113,6 @@
     print("<td align='left'>\n");
     print("<table border=0 cellspacing=0 cellpadding=0>");
     print("<tr>\n");
-    
     // Draw the tree components.
     print("<td align='left'>");
     _thread_print_indent($_indents);

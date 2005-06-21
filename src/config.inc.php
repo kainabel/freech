@@ -3,7 +3,7 @@
   $cfg[db_usr]       = 'user';        // Username on your database host.
   $cfg[db_pass]      = 'password';    // Password on your database host.
   $cfg[db_name]      = 'tefinch';     // Database name.
-  $cfg[db_tablebase] = 'forum';       // Table basename, if unsure leave unchanged.
+  $cfg[db_tablebase] = 'tefinch';       // Table basename, if unsure leave unchanged.
   $cfg[db_backend]   = 'matpath';     // Algorithm. Don't touch unless you know.
   
   $cfg[lang]         = 'german';      // Forum language. The language files are in the

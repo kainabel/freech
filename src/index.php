@@ -233,7 +233,7 @@
     thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
     $db->foreach_child($_queryvars[forum_id],
-                       1,
+                       0,
                        $_queryvars[hs],
                        $folding,
                        thread_print_row,

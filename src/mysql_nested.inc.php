@@ -306,7 +306,7 @@
       
       //print("ID: $_id<br/>\n");
       
-      if ($id != 1) {
+      if ($id != 0) {
         // Get the range of children below the given node.
         $sql = "SELECT lft,rgt FROM $forum WHERE id=$id";
         $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 1: Fail.");
@@ -331,10 +331,10 @@
       $sql .= "DATE_FORMAT(t1.created, '$this->timeformat') time";
       $sql .= " FROM $forum t1";
       $sql .= " WHERE t1.lft!=0";
-      if ($id != 1 || $numrows > 0)
+      if ($id != 0 || $numrows > 0)
         $sql .= " AND (";
       
-      if ($id != 1)
+      if ($id != 0)
         $sql .= " t1.lft BETWEEN $leftmost AND $rightmost";
       else {
         $first = 1;
@@ -349,7 +349,7 @@
         }
       }
       
-      if ($id != 1 || $numrows > 0)
+      if ($id != 0 || $numrows > 0)
         $sql .= ")";
       $sql .= " ORDER BY t1.threadid DESC,t1.lft";
       

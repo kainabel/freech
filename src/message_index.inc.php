@@ -44,7 +44,7 @@
                               array('forum_id', 'fold', 'swap', 'hs'));
     
     // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'"
+    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
         . " bgcolor='#003399'>\n");
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");

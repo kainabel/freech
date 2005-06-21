@@ -12,5 +12,5 @@ CREATE TABLE tefinch (
   active     tinyint(3) unsigned DEFAULT '1',
   PRIMARY KEY (id),
   INDEX(id),
-  INDEX(path),
+  INDEX(path)
 ) TYPE=innoDB;

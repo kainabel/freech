@@ -133,7 +133,7 @@
           . "$_row->title</a>&nbsp;");
 
     if ($_row->leaftype == PARENT_WITH_CHILDREN_FOLDED) {
-      print("(".( ceil (($_row->rgt - $_row->lft)/2)-1 ) .")");
+      print("($_row->n_children)");
     }
     print("</font>"
         . "</td>\n");

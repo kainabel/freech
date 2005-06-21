@@ -200,7 +200,8 @@
      */
     function get_entry($_f, $_id) {
       $id    = $_id * 1;
-      $sql  = "SELECT id,threadid tid,HEX(path) path,name,title,text,active,";
+      $sql  = "SELECT id,threadid,threadid tid,HEX(path) path,n_children,";
+      $sql .= "name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $this->tablebase";
@@ -351,7 +352,7 @@
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $this->tablebase";
-      $sql .= " WHERE forumid=$forumid AND (";
+      $sql .= " WHERE (";
       
       $first = 1;
       while ($row = mysql_fetch_object($res)) {
@@ -377,7 +378,9 @@
         $nextrow = mysql_fetch_object($res);
         
         // Parent node types.
-        if ($this->_is_parent($row) && !$this->_is_childof($row, $nextrow))
+        if ($this->_is_parent($row)
+          && !$this->_is_childof($row, $nextrow)
+          && !$_fold->is_folded($row->id))
           $row->leaftype = PARENT_WITHOUT_CHILDREN;
         else if ($this->_is_parent($row) && !$_fold->is_folded($row->id))
           $row->leaftype = PARENT_WITH_CHILDREN_UNFOLDED;
@@ -436,7 +439,7 @@
      * through all children of the top level node. */
     function foreach_child_in_thread($_forum, $_id, $_offset,
                                      $_fold, $_func, $_data) {
-      $threadid = $this->_get_threadid($_forumid, $_id);
+      $threadid = $this->_get_threadid($_id);
       $this->foreach_child($_forumid,
                            $threadid,
                            $_offset,

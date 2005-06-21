@@ -143,21 +143,13 @@
     message_compose($_POST['name'], $_POST['subject'], $text, '', FALSE, $_queryvars);
   } elseif ($_queryvars['read'] === '1') {
     // read a message
-    $entry = $db->get_entry($_queryvars['forum_id'], $db->_get_threadid($_queryvars['msg_id']));
-    /* FIXME
-    if ($db->get_n_children($_queryvars['forum_id'],
-                             $db->_get_threadid($db->tablebase.$_queryvars['forum_id'],
-                             $_queryvars['msg_id'])) > 1*/
-      $haschild = 1;
-    /*else
-      $haschild = 0;*/
+    $entry    = $db->get_entry($_queryvars['forum_id'], $_queryvars['msg_id']);
+    $haschild = !($entry->id == $entry->threadid && $entry->n_children == 0);
     // print treeview or not
-    $folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
-    if ($_COOKIE[thread] === 'hide' OR ! $haschild)
-      $thread = 0;
-    elseif ($_COOKIE[thread] === 'show')
-      $thread = 1; 
-    elseif ($folding->is_folded($_queryvars['msg_id']))
+    $folding = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
+    if ($_COOKIE[thread] === 'hide'
+        OR !$haschild
+        OR $folding->is_folded($_queryvars['msg_id']))
       $thread = 0;
     else
       $thread = 1;
@@ -183,7 +175,7 @@
                     $_queryvars);
       if ($thread) {
         print("<tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>");
-        $folding = new ThreadFolding(0,0);
+        //$folding = new ThreadFolding(0,0);
         $db->foreach_child_in_thread($_queryvars['forum_id'],
                                      $_queryvars['msg_id'],
                                      0,
@@ -193,13 +185,12 @@
         print("</table></td></tr>");
       }
     } elseif (! $entry) {
-      message_print ('',$lang[noentrytitle],$lang[noentrybody],'',0,$_queryvars);
+      message_print ('',$lang[noentrytitle],$lang[noentrybody],'',$_queryvars);
     } else {
       message_print ('',
                      $lang[blockedtitle],
                      $lang[blockedentry],
                      '',
-                     $thread,
                      $_queryvars);
     }
     message_index_print($entry->id,

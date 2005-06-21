@@ -201,7 +201,7 @@
     function get_entry($_f, $_id) {
       $forum = $this->tablebase . ($_f * 1);
       $id    = $_id * 1;
-      $sql  = "SELECT id,threadid tid,lft,name,title,text,active,";
+      $sql  = "SELECT id,threadid,threadid tid,lft,rgt,name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $forum";
@@ -212,6 +212,7 @@
       $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
       $row->prev_entry  = $this->_get_prev_entry_id($_f,  $row->tid, $row->lft);
       $row->next_entry  = $this->_get_next_entry_id($_f,  $row->tid, $row->lft);
+      $row->n_children  = ceil(($row->rgt - $row->lft) / 2) - 1;
       return $row;
     }
     
@@ -386,6 +387,7 @@
         else
           $row->leaftype = CHILD_WITH_CHILDREN;
         
+        $row->n_children = ceil(($row->rgt - $row->lft) / 2) - 1;
         $_func($row, $indents, $_data);
         
         // Indent.
@@ -477,8 +479,8 @@
     function get_n_threads($_forum) {
       $forum  = $this->tablebase . ($_forum * 1);
       $sql  = "SELECT COUNT(DISTINCT threadid) threads";
-      $sql .= " FROM $forum t1";
-      $sql .= " WHERE t1.lft!=0";
+      $sql .= " FROM $forum";
+      $sql .= " WHERE lft!=0";
       $res = mysql_query($sql) or die("TefinchDB::get_n_threads(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->threads;

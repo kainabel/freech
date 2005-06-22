@@ -75,12 +75,11 @@
     cookie_change('fold','2');
     cookie_change('swap','');
   }
-  $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
-  if ($_GET['swap'])
-    cookie_change('swap',$folding->get_string_swap($_GET[swap]));
-  // FIXME: get_string_swap seems not not change the folding-object, so ...
-  //        recreated it with the new Cookie
-  $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+  $folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+  if ($_GET['swap']) {
+    $folding->swap($_GET['swap']);
+    cookie_change('swap', $folding->get_string());
+  }
   
   // Print the page header.
   $holdvars = array_merge($cfg[urlvars],

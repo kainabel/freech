@@ -46,6 +46,14 @@
     }
     
     
+    function swap($_id) {
+      if ($this->swapped[$_id] == $_id)
+        unset($this->swapped[$_id]);
+      else
+        $this->swapped[$_id] = $_id;
+    }
+    
+    
     function get_string() {
       return implode('.', $this->swapped);
     }

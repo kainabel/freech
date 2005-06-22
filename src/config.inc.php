@@ -16,4 +16,5 @@
   $cfg[tpp]          = 8;             // Maximum number of threads shown per page.
   $cfg[ppi]          = 5;             // Maximum number of pages shown in the index
                                       // before the [...] button is shown.
+  $cfg[maxlength]    = 10000;         // Maximum of length of a message in characters
 ?>

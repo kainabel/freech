@@ -29,16 +29,15 @@
       if (strpos($line,"> ") === 0) {
         $text .= $line."\n";
       } else {
-        $text .= wordwrap($line,80)."\n";
+        $text .= wordwrap(wordwrap($line,80),100,"\n",TRUE)."\n";
       }
     }
-    return nl2br(preg_replace("/  /","&nbsp;&nbsp;", string_escape($text)));
+    return nl2br(preg_replace("/ /","&nbsp;", string_escape($text)));
   }
   
   
   /* print out a message well formated
     $_name, $_subject, $_message, $_time - values which are shown
-    $_showthread - whether to show (1) or to hide (0) the messagetree
   */
   function message_print ($_name,$_subject,$_message,$_time,$_queryvars) {
     global $lang;

@@ -109,6 +109,14 @@
                     $lang['somethingmissing'],
                     $_POST[msg_id] ? TRUE : FALSE,
                     $_queryvars);
+  } elseif (($_POST['preview'] || $_POST['send'])
+           && ( strlen($_POST['message']) > $cfg[maxlength])) {
+    message_compose($_POST['name'],
+                    $_POST['subject'],
+                    $_POST['message'],
+                    $lang['messagetoolong'],
+                    $_POST[msg_id] ? TRUE : FALSE,
+                    $_queryvars);
   } elseif ($_POST['preview']) {
     // Preview the article.
     message_preview($_POST['name'],

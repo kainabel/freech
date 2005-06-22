@@ -48,7 +48,7 @@
   function _thread_print_treeimage($_row, $_folding, $_queryvars) {
     global $cfg;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'fold', 'swap', 'hs'));
+                            array('forum_id', 'hs'));
     
     switch ($_row->leaftype) {
     case PARENT_WITHOUT_CHILDREN:
@@ -62,9 +62,8 @@
         $holdvars = array_merge($holdvars,
                                 array('read','msg_id'));
       } else {
-        $swap = $_folding->get_string_swap($_row->id);
+        $swap = $_row->id;
         $query[swap] = $swap ? $swap : '';
-        $query[fold] = $_folding->get_default();
       }
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
       print("<img src='img/m.png' border=0 width=9 height=21 alt='0' />");
@@ -73,9 +72,8 @@
       
     case PARENT_WITH_CHILDREN_FOLDED:
       $query = "";
-      $swap = $_folding->get_string_swap($_row->id);
+      $swap = $_row->id;
       $query[swap] = $swap ? $swap : '';
-      $query[fold] = $_folding->get_default();
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
       print("<img src='img/p.png' border=0 width=9 height=21 alt='0' />");
       print("</a>");
@@ -100,7 +98,7 @@
     
     list($folding, $queryvars) = $_data;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'fold', 'swap', 'hs'));
+                            array('forum_id', 'hs'));
     
     // Open a new row.
     print("<tr valign='middle' bgcolor='#ffffff'>\n");

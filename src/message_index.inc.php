@@ -41,7 +41,7 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'hs'));
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
@@ -125,7 +125,7 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'hs'));
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='5' border='0'>\n");

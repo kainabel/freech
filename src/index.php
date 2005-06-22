@@ -53,33 +53,38 @@
   $_queryvars     = $_GET;
   
   // process cookie-changes
-  if ($_GET['changeview'] === 't') {
-    if ($_COOKIE['view'] != 'thread') {
-      setcookie('view','thread');
-      $_COOKIE[view] = 'thread';
-    }
-  } elseif ($_GET['changeview'] === 'c') {
-    if ($_COOKIE['view'] != 'plain') {
-      setcookie('view','plain');
-      $_COOKIE[view] = 'plain';
+  // FIXME: move elsewhere (httpquery??)
+  function cookie_change($_name,$_value) {
+    if ($_COOKIE[$_name] != $_value) {
+      setcookie($_name,$_value);
+      $_COOKIE[$_name] = $_value;
     }
   }
-  if ($_GET['showthread'] === '-1') {
-    if ($_COOKIE['thread'] != 'hide') {
-      setcookie('thread','hide');
-      $_COOKIE[thread] = 'hide';
-    }
-  } elseif ($_GET['showthread'] === '1') {
-    if ($_COOKIE['thread'] != 'show') {
-      setcookie('thread','show');
-      $_COOKIE[thread] = 'show';
-    }
+  if ($_GET['changeview'] === 't')
+    cookie_change('view','thread');
+  elseif ($_GET['changeview'] === 'c')
+    cookie_change('view','plain');
+  if ($_GET['showthread'] === '-1')
+    cookie_change('thread','hide');
+  elseif ($_GET['showthread'] === '1')
+    cookie_change('thread','show');
+  if ($_GET['fold'] === '1') {
+    cookie_change('fold','1');
+    cookie_change('swap','');
+  } elseif ($_GET['fold'] === '2') {
+    cookie_change('fold','2');
+    cookie_change('swap','');
   }
-
+  $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+  if ($_GET['swap'])
+    cookie_change('swap',$folding->get_string_swap($_GET[swap]));
+  // FIXME: get_string_swap seems not not change the folding-object, so ...
+  //        recreated it with the new Cookie
+  $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+  
   // Print the page header.
-  //parse_str($_SERVER['QUERY_STRING'], $_queryvars);
   $holdvars = array_merge($cfg[urlvars],
-                          array('forum_id', 'fold', 'swap', 'hs'));
+                          array('forum_id', 'hs'));
   print("<html>\n"
       . "<head>\n"
       . "<title>Tefinch</title>"
@@ -146,10 +151,8 @@
     $entry    = $db->get_entry($_queryvars['forum_id'], $_queryvars['msg_id']);
     $haschild = !($entry->id == $entry->threadid && $entry->n_children == 0);
     // print treeview or not
-    $folding = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
-    if ($_COOKIE[thread] === 'hide'
-        OR !$haschild
-        OR $folding->is_folded($_queryvars['msg_id']))
+    //$folding = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
+    if ($_COOKIE[thread] === 'hide' OR ! $haschild)
       $thread = 0;
     else
       $thread = 1;
@@ -175,7 +178,7 @@
                     $_queryvars);
       if ($thread) {
         print("<tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>");
-        //$folding = new ThreadFolding(0,0);
+        $folding = new ThreadFolding(0,0);
         $db->foreach_child_in_thread($_queryvars['forum_id'],
                                      $_queryvars['msg_id'],
                                      0,
@@ -228,7 +231,7 @@
     // show the message-tree
     $n_threads = $db->get_n_threads($_queryvars[forum_id]);
     $tpp       = $db->get_n_threads_per_page();
-    $folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
+    //$folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
     heading_print($_queryvars,'');
     thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
     print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");

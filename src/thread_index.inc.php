@@ -40,7 +40,7 @@
     global $cfg;
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs', 'list'));
+                              array('forum_id', 'list', 'hs'));
     
     $pages      = ceil($_n_threads / $_tpp);
     $activepage = ceil($_offset / $_tpp) + 1;
@@ -159,7 +159,7 @@
     print("\t\t<font size='-1'>\n");
     
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs', 'list'));
+                              array('forum_id', 'list', 'hs'));
     $query = "";
     if ($_COOKIE[view] === 'plain') {
       $query[changeview] = 't';

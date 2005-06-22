@@ -29,7 +29,7 @@
     global $cfg;
     global $lang;
     $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'fold', 'swap', 'hs'));
+                              array('forum_id', 'hs'));
     // Give some status info and the usual links
     print("<p><h2>$lang[entrysuccess]</h2><br>");
     print("<a href='?".build_url($_queryvars, $holdvars, 

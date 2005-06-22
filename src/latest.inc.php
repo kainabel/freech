@@ -25,7 +25,7 @@
   function latest_print_row($_row, $_queryvars) {
     global $cfg;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'fold', 'swap', 'hs'));
+                            array('forum_id', 'hs'));
     
     // Open a new row.
     print("<tr valign='middle' bgcolor='#ffffff'>\n");

@@ -36,7 +36,7 @@
     global $cfg;
     global $lang;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'msg_id', 'fold', 'swap', 'hs'));
+                            array('forum_id', 'msg_id', 'hs'));
     print("<form action='?".build_url($_queryvars, $holdvars,'')
         ."' method='POST'>\n"
         . "<font size='+1' color='red'>$lang[writeamessage]</font>\n");

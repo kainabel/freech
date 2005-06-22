@@ -33,7 +33,7 @@
     global $cfg;
     global $lang;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'msg_id', 'fold', 'swap', 'hs'));
+                            array('forum_id', 'msg_id', 'hs'));
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");

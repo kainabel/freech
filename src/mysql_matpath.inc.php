@@ -347,7 +347,7 @@
         $sql .= " WHERE forumid=$forumid";
         $sql .= " GROUP BY threadid";
         $sql .= " HAVING path=''";
-        $sql .= " ORDER BY threadid,path DESC";
+        $sql .= " ORDER BY threadid DESC,path";
         $sql .= " LIMIT $offset, $this->threadsperpage";
         $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 2: Fail.");
       }

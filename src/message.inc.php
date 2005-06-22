@@ -25,11 +25,13 @@
   /* Escape special characters in the posting, wrap lines */
   // NOT private.
   function message_format($_string) {
+    global $cfg;
     foreach ( explode("\n",$_string) as $line ) {
       if (strpos($line,"> ") === 0) {
         $text .= $line."\n";
       } else {
-        $text .= wordwrap(wordwrap($line,80),100,"\n",TRUE)."\n";
+        $text .= wordwrap(wordwrap($line,$cfg[linelength]),
+                          ceil($cfg[linelength]*1.25),"\n",TRUE)."\n";
       }
     }
     return nl2br(preg_replace("/ /","&nbsp;", string_escape($text)));

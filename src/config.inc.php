@@ -17,4 +17,5 @@
   $cfg[ppi]          = 5;             // Maximum number of pages shown in the index
                                       // before the [...] button is shown.
   $cfg[maxlength]    = 10000;         // Maximum of length of a message in characters
+  $cfg[linelength]   = 80;            // Number of Characters before a line wraps
 ?>

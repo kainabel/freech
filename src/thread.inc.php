@@ -20,6 +20,7 @@
 ?>
 <?php
   include_once 'config.inc.php';
+  include_once 'string.inc.php';
   include_once 'httpquery.inc.php';
   include_once "mysql_$cfg[db_backend].inc.php";
   
@@ -96,6 +97,8 @@
     global $cfg;
     global $lang;
     
+    $_row->name  = string_escape($_row->name);
+    $_row->title = string_escape($_row->title);
     list($folding, $queryvars) = $_data;
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'hs'));
@@ -121,6 +124,7 @@
     $query = "";
     $query[msg_id] = $_row->id;
     $query[read] = 1;
+    $_row->title = str_replace(" ", "&nbsp;", $_row->title);
     print("<td align='left'><font size='-1'>&nbsp;");
     if (!$_row->active)
       print($lang[blockedtitle]."&nbsp;");

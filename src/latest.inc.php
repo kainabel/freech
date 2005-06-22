@@ -19,6 +19,7 @@
   */
 ?>
 <?php
+  include_once 'string.inc.php';
   include_once 'httpquery.inc.php';
   include_once 'latest_index.inc.php';
   
@@ -27,6 +28,9 @@
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'hs'));
     
+    $_row->name  = string_escape($_row->name);
+    $_row->title = string_escape($_row->title);
+
     // Open a new row.
     print("<tr valign='middle' bgcolor='#ffffff'>\n");
     

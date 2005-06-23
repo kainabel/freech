@@ -135,10 +135,10 @@
     
     $query = "";
     $query['list'] = 1;
-    if ($_GET['read'] === '1' || $_GET['llist']) print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query) . "'>Forum</a>"
-          . "&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
-    else print "&nbsp;&nbsp;Forum";
+    print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query) . "'>Forum</a>");
+    if ($_GET['read'] === '1' || $_GET['llist']) 
+          print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
     
     print("</font>\n");
     print("\t\t</td>\n");

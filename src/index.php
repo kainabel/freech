@@ -84,6 +84,8 @@
   // Print the page header.
   $holdvars = array_merge($cfg[urlvars],
                           array('forum_id', 'hs'));
+  print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"".
+        "\"http://www.w3.org/TR/html4/loose.dtd\">");
   print("<html>\n"
       . "<head>\n"
       . "<title>Tefinch</title>"
@@ -98,23 +100,38 @@
     message_compose_reply($entry->title, '', $_queryvars);
   } elseif ($_queryvars['write'] == '1') {
     message_compose('', '', '', '', FALSE, $_queryvars);
-  // Send, with incomplete data.
-  } elseif (($_POST['preview'] || $_POST['send'])
-           && ( ctype_space($_POST['name'])
-             || ctype_space($_POST['subject'])
-             || ctype_space($_POST['message']) ) ) {
+  } elseif (($_POST['preview'] || $_POST['send']) &&
+            ( ctype_space($_POST['name'])
+           || ctype_space($_POST['subject'])
+           || ctype_space($_POST['message']) ) ) {
     message_compose($_POST['name'],
                     $_POST['subject'],
                     $_POST['message'],
                     $lang['somethingmissing'],
                     $_POST[msg_id] ? TRUE : FALSE,
                     $_queryvars);
-  } elseif (($_POST['preview'] || $_POST['send'])
-           && ( strlen($_POST['message']) > $cfg[maxlength])) {
+  } elseif (($_POST['preview'] || $_POST['send']) &&
+            ( strlen($_POST['message']) > $cfg[max_msglength])) {
     message_compose($_POST['name'],
                     $_POST['subject'],
                     $_POST['message'],
                     $lang['messagetoolong'],
+                    $_POST[msg_id] ? TRUE : FALSE,
+                    $_queryvars);
+  } elseif (($_POST['preview'] || $_POST['send']) && 
+            ( strlen($_POST['name']) > $cfg[max_namelength])) {
+    message_compose($_POST['name'],
+                    $_POST['subject'],
+                    $_POST['message'],
+                    $lang['nametoolong'],
+                    $_POST[msg_id] ? TRUE : FALSE,
+                    $_queryvars);
+  } elseif (($_POST['preview'] || $_POST['send']) && 
+            ( strlen($_POST['subject']) > $cfg[max_titlelength])) {
+    message_compose($_POST['name'],
+                    $_POST['subject'],
+                    $_POST['message'],
+                    $lang['titletoolong'],
                     $_POST[msg_id] ? TRUE : FALSE,
                     $_queryvars);
   } elseif ($_POST['preview']) {
@@ -138,7 +155,7 @@
                                    $_queryvars['msg_id'],
                                    $_POST['name'],
                                    $_POST['subject'],
-                                   $_POST['message']);
+                                   message_wrapline($_POST['message']));
     message_created($newmsg_id, $_queryvars);
   } elseif ($_POST['quote']) {
     // Insert a quote.

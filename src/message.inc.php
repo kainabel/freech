@@ -24,7 +24,8 @@
   
   /* Escape special characters in the posting, wrap lines */
   // NOT private.
-  function message_format($_string) {
+  
+  function message_wrapline($_string) {
     global $cfg;
     foreach ( explode("\n",$_string) as $line ) {
       if (strpos($line,"> ") === 0) {
@@ -34,7 +35,11 @@
                           ceil($cfg[linelength]*1.25),"\n",TRUE)."\n";
       }
     }
-    return nl2br(preg_replace("/ /","&nbsp;", string_escape($text)));
+    return $text;
+  }
+  
+  function message_format($_string) {
+    return nl2br(preg_replace("/ /","&nbsp;", string_escape(message_wrapline($_string))));
   }
   
   

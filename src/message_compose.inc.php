@@ -43,10 +43,10 @@
     if ($_hint) print("<br><font size='+1' color='red'>$_hint</font>\n");
     print("<p><b>$lang[name]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<input type='text' size='80' name='name' value='"
-        . string_escape($_name)."' maxlength='80'></p>\n"
+        . string_escape($_name)."' maxlength='$cfg[max_namelength]'></p>\n"
         . "<p><b>$lang[msgtitle]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<input type='text' size='80' name='subject' value='"
-        . string_escape($_subject)."' maxlength='80'></p>\n"
+        . string_escape($_subject)."' maxlength='$cfg[max_titlelength]'></p>\n"
         . "<p><b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<textarea name='message' cols='80' rows='20' wrap='virtual'>"
         . string_escape($_message)."</textarea></p>\n");

@@ -26,14 +26,14 @@
   
   
   function string_unescape($_string) {
-    return html_entity_decode($_string,ENT_QUOTES);
+    return html_entity_decode($_string, ENT_QUOTES);
   }
   
   
   // Removes the escapings that were added by magic-quotes.
-  function stripslashes_deep($value) {
-    return is_array($value)
-         ? array_map('stripslashes_deep', $value)
-         : stripslashes($value);
+  function stripslashes_deep($_value) {
+    return is_array($_value)
+         ? array_map('stripslashes_deep', $_value)
+         : stripslashes($_value);
   }
 ?>

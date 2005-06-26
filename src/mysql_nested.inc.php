@@ -59,8 +59,9 @@
     /***********************************************************************
      * Private API.
      ***********************************************************************/
-    function _lock_write($table) {
-      $sql = "LOCK TABLE $table WRITE";
+    function _lock_write($_table) {
+      $table = mysql_escape_string($_table);
+      $sql   = "LOCK TABLE $table WRITE";
       //mysql_query($sql) or die("TefinchDB::lock_write(): Failed!\n");
     }
     
@@ -71,8 +72,9 @@
     }
     
     
-    function _get_rightmost($table, $_id) {
-      $id = $_id * 1;
+    function _get_rightmost($_table, $_id) {
+      $table = mysql_escape_string($_table);
+      $id    = $_id * 1;
       if ($id == 0)
         $sql = "SELECT rgt FROM $table WHERE lft=0";
       else
@@ -83,8 +85,9 @@
     }
     
     
-    function _get_threadid($table, $_id) {
-      $id = $_id * 1;
+    function _get_threadid($_table, $_id) {
+      $table = mysql_escape_string($_table);
+      $id    = $_id * 1;
       if ($id == 0)
         $sql = "SELECT threadid FROM $table WHERE lft=0";
       else
@@ -99,10 +102,11 @@
     // This returns a value that is in fact equal to _get_threadid, but it
     // also works for nodes that have no threadid assigned yet, at the expence
     // of performance.
-    function _get_toplevel($table, $_lft, $_rgt) {
-      $id  = $_id  * 1;
-      $lft = $_lft * 1;
-      $rgt = $_rgt * 1;
+    function _get_toplevel($_table, $_lft, $_rgt) {
+      $table = mysql_escape_string($_table);
+      $id    = $_id  * 1;
+      $lft   = $_lft * 1;
+      $rgt   = $_rgt * 1;
       $sql  = "SELECT id FROM $table";
       $sql .= " WHERE lft<=$lft AND rgt>=$rgt AND lft!=0";
       $sql .= " ORDER BY lft LIMIT 1";
@@ -112,8 +116,8 @@
     }
     
     
-    function _is_leaf($row) {
-      return $row->rgt - $row->lft == 1;
+    function _is_leaf($_row) {
+      return $_row->rgt - $_row->lft == 1;
     }
     
     

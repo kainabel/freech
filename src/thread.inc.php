@@ -49,7 +49,7 @@
   function _thread_print_treeimage($_row, $_folding, $_queryvars) {
     global $cfg;
     $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'hs'));
+                            array('forum_id', 'hs', 'msg_id', 'read'));
     
     switch ($_row->leaftype) {
     case PARENT_WITHOUT_CHILDREN:
@@ -57,15 +57,10 @@
       break;
       
     case PARENT_WITH_CHILDREN_UNFOLDED:
-      $query = "";
-      if ($_queryvars['read'] === '1') {
-        $query[thread] = '0';
-        $holdvars = array_merge($holdvars,
-                                array('read','msg_id'));
-      } else {
-        $swap = $_row->id;
-        $query[swap] = $swap ? $swap : '';
-      }
+      $swap = $_row->id;
+      $query[swap] = $swap ? $swap : '';
+      if ($_queryvars[read] == 1)
+        $query[showthread] = -1;
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
       print("<img src='img/m.png' border=0 width=9 height=21 alt='0' />");
       print("</a>");

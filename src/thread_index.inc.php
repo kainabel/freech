@@ -158,8 +158,7 @@
     print("\t\t<td align='left'>\n");
     print("\t\t<font size='-1'>\n");
     
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'list', 'hs'));
+    $holdvars = array_merge($cfg[urlvars], array('forum_id', 'list'));
     $query = "";
     if ($_COOKIE[view] === 'plain') {
       $query[changeview] = 't';

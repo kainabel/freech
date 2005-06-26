@@ -21,27 +21,27 @@
 <?php
   // Compatibility for older PHP versions.
   if (!function_exists('http_build_query')) {
-    function http_build_query(&$queryvars,
-                              $pref = 'flags_',
-                              $f    = '',
-                              $idx  = '') {
+    function http_build_query(&$_queryvars,
+                              $_pref = 'flags_',
+                              $_f    = '',
+                              $_idx  = '') {
       $ret = '';
-      foreach ($queryvars as $i => $j) {
+      foreach ($_queryvars as $i => $j) {
         if ($j == '')
           continue;
-        if ($idx != '')
-          $i = $idx . "[$i]";
+        if ($_idx != '')
+          $i = $_idx . "[$i]";
         if (is_array($j))
-          $ret .= http_build_query($j, '', $f, $i);
+          $ret .= http_build_query($j, '', $_f, $i);
         else {
           $j = urlencode($j);
           if (is_int($i))
-            $ret .= "$f$pref$i=$j";
+            $ret .= "$_f$_pref$i=$j";
           else
-            $ret .= "$f$i=$j";
+            $ret .= "$_f$i=$j";
         }
         
-        $f = '&';
+        $_f = '&';
       }
       
       return $ret;

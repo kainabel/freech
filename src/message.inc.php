@@ -54,7 +54,7 @@
          ."<font color='#555555' size='-1'>$_time</font>\n"
          ."<br><b>".string_escape($_subject)."</b><br><i>".string_escape($_name)."</i></td><td></td></tr></tbody>\n"
          ."</table></td></tr><tr><td><br>\n"
-         .preg_replace("/^(&gt;&nbsp;.*)/m","<font color='red'>$1</font>", message_format($_message))
+         .preg_replace("/^(&gt;&nbsp;.*)/m","<font color='#990000'>$1</font>", message_format($_message))
          ."<br></td></tr></tbody></table></p>\n");
   }
 ?>

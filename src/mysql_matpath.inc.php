@@ -222,12 +222,7 @@
     }
 
 
-    /* Insert a new child into the nested set.
-     *        A(1|10)
-     *          /  \
-     *     B(2|7)  C(8|9)
-     *      /  \
-     *  C(3|4) D(5|6)
+    /* Insert a new child.
      *
      * $_forum:  The forum id.
      * $_parent: The id of the entry under which the new entry is placed.

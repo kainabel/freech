@@ -58,9 +58,10 @@
       
     case PARENT_WITH_CHILDREN_UNFOLDED:
       $swap = $_row->id;
-      $query[swap] = $swap ? $swap : '';
       if ($_queryvars[read] == 1)
         $query[showthread] = -1;
+      else
+        $query[swap] = $swap ? $swap : '';
       print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
       print("<img src='img/m.png' border=0 width=9 height=21 alt='0' />");
       print("</a>");

@@ -98,16 +98,16 @@
     if ($activepage > 1)
       print("&nbsp;<a href='?"
         . build_url($_queryvars, $holdvars, array ( hs => ( $activepage - 2)*$_tpp ))
-        . "'><font color='#FFFFFF'>$lang[prev]</font></a>\n");
+        . "'><font color='#FFFFFF'>$lang[next]</font></a>\n");
     else
-      print("&nbsp;<font color='#FFFFFF'>$lang[prev]</font>\n");
+      print("&nbsp;<font color='#FFFFFF'>$lang[next]</font>\n");
 
     if ($activepage < $pages)
       print("&nbsp;<a href='?"
         . build_url($_queryvars, $holdvars, array ( hs => ($activepage)*$_tpp ))
-        . "'><font color='#FFFFFF'>$lang[next]</font></a>\n");
+        . "'><font color='#FFFFFF'>$lang[prev]</font></a>\n");
     else
-      print("&nbsp;<font color='#FFFFFF'>$lang[next]</font>\n");
+      print("&nbsp;<font color='#FFFFFF'>$lang[prev]</font>\n");
 
     if ($_folding) {
       $fold  = $_folding->get_default();

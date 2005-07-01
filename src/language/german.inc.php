@@ -26,8 +26,8 @@
   $lang[index]            = "Seite";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
-  $lang[next]             = "&Auml;ltere";
-  $lang[prev]             = "Neuere";
+  $lang[prev]             = "&Auml;ltere";
+  $lang[next]             = "Neuere";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
   $lang[threadview]       = "In Thread-Darstellung anzeigen";
@@ -60,7 +60,7 @@
   $lang[preview]          = "Vorschau";
   $lang[quote]            = "Zitat einfügen";
   $lang[answer]           = "Re: ";
-  $lang[wrote]            = "schrieb am";
+  $lang[wrote]            = "[USER] schrieb am";
   
   // Preview
   $lang[reallysend]       = "Vorschau";

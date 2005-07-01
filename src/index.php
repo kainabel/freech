@@ -164,11 +164,11 @@
     $entry = $db->get_entry($_queryvars['forum_id'], $_queryvars['msg_id']);
     if ($_queryvars['msg_id'] && $entry->active) {
       // Add a line "user wrote date" and add "> " at the beginning of each line
-      $text = strip_tags($entry->text);
-      $text = string_unescape($entry->name)
-            . " " . $lang[wrote]
-            . " " . string_unescape($entry->time) . "\n\n"
-            . preg_replace("/^/m","> ", string_unescape($text)) . "\n\n";
+      $text = preg_replace("/\[USER\]/",
+                           string_escape($entry->name),
+                           $lang[wrote])
+            . " " . $entry->time . "\n\n"
+            . preg_replace("/^/m","> ", $entry->text) . "\n";
     }
     $text .= $_POST['message'];
     message_compose($_POST['name'], $_POST['subject'], $text, '', FALSE, $_queryvars);

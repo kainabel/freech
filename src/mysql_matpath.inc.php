@@ -37,7 +37,6 @@
     var $dh;
     var $tablebase;
     var $timeformat = '%y-%m-%d %H:%i';
-    var $threadsperpage = 4;
     
     function TefinchDB($_host, $_user, $_pass, $_db, $_tablebase) {
       $this->db        = $_db;
@@ -327,10 +326,17 @@
      *   5 Non-branch-bottom child without children.
      *   6 Non-branch-bottom child with children.
      */
-    function foreach_child($_forumid, $_id, $_offset, $_fold, $_func, $_data) {
+    function foreach_child($_forumid,
+                           $_id,
+                           $_offset,
+                           $_limit,
+                           $_fold,
+                           $_func,
+                           $_data) {
       $forumid = $_forumid * 1;
       $id      = $_id      * 1;
       $offset  = $_offset  * 1;
+      $limit   = $_limit   * 1;
       
       if ($id != 0) {
         $sql  = "SELECT id,HEX(path) path";
@@ -346,7 +352,7 @@
         $sql .= " GROUP BY threadid";
         $sql .= " HAVING path=''";
         $sql .= " ORDER BY threadid DESC,path";
-        $sql .= " LIMIT $offset, $this->threadsperpage";
+        $sql .= " LIMIT $offset, $limit";
         $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 2: Fail.");
       }
       
@@ -443,12 +449,13 @@
     /* This function performs exactly as foreach_child(), except that given a
      * an id, it first looks up the top-level parent of that node and walks
      * through all children of the top level node. */
-    function foreach_child_in_thread($_forum, $_id, $_offset,
+    function foreach_child_in_thread($_forum, $_id, $_offset, $_limit,
                                      $_fold, $_func, $_data) {
       $threadid = $this->_get_threadid($_id);
       $this->foreach_child($_forumid,
                            $threadid,
                            $_offset,
+                           $_limit,
                            $_fold,
                            $_func,
                            $_data);
@@ -476,11 +483,13 @@
      */
     function foreach_latest_entry($_forumid,
                                   $_offset,
+                                  $_limit,
                                   $_updates,
                                   $_func,
                                   $_data) {
       $forumid = $_forumid * 1;
       $offset  = $_offset  * 1;
+      $limit   = $_limit   * 1;
       $sql  = "SELECT id,name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
@@ -491,7 +500,7 @@
         $sql .= " ORDER BY updated";
       else
         $sql .= " ORDER BY created";
-      $sql .= " DESC LIMIT $offset, $this->threadsperpage";
+      $sql .= " DESC LIMIT $offset, $limit";
       $res = mysql_query($sql)
                or die("TefinchDB::foreach_latest_entry(): Failed.");
       while ($row = mysql_fetch_object($res))
@@ -532,16 +541,6 @@
       $res = mysql_query($sql) or die("TefinchDB::get_n_children(): Failed.");
       $row = mysql_fetch_object($res);
       return $row->n_children;
-    }
-    
-    
-    function get_n_threads_per_page() {
-      return $this->threadsperpage;
-    }
-    
-    
-    function set_n_threads_per_page($_tpp) {
-      $this->threadsperpage = $_tpp;
     }
     
     

@@ -39,7 +39,6 @@
   
   $db = new TefinchDB($cfg[db_host], $cfg[db_usr], $cfg[db_pass],
                       $cfg[db_name], $cfg[db_tablebase]);
-  $db->set_n_threads_per_page($cfg[tpp]);
   $db->set_timeformat($lang[dateformat]);
   
   if (get_magic_quotes_gpc()) {
@@ -208,6 +207,7 @@
         $db->foreach_child_in_thread($_queryvars['forum_id'],
                                      $_queryvars['msg_id'],
                                      0,
+                                     $cfg[tpp],
                                      $folding,
                                      thread_print_row,
                                      array($folding, $_queryvars));
@@ -232,23 +232,23 @@
   } elseif (($_queryvars['list'] || $_queryvars['forum_id'] ) && $_COOKIE['view'] === 'plain') {
     heading_print($_queryvars,'');
     $n_entries = $db->get_n_entries($_queryvars[forum_id]);
-    $tpp = $db->get_n_threads_per_page();
     latest_index_print($n_entries,
                        $_queryvars[hs],
-                       $tpp,
+                       $cfg[epp],
                        $cfg[ppi],
                        '',
                        $_queryvars);
     print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
     $db->foreach_latest_entry($_queryvars[forum_id],
                               $_queryvars[hs],
+                              $cfg[epp],
                               FALSE,
                               latest_print_row,
                               $_queryvars);
     print("</table>\n");
     latest_index_print($n_entries,
                        $_queryvars[hs],
-                       $tpp,
+                       $cfg[epp],
                        $cfg[ppi],
                        '',
                        $_queryvars);
@@ -256,14 +256,20 @@
   } elseif ($_queryvars['list'] === '1' || $_queryvars['forum_id']) {
     // show the message-tree
     $n_threads = $db->get_n_threads($_queryvars[forum_id]);
-    $tpp       = $db->get_n_threads_per_page();
     //$folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
     heading_print($_queryvars,'');
-    thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
+    thread_index_print($n_threads,
+                       $_queryvars[hs],
+                       $cfg[tpp],
+                       $cfg[ppi],
+                       $folding,
+                       $_queryvars);
+    
     print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
     $db->foreach_child($_queryvars[forum_id],
                        0,
                        $_queryvars[hs],
+                       $cfg[tpp],
                        $folding,
                        thread_print_row,
                        array($folding, $_queryvars));
@@ -274,7 +280,12 @@
     }
     print("</table>\n");
   
-    thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
+    thread_index_print($n_threads,
+                       $_queryvars[hs],
+                       $cfg[tpp],
+                       $cfg[ppi],
+                       $folding,
+                       $_queryvars);
     footer_print($_queryvars);    
   } else {
     /* Wenn oben aus der Bedingung "|| $_queryvars['forum_id']" entfernt wird, dann ist

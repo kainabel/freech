@@ -17,7 +17,9 @@
   // *************************************************************
   // Forum appearance.
   $cfg[tpp]             = 8;            // Maximum number of threads shown per
-                                        // page.
+                                        // page. (when shown in thread order)
+  $cfg[epp]             = 15;           // Maximum number of messages shown per
+                                        // page. (when shown in time order)
   $cfg[ppi]             = 5;            // Maximum number of pages shown in the
                                         // index before the [...] button
                                         // appears.

@@ -49,17 +49,19 @@
         . "<b>$lang[name]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<input type='text' size='80' name='name' value='"
         . string_escape($_name)."' maxlength='$cfg[max_namelength]'>\n"
-	
+        
         . "\n<p>\n"
-	. "<b>$lang[msgtitle]</b>&nbsp;<i>$lang[required]</i><br>\n"
+        . "<b>$lang[msgtitle]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<input type='text' size='80' name='subject' value='"
         . string_escape($_subject)."' maxlength='$cfg[max_titlelength]'>\n"
-	
+        
         . "\n<p>\n"
-	. "<b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
+        . "<b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<textarea name='message' cols='80' rows='20' wrap='virtual'>"
         . string_escape($_message)
-	. "</textarea>\n");
+        . "</textarea>\n"
+        
+        . "<p>\n");
     
     if ($_quotebutton) {
       print("<input type='hidden' name='msg_id' value='$_queryvars[msg_id]'>\n");

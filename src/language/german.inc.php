@@ -34,41 +34,41 @@
   $lang[plainview]        = "In Eingangsreihenfolge anzeigen";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
-  $lang[noentries]        = "(Bisher keine Beiträge)";
-  $lang[entryindex]       = "Beitragsübersicht";
+  $lang[noentries]        = "(Bisher keine BeitrÃ¤ge)";
+  $lang[entryindex]       = "BeitragsÃ¼bersicht";
   $lang[hidethread]       = "Thread-Anzeige ausblenden";
   $lang[showthread]       = "Thread-Anzeige einblenden";
 
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
-                           ."eine rechtswidrige Äußerung oder verletzte "
-                           ."grob die Nutzungsbedingungen für unsere "
-                           . "Diskussionsforen. Er ist daher gelöscht worden.";
+                           ."eine rechtswidrige Ã„uÃŸerung oder verletzte "
+                           ."grob die Nutzungsbedingungen fÃ¼r unsere "
+                           . "Diskussionsforen. Er ist daher gelÃ¶scht worden.";
   
   $lang[noentrytitle]     = "Dieser Beitrag ist nicht vorhanden";
   $lang[noentrybody]      = "Der von ihnen angeforderte Eintrag existiert in diesem"
                            ." Forum nicht";
   
   // Compose
-  $lang[writeamessage]    = "Neuen Beitrag für das Forum schreiben";
-  $lang[writeananswer]    = "Antwort für das Forum schreiben";
-  $lang[required]         = "(bitte unbedingt ausfüllen)";
+  $lang[writeamessage]    = "Neuen Beitrag fÃ¼r das Forum schreiben";
+  $lang[writeananswer]    = "Antwort fÃ¼r das Forum schreiben";
+  $lang[required]         = "(bitte unbedingt ausfÃ¼llen)";
   $lang[name]             = "Name";
-  $lang[msgtitle]         = "Überschrift";
+  $lang[msgtitle]         = "Ãœberschrift";
   $lang[msgbody]          = "Beitrag";
   $lang[msgimage]         = "Bild";
   $lang[preview]          = "Vorschau";
-  $lang[quote]            = "Zitat einfügen";
+  $lang[quote]            = "Zitat einfÃ¼gen";
   $lang[answer]           = "Re: ";
   $lang[wrote]            = "schrieb am";
   
   // Preview
   $lang[reallysend]       = "Vorschau";
-  $lang[somethingmissing] = "Achtung! Ihr Beitrag ist nicht vollständig.";
-  $lang[onlywhitespace]   = "Achtung! Ihr Beitrag enthält keinen sichtbaren Text."; // Not used
-  $lang[messagetoolong]   = "Ihr Beitrag ist länger als $cfg[max_msglength] Zeichen. Bitte kürzen sie den Text.";
-  $lang[nametoolong]      = "Der von ihnen gewählte Name ist länger als $cfg[max_namelength] Zeichen. Bitte kürzen sie den Namen.";
-  $lang[titletoolong]     = "Der von ihnen gewählte Beitragstitel ist länger als $cfg[max_titlelength] Zeichen. Bitte kürzen sie den Titel.";
+  $lang[somethingmissing] = "Achtung! Ihr Beitrag ist nicht vollstÃ¤ndig.";
+  $lang[onlywhitespace]   = "Achtung! Ihr Beitrag enthÃ¤lt keinen sichtbaren Text."; // Not used
+  $lang[messagetoolong]   = "Ihr Beitrag ist lÃ¤nger als $cfg[max_msglength] Zeichen. Bitte kÃ¼rzen sie den Text.";
+  $lang[nametoolong]      = "Der von ihnen gewÃ¤hlte Name ist lÃ¤nger als $cfg[max_namelength] Zeichen. Bitte kÃ¼rzen sie den Namen.";
+  $lang[titletoolong]     = "Der von ihnen gewÃ¤hlte Beitragstitel ist lÃ¤nger als $cfg[max_titlelength] Zeichen. Bitte kÃ¼rzen sie den Titel.";
   $lang[forgotname]       = "Bitte einen Namen eingeben."; // Not used
   $lang[forgottitle]      = "Bitte einen Titel eingeben."; // Not used
   $lang[forgottext]       = "Sie haben keinen Text eingegeben."; // Not used

@@ -21,7 +21,7 @@
 ?>
 <?php
   function string_escape($_string) {
-    return htmlentities($_string, ENT_QUOTES);    
+    return htmlentities($_string, ENT_QUOTES, 'UTF-8');
   }
   
   

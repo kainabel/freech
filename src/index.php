@@ -84,10 +84,12 @@
   // Print the page header.
   $holdvars = array_merge($cfg[urlvars],
                           array('forum_id', 'hs'));
+  header("Content-Type: text/html; charset=utf-8");
   print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"".
         "\"http://www.w3.org/TR/html4/loose.dtd\">");
   print("<html>\n"
       . "<head>\n"
+      . "<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\n"
       . "<title>Tefinch</title>"
       . "</head>\n"
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
@@ -182,7 +184,7 @@
       $thread = 1;
     // print top navi-bars
     if ($entry->active)
-      heading_print($_queryvars,$entry->title);
+      heading_print($_queryvars,string_escape($entry->title));
     elseif (!$entry)
       heading_print($_queryvars,$lang[noentrytitle]);    
     else

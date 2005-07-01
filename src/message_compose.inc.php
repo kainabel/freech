@@ -38,7 +38,7 @@
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'msg_id', 'hs'));
     print("<form action='?".build_url($_queryvars, $holdvars,'')
-        ."' method='POST'>\n"
+        ."' method='POST' accept-charset='utf-8'>\n"
         . "<font size='+1' color='red'>$lang[writeamessage]</font>\n");
     if ($_hint) print("<br><font size='+1' color='red'>$_hint</font>\n");
     print("<p><b>$lang[name]</b>&nbsp;<i>$lang[required]</i><br>\n"

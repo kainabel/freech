@@ -122,6 +122,7 @@
     $query[read] = 1;
     $_row->title = str_replace(" ", "&nbsp;", $_row->title);
     print("<td align='left'><font size='-1'>&nbsp;");
+    //print("$_row->id, $_row->path ");
     if (!$_row->active)
       print($lang[blockedtitle]."&nbsp;");
     elseif ($_row->id === $queryvars[msg_id] && $queryvars[read] === '1')

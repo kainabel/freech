@@ -266,11 +266,14 @@
         
         $sql  = "UPDATE $this->tablebase SET path=";
         if ($parentrow->path != '') {
+          $parentrow->path = substr($parentrow->path,
+                                    0,
+                                    strlen($parentrow->path) - 2);
           $sql .= " CONCAT(0x$parentrow->path,";
-          $sql .= "        0x" . $this->_int2hex($newid) . ")";
+          $sql .= "        0x" . $this->_int2hex($newid) . "00)";
         }
         else {
-          $sql .= " 0x" . $this->_int2hex($newid);
+          $sql .= " 0x" . $this->_int2hex($newid) . "00";
         }
         $sql .= " WHERE id=$newid";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Path failed.");

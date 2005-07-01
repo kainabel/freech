@@ -37,19 +37,30 @@
     global $lang;
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'msg_id', 'hs'));
+    
     print("<form action='?".build_url($_queryvars, $holdvars,'')
         ."' method='POST' accept-charset='utf-8'>\n"
         . "<font size='+1' color='red'>$lang[writeamessage]</font>\n");
-    if ($_hint) print("<br><font size='+1' color='red'>$_hint</font>\n");
-    print("<p><b>$lang[name]</b>&nbsp;<i>$lang[required]</i><br>\n"
+    
+    if ($_hint)
+      print("<br><font size='+1' color='red'>$_hint</font>\n");
+    
+    print("\n<p>\n"
+        . "<b>$lang[name]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<input type='text' size='80' name='name' value='"
-        . string_escape($_name)."' maxlength='$cfg[max_namelength]'></p>\n"
-        . "<p><b>$lang[msgtitle]</b>&nbsp;<i>$lang[required]</i><br>\n"
+        . string_escape($_name)."' maxlength='$cfg[max_namelength]'>\n"
+	
+        . "\n<p>\n"
+	. "<b>$lang[msgtitle]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<input type='text' size='80' name='subject' value='"
-        . string_escape($_subject)."' maxlength='$cfg[max_titlelength]'></p>\n"
-        . "<p><b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
+        . string_escape($_subject)."' maxlength='$cfg[max_titlelength]'>\n"
+	
+        . "\n<p>\n"
+	. "<b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
         . "<textarea name='message' cols='80' rows='20' wrap='virtual'>"
-        . string_escape($_message)."</textarea></p>\n");
+        . string_escape($_message)
+	. "</textarea>\n");
+    
     if ($_quotebutton) {
       print("<input type='hidden' name='msg_id' value='$_queryvars[msg_id]'>\n");
       print("<input type='submit' name='quote' value='$lang[quote]'>&nbsp;\n");

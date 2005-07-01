@@ -203,7 +203,7 @@
                     $entry->time,
                     $_queryvars);
       if ($thread) {
-        print("<tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>");
+        print("<table border='0' cellpadding='0' cellspacing='0' width='100%'>");
         $folding = new ThreadFolding(0,0);
         $db->foreach_child_in_thread($_queryvars['forum_id'],
                                      $_queryvars['msg_id'],
@@ -211,7 +211,7 @@
                                      $folding,
                                      thread_print_row,
                                      array($folding, $_queryvars));
-        print("</table></td></tr>");
+        print("</table>");
       }
     } elseif (! $entry) {
       message_print ('',$lang[noentrytitle],$lang[noentrybody],'',$_queryvars);
@@ -239,7 +239,7 @@
                        $cfg[ppi],
                        '',
                        $_queryvars);
-    print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
+    print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
     $db->foreach_latest_entry($_queryvars[forum_id],
                               $_queryvars[hs],
                               FALSE,
@@ -260,7 +260,7 @@
     //$folding   = new ThreadFolding($_queryvars[fold], $_queryvars[swap]);
     heading_print($_queryvars,'');
     thread_index_print($n_threads, $_queryvars[hs], $tpp, $cfg[ppi], $folding, $_queryvars);
-    print("<table border=0 width=100% cellpadding=0 cellspacing=0>\n");
+    print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
     $db->foreach_child($_queryvars[forum_id],
                        0,
                        $_queryvars[hs],

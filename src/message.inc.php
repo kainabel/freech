@@ -48,13 +48,23 @@
   */
   function message_print ($_name,$_subject,$_message,$_time,$_queryvars) {
     global $lang;
-    print("<p><table border='0' cellpadding='5' cellspacing='0' width='100%'>\n"
-         ."<tbody><tr><td><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
-         ."<tbody><tr valign='middle'><td>\n"
-         ."<font color='#555555' size='-1'>$_time</font>\n"
-         ."<br><b>".string_escape($_subject)."</b><br><i>".string_escape($_name)."</i></td><td></td></tr></tbody>\n"
-         ."</table></td></tr><tr><td><br>\n"
-         .preg_replace("/^(&gt;&nbsp;.*)/m","<font color='#990000'>$1</font>", message_format($_message))
-         ."<br></td></tr></tbody></table></p>\n");
+    print("\n<p>\n"
+	 ."<table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
+         ." <tr valign='middle'>\n"
+	 ."  <td>\n"
+         ."   <font color='#555555' size='-1'>$_time</font><br>\n"
+         ."   <b>" . string_escape($_subject) . "</b><br>\n"
+	 ."   <i>" . string_escape($_name)    . "</i>\n"
+	 ."  </td>\n"
+	 ." </tr>\n"
+	 ." <tr>\n"
+	 ."  <td><br>\n"
+	 ."<!-- message body -->\n"
+         . preg_replace("/^(&gt;&nbsp;.*)/m","<font color='#990000'>$1</font>", message_format($_message))
+	 ."<!-- end message body -->\n"
+         ."   <br>\n"
+	 ."  </td>\n"
+	 ." </tr>\n"
+	 ."</table>\n");
   }
 ?>

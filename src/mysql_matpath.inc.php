@@ -204,7 +204,7 @@
      */
     function get_entry($_f, $_id) {
       $id    = $_id * 1;
-      $sql  = "SELECT id,threadid,threadid tid,HEX(path) path,n_descendants,";
+      $sql  = "SELECT id,threadid,threadid tid,HEX(path) path,n_children,";
       $sql .= "name,title,text,active,";
       $sql .= "UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
@@ -216,7 +216,6 @@
       $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
       $row->prev_entry  = $this->_get_prev_entry_id($_f, $row->tid, $row->path);
       $row->next_entry  = $this->_get_next_entry_id($_f, $row->tid, $row->path);
-      $row->n_children  = $row->n_descendants; //FIXME: Hack, hack, hack!!!
       return $row;
     }
 
@@ -253,16 +252,17 @@
       $title = mysql_escape_string($_title);
       $text  = mysql_escape_string($_text);
       if ($parentrow) {
+        // Insert a new child.
         $sql  = "INSERT INTO $this->tablebase";
-        $sql .= " (forumid, threadid, n_descendants, name, title, text,";
-        $sql .= "  created)";
+        $sql .= " (forumid, threadid, name, title, text, created)";
         $sql .= " VALUES (";
-        $sql .= " $parentrow->forumid, $parentrow->threadid, 0,";
+        $sql .= " $parentrow->forumid, $parentrow->threadid,";
         $sql .= " '$name', '$title', '$text', NULL";
         $sql .= ")";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert1 failed.");
         $newid = mysql_insert_id();
         
+        // Update the child's path.
         $sql  = "UPDATE $this->tablebase SET path=";
         if ($parentrow->path != '') {
           $parentrow->path = substr($parentrow->path,
@@ -276,27 +276,43 @@
         }
         $sql .= " WHERE id=$newid";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Path failed.");
+        
+        // Update n_descendants and n_children in one run...
+        if ($parentid == $parentrow->threadid) {
+          $sql  = "UPDATE $this->tablebase";
+          $sql .= " SET n_children=n_children+1,";
+          $sql .= " n_descendants=n_descendants+1";
+          $sql .= " WHERE id=$parentid";
+          mysql_query($sql) or die("TefinchDB::insert_entry(): n++ failed: $sql");
+        }
+        
+        // ...unless it is necessary to update two database sets.
+        else {
+          $sql  = "UPDATE $this->tablebase SET n_children=n_children+1";
+          $sql .= " WHERE id=$parentrow->threadid";
+          mysql_query($sql) or die("TefinchDB::insert_entry(): n_desc failed.");
+          
+          $sql  = "UPDATE $this->tablebase SET n_descendants=n_descendants+1";
+          $sql .= " WHERE id=$parentid";
+          mysql_query($sql) or die("TefinchDB::insert_entry(): n_child failed.");
+        }
       }
       
       // Insert a new thread.
       else {
         $sql  = "INSERT INTO $this->tablebase";
-        $sql .= " (path, forumid, threadid, n_descendants, name, title, text,";
-        $sql .= "  created)";
-        $sql .= " VALUES ('', $forumid, 0, 0, '$name', '$title', '$text',";
+        $sql .= " (path, forumid, threadid, name, title, text, created)";
+        $sql .= " VALUES ('', $forumid, 0, '$name', '$title', '$text',";
         $sql .= "  NULL)";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert2 failed.");
         $newid = mysql_insert_id();
         
         // Set the thread id.
         // FIXME: Is there a better way to do this?
-        $sql = "UPDATE $this->tablebase SET threadid=$newid WHERE id=$newid";
+        $sql  = "UPDATE $this->tablebase SET threadid=$newid";
+        $sql .= " WHERE id=$newid";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Threadid failed.");
       }
-      
-      $sql  = "UPDATE $this->tablebase SET n_descendants=n_descendants+1";
-      $sql .= " WHERE id=$parentid";
-      mysql_query($sql) or die("TefinchDB::insert_entry(): Increment failed.");
       
       $sql = "COMMIT;";
       mysql_query($sql) or die("TefinchDB::insert_entry(): Commit failed.");
@@ -308,15 +324,8 @@
 
     /* Walks through the tree starting from $id, passing each row to the
      * function given in $func.
-     *
-     * Args: $_forum   The forum id.
-     *       $_id      The node whose children we want to print.
-     *       $_offset  The offset.
-     *       $_fold    An object identifying folded nodes.
-     *                 UNFOLDED).
-     *       $_func    A reference to the function to which each row will be
-     *                 passed.
-     *       $_data    Passed through to $_func as an argument.
+     * Note that the row that is passed to the handler has an n_children field
+     * attached, this field is ONLY valid for leaftype 1 and 2.
      *
      * Leaftypes:
      *   1 Parent without children.
@@ -325,6 +334,17 @@
      *   4 Branch-bottom child with children.
      *   5 Non-branch-bottom child without children.
      *   6 Non-branch-bottom child with children.
+     *
+     * Args: $_forum   The forum id.
+     *       $_id      The node whose children we want to print.
+     *       $_offset  The offset.
+     *       $_limit   The maximum number of threads to walk.
+     *       $_fold    An object identifying folded nodes.
+     *                 UNFOLDED).
+     *       $_func    A reference to the function to which each row will be
+     *                 passed.
+     *       $_data    Passed through to $_func as an argument.
+     *
      */
     function foreach_child($_forumid,
                            $_id,
@@ -346,11 +366,9 @@
       }
       else {
         // Select all root nodes.
-        $sql  = "SELECT id,HEX(path) path,count(*)-1 n_children";
+        $sql  = "SELECT id,HEX(path) path, n_children";
         $sql .= " FROM $this->tablebase";
-        $sql .= " WHERE forumid=$forumid";
-        $sql .= " GROUP BY threadid";
-        $sql .= " HAVING path=''";
+        $sql .= " WHERE forumid=$forumid AND path=''";
         $sql .= " ORDER BY threadid DESC,path";
         $sql .= " LIMIT $offset, $limit";
         $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 2: Fail.");
@@ -359,15 +377,14 @@
       // Build the SQL request to grab the complete threads.
       if (mysql_num_rows($res) <= 0)
         return;
-      $sql  = "SELECT id,HEX(path) path,n_descendants,name,title,text,active,";
-      $sql .= "UNIX_TIMESTAMP(created) unixtime,";
+      $sql  = "SELECT id,HEX(path) path,n_children,n_descendants,";
+      $sql .= "name,title,text,active,UNIX_TIMESTAMP(created) unixtime,";
       $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
       $sql .= " FROM $this->tablebase";
       $sql .= " WHERE (";
       
       $first = 1;
       while ($row = mysql_fetch_object($res)) {
-        $childcount[$row->id] = $row->n_children;
         if (!$first)
           $sql .= " OR ";
         if ($_fold->is_folded($row->id))
@@ -416,7 +433,6 @@
         }
         //echo "$row->title ($row->id, $row->path): $row->leaftype<br>\n";
         
-        $row->n_children = $childcount[$row->id];
         $_func($row, $indents, $_data);
         
         // Indent.

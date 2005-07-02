@@ -21,6 +21,7 @@
 <?php
   include_once "language/$cfg[lang].inc.php";
   include_once "string.inc.php";
+  include_once "error.inc.php";
   
   /* Escape special characters in the posting, wrap lines */
   // NOT private.
@@ -31,8 +32,10 @@
       if (strpos($line,"> ") === 0) {
         $text .= $line."\n";
       } else {
-        $text .= wordwrap(wordwrap($line,$cfg[linelength]),
-                          ceil($cfg[linelength]*1.25),"\n",TRUE)."\n";
+        $text .= wordwrap(wordwrap($line, $cfg[max_linelength_soft]),
+                          $cfg[max_linelength_hard],
+                          "\n",
+                          TRUE) . "\n";
       }
     }
     return $text;
@@ -40,6 +43,27 @@
   
   function message_format($_string) {
     return nl2br(preg_replace("/ /","&nbsp;", string_escape(message_wrapline($_string))));
+  }
+  
+  
+  function message_check($_name, $_subject, $_message) {
+    global $cfg;
+    
+    if (ctype_space($_name)
+     || ctype_space($_subject)
+     || ctype_space($_message))
+      return ERR_MESSAGE_INCOMPLETE;
+    
+    if (strlen($_name) > $cfg[max_namelength])
+      return ERR_MESSAGE_NAME_TOO_LONG;
+    
+    if (strlen($_title) > $cfg[max_titlelength])
+      return ERR_MESSAGE_TITLE_TOO_LONG;
+    
+    if (strlen($_message) > $cfg[max_msglength])
+      return ERR_MESSAGE_BODY_TOO_LONG;
+    
+    return 0;
   }
   
   

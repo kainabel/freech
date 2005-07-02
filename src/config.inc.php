@@ -16,16 +16,18 @@
   
   // *************************************************************
   // Forum appearance.
-  $cfg[tpp]             = 8;            // Maximum number of threads shown per
+  $cfg[tpp]                 = 8;        // Maximum number of threads shown per
                                         // page. (when shown in thread order)
-  $cfg[epp]             = 15;           // Maximum number of messages shown per
+  $cfg[epp]                 = 15;       // Maximum number of messages shown per
                                         // page. (when shown in time order)
-  $cfg[ppi]             = 5;            // Maximum number of pages shown in the
+  $cfg[ppi]                 = 5;        // Maximum number of pages shown in the
                                         // index before the [...] button
                                         // appears.
-  $cfg[max_msglength]   = 10000;        // Maximum length of a message.
-  $cfg[max_linelength]  = 80;           // Number of characters before a line
+  $cfg[max_msglength]       = 10000;    // Maximum length of a message.
+  $cfg[max_linelength_soft] = 80;       // Number of characters before a line
                                         // wraps.
+  $cfg[max_linelength_hard] = 120;      // Number of characters before a quoted
+                                        // line wraps.
   $cfg[max_titlelength] = 70;           // Maximum length of the title
   $cfg[max_namelength]  = 70;           // Maximum lenght of the name
 ?>

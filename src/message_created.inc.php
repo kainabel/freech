@@ -28,19 +28,23 @@
   function message_created($_newmsg_id, $_queryvars) {
     global $cfg;
     global $lang;
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'hs'));
-    // Give some status info and the usual links
+    $holdvars      = array_merge($cfg[urlvars], array('forum_id', 'hs'));
+    $query         = array('list' => 1, 'forum_id' => $_queryvars['forum_id']);
+    $forumurl      = build_url($_queryvars, $holdvars, $query);
+    $query         = array('forum_id' => $_queryvars[forum_id],
+                           'msg_id'   => $_newmsg_id,
+                           'read'     => 1);
+    $messageurl    = build_url($_queryvars, $holdvars, $query);
+    $query         = array('forum_id' => $_queryvars[forum_id],
+                           'msg_id'   => $_queryvars[msg_id],
+                           'read'     => 1);
+    $parenturl     = build_url($_queryvars, $holdvars, $query);
+    
+    // Give some status info and the usual links.
     print("<p><h2>$lang[entrysuccess]</h2><br>");
-    print("<a href='?".build_url($_queryvars, $holdvars, 
-        array('msg_id'=>$_newmsg_id,'forum_id'=>$_queryvars['forum_id'],'read'=>1))
-        ."'>$lang[backtoentry]</a><br>");
+    print("<a href='?$messageurl'>$lang[backtoentry]</a><br>");
     if ($_queryvars['msg_id']) 
-      print("<a href='?".build_url($_queryvars, $holdvars, 
-        array('msg_id'=>$_queryvars['msg_id'],'forum_id'=>$_queryvars['forum_id'],'read'=>1))
-        ."'>$lang[backtoparent]</a><br>");
-    print("<a href='?".build_url($_queryvars, $holdvars, 
-        array('forum_id'=>$_queryvars['forum_id'],'list'=>1))
-        ."'>$lang[backtoindex]</a></p>");  
+      print("<a href='?$parenturl'>$lang[backtoparent]</a><br>");
+    print("<a href='?$forumurl'>$lang[backtoindex]</a>");  
   }
 ?>

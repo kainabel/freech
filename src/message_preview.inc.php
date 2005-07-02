@@ -32,6 +32,11 @@
                            $_queryvars) {
     global $cfg;
     global $lang;
+    
+    $err = message_check($_name, $_subject, $_message);
+    if ($err)
+      return $err;
+    
     $holdvars = array_merge($cfg[urlvars],
                             array('forum_id', 'msg_id', 'hs'));
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
@@ -50,5 +55,7 @@
         . "<input type='hidden' name='msg_id' value='$_msg_id'>\n"
         . "<input type='submit' name='edit' value='$lang[change]'>\n"
         . "<input type='submit' name='send' value='$lang[send]'></p></table>\n");
+    
+    return 0;
   }
 ?>

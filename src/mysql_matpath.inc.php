@@ -133,8 +133,8 @@
       $row = mysql_fetch_object($res);
       return $row->id;
     }
-
-
+    
+    
     /* Given the path of any node, this function returns the id of the next
      * entry in the same thread, or 0 if there is no next entry.
      */
@@ -153,8 +153,8 @@
       $row = mysql_fetch_object($res);
       return $row->id;
     }
-
-
+    
+    
     /* Given a threadid, this function returns the id of the previous
      * thread in the given forum, or 0 if there is no previous thread.
      * The threadid equals the id of the toplevel node in a thread.
@@ -170,8 +170,8 @@
       $row = mysql_fetch_object($res);
       return $row->threadid;
     }
-
-
+    
+    
     /* Given a threadid, this function returns the id of the next
      * thread in the given forum, or 0 if there is no next thread.
      * The threadid equals the id of the toplevel node in a thread.
@@ -186,8 +186,8 @@
       $row = mysql_fetch_object($res);
       return $row->threadid;
     }
-
-
+    
+    
     /***********************************************************************
      * Public API.
      ***********************************************************************/
@@ -218,8 +218,8 @@
       $row->next_entry  = $this->_get_next_entry_id($_f, $row->tid, $row->path);
       return $row;
     }
-
-
+    
+    
     /* Insert a new child.
      *
      * $_forum:  The forum id.
@@ -283,18 +283,18 @@
           $sql .= " SET n_children=n_children+1,";
           $sql .= " n_descendants=n_descendants+1";
           $sql .= " WHERE id=$parentid";
-          mysql_query($sql) or die("TefinchDB::insert_entry(): n++ failed: $sql");
+          mysql_query($sql) or die("TefinchDB::insert_entry(): n++ failed.");
         }
         
         // ...unless it is necessary to update two database sets.
         else {
           $sql  = "UPDATE $this->tablebase SET n_children=n_children+1";
           $sql .= " WHERE id=$parentrow->threadid";
-          mysql_query($sql) or die("TefinchDB::insert_entry(): n_desc failed.");
+          mysql_query($sql) or die("TefinchDB::insert_entry(): n_child fail.");
           
           $sql  = "UPDATE $this->tablebase SET n_descendants=n_descendants+1";
           $sql .= " WHERE id=$parentid";
-          mysql_query($sql) or die("TefinchDB::insert_entry(): n_child failed.");
+          mysql_query($sql) or die("TefinchDB::insert_entry(): n_desc fail.");
         }
       }
       
@@ -320,8 +320,8 @@
       $this->_unlock_write();
       return $newid;
     }
-
-
+    
+    
     /* Walks through the tree starting from $id, passing each row to the
      * function given in $func.
      * Note that the row that is passed to the handler has an n_children field

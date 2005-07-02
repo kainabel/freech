@@ -50,6 +50,71 @@
   }
   
   
+  function _forum_print_heading($_queryvars, $_title) {
+    global $lang;
+    global $cfg;
+    
+    $holdvars   = array_merge($cfg[urlvars],
+                              array('forum_id', 'hs'));
+    
+    // Print "index".
+    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'>\n");
+    print("\t<tr>\n");
+    print("\t\t<td align='left'>\n");
+    print("\t\t<font size='-1'>\n");
+    
+    $query = "";
+    $query['list'] = 1;
+    print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query) . "'>Forum</a>");
+    if ($_GET['read'] === '1' || $_GET['llist']) 
+          print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
+    
+    print("</font>\n");
+    print("\t\t</td>\n");
+    /* FIXME: only useful if more than one forum exists
+    print("\t\t<td align='right'>\n");
+    print("\t\t<font size='-1'>\n");
+    
+    $query = "";
+    $query['llist'] = 1;
+    print("&nbsp;&nbsp;<a href='?"
+          . build_url($_queryvars, $holdvars, $query) . "'>$lang[entryindex]</a>\n");
+    print("</font>\n");
+    print("\t\t</td>\n");*/
+    print("\t</tr>\n");
+    print("</table>\n");
+  } 
+  
+  
+  function _forum_print_footer($_queryvars) {
+    global $lang;
+    global $cfg;
+    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'>\n");
+    print("\t<tr>\n");
+    print("\t\t<td align='left'>\n");
+    print("\t\t<font size='-1'>\n");
+    
+    $holdvars = array_merge($cfg[urlvars], array('forum_id', 'list'));
+    $query = "";
+    if ($_COOKIE[view] === 'plain') {
+      $query[changeview] = 't';
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[threadview]</a>");
+      print("&nbsp;&nbsp;&nbsp;");
+      print("$lang[plainview]");
+    } else {
+      $query[changeview] = 'c';
+      print("$lang[threadview]");
+      print("&nbsp;&nbsp;&nbsp;");
+      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[plainview]</a>");
+    }    
+    print("</font>\n");
+    print("\t\t</td>\n");
+    print("\t</tr>\n");
+    print("</table>\n");  
+  }
+  
+  
   // Prepare the forum, set cookies, etc. To be called before the http header 
   // was sent.
   function forum_init() {
@@ -116,11 +181,11 @@
         $thread = 1;
       // print top navi-bars
       if (!$entry)
-        heading_print($_GET, $lang[noentrytitle]);    
+        _forum_print_heading($_GET, $lang[noentrytitle]);    
       elseif (!$entry->active)
-        heading_print($_GET, $lang[blockedtitle]);
+        _forum_print_heading($_GET, $lang[blockedtitle]);
       else
-        heading_print($_GET, string_escape($entry->title));
+        _forum_print_heading($_GET, string_escape($entry->title));
       
       message_index_print($entry->id,
                           $entry->prev_thread,
@@ -248,7 +313,7 @@
     // Show the forum, time order.
     elseif (($_GET['list'] || $_GET['forum_id'])
             && $_COOKIE['view'] === 'plain') {
-      heading_print($_GET, '');
+      _forum_print_heading($_GET, '');
       $n_entries = $db->get_n_entries($_GET[forum_id]);
       latest_index_print($n_entries,
                          $_GET[hs],
@@ -270,7 +335,7 @@
                          $cfg[ppi],
                          '',
                          $_GET);
-      footer_print($_GET);
+      _forum_print_footer($_GET);
     }
     
     // Show the forum, thread order.
@@ -278,7 +343,7 @@
     elseif ($_GET['list'] || $_GET['forum_id']) {
       $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
       $n_threads = $db->get_n_threads($_GET[forum_id]);
-      heading_print($_GET,'');
+      _forum_print_heading($_GET,'');
       thread_index_print($n_threads,
                          $_GET[hs],
                          $cfg[tpp],
@@ -308,7 +373,7 @@
                          $folding,
                          $_GET);
       
-      footer_print($_GET);
+      _forum_print_footer($_GET);
     }
     
     else {

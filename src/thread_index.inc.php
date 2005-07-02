@@ -147,33 +147,4 @@
     print("\t</tr>\n");
     print("</table>\n");
   }
-  
-  
-  // FIXME: Elsewhere?
-  function footer_print($_queryvars) {
-    global $lang;
-    global $cfg;
-    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'>\n");
-    print("\t<tr>\n");
-    print("\t\t<td align='left'>\n");
-    print("\t\t<font size='-1'>\n");
-    
-    $holdvars = array_merge($cfg[urlvars], array('forum_id', 'list'));
-    $query = "";
-    if ($_COOKIE[view] === 'plain') {
-      $query[changeview] = 't';
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[threadview]</a>");
-      print("&nbsp;&nbsp;&nbsp;");
-      print("$lang[plainview]");
-    } else {
-      $query[changeview] = 'c';
-      print("$lang[threadview]");
-      print("&nbsp;&nbsp;&nbsp;");
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[plainview]</a>");
-    }    
-    print("</font>\n");
-    print("\t\t</td>\n");
-    print("\t</tr>\n");
-    print("</table>\n");  
-  }
 ?>

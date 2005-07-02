@@ -117,42 +117,4 @@
     print("\t</tr>\n");
     print("</table>\n");
   } 
-  
-  
-  // FIXME: Move elsewhere.
-  function heading_print($_queryvars, $_title) {
-    global $lang;
-    global $cfg;
-    
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'hs'));
-    
-    // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='5' border='0'>\n");
-    print("\t<tr>\n");
-    print("\t\t<td align='left'>\n");
-    print("\t\t<font size='-1'>\n");
-    
-    $query = "";
-    $query['list'] = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query) . "'>Forum</a>");
-    if ($_GET['read'] === '1' || $_GET['llist']) 
-          print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
-    
-    print("</font>\n");
-    print("\t\t</td>\n");
-    /* FIXME: only useful, if more than one forum exists
-    print("\t\t<td align='right'>\n");
-    print("\t\t<font size='-1'>\n");
-    
-    $query = "";
-    $query['llist'] = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query) . "'>$lang[entryindex]</a>\n");
-    print("</font>\n");
-    print("\t\t</td>\n");*/
-    print("\t</tr>\n");
-    print("</table>\n");
-  } 
 ?>

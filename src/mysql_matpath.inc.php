@@ -163,7 +163,8 @@
       $forumid  = $_forumid  * 1;
       $threadid = $_threadid * 1;
       $sql  = "SELECT threadid FROM $this->tablebase";
-      $sql .= " WHERE forumid=$forumid AND threadid<$threadid AND active=1";
+      $sql .= " WHERE forumid=$forumid AND threadid<$threadid";
+      $sql .= " AND (active=1 OR n_children>0)";
       $sql .= " ORDER BY threadid DESC LIMIT 1";
       $res = mysql_query($sql)
               or die("TefinchDB::_get_prev_thread_id(): Failed.");
@@ -180,7 +181,8 @@
       $forumid  = $_forumid  * 1;
       $threadid = $_threadid * 1;
       $sql  = "SELECT threadid FROM $this->tablebase";
-      $sql .= " WHERE forumid=$forumid AND threadid>$threadid AND active=1";
+      $sql .= " WHERE forumid=$forumid AND threadid>$threadid";
+      $sql .= " AND (active=1 OR n_children>0)";
       $sql .= " ORDER BY threadid LIMIT 1";
       $res = mysql_query($sql) or die("TefinchDB::get_next_thread_id(): Fail.");
       $row = mysql_fetch_object($res);
@@ -238,7 +240,8 @@
       
       // Fetch the parent row.
       $id = $_id * 1;
-      $sql  = "SELECT forumid,threadid,HEX(path) path FROM $this->tablebase";
+      $sql  = "SELECT forumid,threadid,HEX(path) path,active";
+      $sql .= " FROM $this->tablebase";
       $sql .= " WHERE id=$parentid";
       $res  = mysql_query($sql) or die("TefinchDB::insert_entry(): Failed.");
       $parentrow = mysql_fetch_object($res);
@@ -253,6 +256,9 @@
       $title = mysql_escape_string($_title);
       $text  = mysql_escape_string($_text);
       if ($parentrow) {
+        if (!$parentrow->active)
+          die("TefinchDB::insert_entry(): Parent inactive.\n");
+        
         // Insert a new child.
         $sql  = "INSERT INTO $this->tablebase";
         $sql .= " (forumid, threadid, name, title, text, created)";

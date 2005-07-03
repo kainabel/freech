@@ -36,6 +36,7 @@
                                $_prev_entry_id,
                                $_next_entry_id,
                                $_has_thread,
+                               $_can_answer,
                                $_queryvars) {
     global $lang;
     global $cfg;
@@ -86,13 +87,17 @@
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
            ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
     } else {
-    print("&gt;&gt;");
+      print("&gt;&gt;");
     }
-    $query = "";
-    $query[write] = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-          . "'><font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
+    
+    if ($_can_answer) {
+      $query            = "";
+      $query[write]     = 1;
+      $holdvars[msg_id] = 1;
+      $url              = build_url($_GET, $holdvars, $query);
+      print("&nbsp;&nbsp;<a href='?$url'>"
+          . "<font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
+    }
     print("&nbsp;&nbsp;<a href='?"
           . build_url($_queryvars, $holdvars, $query)
           . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");

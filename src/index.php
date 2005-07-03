@@ -35,7 +35,7 @@
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
       . " alink='#5566DD'>\n");
   
-  forum_print(1);
+  forum_print();
   
   print("</body>\n"
       . "</html>\n");

@@ -530,8 +530,10 @@
       $sql .= " DESC LIMIT $offset, $limit";
       $res = mysql_query($sql)
                or die("TefinchDB::foreach_latest_entry(): Failed.");
+      $numrows = mysql_num_rows($res);
       while ($row = mysql_fetch_object($res))
         $_func($row, $_data);
+      return $numrows;
     }
     
     

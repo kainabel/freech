@@ -163,7 +163,7 @@
   }
   
   
-  function forum_print($_forumid) {
+  function forum_print() {
     global $cfg;
     global $lang;
     global $err;
@@ -295,12 +295,18 @@
                          '',
                          $_GET);
       print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
-      $db->foreach_latest_entry($_GET[forum_id],
-                                $_GET[hs],
-                                $cfg[epp],
-                                FALSE,
-                                latest_print_row,
-                                $_GET);
+      $numrows = $db->foreach_latest_entry($_GET[forum_id],
+                                           $_GET[hs],
+                                           $cfg[epp],
+                                           FALSE,
+                                           latest_print_row,
+                                           $_GET);
+      if ($numrows == 0) {
+        print("<tr><td height='4'></td></tr>");
+        print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
+        print("<tr><td height='4'></td></tr>");
+      }
+      
       print("</table>\n");
       latest_index_print($n_entries,
                          $_GET[hs],

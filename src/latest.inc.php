@@ -23,7 +23,7 @@
   include_once 'httpquery.inc.php';
   include_once 'latest_index.inc.php';
   
-  function latest_print_row($_row, $_queryvars) {
+  function _latest_print_row($_row, $_queryvars) {
     global $cfg;
     $holdvars = array_merge($cfg[urlvars], array('forum_id'));
     if ($cfg[remember_page])
@@ -75,5 +75,24 @@
     print("</td>\n");
     
     print("</tr>\n");
+  }
+  
+  
+  function latest_print($_db) {
+    global $cfg;
+    global $lang;
+    print("<table border='0' cellpadding='0' cellspacing='0' width='100%'>");
+    $n_rows = $_db->foreach_latest_entry($_GET[forum_id],
+                                         $_GET[hs],
+                                         $cfg[epp],
+                                         FALSE,
+                                         _latest_print_row,
+                                         $_GET);
+    if ($n_rows == 0) {
+      print("<tr><td height='4'></td></tr>");
+      print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
+      print("<tr><td height='4'></td></tr>");
+    }
+    print("</table>");
   }
 ?>

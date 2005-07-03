@@ -283,7 +283,6 @@
     }
     
     // Show the forum, time order.
-    // FIXME: Create latest_print().
     elseif (($_GET['list'] || $_GET['forum_id'])
             && $_COOKIE['view'] === 'plain') {
       _forum_print_heading($_GET, '');
@@ -294,20 +293,7 @@
                          $cfg[ppi],
                          '',
                          $_GET);
-      print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
-      $numrows = $db->foreach_latest_entry($_GET[forum_id],
-                                           $_GET[hs],
-                                           $cfg[epp],
-                                           FALSE,
-                                           latest_print_row,
-                                           $_GET);
-      if ($numrows == 0) {
-        print("<tr><td height='4'></td></tr>");
-        print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
-        print("<tr><td height='4'></td></tr>");
-      }
-      
-      print("</table>\n");
+      latest_print($db);
       latest_index_print($n_entries,
                          $_GET[hs],
                          $cfg[epp],

@@ -182,7 +182,7 @@
     if ($_GET['read']) {
       $folding    = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
       $entry      = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
-      $hasthread  = (!$entry->is_toplevel || $entry->n_children != 0);
+      $hasthread  = $entry && (!$entry->is_toplevel || $entry->n_children != 0);
       _forum_print_heading($_GET, $entry);
       message_index_print($entry->id,
                           $entry->prev_thread,

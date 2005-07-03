@@ -211,6 +211,8 @@
       $sql .= " WHERE id=$id";
       $res = mysql_query($sql) or die("TefinchDB::get_entry(): Failed.");
       $row = mysql_fetch_object($res);
+      if (!$row)
+        return;
       $row->prev_thread = $this->_get_prev_thread_id($_f, $row->tid);
       $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
       $row->prev_entry  = $this->_get_prev_entry_id($_f,  $row->tid, $row->lft);

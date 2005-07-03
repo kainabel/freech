@@ -42,11 +42,12 @@
     print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
          ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
          ."<tbody><tr>");
-    message_print($_name,
-                  $_subject,
-                  $_message,
-                  date(preg_replace("/%/","", $lang[dateformat]), time()),
-                  $_queryvars);
+    $_entry->name   = $_name;
+    $_entry->title  = $_subject;
+    $_entry->text   = $_message;
+    $_entry->time   = date(preg_replace("/%/","", $lang[dateformat]), time());
+    $_entry->active = 1;
+    message_print($_entry);
     print("<p><form action='?".build_url($_queryvars, $holdvars,'')
         ."' method='POST'>\n"
         . "<input type='hidden' name='name' value='".string_escape($_name)."'>\n"

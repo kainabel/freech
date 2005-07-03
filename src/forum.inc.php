@@ -69,10 +69,10 @@
     if ($_GET['read'] === '1' || $_GET['llist']) {
       if (!$_entry)
         print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$lang[noentrytitle]");
-      elseif (!$entry->active)
+      elseif (!$_entry->active)
         print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$lang[blockedtitle]");
       else
-        print(string_escape($entry->title));
+        print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;" . string_escape($_entry->title));
     }
     
     print("</font>\n");

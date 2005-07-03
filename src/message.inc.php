@@ -82,11 +82,11 @@
     
     if (!$_entry) {
       $subject = $lang[noentrytitle];
-      $body    = $lang[noentrybody];
+      $body    = message_format($lang[noentrybody]);
     }
     elseif (!$_entry->active) {
       $subject = $lang[blockedtitle];
-      $body    = $lang[blockedentry];
+      $body    = message_format($lang[blockedentry]);
     }
     else {
       $name    = string_escape($_entry->name);

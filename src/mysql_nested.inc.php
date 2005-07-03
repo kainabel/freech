@@ -216,6 +216,7 @@
       $row->prev_entry  = $this->_get_prev_entry_id($_f,  $row->tid, $row->lft);
       $row->next_entry  = $this->_get_next_entry_id($_f,  $row->tid, $row->lft);
       $row->n_children  = ceil(($row->rgt - $row->lft) / 2) - 1;
+      $row->is_toplevel = ($row->id == $row->threadid);
       return $row;
     }
     
@@ -301,6 +302,8 @@
      *   4 Branch-bottom child with children.
      *   5 Non-branch-bottom child without children.
      *   6 Non-branch-bottom child with children.
+     *
+     * Returns: The number of rows processed.
      */
     function foreach_child($_forum,
                            $_id,
@@ -365,6 +368,7 @@
       
       // Walk through those threads.
       $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed.");
+      $numrows = mysql_num_rows($res);
       $indent  = 0;
       $indents = array();
       $parents = array();
@@ -415,6 +419,8 @@
         
         $lastrow = $row;
       }
+      
+      return $numrows;
     }
     
     
@@ -426,13 +432,13 @@
       $id       = $_id    * 1;
       $forum    = $this->tablebase . ($_forum * 1);
       $threadid = $this->_get_threadid($forum, $id);
-      $this->foreach_child($_forum,
-                           $threadid,
-                           $_offset,
-                           $_limit,
-                           $_fold,
-                           $_func,
-                           $_data);
+      return $this->foreach_child($_forum,
+                                  $threadid,
+                                  $_offset,
+                                  $_limit,
+                                  $_fold,
+                                  $_func,
+                                  $_data);
     }
     
     

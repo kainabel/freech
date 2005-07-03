@@ -216,6 +216,7 @@
       $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
       $row->prev_entry  = $this->_get_prev_entry_id($_f, $row->tid, $row->path);
       $row->next_entry  = $this->_get_next_entry_id($_f, $row->tid, $row->path);
+      $row->is_toplevel = ($row->id == $row->threadid);
       return $row;
     }
     
@@ -345,6 +346,7 @@
      *                 passed.
      *       $_data    Passed through to $_func as an argument.
      *
+     * Returns: The number of rows processed.
      */
     function foreach_child($_forumid,
                            $_id,
@@ -400,6 +402,7 @@
       // Walk through those threads.
       $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed.");
       $row = mysql_fetch_object($res);
+      $numrows = mysql_num_rows($res);
       $indent  = 0;
       $indents = array();
       $parents = array($row);
@@ -459,22 +462,24 @@
         
         $row = $nextrow;
       }
+      
+      return $numrows;
     }
     
     
     /* This function performs exactly as foreach_child(), except that given a
      * an id, it first looks up the top-level parent of that node and walks
      * through all children of the top level node. */
-    function foreach_child_in_thread($_forum, $_id, $_offset, $_limit,
+    function foreach_child_in_thread($_forumid, $_id, $_offset, $_limit,
                                      $_fold, $_func, $_data) {
       $threadid = $this->_get_threadid($_id);
-      $this->foreach_child($_forumid,
-                           $threadid,
-                           $_offset,
-                           $_limit,
-                           $_fold,
-                           $_func,
-                           $_data);
+      return $this->foreach_child($_forumid,
+                                  $threadid,
+                                  $_offset,
+                                  $_limit,
+                                  $_fold,
+                                  $_func,
+                                  $_data);
     }
     
     

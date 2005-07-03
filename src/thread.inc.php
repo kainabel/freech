@@ -89,7 +89,7 @@
   }
   
   
-  function thread_print_row($_row, $_indents, $_data) {
+  function _thread_print_row($_row, $_indents, $_data) {
     global $cfg;
     global $lang;
     
@@ -171,5 +171,34 @@
     print("</td>\n");
     
     print("</tr>\n");
+  }
+  
+  
+  function thread_print($_db, $_forum_id, $_msg_id, $_offset, $_folding) {
+    global $cfg;
+    global $lang;
+    print("<table border='0' cellpadding='0' cellspacing='0' width='100%'>");
+    if ($_msg_id == 0)
+      $n_rows = $_db->foreach_child($_forum_id,
+                                    $_msg_id,
+                                    $_offset,
+                                    $cfg[tpp],
+                                    $_folding,
+                                    _thread_print_row,
+                                    array($_folding, $_GET));
+    else
+      $n_rows = $_db->foreach_child_in_thread($_forum_id,
+                                              $_msg_id,
+                                              $_offset,
+                                              $cfg[tpp],
+                                              $_folding,
+                                              _thread_print_row,
+                                              array($_folding, $_GET));
+    if ($n_rows == 0) {
+      print("<tr><td height='4'></td></tr>");
+      print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
+      print("<tr><td height='4'></td></tr>");
+    }
+    print("</table>");
   }
 ?>

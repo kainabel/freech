@@ -50,7 +50,7 @@
   }
   
   
-  function _forum_print_heading($_queryvars, $_title) {
+  function _forum_print_heading($_queryvars, $_entry) {
     global $lang;
     global $cfg;
     
@@ -63,15 +63,21 @@
     print("\t\t<td align='left'>\n");
     print("\t\t<font size='-1'>\n");
     
-    $query = "";
     $query['list'] = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query) . "'>Forum</a>");
-    if ($_GET['read'] === '1' || $_GET['llist']) 
-          print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$_title");
+    $url           = build_url($_queryvars, $holdvars, $query);
+    print("&nbsp;&nbsp;<a href='?$url'>Forum</a>");
+    if ($_GET['read'] === '1' || $_GET['llist']) {
+      if (!$_entry)
+        print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$lang[noentrytitle]");
+      elseif (!$entry->active)
+        print("&nbsp;&nbsp;&gt;&nbsp;&nbsp;$lang[blockedtitle]");
+      else
+        print(string_escape($entry->title));
+    }
     
     print("</font>\n");
     print("\t\t</td>\n");
+    
     /* FIXME: only useful if more than one forum exists
     print("\t\t<td align='right'>\n");
     print("\t\t<font size='-1'>\n");
@@ -82,6 +88,7 @@
           . build_url($_queryvars, $holdvars, $query) . "'>$lang[entryindex]</a>\n");
     print("</font>\n");
     print("\t\t</td>\n");*/
+    
     print("\t</tr>\n");
     print("</table>\n");
   } 
@@ -99,15 +106,18 @@
     $query = "";
     if ($_COOKIE[view] === 'plain') {
       $query[changeview] = 't';
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[threadview]</a>");
+      $url               = build_url($_queryvars, $holdvars, $query);
+      print("<a href='?$url'>$lang[threadview]</a>");
       print("&nbsp;&nbsp;&nbsp;");
       print("$lang[plainview]");
     } else {
       $query[changeview] = 'c';
+      $url               = build_url($_queryvars, $holdvars, $query);
       print("$lang[threadview]");
       print("&nbsp;&nbsp;&nbsp;");
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>$lang[plainview]</a>");
-    }    
+      print("<a href='?$url'>$lang[plainview]</a>");
+    }
+    
     print("</font>\n");
     print("\t\t</td>\n");
     print("\t</tr>\n");
@@ -168,68 +178,27 @@
     $holdvars = array_merge($cfg[urlvars], array('forum_id', 'hs'));
   
     // Read a message.
-    // FIXME: Most of this stuff doesn't belong here.
     if ($_GET['read']) {
-      $folding  = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
-      $entry    = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
-      // FIXME: Exposing the threadid here is not a good idea.
-      $haschild = !($entry->id == $entry->threadid && $entry->n_children == 0);
-      // print treeview or not
-      if ($_COOKIE[thread] === 'hide' OR ! $haschild)
-        $thread = 0;
-      else
-        $thread = 1;
-      // print top navi-bars
-      if (!$entry)
-        _forum_print_heading($_GET, $lang[noentrytitle]);    
-      elseif (!$entry->active)
-        _forum_print_heading($_GET, $lang[blockedtitle]);
-      else
-        _forum_print_heading($_GET, string_escape($entry->title));
-      
+      $folding    = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+      $entry      = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
+      $hasthread  = (!$entry->is_toplevel || $entry->n_children != 0);
+      _forum_print_heading($_GET, $entry);
       message_index_print($entry->id,
                           $entry->prev_thread,
                           $entry->next_thread,
                           $entry->prev_entry,
                           $entry->next_entry,
-                          $haschild,
+                          $hasthread,
                           $_GET);
-      
-      if (!$entry)
-        message_print('', $lang[noentrytitle], $lang[noentrybody], '', $_GET);
-      elseif (!$entry->active)
-        message_print('',
-                      $lang[blockedtitle],
-                      $lang[blockedentry],
-                      '',
-                      $_GET);
-      else {
-        message_print(string_unescape($entry->name),
-                      string_unescape($entry->title),
-                      string_unescape($entry->text),
-                      $entry->time,
-                      $_GET);
-        
-        if ($thread) {
-          print("<table border='0' cellpadding='0' cellspacing='0' width='100%'>");
-          $folding = new ThreadFolding(0,0);
-          $db->foreach_child_in_thread($_GET['forum_id'],
-                                       $_GET['msg_id'],
-                                       0,
-                                       $cfg[tpp],
-                                       $folding,
-                                       thread_print_row,
-                                       array($folding, $_GET));
-          print("</table>");
-        }
-      }
-      
+      message_print($entry);
+      if ($hasthread && $_COOKIE[thread] != 'hide')
+        thread_print($db, $_GET['forum_id'], $_GET['msg_id'], 0, $folding);
       message_index_print($entry->id,
                           $entry->prev_thread,
                           $entry->next_thread,
                           $entry->prev_entry,
                           $entry->next_entry,
-                          $haschild,
+                          $hasthread,
                           $_GET);
     }
     
@@ -311,6 +280,7 @@
     }
     
     // Show the forum, time order.
+    // FIXME: Create latest_print().
     elseif (($_GET['list'] || $_GET['forum_id'])
             && $_COOKIE['view'] === 'plain') {
       _forum_print_heading($_GET, '');
@@ -339,7 +309,6 @@
     }
     
     // Show the forum, thread order.
-    // FIXME: Most of this code doesn't belong here.
     elseif ($_GET['list'] || $_GET['forum_id']) {
       $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
       $n_threads = $db->get_n_threads($_GET[forum_id]);
@@ -350,29 +319,13 @@
                          $cfg[ppi],
                          $folding,
                          $_GET);
-      
-      print("<table border=0 width='100%' cellpadding=0 cellspacing=0>\n");
-      $db->foreach_child($_GET[forum_id],
-                         0,
-                         $_GET[hs],
-                         $cfg[tpp],
-                         $folding,
-                         thread_print_row,
-                         array($folding, $_GET));
-      if ($n_threads == 0) {
-        print("<tr><td height='4'></td></tr>");
-        print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
-        print("<tr><td height='4'></td></tr>");
-      }
-      print("</table>\n");
-    
+      thread_print($db, $_GET[forum_id], 0, $_GET[hs], $folding);
       thread_index_print($n_threads,
                          $_GET[hs],
                          $cfg[tpp],
                          $cfg[ppi],
                          $folding,
                          $_GET);
-      
       _forum_print_footer($_GET);
     }
     

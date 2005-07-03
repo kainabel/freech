@@ -30,7 +30,7 @@
     global $cfg;
     foreach ( explode("\n",$_string) as $line ) {
       if (strpos($line,"> ") === 0) {
-        $text .= $line."\n";
+        $text .= $line . "\n";
       } else {
         $text .= wordwrap(wordwrap($line, $cfg[max_linelength_soft]),
                           $cfg[max_linelength_hard],
@@ -42,7 +42,14 @@
   }
   
   function message_format($_string) {
-    return nl2br(preg_replace("/ /","&nbsp;", string_escape(message_wrapline($_string))));
+    $_string = message_wrapline($_string);
+    $_string = string_escape($_string);
+    $_string = preg_replace("/ /", "&nbsp;", $_string);
+    $_string = nl2br($_string);
+    $_string = preg_replace("/^(&gt;&nbsp;.*)/m",
+                            "<font color='#990000'>$1</font>",
+                            $_string);
+    return $_string;
   }
   
   
@@ -70,24 +77,36 @@
   /* print out a message well formated
     $_name, $_subject, $_message, $_time - values which are shown
   */
-  function message_print ($_name,$_subject,$_message,$_time,$_queryvars) {
+  function message_print($_entry) {
     global $lang;
-    $message = preg_replace("/^(&gt;&nbsp;.*)/m",
-                            "<font color='#990000'>$1</font>",
-                            message_format($_message));
+    
+    if (!$_entry) {
+      $subject = $lang[noentrytitle];
+      $body    = $lang[noentrybody];
+    }
+    elseif (!$_entry->active) {
+      $subject = $lang[blockedtitle];
+      $body    = $lang[blockedentry];
+    }
+    else {
+      $name    = string_escape($_entry->name);
+      $subject = string_escape($_entry->title);
+      $body    = message_format($_entry->text);
+    }
+    
     print("\n<p>\n"
         . "<table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
         . " <tr valign='middle'>\n"
         . "  <td>\n"
-        . "   <font color='#555555' size='-1'>$_time</font><br>\n"
-        . "   <b>" . string_escape($_subject) . "</b><br>\n"
-        . "   <i>" . string_escape($_name)    . "</i>\n"
+        . "   <font color='#555555' size='-1'>$_entry->time</font><br>\n"
+        . "   <b>$subject</b><br>\n"
+        . "   <i>$name</i>\n"
         . "  </td>\n"
         . " </tr>\n"
         . " <tr>\n"
         . "  <td><br>\n"
         . "<!-- message body -->\n"
-        . $message
+        . $body
         . "<!-- end message body -->\n"
         . "   <br>\n"
         . "  </td>\n"

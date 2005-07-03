@@ -27,7 +27,7 @@
    *       $_next_thread_id  The id of the next thread, if any.
    *       $_prev_entry_id   The id of the previous entry, if any.
    *       $_next_entry_id   The id of the next entry, if any.
-   *       $_has_child       Set TRUE, unless the entry is a leaf parent.
+   *       $_has_thread      Set TRUE, unless the entry is a leaf parent.
    *       $_queryvars       Variables that are appended to every link.
    */
   function message_index_print($_msg_id,
@@ -35,7 +35,7 @@
                                $_next_thread_id,
                                $_prev_entry_id,
                                $_next_entry_id,
-                               $_has_child,
+                               $_has_thread,
                                $_queryvars) {
     global $lang;
     global $cfg;
@@ -96,7 +96,7 @@
     print("&nbsp;&nbsp;<a href='?"
           . build_url($_queryvars, $holdvars, $query)
           . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");
-    if ($_has_child) {
+    if ($_has_thread) {
       $query = "";
       $query[read] = 1;
       print ("&nbsp;<a href='?");

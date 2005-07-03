@@ -93,7 +93,7 @@
     if ($_can_answer) {
       $query            = "";
       $query[write]     = 1;
-      $holdvars[msg_id] = 1;
+      array_push($holdvars, 'msg_id');
       $url              = build_url($_GET, $holdvars, $query);
       print("&nbsp;&nbsp;<a href='?$url'>"
           . "<font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");

@@ -25,8 +25,9 @@
   
   function latest_print_row($_row, $_queryvars) {
     global $cfg;
-    $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'hs'));
+    $holdvars = array_merge($cfg[urlvars], array('forum_id'));
+    if ($cfg[remember_page])
+      array_push($holdvars, 'hs');
     
     $_row->name  = string_escape($_row->name);
     $_row->title = string_escape($_row->title);

@@ -54,8 +54,9 @@
     global $lang;
     global $cfg;
     
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'hs'));
+    $holdvars = array_merge($cfg[urlvars], array('forum_id'));
+    if ($cfg[remember_page])
+      array_push($holdvars, 'hs');
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='5' border='0'>\n");

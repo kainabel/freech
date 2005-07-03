@@ -41,8 +41,9 @@
     global $lang;
     global $cfg;
     
-    $holdvars   = array_merge($cfg[urlvars],
-                              array('forum_id', 'hs'));
+    $holdvars = array_merge($cfg[urlvars], array('forum_id'));
+    if ($cfg[remember_page])
+      array_push($holdvars, 'hs');
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
@@ -91,13 +92,15 @@
     }
     
     if ($_can_answer) {
-      $query            = "";
-      $query[write]     = 1;
-      array_push($holdvars, 'msg_id');
-      $url              = build_url($_GET, $holdvars, $query);
+      $query         = "";
+      $query[write]  = 1;
+      $query[msg_id] = $_GET[msg_id];
+      $url           = build_url($_GET, $holdvars, $query);
       print("&nbsp;&nbsp;<a href='?$url'>"
           . "<font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
     }
+    $query         = "";
+    $query[write]  = 1;
     print("&nbsp;&nbsp;<a href='?"
           . build_url($_queryvars, $holdvars, $query)
           . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");

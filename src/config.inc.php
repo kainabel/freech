@@ -23,11 +23,15 @@
   $cfg[ppi]                 = 5;        // Maximum number of pages shown in the
                                         // index before the [...] button
                                         // appears.
+  $cfg[remember_page]       = FALSE;    // If TRUE, the current page in the
+                                        // index is remembered even when reading
+                                        // a message. This comes at the cost
+                                        // of less stable URLs.
   $cfg[max_msglength]       = 10000;    // Maximum length of a message.
   $cfg[max_linelength_soft] = 80;       // Number of characters before a line
                                         // wraps.
   $cfg[max_linelength_hard] = 120;      // Number of characters before a quoted
                                         // line wraps.
-  $cfg[max_titlelength] = 70;           // Maximum length of the title
-  $cfg[max_namelength]  = 70;           // Maximum lenght of the name
+  $cfg[max_titlelength]     = 70;       // Maximum length of the title
+  $cfg[max_namelength]      = 50;       // Maximum lenght of the name
 ?>

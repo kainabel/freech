@@ -172,7 +172,7 @@
                         $cfg[db_usr],
                         $cfg[db_pass],
                         $cfg[db_name],
-                        $cfg[db_tablebase]);
+                        $cfg[db_tablebase] . "_message");
     $db->set_timeformat($lang[dateformat]);
     
     // Print the page header.

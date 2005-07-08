@@ -1,4 +1,4 @@
-CREATE TABLE tefinch1 (
+CREATE TABLE tefinch_message1 (
   id       int(11)          auto_increment,
   threadid int(11) NOT NULL,
   lft      int(11) NOT NULL CHECK(lft > 0),

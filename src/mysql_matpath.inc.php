@@ -241,7 +241,6 @@
       $this->_lock_write();
       
       // Fetch the parent row.
-      $id = $_id * 1;
       $sql  = "SELECT forumid,threadid,HEX(path) path,active";
       $sql .= " FROM $this->tablebase";
       $sql .= " WHERE id=$parentid";
@@ -376,9 +375,10 @@
       }
       else {
         // Select all root nodes.
+        //FIXME: How fast is this id=threadid thing?
         $sql  = "SELECT id,HEX(path) path, n_children";
         $sql .= " FROM $this->tablebase";
-        $sql .= " WHERE forumid=$forumid AND path=''";
+        $sql .= " WHERE forumid=$forumid AND id=threadid";
         $sql .= " ORDER BY threadid DESC,path";
         $sql .= " LIMIT $offset, $limit";
         $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 2: Fail.");
@@ -401,7 +401,6 @@
           $sql .= "id=$row->id";
         else
           $sql .= "threadid=$row->id";
-          //$sql .= "path LIKE CONCAT(0x$row->path, '%')";
         $first = 0;
       }
       

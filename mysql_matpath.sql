@@ -79,7 +79,7 @@ CREATE TABLE tefinch_group_permission (
 ) TYPE=innoDB;
 
 
-CREATE TABLE tefinch_group_users (
+CREATE TABLE tefinch_group_user (
   id            int(11)    unsigned auto_increment,
   g_id          int(11)    unsigned DEFAULT 0,
   u_id          int(11)    unsigned DEFAULT 0,

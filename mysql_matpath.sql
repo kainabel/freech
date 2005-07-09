@@ -11,6 +11,7 @@ CREATE TABLE tefinch_group (
 CREATE TABLE tefinch_user (
   id            int(11)    unsigned auto_increment,
   login         varchar(100)        NOT NULL,
+  password      varchar(100)        NOT NULL,
   firstname     varchar(100)        NOT NULL,
   lastname      varchar(100)        NOT NULL,
   mail          varchar(200)        NOT NULL,
@@ -99,10 +100,10 @@ CREATE TABLE tefinch_message (
 ) TYPE=innoDB;
 
 
-INSERT INTO tefinch_user (id, login, firstname, lastname, mail, created)
-                  VALUES (1, 'root', 'root', 'root', '', NULL);
-INSERT INTO tefinch_user (id, login, firstname, lastname, mail, created)
-                  VALUES (2, 'anonymous', 'Anonymous', 'George', '', NULL);
+INSERT INTO tefinch_user (id, login, password, firstname, lastname, mail, created)
+                  VALUES (1, 'root', '', 'root', 'root', '', NULL);
+INSERT INTO tefinch_user (id, login, password, firstname, lastname, mail, created)
+                  VALUES (2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
 
 INSERT INTO tefinch_forum (name, description, ownerid, created)
                    VALUES ('Forum', 'Default forum', 1, NULL);

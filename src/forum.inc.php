@@ -180,7 +180,7 @@
   
     // Read a message.
     if ($_GET['read']) {
-      $folding    = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+      $folding    = new ThreadFolding(UNFOLDED, '');
       $entry      = $db->get_entry($_GET['forum_id'], $_GET['msg_id']);
       $hasthread  = $entry && (!$entry->is_toplevel || $entry->n_children != 0);
       _forum_print_heading($_GET, $entry);

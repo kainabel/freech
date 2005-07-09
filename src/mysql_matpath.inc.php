@@ -144,7 +144,7 @@
       $sql  = "SELECT id,HEX(path) hexpath FROM $this->tablebase";
       $sql .= " WHERE threadid=$threadid";
       $sql .= " AND active=1";
-      $sql .= " AND path!=''";
+      $sql .= " AND is_parent=0";
       if ($_path)
         $sql .= " AND STRCMP(path, 0x$path)=1";
       $sql .= " ORDER BY hexpath LIMIT 1";
@@ -311,9 +311,10 @@
       else {
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO $this->tablebase";
-        $sql .= " (path, forumid, threadid, u_id, name, title, text, created)";
-        $sql .= " VALUES ('', $forumid, 0, 2, '$name', '$title', '$text',";
-        $sql .= "  NULL)";
+        $sql .= " (path, forumid, threadid, is_parent, u_id, name, title,";
+        $sql .= "  text, created)";
+        $sql .= " VALUES ('', $forumid, 0, 1, 2, '$name', '$title',";
+        $sql .= "  '$text', NULL)";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert2 failed.");
         $newid = mysql_insert_id();
         
@@ -377,10 +378,9 @@
       }
       else {
         // Select all root nodes.
-        //FIXME: How fast is this id=threadid thing?
         $sql  = "SELECT id,HEX(path) path, n_children";
         $sql .= " FROM $this->tablebase";
-        $sql .= " WHERE forumid=$forumid AND id=threadid";
+        $sql .= " WHERE forumid=$forumid AND is_parent=1";
         $sql .= " ORDER BY threadid DESC,path";
         $sql .= " LIMIT $offset, $limit";
         $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 2: Fail.");

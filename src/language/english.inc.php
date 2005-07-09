@@ -36,8 +36,8 @@
   $lang[writemessage]     = "New Message";
   $lang[noentries]        = "(No entries yet)";
   $lang[entryindex]       = "Message Overview";
-  $lang[hidethread]       = "Show Threads";
-  $lang[showthread]       = "Hide Threads";
+  $lang[hidethread]       = "Hide Thread";
+  $lang[showthread]       = "Show Thread";
 
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "

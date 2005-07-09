@@ -216,6 +216,9 @@
       $row = mysql_fetch_object($res);
       if (!$row)
         return;
+      $row->can_answer = 1;
+      if (strlen($row->path) / 2 > 252)
+        $row->can_answer = 0;
       $row->prev_thread = $this->_get_prev_thread_id($_f, $row->tid);
       $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
       $row->prev_entry  = $this->_get_prev_entry_id($_f, $row->tid, $row->path);
@@ -259,6 +262,8 @@
       if ($parentrow) {
         if (!$parentrow->active)
           die("TefinchDB::insert_entry(): Parent inactive.\n");
+        if (strlen($parentrow->path) / 2 > 252)
+          die("TefinchDB::insert_entry(): Hierarchy too deep.\n");
         
         // Insert a new child.
         //FIXME: u_id as an arg, as soon as logins are implemented.

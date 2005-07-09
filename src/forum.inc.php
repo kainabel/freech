@@ -190,7 +190,7 @@
                           $entry->prev_entry,
                           $entry->next_entry,
                           $hasthread,
-                          $entry->active,
+                          $entry->active && $entry->can_answer,
                           $_GET);
       message_print($entry);
       if ($hasthread && $_COOKIE[thread] != 'hide')
@@ -201,7 +201,7 @@
                           $entry->prev_entry,
                           $entry->next_entry,
                           $hasthread,
-                          $entry->active,
+                          $entry->active && $entry->can_answer,
                           $_GET);
     }
     

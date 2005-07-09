@@ -1,0 +1,21 @@
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#index, #index a {
+  background-color: #003399;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+#index a {
+  text-decoration: underline;
+}
+
+#index a:visited {
+  color: #CCCCCC;
+}

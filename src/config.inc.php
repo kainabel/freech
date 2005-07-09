@@ -16,6 +16,8 @@
   
   // *************************************************************
   // Forum appearance.
+  $cfg[theme]               = 'heise';  // Theme used. Files are in 'themes/' 
+                                        // subfolder
   $cfg[tpp]                 = 8;        // Maximum number of threads shown per
                                         // page. (when shown in thread order)
   $cfg[epp]                 = 15;       // Maximum number of messages shown per

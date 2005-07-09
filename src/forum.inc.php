@@ -291,14 +291,12 @@
                          $_GET[hs],
                          $cfg[epp],
                          $cfg[ppi],
-                         '',
                          $_GET);
       latest_print($db);
       latest_index_print($n_entries,
                          $_GET[hs],
                          $cfg[epp],
                          $cfg[ppi],
-                         '',
                          $_GET);
       _forum_print_footer($_GET);
     }

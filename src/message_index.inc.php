@@ -47,17 +47,17 @@
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
-        . " bgcolor='#003399'>\n");
+        . " bgcolor='#003399' id='index'>\n");
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
-    print("\t\t<font color='#FFFFFF' size='-1'><b>\n");
+    print("\t\t<font size='-1'>\n");
 
     if ($_prev_entry_id > 0) {
       $query = "";
       $query[msg_id] = $_prev_entry_id * 1;
       $query[read] = 1;
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&lt;&lt;</font></a>");
+           ."&lt;&lt;</a>");
     } else 
     print("&lt;&lt;");
     print("&#032;$lang[entry]&#032;");
@@ -66,7 +66,7 @@
       $query[msg_id] = $_next_entry_id * 1;
       $query[read] = 1;
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
+           ."&gt;&gt;</a>");
     } else
       print("&gt;&gt;");
     
@@ -76,7 +76,7 @@
       $query[msg_id] = $_next_thread_id * 1;
       $query[read] = 1;
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&lt;&lt;</font></a>");
+           ."&lt;&lt;</a>");
     } else {
       print("&lt;&lt;");
     }
@@ -86,7 +86,7 @@
       $query[msg_id] = $_prev_thread_id * 1;
       $query[read] = 1;
       print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."<font color='#FFFFFF'>&gt;&gt;</font></a>");
+           ."&gt;&gt;</a>");
     } else {
       print("&gt;&gt;");
     }
@@ -97,13 +97,13 @@
       $query[msg_id] = $_GET[msg_id];
       $url           = build_url($_GET, $holdvars, $query);
       print("&nbsp;&nbsp;<a href='?$url'>"
-          . "<font color='#FFFFFF'>$lang[writeanswer]</font></a>\n");
+          . "$lang[writeanswer]</a>\n");
     }
     $query         = "";
     $query[write]  = 1;
     print("&nbsp;&nbsp;<a href='?"
           . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");
+          . "'>$lang[writemessage]</a>\n");
     if ($_has_thread) {
       $query = "";
       $query[read] = 1;
@@ -111,11 +111,11 @@
       if ($_COOKIE[thread] === 'hide') {
         $query[showthread] = '1';
         print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-              ."'><font color='#FFFFFF'>$lang[showthread]</font>";
+              ."'>$lang[showthread]";
       } else {
         $query[showthread] = '-1';
         print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-              ."'><font color='#FFFFFF'>$lang[hidethread]</font>";
+              ."'>$lang[hidethread]";
       }
       print ("</a>");
     }

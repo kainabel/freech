@@ -30,6 +30,7 @@
   print("<html>\n"
       . "<head>\n"
       . "<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\n"
+      . "<link rel=\"stylesheet\" type=\"text/css\" href=\"themes/$cfg[theme].css\">"
       . "<title>Tefinch</title>"
       . "</head>\n"
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"

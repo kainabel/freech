@@ -55,10 +55,10 @@
     
     // Print "index".
     print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
-        . " bgcolor='#003399'>\n");
+        . " bgcolor='#003399' id='index'>\n");
     print("\t<tr>\n");
     print("\t\t<td align='left'>\n");
-    print("\t\t<font color='#FFFFFF' size='-1'><b>$lang[index]\n");
+    print("\t\t<font size='-1'>$lang[index]\n");
     
     // Always show a link to the first page.
     if ($pageoffset > 1) {
@@ -74,13 +74,13 @@
     // Print the numbers. Print the active number using another color.
     for ($i = $pageoffset; $i <= $pageoffset + $_ppi && $i <= $pages; $i++) {
       if ($i == $activepage)
-        print(" <font color='#FFFFFF'>$i</font>\n");
+        print(" $i\n");
       else {
         $query     = "";
         $query[hs] = ($i - 1) * $_tpp;
         print(" <a href='?"
             . build_url($_queryvars, $holdvars, $query)
-            . "'><font color='#FFFFFF'>$i</font></a>\n");
+            . "'>$i</a>\n");
       }
     }
     
@@ -92,22 +92,22 @@
       $query[hs] = ($pages - 1) * $_tpp;
       print(" <a href='?"
           . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$pages</font></a>\n");
+          . "'>$pages</a>\n");
     }
 
     if ($activepage > 1)
       print("&nbsp;<a href='?"
         . build_url($_queryvars, $holdvars, array ( hs => ( $activepage - 2)*$_tpp ))
-        . "'><font color='#FFFFFF'>$lang[next]</font></a>\n");
+        . "'>$lang[next]</a>\n");
     else
-      print("&nbsp;<font color='#FFFFFF'>$lang[next]</font>\n");
+      print("&nbsp;$lang[next]\n");
 
     if ($activepage < $pages)
       print("&nbsp;<a href='?"
         . build_url($_queryvars, $holdvars, array ( hs => ($activepage)*$_tpp ))
-        . "'><font color='#FFFFFF'>$lang[prev]</font></a>\n");
+        . "'>$lang[prev]</a>\n");
     else
-      print("&nbsp;<font color='#FFFFFF'>$lang[prev]</font>\n");
+      print("&nbsp;$lang[prev]\n");
 
     if ($_folding) {
       $fold  = $_folding->get_default();
@@ -121,7 +121,7 @@
         $query[swap] = '';
         print("&nbsp;&nbsp;<a href='?"
             . build_url($_queryvars, $holdvars, $query)
-            . "'><font color='#FFFFFF'>$lang[unfoldall]</font></a>\n");
+            . "'>$lang[unfoldall]</a>\n");
       }
     
       if ($fold == FOLDED && $swap == '')
@@ -132,7 +132,7 @@
         $query[swap] = '';
         print("&nbsp;&nbsp;<a href='?"
             . build_url($_queryvars, $holdvars, $query)
-            . "'><font color='#FFFFFF'>$lang[foldall]</font></a>\n");
+            . "'>$lang[foldall]</a>\n");
       }
     }
     
@@ -140,9 +140,9 @@
     $query[write] = 1;
     print("&nbsp;&nbsp;<a href='?"
           . build_url($_queryvars, $holdvars, $query)
-          . "'><font color='#FFFFFF'>$lang[writemessage]</font></a>\n");
+          . "'>$lang[writemessage]</a>\n");
     
-    print("</b></font>\n");
+    print("</font>\n");
     print("\t\t</td>\n");
     print("\t</tr>\n");
     print("</table>\n");

@@ -261,10 +261,11 @@
           die("TefinchDB::insert_entry(): Parent inactive.\n");
         
         // Insert a new child.
+        //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO $this->tablebase";
-        $sql .= " (forumid, threadid, name, title, text, created)";
+        $sql .= " (forumid, threadid, u_id, name, title, text, created)";
         $sql .= " VALUES (";
-        $sql .= " $parentrow->forumid, $parentrow->threadid,";
+        $sql .= " $parentrow->forumid, $parentrow->threadid, 2,";
         $sql .= " '$name', '$title', '$text', NULL";
         $sql .= ")";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert1 failed.");
@@ -308,9 +309,10 @@
       
       // Insert a new thread.
       else {
+        //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO $this->tablebase";
-        $sql .= " (path, forumid, threadid, name, title, text, created)";
-        $sql .= " VALUES ('', $forumid, 0, '$name', '$title', '$text',";
+        $sql .= " (path, forumid, threadid, u_id, name, title, text, created)";
+        $sql .= " VALUES ('', $forumid, 0, 2, '$name', '$title', '$text',";
         $sql .= "  NULL)";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert2 failed.");
         $newid = mysql_insert_id();

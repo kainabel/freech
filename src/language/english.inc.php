@@ -51,7 +51,7 @@
   $lang[writeananswer]    = "Write a Reply";
   $lang[required]         = "(required)";
   $lang[name]             = "Name";
-  $lang[msgtitle]         = "Title";
+  $lang[msgtitle]         = "Subject";
   $lang[msgbody]          = "Message";
   $lang[msgimage]         = "Image";
   $lang[preview]          = "Preview";

@@ -121,6 +121,9 @@
     
     print("</font>\n");
     print("\t\t</td>\n");
+    print("\t\t<td align='right'>\n");
+    print("<font size='-2'><a href='http://debain.org/software/tefinch/'>Tefinch Forum v0.9.0</a></font>");
+    print("\t\t</td>\n");
     print("\t</tr>\n");
     print("</table>\n");  
   }

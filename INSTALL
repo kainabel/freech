@@ -1,0 +1,24 @@
+Prerequirements for Installation
+- - - - - - - - - - - - - - - - -
+
+ * A running MySQL database (4.1 or greater).
+ * A webserver with PHP4 support.
+
+
+Installation Instructions
+- - - - - - - - - - - - - -
+
+- Copy the contents of the "src/" directory to your webserver, including all
+  subdirectories.
+
+- Edit the file "config.inc.php" according to your needs. It should be self
+  explaining.
+
+- Create your database tables using the file mysql_matpath.sql. If you have a
+  rented webspace, you usually do this by loading the file in the phpMyAdmin
+  tool provided by your webspace provider.
+
+- Done. You can now open the webpage.
+
+Do not hesitate to contact me if you run into problems installing the
+software. Also, do not forget to file bugs on the homepage if you find any.

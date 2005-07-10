@@ -65,7 +65,7 @@
   $lang[onlywhitespace]   = "Warning! Your message has no visible text."; // Not used
   $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
   $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_namelength] characters. Please choose a shorter name.";
-  $lang[titletoolong]     = "The title is longer than $cfg[max_titlelength] characters. Please choose a shorter title.";
+  $lang[titletoolong]     = "The subject is longer than $cfg[max_titlelength] characters. Please choose a shorter subject.";
   $lang[forgotname]       = "Please enter a name."; // Not used
   $lang[forgottitle]      = "Please enter a title."; // Not used
   $lang[forgottext]       = "No text was entered."; // Not used

@@ -46,7 +46,7 @@
     $_smarty->assign_by_ref('time',    $time);
     $_smarty->assign_by_ref('subject', $_subject);
     $_smarty->assign_by_ref('name',    $_name);
-    $_smarty->assign_by_ref('message', string_escape($_message));
+    $_smarty->assign_by_ref('message', $_message);
     $_smarty->assign_by_ref('body',    message_format($_message));
     $_smarty->assign_by_ref('msg_id',  $_msg_id);
     $_smarty->assign_by_ref('edit',    $lang[change]);

@@ -137,24 +137,24 @@
     // Write an answer to a message.
     function _message_answer() {
       $entry = $this->db->get_entry($_GET[forum_id], $_GET[msg_id]);
-      message_compose_reply($entry->title, '', $_GET);
+      message_compose_reply($this->smarty, $entry->title, '');
     }
     
     
     // Write a new message.
     function _message_compose() {
-      message_compose('', '', '', '', FALSE, $_GET);
+      message_compose($this->smarty, '', '', '', '', FALSE);
     }
     
     
     // Edit a message.
     function _message_edit() {
-      message_compose($_POST['name'],
+      message_compose($this->smarty,
+                      $_POST['name'],
                       $_POST['subject'],
                       $_POST['message'],
                       '',
-                      $_POST[msg_id] ? TRUE : FALSE,
-                      $_GET);
+                      $_POST[msg_id] ? TRUE : FALSE);
     }
     
     
@@ -172,12 +172,12 @@
                              message_wrapline($entry->text)) . "\n";
       }
       $text .= $_POST['message'];
-      message_compose($_POST['name'],
+      message_compose($this->smarty,
+                      $_POST['name'],
                       $_POST['subject'],
                       $text,
                       '',
-                      FALSE,
-                      $_GET);
+                      FALSE);
     }
     
     
@@ -190,12 +190,12 @@
                              $_POST['message'],
                              $_POST['msg_id']);
       if ($ret < 0)
-        message_compose($_POST['name'],
+        message_compose($this->smarty,
+                        $_POST['name'],
                         $_POST['subject'],
                         $_POST['message'],
                         $err[$ret],
-                        $_POST[msg_id] ? TRUE : FALSE,
-                        $_GET);
+                        $_POST[msg_id] ? TRUE : FALSE);
     }
     
     
@@ -209,12 +209,12 @@
                                $_POST['subject'],
                                $_POST['message']);
       if ($new_id < 0)
-        message_compose($_POST['name'],
+        message_compose($this->smarty,
+                        $_POST['name'],
                         $_POST['subject'],
                         $_POST['message'],
                         $err[$new_id],
-                        $_POST[msg_id] ? TRUE : FALSE,
-                        $_GET);
+                        $_POST[msg_id] ? TRUE : FALSE);
       else
         message_created($this->smarty, $new_id);
     }

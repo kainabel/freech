@@ -1,0 +1,24 @@
+<form action='{$action}' method='POST' accept-charset='utf-8'>
+<font size='+1' color='red'>{$lang.writeamessage}</font>
+{if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
+<p>
+<b>{$lang.name}</b>&nbsp;<i>{$lang.required}</i><br />
+<input type='text' size='80' name='name' value='{$name|escape}' maxlength='{$max_namelength}'>
+<p>
+<b>{$lang.msgtitle}</b>&nbsp;<i>{$lang.required}</i><br />
+<input type='text' size='80' name='subject' value='{$subject|escape}' maxlength='{$max_titlelength}'>
+<p>
+<b>{$lang.msgbody}</b>&nbsp;<i>{$lang.required}</i><br />
+{strip}
+<textarea name='message' cols='80' rows='20' wrap='virtual'>
+{$message|escape}
+</textarea>
+{/strip}        
+<p>
+{if $msg_id != ""}
+<input type='hidden' name='msg_id' value='{$msg_id}'>
+<input type='submit' name='quote' value='{$lang.quote}'>&nbsp;
+{/if}
+<input type='submit' name='preview' value='{$lang.preview}'>&nbsp;
+<input type='submit' name='send' value='{$lang.send}'>
+</form>

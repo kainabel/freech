@@ -4,7 +4,7 @@
 <form action='{$action}' method='POST'>
 <input type='hidden' name='name' value='{$name|escape}'>
 <input type='hidden' name='subject' value='{$subject|escape}'>
-<input type='hidden' name='message' value='{$message}'>
+<input type='hidden' name='message' value='{$message|escape}'>
 <input type='hidden' name='msg_id' value='{$msg_id}'>
 <input type='submit' name='edit' value='{$edit|escape}'>
 <input type='submit' name='send' value='{$send|escape}'>

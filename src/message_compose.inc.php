@@ -27,56 +27,35 @@
    * $_hint is useful to print an error message
    * $_quotebutton: When TRUE, the "Quote" button is shown.
    */
-  function message_compose($_name,
+  function message_compose($_smarty,
+                           $_name,
                            $_subject,
                            $_message,
                            $_hint,
-                           $_quotebutton,
-                           $_queryvars) {
+                           $_quotebutton) {
     global $cfg;
     global $lang;
-    $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'msg_id', 'hs'));
+    $holdvars = array_merge($cfg[urlvars], array('forum_id', 'msg_id', 'hs'));
+    $action = "?" . build_url($_GET, $holdvars, '');
     
-    print("<form action='?".build_url($_queryvars, $holdvars,'')
-        ."' method='POST' accept-charset='utf-8'>\n"
-        . "<font size='+1' color='red'>$lang[writeamessage]</font>\n");
-    
-    if ($_hint)
-      print("<br><font size='+1' color='red'>$_hint</font>\n");
-    
-    print("\n<p>\n"
-        . "<b>$lang[name]</b>&nbsp;<i>$lang[required]</i><br>\n"
-        . "<input type='text' size='80' name='name' value='"
-        . string_escape($_name)."' maxlength='$cfg[max_namelength]'>\n"
-        
-        . "\n<p>\n"
-        . "<b>$lang[msgtitle]</b>&nbsp;<i>$lang[required]</i><br>\n"
-        . "<input type='text' size='80' name='subject' value='"
-        . string_escape($_subject)."' maxlength='$cfg[max_titlelength]'>\n"
-        
-        . "\n<p>\n"
-        . "<b>$lang[msgbody]</b>&nbsp;<i>$lang[required]</i><br>\n"
-        . "<textarea name='message' cols='80' rows='20' wrap='virtual'>"
-        . string_escape($_message)
-        . "</textarea>\n"
-        
-        . "<p>\n");
-    
-    if ($_quotebutton) {
-      print("<input type='hidden' name='msg_id' value='$_queryvars[msg_id]'>\n");
-      print("<input type='submit' name='quote' value='$lang[quote]'>&nbsp;\n");
-    }
-    print("<input type='submit' name='preview' value='$lang[preview]'>&nbsp;\n"
-        . "<input type='submit' name='send' value='$lang[send]'>\n"
-        . "</form>\n"); 
+    $_smarty->assign_by_ref('lang',            $lang);
+    $_smarty->assign_by_ref('action',          $action);
+    $_smarty->assign_by_ref('hint',            $_hint);
+    $_smarty->assign_by_ref('subject',         $_subject);
+    $_smarty->assign_by_ref('name',            $_name);
+    $_smarty->assign_by_ref('message',         $_message);
+    $_smarty->assign_by_ref('max_namelength',  $cfg[max_namelength]);
+    $_smarty->assign_by_ref('max_titlelength', $cfg[max_titlelength]);
+    if ($_quotebutton)
+      $_smarty->assign_by_ref('msg_id',          $_GET[msg_id]);
+    $_smarty->display('message_compose.tmpl');
   }
   
   
   /* Same as above, but grabs the title from the database instead, leaving
    * all other fields empty.
    */
-  function message_compose_reply($_title, $_hint, $_queryvars) {
+  function message_compose_reply($_smarty, $_title, $_hint) {
     global $lang;
     // Prepend 'Re: ' if necessary
     if (strpos($_title, $lang[answer]) !== 0) { 
@@ -84,6 +63,6 @@
     } else { 
        $_title = $_title;
     }
-    message_compose('', $_title, '', $_hint, TRUE, $_queryvars);
+    message_compose($_smarty, '', $_title, '', $_hint, TRUE);
   }
 ?>

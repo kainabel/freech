@@ -77,7 +77,7 @@
   /* print out a message well formated
     $_name, $_subject, $_message, $_time - values which are shown
   */
-  function message_print($_entry) {
+  function message_print($_smarty, $_entry) {
     global $lang;
     
     if (!$_entry) {
@@ -89,28 +89,15 @@
       $body    = message_format($lang[blockedentry]);
     }
     else {
-      $name    = string_escape($_entry->name);
-      $subject = string_escape($_entry->title);
+      $name    = $_entry->name;
+      $subject = $_entry->title;
       $body    = message_format($_entry->text);
     }
     
-    print("\n<p>\n"
-        . "<table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
-        . " <tr valign='middle'>\n"
-        . "  <td>\n"
-        . "   <font color='#555555' size='-1'>$_entry->time</font><br>\n"
-        . "   <b>$subject</b><br>\n"
-        . "   <i>$name</i>\n"
-        . "  </td>\n"
-        . " </tr>\n"
-        . " <tr>\n"
-        . "  <td><br>\n"
-        . "<!-- message body -->\n"
-        . $body
-        . "<!-- end message body -->\n"
-        . "   <br>\n"
-        . "  </td>\n"
-        . " </tr>\n"
-        . "</table>\n");
+    $_smarty->assign_by_ref('time',    $_entry->time);
+    $_smarty->assign_by_ref('subject', $subject);
+    $_smarty->assign_by_ref('name',    $name);
+    $_smarty->assign_by_ref('body',    $body);
+    $_smarty->display('message.tmpl');
   }
 ?>

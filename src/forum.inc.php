@@ -118,7 +118,7 @@
                           $entry->next_entry,
                           $hasthread,
                           $entry->active && $entry->can_answer);
-      message_print($entry);
+      message_print($this->smarty, $entry);
       if ($hasthread && $_COOKIE[thread] != 'hide') {
         $threadprinter = new ThreadPrinter($this->smarty, $this->db, $folding);
         $threadprinter->show($_GET['forum_id'], $_GET['msg_id'], 0);
@@ -183,11 +183,12 @@
     
     // Print a preview of a message.
     function _message_preview() {
-      $ret = message_preview($_POST['name'],
+      global $err;
+      $ret = message_preview($this->smarty,
+                             $_POST['name'],
                              $_POST['subject'],
                              $_POST['message'],
-                             $_POST['msg_id'],
-                             $_GET);
+                             $_POST['msg_id']);
       if ($ret < 0)
         message_compose($_POST['name'],
                         $_POST['subject'],

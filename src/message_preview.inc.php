@@ -25,11 +25,11 @@
   include_once "message.inc.php";
   
   /* Show a preview of the message */
-  function message_preview($_name,
+  function message_preview($_smarty,
+                           $_name,
                            $_subject,
                            $_message,
-                           $_msg_id,
-                           $_queryvars) {
+                           $_msg_id) {
     global $cfg;
     global $lang;
     
@@ -37,25 +37,21 @@
     if ($err)
       return $err;
     
-    $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'msg_id', 'hs'));
-    print("<p><font color='red' size='+1'>$lang[preview]</font></p>\n"
-         ."<p><table border='0' cellpadding='0' cellspacing='0' width='100%'>\n"
-         ."<tbody><tr>");
-    $_entry->name   = $_name;
-    $_entry->title  = $_subject;
-    $_entry->text   = $_message;
-    $_entry->time   = date(preg_replace("/%/","", $lang[dateformat]), time());
-    $_entry->active = 1;
-    message_print($_entry);
-    print("<p><form action='?".build_url($_queryvars, $holdvars,'')
-        ."' method='POST'>\n"
-        . "<input type='hidden' name='name' value='".string_escape($_name)."'>\n"
-        . "<input type='hidden' name='subject' value='".string_escape($_subject)."'>\n"
-        . "<input type='hidden' name='message' value='".string_escape($_message)."'>\n"
-        . "<input type='hidden' name='msg_id' value='$_msg_id'>\n"
-        . "<input type='submit' name='edit' value='$lang[change]'>\n"
-        . "<input type='submit' name='send' value='$lang[send]'></p></table>\n");
+    $holdvars = array_merge($cfg[urlvars], array('forum_id', 'msg_id', 'hs'));
+    $url      = "?" . build_url($_GET, $holdvars, '');
+    $time     = date(preg_replace("/%/","", $lang[dateformat]), time());
+    
+    $_smarty->assign_by_ref('title',   $lang[preview]);
+    $_smarty->assign_by_ref('action',  $url);
+    $_smarty->assign_by_ref('time',    $time);
+    $_smarty->assign_by_ref('subject', $_subject);
+    $_smarty->assign_by_ref('name',    $_name);
+    $_smarty->assign_by_ref('message', string_escape($_message));
+    $_smarty->assign_by_ref('body',    message_format($_message));
+    $_smarty->assign_by_ref('msg_id',  $_msg_id);
+    $_smarty->assign_by_ref('edit',    $lang[change]);
+    $_smarty->assign_by_ref('send',    $lang[send]);
+    $_smarty->display('message_preview.tmpl');
     
     return 0;
   }

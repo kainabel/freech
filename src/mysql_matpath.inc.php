@@ -540,7 +540,7 @@
                or die("TefinchDB::foreach_latest_entry(): Failed.");
       $numrows = mysql_num_rows($res);
       while ($row = mysql_fetch_object($res))
-        $_func($row, $_data);
+        call_user_func($_func, $row, $_data);
       return $numrows;
     }
     

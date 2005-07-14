@@ -224,13 +224,14 @@
       global $cfg;
       $this->_print_navbar($_GET, '');
       $n_entries = $this->db->get_n_entries($_GET[forum_id]);
+      $latest    = new LatestPrinter($this->smarty, $this->db);
       latest_index_print($this->smarty,
                          $n_entries,
                          $_GET[hs],
                          $cfg[epp],
                          $cfg[ppi],
                          $_GET);
-      latest_print($this->db);
+      $latest->show();
       latest_index_print($this->smarty,
                          $n_entries,
                          $_GET[hs],

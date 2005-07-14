@@ -38,7 +38,7 @@
     }
     
     
-    function _thread_print_row($_row, $_indents, $_data) {
+    function _print_row($_row, $_indents, $_data) {
       global $cfg;
       global $lang;
       
@@ -88,7 +88,7 @@
                                           $_offset,
                                           $cfg[tpp],
                                           $this->folding,
-                                          array(&$this, '_thread_print_row'),
+                                          array(&$this, '_print_row'),
                                           '');
       else
         $nrows = $this->db->foreach_child_in_thread($_forum_id,
@@ -96,8 +96,7 @@
                                                     $_offset,
                                                     $cfg[tpp],
                                                     $this->folding,
-                                                    array(&$this,
-                                                          '_thread_print_row'),
+                                                    array(&$this, '_print_row'),
                                                     '');
       if ($nrows == 0) {
         $this->smarty->assign('noentries', $lang[noentries]);

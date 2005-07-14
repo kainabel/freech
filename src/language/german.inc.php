@@ -24,6 +24,7 @@
   // Forum
   $lang[dateformat]       = "%y-%m-%d %H:%i";
   $lang[index]            = "Seite";
+  $lang[forum]            = "Forum";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
   $lang[prev]             = "&Auml;ltere";

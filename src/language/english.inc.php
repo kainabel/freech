@@ -24,6 +24,7 @@
   // Forum
   $lang[dateformat]       = "%y-%m-%d %h:%i";
   $lang[index]            = "Page";
+  $lang[forum]            = "Forum";
   $lang[unfoldall]        = "Unfold All";
   $lang[foldall]          = "Fold All";
   $lang[prev]             = "Older Threads";

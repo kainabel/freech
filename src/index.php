@@ -22,7 +22,7 @@
 <?php
   include_once 'forum.inc.php';
   
-  forum_init();
+  $forum = new TefinchForum();
   
   header("Content-Type: text/html; charset=utf-8");
   print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"".
@@ -30,13 +30,13 @@
   print("<html>\n"
       . "<head>\n"
       . "<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\n"
-      . "<link rel=\"stylesheet\" type=\"text/css\" href=\"themes/$cfg[theme].css\">"
+      . "<link rel=\"stylesheet\" type=\"text/css\" href=\"themes/$cfg[theme]/style.css\">"
       . "<title>Tefinch</title>"
       . "</head>\n"
       . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
       . " alink='#5566DD'>\n");
   
-  forum_print();
+  $forum->show();
   
   print("</body>\n"
       . "</html>\n");

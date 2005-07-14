@@ -22,12 +22,14 @@
   include_once 'httpquery.inc.php';
   include_once 'thread_index.inc.php';
   
-  function latest_index_print($_n_entries,
+  function latest_index_print($_smarty,
+                              $_n_entries,
                               $_offset,
                               $_epp,
                               $_ppi,
                               $_queryvars) {
-    thread_index_print($_n_entries,
+    thread_index_print($_smarty,
+                       $_n_entries,
                        $_offset,
                        $_epp,
                        $_ppi,

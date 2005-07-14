@@ -1,0 +1,39 @@
+<!-- thread_index -->
+<table id='index' width='100%' cellspacing='0' cellpadding='3' border='0' bgcolor='#003399'>
+ <tr>
+  <td align='left'>
+  <font size='-1'>
+  {$index}&nbsp;{foreach key=text item=url from=$numbers}
+ {if $url == ""}{$text}{else}<a href='{$url}'>{$text}</a>{/if}
+{/foreach}
+
+{if $newer_threads.url == ""}
+  &nbsp;&nbsp;{$newer_threads.text}
+{else}
+  &nbsp;&nbsp;<a href='{$newer_threads.url}'>{$newer_threads.text}</a>
+{/if}
+{if $older_threads.url == ""}
+  &nbsp;&nbsp;{$older_threads.text}
+{else}
+  &nbsp;&nbsp;<a href='{$older_threads.url}'>{$older_threads.text}</a>
+{/if}
+{if $fold_all.text != "" }
+  {if $fold_all.url == ""}
+    &nbsp;&nbsp;{$fold_all.text}
+  {else}
+    &nbsp;&nbsp;<a href='{$fold_all.url}'>{$fold_all.text}</a>
+  {/if}
+{/if}
+{if $unfold_all.text != "" }
+  {if $unfold_all.url == ""}
+    &nbsp;&nbsp;{$unfold_all.text}
+  {else}
+    &nbsp;&nbsp;<a href='{$unfold_all.url}'>{$unfold_all.text}</a>
+  {/if}
+{/if}
+  &nbsp;&nbsp;<a href='{$new_thread.url}'>{$new_thread.text}</a>
+  </font>
+  </td>
+ </tr>
+</table>
+<!-- end thread_index -->

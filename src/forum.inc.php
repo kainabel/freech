@@ -104,6 +104,7 @@
     }
     
     
+    // Read a message.
     function _message_read() {
       $folding   = new ThreadFolding(UNFOLDED, '');
       $entry     = $this->db->get_entry($_GET['forum_id'], $_GET['msg_id']);
@@ -225,13 +226,15 @@
       global $cfg;
       $this->_print_navbar($_GET, '');
       $n_entries = $this->db->get_n_entries($_GET[forum_id]);
-      latest_index_print($n_entries,
+      latest_index_print($this->smarty,
+                         $n_entries,
                          $_GET[hs],
                          $cfg[epp],
                          $cfg[ppi],
                          $_GET);
       latest_print($this->db);
-      latest_index_print($n_entries,
+      latest_index_print($this->smarty,
+                         $n_entries,
                          $_GET[hs],
                          $cfg[epp],
                          $cfg[ppi],
@@ -246,14 +249,16 @@
       $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
       $this->_print_navbar($_GET,'');
-      thread_index_print($n_threads,
+      thread_index_print($this->smarty,
+                         $n_threads,
                          $_GET[hs],
                          $cfg[tpp],
                          $cfg[ppi],
                          $folding,
                          $_GET);
       thread_print($this->db, $_GET[forum_id], 0, $_GET[hs], $folding);
-      thread_index_print($n_threads,
+      thread_index_print($this->smarty,
+                         $n_threads,
                          $_GET[hs],
                          $cfg[tpp],
                          $cfg[ppi],
@@ -294,6 +299,7 @@
       }
       
       $this->smarty->display("navbar.tmpl");
+      print("\n");
     } 
     
     
@@ -323,6 +329,7 @@
                           . "</a>");
       
       $this->smarty->display("footer.tmpl");
+      print("\n");
     }
     
     

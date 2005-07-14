@@ -1,0 +1,71 @@
+<!-- thread_row -->
+<tr valign='middle' bgcolor='#ffffff'>
+  <td align='center' width=8><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='left'>{strip}
+  <table border=0 cellspacing=0 cellpadding=0>
+    <tr>
+     <td align='left'>
+{*
+  $indents:
+  1: INDENT_DRAW_DASH
+  2: INDENT_DRAW_SPACE
+*}
+{foreach item=indent from=$indents}
+  {if $indent == 1}
+     <img src='themes/heise2/img/l.png' width=20 height=23 alt='|' />
+  {else}
+     <img src='themes/heise2/img/null.png' width=20 height=23 alt='&nbsp;' />
+  {/if}
+{/foreach}
+{*
+  $row->leaftype:
+  1: PARENT_WITHOUT_CHILDREN
+  2: PARENT_WITH_CHILDREN_UNFOLDED
+  3: PARENT_WITH_CHILDREN_FOLDED
+  4: BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN
+  5: BRANCHBOTTOM_CHILD_WITH_CHILDREN
+  6: CHILD_WITHOUT_CHILDREN
+  7: CHILD_WITH_CHILDREN
+*}
+{if $row->leaftype == 1}
+     <img src='themes/heise2/img/o.png' width=9 height=21 alt='' />
+{elseif $row->leaftype == 2}
+     <a href='{$row->foldurl}'><img src='themes/heise2/img/m.png' border=0 width=9 height=21 alt='0' /></a>
+{elseif $row->leaftype == 3}
+     <a href='{$row->foldurl}'><img src='themes/heise2/img/p.png' border=0 width=9 height=21 alt='0' /></a>
+{elseif $row->leaftype == 4 || $row->leaftype == 5}
+     <img src='themes/heise2/img/e.png' width=20 height=23 alt='`-' />
+{elseif $row->leaftype == 6 || $row->leaftype == 7}
+     <img src='themes/heise2/img/x.png' width=20 height=23 alt='|-' />
+{/if}
+     </td>
+     <td align='left'>
+{if $row->url == ""}
+     <font size='-1'>&nbsp;{$row->title}</font>
+{elseif $row->selected == 1}
+     &nbsp;<font size='-1' color='green'>{$row->title}</font>
+{else}
+     <font size='-1'>&nbsp;<a href='{$row->url}'>{$row->title}</a></font>
+{/if}
+{if $row.leaftype == 3}({$row->n_children}){/if}
+     </td>
+    </tr>
+   </table>
+  </td>
+{/strip}
+  <td><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+{if $row->selected == 1}
+  <td align='left'><font size='-1' color='green'>{$row->name}</font></td>
+{else}
+  <td align='left'><font size='-1'>{$row->name}</font></td>
+{/if}
+{if $row->selected == 1}
+  <td align='right' nowrap><font size='-1' color='green'>{$row->time}</font></td>
+{elseif $row->new}
+  <td align='right' nowrap><font size='-1' color='red'>{$row->time}</font></td>
+{else}
+  <td align='right' nowrap><font size='-1'>{$row->time}</font></td>
+{/if}
+  <td align='center' width=8><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+ </tr>
+<!-- end thread_row -->

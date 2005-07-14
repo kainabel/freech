@@ -6,16 +6,17 @@ a:hover {
   text-decoration: underline;
 }
 
-#index, #index a {
+.index {
   background-color: #003399;
   color: #FFFFFF;
   font-weight: bold;
 }
 
-#index a {
+.index a {
+  color: #ffffff;
   text-decoration: underline;
 }
 
-#index a:visited {
+.index a:visited {
   color: #CCCCCC;
 }

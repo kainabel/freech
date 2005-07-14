@@ -450,7 +450,7 @@
         }
         //echo "$row->title ($row->id, $row->path): $row->leaftype<br>\n";
         
-        $_func($row, $indents, $_data);
+        call_user_func($_func, $row, $indents, $_data);
         
         // Indent.
         $parents[$indent] = $row;
@@ -469,7 +469,7 @@
           while ($leaftype == BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN
             || $leaftype == BRANCHBOTTOM_CHILD_WITH_CHILDREN) {
             $indent--;
-            $indents[$indent] = 0;
+            unset($indents[$indent]);
             $leaftype = $parents[$indent]->leaftype;
           }
         }

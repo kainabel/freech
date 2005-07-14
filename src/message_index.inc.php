@@ -30,99 +30,96 @@
    *       $_has_thread      Set TRUE, unless the entry is a leaf parent.
    *       $_queryvars       Variables that are appended to every link.
    */
-  function message_index_print($_msg_id,
+  function message_index_print($_smarty,
+                               $_msg_id,
                                $_prev_thread_id,
                                $_next_thread_id,
                                $_prev_entry_id,
                                $_next_entry_id,
                                $_has_thread,
-                               $_can_answer,
-                               $_queryvars) {
+                               $_can_answer) {
     global $lang;
     global $cfg;
     
+    $_smarty->clear_all_assign();
     $holdvars = array_merge($cfg[urlvars], array('forum_id'));
     if ($cfg[remember_page])
       array_push($holdvars, 'hs');
     
-    // Print "index".
-    print("<table width='100%' cellspacing='0' cellpadding='3' border='0'"
-        . " bgcolor='#003399' id='index'>\n");
-    print("\t<tr>\n");
-    print("\t\t<td align='left'>\n");
-    print("\t\t<font size='-1'>\n");
-
+    // "Previous/Next Entry" buttons.
+    $preventry[text] = "&lt;&lt;";
     if ($_prev_entry_id > 0) {
-      $query = "";
-      $query[msg_id] = $_prev_entry_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."&lt;&lt;</a>");
-    } else 
-    print("&lt;&lt;");
-    print("&#032;$lang[entry]&#032;");
+      $query          = "";
+      $query[msg_id]  = $_prev_entry_id * 1;
+      $query[read]    = 1;
+      $preventry[url] = "?" . build_url($_GET, $holdvars, $query);
+    }
+    $nextentry[text] = "&gt;&gt;";
     if ($_next_entry_id > 0) {
-      $query = "";
-      $query[msg_id] = $_next_entry_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."&gt;&gt;</a>");
-    } else
-      print("&gt;&gt;");
-    
-    print("&nbsp;");
-    if ($_next_thread_id > 0) {
-      $query = "";
-      $query[msg_id] = $_next_thread_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."&lt;&lt;</a>");
-    } else {
-      print("&lt;&lt;");
+      $query          = "";
+      $query[msg_id]  = $_next_entry_id * 1;
+      $query[read]    = 1;
+      $nextentry[url] = "?" . build_url($_GET, $holdvars, $query);
     }
-    print("&#032;$lang[thread]&#032;");
+    $_smarty->assign_by_ref('preventry', $preventry);
+    $_smarty->assign_by_ref('entry',     $lang[entry]);
+    $_smarty->assign_by_ref('nextentry', $nextentry);
+    
+    // "Previous/Next Thread" buttons.
+    $prevthread[text] = "&lt;&lt;";
     if ($_prev_thread_id > 0) {
-      $query = "";
-      $query[msg_id] = $_prev_thread_id * 1;
-      $query[read] = 1;
-      print("<a href='?".build_url($_queryvars,$holdvars,$query)."'>"
-           ."&gt;&gt;</a>");
-    } else {
-      print("&gt;&gt;");
+      $query           = "";
+      $query[msg_id]   = $_prev_thread_id * 1;
+      $query[read]     = 1;
+      $prevthread[url] = "?" . build_url($_GET, $holdvars, $query);
     }
+    $nextthread[text] = "&gt;&gt;";
+    if ($_next_thread_id > 0) {
+      $query           = "";
+      $query[msg_id]   = $_next_thread_id * 1;
+      $query[read]     = 1;
+      $nextthread[url] = "?" . build_url($_GET, $holdvars, $query);
+    }
+    $_smarty->assign_by_ref('prevthread', $prevthread);
+    $_smarty->assign_by_ref('thread',     $lang[thread]);
+    $_smarty->assign_by_ref('nextthread', $nextthread);
     
+    // "Reply" button.
     if ($_can_answer) {
       $query         = "";
       $query[write]  = 1;
       $query[msg_id] = $_GET[msg_id];
-      $url           = build_url($_GET, $holdvars, $query);
-      print("&nbsp;&nbsp;<a href='?$url'>"
-          . "$lang[writeanswer]</a>\n");
+      $answer[text]  = $lang[writeanswer];
+      $answer[url]   = "?" . build_url($_GET, $holdvars, $query);
+      $_smarty->assign_by_ref('answer', $answer);
     }
-    $query         = "";
-    $query[write]  = 1;
-    print("&nbsp;&nbsp;<a href='?"
-          . build_url($_queryvars, $holdvars, $query)
-          . "'>$lang[writemessage]</a>\n");
+    
+    // "New Thread" button.
+    $query           = "";
+    $query[write]    = 1;
+    $newthread[text] = $lang[writemessage];
+    $newthread[url]  = "?" . build_url($_GET, $holdvars, $query);
+    $_smarty->assign_by_ref('new_thread', $newthread);
+    
+    // "Show/Hide Thread" button.
     if ($_has_thread) {
-      $query = "";
+      $query       = "";
       $query[read] = 1;
-      print ("&nbsp;<a href='?");
+      array_push($holdvars, 'msg_id');
       if ($_COOKIE[thread] === 'hide') {
         $query[showthread] = '1';
-        print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-              ."'>$lang[showthread]";
-      } else {
-        $query[showthread] = '-1';
-        print build_url($_queryvars,array_merge($holdvars,array('msg_id')),$query)
-              ."'>$lang[hidethread]";
+        $showthread[text]  = $lang[showthread];
+        $showthread[url]   = "?" . build_url($_GET, $holdvars, $query);
       }
-      print ("</a>");
+      else {
+        $query[showthread] = '-1';
+        $showthread[text]  = $lang[hidethread];
+        array_push($holdvars, 'msg_id');
+        $showthread[url]   = "?" . build_url($_GET, $holdvars, $query);
+      }
+      $_smarty->assign_by_ref('togglethread', $showthread);
     }
-     
-    print("</b></font>\n");
-    print("\t\t</td>\n");
-    print("\t</tr>\n");
-    print("</table>\n");
+    
+    $_smarty->display('message_index.tmpl');
   } 
 ?>

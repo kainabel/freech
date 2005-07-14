@@ -44,6 +44,8 @@
                               array('forum_id', 'list', 'hs'));
     
     $pages      = ceil($_n_threads / $_tpp);
+    if ($pages <= 0)
+      $pages = 1;
     $activepage = ceil($_offset / $_tpp) + 1;
     $pageoffset = 1;
     

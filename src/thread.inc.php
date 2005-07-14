@@ -24,182 +24,89 @@
   include_once 'httpquery.inc.php';
   include_once "mysql_$cfg[db_backend].inc.php";
   
-  // Draws the indent according to the given array.
-  function _thread_print_indent($_indents) {
-    $i = 0;
-    while ($_indents[$i]) {
-      switch ($_indents[$i]) {
-      case INDENT_DRAW_DASH:
-        print("<img src='img/l.png' width=20 height=23 alt='|' />");
-        break;
-      
-      case INDENT_DRAW_SPACE:
-        print("<img src='img/null.png' width=20 height=23 alt='&nbsp;' />");
-        break;
-      
-      default:
-        break;
-      }
-      $i++;
-    }
-  }
   
-  
-  // Draws the appropriate tree image.
-  function _thread_print_treeimage($_row, $_folding, $_queryvars) {
-    global $cfg;
-    $holdvars = array_merge($cfg[urlvars],
-                            array('forum_id', 'hs', 'msg_id', 'read'));
+  class ThreadPrinter {
+    var $smarty;
+    var $folding;
+    var $db;
+    var $_html;
     
-    switch ($_row->leaftype) {
-    case PARENT_WITHOUT_CHILDREN:
-      print("<img src='img/o.png' width=9 height=21 alt='' />");
-      break;
+    function ThreadPrinter($_smarty, $_db, $_folding) {
+      $this->smarty  = $_smarty;
+      $this->db      = $_db;
+      $this->folding = $_folding;
+    }
+    
+    
+    function _thread_print_row($_row, $_indents, $_data) {
+      global $cfg;
+      global $lang;
       
-    case PARENT_WITH_CHILDREN_UNFOLDED:
-      $swap = $_row->id;
-      if ($_queryvars[read] == 1)
+      $this->smarty->clear_all_assign();
+      $query         = "";
+      $query[msg_id] = $_row->id;
+      $query[read]   = 1;
+      $holdvars      = array_merge($cfg[urlvars], array('forum_id'));
+      if ($cfg[remember_page])
+        array_push($holdvars, 'hs');
+      
+      $_row->name     = string_escape($_row->name);
+      $_row->title    = string_escape($_row->title);
+      $_row->url      = "?" . build_url($_GET, $holdvars, $query);
+      if ($_GET[read]) {
         $query[showthread] = -1;
+        $_row->foldurl     = "?" . build_url($_GET, $holdvars, $query);
+      }
+      else {
+        $query          = "";
+        $query[swap]    = $_row->id;
+        $_row->foldurl  = "?" . build_url($_GET, $holdvars, $query);
+      }
+      $_row->selected = ($_row->id === $_GET[msg_id] && $_GET[read]);
+      $_row->new      = ((time() - $_row->unixtime) < 86400);
+      if (!$_row->active) {
+        $_row->title = $lang[blockedtitle];
+        $_row->name  = "------";
+        $_row->url   = "";
+      }
+      $_row->title    = str_replace(" ", "&nbsp;", $_row->title);
+      
+      $this->smarty->assign_by_ref('indents', $_indents);
+      $this->smarty->assign_by_ref('row',     $_row);
+      
+      $this->_html .= $this->smarty->fetch('thread_row.tmpl') . "\n";
+    }
+    
+    
+    function show($_forum_id, $_msg_id, $_offset) {
+      global $cfg;
+      global $lang;
+      
+      if ($_msg_id == 0)
+        $nrows = $this->db->foreach_child($_forum_id,
+                                          $_msg_id,
+                                          $_offset,
+                                          $cfg[tpp],
+                                          $this->folding,
+                                          array(&$this, '_thread_print_row'),
+                                          '');
       else
-        $query[swap] = $swap ? $swap : '';
-      print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
-      print("<img src='img/m.png' border=0 width=9 height=21 alt='0' />");
-      print("</a>");
-      break;
+        $nrows = $this->db->foreach_child_in_thread($_forum_id,
+                                                    $_msg_id,
+                                                    $_offset,
+                                                    $cfg[tpp],
+                                                    $this->folding,
+                                                    array(&$this,
+                                                          '_thread_print_row'),
+                                                    '');
+      if ($nrows == 0) {
+        $this->smarty->assign('noentries', $lang[noentries]);
+        $this->_html .= $this->smarty->fetch('thread_no_row.tmpl') . "\n";
+      }
       
-    case PARENT_WITH_CHILDREN_FOLDED:
-      $query = "";
-      $swap = $_row->id;
-      $query[swap] = $swap ? $swap : '';
-      print("<a href='?" . build_url($_queryvars, $holdvars, $query) . "'>");
-      print("<img src='img/p.png' border=0 width=9 height=21 alt='0' />");
-      print("</a>");
-      break;
-      
-    case BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN:
-    case BRANCHBOTTOM_CHILD_WITH_CHILDREN:
-      print("<img src='img/e.png' width=20 height=23 alt='`-' />");
-      break;
-      
-    case CHILD_WITHOUT_CHILDREN:
-    case CHILD_WITH_CHILDREN:
-      print("<img src='img/x.png' width=20 height=23 alt='|-' />");
-      break;
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign_by_ref('threads', $this->_html);
+      $this->smarty->display('thread.tmpl');
     }
-  }
-  
-  
-  function _thread_print_row($_row, $_indents, $_data) {
-    global $cfg;
-    global $lang;
-    
-    $_row->name  = string_escape($_row->name);
-    $_row->title = string_escape($_row->title);
-    list($folding, $queryvars) = $_data;
-    $holdvars = array_merge($cfg[urlvars], array('forum_id'));
-    if ($cfg[remember_page])
-      array_push($holdvars, 'hs');
-    
-    // Open a new row.
-    print("<tr valign='middle' bgcolor='#ffffff'>\n");
-    
-    print("<td align='center' width=8>");
-    print("<img src='img/null.png' width=8 height=23 alt='' />");
-    print("</td>\n");
-    
-    // Inner table.
-    print("<td align='left'>\n");
-    print("<table border=0 cellspacing=0 cellpadding=0>");
-    print("<tr>\n");
-    // Draw the tree components.
-    print("<td align='left'>");
-    _thread_print_indent($_indents);
-    _thread_print_treeimage($_row, $folding, $queryvars);
-    print("</td>\n");
-    
-    // Title.
-    $query = "";
-    $query[msg_id] = $_row->id;
-    $query[read] = 1;
-    $_row->title = str_replace(" ", "&nbsp;", $_row->title);
-    print("<td align='left'><font size='-1'>&nbsp;");
-    //print("$_row->id, $_row->path ");
-    if (!$_row->active)
-      print($lang[blockedtitle]."&nbsp;");
-    elseif ($_row->id === $queryvars[msg_id] && $queryvars[read] === '1')
-      print("<font color='green'>$_row->title</font>");
-    else
-      print("<a href='?" . build_url($queryvars, $holdvars, $query) . "'>"
-          . "$_row->title</a>&nbsp;");
-
-    if ($_row->leaftype == PARENT_WITH_CHILDREN_FOLDED) {
-      print("($_row->n_children)");
-    }
-    print("</font>"
-        . "</td>\n");
-    
-    // End inner table.
-    print("</tr>\n");
-    print("</table>\n");
-    print("</td>\n");
-    
-    // Some space.
-    //print("<td>&nbsp;</td>");
-    print("<td><img src='img/null.png' alt='' width=4 height=23 /></td>\n");
-    
-    // User name.
-    print("<td align='left'><font size='-1'>");
-    if (!$_row->active)
-      print("------");
-    elseif ($_row->id === $_GET[msg_id] && $queryvars[read] === '1')
-      print("<font color='green'>$_row->name</font>");
-    else
-      print $_row->name;
-    print("&nbsp;</font></td>\n");
-    
-    // Date.
-    if ($_row->id === $_GET[msg_id] && $queryvars[read] === '1') 
-      $color = 'green';
-    elseif ((time() - $_row->unixtime) < 86400)
-      $color = 'red';
-    else $color = 'black';
-    print("<td align='right' nowrap><font size='-1' color='$color'>"
-        . "$_row->time"
-        . "</font></td>\n");
-    
-    print("<td align='center' width=8>");
-    print("<img src='img/null.png' width=8 height=23 alt='' />");
-    print("</td>\n");
-    
-    print("</tr>\n");
-  }
-  
-  
-  function thread_print($_db, $_forum_id, $_msg_id, $_offset, $_folding) {
-    global $cfg;
-    global $lang;
-    print("<table border='0' cellpadding='0' cellspacing='0' width='100%'>");
-    if ($_msg_id == 0)
-      $n_rows = $_db->foreach_child($_forum_id,
-                                    $_msg_id,
-                                    $_offset,
-                                    $cfg[tpp],
-                                    $_folding,
-                                    _thread_print_row,
-                                    array($_folding, $_GET));
-    else
-      $n_rows = $_db->foreach_child_in_thread($_forum_id,
-                                              $_msg_id,
-                                              $_offset,
-                                              $cfg[tpp],
-                                              $_folding,
-                                              _thread_print_row,
-                                              array($_folding, $_GET));
-    if ($n_rows == 0) {
-      print("<tr><td height='4'></td></tr>");
-      print("<tr><td align='center'><i>$lang[noentries]</i></td></tr>");
-      print("<tr><td height='4'></td></tr>");
-    }
-    print("</table>");
   }
 ?>

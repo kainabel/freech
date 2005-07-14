@@ -110,29 +110,27 @@
       $entry     = $this->db->get_entry($_GET['forum_id'], $_GET['msg_id']);
       $hasthread = $entry && (!$entry->is_toplevel || $entry->n_children != 0);
       $this->_print_navbar($_GET, $entry);
-      message_index_print($entry->id,
+      message_index_print($this->smarty,
+                          $entry->id,
                           $entry->prev_thread,
                           $entry->next_thread,
                           $entry->prev_entry,
                           $entry->next_entry,
                           $hasthread,
-                          $entry->active && $entry->can_answer,
-                          $_GET);
+                          $entry->active && $entry->can_answer);
       message_print($entry);
-      if ($hasthread && $_COOKIE[thread] != 'hide')
-        thread_print($this->db,
-                     $_GET['forum_id'],
-                     $_GET['msg_id'],
-                     0,
-                     $folding);
-      message_index_print($entry->id,
+      if ($hasthread && $_COOKIE[thread] != 'hide') {
+        $threadprinter = new ThreadPrinter($this->smarty, $this->db, $folding);
+        $threadprinter->show($_GET['forum_id'], $_GET['msg_id'], 0);
+      }
+      message_index_print($this->smarty,
+                          $entry->id,
                           $entry->prev_thread,
                           $entry->next_thread,
                           $entry->prev_entry,
                           $entry->next_entry,
                           $hasthread,
-                          $entry->active && $entry->can_answer,
-                          $_GET);
+                          $entry->active && $entry->can_answer);
     }
     
     
@@ -256,7 +254,8 @@
                          $cfg[ppi],
                          $folding,
                          $_GET);
-      thread_print($this->db, $_GET[forum_id], 0, $_GET[hs], $folding);
+      $threadprinter = new ThreadPrinter($this->smarty, $this->db, $folding);
+      $threadprinter->show($_GET['forum_id'], 0, $_GET[hs]);
       thread_index_print($this->smarty,
                          $n_threads,
                          $_GET[hs],

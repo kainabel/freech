@@ -37,6 +37,7 @@
       . " alink='#5566DD'>\n");
   
   $forum->show();
+  $forum->destroy();
   
   print("</body>\n"
       . "</html>\n");

@@ -25,26 +25,27 @@
   /* Show created message 
     $_msg_id - id of the created message
   */
-  function message_created($_newmsg_id, $_queryvars) {
+  function message_created($_smarty, $_newmsg_id) {
     global $cfg;
     global $lang;
     $holdvars      = array_merge($cfg[urlvars], array('forum_id', 'hs'));
-    $query         = array('list' => 1, 'forum_id' => $_queryvars['forum_id']);
-    $forumurl      = build_url($_queryvars, $holdvars, $query);
-    $query         = array('forum_id' => $_queryvars[forum_id],
+    $query         = array('list' => 1, 'forum_id' => $_GET['forum_id']);
+    $forumurl      = "?" . build_url($_GET, $holdvars, $query);
+    $query         = array('forum_id' => $_GET[forum_id],
                            'msg_id'   => $_newmsg_id,
                            'read'     => 1);
-    $messageurl    = build_url($_queryvars, $holdvars, $query);
-    $query         = array('forum_id' => $_queryvars[forum_id],
-                           'msg_id'   => $_queryvars[msg_id],
+    $messageurl    = "?" . build_url($_GET, $holdvars, $query);
+    $query         = array('forum_id' => $_GET[forum_id],
+                           'msg_id'   => $_GET[msg_id],
                            'read'     => 1);
-    $parenturl     = build_url($_queryvars, $holdvars, $query);
+    $parenturl     = "?" . build_url($_GET, $holdvars, $query);
     
     // Give some status info and the usual links.
-    print("<p><h2>$lang[entrysuccess]</h2><br>");
-    print("<a href='?$messageurl'>$lang[backtoentry]</a><br>");
-    if ($_queryvars['msg_id']) 
-      print("<a href='?$parenturl'>$lang[backtoparent]</a><br>");
-    print("<a href='?$forumurl'>$lang[backtoindex]</a>");  
+    $_smarty->assign_by_ref('lang',       $lang);
+    $_smarty->assign_by_ref('messageurl', $messageurl);
+    $_smarty->assign_by_ref('forumurl',   $forumurl);
+    if ($_GET['msg_id']) 
+      $_smarty->assign_by_ref('parenturl',  $parenturl);
+    $_smarty->display('message_created.tmpl');
   }
 ?>

@@ -216,7 +216,7 @@
                         $_POST[msg_id] ? TRUE : FALSE,
                         $_GET);
       else
-        message_created($new_id, $_GET);
+        message_created($this->smarty, $new_id);
     }
     
     

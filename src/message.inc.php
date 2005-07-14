@@ -25,7 +25,6 @@
   
   /* Escape special characters in the posting, wrap lines */
   // NOT private.
-  
   function message_wrapline($_string) {
     global $cfg;
     foreach ( explode("\n",$_string) as $line ) {
@@ -40,6 +39,7 @@
     }
     return $text;
   }
+  
   
   function message_format($_string) {
     $_string = message_wrapline($_string);

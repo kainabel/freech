@@ -51,13 +51,13 @@
      </td>
      <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
 {if $row->url == ""}
-     <td align='left' valign='center'>
+     <td align='left'>
      <i>{$row->title}</i>
 {elseif $row->selected == 1}
      <td align='left' valign='top'>
      <font color='green'>{$row->title|truncate:65}</font>
 {else}
-     <td align='left' valign='top'>
+     <td align='left'>
      <a href='{$row->url}'>{$row->title|truncate:65}</a>
 {/if}
 {if $row.leaftype == 3}({$row->n_children}){/if}

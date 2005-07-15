@@ -81,4 +81,20 @@
   $lang[backtoentry]      = "Zu ihrem Beitrag";
   $lang[backtoparent]     = "Beantworteten Beitrag anzeigen";
   $lang[backtoindex]      = "Zum Forum";
+  
+  // Login
+  $lang[havetoregister]   = "Um unsere personalisierten Dienste nutzen zu "
+                          . "k&ouml;nnen, m&uuml;ssen Sie sich zun&auml;chst "
+                          . "<a href='registration/'>registrieren</a>. Erst "
+                          . "danach k&ouml;nnen Sie sich hier einloggen. ";
+  $lang[passwdforgotten]  = "Wenn Sie Ihre <a href='registration/?forgot'>"
+                          . "Zugangsdaten vergessen</a> haben, dann k&ouml;nnen "
+                          . "Sie diese bei uns anfordern.";
+  $lang[enteruserdata]    = "User-Daten eingeben";
+  $lang[username]         = "User-Name";
+  $lang[passwd]           = "Passwort";
+  $lang[rememberpasswd]   = "Passwort merken";
+  $lang[remembpasswdlong] = "Klicken Sie hier, wenn wir ein dauerhaftes Cookie "
+                          . "setzen sollen.";
+  $lang[login]            = "Anmelden";
 ?>

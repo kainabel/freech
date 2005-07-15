@@ -41,6 +41,8 @@
   include_once 'latest.inc.php';
   include_once 'latest_index.inc.php';
   
+  include_once 'login.inc.php';
+  
   
   class TefinchForum {
     var $db;
@@ -331,6 +333,9 @@
       print("\n");
     }
     
+    function _show_login() {
+      login_print($this->smarty);
+    }
     
     function show() {
       if ($_GET['read'])
@@ -347,6 +352,8 @@
         $this->_message_preview();  // A message preview was requested.
       elseif ($_POST['send'])
         $this->_message_send();     // A message was posted and should be saved.
+      elseif ($_GET['login'])
+        $this->_show_login();
       elseif (($_GET['list'] || $_GET['forum_id'])
               && $_COOKIE['view'] === 'plain')
         $this->_list_by_time();     // Show the forum, time order.

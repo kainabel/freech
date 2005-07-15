@@ -9,7 +9,6 @@ a {
 
 a:hover {
   text-decoration: underline;
-  color: grey;
 }
 
 a:visited {
@@ -19,7 +18,15 @@ a:visited {
 .highlight {
   border: 1px dashed black;
   background-color: #f2f5ff;
-  cursor: hand;
+  cursor: pointer;
+}
+
+.highlight a {
+  text-decoration: none;
+}
+
+.highlight a:hover {
+  text-decoration: none;
 }
 
 .dashed {

@@ -85,7 +85,7 @@
                           . " you need to <a href='registration/'>register</a>."
                           . " After that you can log in.";
   $lang[passwdforgotten]  = "If you <a href='registration/?forgot'>forgot "
-                          . "your password</a> you can order a new one."
+                          . "your password</a> you can order a new one.";
   $lang[enteruserdata]    = "Enter User Data";
   $lang[username]         = "Username";
   $lang[passwd]           = "Password";

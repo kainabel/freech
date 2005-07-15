@@ -16,6 +16,11 @@ a:visited {
   color: #444;
 }
 
+.highlight {
+  border: 1px dashed black;
+  background-color: #f2f5ff;
+}
+
 .dashed {
   border: 1px dashed black;
 }

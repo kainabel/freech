@@ -12,7 +12,16 @@
 {if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
 <tr><td colspan=7 height='7'></td></tr>
 <tr valign='middle'>
-<td colspan='7'><table width='100%' class='dashed' bgcolor='#eceff9'><tr>
+<td colspan='7'>
+  {if $row->url == ""}
+  <table width='100%' class='dashed' bgcolor='#eceff9'>
+  {else}
+  <table onmouseover="this.className='highlight';"
+         onmouseout="this.className='dashed';"
+         onclick="document.location.href='{$row->url}';"
+         width='100%' class='dashed' bgcolor='#eceff9'>
+  {/if}
+  <tr>
 {else}
 <tr valign='middle' bgcolor='#ffffff'>
 {/if}
@@ -63,13 +72,13 @@
 {if $row.leaftype == 3}({$row->n_children}){/if}
 {if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
      <br />
-     <font class='introduction' size='-1'>
+     <a href='{$row->url}'><font class='introduction' size='-1'>
   {if strlen($row->text) > 250}
      {$row->text|truncate:200:""|truncate:250:" [...]":true|escape}
   {else}
      {$row->text|escape}
   {/if}
-     </font>
+     </font></a>
 {/if}
      </td>
     </tr>

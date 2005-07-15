@@ -32,10 +32,9 @@
       . "<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\n"
       . "<link rel=\"stylesheet\" type=\"text/css\" href=\"themes/$cfg[theme]/style.css\">"
       . "<title>Tefinch</title>"
-      . "</head>\n"
-      . "<body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666'"
-      . " alink='#5566DD'>\n");
+      . "</head>\n");
   
+  $forum->print_head();
   $forum->show();
   $forum->destroy();
   

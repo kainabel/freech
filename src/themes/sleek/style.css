@@ -19,6 +19,7 @@ a:visited {
 .highlight {
   border: 1px dashed black;
   background-color: #f2f5ff;
+  cursor: hand;
 }
 
 .dashed {

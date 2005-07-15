@@ -333,9 +333,18 @@
       print("\n");
     }
     
+    
     function _show_login() {
       login_print($this->smarty);
     }
+    
+    
+    function print_head() {
+      $this->smarty->assign_by_ref('lang', $lang);
+      $this->smarty->display("header.tmpl");
+      print("\n");
+    }
+    
     
     function show() {
       if ($_GET['read'])

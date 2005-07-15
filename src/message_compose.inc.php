@@ -47,7 +47,7 @@
     $_smarty->assign_by_ref('max_namelength',  $cfg[max_namelength]);
     $_smarty->assign_by_ref('max_titlelength', $cfg[max_titlelength]);
     if ($_quotebutton)
-      $_smarty->assign_by_ref('msg_id',          $_GET[msg_id]);
+      $_smarty->assign_by_ref('msg_id', $_GET[msg_id]);
     $_smarty->display('message_compose.tmpl');
   }
   

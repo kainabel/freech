@@ -106,6 +106,7 @@
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('threads', $this->_html);
       $this->smarty->display('thread.tmpl');
+      print("\n");
     }
   }
 ?>

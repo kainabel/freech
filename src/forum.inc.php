@@ -109,7 +109,7 @@
       $folding   = new ThreadFolding(UNFOLDED, '');
       $entry     = $this->db->get_entry($_GET['forum_id'], $_GET['msg_id']);
       $hasthread = $entry && (!$entry->is_toplevel || $entry->n_children != 0);
-      $this->_print_navbar($_GET, $entry);
+      $this->_print_navbar($entry);
       message_index_print($this->smarty,
                           $entry->id,
                           $entry->prev_thread,
@@ -223,7 +223,7 @@
     // Shows the forum, time order.
     function _list_by_time() {
       global $cfg;
-      $this->_print_navbar($_GET, '');
+      $this->_print_navbar('');
       $n_entries = $this->db->get_n_entries($_GET[forum_id]);
       $latest    = new LatestPrinter($this->smarty, $this->db);
       latest_index_print($this->smarty,
@@ -239,7 +239,7 @@
                          $cfg[epp],
                          $cfg[ppi],
                          $_GET);
-      $this->_print_footer($_GET);
+      $this->_print_footer();
     }
     
     
@@ -248,7 +248,7 @@
       global $cfg;
       $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
-      $this->_print_navbar($_GET,'');
+      $this->_print_navbar('');
       thread_index_print($this->smarty,
                          $n_threads,
                          $_GET[hs],
@@ -265,7 +265,7 @@
                          $cfg[ppi],
                          $folding,
                          $_GET);
-      $this->_print_footer($_GET);
+      $this->_print_footer();
     }
     
     
@@ -279,7 +279,7 @@
     
     
     // Prints the head of the page.
-    function _print_navbar($_queryvars, $_entry) {
+    function _print_navbar($_entry) {
       global $lang;
       global $cfg;
       
@@ -287,7 +287,7 @@
       if ($cfg[remember_page])
         array_push($holdvars, 'hs');
       $query['list'] = 1;
-      $url           = build_url($_queryvars, $holdvars, $query);
+      $url           = build_url($_GET, $holdvars, $query);
       
       $this->smarty->assign('layer1', "<a href='?$url'>$lang[forum]</a>");
       if ($_GET['read'] === '1' || $_GET['llist']) {
@@ -305,7 +305,7 @@
     
     
     // Prints the footer of the page.
-    function _print_footer($_queryvars) {
+    function _print_footer() {
       global $lang;
       global $cfg;
       
@@ -313,21 +313,19 @@
       $query = "";
       if ($_COOKIE[view] === 'plain') {
         $query[changeview] = 't';
-        $url               = build_url($_queryvars, $holdvars, $query);
-        $order_by_thread = "<a href='?$url'>$lang[threadview]</a>";
-        $order_by_time   = $lang[plainview];
+        $order_by_thread   = "?" . build_url($_GET, $holdvars, $query);
+        $order_by_time     = '';
       } else {
         $query[changeview] = 'c';
-        $url               = build_url($_queryvars, $holdvars, $query);
-        $order_by_thread = $lang[threadview];
-        $order_by_time   = "<a href='?$url'>$lang[plainview]</a>";
+        $order_by_thread   = '';
+        $order_by_time     = "?" . build_url($_GET, $holdvars, $query);
       }
-      $this->smarty->assign('order_by_thread', $order_by_thread);
-      $this->smarty->assign('order_by_time',   $order_by_time);
-      $this->smarty->assign('version',
-                            "<a href='http://debain.org/software/tefinch/'>"
-                          . "Tefinch Forum v0.9.0"
-                          . "</a>");
+      $version[url]  = "http://debain.org/software/tefinch/";
+      $version[text] = "Tefinch Forum v0.9.2";
+      $this->smarty->assign_by_ref('lang',            $lang);
+      $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
+      $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
+      $this->smarty->assign_by_ref('version',         $version);
       
       $this->smarty->display("footer.tmpl");
       print("\n");

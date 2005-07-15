@@ -39,6 +39,7 @@
   $lang[entryindex]       = "Message Overview";
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
+  $lang[postedby]         = "Posted by [USER]";
 
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
@@ -78,4 +79,17 @@
   $lang[backtoentry]      = "Show Your Message";
   $lang[backtoparent]     = "Show the Answered Message";
   $lang[backtoindex]      = "Go Back to the Forum";
+  
+  // Login
+  $lang[havetoregister]   = "In order to be able to use personalized features"
+                          . " you need to <a href='registration/'>register</a>."
+                          . " After that you can log in.";
+  $lang[passwdforgotten]  = "If you <a href='registration/?forgot'>forgot "
+                          . "your password</a> you can order a new one."
+  $lang[enteruserdata]    = "Enter User Data";
+  $lang[username]         = "Username";
+  $lang[passwd]           = "Password";
+  $lang[rememberpasswd]   = "Remember password";
+  $lang[remembpasswdlong] = "Click here if you want do set a persistent cookie.";
+  $lang[login]            = "Log in";
 ?>

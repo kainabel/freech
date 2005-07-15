@@ -1,0 +1,27 @@
+<!-- footer -->
+<table width='100%' cellspacing='0' cellpadding='5' border='0'>
+ <tr>
+  <td align='left'>
+  <font size='-1'>{strip}
+  {if $order_by_thread == ""}
+    {$lang.threadview}
+  {else}
+    <a href='{$order_by_thread}'>{$lang.threadview}</a>
+  {/if}
+  &nbsp;&nbsp;&nbsp;
+  {if $order_by_time == ""}
+    {$lang.plainview}
+  {else}
+    <a href='{$order_by_time}'>{$lang.plainview}</a>
+  {/if}
+  </font>
+{/strip}
+  </td>
+  <td align='right'>
+  <font size='-2'>
+  <a href='{$version.url}'>{$version.text}</a>
+  </font>
+  </td>
+ </tr>
+</table>
+<!-- end footer -->

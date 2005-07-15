@@ -30,11 +30,13 @@
     var $folding;
     var $db;
     var $_html;
+    var $_rownum;
     
     function ThreadPrinter($_smarty, $_db, $_folding) {
       $this->smarty  = $_smarty;
       $this->db      = $_db;
       $this->folding = $_folding;
+      $this->_rownum = 0;
     }
     
     
@@ -42,6 +44,7 @@
       global $cfg;
       global $lang;
       
+      $this->_rownum++;
       $this->smarty->clear_all_assign();
       $query         = "";
       $query[msg_id] = $_row->id;
@@ -68,11 +71,14 @@
         $_row->title = $lang[blockedtitle];
         $_row->name  = "------";
         $_row->url   = "";
+        $_row->text  = "";
       }
       $_row->title    = str_replace(" ", "&nbsp;", $_row->title);
       
+      $this->smarty->assign_by_ref('lang',    $lang);
       $this->smarty->assign_by_ref('indents', $_indents);
       $this->smarty->assign_by_ref('row',     $_row);
+      $this->smarty->assign_by_ref('rownum',  $this->_rownum);
       
       $this->_html .= $this->smarty->fetch('thread_row.tmpl') . "\n";
     }
@@ -82,6 +88,7 @@
       global $cfg;
       global $lang;
       
+      $this->_rownum = 0;
       if ($_msg_id == 0)
         $nrows = $this->db->foreach_child($_forum_id,
                                           $_msg_id,

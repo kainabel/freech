@@ -1,0 +1,100 @@
+<!-- thread_row -->
+{*
+  $row->leaftype:
+  1: PARENT_WITHOUT_CHILDREN
+  2: PARENT_WITH_CHILDREN_UNFOLDED
+  3: PARENT_WITH_CHILDREN_FOLDED
+  4: BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN
+  5: BRANCHBOTTOM_CHILD_WITH_CHILDREN
+  6: CHILD_WITHOUT_CHILDREN
+  7: CHILD_WITH_CHILDREN
+*}
+{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+<tr><td colspan=7 height='7'></td></tr>
+<tr valign='middle'>
+<td colspan='7'><table width='100%' class='dashed' bgcolor='#eceff9'><tr>
+{else}
+<tr valign='middle' bgcolor='#ffffff'>
+{/if}
+  <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
+{strip}
+{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+  <td align='left' height=60>
+{else}
+  <td align='left'>
+{/if}
+  <table border=0 cellspacing=0 cellpadding=0>
+    <tr>
+     <td align='left'>
+{if $row->leaftype != 1 && $row->leaftype != 2 && $row->leaftype != 3}
+  <img src='themes/sleek/img/null.png' width=20 height=23 alt='&nbsp;' />
+{/if}
+{*
+  $indents:
+  1: INDENT_DRAW_DASH
+  2: INDENT_DRAW_SPACE
+*}
+{foreach item=indent from=$indents}
+  {if $indent == 1}
+     <img src='themes/sleek/img/l.png' width=20 height=23 alt='|' />
+  {else}
+     <img src='themes/sleek/img/null.png' width=20 height=23 alt='&nbsp;' />
+  {/if}
+{/foreach}
+{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+     <img src='themes/sleek/img/noavatar.png' border=0 width=48 height=48 alt='0' />
+{elseif $row->leaftype == 4 || $row->leaftype == 5}
+     <img src='themes/sleek/img/e.png' width=20 height=23 alt='`-' />
+{elseif $row->leaftype == 6 || $row->leaftype == 7}
+     <img src='themes/sleek/img/x.png' width=20 height=23 alt='|-' />
+{/if}
+     </td>
+     <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
+{if $row->url == ""}
+     <td align='left' valign='center'>
+     <i>{$row->title}</i>
+{elseif $row->selected == 1}
+     <td align='left' valign='top'>
+     <font color='green'>{$row->title|truncate:65}</font>
+{else}
+     <td align='left' valign='top'>
+     <a href='{$row->url}'>{$row->title|truncate:65}</a>
+{/if}
+{if $row.leaftype == 3}({$row->n_children}){/if}
+{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+     <br />
+     <font class='introduction' size='-1'>
+  {if strlen($row->text) > 250}
+     {$row->text|truncate:200:""|truncate:250:" [...]":true|escape}
+  {else}
+     {$row->text|escape}
+  {/if}
+     </font>
+{/if}
+     </td>
+    </tr>
+   </table>
+  </td>
+{/strip}
+  <td><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
+{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+  <td align='right'>
+  {$lang.postedby|replace:"[USER]":$row->name}<br /><br />
+  <font size='-1'>{$row->time}</font>
+  </td>
+{elseif $row->selected}
+  <td align='left'><font color='green'>{$row->name}</font></td>
+  <td align='right' nowrap><font color='green'>{$row->time}</font></td>
+{elseif $row->new}
+  <td align='left'>{$row->name}</td>
+  <td align='right' nowrap><font color='red'>{$row->time}</font></td>
+{else}
+  <td align='left'>{$row->name}</td>
+  <td align='right' nowrap>{$row->time}</td>
+{/if}
+  <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
+{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+  </tr></table>
+ </tr>
+{/if}
+<!-- end thread_row -->

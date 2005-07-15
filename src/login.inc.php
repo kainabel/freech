@@ -24,23 +24,23 @@
   include_once "language/$cfg[lang].inc.php";
 
 
-function login_print($_smarty) {
-  global $lang;
-  $hint = $lang[havetoregister].$lang[passwdforgotten];
+  function login_print($_smarty) {
+    global $lang;
+    $hint = $lang[havetoregister] . " " . $lang[passwdforgotten];
+    
+    $holdvars = array_merge($cfg[urlvars], array('forum_id', 'msg_id', 'hs'));
+    $action = "?" . build_url($_GET, $holdvars, array('do_login' => '1'));
+    
+    $_smarty->assign_by_ref('hint',$hint);
+    $_smarty->assign_by_ref('action',$action);
+    $_smarty->assign_by_ref('enter_user_data',$lang[enteruserdata]);
+    $_smarty->assign_by_ref('username',$lang[username]);
+    $_smarty->assign_by_ref('password',$lang[passwd]);
+    $_smarty->assign_by_ref('remember_pass',$lang[rememberpasswd]);
+    $_smarty->assign_by_ref('remember_pass_long',$lang[remembpasswdlong]);
+    $_smarty->assign_by_ref('login',$lang[login]);
+    
+    $_smarty->display('login.tmpl');
+  }
   
-  $holdvars = array_merge($cfg[urlvars], array('forum_id', 'msg_id', 'hs'));
-  $action = "?" . build_url($_GET, $holdvars, array('do_login' => '1'));
-  
-  $_smarty->assign_by_ref('hint',$hint);
-  $_smarty->assign_by_ref('action',$action);
-  $_smarty->assign_by_ref('enter_user_data',$lang[enteruserdata]);
-  $_smarty->assign_by_ref('username',$lang[username]);
-  $_smarty->assign_by_ref('password',$lang[passwd]);
-  $_smarty->assign_by_ref('remember_pass',$lang[rememberpasswd]);
-  $_smarty->assign_by_ref('remember_pass_long',$lang[remembpasswdlong]);
-  $_smarty->assign_by_ref('login',$lang[login]);
-  
-  $_smarty->display('login.tmpl');
-}
-
 ?>

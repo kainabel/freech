@@ -39,6 +39,7 @@
   $lang[entryindex]       = "Beitragsübersicht";
   $lang[hidethread]       = "Thread-Anzeige ausblenden";
   $lang[showthread]       = "Thread-Anzeige einblenden";
+  $lang[postedby]         = "Beitrag von [USER]";
 
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
@@ -86,7 +87,7 @@
   $lang[havetoregister]   = "Um unsere personalisierten Dienste nutzen zu "
                           . "k&ouml;nnen, m&uuml;ssen Sie sich zun&auml;chst "
                           . "<a href='registration/'>registrieren</a>. Erst "
-                          . "danach k&ouml;nnen Sie sich hier einloggen. ";
+                          . "danach k&ouml;nnen Sie sich hier einloggen.";
   $lang[passwdforgotten]  = "Wenn Sie Ihre <a href='registration/?forgot'>"
                           . "Zugangsdaten vergessen</a> haben, dann k&ouml;nnen "
                           . "Sie diese bei uns anfordern.";

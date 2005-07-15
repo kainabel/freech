@@ -13,7 +13,7 @@
 <tr><td colspan=7 height='7'></td></tr>
 <tr valign='middle'>
 <td colspan='7'>
-  {if $row->url == ""}
+  {if $row->url == "" || $row->selected}
   <table width='100%' class='dashed' bgcolor='#eceff9'>
   {else}
   <table onmouseover="this.className='highlight';"
@@ -72,13 +72,19 @@
 {if $row.leaftype == 3}({$row->n_children}){/if}
 {if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
      <br />
-     <a href='{$row->url}'><font class='introduction' size='-1'>
-  {if strlen($row->text) > 250}
-     {$row->text|truncate:200:""|truncate:250:" [...]":true|escape}
-  {else}
-     {$row->text|escape}
+  {if !$row->selected}
+     <a href='{$row->url}'>
   {/if}
-     </font></a>
+     <font class='introduction' size='-1'>
+  {if strlen($row->text) > 250}
+     {$row->text|regex_replace:"/[\r\n]/":" "|truncate:200:""|truncate:250:" [...]":true|escape}
+  {else}
+     {$row->text|regex_replace:"/[\r\n]/":" "|escape}
+  {/if}
+     </font>
+  {if !$row->selected}
+     </a>
+  {/if}
 {/if}
      </td>
     </tr>

@@ -34,6 +34,8 @@
       . "<title>Tefinch</title>"
       . "</head>\n");
   
+  if ($_GET[forum_id] != 1)
+    die("If you touch that URL again I will sue you!");
   $forum->print_head();
   $forum->show();
   $forum->destroy();

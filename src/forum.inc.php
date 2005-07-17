@@ -41,6 +41,8 @@
   include_once 'latest.inc.php';
   include_once 'latest_index.inc.php';
   
+  include_once 'rss.inc.php';
+  
   include_once 'login.inc.php';
   
   
@@ -371,6 +373,23 @@
       else
         print("internal error");
     }
+    
+    
+    // Prints an RSS page.
+    function print_rss($_forum_id,
+                       $_title,
+                       $_descr,
+                       $_lang,
+                       $_off,
+                       $_n_entries) {
+      global $cfg;
+      $rss = new RSSPrinter($this->smarty, $this->db);
+      $rss->set_base_url($cfg[rss_url]);
+      $rss->set_title($_title);
+      $rss->set_description($_descr);
+      $rss->set_language($_lang);
+      $rss->show($_forum_id, $_off, $_n_entries);
+    } 
     
     
     function destroy() {

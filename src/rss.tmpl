@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>{$title|escape}</title>
+    <link>{$link|escape}</link>
+    <language>{$language|escape}</language>
+    <description>{$description|escape}</description>
+{foreach from=$messages item=message}
+    <item>
+      <title>{$message->title|escape}</title>
+      <guid>{$message->url|escape}</guid>
+      <link>{$message->url|escape}</link>
+      <description>{$message->text|escape}</description>
+      <pubDate>{$message->unixtime|date_format:"%a, %d %b %Y %R +0000"}</pubDate>
+    </item>
+{/foreach}
+  </channel>
+</rss>

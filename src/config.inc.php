@@ -10,6 +10,9 @@
   
   $cfg[lang]            = 'english';    // Forum language. The language files
                                         // are in the "language/" subfolder.
+  $cfg[rss_url]         = 'http://example.com/tefinch/';
+                                        // URL of your domain. Only needed for
+                                        // your RSS file.
   $cfg[urlvars]         = array('sid'); // Lets you append additional variables
                                         // to every URL. If unsure leave
                                         // unchanged.
@@ -36,4 +39,9 @@
                                         // line wraps.
   $cfg[max_titlelength]     = 70;       // Maximum length of the title
   $cfg[max_namelength]      = 50;       // Maximum lenght of the name
+  $cfg[rss_items]           = 10;       // The default number of entries in
+                                        // your RSS file.
+  $cfg[rss_maxitems]        = 20;       // The maximum number of entries in
+                                        // your RSS file.
+  
 ?>

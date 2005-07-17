@@ -32,7 +32,6 @@
     function LatestPrinter($_smarty, $_db) {
       $this->smarty  = $_smarty;
       $this->db      = $_db;
-      $this->folding = $_folding;
     }
     
     

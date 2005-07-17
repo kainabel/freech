@@ -10,9 +10,16 @@
   
   $cfg[lang]            = 'english';    // Forum language. The language files
                                         // are in the "language/" subfolder.
+  
   $cfg[rss_url]         = 'http://example.com/tefinch/';
                                         // URL of your domain. Only needed for
                                         // your RSS file.
+  $cfg[rss_language]    = 'en';         // The country code of the language in
+                                        // the RSS file.
+  $cfg[rss_title]       = 'Tefinch';    // The name of the RSS stream.
+  $cfg[rss_description] = 'Tefinch Forum';
+                                        // The descripton included in the RSS.
+  
   $cfg[urlvars]         = array('sid'); // Lets you append additional variables
                                         // to every URL. If unsure leave
                                         // unchanged.

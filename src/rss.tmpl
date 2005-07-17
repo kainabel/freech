@@ -11,7 +11,7 @@
       <guid>{$message->url|escape}</guid>
       <link>{$message->url|escape}</link>
       <description>{$message->text|escape}</description>
-      <pubDate>{$message->unixtime|date_format:"%a, %d %b %Y %R +0000"}</pubDate>
+      <pubDate>{$message->unixtime|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
     </item>
 {/foreach}
   </channel>

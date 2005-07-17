@@ -26,12 +26,10 @@
   header("Content-Type: text/xml; charset=utf-8");
   if ($_GET[forum_id] != 1)
     die("If you touch that URL again I will sue you!");
-  if ($_GET[len] > 20)
-    $_GET[len] = 20;
   $forum->print_rss($_GET[forum_id],
-                    "Tefinch Bastelforum",
-                    "Bastelforum - http://debain.org/tefinch",
-                    "en",
+                    $cfg[rss_title],
+                    $cfg[rss_description],
+                    $cfg[rss_language],
                     $_GET[hs],
                     $_GET[len]);
   $forum->destroy();

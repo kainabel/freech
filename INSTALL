@@ -5,20 +5,34 @@ Prerequirements for Installation
  * A webserver with PHP4 support.
 
 
+FAQ
+---
+
+Q: I changed the theme in the configfile but the old theme still appears.
+A: The theme is cached on the server. Delete the contents of
+   "src/smarty/templates_c/" and the theme should appear.
+
 Installation Instructions
 - - - - - - - - - - - - - -
 
 1. Copy the contents of the "src/" directory to your webserver, including all
    subdirectories.
 
-2. Edit the file "config.inc.php" according to your needs. It should be self
+2. Change the permissions of "src/smarty/templates_c/" so that the webserver
+   can write into the directory. This can either be done somewhere in your
+   FTP client (consult the documentation of the client in case you use one),
+   or by using the command:
+   chmod 777 src/smarty/templates_c/
+   on the webserver.
+
+3. Edit the file "config.inc.php" according to your needs. It should be self
    explaining.
 
-3. Create your database tables using the file mysql_matpath.sql. If you have a
+4. Create your database tables using the file mysql_matpath.sql. If you have a
    rented webspace, you usually do this by loading the file in the phpMyAdmin
    tool provided by your webspace provider.
 
-4. Done. You can now open the webpage.
+5. Done. You can now open the webpage.
 
 Do not hesitate to contact me if you run into problems installing the
 software. Also, do not forget to file bugs on the homepage if you find any.

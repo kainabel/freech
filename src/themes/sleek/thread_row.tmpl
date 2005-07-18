@@ -24,7 +24,11 @@
   {/if}
     <tr>
       <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
-      <td align='left' width=48><img src='themes/sleek/img/noavatar.png' border=0 width=48 height=48 alt='*' /></td>
+  {if $row->url}
+      <td align='left' width=48><img src='themes/sleek/img/avatar_none.png' border=0 width=48 height=48 alt='*' /></td>
+  {else}
+      <td align='left' width=48><img src='themes/sleek/img/avatar_blocked.png' border=0 width=48 height=48 alt='*' /></td>
+  {/if}
       <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
       <td align='left'>
   {if !$row->url}
@@ -35,11 +39,7 @@
       <a href='{$row->url}'>{$row->title|truncate:65}<br />
   {/if}
       <font class='introduction' size='-1'>
-      {* if strlen($row->text) > 250 *}
         {$row->text|regex_replace:"/[\r\n]/":" "|truncate:200:""|truncate:250:" [...]":true|escape}
-      {* else *}
-        {* $row->text|regex_replace:"/[\r\n]/":" "|escape *}
-      {* /if *}
       </font>
   {if $row->url && !$row->selected}
       </a>

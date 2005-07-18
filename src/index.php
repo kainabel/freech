@@ -34,9 +34,16 @@
       . "<title>Tefinch</title>"
       . "</head>\n");
   
+  $forum->print_head();
+  print("<table width=100%>"
+      . " <tr>"
+      . "  <td align='center'>"
+      . "  <a href='.'><img src='themes/$cfg[theme]/img/logo.png' alt='' border=0 width=254 height=107 /></a>"
+      . "  </td>"
+      . " </tr>"
+      . "</table><br />");
   if ($_GET[forum_id] != 1)
     die("If you touch that URL again I will sue you!");
-  $forum->print_head();
   $forum->show();
   $forum->destroy();
   

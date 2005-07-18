@@ -1,5 +1,11 @@
 2005-07-18  Samuel Abels  <spam debain org>
 	
+	* Release 0.9.4
+	* Fix: No real security problem was known, but with register_globals=on
+	  you might run into problems I can't think of in older versions.
+
+2005-07-18  Samuel Abels  <spam debain org>
+	
 	* Release 0.9.2
 	* Theme support through smarty was added and a
 	  second theme was created.

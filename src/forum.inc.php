@@ -22,8 +22,10 @@
 <?php
   require_once 'smarty/Smarty.class.php';
   include_once 'config.inc.php';
-  include_once "mysql_$cfg[db_backend].inc.php";
-  include_once "language/$cfg[lang].inc.php";
+  if (preg_match("/^[a-z0-9_]+$/i", $cfg[db_backend]))
+    include_once "mysql_$cfg[db_backend].inc.php";
+  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
+    include_once "language/$cfg[lang].inc.php";
   include_once 'error.inc.php';
   include_once 'string.inc.php';
   include_once 'httpquery.inc.php';

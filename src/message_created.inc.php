@@ -19,7 +19,8 @@
   */
 ?>
 <?php
-  include_once "language/$cfg[lang].inc.php";
+  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
+    include_once "language/$cfg[lang].inc.php";
   include_once "string.inc.php";
   
   /* Show created message 

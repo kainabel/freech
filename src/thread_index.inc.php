@@ -20,7 +20,8 @@
 ?>
 <?php
   include_once 'config.inc.php';
-  include_once "language/$cfg[lang].inc.php";
+  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
+    include_once "language/$cfg[lang].inc.php";
   
   /* Prints the indexbar out.
    * Args: $_n_threads  The total number of threads

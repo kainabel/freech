@@ -8,6 +8,7 @@
 {foreach from=$messages item=message}
     <item>
       <title>{$message->title|escape}</title>
+      <author>{$message->name|escape}</author>
       <guid>{$message->url|escape}</guid>
       <link>{$message->url|escape}</link>
       <description>{$message->text|escape}</description>

@@ -48,13 +48,13 @@
     <td><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
     <td align='right'>
   {if $row->selected}
-    <font color='green'>{$lang.postedby|replace:"[USER]":$row->name}</font><br /><br />
+    <font color='green'>{$lang.postedby|replace:"[USER]":$row->name|replace:" ":"&nbsp;"}</font><br /><br />
     <font size='-1' color='green' nowrap>{$row->time}</font>
   {elseif $row->new}
-    <font color='red'>{$lang.postedby|replace:"[USER]":$row->name}</font><br /><br />
+    <font color='red'>{$lang.postedby|replace:"[USER]":$row->name|replace:" ":"&nbsp;"}</font><br /><br />
     <font size='-1' color='red' nowrap>{$row->time}</font>
   {else}
-    {$lang.postedby|replace:"[USER]":$row->name}<br /><br />
+    {$lang.postedby|replace:"[USER]":$row->name|replace:" ":"&nbsp;"}<br /><br />
     <font size='-1' nowrap>{$row->time}</font>
   {/if}
     </td>

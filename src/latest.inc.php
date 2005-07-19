@@ -21,7 +21,6 @@
 <?php
   include_once 'string.inc.php';
   include_once 'httpquery.inc.php';
-  include_once 'latest_index.inc.php';
   
   
   class LatestPrinter {

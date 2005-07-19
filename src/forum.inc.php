@@ -29,6 +29,12 @@
   include_once 'error.inc.php';
   include_once 'string.inc.php';
   include_once 'httpquery.inc.php';
+  include_once 'objects/url.class.php';
+  
+  include_once 'actions/indexbar_printer_strategy.class.php';
+  include_once 'actions/indexbar_printer_strategy_list_by_time.class.php';
+  include_once 'actions/indexbar_printer_strategy_list_by_thread.class.php';
+  include_once 'actions/indexbar_printer.class.php';
   
   include_once 'message.inc.php';
   include_once 'message_index.inc.php';
@@ -38,13 +44,8 @@
   include_once 'message_created.inc.php';
   
   include_once 'thread.inc.php';
-  include_once 'thread_index.inc.php';
-  
   include_once 'latest.inc.php';
-  include_once 'latest_index.inc.php';
-  
   include_once 'rss.inc.php';
-  
   include_once 'login.inc.php';
   
   
@@ -232,19 +233,15 @@
       $this->_print_navbar('');
       $n_entries = $this->db->get_n_entries($_GET[forum_id]);
       $latest    = new LatestPrinter($this->smarty, $this->db);
-      latest_index_print($this->smarty,
-                         $n_entries,
-                         $_GET[hs],
-                         $cfg[epp],
-                         $cfg[ppi],
-                         $_GET);
+      $index     = new IndexBarPrinter($this->smarty,
+                                       'list_by_time',
+                                       array(n_messages          => $n_entries,
+                                             n_messages_per_page => $cfg[epp],
+                                             n_offset            => $_GET[hs],
+                                             n_pages_per_index   => $cfg[ppi]));
+      $index->show();
       $latest->show();
-      latest_index_print($this->smarty,
-                         $n_entries,
-                         $_GET[hs],
-                         $cfg[epp],
-                         $cfg[ppi],
-                         $_GET);
+      $index->show();
       $this->_print_footer();
     }
     
@@ -255,22 +252,17 @@
       $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
       $this->_print_navbar('');
-      thread_index_print($this->smarty,
-                         $n_threads,
-                         $_GET[hs],
-                         $cfg[tpp],
-                         $cfg[ppi],
-                         $folding,
-                         $_GET);
-      $threadprinter = new ThreadPrinter($this->smarty, $this->db, $folding);
-      $threadprinter->show($_GET['forum_id'], 0, $_GET[hs]);
-      thread_index_print($this->smarty,
-                         $n_threads,
-                         $_GET[hs],
-                         $cfg[tpp],
-                         $cfg[ppi],
-                         $folding,
-                         $_GET);
+      $thread = new ThreadPrinter($this->smarty, $this->db, $folding);
+      $index  = new IndexBarPrinter($this->smarty,
+                                    'list_by_thread',
+                                    array(n_threads          => $n_threads,
+                                          n_threads_per_page => $cfg[tpp],
+                                          n_offset           => $_GET[hs],
+                                          n_pages_per_index  => $cfg[ppi],
+                                          folding            => $folding));
+      $index->show();
+      $thread->show($_GET['forum_id'], 0, $_GET[hs]);
+      $index->show();
       $this->_print_footer();
     }
     
@@ -327,7 +319,7 @@
         $order_by_time     = "?" . build_url($_GET, $holdvars, $query);
       }
       $version[url]  = "http://debain.org/software/tefinch/";
-      $version[text] = "Tefinch Forum v0.9.2";
+      $version[text] = "Tefinch Forum v0.9.6";
       $this->smarty->assign_by_ref('lang',            $lang);
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);

@@ -27,7 +27,7 @@
   $lang[forum]            = "Forum";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
-  $lang[prev]             = "&Auml;ltere";
+  $lang[prev]             = "Ältere";
   $lang[next]             = "Neuere";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
@@ -85,11 +85,11 @@
   
   // Login
   $lang[havetoregister]   = "Um unsere personalisierten Dienste nutzen zu "
-                          . "k&ouml;nnen, m&uuml;ssen Sie sich zun&auml;chst "
+                          . "können, müssen Sie sich zunächst "
                           . "<a href='registration/'>registrieren</a>. Erst "
-                          . "danach k&ouml;nnen Sie sich hier einloggen.";
+                          . "danach können Sie sich hier einloggen.";
   $lang[passwdforgotten]  = "Wenn Sie Ihre <a href='registration/?forgot'>"
-                          . "Zugangsdaten vergessen</a> haben, dann k&ouml;nnen "
+                          . "Zugangsdaten vergessen</a> haben, dann können "
                           . "Sie diese bei uns anfordern.";
   $lang[enteruserdata]    = "User-Daten eingeben";
   $lang[username]         = "User-Name";

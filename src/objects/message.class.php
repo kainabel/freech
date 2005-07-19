@@ -33,13 +33,9 @@
   class Message {
     var $_fields;
     
-    
     // Constructor. May be passed a row from the database for initialisation.
-    function Message(&$_db_row = 0) {
-      if (is_object($_db_row))
-        $this->set_from_db($_db_row);
-      else
-        $this->clear();
+    function Message() {
+      $this->clear();
     }
     
     
@@ -62,7 +58,9 @@
       $this->_fields[username]        = $_db_row->username;
       $this->_fields[subject]         = $_db_row->subject;
       $this->_fields[body]            = $_db_row->body;
+      $this->_fields[updated]         = $_db_row->updated;
       $this->_fields[created]         = $_db_row->created;
+      $this->_fields[n_children]      = $_db_row->n_children;
       if (isset($_db_row->relation))
         $this->_fields[relation]      = $_db_row->relation;
       $this->_fields[active]          = $_db_row->active;
@@ -77,7 +75,7 @@
     
     // Set a unique id for the message.
     function set_id($_id) {
-      $this->_fields[id] = $_id;
+      $this->_fields[id] = $_id * 1;
     }
     
     
@@ -87,7 +85,7 @@
     
     
     function set_forum_id($_forum_id) {
-      $this->_fields[forum_id] = $_forum_id;
+      $this->_fields[forum_id] = $_forum_id * 1;
     }
     
     
@@ -132,7 +130,10 @@
     
     
     // Returns the formatted time.
-    function get_created_time($_format = conf(GENERAL_TIMEFORMAT)) {
+    function get_created_time($_format = '') {
+      global $lang; //FIXME
+      if (!$_format)
+        $_format = $lang[dateformat];
       return date($_format, $this->_fields[created]);
     }
     
@@ -144,7 +145,7 @@
     
     
     function set_updated_time($_updated) {
-      $this->_fields[updated] = $_updated;
+      $this->_fields[updated] = $_updated * 1;
     }
     
     
@@ -154,8 +155,27 @@
     
     
     // Returns the formatted time.
-    function get_updated_time($_format = conf(GENERAL_TIMEFORMAT)) {
+    function get_updated_time($_format = '') {
+      global $lang; //FIXME
+      if (!$_format)
+        $_format = $lang[dateformat];
       return date($_format, $this->_fields[updated]);
+    }
+    
+    
+    // The number of children.
+    function set_n_children($_n_children) {
+      $this->_fields[n_children] = $_n_children;
+    }
+    
+    
+    function get_n_children() {
+      if ($this->_fields[relation] != MESSAGE_RELATION_PARENT_STUB
+        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
+        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
+        die("Message:get_n_children(): This function must not be called on"
+          . " non-parent rows.");
+      return $this->_fields[n_children] * 1;
     }
     
     
@@ -170,7 +190,7 @@
     }
     
     
-    function set_active($_active) {
+    function set_active($_active = TRUE) {
       $this->_fields[active] = $_active;
     }
     
@@ -190,8 +210,17 @@
     }
     
     
+    function has_thread() {
+      if ($this->_fields[relation] != MESSAGE_RELATION_PARENT_STUB
+        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
+        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
+        return TRUE;
+      return $this->_fields[n_children] != 0;
+    }
+    
+    
     function set_next_message_id($_next_message_id) {
-      $this->_fields[next_message_id] = $_next_message_id;
+      $this->_fields[next_message_id] = $_next_message_id * 1;
     }
     
     
@@ -201,7 +230,7 @@
     
     
     function set_prev_message_id($_prev_message_id) {
-      $this->_fields[prev_message_id] = $_prev_message_id;
+      $this->_fields[prev_message_id] = $_prev_message_id * 1;
     }
     
     
@@ -211,7 +240,7 @@
     
     
     function set_next_thread_id($_next_thread_id) {
-      $this->_fields[next_thread_id] = $_next_thread_id;
+      $this->_fields[next_thread_id] = $_next_thread_id * 1;
     }
     
     
@@ -221,7 +250,7 @@
     
     
     function set_prev_thread_id($_prev_thread_id) {
-      $this->_fields[prev_thread_id] = $_prev_thread_id;
+      $this->_fields[prev_thread_id] = $_prev_thread_id * 1;
     }
     
     
@@ -230,17 +259,12 @@
     }
     
     
-    function get_selected() {
-      return $this->_fields[selected];
-    }
-    
-    
-    function set_selected($_selected) {
+    function set_selected($_selected = TRUE) {
       $this->_fields[selected] = $_selected;
     }
     
     
-    function get_selected() {
+    function is_selected() {
       return $this->_fields[selected];
     }
   }

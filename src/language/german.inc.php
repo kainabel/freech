@@ -22,13 +22,15 @@
 // German language file, 2003 by Samuel Abels
 
   // Forum
-  $lang[dateformat]       = "%y-%m-%d %H:%i";
+  $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Seite";
   $lang[forum]            = "Forum";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
   $lang[prev]             = "Ältere";
   $lang[next]             = "Neuere";
+  $lang[prev_symbol]      = "<<";
+  $lang[next_symbol]      = ">>";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
   $lang[threadview]       = "In Thread-Darstellung anzeigen";

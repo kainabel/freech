@@ -19,16 +19,6 @@
   */
 ?>
 <?php
-  include_once 'thread_folding.inc.php';
-  
-  define("PARENT_WITHOUT_CHILDREN",             1);
-  define("PARENT_WITH_CHILDREN_UNFOLDED",       2);
-  define("PARENT_WITH_CHILDREN_FOLDED",         3);
-  define("BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN", 4);
-  define("BRANCHBOTTOM_CHILD_WITH_CHILDREN",    5);
-  define("CHILD_WITHOUT_CHILDREN",              6);
-  define("CHILD_WITH_CHILDREN",                 7);
-  
   define("INDENT_DRAW_DASH",  1);
   define("INDENT_DRAW_SPACE", 2);
   
@@ -70,7 +60,7 @@
     }
     
     
-    /* Given an decimal number, this function returns an 8 character wide
+    /* Given a decimal number, this function returns an 8 character wide
      * hexadecimal string representation of it.
      */
     function _int2hex($_n) {
@@ -193,9 +183,9 @@
     /***********************************************************************
      * Public API.
      ***********************************************************************/
-    /* Returns an entry from the given forum.
+    /* Returns a message from the given forum.
      * $_forum: The forum id.
-     * $_id:    The id of the entry.
+     * $_id:    The id of the message.
      * Returns: An object containing the fields
      *            - id
      *            - name
@@ -204,40 +194,47 @@
      *            - active
      *            - time
      */
-    function get_entry($_f, $_id) {
+    function get_message($_forumid, $_id) {
       $id    = $_id * 1;
-      $sql  = "SELECT id,threadid,threadid tid,HEX(path) path,n_children,";
-      $sql .= "name,title,text,active,";
-      $sql .= "UNIX_TIMESTAMP(created) unixtime,";
-      $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
+      $sql  = "SELECT id,forumid,threadid,HEX(path) path,n_children,";
+      $sql .= "name username,title subject,text body,active,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM $this->tablebase";
       $sql .= " WHERE id=$id";
       $res = mysql_query($sql) or die("TefinchDB::get_entry(): Failed.");
       $row = mysql_fetch_object($res);
       if (!$row)
         return;
-      $row->can_answer = 1;
-      if (strlen($row->path) / 2 > 252)
-        $row->can_answer = 0;
-      $row->prev_thread = $this->_get_prev_thread_id($_f, $row->tid);
-      $row->next_thread = $this->_get_next_thread_id($_f, $row->tid);
-      $row->prev_entry  = $this->_get_prev_entry_id($_f, $row->tid, $row->path);
-      $row->next_entry  = $this->_get_next_entry_id($_f, $row->tid, $row->path);
-      $row->is_toplevel = ($row->id == $row->threadid);
-      return $row;
+      $row->prev_thread_id   = $this->_get_prev_thread_id($_forumid,
+                                                          $row->threadid);
+      $row->next_thread_id   = $this->_get_next_thread_id($_forumid,
+                                                          $row->threadid);
+      $row->prev_message_id  = $this->_get_prev_entry_id($_forumid,
+                                                         $row->threadid,
+                                                         $row->path);
+      $row->next_message_id  = $this->_get_next_entry_id($_forumid,
+                                                         $row->threadid,
+                                                         $row->path);
+      if (strlen($row->path) / 2 > 252)  // Path as long as the the DB field.
+        $row->allow_answer = FALSE;
+      if ($row->id == $row->threadid)
+        $row->relation = MESSAGE_RELATION_PARENT_UNFOLDED;
+      
+      $message = new Message;
+      $message->set_from_db($row);
+      return $message;
     }
     
     
     /* Insert a new child.
      *
-     * $_forum:  The forum id.
-     * $_parent: The id of the entry under which the new entry is placed.
-     * $_name:   The name field of the entry.
-     * $_title:  The title field of the entry.
-     * $_text:   The text field of the entry.
-     * Returns:  The id of the newly inserted entry.
+     * $_forum:   The forum id.
+     * $_parent:  The id of the entry under which the new entry is placed.
+     * $_message: The message to be inserted.
+     * Returns:   The id of the newly inserted entry.
      */
-    function insert_entry($_forumid, $_parentid, $_name, $_title, $_text) {
+    function insert_entry($_forumid, $_parentid, $_message) {
       $forumid  = $_forumid  * 1;
       $parentid = $_parentid * 1;
       
@@ -256,9 +253,9 @@
       mysql_query($sql) or die("TefinchDB::insert_entry(): Begin failed.");
       
       // Insert the new node.
-      $name  = mysql_escape_string($_name);
-      $title = mysql_escape_string($_title);
-      $text  = mysql_escape_string($_text);
+      $username = mysql_escape_string($_message->get_username());
+      $subject  = mysql_escape_string($_message->get_subject());
+      $body     = mysql_escape_string($_message->get_body());
       if ($parentrow) {
         if (!$parentrow->active)
           die("TefinchDB::insert_entry(): Parent inactive.\n");
@@ -271,7 +268,7 @@
         $sql .= " (forumid, threadid, u_id, name, title, text, created)";
         $sql .= " VALUES (";
         $sql .= " $parentrow->forumid, $parentrow->threadid, 2,";
-        $sql .= " '$name', '$title', '$text', NULL";
+        $sql .= " '$username', '$subject', '$body', NULL";
         $sql .= ")";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert1 failed.");
         $newid = mysql_insert_id();
@@ -318,8 +315,8 @@
         $sql  = "INSERT INTO $this->tablebase";
         $sql .= " (path, forumid, threadid, is_parent, u_id, name, title,";
         $sql .= "  text, created)";
-        $sql .= " VALUES ('', $forumid, 0, 1, 2, '$name', '$title',";
-        $sql .= "  '$text', NULL)";
+        $sql .= " VALUES ('', $forumid, 0, 1, 2, '$username', '$subject',";
+        $sql .= "  '$body', NULL)";
         mysql_query($sql) or die("TefinchDB::insert_entry(): Insert2 failed.");
         $newid = mysql_insert_id();
         
@@ -341,9 +338,9 @@
     /* Walks through the tree starting from $id, passing each row to the
      * function given in $func.
      * Note that the row that is passed to the handler has an n_children field
-     * attached, this field is ONLY valid for leaftype 1 and 2.
+     * attached, this field is ONLY valid for relation 1 and 2.
      *
-     * Leaftypes:
+     * Relations:
      *   1 Parent without children.
      *   2 Parent with children.
      *   3 Branch-bottom child without children.
@@ -394,9 +391,10 @@
       // Build the SQL request to grab the complete threads.
       if (mysql_num_rows($res) <= 0)
         return;
-      $sql  = "SELECT id,HEX(path) path,n_children,n_descendants,";
-      $sql .= "name,title,text,active,UNIX_TIMESTAMP(created) unixtime,";
-      $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
+      $sql  = "SELECT id,forumid,HEX(path) path,n_children,n_descendants,";
+      $sql .= "name username,title subject,text body,active,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM $this->tablebase";
       $sql .= " WHERE (";
       
@@ -414,7 +412,7 @@
       $sql .= ") ORDER BY threadid DESC,path";
       
       // Walk through those threads.
-      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed.");
+      $res = mysql_query($sql) or die("TefinchDB::foreach_child(): 3 Failed." . mysql_error());
       $row = mysql_fetch_object($res);
       $numrows = mysql_num_rows($res);
       $indent  = 0;
@@ -426,51 +424,53 @@
         // Parent node types.
         if ($this->_is_parent($row)
           && !$this->_has_children($row))
-          $row->leaftype = PARENT_WITHOUT_CHILDREN;
+          $row->relation = MESSAGE_RELATION_PARENT_STUB;
         else if ($this->_is_parent($row) && !$_fold->is_folded($row->id))
-          $row->leaftype = PARENT_WITH_CHILDREN_UNFOLDED;
+          $row->relation = MESSAGE_RELATION_PARENT_UNFOLDED;
         else if ($this->_is_parent($row))
-          $row->leaftype = PARENT_WITH_CHILDREN_FOLDED;
+          $row->relation = MESSAGE_RELATION_PARENT_FOLDED;
         
         // Children at a branch end.
         else if ($parents[$indent - 1]->n_descendants == 1
                && !$this->_is_childof($row, $nextrow))
-          $row->leaftype = BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN;
+          $row->relation = MESSAGE_RELATION_BRANCHEND_STUB;
         else if ($parents[$indent - 1]->n_descendants == 1)
-          $row->leaftype = BRANCHBOTTOM_CHILD_WITH_CHILDREN;
+          $row->relation = MESSAGE_RELATION_BRANCHEND;
         
         // Other children.
         else if (!$this->_is_childof($row, $nextrow)) {
-          $row->leaftype = CHILD_WITHOUT_CHILDREN;
+          $row->relation = MESSAGE_RELATION_CHILD_STUB;
           $parents[$indent - 1]->n_descendants--;
         }
         else {
-          $row->leaftype = CHILD_WITH_CHILDREN;
+          $row->relation = MESSAGE_RELATION_CHILD;
           $parents[$indent - 1]->n_descendants--;
         }
-        //echo "$row->title ($row->id, $row->path): $row->leaftype<br>\n";
+        //echo "$row->title ($row->id, $row->path): $row->relation<br>\n";
         
-        call_user_func($_func, $row, $indents, $_data);
+        $message = new Message();
+        $message->set_from_db($row);
+        call_user_func($_func, $message, $indents, $_data);
         
         // Indent.
         $parents[$indent] = $row;
-        if ($row->leaftype == PARENT_WITH_CHILDREN_UNFOLDED
-          || $row->leaftype == CHILD_WITH_CHILDREN
-          || $row->leaftype == BRANCHBOTTOM_CHILD_WITH_CHILDREN) {
-          if ($row->leaftype == CHILD_WITH_CHILDREN)
+        if ($row->relation == MESSAGE_RELATION_PARENT_UNFOLDED
+          || $row->relation == MESSAGE_RELATION_CHILD
+          || $row->relation == MESSAGE_RELATION_BRANCHEND) {
+          if ($row->relation == MESSAGE_RELATION_CHILD)
             $indents[$indent] = INDENT_DRAW_DASH;
           else
             $indents[$indent] = INDENT_DRAW_SPACE;
           $indent++;
         }
         // If the last row was a branch end, unindent.
-        else if ($row->leaftype == BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN) {
-          $leaftype = $parents[$indent]->leaftype;
-          while ($leaftype == BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN
-            || $leaftype == BRANCHBOTTOM_CHILD_WITH_CHILDREN) {
+        else if ($row->relation == MESSAGE_RELATION_BRANCHEND_STUB) {
+          $relation = $parents[$indent]->relation;
+          while ($relation == MESSAGE_RELATION_BRANCHEND_STUB
+            || $relation == MESSAGE_RELATION_BRANCHEND) {
             $indent--;
             unset($indents[$indent]);
-            $leaftype = $parents[$indent]->leaftype;
+            $relation = $parents[$indent]->relation;
           }
         }
         
@@ -525,9 +525,9 @@
       $forumid = $_forumid * 1;
       $offset  = $_offset  * 1;
       $limit   = $_limit   * 1;
-      $sql  = "SELECT id,name,title,text,active,";
-      $sql .= "UNIX_TIMESTAMP(created) unixtime,";
-      $sql .= "DATE_FORMAT(created, '$this->timeformat') time";
+      $sql  = "SELECT id,name username,title subject,text body,active,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM $this->tablebase";
       if ($_forumid)
         $sql .= " WHERE forumid=$forumid";
@@ -539,8 +539,12 @@
       $res = mysql_query($sql)
                or die("TefinchDB::foreach_latest_entry(): Failed.");
       $numrows = mysql_num_rows($res);
-      while ($row = mysql_fetch_object($res))
-        call_user_func($_func, $row, $_data);
+      $message = new Message();
+      while ($row = mysql_fetch_object($res)) {
+        $message = new Message();
+        $message->set_from_db($row);
+        call_user_func($_func, $message, $_data);
+      }
       return $numrows;
     }
     

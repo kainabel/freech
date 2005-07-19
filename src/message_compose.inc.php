@@ -56,14 +56,13 @@
   /* Same as above, but grabs the title from the database instead, leaving
    * all other fields empty.
    */
-  function message_compose_reply($_smarty, $_title, $_hint) {
+  function message_compose_reply($_smarty, $_message, $_hint) {
     global $lang;
     // Prepend 'Re: ' if necessary
-    if (strpos($_title, $lang[answer]) !== 0) { 
-       $_title = $lang[answer] . $_title;
-    } else { 
-       $_title = $_title;
-    }
+    if (strpos($_message->get_subject(), $lang[answer]) !== 0)
+       $_title = $lang[answer] . $_message->get_subject();
+    else
+       $_title = $_message->get_subject();
     message_compose($_smarty, '', $_title, '', $_hint, TRUE);
   }
 ?>

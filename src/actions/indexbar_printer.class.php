@@ -33,7 +33,7 @@
      * /param $_args     The url to the page.
      */
     function IndexBarPrinter(&$_smarty, $_strategy, $_args = array()) {
-      $classname = "IndexBarPrinterStrategy_" . $_strategy;
+      $classname = "IndexBarStrategy_" . $_strategy;
       $this->print_strategy = &new $classname($_args);
       if (!$this->print_strategy)
         die("IndexBarPrinter::IndexBarPrinter(): Invalid strategy.");
@@ -63,11 +63,12 @@
      */
     function show() {
       if (count($this->items) <= 0) {
-        $this->print_strategy->foreach_page(array(&$this, '_add_item'));
+        $this->print_strategy->foreach_link(array(&$this, '_add_item'));
         $this->smarty->clear_all_assign();
         $this->smarty->assign_by_ref('items', $this->items);
       }
       $this->smarty->display('indexbar.tmpl');
+      print("\n");
     }
   }
 ?>

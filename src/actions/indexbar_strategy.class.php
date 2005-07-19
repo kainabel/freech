@@ -23,7 +23,7 @@
    * Abstract function. Shame on PHP4 for not having an abstract keyword.
    * IndexBarPrinterStrategies are different algorithms to print an index bar.
    */
-  class IndexBarPrinterStrategy {
+  class IndexBarStrategy {
     /// Calls the given function $func once for each page.
     /**
      * Calls the given callback function $func once for each page.
@@ -32,6 +32,6 @@
      * - $url  The url to the page, or NULL if not a link.
      * /param $_func The function to be called for each page.
      */
-    function foreach_page($_func) { }
+    function foreach_link($_func) { }
   }
 ?>

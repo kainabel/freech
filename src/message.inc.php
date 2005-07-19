@@ -78,24 +78,26 @@
   /* print out a message well formated
     $_name, $_subject, $_message, $_time - values which are shown
   */
-  function message_print($_smarty, $_entry) {
+  function message_print($_smarty, $_message) {
     global $lang;
     
-    if (!$_entry) {
+    if (!$_message) {
       $subject = $lang[noentrytitle];
       $body    = message_format($lang[noentrybody]);
     }
-    elseif (!$_entry->active) {
+    elseif (!$_message->is_active()) {
       $subject = $lang[blockedtitle];
       $body    = message_format($lang[blockedentry]);
+      $time    = $_message->get_created_time();
     }
     else {
-      $name    = $_entry->name;
-      $subject = $_entry->title;
-      $body    = message_format($_entry->text);
+      $name    = $_message->get_username();
+      $subject = $_message->get_subject();
+      $body    = message_format($_message->get_body());
+      $time    = $_message->get_created_time();
     }
     
-    $_smarty->assign_by_ref('time',    $_entry->time);
+    $_smarty->assign_by_ref('time',    $time);
     $_smarty->assign_by_ref('subject', $subject);
     $_smarty->assign_by_ref('name',    $name);
     $_smarty->assign_by_ref('body',    $body);

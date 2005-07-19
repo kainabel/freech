@@ -22,14 +22,14 @@
   /**
    * Concrete strategy, prints the index bar for "by time" ordered list.
    */
-  class IndexBarPrinterStrategy_list_by_time extends IndexBarPrinterStrategy {
+  class IndexBarStrategy_list_by_time extends IndexBarStrategy {
     var $n_messages;
     var $n_messages_per_page;
     var $n_offset;
     var $n_pages_per_index;
     
     /// Constructor.
-    function IndexBarPrinterStrategy_list_by_time($_args) {
+    function IndexBarStrategy_list_by_time($_args) {
       $this->n_messages          = $_args[n_messages];
       $this->n_messages_per_page = $_args[n_messages_per_page];
       $this->n_offset            = $_args[n_offset];
@@ -37,7 +37,7 @@
     }
     
     
-    function foreach_page($_func) {
+    function foreach_link($_func) {
       global $lang; //FIXME
       global $cfg; //FIXME
       

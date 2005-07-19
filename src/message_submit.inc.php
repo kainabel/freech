@@ -38,11 +38,13 @@
       return $err;
     
     // Insert the message into db.
+    $message = new Message;
+    $message->set_username($_name);
+    $message->set_subject($_subject);
+    $message->set_body($_message);
     $newmsg_id = $_db->insert_entry($_forumid,
                                     $_parentid,
-                                    $_name,
-                                    $_subject,
-                                    $_message);
+                                    $message);
     
     return $newmsg_id;
   }

@@ -22,7 +22,7 @@
   /**
    * Concrete strategy, prints the index bar for the "threaded" list.
    */
-  class IndexBarPrinterStrategy_list_by_thread extends IndexBarPrinterStrategy {
+  class IndexBarStrategy_list_by_thread extends IndexBarStrategy {
     var $n_threads;
     var $n_threads_per_page;
     var $n_offset;
@@ -30,7 +30,7 @@
     var $folding;
     
     /// Constructor.
-    function IndexBarPrinterStrategy_list_by_thread(&$_args) {
+    function IndexBarStrategy_list_by_thread(&$_args) {
       $this->n_threads          = $_args[n_threads];
       $this->n_threads_per_page = $_args[n_threads_per_page];
       $this->n_offset           = $_args[n_offset];
@@ -39,7 +39,7 @@
     }
     
     
-    function foreach_page($_func) {
+    function foreach_link($_func) {
       global $lang; //FIXME
       global $cfg; //FIXME
       
@@ -114,7 +114,7 @@
       
       $url->delete_var('hs');
       if (!$this->folding)
-        die("IndexBarPrinterStrategy_list_by_thread:foreach_page(): Folding.");
+        die("IndexBarStrategy_list_by_thread:foreach_page(): Folding.");
       
       $fold  = $this->folding->get_default();
       $swap  = $this->folding->get_string_swap();

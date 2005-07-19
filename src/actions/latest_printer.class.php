@@ -19,11 +19,6 @@
   */
 ?>
 <?php
-  include_once 'string.inc.php';
-  include_once 'httpquery.inc.php';
-  include_once 'latest_index.inc.php';
-  
-  
   class LatestPrinter {
     var $smarty;
     var $db;
@@ -43,7 +38,8 @@
       global $lang;
       
       // The URL to the message.
-      $url = new URL('?', $cfg[urlvars]);
+      $url = new URL();
+      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list', 'read'));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
@@ -60,8 +56,8 @@
       }
       
       // Append everything to a list.
+      $_message->url = $url ? $url->get_string()     : '';
       array_push($this->messages, $_message);
-      array_push($this->urls,     $url);
     }
     
     
@@ -80,7 +76,6 @@
       $this->smarty->assign_by_ref('n_rows',   $n);
       $this->smarty->assign_by_ref('lang',     $lang);
       $this->smarty->assign_by_ref('messages', $this->messages);
-      $this->smarty->assign_by_ref('urls',     $this->urls);
       $this->smarty->display('latest.tmpl');
       print("\n");
     }

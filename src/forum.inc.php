@@ -30,21 +30,24 @@
   include_once 'string.inc.php';
   include_once 'httpquery.inc.php';
   include_once 'objects/url.class.php';
+  include_once 'objects/message.class.php';
   
-  include_once 'actions/indexbar_printer_strategy.class.php';
-  include_once 'actions/indexbar_printer_strategy_list_by_time.class.php';
-  include_once 'actions/indexbar_printer_strategy_list_by_thread.class.php';
+  include_once 'actions/indexbar_strategy.class.php';
+  include_once 'actions/indexbar_strategy_list_by_time.class.php';
+  include_once 'actions/indexbar_strategy_list_by_thread.class.php';
+  include_once 'actions/indexbar_strategy_read_message.class.php';
   include_once 'actions/indexbar_printer.class.php';
+  include_once 'actions/thread_printer.class.php';
+  include_once 'actions/latest_printer.class.php';
+  
+  include_once 'services/thread_folding.class.php';
   
   include_once 'message.inc.php';
-  include_once 'message_index.inc.php';
   include_once 'message_compose.inc.php';
   include_once 'message_preview.inc.php';
   include_once 'message_submit.inc.php';
   include_once 'message_created.inc.php';
   
-  include_once 'thread.inc.php';
-  include_once 'latest.inc.php';
   include_once 'rss.inc.php';
   include_once 'login.inc.php';
   
@@ -72,12 +75,6 @@
       $this->smarty->cache_dir    = "smarty/cache";
       $this->smarty->config_dir   = "smarty/configs";
       
-      $this->folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
-      if ($_GET['swap']) {
-        $this->folding->swap($_GET['swap']);
-        $this->_set_cookie('swap', $this->folding->get_string());
-      }
-      
       $this->_handle_cookies();
     }
     
@@ -91,6 +88,12 @@
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
       $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
       
+      $this->folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
+      if ($_GET['c']) {
+        $this->folding->swap($_GET['c']);
+        $this->_set_cookie('c', $this->folding->get_string());
+      }
+      
       if ($_GET['changeview'] === 't')
         $this->_set_cookie('view', 'thread');
       elseif ($_GET['changeview'] === 'c')
@@ -103,10 +106,10 @@
       
       if ($_GET['fold'] === '1') {
         $this->_set_cookie('fold', '1');
-        $this->_set_cookie('swap', '');
+        $this->_set_cookie('c', '');
       } elseif ($_GET['fold'] === '2') {
         $this->_set_cookie('fold', '2');
-        $this->_set_cookie('swap', '');
+        $this->_set_cookie('c', '');
       }
     }
     
@@ -114,37 +117,25 @@
     // Read a message.
     function _message_read() {
       $folding   = new ThreadFolding(UNFOLDED, '');
-      $entry     = $this->db->get_entry($_GET['forum_id'], $_GET['msg_id']);
-      $hasthread = $entry && (!$entry->is_toplevel || $entry->n_children != 0);
-      $this->_print_navbar($entry);
-      message_index_print($this->smarty,
-                          $entry->id,
-                          $entry->prev_thread,
-                          $entry->next_thread,
-                          $entry->prev_entry,
-                          $entry->next_entry,
-                          $hasthread,
-                          $entry->active && $entry->can_answer);
-      message_print($this->smarty, $entry);
-      if ($hasthread && $_COOKIE[thread] != 'hide') {
+      $message   = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
+      $index     = new IndexBarPrinter($this->smarty,
+                                       'read_message',
+                                       array(message => $message));
+      $this->_print_navbar($message);
+      $index->show();
+      message_print($this->smarty, $message);
+      if ($message && $message->has_thread() && $_COOKIE[thread] != 'hide') {
         $threadprinter = new ThreadPrinter($this->smarty, $this->db, $folding);
-        $threadprinter->show($_GET['forum_id'], $_GET['msg_id'], 0);
+        $threadprinter->show($_GET[forum_id], $_GET[msg_id], 0);
       }
-      message_index_print($this->smarty,
-                          $entry->id,
-                          $entry->prev_thread,
-                          $entry->next_thread,
-                          $entry->prev_entry,
-                          $entry->next_entry,
-                          $hasthread,
-                          $entry->active && $entry->can_answer);
+      $index->show();
     }
     
     
     // Write an answer to a message.
     function _message_answer() {
-      $entry = $this->db->get_entry($_GET[forum_id], $_GET[msg_id]);
-      message_compose_reply($this->smarty, $entry->title, '');
+      $message = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
+      message_compose_reply($this->smarty, $message, '');
     }
     
     
@@ -169,14 +160,14 @@
     function _message_quote() {
       global $lang;
       // FIXME: String stuff should be moved elsewhere.
-      $entry = $this->db->get_entry($_GET['forum_id'], $_GET['msg_id']);
-      if ($_GET['msg_id'] && $entry->active) {
+      $message = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
+      if ($_GET[msg_id] && $message->is_active()) {
         // Add a line "user wrote date" and add "> " at the beginning of
         // each line.
-        $text = preg_replace("/\[USER\]/", $entry->name, $lang[wrote])
-              . " $entry->time\n\n"
+        $text = preg_replace("/\[USER\]/", $message->get_username(), $lang[wrote])
+              . " " . $message->get_created_time() . "\n\n"
               . preg_replace("/^/m","> ",
-                             message_wrapline($entry->text)) . "\n";
+                             message_wrapline($message->get_body())) . "\n";
       }
       $text .= $_POST['message'];
       message_compose($this->smarty,
@@ -249,7 +240,7 @@
     // Shows the forum, thread order.
     function _list_by_thread() {
       global $cfg;
-      $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['swap']);
+      $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
       $this->_print_navbar('');
       $thread = new ThreadPrinter($this->smarty, $this->db, $folding);
@@ -277,7 +268,7 @@
     
     
     // Prints the head of the page.
-    function _print_navbar($_entry) {
+    function _print_navbar($_message) {
       global $lang;
       global $cfg;
       
@@ -289,12 +280,12 @@
       
       $this->smarty->assign('layer1', "<a href='?$url'>$lang[forum]</a>");
       if ($_GET['read'] === '1' || $_GET['llist']) {
-        if ($entry)
+        if (!$_message)
           $this->smarty->assign('layer2', $lang[noentrytitle]);
-        elseif (!$_entry->active)
+        elseif (!$_message->is_active())
           $this->smarty->assign('layer2', $lang[blockedtitle]);
         else
-          $this->smarty->assign('layer2', string_escape($_entry->title));
+          $this->smarty->assign('layer2', string_escape($_message->get_subject()));
       }
       
       $this->smarty->display("navbar.tmpl");

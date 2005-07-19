@@ -1,6 +1,6 @@
 <!-- thread_row -->
 {*
-  $row->leaftype:
+  $message->get_relation():
   1: PARENT_WITHOUT_CHILDREN
   2: PARENT_WITH_CHILDREN_UNFOLDED
   3: PARENT_WITH_CHILDREN_FOLDED
@@ -9,53 +9,53 @@
   6: CHILD_WITHOUT_CHILDREN
   7: CHILD_WITH_CHILDREN
 *}
-{if $row->leaftype == 1 || $row->leaftype == 2 || $row->leaftype == 3}
+{if $message->get_relation() == 1 || $message->get_relation() == 2 || $message->get_relation() == 3}
 <tr><td colspan=7 height='7'></td></tr>
 <tr valign='middle'>
   <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left' colspan=5>
-  {if $row->url == "" || $row->selected}
+  {if $message->url == "" || $message->is_selected()}
     <table width='100%' height=65 class='dashed' bgcolor='#eceff9' border='0' cellpadding='0' cellspacing='0'>
   {else}
     <table onmouseover="this.className='highlight';"
            onmouseout="this.className='dashed';"
-           onclick="document.location.href='{$row->url}';"
+           onclick="document.location.href='{$message->url|escape}';"
            width='100%' height=65 class='dashed' bgcolor='#eceff9' border='0' cellpadding='0' cellspacing='0'>
   {/if}
     <tr>
       <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
-  {if $row->url}
+  {if $message->url}
       <td align='left' width=48><img src='themes/sleek/img/avatar_none.png' border=0 width=48 height=48 alt='*' /></td>
   {else}
       <td align='left' width=48><img src='themes/sleek/img/avatar_blocked.png' border=0 width=48 height=48 alt='*' /></td>
   {/if}
       <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
       <td align='left'>
-  {if !$row->url}
-      <i>{$row->title}</i><br />
-  {elseif $row->selected}
-      <font color='green'>{$row->title|truncate:65}</font><br />
+  {if !$message->url}
+      <i>{$message->get_subject()|escape}</i><br />
+  {elseif $message->is_selected()}
+      <font color='green'>{$message->get_subject()|truncate:65|escape}</font><br />
   {else}
-      <a href='{$row->url}'>{$row->title|truncate:65}<br />
+      <a href='{$message->url|escape}'>{$message->get_subject()|truncate:65|escape}<br />
   {/if}
       <font class='introduction' size='-1'>
-        {$row->text|regex_replace:"/[\r\n]/":" "|truncate:200:""|truncate:250:" [...]":true|escape}
+        {$message->get_body()|regex_replace:"/[\r\n]/":" "|truncate:200:""|truncate:250:" [...]":true|escape}
       </font>
-  {if $row->url && !$row->selected}
+  {if $message->url && !$message->is_selected()}
       </a>
   {/if}
     </td>
     <td><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
     <td align='right'>
-  {if $row->selected}
-    <font color='green'>{$lang.postedby|replace:"[USER]":$row->name|replace:" ":"&nbsp;"}</font><br /><br />
-    <font size='-1' color='green' nowrap>{$row->time}</font>
-  {elseif $row->new}
-    <font color='red'>{$lang.postedby|replace:"[USER]":$row->name|replace:" ":"&nbsp;"}</font><br /><br />
-    <font size='-1' color='red' nowrap>{$row->time}</font>
+  {if $message->is_selected()}
+    <font color='green'>{$lang.postedby|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;"}</font><br /><br />
+    <font size='-1' color='green' nowrap>{$message->get_created_time()}</font>
+  {elseif $message->is_new()}
+    <font color='red'>{$lang.postedby|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;"}</font><br /><br />
+    <font size='-1' color='red' nowrap>{$message->get_created_time()}</font>
   {else}
-    {$lang.postedby|replace:"[USER]":$row->name|replace:" ":"&nbsp;"}<br /><br />
-    <font size='-1' nowrap>{$row->time}</font>
+    {$lang.postedby|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;"}<br /><br />
+    <font size='-1' nowrap>{$message->get_created_time()}</font>
   {/if}
     </td>
     <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
@@ -79,41 +79,41 @@
     <tr>
       <td align='left'>
       <img src='themes/sleek/img/null.png' width=20 height=23 alt='&nbsp;' />
-  {foreach item=indent from=$indents}
+  {foreach item=indent from=$message->indent}
     {if $indent == 1}
       <img src='themes/sleek/img/l.png' width=20 height=23 alt='|' />
     {else}
       <img src='themes/sleek/img/null.png' width=20 height=23 alt='&nbsp;' />
     {/if}
   {/foreach}
-  {if $row->leaftype == 4 || $row->leaftype == 5}
+  {if $message->get_relation() == 4 || $message->get_relation() == 5}
       <img src='themes/sleek/img/e.png' width=20 height=23 alt='`-' />
   {else}
       <img src='themes/sleek/img/x.png' width=20 height=23 alt='|-' />
   {/if}
       </td>
       <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
-  {if !$row->url}
-      <td align='left'><i>{$row->title|truncate:65}</i></td>
-  {elseif $row->selected}
-      <td align='left'><font color='green'>{$row->title|truncate:65}</font></td>
+  {if !$message->url}
+      <td align='left'><i>{$message->get_subject()|truncate:65|escape}</i></td>
+  {elseif $message->is_selected()}
+      <td align='left'><font color='green'>{$message->get_subject()|truncate:65|escape}</font></td>
   {else}
-      <td align='left'><a href='{$row->url}'>{$row->title|truncate:65}</a></td>
+      <td align='left'><a href='{$message->url|escape}'>{$message->get_subject()|truncate:65|escape}</a></td>
   {/if}
     </tr>
   </table>
   </td>
 {/strip}
   <td><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
-  {if $row->selected}
-  <td align='left'><font color='green'>{$row->name}</font></td>
-  <td align='right' nowrap><font color='green'>{$row->time}</font></td>
-  {elseif $row->new}
-  <td align='left'>{$row->name}</td>
-  <td align='right' nowrap><font color='red'>{$row->time}</font></td>
+  {if $message->is_selected()}
+  <td align='left'><font color='green'>{$message->get_username()}</font></td>
+  <td align='right' nowrap><font color='green'>{$message->get_created_time()}</font></td>
+  {elseif $message->is_new()}
+  <td align='left'>{$message->get_username()}</td>
+  <td align='right' nowrap><font color='red'>{$message->get_created_time()}</font></td>
   {else}
-  <td align='left'>{$row->name}</td>
-  <td align='right' nowrap>{$row->time}</td>
+  <td align='left'>{$message->get_username()}</td>
+  <td align='right' nowrap>{$message->get_created_time()}</td>
   {/if}
   <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
 </tr>

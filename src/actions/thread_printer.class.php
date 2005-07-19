@@ -19,13 +19,6 @@
   */
 ?>
 <?php
-  include_once 'config.inc.php';
-  include_once 'string.inc.php';
-  include_once 'httpquery.inc.php';
-  if (preg_match("/^[a-z0-9_]+$/i", $cfg[db_backend]))
-    include_once "mysql_$cfg[db_backend].inc.php";
-  
-  
   class ThreadPrinter {
     var $smarty;
     var $folding;
@@ -49,33 +42,37 @@
       global $lang;
       
       // The URL to the message.
-      $url = new URL('?', $cfg[urlvars]);
+      $url = new URL();
+      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list', 'read'));
       $url->set_var('read',     1);
-      $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
+      $url->set_var('msg_id',   $_message->get_id());
       if ($cfg[remember_page])
         $url->set_var('hs', $_GET[hs]);
       
       // The url behind the "+/-" folding toggle button.
-      $foldurl = $url;
+      $foldurl = new URL();
+      $foldurl->mask(array_merge($cfg[urlvars], 'forum_id', 'list'));
       if ($_GET[read])
         $foldurl->set_var('showthread', -1);
       else
         $foldurl->set_var('c', $_message->get_id());
       
       // Required to enable correct formatting of the message.
-      $_message->set_selected($_row->id == $_GET[msg_id] && $_GET[read]);
+      if ($_message->get_id() == $_GET[msg_id] && $_GET[read])
+        $_message->set_selected();
       if (!$_message->is_active()) {
         $_message->set_subject($lang[blockedtitle]);
-        $_message->set_name('------');
+        $_message->set_username('------');
         $_message->set_body('');
         unset($url);
       }
       
       // Append everything to a list.
+      $_message->indent  = $_indents;
+      $_message->url     = $url     ? $url->get_string()     : '';
+      $_message->foldurl = $foldurl ? $foldurl->get_string() : '';
       array_push($this->messages, $_message);
-      array_push($this->urls,     $url);
-      array_push($this->foldurls, $foldurl);
     }
     
     
@@ -104,9 +101,7 @@
       $this->smarty->assign_by_ref('n_rows',   $n);
       $this->smarty->assign_by_ref('lang',     $lang);
       $this->smarty->assign_by_ref('messages', $this->messages);
-      $this->smarty->assign_by_ref('urls',     $this->urls);
-      $this->smarty->assign_by_ref('foldurls', $this->foldurls);
-      $this->smarty->display('message.tmpl');
+      $this->smarty->display('thread.tmpl');
       print("\n");
     }
   }

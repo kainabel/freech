@@ -72,7 +72,6 @@
         $url->set_var('hs', $_GET[hs]);
       
       // Required to enable correct formatting of the message.
-      $_message->set_body(message_format($_message->get_body()));
       $_message->set_body(preg_replace("/&nbsp;/", " ", $_message->get_body()));
       
       // Append everything to a list.

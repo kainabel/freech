@@ -11,7 +11,7 @@
       <author>{$message->get_username()|escape}</author>
       <guid>{$message->url|escape}</guid>
       <link>{$message->url|escape}</link>
-      <description>{$message->get_body()|escape}</description>
+      <description>{$message->get_body_html()|escape}</description>
       <pubDate>{$message->get_created_unixtime()|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
     </item>
 {/foreach}

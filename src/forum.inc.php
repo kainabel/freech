@@ -308,16 +308,17 @@
       global $lang;
       global $cfg;
       
-      $holdvars = array_merge($cfg[urlvars], array('forum_id', 'list'));
-      $query = "";
+      $url = new URL('?', $cfg[urlvars]);
+      $url->set_var('list',     1);
+      $url->set_var('forum_id', $_GET[forum_id]);
       if ($_COOKIE[view] === 'plain') {
-        $query[changeview] = 't';
-        $order_by_thread   = "?" . build_url($_GET, $holdvars, $query);
+        $url->set_var('changeview', 't');
+        $order_by_thread   = $url->get_string();
         $order_by_time     = '';
       } else {
-        $query[changeview] = 'c';
+        $url->set_var('changeview', 'c');
         $order_by_thread   = '';
-        $order_by_time     = "?" . build_url($_GET, $holdvars, $query);
+        $order_by_time     = $url->get_string();
       }
       $version[url]  = "http://debain.org/software/tefinch/";
       $version[text] = "Tefinch Forum v0.9.6";

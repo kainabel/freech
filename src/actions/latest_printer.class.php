@@ -36,8 +36,7 @@
       global $lang;
       
       // The URL to the message.
-      $url = new URL('?', array_merge($_GET, $cfg[urlvars]));
-      $url->mask(array('forum_id', 'list', 'read'));
+      $url = new URL('?', $cfg[urlvars]);
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
@@ -48,7 +47,7 @@
       $_message->set_selected($_row->id == $_GET[msg_id] && $_GET[read]);
       if (!$_message->is_active()) {
         $_message->set_subject($lang[blockedtitle]);
-        $_message->set_name('------');
+        $_message->set_username('------');
         $_message->set_body('');
         unset($url);
       }

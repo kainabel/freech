@@ -62,8 +62,10 @@
         $n_indexoffset = 1;
       
       // Always show a link to the first page.
-      $url = new URL('?', array_merge($_GET, $cfg[urlvars]));  //FIXME: cfg
-      $url->mask(array('forum_id', 'list'));
+      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url->set_var('list',  1);
+      $url->set_var('hs',    0);
+      $url->set_var('forum', $_GET[forum_id]);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
         call_user_func($_func, 1, $url);
@@ -106,9 +108,9 @@
         call_user_func($_func, $lang[prev], $url); //FIXME: lang
       }
       
-      $url->delete_var('hs');
-      
       // "New message" link.
+      $url->delete_var('hs');
+      $url->delete_var('list');
       $url->set_var('write', 1);
       call_user_func($_func);
       call_user_func($_func, $lang[writemessage], $url); //FIXME: lang

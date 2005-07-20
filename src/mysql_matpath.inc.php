@@ -525,7 +525,7 @@
       $forumid = $_forumid * 1;
       $offset  = $_offset  * 1;
       $limit   = $_limit   * 1;
-      $sql  = "SELECT id,name username,title subject,text body,active,";
+      $sql  = "SELECT id,forumid,name username,title subject,text body,active,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM $this->tablebase";

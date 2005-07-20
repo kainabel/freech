@@ -46,6 +46,11 @@
     }
     
     
+    function set_var_from_array($_array) {
+      $this->vars = array_merge($this->vars, $_array);
+    }
+    
+    
     // Deletes the given variable from the URL.
     function delete_var($_name) {
       unset($this->vars[$_name]);

@@ -41,11 +41,12 @@
         return;
       }
       
-      $url = new URL('?', $_GET);
-      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list'));  //FIXME: cfg
+      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url->set_var('read',     1);
+      $url->set_var('msg_id',   0);
+      $url->set_var('forum_id', $_GET[forum_id]);
       
       // "Previous/Next Entry" buttons.
-      $url->set_var('read', 1);
       if ($this->message->get_prev_message_id() > 0) {
         $url->set_var('msg_id', $this->message->get_prev_message_id());
         call_user_func($_func, $lang[prev_symbol], $url); //FIXME: lang
@@ -93,10 +94,13 @@
       call_user_func($_func, $lang[writemessage], $url); //FIXME: lang
       
       // "Show/Hide Thread" button.
-      if ($this->message->has_thread) {
-        $url->delete_var('write');
+      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url->set_var('read',     1);
+      $url->set_var('msg_id',   0);
+      $url->set_var('forum_id', $_GET[forum_id]);
+      if ($this->message->has_thread()) {
+        call_user_func($_func);
         $url->set_var('msg_id', $this->message->get_id());
-        $url->set_var('read',   1);
         if ($_COOKIE[thread] === 'hide') {
           $url->set_var('showthread', 1);
           call_user_func($_func, $lang[showthread], $url); //FIXME: lang

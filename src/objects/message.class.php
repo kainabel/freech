@@ -42,6 +42,7 @@
     // Resets all values.
     function clear() {
       $this->_fields = array();
+      $this->_fields[created]      = time();
       $this->_fields[relation]     = MESSAGE_RELATION_CHILD;
       $this->_fields[active]       = TRUE;
       $this->_fields[allow_answer] = TRUE;
@@ -54,7 +55,7 @@
         die("Message:set_from_db(): Non-object.");
       $this->clear();
       $this->_fields[id]              = $_db_row->id;
-      $this->_fields[forum_id]        = $_db_row->forum_id;
+      $this->_fields[forum_id]        = $_db_row->forumid;
       $this->_fields[username]        = $_db_row->username;
       $this->_fields[subject]         = $_db_row->subject;
       $this->_fields[body]            = $_db_row->body;
@@ -121,6 +122,18 @@
     
     function get_body() {
       return $this->_fields[body];
+    }
+    
+    
+    function get_body_html($_quotecolor = "#990000") {
+      $body = wordwrap_smart($this->_fields[body]);
+      $body = string_escape($body);
+      $body = preg_replace("/ /", "&nbsp;", $body);
+      $body = nl2br($body);
+      $body = preg_replace("/^(&gt;&nbsp;.*)/m",
+                           "<font color='$_quotecolor'>$1</font>",
+                           $body);
+      return $body;
     }
     
     
@@ -266,6 +279,26 @@
     
     function is_selected() {
       return $this->_fields[selected];
+    }
+    
+    
+    function check_complete() {
+      global $cfg; //FIXME
+      if (ctype_space($this->_fields[username])
+       || ctype_space($this->_fields[subject])
+       || ctype_space($this->_fields[body]))
+        return ERR_MESSAGE_INCOMPLETE;
+      
+      if (strlen($this->_fields[username]) > $cfg[max_namelength]) //FIXME: cfg
+        return ERR_MESSAGE_NAME_TOO_LONG;
+      
+      if (strlen($this->_fields[subject]) > $cfg[max_titlelength]) //FIXME: cfg
+        return ERR_MESSAGE_TITLE_TOO_LONG;
+      
+      if (strlen($this->_fields[body]) > $cfg[max_msglength]) //FIXME: cfg
+        return ERR_MESSAGE_BODY_TOO_LONG;
+      
+      return 0;
     }
   }
 ?>

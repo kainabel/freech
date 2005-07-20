@@ -29,24 +29,27 @@
   function message_created($_smarty, $_newmsg_id) {
     global $cfg;
     global $lang;
-    $holdvars      = array_merge($cfg[urlvars], array('forum_id', 'hs'));
-    $query         = array('list' => 1, 'forum_id' => $_GET['forum_id']);
-    $forumurl      = "?" . build_url($_GET, $holdvars, $query);
-    $query         = array('forum_id' => $_GET[forum_id],
-                           'msg_id'   => $_newmsg_id,
-                           'read'     => 1);
-    $messageurl    = "?" . build_url($_GET, $holdvars, $query);
-    $query         = array('forum_id' => $_GET[forum_id],
-                           'msg_id'   => $_GET[msg_id],
-                           'read'     => 1);
-    $parenturl     = "?" . build_url($_GET, $holdvars, $query);
+    
+    $messageurl = new URL('?', $cfg[urlvars]);
+    $messageurl->set_var('read',     1);
+    $messageurl->set_var('msg_id',   $_newmsg_id);
+    $messageurl->set_var('forum_id', $_GET[forum_id]);
+    
+    $parenturl = new URL('?', $cfg[urlvars]);
+    $parenturl->set_var('read',     1);
+    $parenturl->set_var('msg_id',   $_GET[msg_id]);
+    $parenturl->set_var('forum_id', $_GET[forum_id]);
+    
+    $forumurl = new URL('?', $cfg[urlvars]);
+    $forumurl->set_var('list',     1);
+    $forumurl->set_var('forum_id', $_GET[forum_id]);
     
     // Give some status info and the usual links.
     $_smarty->assign_by_ref('lang',       $lang);
-    $_smarty->assign_by_ref('messageurl', $messageurl);
-    $_smarty->assign_by_ref('forumurl',   $forumurl);
+    $_smarty->assign_by_ref('messageurl', $messageurl->get_string());
+    $_smarty->assign_by_ref('forumurl',   $forumurl->get_string());
     if ($_GET['msg_id']) 
-      $_smarty->assign_by_ref('parenturl',  $parenturl);
+      $_smarty->assign_by_ref('parenturl',  $parenturl->get_string());
     $_smarty->display('message_created.tmpl');
   }
 ?>

@@ -62,8 +62,8 @@
         $n_indexoffset = 1;
       
       // Always show a link to the first page.
-      $url = new URL('?', $_GET);
-      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list'));  //FIXME: cfg
+      $url = new URL('?', array_merge($_GET, $cfg[urlvars]));  //FIXME: cfg
+      $url->mask(array('forum_id', 'list'));
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
         call_user_func($_func, 1, $url);

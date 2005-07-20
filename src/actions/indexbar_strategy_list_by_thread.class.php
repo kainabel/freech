@@ -64,8 +64,10 @@
         $n_indexoffset = 1;
       
       // Always show a link to the first page.
-      $url = new URL('?', $_GET);
-      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list'));  //FIXME: cfg
+      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url->set_var('list',  1);
+      $url->set_var('hs',    0);
+      $url->set_var('forum', $_GET[forum_id]);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
         call_user_func($_func, 1, $url);
@@ -111,7 +113,6 @@
       else
         call_user_func($_func, $lang[prev]); //FIXME: lang
       
-      $url->delete_var('hs');
       if (!$this->folding)
         die("IndexBarStrategy_list_by_thread:foreach_page(): Folding.");
       
@@ -120,6 +121,7 @@
       
       // "Unfold all" link.
       call_user_func($_func);
+      $url->set_var('hs', $_GET[hs]);
       if ($fold != UNFOLDED || $swap != '') {
         $url->set_var('fold', UNFOLDED);
         call_user_func($_func, $lang[unfoldall], $url); //FIXME: lang
@@ -138,6 +140,8 @@
       $url->delete_var('fold');
       
       // "New message" link.
+      $url->delete_var('hs');
+      $url->delete_var('list');
       $url->set_var('write', 1);
       call_user_func($_func);
       call_user_func($_func, $lang[writemessage], $url); //FIXME: lang

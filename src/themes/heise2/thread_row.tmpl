@@ -47,7 +47,7 @@
 {else}
      <font size='-1'>&nbsp;<a href='{$message->url}'>{$message->get_subject()|escape}</a></font>
 {/if}
-{if $message->get_relation() == 3}({$message->get_n_children()}){/if}
+{if $message->get_relation() == 3}<font size='-1'>&nbsp;({$message->get_n_children()})</font>{/if}
      </td>
     </tr>
    </table>

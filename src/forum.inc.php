@@ -40,13 +40,11 @@
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
+  include_once 'actions/message_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
   
-  include_once 'message.inc.php';
   include_once 'message_compose.inc.php';
-  include_once 'message_preview.inc.php';
-  include_once 'message_submit.inc.php';
   include_once 'message_created.inc.php';
   
   include_once 'login.inc.php';
@@ -116,14 +114,15 @@
     
     // Read a message.
     function _message_read() {
-      $folding   = new ThreadFolding(UNFOLDED, '');
-      $message   = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
-      $index     = new IndexBarPrinter($this->smarty,
+      $message    = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
+      $folding    = new ThreadFolding(UNFOLDED, '');
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $index      = new IndexBarPrinter($this->smarty,
                                        'read_message',
                                        array(message => $message));
       $this->_print_navbar($message);
       $index->show();
-      message_print($this->smarty, $message);
+      $msgprinter->show($message);
       if ($message && $message->has_thread() && $_COOKIE[thread] != 'hide') {
         $threadprinter = new ThreadPrinter($this->smarty, $this->db, $folding);
         $threadprinter->show($_GET[forum_id], $_GET[msg_id], 0);
@@ -182,11 +181,12 @@
     // Print a preview of a message.
     function _message_preview() {
       global $err;
-      $ret = message_preview($this->smarty,
-                             $_POST['name'],
-                             $_POST['subject'],
-                             $_POST['message'],
-                             $_POST['msg_id']);
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $message    = new Message;
+      $message->set_username($_POST['name']);
+      $message->set_subject($_POST['subject']);
+      $message->set_body($_POST['message']);
+      $ret = $message->check_complete();
       if ($ret < 0)
         message_compose($this->smarty,
                         $_POST['name'],
@@ -194,19 +194,25 @@
                         $_POST['message'],
                         $err[$ret],
                         $_POST[msg_id] ? TRUE : FALSE);
+      else
+        $msgprinter->show_preview($message, $_POST['msg_id']);
     }
     
     
     // Saves the posted message.
-    function _message_send() {
+    function _message_submit() {
       global $err;
-      $new_id = message_submit($this->db,
-                               $_GET[forum_id],
-                               $_GET[msg_id],
-                               $_POST['name'],
-                               $_POST['subject'],
-                               $_POST['message']);
-      if ($new_id < 0)
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $message    = new Message;
+      $message->set_username($_POST['name']);
+      $message->set_subject($_POST['subject']);
+      $message->set_body($_POST['message']);
+      $ret = $message->check_complete();
+      if ($ret == 0)
+        $newmsg_id = $this->db->insert_entry($_GET[forum_id],
+                                             $_GET[msg_id],
+                                             $message);
+      if ($ret < 0 || $new_id < 0)
         message_compose($this->smarty,
                         $_POST['name'],
                         $_POST['subject'],
@@ -214,7 +220,7 @@
                         $err[$new_id],
                         $_POST[msg_id] ? TRUE : FALSE);
       else
-        message_created($this->smarty, $new_id);
+        message_created($this->smarty, $newmsg_id);
     }
     
     
@@ -240,17 +246,17 @@
     // Shows the forum, thread order.
     function _list_by_thread() {
       global $cfg;
-      $folding   = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
       $this->_print_navbar('');
-      $thread = new ThreadPrinter($this->smarty, $this->db, $folding);
-      $index  = new IndexBarPrinter($this->smarty,
-                                    'list_by_thread',
-                                    array(n_threads          => $n_threads,
-                                          n_threads_per_page => $cfg[tpp],
-                                          n_offset           => $_GET[hs],
-                                          n_pages_per_index  => $cfg[ppi],
-                                          folding            => $folding));
+      $folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
+      $thread  = new ThreadPrinter($this->smarty, $this->db, $folding);
+      $index   = new IndexBarPrinter($this->smarty,
+                                     'list_by_thread',
+                                     array(n_threads          => $n_threads,
+                                           n_threads_per_page => $cfg[tpp],
+                                           n_offset           => $_GET[hs],
+                                           n_pages_per_index  => $cfg[ppi],
+                                           folding            => $folding));
       $index->show();
       $thread->show($_GET['forum_id'], 0, $_GET[hs]);
       $index->show();
@@ -276,9 +282,13 @@
       if ($cfg[remember_page])
         array_push($holdvars, 'hs');
       $query['list'] = 1;
-      $url           = build_url($_GET, $holdvars, $query);
+      $url           = new URL('?', $cfg[urlvars]);
+      $url->set_var('list',     1);
+      $url->set_var('forum_id', $_GET[forum_id]);
       
-      $this->smarty->assign('layer1', "<a href='?$url'>$lang[forum]</a>");
+      $this->smarty->assign('layer1', "<a href='"
+                                    . string_escape($url->get_string())
+                                    . "'>$lang[forum]</a>");
       if ($_GET['read'] === '1' || $_GET['llist']) {
         if (!$_message)
           $this->smarty->assign('layer2', $lang[noentrytitle]);
@@ -347,7 +357,7 @@
       elseif ($_POST['preview'])
         $this->_message_preview();  // A message preview was requested.
       elseif ($_POST['send'])
-        $this->_message_send();     // A message was posted and should be saved.
+        $this->_message_submit();   // A message was posted and should be saved.
       elseif ($_GET['login'])
         $this->_show_login();
       elseif (($_GET['list'] || $_GET['forum_id'])

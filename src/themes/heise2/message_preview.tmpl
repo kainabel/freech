@@ -2,10 +2,10 @@
 {include file="message.tmpl"}
 <p>
 <form action='{$action}' method='POST'>
-<input type='hidden' name='name' value='{$name|escape}'>
-<input type='hidden' name='subject' value='{$subject|escape}'>
-<input type='hidden' name='message' value='{$message|escape}'>
+<input type='hidden' name='name' value='{$message->get_username()|escape}'>
+<input type='hidden' name='subject' value='{$message->get_subject()|escape}'>
+<input type='hidden' name='message' value='{$message->get_body()|escape}'>
 <input type='hidden' name='msg_id' value='{$msg_id}'>
-<input type='submit' name='edit' value='{$edit|escape}'>
-<input type='submit' name='send' value='{$send|escape}'>
+<input type='submit' name='edit' value='{$lang.change|escape}'>
+<input type='submit' name='send' value='{$lang.send|escape}'>
 <!-- end message -->

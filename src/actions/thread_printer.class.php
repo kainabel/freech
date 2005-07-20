@@ -42,21 +42,26 @@
       global $lang;
       
       // The URL to the message.
-      $url = new URL();
-      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list', 'read'));
+      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
       $url->set_var('read',     1);
-      $url->set_var('forum_id', $_message->get_forum_id());
       $url->set_var('msg_id',   $_message->get_id());
+      $url->set_var('forum_id', $_message->get_forum_id());
       if ($cfg[remember_page])
         $url->set_var('hs', $_GET[hs]);
       
       // The url behind the "+/-" folding toggle button.
-      $foldurl = new URL();
-      $foldurl->mask(array_merge($cfg[urlvars], 'forum_id', 'list'));
-      if ($_GET[read])
+      if ($_GET[read]) {
+        $foldurl = $url;
+        $foldurl->delete_var[hs];
         $foldurl->set_var('showthread', -1);
-      else
+      }
+      else {
+        $foldurl = new URL('?', $cfg[urlvars]); //FIXME: cfg
+        $foldurl->set_var('list',     1);
+        $foldurl->set_var('hs',       $_GET[hs]);
+        $foldurl->set_var('forum_id', $_message->get_forum_id());
         $foldurl->set_var('c', $_message->get_id());
+      }
       
       // Required to enable correct formatting of the message.
       if ($_message->get_id() == $_GET[msg_id] && $_GET[read])

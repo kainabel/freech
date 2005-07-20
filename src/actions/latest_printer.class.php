@@ -36,8 +36,8 @@
       global $lang;
       
       // The URL to the message.
-      $url = new URL();
-      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list', 'read'));
+      $url = new URL('?', array_merge($_GET, $cfg[urlvars]));
+      $url->mask(array('forum_id', 'list', 'read'));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
@@ -54,7 +54,7 @@
       }
       
       // Append everything to a list.
-      $_message->url = $url ? $url->get_string()     : '';
+      $_message->url = $url ? $url->get_string() : '';
       array_push($this->messages, $_message);
     }
     

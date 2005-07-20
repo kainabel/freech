@@ -19,58 +19,65 @@
   */
 ?>
 <?php
-  include_once 'string.inc.php';
-  include_once 'message.inc.php';
-  
-  
   class RSSPrinter {
     var $smarty;
     var $db;
-    var $_messages;
-    var $_title;
-    var $_descr;
-    var $_url;
-    var $_countrycode;
+    var $messages;
+    var $title;
+    var $descr;
+    var $url;
+    var $countrycode;
     
     function RSSPrinter($_smarty, $_db) {
-      $this->smarty    = $_smarty;
-      $this->db        = $_db;
-      $this->_messages = array();
+      $this->smarty   = $_smarty;
+      $this->db       = $_db;
+      $this->messages = array();
     }
     
     
     function set_title($_title) {
-      $this->_title = $_title;
+      $this->title = $_title;
     }
     
     
     function set_description($_descr) {
-      $this->_descr = $_descr;
+      $this->descr = $_descr;
     }
     
     
     function set_base_url($_url) {
-      $this->_url = $_url;
+      $this->url = $_url;
     }
     
     
     function set_language($_countrycode) {
-      $this->_countrycode = $_countrycode;
+      $this->countrycode = $_countrycode;
     }
     
     
-    function _print_row($_row, $_forum_id) {
+    function _append_row($_message, $_forum_id) {
       global $cfg;
       global $lang;
       
-      if (!$_row->active)
+      if (!$_message->is_active())
         return;
-      $_row->forum_id = $_forum_id;
-      $_row->text     = message_format($_row->text);
-      $_row->text     = preg_replace("/&nbsp;/", " ", $_row->text);
-      $_row->url = $this->_url
-                 . "?forum_id=$_row->forum_id&amp;msg_id=$_row->id&amp;read=1";
-      array_push($this->_messages, $_row);
+      
+      // The URL to the message.
+      $url = new URL($this->url . "?");
+      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list', 'read'));
+      $url->set_var('read',     1);
+      $url->set_var('msg_id',   $_message->get_id());
+      $url->set_var('forum_id', $_message->get_forum_id());
+      if ($cfg[remember_page])
+        $url->set_var('hs', $_GET[hs]);
+      
+      // Required to enable correct formatting of the message.
+      $_message->set_body(message_format($_message->get_body()));
+      $_message->set_body(preg_replace("/&nbsp;/", " ", $_message->get_body()));
+      
+      // Append everything to a list.
+      $_message->url = $url ? $url->get_string()     : '';
+      array_push($this->messages, $_message);
     }
     
     
@@ -78,7 +85,7 @@
       global $cfg;
       global $lang;
       
-      $this->_messages = array();
+      $this->messages = array();
       
       if ($_n_entries < 1)
         $_n_entries = $cfg[rss_items];
@@ -89,15 +96,17 @@
                                       $_off,
                                       $_n_entries,
                                       FALSE,
-                                      array(&$this, '_print_row'),
+                                      array(&$this, '_append_row'),
                                       $_forum_id);
+      
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('title',       $this->_title);
-      $this->smarty->assign_by_ref('link',        $this->_url);
-      $this->smarty->assign_by_ref('language',    $this->_countrycode);
-      $this->smarty->assign_by_ref('description', $this->_descr);
-      $this->smarty->assign_by_ref('messages',    $this->_messages);
+      $this->smarty->assign_by_ref('title',       $this->title);
+      $this->smarty->assign_by_ref('link',        $this->url);
+      $this->smarty->assign_by_ref('language',    $this->countrycode);
+      $this->smarty->assign_by_ref('description', $this->descr);
+      $this->smarty->assign_by_ref('messages',    $this->messages);
       $this->smarty->display('../../rss.tmpl');
+      print("\n");
     }
   }
 ?>

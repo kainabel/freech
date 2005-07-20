@@ -2,6 +2,7 @@
   /*
   Tefinch.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
+                     Robert Weidlich, <tefinch xenim de>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -22,6 +23,7 @@
 // German language file, 2003 by Samuel Abels
 
   // Forum
+  $lang[countrycode]      = "de";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Seite";
   $lang[forum]            = "Forum";

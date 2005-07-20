@@ -39,6 +39,7 @@
   include_once 'actions/indexbar_printer.class.php';
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
+  include_once 'actions/rss_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
   
@@ -48,7 +49,6 @@
   include_once 'message_submit.inc.php';
   include_once 'message_created.inc.php';
   
-  include_once 'rss.inc.php';
   include_once 'login.inc.php';
   
   
@@ -167,7 +167,7 @@
         $text = preg_replace("/\[USER\]/", $message->get_username(), $lang[wrote])
               . " " . $message->get_created_time() . "\n\n"
               . preg_replace("/^/m","> ",
-                             message_wrapline($message->get_body())) . "\n";
+                             wordwrap_smart($message->get_body())) . "\n\n";
       }
       $text .= $_POST['message'];
       message_compose($this->smarty,
@@ -364,15 +364,15 @@
     function print_rss($_forum_id,
                        $_title,
                        $_descr,
-                       $_lang,
                        $_off,
                        $_n_entries) {
       global $cfg;
+      global $lang;
       $rss = new RSSPrinter($this->smarty, $this->db);
       $rss->set_base_url($cfg[rss_url]);
       $rss->set_title($_title);
       $rss->set_description($_descr);
-      $rss->set_language($_lang);
+      $rss->set_language($lang[countrycode]);
       $rss->show($_forum_id, $_off, $_n_entries);
     } 
     

@@ -23,13 +23,11 @@
     var $smarty;
     var $db;
     var $messages;
-    var $urls;
     
     function LatestPrinter($_smarty, $_db) {
-      $this->smarty  = $_smarty;
-      $this->db      = $_db;
+      $this->smarty   = $_smarty;
+      $this->db       = $_db;
       $this->messages = array();
-      $this->urls     = array();
     }
     
     

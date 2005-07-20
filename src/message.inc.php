@@ -19,31 +19,8 @@
   */
 ?>
 <?php
-  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
-    include_once "language/$cfg[lang].inc.php";
-  include_once "string.inc.php";
-  include_once "error.inc.php";
-  
-  /* Escape special characters in the posting, wrap lines */
-  // NOT private.
-  function message_wrapline($_string) {
-    global $cfg;
-    foreach ( explode("\n",$_string) as $line ) {
-      if (strpos($line,"> ") === 0) {
-        $text .= $line . "\n";
-      } else {
-        $text .= wordwrap(wordwrap($line, $cfg[max_linelength_soft]),
-                          $cfg[max_linelength_hard],
-                          "\n",
-                          TRUE) . "\n";
-      }
-    }
-    return $text;
-  }
-  
-  
   function message_format($_string) {
-    $_string = message_wrapline($_string);
+    $_string = wordwrap_smart($_string);
     $_string = string_escape($_string);
     $_string = preg_replace("/ /", "&nbsp;", $_string);
     $_string = nl2br($_string);

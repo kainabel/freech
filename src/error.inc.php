@@ -19,10 +19,6 @@
   */
 ?>
 <?php
-  include_once 'config.inc.php';
-  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
-    include_once "language/$cfg[lang].inc.php";
-  
   define("ERR_MESSAGE_INCOMPLETE",     -1);
   define("ERR_MESSAGE_NAME_TOO_LONG",  -2);
   define("ERR_MESSAGE_TITLE_TOO_LONG", -3);

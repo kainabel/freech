@@ -7,12 +7,12 @@
     <description>{$description|escape}</description>
 {foreach from=$messages item=message}
     <item>
-      <title>{$message->title|escape}</title>
-      <author>{$message->name|escape}</author>
+      <title>{$message->get_subject()|escape}</title>
+      <author>{$message->get_username()|escape}</author>
       <guid>{$message->url|escape}</guid>
       <link>{$message->url|escape}</link>
-      <description>{$message->text|escape}</description>
-      <pubDate>{$message->unixtime|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
+      <description>{$message->get_body()|escape}</description>
+      <pubDate>{$message->get_created_unixtime()|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
     </item>
 {/foreach}
   </channel>

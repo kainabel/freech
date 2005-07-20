@@ -20,11 +20,6 @@
   */
 ?>
 <?php
-  include_once 'config.inc.php';
-  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
-    include_once "language/$cfg[lang].inc.php";
-
-
   function login_print($_smarty) {
     global $lang;
     $hint = $lang[havetoregister] . " " . $lang[passwdforgotten];

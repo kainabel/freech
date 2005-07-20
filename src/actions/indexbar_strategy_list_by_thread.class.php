@@ -45,7 +45,6 @@
       
       // Print the "Index" keyword, followed by a separator.
       call_user_func($_func, $lang[index]);
-      call_user_func($_func);
       
       // Calculate the total number of pages.
       $n_pages = ceil($this->n_threads / $this->n_threads_per_page);

@@ -22,6 +22,7 @@
 // German language file, 2003 by Samuel Abels
 
   // Forum
+  $lang[countrycode]      = "en";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Page";
   $lang[forum]            = "Forum";

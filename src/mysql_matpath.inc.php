@@ -120,7 +120,7 @@
       $sql .= " ORDER BY hexpath DESC LIMIT 1";
       $query = new SqlQuery($sql);
       $query->set_int('threadid', $_threadid);
-      $query->set_string('path', "0x" . $_path);
+      $query->set_hex('path',     $_path);
       $res = mysql_query($query->sql())
                or die("TefinchDB::_get_prev_entry_id()");
       $row = mysql_fetch_object($res);
@@ -141,7 +141,7 @@
       $sql .= " ORDER BY hexpath LIMIT 1";
       $query = new SqlQuery($sql);
       $query->set_int('threadid', $_threadid);
-      $query->set_string('path', "0x" . $_path);
+      $query->set_hex('path',     $_path);
       $res = mysql_query($query->sql())
                or die("TefinchDB::_get_next_entry_id()");
       $row = mysql_fetch_object($res);
@@ -243,7 +243,7 @@
      * $_message: The message to be inserted.
      * Returns:   The id of the newly inserted entry.
      */
-    function insert_entry($_forumid, $_parentid, $_message) {
+    function insert_entry($_forumid, $_parentid, &$_message) {
       $this->_lock_write("t_message");
       
       // Fetch the parent row.

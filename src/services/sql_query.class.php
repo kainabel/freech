@@ -24,7 +24,7 @@
  * into the query.
  *
  * @author $Author: knipknap $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package openrat.services
  */
 class SqlQuery
@@ -57,9 +57,10 @@ class SqlQuery
     
     foreach( $this->data as $name=>$data )
     {
-      if ( $data['type']=='string' ) $this->setString($name,$data['value'] );
-      if ( $data['type']=='int'    ) $this->setInt   ($name,$data['value'] );
-      if ( $data['type']=='null'   ) $this->setNull  ($name                );
+      if ( $data['type']=='string' ) $this->set_string($name,$data['value'] );
+      if ( $data['type']=='hex'    ) $this->set_hex   ($name,$data['value'] );
+      if ( $data['type']=='int'    ) $this->set_int   ($name,$data['value'] );
+      if ( $data['type']=='null'   ) $this->set_null  ($name                );
     }
   }
   
@@ -89,6 +90,15 @@ class SqlQuery
     $this->data[ $name ] = array( 'type'=>'string','value'=>$value );
     $value = addslashes($value);
     $value = "'".$value."'";
+    $this->query = str_replace( '{'.$name.'}',$value,$this->query );
+  }
+  
+  
+  function set_hex($name, $value)
+  {
+    $this->data[ $name ] = array( 'type'=>'hex','value'=>$value );
+    $value = addslashes($value);
+    $value = "0x".$value;
     $this->query = str_replace( '{'.$name.'}',$value,$this->query );
   }
   

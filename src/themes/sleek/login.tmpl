@@ -3,35 +3,31 @@
   <div align="left">
     <table border="0" cellpadding="2">
       <tr>
-	<td bgcolor="#CCCCCC">&nbsp;</td>
-	<td bgcolor="#CCCCCC"><b>{$enter_user_data}</b></td>
+        <td bgcolor="#CCCCCC">&nbsp;</td>
+        <td bgcolor="#CCCCCC"><b>{$lang.enter_user_data|escape}</b></td>
       </tr>
       <tr>
-	<td align="right" valign="middle" bgcolor="#CCCCCC">{$username}</td>
-	<td bgcolor="#CCCCCC">
-	  <input type="text" name="username" size="20">
-	</td>
+        <td align="right" valign="middle" bgcolor="#CCCCCC">{$lang.username|escape}</td>
+        <td bgcolor="#CCCCCC">
+          <input type="text" name="username" size="20">
+        </td>
       </tr>
       <tr>
-	<td align="right" valign="middle" bgcolor="#CCCCCC">{$password}</td>
-	<td bgcolor="#CCCCCC">
-	  <input type="password" name="password" size="20">
-	</td>
+        <td align="right" valign="middle" bgcolor="#CCCCCC">{$lang.passwd|escape}</td>
+        <td bgcolor="#CCCCCC">
+          <input type="password" name="password" size="20">
+        </td>
       </tr>
       <tr>
-	<td align="right" valign="middle" bgcolor="#CCCCCC">{$remember_pass}</td>
-	<td bgcolor="#CCCCCC">
-          <font size="2">
-             {$remember_pass_long}<br>
-	  </font>
+        <td align="right" valign="middle" bgcolor="#CCCCCC">{$lang.rememberpasswd|escape}</td>
+        <td bgcolor="#CCCCCC">
+          <font size="2">{$lang.remembpasswdlong|escape}<br /></font>
           <input type="checkbox" name="permanent" value="ON"><br>
-	</td>
+        </td>
       </tr>
       <tr>
-	<td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
-	<td bgcolor="#CCCCCC">
-	  <input type=submit value='{$login}'>
-	</td>
+        <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
+        <td bgcolor="#CCCCCC"><input type=submit value='{$lang.login|escape}'></td>
       </tr>
     </table>
   </div>

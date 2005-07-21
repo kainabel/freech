@@ -41,10 +41,10 @@
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
   include_once 'actions/message_printer.class.php';
+  include_once 'actions/breadcrumbs_printer.class.php';
+  include_once 'actions/login_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
-  
-  include_once 'login.inc.php';
   
   
   class TefinchForum {
@@ -117,7 +117,7 @@
       $index      = new IndexBarPrinter($this->smarty,
                                        'read_message',
                                        array(message => $message));
-      $this->_print_navbar($message);
+      $this->_print_breadcrumbs($message);
       $index->show();
       $msgprinter->show($message);
       if ($message && $message->has_thread() && $_COOKIE[thread] != 'hide') {
@@ -211,7 +211,7 @@
     // Shows the forum, time order.
     function _list_by_time() {
       global $cfg;
-      $this->_print_navbar('');
+      $this->_print_breadcrumbs('');
       $n_entries = $this->db->get_n_entries($_GET[forum_id]);
       $latest    = new LatestPrinter($this->smarty, $this->db);
       $index     = new IndexBarPrinter($this->smarty,
@@ -231,7 +231,7 @@
     function _list_by_thread() {
       global $cfg;
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
-      $this->_print_navbar('');
+      $this->_print_breadcrumbs('');
       $folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       $thread  = new ThreadPrinter($this->smarty, $this->db, $folding);
       $index   = new IndexBarPrinter($this->smarty,
@@ -258,32 +258,27 @@
     
     
     // Prints the head of the page.
-    function _print_navbar($_message) {
+    function _print_breadcrumbs($_message) {
       global $lang;
       global $cfg;
       
-      $holdvars = array_merge($cfg[urlvars], array('forum_id'));
-      if ($cfg[remember_page])
-        array_push($holdvars, 'hs');
-      $query['list'] = 1;
-      $url           = new URL('?', $cfg[urlvars]);
-      $url->set_var('list',     1);
-      $url->set_var('forum_id', $_GET[forum_id]);
+      $forumurl = new URL('?', $cfg[urlvars]);
+      $forumurl->set_var('list',     1);
+      $forumurl->set_var('forum_id', $_GET[forum_id]);
       
-      $this->smarty->assign('layer1', "<a href='"
-                                    . string_escape($url->get_string())
-                                    . "'>$lang[forum]</a>");
-      if ($_GET['read'] === '1' || $_GET['llist']) {
+      $breadcrumbs = new BreadCrumbsPrinter($this->smarty, $this->db);
+      $breadcrumbs->add_item($lang[forum], $forumurl);
+      
+      if ($_GET[read] || $_GET[llist]) {
         if (!$_message)
-          $this->smarty->assign('layer2', $lang[noentrytitle]);
+          $breadcrumbs->add_item($lang[noentrytitle]);
         elseif (!$_message->is_active())
-          $this->smarty->assign('layer2', $lang[blockedtitle]);
+          $breadcrumbs->add_item($lang[blockedtitle]);
         else
-          $this->smarty->assign('layer2', string_escape($_message->get_subject()));
+          $breadcrumbs->add_item($_message->get_subject());
       }
       
-      $this->smarty->display("navbar.tmpl");
-      print("\n");
+      $breadcrumbs->show();
     } 
     
     
@@ -317,7 +312,8 @@
     
     
     function _show_login() {
-      login_print($this->smarty);
+      $login = new LoginPrinter($this->smarty, $this->db);
+      $login->show();
     }
     
     
@@ -343,7 +339,7 @@
         $this->_message_preview();  // A message preview was requested.
       elseif ($_POST['send'])
         $this->_message_submit();   // A message was posted and should be saved.
-      elseif ($_GET['login'])
+      elseif ($_GET['do_login'])
         $this->_show_login();
       elseif (($_GET['list'] || $_GET['forum_id'])
               && $_COOKIE['view'] === 'plain')

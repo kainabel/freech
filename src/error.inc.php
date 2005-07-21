@@ -19,13 +19,33 @@
   */
 ?>
 <?php
-  define("ERR_MESSAGE_INCOMPLETE",     -1);
-  define("ERR_MESSAGE_NAME_TOO_LONG",  -2);
-  define("ERR_MESSAGE_TITLE_TOO_LONG", -3);
-  define("ERR_MESSAGE_BODY_TOO_LONG",  -4);
+  define("ERR_MESSAGE_INCOMPLETE",           -101);
+  define("ERR_MESSAGE_NAME_TOO_LONG",        -102);
+  define("ERR_MESSAGE_TITLE_TOO_LONG",       -103);
+  define("ERR_MESSAGE_BODY_TOO_LONG",        -104);
   
-  $err[ERR_MESSAGE_INCOMPLETE]     = $lang[somethingmissing];
-  $err[ERR_MESSAGE_NAME_TOO_LONG]  = $lang[nametoolong];
-  $err[ERR_MESSAGE_TITLE_TOO_LONG] = $lang[titletoolong];
-  $err[ERR_MESSAGE_BODY_TOO_LONG]  = $lang[messagetoolong];
+  define("ERR_USER_LOGIN_INCOMPLETE",        -201);
+  define("ERR_USER_LOGIN_TOO_SHORT",         -202);
+  define("ERR_USER_LOGIN_TOO_LONG",          -203);
+  define("ERR_USER_PASSWORD_INCOMPLETE",     -211);
+  define("ERR_USER_PASSWORD_TOO_SHORT",      -212);
+  define("ERR_USER_PASSWORD_TOO_LONG",       -213);
+  define("ERR_USER_FIRSTNAME_INCOMPLETE",    -221);
+  define("ERR_USER_FIRSTNAME_TOO_SHORT",     -222);
+  define("ERR_USER_FIRSTNAME_TOO_LONG",      -223);
+  define("ERR_USER_LASTNAME_INCOMPLETE",     -231);
+  define("ERR_USER_LASTNAME_TOO_SHORT",      -232);
+  define("ERR_USER_LASTNAME_TOO_LONG",       -233);
+  define("ERR_USER_MAIL_NOT_VALID",          -241);
+  define("ERR_USER_MAIL_TOO_LONG",           -242);
+  define("ERR_USER_HOMEPAGE_NOT_VALID",      -251);
+  define("ERR_USER_HOMEPAGE_TOO_LONG",       -252);
+  define("ERR_USER_IM_TOO_LONG",             -261);
+  define("ERR_USER_SIGNATURE_TOO_LONG",      -271);
+  define("ERR_USER_REMOVED_FROM_LAST_GROUP", -281);
+  
+  $err[ERR_MESSAGE_INCOMPLETE]           = $lang[somethingmissing];
+  $err[ERR_MESSAGE_NAME_TOO_LONG]        = $lang[nametoolong];
+  $err[ERR_MESSAGE_TITLE_TOO_LONG]       = $lang[titletoolong];
+  $err[ERR_MESSAGE_BODY_TOO_LONG]        = $lang[messagetoolong];
 ?>

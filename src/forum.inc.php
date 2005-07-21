@@ -34,6 +34,7 @@
   
   include_once 'objects/url.class.php';
   include_once 'objects/message.class.php';
+  include_once 'objects/user.class.php';
   
   include_once 'actions/indexbar_strategy.class.php';
   include_once 'actions/indexbar_strategy_list_by_time.class.php';

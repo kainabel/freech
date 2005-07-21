@@ -33,7 +33,7 @@
   class Message {
     var $_fields;
     
-    // Constructor. May be passed a row from the database for initialisation.
+    // Constructor.
     function Message() {
       $this->clear();
     }
@@ -100,7 +100,7 @@
     }
     
     
-    function get_username() {
+    function &get_username() {
       return $this->_fields[username];
     }
     
@@ -110,7 +110,7 @@
     }
     
     
-    function get_subject() {
+    function &get_subject() {
       return $this->_fields[subject];
     }
     
@@ -120,12 +120,12 @@
     }
     
     
-    function get_body() {
+    function &get_body() {
       return $this->_fields[body];
     }
     
     
-    function get_body_html($_quotecolor = "#990000") {
+    function &get_body_html($_quotecolor = "#990000") {
       $body = wordwrap_smart($this->_fields[body]);
       $body = string_escape($body);
       $body = preg_replace("/ /", "&nbsp;", $body);

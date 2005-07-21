@@ -5,7 +5,6 @@
 * Database abstraction through Pear.
 * Languagefile abstration.
 * Configfile abstraction.
-* Create a User object.
 * Create a Group object.
 * Create a UserManager object.
 * Create a AccountOptionsPrinter object and a corresponding template.

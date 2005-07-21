@@ -234,7 +234,7 @@
     
     
     function add_to_group(&$_group) {
-      $this->groups[$_group->get_name()] = $_group;
+      $this->groups[$_group->get_name()] =& $_group;
     }
     
     
@@ -243,7 +243,7 @@
         return 0;
       if (count($this->groups) <= 1)
         return ERR_USER_REMOVED_FROM_LAST_GROUP;
-      $this->groups[$_group->get_name()] = $_group;
+      unset($this->groups[$_group->get_name()]);
       return 0;
     }
     

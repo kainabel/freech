@@ -1,0 +1,13 @@
+* Create a FooterPrinter class and move the corresponding code out
+  of forum.inc.php.
+* Create a HeaderPrinter class and move the corresponding code out
+  of forum.inc.php.
+* Database abstraction through Pear.
+* Languagefile abstration.
+* Configfile abstraction.
+* Create a User object.
+* Create a Group object.
+* Create a UserManager object.
+* Create a AccountOptionsPrinter object and a corresponding template.
+* Add an API for searching messages to the TefinchDB class.
+* Create a SearchPrinter object and a corresponding template.

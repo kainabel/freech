@@ -173,8 +173,6 @@
      * The threadid equals the id of the toplevel node in a thread.
      */
     function _get_next_thread_id($_forumid, $_threadid) {
-      $forumid  = $_forumid  * 1;
-      $threadid = $_threadid * 1;
       $sql  = "SELECT threadid FROM {t_message}";
       $sql .= " WHERE forumid={forumid} AND threadid>{threadid}";
       $sql .= " AND (active=1 OR n_children>0)";
@@ -212,7 +210,7 @@
       $sql .= " WHERE id={id}";
       $query = new SqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = mysql_query($query->get_sql())
+      $res = mysql_query($query->sql())
                or die("TefinchDB::get_entry(): Failed.");
       $row = mysql_fetch_object($res);
       if (!$row)

@@ -44,9 +44,6 @@
   
   include_once 'services/thread_folding.class.php';
   
-  include_once 'message_compose.inc.php';
-  include_once 'message_created.inc.php';
-  
   include_once 'login.inc.php';
   
   
@@ -133,48 +130,41 @@
     
     // Write an answer to a message.
     function _message_answer() {
-      $message = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
-      message_compose_reply($this->smarty, $message, '');
+      $message    = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $msgprinter->show_compose_reply($message, '', TRUE);
     }
     
     
     // Write a new message.
     function _message_compose() {
-      message_compose($this->smarty, '', '', '', '', FALSE);
+      $message    = new Message;
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $msgprinter->show_compose($message, '', FALSE);
     }
     
     
     // Edit a message.
     function _message_edit() {
-      message_compose($this->smarty,
-                      $_POST['name'],
-                      $_POST['subject'],
-                      $_POST['message'],
-                      '',
-                      $_POST[msg_id] ? TRUE : FALSE);
+      $message    = new Message;
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $message->set_username($_POST[name]);
+      $message->set_subject($_POST[subject]);
+      $message->set_body($_POST[message]);
+      $msgprinter->show_compose($message, '', $_POST[msg_id] ? TRUE : FALSE);
     }
     
     
     // Insert a quote from the parent message.
     function _message_quote() {
       global $lang;
-      // FIXME: String stuff should be moved elsewhere.
-      $message = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
-      if ($_GET[msg_id] && $message->is_active()) {
-        // Add a line "user wrote date" and add "> " at the beginning of
-        // each line.
-        $text = preg_replace("/\[USER\]/", $message->get_username(), $lang[wrote])
-              . " " . $message->get_created_time() . "\n\n"
-              . preg_replace("/^/m","> ",
-                             wordwrap_smart($message->get_body())) . "\n\n";
-      }
-      $text .= $_POST['message'];
-      message_compose($this->smarty,
-                      $_POST['name'],
-                      $_POST['subject'],
-                      $text,
-                      '',
-                      FALSE);
+      $quoted_msg = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
+      $message    = new Message;
+      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $message->set_username($_POST[name]);
+      $message->set_subject($_POST[subject]);
+      $message->set_body($_POST[message]);
+      $msgprinter->show_compose_quoted($message, $quoted_msg, '', FALSE);
     }
     
     
@@ -188,12 +178,9 @@
       $message->set_body($_POST['message']);
       $ret = $message->check_complete();
       if ($ret < 0)
-        message_compose($this->smarty,
-                        $_POST['name'],
-                        $_POST['subject'],
-                        $_POST['message'],
-                        $err[$ret],
-                        $_POST[msg_id] ? TRUE : FALSE);
+        $msgprinter->show_compose($message,
+                                  $err[$ret],
+                                  $_POST[msg_id] ? TRUE : FALSE);
       else
         $msgprinter->show_preview($message, $_POST['msg_id']);
     }
@@ -213,14 +200,11 @@
                                              $_GET[msg_id],
                                              $message);
       if ($ret < 0 || $new_id < 0)
-        message_compose($this->smarty,
-                        $_POST['name'],
-                        $_POST['subject'],
-                        $_POST['message'],
-                        $err[$new_id],
-                        $_POST[msg_id] ? TRUE : FALSE);
+        $msgprinter->show_compose($message,
+                                  $err[$ret],
+                                  $_POST[msg_id] ? TRUE : FALSE);
       else
-        message_created($this->smarty, $newmsg_id);
+        $msgprinter->show_created($newmsg_id);
     }
     
     

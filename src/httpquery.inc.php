@@ -47,19 +47,4 @@
       return $ret;
     }
   }
-  
-  // Generates a URL from the given variables.
-  // $_urlvars:     The current URL, as returned from
-  //                parse_str($_SERVER['QUERY_STRING']);
-  // $_allowedvars: Variable names that are NOT listed here are filtered out.
-  // $_addvars:     Variables to add to the URL. These variables are not
-  //                required to be listed in $_allowedvars.
-  function build_url($_urlvars, $_allowedvars, $_addvars) {
-    foreach ($_allowedvars as $var)
-      $vars[$var] = $_urlvars[$var];
-    if ($_addvars)
-      foreach ($_addvars as $key => $val)
-        $vars[$key] = $val;
-    return http_build_query($vars);
-  }
 ?>

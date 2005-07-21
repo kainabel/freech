@@ -66,7 +66,7 @@
   $lang[preview]          = "Vorschau";
   $lang[quote]            = "Zitat einfügen";
   $lang[answer]           = "Re: ";
-  $lang[wrote]            = "[USER] schrieb am";
+  $lang[wrote]            = "[USER] schrieb am [TIME]";
   
   // Preview
   $lang[reallysend]       = "Vorschau";

@@ -5,15 +5,15 @@
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
 <p>
 <b>{$lang.name}</b>&nbsp;<i>{$lang.required}</i><br />
-<input type='text' size='80' name='name' value='{$name|escape}' maxlength='{$max_namelength}'>
+<input type='text' size='80' name='name' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>
 <p>
 <b>{$lang.msgtitle}</b>&nbsp;<i>{$lang.required}</i><br />
-<input type='text' size='80' name='subject' value='{$subject|escape}' maxlength='{$max_titlelength}'>
+<input type='text' size='80' name='subject' value='{$message->get_subject()|escape}' maxlength='{$max_titlelength}'>
 <p>
 <b>{$lang.msgbody}</b>&nbsp;<i>{$lang.required}</i><br />
 {strip}
 <textarea name='message' cols='80' rows='20' wrap='virtual'>
-{$message|escape}
+{$message->get_body()|escape}
 </textarea>
 {/strip}        
 <p>

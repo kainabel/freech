@@ -3,24 +3,24 @@
   <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left'>{strip}
 {if $message->url == ""}
-  <font size='-1'>&nbsp;{$message->get_subject()|escape}</font>
+  &nbsp;{$message->get_subject()|escape}</font>
 {else}
-  <font size='-1'>&nbsp;<a href='{$message->url|escape}'>{$message->get_subject()|escape}</a></font>
+  &nbsp;<a href='{$message->url|escape}'>{$message->get_subject()|escape}</a>
 {/if}
   </td>
 {/strip}
   <td><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
 {if $message->is_selected()}
-  <td align='left'><font size='-1' color='green'>{$message->get_username()|escape}</font></td>
+  <td align='left'><font color='green'>{$message->get_username()|escape}</font></td>
 {else}
-  <td align='left'><font size='-1'>{$message->get_username()|escape}</font></td>
+  <td align='left'>{$message->get_username()|escape}</td>
 {/if}
 {if $message->is_selected()}
-  <td align='right' nowrap><font size='-1' color='green'>{$message->get_created_time()}</font></td>
+  <td align='right' nowrap><font color='green'>{$message->get_created_time()}</font></td>
 {elseif $message->is_new()}
-  <td align='right' nowrap><font size='-1' color='red'>{$message->get_created_time()}</font></td>
+  <td align='right' nowrap><font color='red'>{$message->get_created_time()}</font></td>
 {else}
-  <td align='right' nowrap><font size='-1'>{$message->get_created_time()}</font></td>
+  <td align='right' nowrap>{$message->get_created_time()}</td>
 {/if}
   <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
  </tr>

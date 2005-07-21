@@ -27,8 +27,11 @@
   if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
     include_once "language/$cfg[lang].inc.php";
   include_once 'error.inc.php';
-  include_once 'string.inc.php';
-  include_once 'httpquery.inc.php';
+  
+  include_once 'functions/table_names.inc.php';
+  include_once 'functions/string.inc.php';
+  include_once 'functions/httpquery.inc.php';
+  
   include_once 'objects/url.class.php';
   include_once 'objects/message.class.php';
   
@@ -45,7 +48,7 @@
   include_once 'actions/login_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
-  
+  include_once 'services/sql_query.class.php';
   
   class TefinchForum {
     var $db;

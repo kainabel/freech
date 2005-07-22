@@ -24,8 +24,6 @@
   include_once 'config.inc.php';
   if (preg_match("/^[a-z0-9_]+$/i", $cfg[db_backend]))
     include_once "mysql_$cfg[db_backend].inc.php";
-  if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
-    include_once "language/$cfg[lang].inc.php";
   
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
@@ -33,6 +31,8 @@
   include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
   
+  if (preg_match("/^[a-z0-9_]+$/i", cfg(lang)))
+    include_once "language/" . cfg(lang) . ".inc.php";
   include_once 'error.inc.php';
   
   include_once 'objects/url.class.php';

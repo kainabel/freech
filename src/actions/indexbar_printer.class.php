@@ -38,7 +38,7 @@
       if (!$this->print_strategy)
         die("IndexBarPrinter::IndexBarPrinter(): Invalid strategy.");
       
-      $this->smarty = $_smarty;
+      $this->smarty = &$_smarty;
       $this->items  = array();
     }
     

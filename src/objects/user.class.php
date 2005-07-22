@@ -40,6 +40,7 @@
       $this->fields[lastname]     = "George";
       $this->fields[created]      = time();
       $this->fields[updated]      = time();
+      $this->fields[lastlogin]    = time();
       $this->groups = array();
     }
     
@@ -49,15 +50,18 @@
       if (!is_object($_db_row))
         die("User:set_from_db(): Non-object.");
       $this->clear();
-      $this->fields[id]              = $_db_row->id;
-      $this->fields[login]           = $_db_row->login;
-      $this->fields[passwordhash]    = $_db_row->password;
-      $this->fields[firstname]       = $_db_row->firstname;
-      $this->fields[lastname]        = $_db_row->lastname;
-      $this->fields[mail]            = $_db_row->mail;
-      $this->fields[homepage]        = $_db_row->homepage;
-      $this->fields[im]              = $_db_row->im;
-      $this->fields[signature]       = $_db_row->signature;
+      $this->fields[id]           = $_db_row->id;
+      $this->fields[login]        = $_db_row->login;
+      $this->fields[passwordhash] = $_db_row->password;
+      $this->fields[firstname]    = $_db_row->firstname;
+      $this->fields[lastname]     = $_db_row->lastname;
+      $this->fields[mail]         = $_db_row->mail;
+      $this->fields[homepage]     = $_db_row->homepage;
+      $this->fields[im]           = $_db_row->im;
+      $this->fields[signature]    = $_db_row->signature;
+      $this->fields[created]      = $_db_row->created;
+      $this->fields[updated]      = $_db_row->updated;
+      $this->fields[lastlogin]    = $_db_row->lastlogin;
     }
     
     
@@ -230,6 +234,25 @@
       if (!$_format)
         $_format = $lang[dateformat];
       return date($_format, $this->fields[updated]);
+    }
+    
+    
+    function set_last_login_time($_lastlogin) {
+      $this->fields[lastlogin] = $_lastlogin * 1;
+    }
+    
+    
+    function get_last_login_unixtime() {
+      return $this->fields[lastlogin];
+    }
+    
+    
+    /// Returns the formatted time.
+    function get_last_login_time($_format = '') {
+      global $lang; //FIXME
+      if (!$_format)
+        $_format = $lang[dateformat];
+      return date($_format, $this->fields[lastlogin]);
     }
     
     

@@ -46,7 +46,7 @@
     }
     
     
-    function set_var_from_array($_array) {
+    function set_var_from_array(&$_array) {
       $this->vars = array_merge($this->vars, $_array);
     }
     

@@ -28,9 +28,9 @@
     var $url;
     var $countrycode;
     
-    function RSSPrinter($_smarty, $_db) {
-      $this->smarty   = $_smarty;
-      $this->db       = $_db;
+    function RSSPrinter(&$_smarty, &$_db) {
+      $this->smarty   = &$_smarty;
+      $this->db       = &$_db;
       $this->messages = array();
     }
     
@@ -55,7 +55,7 @@
     }
     
     
-    function _append_row($_message, $_forum_id) {
+    function _append_row(&$_message, $_forum_id) {
       global $cfg;
       global $lang;
       

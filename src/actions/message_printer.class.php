@@ -23,13 +23,13 @@
     var $smarty;
     var $db;
     
-    function MessagePrinter($_smarty, $_db) {
-      $this->smarty  = $_smarty;
-      $this->db      = $_db;
+    function MessagePrinter(&$_smarty, &$_db) {
+      $this->smarty  = &$_smarty;
+      $this->db      = &$_db;
     }
     
     
-    function show($_message) {
+    function show(&$_message) {
       global $cfg;
       global $lang;
       
@@ -54,7 +54,7 @@
      * Shows a form for editing a message. The values given in $_message are
      * filled into the fields.
      */
-    function show_compose($_message, $_hint, $_quotebutton) {
+    function show_compose(&$_message, $_hint, $_quotebutton) {
       global $cfg;
       global $lang;
       
@@ -80,7 +80,7 @@
      * filled into the fields, with the values from $_quoted inserted as a
      * quote.
      */
-    function show_compose_quoted($_message, $_quoted, $_hint, $_quotebutton) {
+    function show_compose_quoted(&$_message, $_quoted, $_hint, $_quotebutton) {
       global $cfg;
       global $lang;
       
@@ -106,7 +106,7 @@
     /**
      * Shows a form for editing a reply to the given message.
      */
-    function show_compose_reply($_parent_msg, $_hint, $_quotebutton) {
+    function show_compose_reply(&$_parent_msg, $_hint, $_quotebutton) {
       global $cfg;
       global $lang;
       
@@ -123,7 +123,7 @@
     
     
     /* Show a preview form of the message. */
-    function show_preview($_message, $_parent_id = '') {
+    function show_preview(&$_message, $_parent_id = '') {
       global $cfg;
       global $lang;
       

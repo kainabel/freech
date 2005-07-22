@@ -27,10 +27,10 @@
     var $urls;
     var $foldurls;
     
-    function ThreadPrinter($_smarty, $_db, $_folding) {
-      $this->smarty   = $_smarty;
-      $this->db       = $_db;
-      $this->folding  = $_folding;
+    function ThreadPrinter(&$_smarty, &$_db, &$_folding) {
+      $this->smarty   = &$_smarty;
+      $this->db       = &$_db;
+      $this->folding  = &$_folding;
       $this->messages = array();
       $this->urls     = array();
       $this->foldurls = array();

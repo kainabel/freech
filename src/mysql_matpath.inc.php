@@ -201,7 +201,7 @@
      *            - active
      *            - time
      */
-    function get_message($_forumid, $_id) {
+    function &get_message($_forumid, $_id) {
       $sql  = "SELECT id,forumid,threadid,HEX(path) path,n_children,";
       $sql .= "name username,title subject,text body,active,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";

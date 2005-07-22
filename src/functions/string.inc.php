@@ -20,18 +20,18 @@
   */
 ?>
 <?php
-  function string_escape($_string) {
+  function string_escape(&$_string) {
     return htmlentities($_string, ENT_QUOTES, 'UTF-8');
   }
   
   
-  function string_unescape($_string) {
+  function string_unescape(&$_string) {
     return html_entity_decode($_string, ENT_QUOTES);
   }
   
   
   // Removes the escapings that were added by magic-quotes.
-  function stripslashes_deep($_value) {
+  function stripslashes_deep(&$_value) {
     return is_array($_value)
          ? array_map('stripslashes_deep', $_value)
          : stripslashes($_value);
@@ -40,7 +40,7 @@
   
   // Like wordwrap, but does not wrap lines beginning with ">" and allows to
   // set a hard limit.
-  function wordwrap_except_quoted($_string) {
+  function wordwrap_except_quoted(&$_string) {
     global $cfg;
     foreach (explode("\n", $_string) as $line) {
       if (strpos($line,"> ") === 0) {
@@ -58,7 +58,7 @@
   
   // Like wordwrap, but when wrapping lines beginning with ">" it tries to be
   // smart in adding more ">" in the new line. It also sets a hard limit.
-  function wordwrap_smart($_string) {
+  function wordwrap_smart(&$_string) {
     global $cfg;
     $lines              = preg_replace("/\r/", "", $_string);
     $lines              = explode("\n", $lines);

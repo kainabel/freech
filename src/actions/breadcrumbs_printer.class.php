@@ -24,14 +24,14 @@
     var $db;
     var $breadcrumbs;
     
-    function BreadCrumbsPrinter($_smarty, $_db) {
-      $this->smarty      = $_smarty;
-      $this->db          = $_db;
+    function BreadCrumbsPrinter(&$_smarty, &$_db) {
+      $this->smarty      = &$_smarty;
+      $this->db          = &$_db;
       $this->breadcrumbs = array();
     }
     
     
-    function add_item($_text, $_url = '') {
+    function add_item(&$_text, $_url = '') {
       $this->breadcrumbs[$_text] = $_url;
     }
     

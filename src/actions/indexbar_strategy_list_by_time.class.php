@@ -29,7 +29,7 @@
     var $n_pages_per_index;
     
     /// Constructor.
-    function IndexBarStrategy_list_by_time($_args) {
+    function IndexBarStrategy_list_by_time(&$_args) {
       $this->n_messages          = $_args[n_messages];
       $this->n_messages_per_page = $_args[n_messages_per_page];
       $this->n_offset            = $_args[n_offset];

@@ -39,7 +39,6 @@
     
     function _append_row(&$_message, $_indents, $_data) {
       global $cfg;
-      global $lang;
       
       // The URL to the message.
       $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
@@ -67,7 +66,7 @@
       if ($_message->get_id() == $_GET[msg_id] && $_GET[read])
         $_message->set_selected();
       if (!$_message->is_active()) {
-        $_message->set_subject($lang[blockedtitle]);
+        $_message->set_subject(lang("blockedtitle"));
         $_message->set_username('------');
         $_message->set_body('');
         unset($url);
@@ -83,7 +82,6 @@
     
     function show($_forum_id, $_msg_id, $_offset) {
       global $cfg;
-      global $lang;
       
       if ($_msg_id == 0)
         $n = $this->db->foreach_child($_forum_id,
@@ -104,7 +102,7 @@
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('lang',     $lang);
+      $this->smarty->assign_by_ref('lang',     lang());
       $this->smarty->assign_by_ref('messages', $this->messages);
       $this->smarty->display('thread.tmpl');
       print("\n");

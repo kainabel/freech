@@ -26,11 +26,13 @@
     include_once "mysql_$cfg[db_backend].inc.php";
   if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
     include_once "language/$cfg[lang].inc.php";
-  include_once 'error.inc.php';
   
+  include_once 'functions/language.inc.php';
   include_once 'functions/table_names.inc.php';
   include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
+  
+  include_once 'error.inc.php';
   
   include_once 'objects/url.class.php';
   include_once 'objects/message.class.php';
@@ -61,13 +63,12 @@
     // was sent.
     function TefinchForum() {
       global $cfg;
-      global $lang;
       $this->db = new TefinchDB($cfg[db_host],
                                 $cfg[db_usr],
                                 $cfg[db_pass],
                                 $cfg[db_name],
                                 $cfg[db_tablebase] . "_message");
-      $this->db->set_timeformat($lang[dateformat]);
+      $this->db->set_timeformat(lang("dateformat"));
       
       $this->smarty = new Smarty();
       $this->smarty->template_dir = "themes/$cfg[theme]";
@@ -162,7 +163,6 @@
     
     // Insert a quote from the parent message.
     function _message_quote() {
-      global $lang;
       $quoted_msg = $this->db->get_message($_GET[forum_id], $_GET[msg_id]);
       $message    = new Message;
       $msgprinter = new MessagePrinter($this->smarty, $this->db);
@@ -264,7 +264,6 @@
     
     // Prints the head of the page.
     function _print_breadcrumbs($_message) {
-      global $lang;
       global $cfg;
       
       $forumurl = new URL('?', $cfg[urlvars]);
@@ -272,13 +271,13 @@
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
       $breadcrumbs = new BreadCrumbsPrinter($this->smarty, $this->db);
-      $breadcrumbs->add_item($lang[forum], $forumurl);
+      $breadcrumbs->add_item(lang("forum"), $forumurl);
       
       if ($_GET[read] || $_GET[llist]) {
         if (!$_message)
-          $breadcrumbs->add_item($lang[noentrytitle]);
+          $breadcrumbs->add_item(lang("noentrytitle"));
         elseif (!$_message->is_active())
-          $breadcrumbs->add_item($lang[blockedtitle]);
+          $breadcrumbs->add_item(lang("blockedtitle"));
         else
           $breadcrumbs->add_item($_message->get_subject());
       }
@@ -289,7 +288,6 @@
     
     // Prints the footer of the page.
     function _print_footer() {
-      global $lang;
       global $cfg;
       
       $url = new URL('?', $cfg[urlvars]);
@@ -306,7 +304,7 @@
       }
       $version[url]  = "http://debain.org/software/tefinch/";
       $version[text] = "Tefinch Forum v0.9.6";
-      $this->smarty->assign_by_ref('lang',            $lang);
+      $this->smarty->assign_by_ref('lang',            lang());
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
       $this->smarty->assign_by_ref('version',         $version);
@@ -323,7 +321,7 @@
     
     
     function print_head() {
-      $this->smarty->assign_by_ref('lang', $lang);
+      $this->smarty->assign_by_ref('lang', lang());
       $this->smarty->display("header.tmpl");
       print("\n");
     }
@@ -363,12 +361,11 @@
                        $_off,
                        $_n_entries) {
       global $cfg;
-      global $lang;
       $rss = new RSSPrinter($this->smarty, $this->db);
       $rss->set_base_url($cfg[rss_url]);
       $rss->set_title($_title);
       $rss->set_description($_descr);
-      $rss->set_language($lang[countrycode]);
+      $rss->set_language(lang("countrycode"));
       $rss->show($_forum_id, $_off, $_n_entries);
     } 
     

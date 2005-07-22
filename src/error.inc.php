@@ -48,8 +48,8 @@
   define("ERR_GROUP_NAME_TOO_SHORT",         -302);
   define("ERR_GROUP_NAME_TOO_LONG",          -303);
   
-  $err[ERR_MESSAGE_INCOMPLETE]           = $lang[somethingmissing];
-  $err[ERR_MESSAGE_NAME_TOO_LONG]        = $lang[nametoolong];
-  $err[ERR_MESSAGE_TITLE_TOO_LONG]       = $lang[titletoolong];
-  $err[ERR_MESSAGE_BODY_TOO_LONG]        = $lang[messagetoolong];
+  $err[ERR_MESSAGE_INCOMPLETE]           = lang("somethingmissing");
+  $err[ERR_MESSAGE_NAME_TOO_LONG]        = lang("nametoolong");
+  $err[ERR_MESSAGE_TITLE_TOO_LONG]       = lang("titletoolong");
+  $err[ERR_MESSAGE_BODY_TOO_LONG]        = lang("messagetoolong");
 ?>

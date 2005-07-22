@@ -62,11 +62,9 @@
      * The bar is printed to the smarty instance.
      */
     function show() {
-      if (count($this->items) <= 0) {
+      if (count($this->items) <= 0)
         $this->print_strategy->foreach_link(array(&$this, '_add_item'));
-        $this->smarty->clear_all_assign();
-        $this->smarty->assign_by_ref('items', $this->items);
-      }
+      $this->smarty->assign_by_ref('items', $this->items);
       $this->smarty->display('indexbar.tmpl');
       print("\n");
     }

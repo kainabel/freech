@@ -144,9 +144,8 @@
     
     // Returns the formatted time.
     function get_created_time($_format = '') {
-      global $lang; //FIXME
       if (!$_format)
-        $_format = $lang[dateformat];
+        $_format = lang("dateformat");
       return date($_format, $this->_fields[created]);
     }
     
@@ -169,9 +168,8 @@
     
     // Returns the formatted time.
     function get_updated_time($_format = '') {
-      global $lang; //FIXME
       if (!$_format)
-        $_format = $lang[dateformat];
+        $_format = lang("dateformat");
       return date($_format, $this->_fields[updated]);
     }
     

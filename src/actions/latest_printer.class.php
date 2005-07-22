@@ -33,7 +33,6 @@
     
     function _append_row(&$_message, $_data) {
       global $cfg;
-      global $lang;
       
       // The URL to the message.
       $url = new URL('?', $cfg[urlvars]);
@@ -46,7 +45,7 @@
       // Required to enable correct formatting of the message.
       $_message->set_selected($_row->id == $_GET[msg_id] && $_GET[read]);
       if (!$_message->is_active()) {
-        $_message->set_subject($lang[blockedtitle]);
+        $_message->set_subject(lang("blockedtitle"));
         $_message->set_username('------');
         $_message->set_body('');
         unset($url);
@@ -60,7 +59,6 @@
     
     function show() {
       global $cfg;
-      global $lang;
       
       $n = $this->db->foreach_latest_entry($_GET[forum_id],
                                            $_GET[hs],
@@ -71,7 +69,7 @@
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('lang',     $lang);
+      $this->smarty->assign_by_ref('lang',     lang());
       $this->smarty->assign_by_ref('messages', $this->messages);
       $this->smarty->display('latest.tmpl');
       print("\n");

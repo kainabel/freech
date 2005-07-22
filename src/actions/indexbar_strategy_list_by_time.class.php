@@ -38,11 +38,10 @@
     
     
     function foreach_link($_func) {
-      global $lang; //FIXME
       global $cfg; //FIXME
       
       // Print the "Index" keyword, followed by a separator.
-      call_user_func($_func, $lang[index]);
+      call_user_func($_func, lang("index"));
       
       // Calculate the total number of pages.
       $n_pages = ceil($this->n_messages / $this->n_messages_per_page);
@@ -97,15 +96,15 @@
       if ($activepage > 1) {
         $url->set_var('hs', ($activepage - 2) * $this->n_messages_per_page);
         call_user_func($_func);
-        call_user_func($_func, $lang[next], $url); //FIXME: lang
+        call_user_func($_func, lang("next"), $url);
       }
       
       // "Older threads" link.
-      $older_threads[text] = $lang[prev];
+      $older_threads[text] = lang("prev");
       if ($activepage < $pages) {
         $url->set_var('hs', $activepage * $this->n_messages_per_page);
         call_user_func($_func);
-        call_user_func($_func, $lang[prev], $url); //FIXME: lang
+        call_user_func($_func, lang("prev"), $url);
       }
       
       // "New message" link.
@@ -113,7 +112,7 @@
       $url->delete_var('list');
       $url->set_var('write', 1);
       call_user_func($_func);
-      call_user_func($_func, $lang[writemessage], $url); //FIXME: lang
+      call_user_func($_func, lang("writemessage"), $url);
     }
   }
 ?>

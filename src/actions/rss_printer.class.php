@@ -57,7 +57,6 @@
     
     function _append_row(&$_message, $_forum_id) {
       global $cfg;
-      global $lang;
       
       if (!$_message->is_active())
         return;
@@ -82,7 +81,6 @@
     
     function show($_forum_id, $_off, $_n_entries) {
       global $cfg;
-      global $lang;
       
       $this->messages = array();
       

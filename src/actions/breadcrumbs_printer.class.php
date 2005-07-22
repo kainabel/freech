@@ -31,14 +31,13 @@
     }
     
     
-    function add_item(&$_text, $_url = '') {
+    function add_item($_text, $_url = '') {
       $this->breadcrumbs[$_text] = $_url;
     }
     
     
     function show() {
       global $cfg;
-      global $lang;
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('breadcrumbs', $this->breadcrumbs);

@@ -40,11 +40,10 @@
     
     
     function foreach_link($_func) {
-      global $lang; //FIXME
       global $cfg; //FIXME
       
       // Print the "Index" keyword, followed by a separator.
-      call_user_func($_func, $lang[index]);
+      call_user_func($_func, lang("index"));
       
       // Calculate the total number of pages.
       $n_pages = ceil($this->n_threads / $this->n_threads_per_page);
@@ -99,19 +98,19 @@
       call_user_func($_func);
       if ($activepage > 1) {
         $url->set_var('hs', ($activepage - 2) * $this->n_threads_per_page);
-        call_user_func($_func, $lang[next], $url); //FIXME: lang
+        call_user_func($_func, lang("next"), $url);
       }
       else
-        call_user_func($_func, $lang[next]); //FIXME: lang
+        call_user_func($_func, lang("next"));
       
       // "Older threads" link.
       call_user_func($_func);
       if ($activepage < $n_pages) {
         $url->set_var('hs', $activepage * $this->n_threads_per_page);
-        call_user_func($_func, $lang[prev], $url); //FIXME: lang
+        call_user_func($_func, lang("prev"), $url);
       }
       else
-        call_user_func($_func, $lang[prev]); //FIXME: lang
+        call_user_func($_func, lang("prev"));
       
       if (!$this->folding)
         die("IndexBarStrategy_list_by_thread:foreach_page(): Folding.");
@@ -124,19 +123,19 @@
       $url->set_var('hs', $_GET[hs]);
       if ($fold != UNFOLDED || $swap != '') {
         $url->set_var('fold', UNFOLDED);
-        call_user_func($_func, $lang[unfoldall], $url); //FIXME: lang
+        call_user_func($_func, lang("unfoldall"), $url);
       }
       else
-        call_user_func($_func, $lang[unfoldall]); //FIXME: lang
+        call_user_func($_func, lang("unfoldall"));
       
       // "Fold all" link.
       call_user_func($_func);
       if ($fold != FOLDED || $swap != '') {
         $url->set_var('fold', FOLDED);
-        call_user_func($_func, $lang[foldall], $url); //FIXME: lang
+        call_user_func($_func, lang("foldall"), $url);
       }
       else
-        call_user_func($_func, $lang[foldall]); //FIXME: lang
+        call_user_func($_func, lang("foldall"));
       $url->delete_var('fold');
       
       // "New message" link.
@@ -144,7 +143,7 @@
       $url->delete_var('list');
       $url->set_var('write', 1);
       call_user_func($_func);
-      call_user_func($_func, $lang[writemessage], $url); //FIXME: lang
+      call_user_func($_func, lang("writemessage"), $url);
     }
   }
 ?>

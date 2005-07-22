@@ -37,7 +37,6 @@
     
     
     function show() {
-      global $cfg;
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('breadcrumbs', $this->breadcrumbs);

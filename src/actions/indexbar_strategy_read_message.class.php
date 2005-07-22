@@ -33,14 +33,13 @@
     
     
     function foreach_link($_func) {
-      global $cfg; //FIXME
       
       if (!$this->message) {
         call_user_func($_func);
         return;
       }
       
-      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   0);
       $url->set_var('forum_id', $_GET[forum_id]);
@@ -93,7 +92,7 @@
       call_user_func($_func, lang("writemessage"), $url);
       
       // "Show/Hide Thread" button.
-      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   0);
       $url->set_var('forum_id', $_GET[forum_id]);

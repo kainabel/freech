@@ -77,10 +77,9 @@
     
     
     function set_login($_login) {
-      global $cfg; //FIXME
-      if (strlen($_login) < $cfg[min_loginlength]) //FIXME: cfg
+      if (strlen($_login) < cfg("min_loginlength"))
         return ERR_USER_LOGIN_TOO_SHORT;
-      if (strlen($_login) > $cfg[max_loginlength]) //FIXME: cfg
+      if (strlen($_login) > cfg("max_loginlength"))
         return ERR_USER_LOGIN_TOO_LONG;
       $this->fields[login] = $_login * 1;
     }
@@ -92,10 +91,9 @@
     
     
     function set_password($_password) {
-      global $cfg; //FIXME
-      if (strlen($_password) < $cfg[min_passwordlength]) //FIXME: cfg
+      if (strlen($_password) < cfg("min_passwordlength"))
         return ERR_USER_PASSWORD_TOO_SHORT;
-      if (strlen($_password) > $cfg[max_passwordlength]) //FIXME: cfg
+      if (strlen($_password) > cfg("max_passwordlength"))
         return ERR_USER_PASSWORD_TOO_LONG;
       $this->fields[passwordhash] = crypt($_password);
     }
@@ -113,10 +111,9 @@
     
     
     function set_firstname($_firstname) {
-      global $cfg; //FIXME
-      if (strlen($_firstname) < $cfg[min_firstnamelength]) //FIXME: cfg
+      if (strlen($_firstname) < cfg("min_firstnamelength"))
         return ERR_USER_FIRSTNAME_TOO_SHORT;
-      if (strlen($_firstname) > $cfg[max_firstnamelength]) //FIXME: cfg
+      if (strlen($_firstname) > cfg("max_firstnamelength"))
         return ERR_USER_FIRSTNAME_TOO_LONG;
       $this->fields[firstname] = $_firstname;
     }
@@ -128,10 +125,9 @@
     
     
     function set_lastname($_lastname) {
-      global $cfg; //FIXME
-      if (strlen($_lastname) < $cfg[min_lastnamelength]) //FIXME: cfg
+      if (strlen($_lastname) < cfg("min_lastnamelength"))
         return ERR_USER_LASTNAME_TOO_SHORT;
-      if (strlen($_lastname) > $cfg[max_lastnamelength]) //FIXME: cfg
+      if (strlen($_lastname) > cfg("max_lastnamelength"))
         return ERR_USER_LASTNAME_TOO_LONG;
       $this->fields[lastname] = $_lastname;
     }
@@ -143,11 +139,10 @@
     
     
     function set_mail($_mail) {
-      global $cfg; //FIXME
       //FIXME: make a much better check.
       if (!preg_match("/^[a-z0-9\._]+@[a-z0-9\-\._]+\.[a-z]+$/i", $_mail))
         return ERR_USER_MAIL_NOT_VALID;
-      if (strlen($_mail) > $cfg[max_maillength]) //FIXME: cfg
+      if (strlen($_mail) > cfg("max_maillength"))
         return ERR_USER_MAIL_TOO_LONG;
       $this->fields[mail] = $_mail;
     }
@@ -159,13 +154,12 @@
     
     
     function set_homepage($_homepage) {
-      global $cfg; //FIXME
       if (!preg_match("/^http/i", $_homepage))
         $_homepage = "http://" . $_homepage;
       //FIXME: make a much better check.
       if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $_homepage))
         return ERR_USER_HOMEPAGE_NOT_VALID;
-      if (strlen($_homepage) > $cfg[max_homepageurllength]) //FIXME: cfg
+      if (strlen($_homepage) > cfg("max_homepageurllength"))
         return ERR_USER_HOMEPAGE_TOO_LONG;
       $this->fields[homepage] = $_homepage;
     }
@@ -178,8 +172,7 @@
     
     /// Instant messenger address.
     function set_im($_im) {
-      global $cfg; //FIXME
-      if (strlen($_im) > $cfg[max_imlength]) //FIXME: cfg
+      if (strlen($_im) > cfg("max_imlength"))
         return ERR_USER_IM_TOO_LONG;
       $this->fields[im] = $_im;
     }
@@ -192,8 +185,7 @@
     
     /// A signature that can be addded below a message that the user writes.
     function set_signature($_signature) {
-      global $cfg; //FIXME
-      if (strlen($_signature) > $cfg[max_signaturelength]) //FIXME: cfg
+      if (strlen($_signature) > cfg("max_signaturelength"))
         return ERR_USER_SIGNATURE_TOO_LONG;
       $this->fields[signature] = $_signature;
     }

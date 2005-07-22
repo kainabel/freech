@@ -281,19 +281,18 @@
     
     
     function check_complete() {
-      global $cfg; //FIXME
       if (ctype_space($this->_fields[username])
        || ctype_space($this->_fields[subject])
        || ctype_space($this->_fields[body]))
         return ERR_MESSAGE_INCOMPLETE;
       
-      if (strlen($this->_fields[username]) > $cfg[max_namelength]) //FIXME: cfg
+      if (strlen($this->_fields[username]) > cfg("max_namelength"))
         return ERR_MESSAGE_NAME_TOO_LONG;
       
-      if (strlen($this->_fields[subject]) > $cfg[max_titlelength]) //FIXME: cfg
+      if (strlen($this->_fields[subject]) > cfg("max_titlelength"))
         return ERR_MESSAGE_TITLE_TOO_LONG;
       
-      if (strlen($this->_fields[body]) > $cfg[max_msglength]) //FIXME: cfg
+      if (strlen($this->_fields[body]) > cfg("max_msglength"))
         return ERR_MESSAGE_BODY_TOO_LONG;
       
       return 0;

@@ -40,7 +40,6 @@
     
     
     function foreach_link($_func) {
-      global $cfg; //FIXME
       
       // Print the "Index" keyword, followed by a separator.
       call_user_func($_func, lang("index"));
@@ -63,7 +62,7 @@
         $n_indexoffset = 1;
       
       // Always show a link to the first page.
-      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('list',  1);
       $url->set_var('hs',    0);
       $url->set_var('forum', $_GET[forum_id]);

@@ -38,14 +38,13 @@
     
     
     function _append_row(&$_message, $_indents, $_data) {
-      global $cfg;
       
       // The URL to the message.
-      $url = new URL('?', $cfg[urlvars]);  //FIXME: cfg
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
-      if ($cfg[remember_page])
+      if (cfg("remember_page"))
         $url->set_var('hs', $_GET[hs]);
       
       // The url behind the "+/-" folding toggle button.
@@ -55,7 +54,7 @@
         $foldurl->set_var('showthread', -1);
       }
       else {
-        $foldurl = new URL('?', $cfg[urlvars]); //FIXME: cfg
+        $foldurl = new URL('?', cfg("urlvars"));
         $foldurl->set_var('list',     1);
         $foldurl->set_var('hs',       $_GET[hs]);
         $foldurl->set_var('forum_id', $_message->get_forum_id());
@@ -81,13 +80,12 @@
     
     
     function show($_forum_id, $_msg_id, $_offset) {
-      global $cfg;
       
       if ($_msg_id == 0)
         $n = $this->db->foreach_child($_forum_id,
                                       $_msg_id,
                                       $_offset,
-                                      $cfg[tpp],
+                                      cfg("tpp"),
                                       $this->folding,
                                       array(&$this, '_append_row'),
                                       '');
@@ -95,7 +93,7 @@
         $n = $this->db->foreach_child_in_thread($_forum_id,
                                                 $_msg_id,
                                                 $_offset,
-                                                $cfg[tpp],
+                                                cfg("tpp"),
                                                 $this->folding,
                                                 array(&$this, '_append_row'),
                                                 '');

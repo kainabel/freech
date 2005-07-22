@@ -32,14 +32,13 @@
     
     
     function _append_row(&$_message, $_data) {
-      global $cfg;
       
       // The URL to the message.
-      $url = new URL('?', $cfg[urlvars]);
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
-      if ($cfg[remember_page])
+      if (cfg("remember_page"))
         $url->set_var('hs', $_GET[hs]);
       
       // Required to enable correct formatting of the message.
@@ -58,11 +57,10 @@
     
     
     function show() {
-      global $cfg;
       
       $n = $this->db->foreach_latest_entry($_GET[forum_id],
                                            $_GET[hs],
-                                           $cfg[epp],
+                                           cfg("epp"),
                                            FALSE,
                                            array(&$this, '_append_row'),
                                            '');

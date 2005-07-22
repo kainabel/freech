@@ -20,15 +20,14 @@
 ?>
 <?php
   function table_names() {
-    global $cfg;
     $tables = array (
-      t_group            => $cfg[db_tablebase] . 'group',
-      t_user             => $cfg[db_tablebase] . 'user',
-      t_permission       => $cfg[db_tablebase] . 'permission',
-      t_group_permission => $cfg[db_tablebase] . 'group_permission',
-      t_group_user       => $cfg[db_tablebase] . 'group_user',
-      t_forum            => $cfg[db_tablebase] . 'forum',
-      t_message          => $cfg[db_tablebase] . 'message'
+      t_group            => cfg("db_tablebase") . 'group',
+      t_user             => cfg("db_tablebase") . 'user',
+      t_permission       => cfg("db_tablebase") . 'permission',
+      t_group_permission => cfg("db_tablebase") . 'group_permission',
+      t_group_user       => cfg("db_tablebase") . 'group_user',
+      t_forum            => cfg("db_tablebase") . 'forum',
+      t_message          => cfg("db_tablebase") . 'message'
     );
     return $tables;
   }

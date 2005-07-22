@@ -27,6 +27,7 @@
   if (preg_match("/^[a-z0-9_]+$/i", $cfg[lang]))
     include_once "language/$cfg[lang].inc.php";
   
+  include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
   include_once 'functions/table_names.inc.php';
   include_once 'functions/string.inc.php';
@@ -62,16 +63,15 @@
     // Prepare the forum, set cookies, etc. To be called before the http header 
     // was sent.
     function TefinchForum() {
-      global $cfg;
-      $this->db = new TefinchDB($cfg[db_host],
-                                $cfg[db_usr],
-                                $cfg[db_pass],
-                                $cfg[db_name],
-                                $cfg[db_tablebase] . "_message");
+      $this->db = new TefinchDB(cfg("db_host"),
+                                cfg("db_usr"),
+                                cfg("db_pass"),
+                                cfg("db_name"),
+                                cfg("db_tablebase") . "_message");
       $this->db->set_timeformat(lang("dateformat"));
       
       $this->smarty = new Smarty();
-      $this->smarty->template_dir = "themes/$cfg[theme]";
+      $this->smarty->template_dir = "themes/" . cfg("theme");
       $this->smarty->compile_dir  = "smarty/templates_c";
       $this->smarty->cache_dir    = "smarty/cache";
       $this->smarty->config_dir   = "smarty/configs";
@@ -215,16 +215,15 @@
     
     // Shows the forum, time order.
     function _list_by_time() {
-      global $cfg;
       $this->_print_breadcrumbs('');
       $n_entries = $this->db->get_n_entries($_GET[forum_id]);
       $latest    = new LatestPrinter($this->smarty, $this->db);
       $index     = new IndexBarPrinter($this->smarty,
                                        'list_by_time',
                                        array(n_messages          => $n_entries,
-                                             n_messages_per_page => $cfg[epp],
+                                             n_messages_per_page => cfg("epp"),
                                              n_offset            => $_GET[hs],
-                                             n_pages_per_index   => $cfg[ppi]));
+                                             n_pages_per_index   => cfg("ppi")));
       $index->show();
       $latest->show();
       $index->show();
@@ -234,7 +233,6 @@
     
     // Shows the forum, thread order.
     function _list_by_thread() {
-      global $cfg;
       $n_threads = $this->db->get_n_threads($_GET[forum_id]);
       $this->_print_breadcrumbs('');
       $folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
@@ -242,9 +240,9 @@
       $index   = new IndexBarPrinter($this->smarty,
                                      'list_by_thread',
                                      array(n_threads          => $n_threads,
-                                           n_threads_per_page => $cfg[tpp],
+                                           n_threads_per_page => cfg("tpp"),
                                            n_offset           => $_GET[hs],
-                                           n_pages_per_index  => $cfg[ppi],
+                                           n_pages_per_index  => cfg("ppi"),
                                            folding            => $folding));
       $index->show();
       $thread->show($_GET['forum_id'], 0, $_GET[hs]);
@@ -264,9 +262,8 @@
     
     // Prints the head of the page.
     function _print_breadcrumbs($_message) {
-      global $cfg;
       
-      $forumurl = new URL('?', $cfg[urlvars]);
+      $forumurl = new URL('?', cfg("urlvars"));
       $forumurl->set_var('list',     1);
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
@@ -288,9 +285,8 @@
     
     // Prints the footer of the page.
     function _print_footer() {
-      global $cfg;
       
-      $url = new URL('?', $cfg[urlvars]);
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('list',     1);
       $url->set_var('forum_id', $_GET[forum_id]);
       if ($_COOKIE[view] === 'plain') {
@@ -360,9 +356,8 @@
                        $_descr,
                        $_off,
                        $_n_entries) {
-      global $cfg;
       $rss = new RSSPrinter($this->smarty, $this->db);
-      $rss->set_base_url($cfg[rss_url]);
+      $rss->set_base_url(cfg("rss_url"));
       $rss->set_title($_title);
       $rss->set_description($_descr);
       $rss->set_language(lang("countrycode"));

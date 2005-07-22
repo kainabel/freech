@@ -30,7 +30,7 @@
   print("<html>\n"
       . "<head>\n"
       . "<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">\n"
-      . "<link rel=\"stylesheet\" type=\"text/css\" href=\"themes/$cfg[theme]/style.css\">"
+      . "<link rel=\"stylesheet\" type=\"text/css\" href=\"themes/" . cfg("theme") . "/style.css\">"
       . "<title>Tefinch</title>"
       . "</head>\n");
   
@@ -38,7 +38,7 @@
   print("<table width=100%>"
       . " <tr>"
       . "  <td align='center'>"
-      . "  <a href='.'><img src='themes/$cfg[theme]/img/logo.png' alt='' border=0 width=254 height=107 /></a>"
+      . "  <a href='.'><img src='themes/" . cfg("theme") . "/img/logo.png' alt='' border=0 width=254 height=107 /></a>"
       . "  </td>"
       . " </tr>"
       . "</table><br />");

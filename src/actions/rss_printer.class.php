@@ -56,18 +56,17 @@
     
     
     function _append_row(&$_message, $_forum_id) {
-      global $cfg;
       
       if (!$_message->is_active())
         return;
       
       // The URL to the message.
       $url = new URL($this->url . "?");
-      $url->mask(array_merge($cfg[urlvars], 'forum_id', 'list', 'read'));
+      $url->mask(array_merge(cfg("urlvars"), 'forum_id', 'list', 'read'));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
-      if ($cfg[remember_page])
+      if (cfg("remember_page"))
         $url->set_var('hs', $_GET[hs]);
       
       // Required to enable correct formatting of the message.
@@ -80,14 +79,13 @@
     
     
     function show($_forum_id, $_off, $_n_entries) {
-      global $cfg;
       
       $this->messages = array();
       
       if ($_n_entries < 1)
-        $_n_entries = $cfg[rss_items];
-      if ($_n_entries > $cfg[rss_maxitems])
-        $n_entries = $cfg[rss_maxitems];
+        $_n_entries = cfg("rss_items");
+      if ($_n_entries > cfg("rss_maxitems"))
+        $n_entries = cfg("rss_maxitems");
       
       $this->db->foreach_latest_entry($_forum_id,
                                       $_off,

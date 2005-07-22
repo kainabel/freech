@@ -68,10 +68,9 @@
     
     
     function set_name($_name) {
-      global $cfg; //FIXME
-      if (strlen($_name) < $cfg[min_groupnamelength]) //FIXME: cfg
+      if (strlen($_name) < cfg("min_groupnamelength"))
         return ERR_GROUP_NAME_TOO_SHORT;
-      if (strlen($_name) > $cfg[max_groupnamelength]) //FIXME: cfg
+      if (strlen($_name) > cfg("max_groupnamelength"))
         return ERR_GROUP_NAME_TOO_LONG;
       $this->fields[login] = $_login * 1;
     }

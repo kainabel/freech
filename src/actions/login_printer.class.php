@@ -30,9 +30,8 @@
     
     
     function show($_hint = '') {
-      global $cfg;
       
-      $url = new URL('?', array_merge($cfg[urlvars], $_GET));
+      $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
       $url->set_var('do_login', 1);
       
       $this->smarty->clear_all_assign();

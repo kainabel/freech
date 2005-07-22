@@ -30,7 +30,6 @@
     
     
     function show(&$_message) {
-      global $cfg;
       
       if (!$_message) {
         $_message = new Message;
@@ -54,9 +53,8 @@
      * filled into the fields.
      */
     function show_compose(&$_message, $_hint, $_quotebutton) {
-      global $cfg;
       
-      $url = new URL('?', $cfg[urlvars]);
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('msg_id',   $_GET[msg_id]);
       $url->set_var('forum_id', $_GET[forum_id]);
       
@@ -65,8 +63,8 @@
       $this->smarty->assign_by_ref('action',          $url->get_string());
       $this->smarty->assign_by_ref('hint',            $_hint);
       $this->smarty->assign_by_ref('message',         $_message);
-      $this->smarty->assign_by_ref('max_namelength',  $cfg[max_namelength]);
-      $this->smarty->assign_by_ref('max_titlelength', $cfg[max_titlelength]);
+      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       if ($_quotebutton)
         $this->smarty->assign_by_ref('msg_id', $_GET[msg_id]);
       $this->smarty->display('message_compose.tmpl');
@@ -79,7 +77,6 @@
      * quote.
      */
     function show_compose_quoted(&$_message, $_quoted, $_hint, $_quotebutton) {
-      global $cfg;
       
       // Add "Message written by ... on ..." before the quoted stuff.
       if ($_GET[msg_id] && $_quoted->is_active()) {
@@ -104,7 +101,6 @@
      * Shows a form for editing a reply to the given message.
      */
     function show_compose_reply(&$_parent_msg, $_hint, $_quotebutton) {
-      global $cfg;
       
       $message = new Message;
       
@@ -120,9 +116,8 @@
     
     /* Show a preview form of the message. */
     function show_preview(&$_message, $_parent_id = '') {
-      global $cfg;
       
-      $url  = new URL('?', array_merge($_GET, $cfg[urlvars]));
+      $url  = new URL('?', array_merge($_GET, cfg("urlvars")));
       $url->mask(array('forum_id', 'msg_id', 'hs'));
       
       $this->smarty->clear_all_assign();
@@ -139,19 +134,18 @@
     
     // Shows a page explaining that the message was successfully created.
     function show_created($_newmsg_id) {
-      global $cfg;
       
-      $messageurl = new URL('?', $cfg[urlvars]);
+      $messageurl = new URL('?', cfg("urlvars"));
       $messageurl->set_var('read',     1);
       $messageurl->set_var('msg_id',   $_newmsg_id);
       $messageurl->set_var('forum_id', $_GET[forum_id]);
       
-      $parenturl = new URL('?', $cfg[urlvars]);
+      $parenturl = new URL('?', cfg("urlvars"));
       $parenturl->set_var('read',     1);
       $parenturl->set_var('msg_id',   $_GET[msg_id]);
       $parenturl->set_var('forum_id', $_GET[forum_id]);
       
-      $forumurl = new URL('?', $cfg[urlvars]);
+      $forumurl = new URL('?', cfg("urlvars"));
       $forumurl->set_var('list',     1);
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       

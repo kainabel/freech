@@ -26,8 +26,8 @@
   if ($_GET[forum_id] != 1)
     die("If you touch that URL again I will sue you!");
   $forum->print_rss($_GET[forum_id],
-                    $cfg[rss_title],
-                    $cfg[rss_description],
+                    cfg("rss_title"),
+                    cfg("rss_description"),
                     $_GET[hs],
                     $_GET[len]);
   $forum->destroy();

@@ -47,21 +47,21 @@
     
     /// Sets all values from a given database row.
     function set_from_db(&$_db_row) {
-      if (!is_object($_db_row))
+      if (!is_array($_db_row))
         die("User:set_from_db(): Non-object.");
       $this->clear();
-      $this->fields[id]           = $_db_row->id;
-      $this->fields[login]        = $_db_row->login;
-      $this->fields[passwordhash] = $_db_row->password;
-      $this->fields[firstname]    = $_db_row->firstname;
-      $this->fields[lastname]     = $_db_row->lastname;
-      $this->fields[mail]         = $_db_row->mail;
-      $this->fields[homepage]     = $_db_row->homepage;
-      $this->fields[im]           = $_db_row->im;
-      $this->fields[signature]    = $_db_row->signature;
-      $this->fields[created]      = $_db_row->created;
-      $this->fields[updated]      = $_db_row->updated;
-      $this->fields[lastlogin]    = $_db_row->lastlogin;
+      $this->fields[id]           = $_db_row[id];
+      $this->fields[login]        = $_db_row[login];
+      $this->fields[passwordhash] = $_db_row[password];
+      $this->fields[firstname]    = $_db_row[firstname];
+      $this->fields[lastname]     = $_db_row[lastname];
+      $this->fields[mail]         = $_db_row[mail];
+      $this->fields[homepage]     = $_db_row[homepage];
+      $this->fields[im]           = $_db_row[im];
+      $this->fields[signature]    = $_db_row[signature];
+      $this->fields[created]      = $_db_row[created];
+      $this->fields[updated]      = $_db_row[updated];
+      $this->fields[lastlogin]    = $_db_row[lastlogin];
     }
     
     

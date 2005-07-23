@@ -22,26 +22,11 @@
   define("INDENT_DRAW_DASH",  1);
   define("INDENT_DRAW_SPACE", 2);
   
-  class TefinchDB {
+  class ForumDB {
     var $db;
-    var $dh;
-    var $tablebase;
-    var $timeformat = '%y-%m-%d %H:%i';
     
-    function TefinchDB($_host, $_user, $_pass, $_db, $_tablebase) {
-      $this->db        = $_db;
-      $this->tablebase = $_tablebase;
-      $this->dh        = mysql_connect($_host, $_user, $_pass)
-        or die("TefinchDB::TefinchDB(): Error: Can't connect."
-             . " Please check username, password and hostname.");
-      mysql_select_db($this->db)
-        or die("Error: db_connect(): No database with the given name found.");
-    }
-    
-    
-    function close() {
-      mysql_close($this->dh)
-        or die("Error: db_connect(): Database close failed.");
+    function ForumDB(&$_db) {
+      $this->db = &$_db;
     }
     
     
@@ -50,13 +35,13 @@
      ***********************************************************************/
     function _lock_write($_forum) {
       $query = new SqlQuery("LOCK TABLE {$_forum} WRITE");
-      //mysql_query($query->sql()) or die("TefinchDB::lock_write()");
+      //$this->db->execute($query->sql()) or die("ForumDB::lock_write()");
     }
     
     
     function _unlock_write() {
       $query = new SqlQuery("UNLOCK TABLES");
-      //mysql_query($query->sql()) or die("TefinchDB::unlock_write()");
+      //$this->db->execute($query->sql()) or die("ForumDB::unlock_write()");
     }
     
     
@@ -76,9 +61,8 @@
       $sql .= " WHERE t1.id={id}";
       $query = new SqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = mysql_query($query->sql()) or die("TefinchDB::_get_path()");
-      $row = mysql_fetch_object($res);
-      return $row->path;
+      $row = $this->db->GetRow($query->sql()) or die("ForumDB::_get_path()");
+      return $row[path];
     }
     
     
@@ -86,24 +70,24 @@
       $sql = "SELECT threadid FROM {t_message} WHERE id={id}";
       $query = new SqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = mysql_query($query->sql()) or die("TefinchDB::_get_threadid()");
-      $row = mysql_fetch_object($res);
-      return $row->threadid ? $row->threadid : 0;
+      $row = $this->db->GetRow($query->sql())
+                          or die("ForumDB::_get_threadid()");
+      return $row[threadid] ? $row[threadid] : 0;
     }
     
     
     function _is_parent($_row) {
-      return $_row->path == "";
+      return $_row[path] == "";
     }
     
     
     function _has_children($_row) {
-      return $_row->n_descendants > 0;
+      return $_row[n_descendants] > 0;
     }
     
     
     function _is_childof($_row, $_nextrow) {
-      return strlen($_nextrow->path) > strlen($_row->path);
+      return strlen($_nextrow[path]) > strlen($_row[path]);
     }
     
     
@@ -113,18 +97,18 @@
     function _get_prev_entry_id($_forumid, $_threadid, $_path) {
       if (!$_path)
         return 0;
-      $sql  = "SELECT id,HEX(path) hexpath FROM {t_message}";
+      $sql  = "SELECT id FROM {t_message}";
       $sql .= " WHERE threadid={threadid}";
       $sql .= " AND active=1";
-      $sql .= " AND STRCMP(path, {path})=-1";
-      $sql .= " ORDER BY hexpath DESC LIMIT 1";
+      $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
+      $sql .= " ORDER BY HEX(path) DESC";
       $query = new SqlQuery($sql);
       $query->set_int('threadid', $_threadid);
       $query->set_hex('path',     $_path);
-      $res = mysql_query($query->sql())
-               or die("TefinchDB::_get_prev_entry_id()");
-      $row = mysql_fetch_object($res);
-      return $row->id;
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die("ForumDB::_get_prev_entry_id()");
+      $row = $res->FetchRow($res);
+      return $row[id];
     }
     
     
@@ -132,20 +116,20 @@
      * entry in the same thread, or 0 if there is no next entry.
      */
     function _get_next_entry_id($_forumid, $_threadid, $_path) {
-      $sql  = "SELECT id,HEX(path) hexpath FROM {t_message}";
+      $sql  = "SELECT id FROM {t_message}";
       $sql .= " WHERE threadid={threadid}";
       $sql .= " AND active=1";
       $sql .= " AND is_parent=0";
       if ($_path)
-        $sql .= " AND STRCMP(path, {path})=1";
-      $sql .= " ORDER BY hexpath LIMIT 1";
+        $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
+      $sql .= " ORDER BY HEX(path)";
       $query = new SqlQuery($sql);
       $query->set_int('threadid', $_threadid);
       $query->set_hex('path',     $_path);
-      $res = mysql_query($query->sql())
-               or die("TefinchDB::_get_next_entry_id()");
-      $row = mysql_fetch_object($res);
-      return $row->id;
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die("ForumDB::_get_next_entry_id()");
+      $row = $res->FetchRow($res);
+      return $row[id];
     }
     
     
@@ -157,14 +141,14 @@
       $sql  = "SELECT threadid FROM {t_message}";
       $sql .= " WHERE forumid={forumid} AND threadid<{threadid}";
       $sql .= " AND (active=1 OR n_children>0)";
-      $sql .= " ORDER BY threadid DESC LIMIT 1";
+      $sql .= " ORDER BY threadid DESC";
       $query = new SqlQuery($sql);
       $query->set_int('forumid',  $_forumid);
       $query->set_int('threadid', $_threadid);
-      $res = mysql_query($query->sql())
-               or die("TefinchDB::_get_prev_thread_id()");
-      $row = mysql_fetch_object($res);
-      return $row->threadid;
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die("ForumDB::_get_prev_thread_id()");
+      $row = $res->FetchRow($res);
+      return $row[threadid];
     }
     
     
@@ -176,14 +160,14 @@
       $sql  = "SELECT threadid FROM {t_message}";
       $sql .= " WHERE forumid={forumid} AND threadid>{threadid}";
       $sql .= " AND (active=1 OR n_children>0)";
-      $sql .= " ORDER BY threadid LIMIT 1";
+      $sql .= " ORDER BY threadid";
       $query = new SqlQuery($sql);
       $query->set_int('forumid',  $_forumid);
       $query->set_int('threadid', $_threadid);
-      $res = mysql_query($query->sql())
-               or die("TefinchDB::get_next_thread_id()");
-      $row = mysql_fetch_object($res);
-      return $row->threadid;
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die("ForumDB::_get_next_thread_id()");
+      $row = $res->FetchRow($res);
+      return $row[threadid];
     }
     
     
@@ -210,25 +194,23 @@
       $sql .= " WHERE id={id}";
       $query = new SqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = mysql_query($query->sql())
-               or die("TefinchDB::get_entry(): Failed.");
-      $row = mysql_fetch_object($res);
+      $row = $this->db->GetRow($query->sql()) or die("ForumDB::get_message()");
       if (!$row)
         return;
-      $row->prev_thread_id   = $this->_get_prev_thread_id($_forumid,
-                                                          $row->threadid);
-      $row->next_thread_id   = $this->_get_next_thread_id($_forumid,
-                                                          $row->threadid);
-      $row->prev_message_id  = $this->_get_prev_entry_id($_forumid,
-                                                         $row->threadid,
-                                                         $row->path);
-      $row->next_message_id  = $this->_get_next_entry_id($_forumid,
-                                                         $row->threadid,
-                                                         $row->path);
-      if (strlen($row->path) / 2 > 252)  // Path as long as the the DB field.
-        $row->allow_answer = FALSE;
-      if ($row->id == $row->threadid)
-        $row->relation = MESSAGE_RELATION_PARENT_UNFOLDED;
+      $row[prev_thread_id]   = $this->_get_prev_thread_id($_forumid,
+                                                          $row[threadid]);
+      $row[next_thread_id]   = $this->_get_next_thread_id($_forumid,
+                                                          $row[threadid]);
+      $row[prev_message_id]  = $this->_get_prev_entry_id($_forumid,
+                                                         $row[threadid],
+                                                         $row[path]);
+      $row[next_message_id]  = $this->_get_next_entry_id($_forumid,
+                                                         $row[threadid],
+                                                         $row[path]);
+      if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
+        $row[allow_answer] = FALSE;
+      if ($row[id] == $row[threadid])
+        $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
       
       $message = new Message;
       $message->set_from_db($row);
@@ -252,23 +234,23 @@
       $sql .= " WHERE id={parentid}";
       $query = new SqlQuery($sql);
       $query->set_int('parentid', $_parentid);
-      $res = mysql_query($query->sql()) or die("TefinchDB::insert_entry(): 1");
-      $parentrow = mysql_fetch_object($res);
+      $parentrow = $this->db->GetRow($query->sql())
+                                or die("ForumDB::insert_entry(): 1");
       
       $query = new SqlQuery("SET AUTOCOMMIT=0;");
-      mysql_query($query->sql()) or die("TefinchDB::insert_entry(): AC0.");
+      $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): AC0");
       $query = new SqlQuery("BEGIN;");
-      mysql_query($query->sql()) or die("TefinchDB::insert_entry(): Begin.");
+      $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): Beg");
       
       // Insert the new node.
       $username = mysql_escape_string($_message->get_username());
       $subject  = mysql_escape_string($_message->get_subject());
       $body     = mysql_escape_string($_message->get_body());
       if ($parentrow) {
-        if (!$parentrow->active)
-          die("TefinchDB::insert_entry(): Parent inactive.\n");
-        if (strlen($parentrow->path) / 2 > 252)
-          die("TefinchDB::insert_entry(): Hierarchy too deep.\n");
+        if (!$parentrow[active])
+          die("ForumDB::insert_entry(): Parent inactive.\n");
+        if (strlen($parentrow[path]) / 2 > 252)
+          die("ForumDB::insert_entry(): Hierarchy too deep.\n");
         
         // Insert a new child.
         //FIXME: u_id as an arg, as soon as logins are implemented.
@@ -278,22 +260,22 @@
         $sql .= " {forumid}, {threadid}, 2, {name}, {subject}, {body}, NULL";
         $sql .= ")";
         $query = new SqlQuery($sql);
-        $query->set_int('forumid',  $parentrow->forumid);
-        $query->set_int('threadid', $parentrow->threadid);
+        $query->set_int('forumid',  $parentrow[forumid]);
+        $query->set_int('threadid', $parentrow[threadid]);
         $query->set_string('name',    $_message->get_username());
         $query->set_string('subject', $_message->get_subject());
         $query->set_string('body',    $_message->get_body());
-        mysql_query($query->sql())
-          or die("TefinchDB::insert_entry(): Insert1.");
-        $newid = mysql_insert_id();
+        $this->db->Execute($query->sql())
+                or die("ForumDB::insert_entry(): Insert1.");
+        $newid = $this->db->Insert_Id();
         
         // Update the child's path.
         $sql  = "UPDATE {t_message} SET path=";
-        if ($parentrow->path != '') {
-          $parentrow->path = substr($parentrow->path,
+        if ($parentrow[path] != '') {
+          $parentrow[path] = substr($parentrow[path],
                                     0,
-                                    strlen($parentrow->path) - 2);
-          $sql .= " CONCAT(0x$parentrow->path,";
+                                    strlen($parentrow[path]) - 2);
+          $sql .= " CONCAT(0x$parentrow[path],";
           $sql .= "        0x" . $this->_int2hex($newid) . "00)";
         }
         else {
@@ -302,17 +284,19 @@
         $sql .= " WHERE id={newid}";
         $query = new SqlQuery($sql);
         $query->set_int('newid', $newid);
-        mysql_query($query->sql()) or die("TefinchDB::insert_entry(): Path");
+        $this->db->Execute($query->sql())
+                or die("ForumDB::insert_entry(): Path");
         
         // Update n_descendants and n_children in one run...
-        if ($_parentid == $parentrow->threadid) {
+        if ($_parentid == $parentrow[threadid]) {
           $sql  = "UPDATE {t_message}";
           $sql .= " SET n_children=n_children+1,";
           $sql .= " n_descendants=n_descendants+1";
           $sql .= " WHERE id={parentid}";
           $query = new SqlQuery($sql);
           $query->set_int('parentid', $_parentid);
-          mysql_query($query->sql()) or die("TefinchDB::insert_entry(): n++");
+          $this->db->Execute($query->sql())
+                  or die("ForumDB::insert_entry(): n++");
         }
         
         // ...unless it is necessary to update two database sets.
@@ -320,16 +304,16 @@
           $sql  = "UPDATE {t_message} SET n_children=n_children+1";
           $sql .= " WHERE id={threadid}";
           $query = new SqlQuery($sql);
-          $query->set_int('threadid', $parentrow->threadid);
-          mysql_query($query->sql())
-            or die("TefinchDB::insert_entry(): n_child fail.");
+          $query->set_int('threadid', $parentrow[threadid]);
+          $this->db->Execute($query->sql())
+                  or die("ForumDB::insert_entry(): n_child fail");
           
           $sql  = "UPDATE {t_message} SET n_descendants=n_descendants+1";
           $sql .= " WHERE id={parentid}";
           $query = new SqlQuery($sql);
           $query->set_int('parentid', $_parentid);
-          mysql_query($query->sql())
-            or die("TefinchDB::insert_entry(): n_desc");
+          $this->db->Execute($query->sql())
+                  or die("ForumDB::insert_entry(): n_desc");
         }
       }
       
@@ -347,8 +331,9 @@
         $query->set_string('name',    $_message->get_username());
         $query->set_string('subject', $_message->get_subject());
         $query->set_string('body',    $_message->get_body());
-        mysql_query($query->sql()) or die("TefinchDB::insert_entry(): Insert2");
-        $newid = mysql_insert_id();
+        $this->db->Execute($query->sql())
+                or die("ForumDB::insert_entry(): Insert2.");
+        $newid = $this->db->Insert_Id();
         
         // Set the thread id.
         // FIXME: Is there a better way to do this?
@@ -356,12 +341,12 @@
         $sql .= " WHERE id={newid}";
         $query = new SqlQuery($sql);
         $query->set_int('newid', $newid);
-        mysql_query($query->sql())
-          or die("TefinchDB::insert_entry(): Threadid");
+        $this->db->Execute($query->sql())
+                or die("ForumDB::insert_entry(): threadid");
       }
       
       $query = new SqlQuery("COMMIT;");
-      mysql_query($query->sql()) or die("TefinchDB::insert_entry(): Commit");
+      $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): Com");
       
       $this->_unlock_write();
       return $newid;
@@ -406,8 +391,8 @@
         $sql .= " WHERE id={id}";
         $query = new SqlQuery($sql);
         $query->set_int('id', $_id);
-        $res = mysql_query($query->sql())
-          or die("TefinchDB::foreach_child(): 1");
+        $res = $this->db->Execute($query->sql())
+                       or die("ForumDB::foreach_child(): 1");
       }
       else {
         // Select all root nodes.
@@ -415,17 +400,14 @@
         $sql .= " FROM {t_message}";
         $sql .= " WHERE forumid={forumid} AND is_parent=1";
         $sql .= " ORDER BY threadid DESC,path";
-        $sql .= " LIMIT {offset}, {limit}";
         $query = new SqlQuery($sql);
         $query->set_int('forumid', $_forumid);
-        $query->set_int('offset',  $_offset);
-        $query->set_int('limit',   $_limit);
-        $res = mysql_query($query->sql())
-          or die("TefinchDB::foreach_child(): 2: Fail.");
+        $res = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
+                       or die("ForumDB::foreach_child(): 2");
       }
       
       // Build the SQL request to grab the complete threads.
-      if (mysql_num_rows($res) <= 0)
+      if ($res->RecordCount() <= 0)
         return;
       $sql  = "SELECT id,forumid,HEX(path) path,n_children,n_descendants,";
       $sql .= "name username,title subject,text body,active,";
@@ -435,56 +417,56 @@
       $sql .= " WHERE (";
       
       $first = 1;
-      while ($row = mysql_fetch_object($res)) {
+      while ($row = $res->FetchRow()) {
         if (!$first)
           $sql .= " OR ";
-        if ($_fold->is_folded($row->id))
-          $sql .= "id=$row->id";
+        if ($_fold->is_folded($row[id]))
+          $sql .= "id=$row[id]";
         else
-          $sql .= "threadid=$row->id";
+          $sql .= "threadid=$row[id]";
         $first = 0;
       }
       
       $sql .= ") ORDER BY threadid DESC,path";
       
       // Walk through those threads.
-      $query = new SqlQuery($sql);
-      $res = mysql_query($query->sql())
-        or die("TefinchDB::foreach_child(): 3");
-      $row = mysql_fetch_object($res);
-      $numrows = mysql_num_rows($res);
+      $query   = new SqlQuery($sql);
+      $res     = $this->db->Execute($query->sql())
+                              or die("ForumDB::foreach_child: 3");
+      $row     = $res->FetchRow();
+      $numrows = $res->RecordCount();
       $indent  = 0;
       $indents = array();
       $parents = array($row);
       while ($row) {
-        $nextrow = mysql_fetch_object($res);
+        $nextrow = $res->FetchRow();
         
         // Parent node types.
         if ($this->_is_parent($row)
           && !$this->_has_children($row))
-          $row->relation = MESSAGE_RELATION_PARENT_STUB;
-        else if ($this->_is_parent($row) && !$_fold->is_folded($row->id))
-          $row->relation = MESSAGE_RELATION_PARENT_UNFOLDED;
+          $row[relation] = MESSAGE_RELATION_PARENT_STUB;
+        else if ($this->_is_parent($row) && !$_fold->is_folded($row[id]))
+          $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
         else if ($this->_is_parent($row))
-          $row->relation = MESSAGE_RELATION_PARENT_FOLDED;
+          $row[relation] = MESSAGE_RELATION_PARENT_FOLDED;
         
         // Children at a branch end.
-        else if ($parents[$indent - 1]->n_descendants == 1
+        else if ($parents[$indent - 1][n_descendants] == 1
                && !$this->_is_childof($row, $nextrow))
-          $row->relation = MESSAGE_RELATION_BRANCHEND_STUB;
-        else if ($parents[$indent - 1]->n_descendants == 1)
-          $row->relation = MESSAGE_RELATION_BRANCHEND;
+          $row[relation] = MESSAGE_RELATION_BRANCHEND_STUB;
+        else if ($parents[$indent - 1][n_descendants] == 1)
+          $row[relation] = MESSAGE_RELATION_BRANCHEND;
         
         // Other children.
         else if (!$this->_is_childof($row, $nextrow)) {
-          $row->relation = MESSAGE_RELATION_CHILD_STUB;
-          $parents[$indent - 1]->n_descendants--;
+          $row[relation] = MESSAGE_RELATION_CHILD_STUB;
+          $parents[$indent - 1][n_descendants]--;
         }
         else {
-          $row->relation = MESSAGE_RELATION_CHILD;
-          $parents[$indent - 1]->n_descendants--;
+          $row[relation] = MESSAGE_RELATION_CHILD;
+          $parents[$indent - 1][n_descendants]--;
         }
-        //echo "$row->title ($row->id, $row->path): $row->relation<br>\n";
+        //echo "$row[title] ($row[id], $row[path]): $row[relation]<br>\n";
         
         $message = new Message();
         $message->set_from_db($row);
@@ -492,23 +474,23 @@
         
         // Indent.
         $parents[$indent] = $row;
-        if ($row->relation == MESSAGE_RELATION_PARENT_UNFOLDED
-          || $row->relation == MESSAGE_RELATION_CHILD
-          || $row->relation == MESSAGE_RELATION_BRANCHEND) {
-          if ($row->relation == MESSAGE_RELATION_CHILD)
+        if ($row[relation] == MESSAGE_RELATION_PARENT_UNFOLDED
+          || $row[relation] == MESSAGE_RELATION_CHILD
+          || $row[relation] == MESSAGE_RELATION_BRANCHEND) {
+          if ($row[relation] == MESSAGE_RELATION_CHILD)
             $indents[$indent] = INDENT_DRAW_DASH;
           else
             $indents[$indent] = INDENT_DRAW_SPACE;
           $indent++;
         }
         // If the last row was a branch end, unindent.
-        else if ($row->relation == MESSAGE_RELATION_BRANCHEND_STUB) {
-          $relation = $parents[$indent]->relation;
+        else if ($row[relation] == MESSAGE_RELATION_BRANCHEND_STUB) {
+          $relation = $parents[$indent][relation];
           while ($relation == MESSAGE_RELATION_BRANCHEND_STUB
             || $relation == MESSAGE_RELATION_BRANCHEND) {
             $indent--;
             unset($indents[$indent]);
-            $relation = $parents[$indent]->relation;
+            $relation = $parents[$indent][relation];
           }
         }
         
@@ -554,12 +536,12 @@
      *            - time
      *  $data: The data given this function in $_data.
      */
-    function foreach_latest_entry($_forumid,
-                                  $_offset,
-                                  $_limit,
-                                  $_updates,
-                                  $_func,
-                                  $_data) {
+    function foreach_latest_message($_forumid,
+                                    $_offset,
+                                    $_limit,
+                                    $_updates,
+                                    $_func,
+                                    $_data) {
       $sql  = "SELECT id,forumid,name username,title subject,text body,active,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
@@ -570,16 +552,13 @@
         $sql .= " ORDER BY updated";
       else
         $sql .= " ORDER BY created";
-      $sql .= " DESC LIMIT {offset}, {limit}";
+      $sql .= " DESC";
       $query = new SqlQuery($sql);
       $query->set_int('forumid', $_forumid);
-      $query->set_int('offset',  $_offset);
-      $query->set_int('limit',   $_limit);
-      $res = mysql_query($query->sql())
-               or die("TefinchDB::foreach_latest_entry(): Failed.");
-      $numrows = mysql_num_rows($res);
-      $message = new Message();
-      while ($row = mysql_fetch_object($res)) {
+      $res = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
+                          or die("ForumDB::foreach_latest_message()");
+      $numrows = $res->RecordCount();
+      while ($row = $res->FetchRow()) {
         $message = new Message();
         $message->set_from_db($row);
         call_user_func($_func, $message, $_data);
@@ -589,30 +568,28 @@
     
     
     /* Returns the total number of entries in the given forum. */
-    function get_n_entries($_forumid) {
-      $sql  = "SELECT COUNT(*) entries";
+    function get_n_messages($_forumid) {
+      $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
       if ($_forumid)
         $sql .= " WHERE forumid={forumid}";
       $query = new SqlQuery($sql);
       $query->set_int('forumid', $_forumid);
-      $res = mysql_query($query->sql()) or die("TefinchDB::get_n_entries()");
-      $row = mysql_fetch_object($res);
-      return $row->entries;
+      $n = $this->db->GetOne($query->sql()) or die("ForumDB::get_n_messages()");
+      return n;
     }
     
     
      /* Returns the total number of threads in the given forum. */
     function get_n_threads($_forumid) {
-      $sql  = "SELECT COUNT(DISTINCT threadid) threads";
+      $sql  = "SELECT COUNT(DISTINCT threadid)";
       $sql .= " FROM {t_message}";
       if ($_forumid)
         $sql .= " WHERE forumid={forumid}";
       $query = new SqlQuery($sql);
       $query->set_int('forumid', $_forumid);
-      $res = mysql_query($query->sql()) or die("TefinchDB::get_n_threads()");
-      $row = mysql_fetch_object($res);
-      return $row->threads;
+      $n = $this->db->GetOne($query->sql()) or die("ForumDB::get_n_threads()");
+      return $n;
     }
     
     
@@ -621,14 +598,8 @@
       $sql = "SELECT n_children FROM {t_message} WHERE id={id}";
       $query = new SqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = mysql_query($query->sql()) or die("TefinchDB::get_n_children()");
-      $row = mysql_fetch_object($res);
-      return $row->n_children;
-    }
-    
-    
-    function set_timeformat($_format) {
-      $this->timeformat = $_format;
+      $n = $this->db->GetOne($query->sql()) or die("ForumDB::get_n_children()");
+      return $n;
     }
   }
 ?>

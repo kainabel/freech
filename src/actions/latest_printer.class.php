@@ -32,7 +32,6 @@
     
     
     function _append_row(&$_message, $_data) {
-      
       // The URL to the message.
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
@@ -42,7 +41,7 @@
         $url->set_var('hs', $_GET[hs]);
       
       // Required to enable correct formatting of the message.
-      $_message->set_selected($_row->id == $_GET[msg_id] && $_GET[read]);
+      $_message->set_selected($_row[id] == $_GET[msg_id] && $_GET[read]);
       if (!$_message->is_active()) {
         $_message->set_subject(lang("blockedtitle"));
         $_message->set_username('------');
@@ -57,13 +56,12 @@
     
     
     function show() {
-      
-      $n = $this->db->foreach_latest_entry($_GET[forum_id],
-                                           $_GET[hs],
-                                           cfg("epp"),
-                                           FALSE,
-                                           array(&$this, '_append_row'),
-                                           '');
+      $n = $this->db->foreach_latest_message($_GET[forum_id],
+                                             $_GET[hs],
+                                             cfg("epp"),
+                                             FALSE,
+                                             array(&$this, '_append_row'),
+                                             '');
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('n_rows',   $n);

@@ -4,10 +4,12 @@
   $cfg[db_usr]          = 'user';       // Username on your database host.
   $cfg[db_pass]         = 'password';   // Password on your database host.
   $cfg[db_name]         = 'tefinch';    // Database name.
+  $cfg[db_dbn]          = "mysql://$cfg[db_usr]:" // If unsure leave unchanged.
+                        . urlencode($cfg[db_pass])
+                        . "@$cfg[db_host]/$cfg[db_name]";
+  
   $cfg[db_tablebase]    = 'tefinch_';   // Table basename, if unsure leave
                                         // unchanged.
-  $cfg[db_backend]      = 'matpath';    // Algorithm. Don't touch if unsure.
-  
   $cfg[lang]            = 'english';    // Forum language. The language files
                                         // are in the "language/" subfolder.
   

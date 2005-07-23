@@ -42,7 +42,7 @@
   $lang[entryindex]       = "Message Overview";
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
-  $lang[postedby]         = "Written by [USER] on [TIME]";
+  $lang[postedby]         = "Written by [USER]";
 
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
@@ -62,7 +62,7 @@
   $lang[preview]          = "Preview";
   $lang[quote]            = "Quote Message";
   $lang[answer]           = "Re: ";
-  $lang[wrote]            = "[USER] wrote";
+  $lang[wrote]            = "[USER] wrote on [TIME]:";
   
   // Preview
   $lang[reallysend]       = "Preview";

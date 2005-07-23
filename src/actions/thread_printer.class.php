@@ -38,7 +38,6 @@
     
     
     function _append_row(&$_message, $_indents, $_data) {
-      
       // The URL to the message.
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
@@ -80,7 +79,6 @@
     
     
     function show($_forum_id, $_msg_id, $_offset) {
-      
       if ($_msg_id == 0)
         $n = $this->db->foreach_child($_forum_id,
                                       $_msg_id,

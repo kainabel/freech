@@ -51,26 +51,26 @@
     
     // Sets all values from a given database row.
     function set_from_db(&$_db_row) {
-      if (!is_object($_db_row))
+      if (!is_array($_db_row))
         die("Message:set_from_db(): Non-object.");
       $this->clear();
-      $this->_fields[id]              = $_db_row->id;
-      $this->_fields[forum_id]        = $_db_row->forumid;
-      $this->_fields[username]        = $_db_row->username;
-      $this->_fields[subject]         = $_db_row->subject;
-      $this->_fields[body]            = $_db_row->body;
-      $this->_fields[updated]         = $_db_row->updated;
-      $this->_fields[created]         = $_db_row->created;
-      $this->_fields[n_children]      = $_db_row->n_children;
-      if (isset($_db_row->relation))
-        $this->_fields[relation]      = $_db_row->relation;
-      $this->_fields[active]          = $_db_row->active;
-      if (isset($_db_row->allow_answer))
-        $this->_fields[allow_answer]  = $_db_row->allow_answer;
-      $this->_fields[next_message_id] = $_db_row->next_message_id;
-      $this->_fields[prev_message_id] = $_db_row->prev_message_id;
-      $this->_fields[next_thread_id]  = $_db_row->next_thread_id;
-      $this->_fields[prev_thread_id]  = $_db_row->prev_thread_id;
+      $this->_fields[id]              = $_db_row[id];
+      $this->_fields[forum_id]        = $_db_row[forumid];
+      $this->_fields[username]        = $_db_row[username];
+      $this->_fields[subject]         = $_db_row[subject];
+      $this->_fields[body]            = $_db_row[body];
+      $this->_fields[updated]         = $_db_row[updated];
+      $this->_fields[created]         = $_db_row[created];
+      $this->_fields[n_children]      = $_db_row[n_children];
+      if (isset($_db_row[relation]))
+        $this->_fields[relation]      = $_db_row[relation];
+      $this->_fields[active]          = $_db_row[active];
+      if (isset($_db_row[allow_answer]))
+        $this->_fields[allow_answer]  = $_db_row[allow_answer];
+      $this->_fields[next_message_id] = $_db_row[next_message_id];
+      $this->_fields[prev_message_id] = $_db_row[prev_message_id];
+      $this->_fields[next_thread_id]  = $_db_row[next_thread_id];
+      $this->_fields[prev_thread_id]  = $_db_row[prev_thread_id];
     }
     
     

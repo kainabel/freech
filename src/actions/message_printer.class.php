@@ -30,7 +30,6 @@
     
     
     function show(&$_message) {
-      
       if (!$_message) {
         $_message = new Message;
         $_message->set_subject(lang("noentrytitle"));
@@ -76,11 +75,11 @@
      * filled into the fields, with the values from $_quoted inserted as a
      * quote.
      */
-    function show_compose_quoted(&$_message, $_quoted, $_hint, $_quotebutton) {
+    function show_compose_quoted(&$_message, &$_quoted, $_hint, $_quotebutton) {
       
       // Add "Message written by ... on ..." before the quoted stuff.
       if ($_GET[msg_id] && $_quoted->is_active()) {
-        $text .= preg_replace("/\[USER\]/",
+        $text  = preg_replace("/\[USER\]/",
                               $_quoted->get_username(),
                               lang("wrote"));
         $text  = preg_replace("/\[TIME\]/",

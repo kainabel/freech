@@ -51,6 +51,8 @@
   include_once 'actions/message_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
   include_once 'actions/login_printer.class.php';
+  include_once 'actions/header_printer.class.php';
+  include_once 'actions/footer_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
   include_once 'services/sql_query.class.php';
@@ -268,7 +270,7 @@
       $forumurl->set_var('list',     1);
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
-      $breadcrumbs = new BreadCrumbsPrinter($this->smarty, $this->db);
+      $breadcrumbs = new BreadCrumbsPrinter($this->smarty, $this->forum);
       $breadcrumbs->add_item(lang("forum"), $forumurl);
       
       if ($_GET[read] || $_GET[llist]) {
@@ -286,28 +288,8 @@
     
     // Prints the footer of the page.
     function _print_footer() {
-      
-      $url = new URL('?', cfg("urlvars"));
-      $url->set_var('list',     1);
-      $url->set_var('forum_id', $_GET[forum_id]);
-      if ($_COOKIE[view] === 'plain') {
-        $url->set_var('changeview', 't');
-        $order_by_thread   = $url->get_string();
-        $order_by_time     = '';
-      } else {
-        $url->set_var('changeview', 'c');
-        $order_by_thread   = '';
-        $order_by_time     = $url->get_string();
-      }
-      $version[url]  = "http://debain.org/software/tefinch/";
-      $version[text] = "Tefinch Forum v0.9.6";
-      $this->smarty->assign_by_ref('lang',            lang());
-      $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
-      $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
-      $this->smarty->assign_by_ref('version',         $version);
-      
-      $this->smarty->display("footer.tmpl");
-      print("\n");
+      $footer = new FooterPrinter($this->smarty, $this->db);
+      $footer->show();
     }
     
     
@@ -318,9 +300,8 @@
     
     
     function print_head() {
-      $this->smarty->assign_by_ref('lang', lang());
-      $this->smarty->display("header.tmpl");
-      print("\n");
+      $header = new HeaderPrinter($this->smarty, $this->forum);
+      $header->show();
     }
     
     

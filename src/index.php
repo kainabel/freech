@@ -41,7 +41,7 @@
       . "  <a href='.'><img src='themes/" . cfg("theme") . "/img/logo.png' alt='' border=0 width=254 height=107 /></a>"
       . "  </td>"
       . " </tr>"
-      . "</table><br />");
+      . "</table><br />\n");
   if ($_GET[forum_id] != 1)
     die("If you touch that URL again I will sue you!");
   $forum->show();

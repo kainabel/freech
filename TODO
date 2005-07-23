@@ -1,7 +1,3 @@
-* Create a FooterPrinter class and move the corresponding code out
-  of forum.inc.php.
-* Create a HeaderPrinter class and move the corresponding code out
-  of forum.inc.php.
 * Create an UserManager object.
 * Create an AccountOptionsPrinter object and a corresponding template.
 * Add an API for searching messages to the TefinchDB class.

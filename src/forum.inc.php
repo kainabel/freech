@@ -338,7 +338,7 @@
                        $_descr,
                        $_off,
                        $_n_entries) {
-      $rss = new RSSPrinter($this->smarty, $this->db);
+      $rss = new RSSPrinter($this->smarty, $this->forum);
       $rss->set_base_url(cfg("rss_url"));
       $rss->set_title($_title);
       $rss->set_description($_descr);

@@ -1,3 +1,12 @@
+2005-07-?  Samuel Abels  <spam debain org>
+	
+	* Release 0.9.6
+	* Immense code cleanups (almost rewrite).
+	* Database abstraction through AdoDB, so databases other than MySQL *should*
+	  work. I have no way to test this though.
+	* Performance should have increased significantly.
+	* Templates are easier to understand.
+
 2005-07-18  Samuel Abels  <spam debain org>
 	
 	* Release 0.9.4

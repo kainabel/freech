@@ -12,6 +12,7 @@ Q: I changed the theme in the configfile but the old theme still appears.
 A: The theme is cached on the server. Delete the contents of
    "src/smarty/templates_c/" and the theme should appear.
 
+
 Installation Instructions
 - - - - - - - - - - - - - -
 

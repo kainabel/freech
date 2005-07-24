@@ -97,8 +97,10 @@
                                                 '');
       
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('messages', $this->messages);
+      $this->smarty->assign_by_ref('n_rows',          $n);
+      $this->smarty->assign_by_ref('messages',        $this->messages);
+      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       $this->smarty->display('thread.tmpl');
       print("\n");
     }

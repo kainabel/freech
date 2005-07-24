@@ -101,8 +101,10 @@
       $message = new Message;
       
       // Prepend 'Re: ' if necessary
-      if (strpos($_parent_msg->get_subject(), lang("answer")) !== 0)
-        $message->set_subject(lang("answer") . $_parent_msg->get_subject());
+      if (strpos($_parent_msg->get_subject(), lang("answer")) !== 0) {
+        $subject = lang("answer") . $_parent_msg->get_subject();
+        $message->set_subject(substr($subject, 0, cfg("max_titlelength")));
+      }
       else
         $message->set_subject($_parent_msg->get_subject());
       

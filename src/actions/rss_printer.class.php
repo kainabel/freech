@@ -61,8 +61,7 @@
         return;
       
       // The URL to the message.
-      $url = new URL($this->url . "?");
-      $url->mask(array_merge(cfg("urlvars"), 'forum_id', 'list', 'read'));
+      $url = new URL($this->url . "?", cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());

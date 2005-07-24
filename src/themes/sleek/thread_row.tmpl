@@ -34,9 +34,9 @@
   {if !$message->url}
       <i>{$message->get_subject()|escape}</i><br />
   {elseif $message->is_selected()}
-      <font color='green'>{$message->get_subject()|truncate:65|escape}</font><br />
+      <font color='green'>{$message->get_subject()|truncate:$max_titlelength|escape}</font><br />
   {else}
-      <a href='{$message->url|escape}'>{$message->get_subject()|truncate:65|escape}<br />
+      <a href='{$message->url|escape}'>{$message->get_subject()|truncate:$max_titlelength|escape}<br />
   {/if}
       <font class='introduction' size='-1'>
         {$message->get_body()|regex_replace:"/[\r\n]/":" "|truncate:200:""|truncate:250:" [...]":true|escape}
@@ -94,11 +94,11 @@
       </td>
       <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
   {if !$message->url}
-      <td align='left'><i>{$message->get_subject()|truncate:65|escape}</i></td>
+      <td align='left'><i>{$message->get_subject()|truncate:$max_titlelength|escape}</i></td>
   {elseif $message->is_selected()}
-      <td align='left'><font color='green'>{$message->get_subject()|truncate:65|escape}</font></td>
+      <td align='left'><font color='green'>{$message->get_subject()|truncate:$max_titlelength|escape}</font></td>
   {else}
-      <td align='left'><a href='{$message->url|escape}'>{$message->get_subject()|truncate:65|escape}</a></td>
+      <td align='left'><a href='{$message->url|escape}'>{$message->get_subject()|truncate:$max_titlelength|escape}</a></td>
   {/if}
     </tr>
   </table>

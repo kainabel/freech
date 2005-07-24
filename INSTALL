@@ -3,6 +3,7 @@ Prerequirements for Installation
 
  * A running MySQL database (4.1 or greater).
  * A webserver with PHP4 support.
+ * PHP gettext support.
 
 
 FAQ

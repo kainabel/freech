@@ -1,4 +1,16 @@
-* Create an UserManager object.
+* Finish the UserManager class.
+* Create a template for the page that is shown when the account was
+  created and add a corresponding method to the RegistrationPrinter.
+  That page should also show a note that an email containing a link
+  was sent out.
+* Create a template for the page that is shown when the email with
+  the link was confirmed by the user and add a corresponding method
+  to the RegistrationPrinter.
 * Create an AccountOptionsPrinter object and a corresponding template.
-* Add an API for searching messages to the TefinchDB class.
+* Create a MenuPrinter class and a corresponding template.
+* Derive an AdminMenuPrinter class from MenuPrinter.
+* Create a GroupOverviewPrinter class and a corresponding template.
+* Create a UserOverviewPrinter class and a corresponding template.
+* Create a ForumOverviewPrinter class and a corresponding template.
+* Add an API for searching messages to the ForumDB class.
 * Create a SearchPrinter object and a corresponding template.

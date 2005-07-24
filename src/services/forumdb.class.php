@@ -233,8 +233,7 @@
       $sql .= " WHERE id={parentid}";
       $query = &new SqlQuery($sql);
       $query->set_int('parentid', $_parentid);
-      $parentrow = $this->db->GetRow($query->sql())
-                                or die("ForumDB::insert_entry(): 1");
+      $parentrow = $this->db->GetRow($query->sql());
       
       $query = &new SqlQuery("SET AUTOCOMMIT=0;");
       $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): AC0");

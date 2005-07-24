@@ -38,7 +38,6 @@
     
     
     function foreach_link($_func) {
-      
       // Print the "Index" keyword, followed by a separator.
       call_user_func($_func, lang("index"));
       
@@ -92,19 +91,22 @@
       }
       
       // "Newer threads" link.
+      call_user_func($_func);
       if ($activepage > 1) {
         $url->set_var('hs', ($activepage - 2) * $this->n_messages_per_page);
-        call_user_func($_func);
         call_user_func($_func, lang("next"), $url);
       }
+      else
+        call_user_func($_func, lang("next"));
       
       // "Older threads" link.
-      $older_threads[text] = lang("prev");
-      if ($activepage < $pages) {
+      call_user_func($_func);
+      if ($activepage < $n_pages) {
         $url->set_var('hs', $activepage * $this->n_messages_per_page);
-        call_user_func($_func);
         call_user_func($_func, lang("prev"), $url);
       }
+      else
+        call_user_func($_func, lang("prev"), $url);
       
       // "New message" link.
       $url->delete_var('hs');

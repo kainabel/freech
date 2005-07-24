@@ -558,7 +558,7 @@
       $query = &new SqlQuery($sql);
       $query->set_int('forumid', $_forumid);
       $n = $this->db->GetOne($query->sql());
-      return n;
+      return $n;
     }
     
     

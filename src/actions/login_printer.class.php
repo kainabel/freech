@@ -37,7 +37,6 @@
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('hint',   $hint);
       $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->smarty->assign_by_ref('lang',   lang());
       $this->smarty->display('login.tmpl');
       print("\n");
     }

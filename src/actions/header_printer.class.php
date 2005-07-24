@@ -34,7 +34,6 @@
       $url->set_var('do_login', 1);
       
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('lang', lang());
       $this->smarty->display("header.tmpl");
       print("\n");
     }

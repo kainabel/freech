@@ -24,7 +24,7 @@
  * into the query.
  *
  * @author $Author: knipknap $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @package openrat.services
  */
 class SqlQuery
@@ -46,7 +46,7 @@ class SqlQuery
   
   
   // Overwrites the SQL query.
-  function set_query($query = '')
+  function set_sql($query = '')
   {
     $this->query = $query;
     

@@ -7,12 +7,10 @@
   $cfg[db_dbn]          = "mysql://$cfg[db_usr]:" // If unsure leave unchanged.
                         . urlencode($cfg[db_pass])
                         . "@$cfg[db_host]/$cfg[db_name]";
-  
   $cfg[db_tablebase]    = 'tefinch_';   // Table basename, if unsure leave
                                         // unchanged.
   $cfg[lang]            = 'english';    // Forum language. The language files
                                         // are in the "language/" subfolder.
-  
   $cfg[rss_url]         = 'http://example.com/tefinch/';
                                         // URL of your domain. Only needed for
                                         // your RSS file.

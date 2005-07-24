@@ -52,7 +52,7 @@
     // Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("Message:set_from_db(): Non-object.");
+        die("Message:set_from_db(): Non-array.");
       $this->clear();
       $this->_fields[id]              = $_db_row[id];
       $this->_fields[forum_id]        = $_db_row[forumid];

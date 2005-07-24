@@ -83,6 +83,39 @@
   $lang[backtoparent]     = "Show the Answered Message";
   $lang[backtoindex]      = "Go Back to the Forum";
   
+  // Registration
+  $lang[register_title]      = "User Registration";
+  $lang[register_welcome]    = "Welcome!\n"
+                             . "By registrating you will be able to"
+                             . " participate in our discussion forum."
+                             . " All you need is a valid email address and a"
+                             . " few minutes of time.";
+  $lang[register_privacy]    = "The e-mail address is"
+                             . " used only for confirming your registration"
+                             . " details and password (and for sending new"
+                             . " passwords should you forget your current one)."
+                             . " None of your personal data is given to any"
+                             . " third parties.";
+  $lang[register_nick]       = "Username:";
+  $lang[register_nick_l]     = "Please select a username (letters and digits"
+                             . " only). This username is used to log into"
+                             . " your account later.";
+  $lang[register_fullname]   = "Firstname And Lastname:";
+  $lang[register_fullname_l] = "Please enter valid information, we can"
+                             . " your registration is invalid otherwise"
+                             . " and can be deleted.";
+  $lang[register_mail]       = "Email Address:";
+  $lang[register_publicmail] = "Public Email:";
+  $lang[register_public_l]   = "Click here if you want other users to be able"
+                             . " to see the address.";
+  $lang[register_term_title] = "Terms of Usage:";
+  $lang[register_term]       = "By clicking Register below you agree that"
+                             . " we may store your personal data as stated"
+                             . " above. Your also agree to be bound by the"
+                             . "  conditions of usage.";
+  $lang[register_agree]      = "I Agree, Register";
+  $lang[register_disagree]   = "I Do Not Agree, Cancel";
+  
   // Login
   $lang[havetoregister]   = "In order to be able to use personalized features"
                           . " you need to <a href='registration/'>register</a>."

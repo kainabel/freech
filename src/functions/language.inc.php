@@ -27,4 +27,11 @@
       return $_phrase;
     return $lang[$_phrase];
   }
+  
+  
+  function smarty_lang($params) {
+    if (!isset($params[text]))
+      die("smarty_lang(): No text given.");
+    return lang($params[text]);
+  }
 ?>

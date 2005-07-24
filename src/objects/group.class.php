@@ -37,7 +37,6 @@
     function clear() {
       $this->fields          = array();
       $this->fields[created] = time();
-      $this->fields[updated] = time();
       $this->users           = array();
       $this->permissions     = array();
     }
@@ -46,7 +45,7 @@
     /// Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("User:set_from_db(): Non-object.");
+        die("User:set_from_db(): Non-array.");
       $this->clear();
       $this->fields[id]      = $_db_row[id];
       $this->fields[name]    = $_db_row[name];

@@ -53,10 +53,13 @@
   include_once 'actions/login_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
+  include_once 'actions/registration_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
+  include_once 'services/accountdb.class.php';
+  
   
   class TefinchForum {
     var $db;
@@ -67,16 +70,35 @@
     // Prepare the forum, set cookies, etc. To be called before the http header 
     // was sent.
     function TefinchForum() {
+      // Select a language.
+      $l = cfg("lang");
+      if ($l == 'auto')
+        $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg("lang_default"));
+      //putenv("LANG=$l");
+      setlocale(LC_MESSAGES, $l);
+      
+      // Setup gettext.
+      if (!function_exists("gettext"))
+        die("This webserver does not have gettext installed.<br/>"
+          . "Please contact your webspace provider.");
+      $domain = 'tefinch';
+      bindtextdomain($domain, "./language");
+      textdomain($domain);
+      bind_textdomain_codeset($domain, 'UTF-8');
+      
+      // Connect to the DB.
       $this->db    = &ADONewConnection(cfg("db_dbn"))
         or die("TefinchForum::TefinchForum(): Error: Can't connect."
              . " Please check username, password and hostname.");
-      $this->forum = new ForumDB($this->db, cfg("db_tablebase") . "_message");
+      $this->forum = &new ForumDB($this->db);
       
-      $this->smarty = new Smarty();
+      // Init Smarty.
+      $this->smarty = &new Smarty();
       $this->smarty->template_dir = "themes/" . cfg("theme");
       $this->smarty->compile_dir  = "smarty/templates_c";
       $this->smarty->cache_dir    = "smarty/cache";
       $this->smarty->config_dir   = "smarty/configs";
+      $this->smarty->register_function('lang', 'smarty_lang');
       
       $this->_handle_cookies();
     }
@@ -91,7 +113,7 @@
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
       $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
       
-      $this->folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
+      $this->folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       if ($_GET['c']) {
         $this->folding->swap($_GET['c']);
         $this->_set_cookie('c', $this->folding->get_string());
@@ -120,16 +142,16 @@
     // Read a message.
     function _message_read() {
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
-      $folding    = new ThreadFolding(UNFOLDED, '');
-      $msgprinter = new MessagePrinter($this->smarty, $this->db);
-      $index      = new IndexBarPrinter($this->smarty,
+      $folding    = &new ThreadFolding(UNFOLDED, '');
+      $msgprinter = &new MessagePrinter($this->smarty, $this->db);
+      $index      = &new IndexBarPrinter($this->smarty,
                                        'read_message',
                                        array(message => $message));
       $this->_print_breadcrumbs($message);
       $index->show();
       $msgprinter->show($message);
       if ($message && $message->has_thread() && $_COOKIE[thread] != 'hide') {
-        $threadprinter = new ThreadPrinter($this->smarty,
+        $threadprinter = &new ThreadPrinter($this->smarty,
                                            $this->forum,
                                            $folding);
         $threadprinter->show($_GET[forum_id], $_GET[msg_id], 0);
@@ -141,23 +163,23 @@
     // Write an answer to a message.
     function _message_answer() {
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
-      $msgprinter = new MessagePrinter($this->smarty, $this->db);
+      $msgprinter = &new MessagePrinter($this->smarty, $this->db);
       $msgprinter->show_compose_reply($message, '', TRUE);
     }
     
     
-    // Write a new message.
+    // Write a &new message.
     function _message_compose() {
-      $message    = new Message;
-      $msgprinter = new MessagePrinter($this->smarty, $this->forum);
+      $message    = &new Message;
+      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
       $msgprinter->show_compose($message, '', FALSE);
     }
     
     
     // Edit a message.
     function _message_edit() {
-      $message    = new Message;
-      $msgprinter = new MessagePrinter($this->smarty, $this->forum);
+      $message    = &new Message;
+      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
       $message->set_username($_POST[name]);
       $message->set_subject($_POST[subject]);
       $message->set_body($_POST[message]);
@@ -168,8 +190,8 @@
     // Insert a quote from the parent message.
     function _message_quote() {
       $quoted_msg = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
-      $message    = new Message;
-      $msgprinter = new MessagePrinter($this->smarty, $this->forum);
+      $message    = &new Message;
+      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
       $message->set_username($_POST[name]);
       $message->set_subject($_POST[subject]);
       $message->set_body($_POST[message]);
@@ -180,8 +202,8 @@
     // Print a preview of a message.
     function _message_preview() {
       global $err;
-      $msgprinter = new MessagePrinter($this->smarty, $this->forum);
-      $message    = new Message;
+      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $message    = &new Message;
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
@@ -198,8 +220,8 @@
     // Saves the posted message.
     function _message_submit() {
       global $err;
-      $msgprinter = new MessagePrinter($this->smarty, $this->forum);
-      $message    = new Message;
+      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $message    = &new Message;
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
@@ -221,8 +243,8 @@
     function _list_by_time() {
       $this->_print_breadcrumbs('');
       $n_entries = $this->forum->get_n_messages($_GET[forum_id]);
-      $latest    = new LatestPrinter($this->smarty, $this->forum);
-      $index     = new IndexBarPrinter($this->smarty,
+      $latest    = &new LatestPrinter($this->smarty, $this->forum);
+      $index     = &new IndexBarPrinter($this->smarty,
                                        'list_by_time',
                                        array(n_messages          => $n_entries,
                                              n_messages_per_page => cfg("epp"),
@@ -239,9 +261,9 @@
     function _list_by_thread() {
       $n_threads = $this->forum->get_n_threads($_GET[forum_id]);
       $this->_print_breadcrumbs('');
-      $folding = new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
-      $thread  = new ThreadPrinter($this->smarty, $this->forum, $folding);
-      $index   = new IndexBarPrinter($this->smarty,
+      $folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
+      $thread  = &new ThreadPrinter($this->smarty, $this->forum, $folding);
+      $index   = &new IndexBarPrinter($this->smarty,
                                      'list_by_thread',
                                      array(n_threads          => $n_threads,
                                            n_threads_per_page => cfg("tpp"),
@@ -266,11 +288,11 @@
     
     // Prints the head of the page.
     function _print_breadcrumbs($_message) {
-      $forumurl = new URL('?', cfg("urlvars"));
+      $forumurl = &new URL('?', cfg("urlvars"));
       $forumurl->set_var('list',     1);
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
-      $breadcrumbs = new BreadCrumbsPrinter($this->smarty, $this->forum);
+      $breadcrumbs = &new BreadCrumbsPrinter($this->smarty, $this->forum);
       $breadcrumbs->add_item(lang("forum"), $forumurl);
       
       if ($_GET[read] || $_GET[llist]) {
@@ -288,19 +310,29 @@
     
     // Prints the footer of the page.
     function _print_footer() {
-      $footer = new FooterPrinter($this->smarty, $this->db);
+      $footer = &new FooterPrinter($this->smarty, $this->db);
       $footer->show();
     }
     
     
     function _show_login() {
-      $login = new LoginPrinter($this->smarty, $this->db);
+      $login = &new LoginPrinter($this->smarty, $this->db);
       $login->show();
     }
     
     
+    function _user_print($_user, $_data) { print $_user->get_login() . "<br>"; } //FIXME
+    function _register() {
+      $registration = &new RegistrationPrinter($this->smarty, $this->db);
+      $registration->show();
+      //$group     = &new Group;
+      //$accountdb = &new AccountDB($this->db);
+      //$accountdb->foreach_user(-1, 0, -1, array(&$this, "_user_print"), '');
+    }
+    
+    
     function print_head() {
-      $header = new HeaderPrinter($this->smarty, $this->forum);
+      $header = &new HeaderPrinter($this->smarty, $this->forum);
       $header->show();
     }
     
@@ -311,7 +343,7 @@
       elseif ($_GET['write'] && $_GET['msg_id'])
         $this->_message_answer();   // Write an answer.
       elseif ($_GET['write'])
-        $this->_message_compose();  // Write a new message.
+        $this->_message_compose();  // Write a &new message.
       elseif ($_POST['edit'])
         $this->_message_edit();     // Edit a message.
       elseif ($_POST['quote'])
@@ -321,7 +353,9 @@
       elseif ($_POST['send'])
         $this->_message_submit();   // A message was posted and should be saved.
       elseif ($_GET['do_login'])
-        $this->_show_login();
+        $this->_show_login();       // Show a login form.
+      elseif ($_GET['register'])
+        $this->_register();         // Show a registration form.
       elseif (($_GET['list'] || $_GET['forum_id'])
               && $_COOKIE['view'] === 'plain')
         $this->_list_by_time();     // Show the forum, time order.
@@ -338,7 +372,7 @@
                        $_descr,
                        $_off,
                        $_n_entries) {
-      $rss = new RSSPrinter($this->smarty, $this->forum);
+      $rss = &new RSSPrinter($this->smarty, $this->forum);
       $rss->set_base_url(cfg("rss_url"));
       $rss->set_title($_title);
       $rss->set_description($_descr);

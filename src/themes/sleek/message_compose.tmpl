@@ -1,16 +1,16 @@
 <!-- message_compose -->
 <p>
 <form action='{$action}' method='POST' accept-charset='utf-8'>
-<font size='+1' color='red'>{$lang.writeamessage}</font>
+<font size='+1' color='red'>{lang text="writeamessage"|escape}</font>
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
 <p>
-<b>{$lang.name}</b>&nbsp;<i>{$lang.required}</i><br />
+<b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='name' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>
 <p>
-<b>{$lang.msgtitle}</b>&nbsp;<i>{$lang.required}</i><br />
+<b>{lang text="msgtitle"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='subject' value='{$message->get_subject()|escape}' maxlength='{$max_titlelength}'>
 <p>
-<b>{$lang.msgbody}</b>&nbsp;<i>{$lang.required}</i><br />
+<b>{lang text="msgbody"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 {strip}
 <textarea name='message' cols='80' rows='20' wrap='virtual'>
 {$message->get_body()|escape}
@@ -19,9 +19,9 @@
 <p>
 {if $msg_id != ""}
 <input type='hidden' name='msg_id' value='{$msg_id}'>
-<input type='submit' name='quote' value='{$lang.quote}'>&nbsp;
+<input type='submit' name='quote' value='{lang text="quote"|escape}'>&nbsp;
 {/if}
-<input type='submit' name='preview' value='{$lang.preview}'>&nbsp;
-<input type='submit' name='send' value='{$lang.send}'>
+<input type='submit' name='preview' value='{lang text="preview"|escape}'>&nbsp;
+<input type='submit' name='send' value='{lang text="send"|escape}'>
 </form>
 <!-- end message_compose -->

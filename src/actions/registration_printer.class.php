@@ -19,36 +19,23 @@
   */
 ?>
 <?php
-  class FooterPrinter {
+  class RegistrationPrinter {
     var $smarty;
     var $db;
     
-    function FooterPrinter(&$_smarty, &$_db) {
+    function RegistrationPrinter(&$_smarty, &$_db) {
       $this->smarty = &$_smarty;
       $this->db     = &$_db;
     }
     
     
     function show() {
-      $url = new URL('?', cfg("urlvars"));
-      $url->set_var('list',     1);
-      $url->set_var('forum_id', $_GET[forum_id]);
-      if ($_COOKIE[view] === 'plain') {
-        $url->set_var('changeview', 't');
-        $order_by_thread   = $url->get_string();
-        $order_by_time     = '';
-      } else {
-        $url->set_var('changeview', 'c');
-        $order_by_thread   = '';
-        $order_by_time     = $url->get_string();
-      }
-      $version[url]  = "http://debain.org/software/tefinch/";
-      $version[text] = "Tefinch Forum v0.9.6";
+      $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
+      $url->set_var('register', 1);
+      
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
-      $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
-      $this->smarty->assign_by_ref('version',         $version);
-      $this->smarty->display("footer.tmpl");
+      $this->smarty->assign_by_ref('action', $url->get_string());
+      $this->smarty->display('registration.tmpl');
       print("\n");
     }
   }

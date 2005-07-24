@@ -39,7 +39,6 @@
       $this->fields[firstname]    = "Anonymous";
       $this->fields[lastname]     = "George";
       $this->fields[created]      = time();
-      $this->fields[updated]      = time();
       $this->fields[lastlogin]    = time();
       $this->groups = array();
     }
@@ -48,7 +47,7 @@
     /// Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("User:set_from_db(): Non-object.");
+        die("User:set_from_db(): Non-array.");
       $this->clear();
       $this->fields[id]           = $_db_row[id];
       $this->fields[login]        = $_db_row[login];
@@ -96,6 +95,11 @@
       if (strlen($_password) > cfg("max_passwordlength"))
         return ERR_USER_PASSWORD_TOO_LONG;
       $this->fields[passwordhash] = crypt($_password);
+    }
+    
+    
+    function &get_password_hash($_password) {
+      return $this->fields[passwordhash];
     }
     
     

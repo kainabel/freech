@@ -35,7 +35,7 @@
       . "</head>\n");
   
   $forum->print_head();
-  print("<table width=100%>"
+  print("<table width='100%'>"
       . " <tr>"
       . "  <td align='center'>"
       . "  <a href='.'><img src='themes/" . cfg("theme") . "/img/logo.png' alt='' border=0 width=254 height=107 /></a>"

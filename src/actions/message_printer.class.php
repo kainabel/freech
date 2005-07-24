@@ -24,8 +24,8 @@
     var $db;
     
     function MessagePrinter(&$_smarty, &$_db) {
-      $this->smarty  = &$_smarty;
-      $this->db      = &$_db;
+      $this->smarty = &$_smarty;
+      $this->db     = &$_db;
     }
     
     
@@ -58,7 +58,6 @@
       $url->set_var('forum_id', $_GET[forum_id]);
       
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('lang',            lang());
       $this->smarty->assign_by_ref('action',          $url->get_string());
       $this->smarty->assign_by_ref('hint',            $_hint);
       $this->smarty->assign_by_ref('message',         $_message);
@@ -76,7 +75,6 @@
      * quote.
      */
     function show_compose_quoted(&$_message, &$_quoted, $_hint, $_quotebutton) {
-      
       // Add "Message written by ... on ..." before the quoted stuff.
       if ($_GET[msg_id] && $_quoted->is_active()) {
         $text  = preg_replace("/\[USER\]/",
@@ -100,7 +98,6 @@
      * Shows a form for editing a reply to the given message.
      */
     function show_compose_reply(&$_parent_msg, $_hint, $_quotebutton) {
-      
       $message = new Message;
       
       // Prepend 'Re: ' if necessary
@@ -115,7 +112,6 @@
     
     /* Show a preview form of the message. */
     function show_preview(&$_message, $_parent_id = '') {
-      
       $url  = new URL('?', array_merge($_GET, cfg("urlvars")));
       $url->mask(array('forum_id', 'msg_id', 'hs'));
       
@@ -124,7 +120,6 @@
       $this->smarty->assign_by_ref('action',    $url->get_string());
       $this->smarty->assign_by_ref('message',   $_message);
       $this->smarty->assign_by_ref('msg_id',    $_parent_id);
-      $this->smarty->assign_by_ref('lang',      lang());
       $this->smarty->display('message_preview.tmpl');
       
       return 0;
@@ -149,7 +144,6 @@
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('lang',       lang());
       $this->smarty->assign_by_ref('messageurl', $messageurl->get_string());
       if ($_GET[msg_id]) 
         $this->smarty->assign_by_ref('parenturl', $parenturl->get_string());

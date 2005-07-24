@@ -98,7 +98,6 @@
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('lang',     lang());
       $this->smarty->assign_by_ref('messages', $this->messages);
       $this->smarty->display('thread.tmpl');
       print("\n");

@@ -48,13 +48,14 @@
     <td><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
     <td align='right'>
   {if $message->is_selected()}
-    <font color='green'>{$lang.postedby|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;"}</font><br /><br />
+    {* FIXME: lang text="postedby"|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;" *}
+    <font color='green'>{$message->get_username()|escape|replace:" ":"&nbsp;"}</font><br /><br />
     <font size='-1' color='green' nowrap>{$message->get_created_time()}</font>
   {elseif $message->is_new()}
-    <font color='red'>{$lang.postedby|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;"}</font><br /><br />
+    <font color='red'>{$message->get_username()|escape|replace:" ":"&nbsp;"}</font><br /><br />
     <font size='-1' color='red' nowrap>{$message->get_created_time()}</font>
   {else}
-    {$lang.postedby|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;"}<br /><br />
+    {$message->get_username()|escape|replace:" ":"&nbsp;"}<br /><br />
     <font size='-1' nowrap>{$message->get_created_time()}</font>
   {/if}
     </td>

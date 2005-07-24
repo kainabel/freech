@@ -82,10 +82,47 @@
   $lang[send]             = "Abschicken";
   
   // Submit.
-  $lang[entrysuccess]     = "Ihr Eintrag ist gespeichert.";
-  $lang[backtoentry]      = "Zu ihrem Beitrag";
-  $lang[backtoparent]     = "Beantworteten Beitrag anzeigen";
-  $lang[backtoindex]      = "Zum Forum";
+  $lang[entrysuccess]      = "Ihr Eintrag ist gespeichert.";
+  $lang[backtoentry]       = "Zu ihrem Beitrag";
+  $lang[backtoparent]      = "Beantworteten Beitrag anzeigen";
+  $lang[backtoindex]       = "Zum Forum";
+  
+  // Registration
+  $lang[register_title]      = "Benutzer-Registrierung";
+  $lang[register_welcome]    = "Herzlich willkommen!\n"
+                             . "Bitte registrieren Sie sich hier, um aktiv an"
+                             . " den Diskussionsforen und an anderen Diensten"
+                             . " (wie zum Beispiel Online-Umfragen)"
+                             . " teilnehmen zu können. Sie benötigen"
+                             . " dafür lediglich eine gültige E-Mail-Adresse"
+                             . " und wenige Minuten Zeit.";
+  $lang[register_privacy]    = "Wir respektieren den Datenschutz und"
+                             . " garantieren, dass wir Ihre persönlichen"
+                             . " Angaben strikt vertraulich behandeln. Bitte"
+                             . " lesen Sie die Erklärung zum Datenschutz.";
+  $lang[register_nick]       = "Benutzername:";
+  $lang[register_nick_l]     = "Wählen Sie einen Benutzernamen (nur"
+                             . " Buchstaben und Zahlen, keine Umlaute oder"
+                             . " Leerzeichen) zu Ihrer Identifikation bei"
+                             . " der Registrierung.";
+  $lang[register_fullname]   = "Vor- und Nachname:";
+  $lang[register_fullname_l] = "Geben Sie bitte auf jeden Fall Ihren"
+                             . " vollständigen Namen an, da die"
+                             . " Registrierung sonst nicht gültig ist.";
+  $lang[register_mail]       = "E-Mail-Adresse:";
+  $lang[register_publicmail] = "Öffentliche E-Mail-Adresse:";
+  $lang[register_public_l]   = "Klicken Sie hier, wenn Ihre E-Mail-Adresse"
+                             . " über Ihren Beiträgen erscheinen soll.";
+  $lang[register_term_title] = "Einwilligungserklärung:";
+  $lang[register_term]       = "Wenn Sie mit der Speicherung Ihrer"
+                             . " personenbezogenen Daten sowie den"
+                             . " vorstehenden Regeln und Bestimmungen der"
+                             . " Nutzungsvereinbarung einverstanden sind,"
+                             . " können Sie mit einem Klick auf den"
+                             . " \"Zustimmen\"-Button unten fortfahren."
+                             . " Ansonsten drücken Sie bitte \"Abbrechen\".";
+  $lang[register_agree]      = "Ich stimme zu";
+  $lang[register_disagree]   = "Abbrechen";
   
   // Login
   $lang[havetoregister]   = "Um unsere personalisierten Dienste nutzen zu "

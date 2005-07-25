@@ -14,7 +14,36 @@ Have Fun!
 Additional Notes
 - - - - - - - - -
 
+Created a great theme? Send us a link and we will put it on the Tefinch
+homepage. Please also let us know the Tefinch version number for which the
+theme was created.
 If you have translated Tefinch to a new language, send us the translation!
+
+
+
+FAQ
+---
+
+Q: I get an error message after installing the forum:
+   "Smarty error: unable to write to $compile_dir"
+A: You did not read the installation instructions in the INSTALL file.
+   Particulary, you want to read the instructions under step 2.
+
+Q: I changed the theme in the configfile but the old theme still appears.
+A: The theme is cached on the server. Delete the contents of
+   "src/smarty/templates_c/" and the theme should appear.
+
+Q: Is RSS supported? Where is the RSS file?
+A: RSS2.0 is supported. The RSS file is in the same directory in which the
+   index.php file is. You likely want to enter the following path into your
+   newsreader:
+   http://www.mydomain.com/tefinch/rss.php
+
+Q: But the RSS file gives me the messages from all forums, I want to track only
+   the messages from one single forum.
+A: Try
+   http://www.mydomain.com/tefinch/rss.php?forum_id=1
+   (where "1" is of course replaced by the correct forum id.)
 
 
 

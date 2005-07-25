@@ -23,16 +23,12 @@
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';
   
-  include_once 'config.inc.php';
-  
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
   include_once 'functions/table_names.inc.php';
   include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
   
-  if (preg_match("/^[a-z0-9_]+$/i", cfg(lang)))
-    include_once "language/" . cfg(lang) . ".inc.php";
   include_once 'error.inc.php';
   
   include_once 'objects/url.class.php';
@@ -145,8 +141,8 @@
       $folding    = &new ThreadFolding(UNFOLDED, '');
       $msgprinter = &new MessagePrinter($this->smarty, $this->db);
       $index      = &new IndexBarPrinter($this->smarty,
-                                       'read_message',
-                                       array(message => $message));
+                                         'read_message',
+                                         array(message => $message));
       $this->_print_breadcrumbs($message);
       $index->show();
       $msgprinter->show($message);
@@ -168,7 +164,7 @@
     }
     
     
-    // Write a &new message.
+    // Write a new message.
     function _message_compose() {
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
@@ -343,7 +339,7 @@
       elseif ($_GET['write'] && $_GET['msg_id'])
         $this->_message_answer();   // Write an answer.
       elseif ($_GET['write'])
-        $this->_message_compose();  // Write a &new message.
+        $this->_message_compose();  // Write a new message.
       elseif ($_POST['edit'])
         $this->_message_edit();     // Edit a message.
       elseif ($_POST['quote'])

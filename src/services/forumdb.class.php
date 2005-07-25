@@ -70,9 +70,8 @@
       $sql = "SELECT threadid FROM {t_message} WHERE id={id}";
       $query = &new SqlQuery($sql);
       $query->set_int('id', $_id);
-      $row = $this->db->GetRow($query->sql())
-                          or die("ForumDB::_get_threadid()");
-      return $row[threadid] ? $row[threadid] : 0;
+      $row = $this->db->GetRow($query->sql());
+      return $row && $row[threadid] ? $row[threadid] : 0;
     }
     
     
@@ -217,10 +216,10 @@
     }
     
     
-    /* Insert a &new child.
+    /* Insert a new child.
      *
      * $_forum:   The forum id.
-     * $_parent:  The id of the entry under which the &new entry is placed.
+     * $_parent:  The id of the entry under which the new entry is placed.
      * $_message: The message to be inserted.
      * Returns:   The id of the newly inserted entry.
      */
@@ -240,7 +239,7 @@
       $query = &new SqlQuery("BEGIN;");
       $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): Beg");
       
-      // Insert the &new node.
+      // Insert the new node.
       $username = mysql_escape_string($_message->get_username());
       $subject  = mysql_escape_string($_message->get_subject());
       $body     = mysql_escape_string($_message->get_body());
@@ -250,7 +249,7 @@
         if (strlen($parentrow[path]) / 2 > 252)
           die("ForumDB::insert_entry(): Hierarchy too deep.\n");
         
-        // Insert a &new child.
+        // Insert a new child.
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (forumid, threadid, u_id, name, title, text, created)";
@@ -315,7 +314,7 @@
         }
       }
       
-      // Insert a &new thread.
+      // Insert a new thread.
       else {
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";

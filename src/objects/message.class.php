@@ -43,7 +43,7 @@
     function clear() {
       $this->_fields = array();
       $this->_fields[created]      = time();
-      $this->_fields[relation]     = MESSAGE_RELATION_CHILD;
+      $this->_fields[relation]     = MESSAGE_RELATION_PARENT_STUB;
       $this->_fields[active]       = TRUE;
       $this->_fields[allow_answer] = TRUE;
     }

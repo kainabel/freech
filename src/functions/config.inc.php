@@ -19,6 +19,9 @@
   */
 ?>
 <?php
+  unset($cfg);
+  include_once 'config.inc.php';
+  
   function &cfg($_key) {
     global $cfg;
     if (!$_key || !isset($cfg[$_key]))

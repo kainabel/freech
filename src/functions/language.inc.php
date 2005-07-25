@@ -19,6 +19,10 @@
   */
 ?>
 <?php
+  unset($lang);
+  if (preg_match("/^[a-z0-9_]+$/i", cfg(lang)))
+    include_once "language/" . cfg(lang) . ".inc.php";
+  
   function &lang($_phrase = '') {
     global $lang;
     if (!$_phrase)

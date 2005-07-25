@@ -6,12 +6,11 @@ Prerequirements for Installation
  * PHP gettext support.
 
 
-FAQ
----
+If something does not work
+- - - - - - - - - - - - - -
 
-Q: I changed the theme in the configfile but the old theme still appears.
-A: The theme is cached on the server. Delete the contents of
-   "src/smarty/templates_c/" and the theme should appear.
+PLEASE read our FAQ first. It is contained in the README file shipped with
+this package.
 
 
 Installation Instructions

@@ -19,6 +19,7 @@
   */
 ?>
 <?php
+  define("MESSAGE_RELATION_UNKNOWN",         0);
   define("MESSAGE_RELATION_PARENT_STUB",     1);
   define("MESSAGE_RELATION_PARENT_UNFOLDED", 2);
   define("MESSAGE_RELATION_PARENT_FOLDED",   3);
@@ -43,7 +44,7 @@
     function clear() {
       $this->_fields = array();
       $this->_fields[created]      = time();
-      $this->_fields[relation]     = MESSAGE_RELATION_PARENT_STUB;
+      $this->_fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->_fields[active]       = TRUE;
       $this->_fields[allow_answer] = TRUE;
     }

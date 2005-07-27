@@ -38,6 +38,20 @@
   }
   
   
+  function is_utf8($_string) {
+    return preg_match('/^([\x00-\x7f]|'
+                    . '[\xc2-\xdf][\x80-\xbf]|'
+                    . '\xe0[\xa0-\xbf][\x80-\xbf]|'
+                    . '[\xe1-\xec][\x80-\xbf]{2}|'
+                    . '\xed[\x80-\x9f][\x80-\xbf]|'
+                    . '[\xee-\xef][\x80-\xbf]{2}|'
+                    . 'f0[\x90-\xbf][\x80-\xbf]{2}|'
+                    . '[\xf1-\xf3][\x80-\xbf]{3}|'
+                    . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/',
+                      $_string) > 0;
+  }
+  
+  
   // Like wordwrap, but does not wrap lines beginning with ">" and allows to
   // set a hard limit.
   function wordwrap_except_quoted(&$_string) {

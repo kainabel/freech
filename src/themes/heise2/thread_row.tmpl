@@ -45,7 +45,7 @@
 {elseif $message->is_selected()}
      &nbsp;<font size='-1' color='green'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>
 {else}
-     <font size='-1'>&nbsp;<a href='{$message->url}'>{$message->get_subject()|truncate:$max_titlelength|escape}</a></font>
+     <font size='-1'>&nbsp;<a href='{$message->url|escape}'>{$message->get_subject()|truncate:$max_titlelength|escape}</a></font>
 {/if}
 {if $message->get_relation() == 3}<font size='-1'>&nbsp;({$message->get_n_children()})</font>{/if}
      </td>

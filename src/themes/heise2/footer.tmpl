@@ -6,13 +6,13 @@
   {if $order_by_thread == ""}
     {lang text="threadview"|escape}
   {else}
-    <a href='{$order_by_thread}'>{lang text="threadview"|escape}</a>
+    <a href='{$order_by_thread|escape}'>{lang text="threadview"|escape}</a>
   {/if}
   &nbsp;&nbsp;&nbsp;
   {if $order_by_time == ""}
     {lang text="plainview"|escape}
   {else}
-    <a href='{$order_by_time}'>{lang text="plainview"|escape}</a>
+    <a href='{$order_by_time|escape}'>{lang text="plainview"|escape}</a>
   {/if}
   </font>
 {/strip}

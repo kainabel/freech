@@ -47,6 +47,22 @@
     }
     
     
+    function _add_to_group($_groupid, $_user) {
+      if (!is_object($_user))
+        die("AccountDB::_add_to_group(): Invalid user.");
+      $sql   = "INSERT INTO {t_group_user}";
+      $sql  .= "  (g_id, u_id)";
+      $sql  .= " VALUES";
+      $sql  .= "  ({g_id}, {u_id})";
+      $query->set_sql($sql);
+      $query->set_int('g_id', $_groupid);
+      $query->set_int('u_id', $_user->get_id());
+      $newid = $this->db->Execute($query->sql())
+                            or die("AccountDB::_add_to_group");
+      return $newid;
+    }
+    
+    
     /***********************************************************************
      * Public API.
      ***********************************************************************/

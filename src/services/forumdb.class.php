@@ -372,6 +372,9 @@
                            $_fold,
                            $_func,
                            $_data) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+      
       if ($_id != 0) {
         $sql  = "SELECT id,HEX(path) path";
         $sql .= " FROM {t_message}";
@@ -389,7 +392,7 @@
         $sql .= " ORDER BY threadid DESC,path";
         $query = &new SqlQuery($sql);
         $query->set_int('forumid', $_forumid);
-        $res = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
+        $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                        or die("ForumDB::foreach_child(): 2");
       }
       
@@ -523,6 +526,9 @@
                                     $_updates,
                                     $_func,
                                     $_data) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+      
       $sql  = "SELECT id,forumid,name username,title subject,text body,active,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
@@ -536,7 +542,7 @@
       $sql .= " DESC";
       $query = &new SqlQuery($sql);
       $query->set_int('forumid', $_forumid);
-      $res = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
+      $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                           or die("ForumDB::foreach_latest_message()");
       $numrows = $res->RecordCount();
       while ($row = $res->FetchRow()) {

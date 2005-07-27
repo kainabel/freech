@@ -15,15 +15,15 @@
   <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left' colspan=5>
   {if $message->url == "" || $message->is_selected()}
-    <table width='100%' height=65 class='dashed' bgcolor='#eceff9' border='0' cellpadding='0' cellspacing='0'>
+    <table width='100%' class='dashed' bgcolor='#eceff9' border='0' cellpadding='0' cellspacing='0'>
   {else}
     <table onmouseover="this.className='highlight';"
            onmouseout="this.className='dashed';"
            onclick="document.location.href='{$message->url|escape}';"
-           width='100%' height=65 class='dashed' bgcolor='#eceff9' border='0' cellpadding='0' cellspacing='0'>
+           width='100%' class='dashed' bgcolor='#eceff9' border='0' cellpadding='0' cellspacing='0'>
   {/if}
     <tr>
-      <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>
+      <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=65 alt='' /></td>
   {if $message->url}
       <td align='left' width=48><img src='themes/sleek/img/avatar_none.png' border=0 width=48 height=48 alt='*' /></td>
   {else}
@@ -49,13 +49,13 @@
     <td align='right'>
   {if $message->is_selected()}
     <font color='green'>{lang|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;" text="postedby"}</font><br /><br />
-    <font size='-1' color='green' nowrap>{$message->get_created_time()}</font>
+    <font size='-1' color='green'>{$message->get_created_time()|replace:" ":"&nbsp;"}</font>
   {elseif $message->is_new()}
     <font color='red'>{lang|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;" text="postedby"}</font><br /><br />
-    <font size='-1' color='red' nowrap>{$message->get_created_time()}</font>
+    <font size='-1' color='red'>{$message->get_created_time()|replace:" ":"&nbsp;"}</font>
   {else}
     {lang|replace:"[USER]":$message->get_username()|escape|replace:" ":"&nbsp;" text="postedby"}<br /><br />
-    <font size='-1' nowrap>{$message->get_created_time()}</font>
+    <font size='-1'>{$message->get_created_time()|replace:" ":"&nbsp;"}</font>
   {/if}
     </td>
     <td align='center' width=8><img src='themes/sleek/img/null.png' width=8 height=23 alt='' /></td>

@@ -23,6 +23,7 @@
   define("ERR_MESSAGE_NAME_TOO_LONG",        -102);
   define("ERR_MESSAGE_TITLE_TOO_LONG",       -103);
   define("ERR_MESSAGE_BODY_TOO_LONG",        -104);
+  define("ERR_MESSAGE_BODY_NO_UTF8",         -105);
   
   define("ERR_USER_LOGIN_INCOMPLETE",        -201);
   define("ERR_USER_LOGIN_TOO_SHORT",         -202);
@@ -48,9 +49,10 @@
   define("ERR_GROUP_NAME_TOO_SHORT",         -302);
   define("ERR_GROUP_NAME_TOO_LONG",          -303);
   
-  unset $err;
+  unset($err);
   $err[ERR_MESSAGE_INCOMPLETE]           = lang("somethingmissing");
   $err[ERR_MESSAGE_NAME_TOO_LONG]        = lang("nametoolong");
   $err[ERR_MESSAGE_TITLE_TOO_LONG]       = lang("titletoolong");
   $err[ERR_MESSAGE_BODY_TOO_LONG]        = lang("messagetoolong");
+  $err[ERR_MESSAGE_BODY_NO_UTF8]         = lang("pvw_invalidchars");
 ?>

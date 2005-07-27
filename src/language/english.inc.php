@@ -69,6 +69,7 @@
   $lang[somethingmissing] = "Warning! Your message is incomplete.";
   $lang[onlywhitespace]   = "Warning! Your message has no visible text."; // Not used
   $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
+  $lang[pvw_invalidchars] = "Warning! Your message contains invalid characters.";
   $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_namelength] characters. Please choose a shorter name.";
   $lang[titletoolong]     = "The subject is longer than $cfg[max_titlelength] characters. Please choose a shorter subject.";
   $lang[forgotname]       = "Please enter a name."; // Not used

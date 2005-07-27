@@ -296,6 +296,11 @@
       if (strlen($this->_fields[body]) > cfg("max_msglength"))
         return ERR_MESSAGE_BODY_TOO_LONG;
       
+      if (!is_utf8($this->_fields[username])
+        || !is_utf8($this->_fields[subject])
+        || !is_utf8($this->_fields[body]))
+        return ERR_MESSAGE_BODY_NO_UTF8;
+      
       return 0;
     }
   }

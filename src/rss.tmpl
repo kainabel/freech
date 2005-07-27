@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>{$title|escape}</title>
@@ -8,7 +8,7 @@
 {foreach from=$messages item=message}
     <item>
       <title>{$message->get_subject()|escape}</title>
-      <author>{$message->get_username()|escape}</author>
+      <author>unknown@unknown.com ({$message->get_username()|escape})</author>
       <guid>{$message->url|escape}</guid>
       <link>{$message->url|escape}</link>
       <description>{$message->get_body_html()|escape}</description>

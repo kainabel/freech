@@ -52,6 +52,7 @@
      * filled into the fields.
      */
     function show_compose(&$_message, $_hint, $_quotebutton) {
+      $msg_id = $_GET[msg_id] * 1;
       
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('msg_id',   $_GET[msg_id]);
@@ -64,7 +65,7 @@
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       if ($_quotebutton)
-        $this->smarty->assign_by_ref('msg_id', $_GET[msg_id]);
+        $this->smarty->assign_by_ref('msg_id', $msg_id);
       $this->smarty->display('message_compose.tmpl');
     }
     
@@ -130,11 +131,10 @@
     
     // Shows a page explaining that the message was successfully created.
     function show_created($_newmsg_id) {
-      
       $messageurl = new URL('?', cfg("urlvars"));
       $messageurl->set_var('read',     1);
       $messageurl->set_var('msg_id',   $_newmsg_id);
-      $messageurl->set_var('forum_id', $_GET[forum_id]);
+      $messageurl->set_var('forum_id', int($_GET[forum_id]));
       
       $parenturl = new URL('?', cfg("urlvars"));
       $parenturl->set_var('read',     1);

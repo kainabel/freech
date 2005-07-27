@@ -32,7 +32,7 @@
     function show() {
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('list',     1);
-      $url->set_var('forum_id', $_GET[forum_id]);
+      $url->set_var('forum_id', (int)$_GET[forum_id]);
       if ($_COOKIE[view] === 'plain') {
         $url->set_var('changeview', 't');
         $order_by_thread   = $url->get_string();

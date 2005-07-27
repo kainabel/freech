@@ -62,7 +62,7 @@
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('list',  1);
       $url->set_var('hs',    0);
-      $url->set_var('forum', $_GET[forum_id]);
+      $url->set_var('forum', (int)$_GET[forum_id]);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
         call_user_func($_func, 1, $url);

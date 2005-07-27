@@ -33,7 +33,6 @@
     
     
     function foreach_link($_func) {
-      
       if (!$this->message) {
         call_user_func($_func);
         return;
@@ -42,7 +41,7 @@
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   0);
-      $url->set_var('forum_id', $_GET[forum_id]);
+      $url->set_var('forum_id', (int)$_GET[forum_id]);
       
       // "Previous/Next Entry" buttons.
       if ($this->message->get_prev_message_id() > 0) {
@@ -95,7 +94,7 @@
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   0);
-      $url->set_var('forum_id', $_GET[forum_id]);
+      $url->set_var('forum_id', (int)$_GET[forum_id]);
       if ($this->message->has_thread()) {
         call_user_func($_func);
         $url->set_var('msg_id', $this->message->get_id());

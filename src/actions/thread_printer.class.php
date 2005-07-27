@@ -44,7 +44,7 @@
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
       if (cfg("remember_page"))
-        $url->set_var('hs', $_GET[hs]);
+        $url->set_var('hs', (int)$_GET[hs]);
       
       // The url behind the "+/-" folding toggle button.
       if ($_GET[read]) {
@@ -55,7 +55,7 @@
       else {
         $foldurl = new URL('?', cfg("urlvars"));
         $foldurl->set_var('list',     1);
-        $foldurl->set_var('hs',       $_GET[hs]);
+        $foldurl->set_var('hs',       (int)$_GET[hs]);
         $foldurl->set_var('forum_id', $_message->get_forum_id());
         $foldurl->set_var('c', $_message->get_id());
       }

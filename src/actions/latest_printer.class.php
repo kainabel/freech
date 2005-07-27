@@ -38,7 +38,7 @@
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
       if (cfg("remember_page"))
-        $url->set_var('hs', $_GET[hs]);
+        $url->set_var('hs', (int)$_GET[hs]);
       
       // Required to enable correct formatting of the message.
       $_message->set_selected($_row[id] == $_GET[msg_id] && $_GET[read]);
@@ -56,8 +56,8 @@
     
     
     function show() {
-      $n = $this->db->foreach_latest_message($_GET[forum_id],
-                                             $_GET[hs],
+      $n = $this->db->foreach_latest_message((int)$_GET[forum_id],
+                                             (int)$_GET[hs],
                                              cfg("epp"),
                                              FALSE,
                                              array(&$this, '_append_row'),

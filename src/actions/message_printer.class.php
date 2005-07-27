@@ -52,11 +52,9 @@
      * filled into the fields.
      */
     function show_compose(&$_message, $_hint, $_quotebutton) {
-      $msg_id = $_GET[msg_id] * 1;
-      
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('msg_id',   $_GET[msg_id]);
-      $url->set_var('forum_id', $_GET[forum_id]);
+      $url->set_var('msg_id',   (int)$_GET[msg_id]);
+      $url->set_var('forum_id', (int)$_GET[forum_id]);
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('action',          $url->get_string());
@@ -65,7 +63,7 @@
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       if ($_quotebutton)
-        $this->smarty->assign_by_ref('msg_id', $msg_id);
+        $this->smarty->assign('msg_id', (int)$_GET[msg_id]);
       $this->smarty->display('message_compose.tmpl');
     }
     
@@ -122,7 +120,7 @@
       $this->smarty->assign_by_ref('pagetitle', lang("preview"));
       $this->smarty->assign_by_ref('action',    $url->get_string());
       $this->smarty->assign_by_ref('message',   $_message);
-      $this->smarty->assign_by_ref('msg_id',    $_parent_id);
+      $this->smarty->assign('msg_id', (int)$_parent_id);
       $this->smarty->display('message_preview.tmpl');
       
       return 0;
@@ -134,22 +132,22 @@
       $messageurl = new URL('?', cfg("urlvars"));
       $messageurl->set_var('read',     1);
       $messageurl->set_var('msg_id',   $_newmsg_id);
-      $messageurl->set_var('forum_id', $_GET[forum_id]);
+      $messageurl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $parenturl = new URL('?', cfg("urlvars"));
       $parenturl->set_var('read',     1);
-      $parenturl->set_var('msg_id',   $_GET[msg_id]);
-      $parenturl->set_var('forum_id', $_GET[forum_id]);
+      $parenturl->set_var('msg_id',   (int)$_GET[msg_id]);
+      $parenturl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $forumurl = new URL('?', cfg("urlvars"));
       $forumurl->set_var('list',     1);
-      $forumurl->set_var('forum_id', $_GET[forum_id]);
+      $forumurl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('messageurl', $messageurl->get_string());
       if ($_GET[msg_id]) 
         $this->smarty->assign_by_ref('parenturl', $parenturl->get_string());
-      $this->smarty->assign_by_ref('forumurl',   $forumurl->get_string());
+      $this->smarty->assign_by_ref('forumurl', $forumurl->get_string());
       $this->smarty->display('message_created.tmpl');
     }
   }

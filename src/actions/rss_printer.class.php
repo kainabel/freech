@@ -66,7 +66,7 @@
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
       if (cfg("remember_page"))
-        $url->set_var('hs', $_GET[hs]);
+        $url->set_var('hs', (int)$_GET[hs]);
       
       // Required to enable correct formatting of the message.
       $_message->set_body(preg_replace("/&nbsp;/", " ", $_message->get_body()));

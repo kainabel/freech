@@ -17,11 +17,12 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   */
+  
+  /* WARNING: THIS FILE CONTAINS UNSTABLE, BOGUS, EVIL PROTOTYPE CODE THAT SHOULD
+     NOT BE USED IN A PRODUCTION ENVIRONMENT! DON'T BLAME ME IF YOU STILL DO THAT.
+   */
 ?>
 <?php
-  define("INDENT_DRAW_DASH",  1);
-  define("INDENT_DRAW_SPACE", 2);
-  
   class AccountDB {
     var $db;
     var $users;   // Caches users.

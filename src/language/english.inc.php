@@ -104,7 +104,7 @@
   $lang[register_fullname]   = "Firstname And Lastname:";
   $lang[register_fullname_l] = "Please enter valid information, "
                              . " your registration is invalid otherwise"
-                             . " and can be deleted.";
+                             . " and may be deleted.";
   $lang[register_mail]       = "Email Address:";
   $lang[register_publicmail] = "Public Email:";
   $lang[register_public_l]   = "Click here if you want other users to be able"

@@ -30,7 +30,6 @@
     
     
     function show($_hint = '') {
-      
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
       $url->set_var('do_login', 1);
       

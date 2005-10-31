@@ -87,22 +87,22 @@
   // Registration
   $lang[register_title]      = "User Registration";
   $lang[register_welcome]    = "Welcome!\n"
-                             . "By registrating you will be able to"
+                             . "By registering you will be able to"
                              . " participate in our discussion forum."
                              . " All you need is a valid email address and a"
-                             . " few minutes of time.";
+                             . " few minutes of your time.";
   $lang[register_privacy]    = "The e-mail address is"
                              . " used only for confirming your registration"
-                             . " details and password (and for sending new"
-                             . " passwords should you forget your current one)."
+                             . " details, and for sending you a password"
+                             . " reminder if you ever forget yours."
                              . " None of your personal data is given to any"
                              . " third parties.";
   $lang[register_nick]       = "Username:";
   $lang[register_nick_l]     = "Please select a username (letters and digits"
-                             . " only). This username is used to log into"
+                             . " only). The username is used to log into"
                              . " your account later.";
   $lang[register_fullname]   = "Firstname And Lastname:";
-  $lang[register_fullname_l] = "Please enter valid information, we can"
+  $lang[register_fullname_l] = "Please enter valid information, "
                              . " your registration is invalid otherwise"
                              . " and can be deleted.";
   $lang[register_mail]       = "Email Address:";
@@ -113,7 +113,7 @@
   $lang[register_term]       = "By clicking Register below you agree that"
                              . " we may store your personal data as stated"
                              . " above. Your also agree to be bound by the"
-                             . "  conditions of usage.";
+                             . " conditions of usage.";
   $lang[register_agree]      = "I Agree, Register";
   $lang[register_disagree]   = "I Do Not Agree, Cancel";
   

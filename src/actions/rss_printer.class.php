@@ -56,7 +56,6 @@
     
     
     function _append_row(&$_message, $_forum_id) {
-      
       if (!$_message->is_active())
         return;
       
@@ -78,7 +77,6 @@
     
     
     function show($_forum_id, $_off, $_n_entries) {
-      
       $this->messages = array();
       
       if ($_n_entries < 1)

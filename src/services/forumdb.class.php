@@ -226,6 +226,8 @@
     function insert_entry($_forumid, $_parentid, &$_message) {
       $this->_lock_write("t_message");
       
+      //$this->db->debug = true;
+      
       // Fetch the parent row.
       $sql  = "SELECT forumid,threadid,HEX(path) path,active";
       $sql .= " FROM {t_message}";
@@ -234,10 +236,7 @@
       $query->set_int('parentid', $_parentid);
       $parentrow = $this->db->GetRow($query->sql());
       
-      $query = &new SqlQuery("SET AUTOCOMMIT=0;");
-      $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): AC0");
-      $query = &new SqlQuery("BEGIN;");
-      $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): Beg");
+      $this->db->StartTrans();
       
       // Insert the new node.
       $username = mysql_escape_string($_message->get_username());
@@ -269,9 +268,8 @@
         // Update the child's path.
         $sql  = "UPDATE {t_message} SET path=";
         if ($parentrow[path] != '') {
-          $parentrow[path] = substr($parentrow[path],
-                                    0,
-                                    strlen($parentrow[path]) - 2);
+          $len = strlen($parentrow[path]);
+          $parentrow[path] = substr($parentrow[path], 0, $len - 2);
           $sql .= " CONCAT(0x$parentrow[path],";
           $sql .= "        0x" . $this->_int2hex($newid) . "00)";
         }
@@ -282,7 +280,7 @@
         $query = &new SqlQuery($sql);
         $query->set_int('newid', $newid);
         $this->db->Execute($query->sql())
-                or die("ForumDB::insert_entry(): Path");
+                or die("ForumDB::insert_entry(): Path.");
         
         // Update n_descendants and n_children in one run...
         if ($_parentid == $parentrow[threadid]) {
@@ -342,8 +340,7 @@
                 or die("ForumDB::insert_entry(): threadid");
       }
       
-      $query = &new SqlQuery("COMMIT;");
-      $this->db->Execute($query->sql()) or die("ForumDB::insert_entry(): Com");
+      $this->db->CompleteTrans();
       
       $this->_unlock_write();
       return $newid;

@@ -3,6 +3,8 @@
 	* Release 0.9.8
 	* Fix: Correct URL variable order in the RSS.
 	* Fix: Truncate subject if prepending "Re:" makes it too long.
+	* Fix: Correctly handle transactions.
+	* Make the transactional mysql backend default (mysqlt).
 
 2005-07-24  Samuel Abels  <spam debain org>
 	

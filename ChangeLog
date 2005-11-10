@@ -1,10 +1,12 @@
-2005-?  Samuel Abels  <spam debain org>
+2005-11-10  Samuel Abels  <spam debain org>
 	
 	* Release 0.9.8
 	* Fix: Correct URL variable order in the RSS.
 	* Fix: Truncate subject if prepending "Re:" makes it too long.
 	* Fix: Correctly handle transactions.
 	* Make the transactional mysql backend default (mysqlt).
+	* Added basic plugin support.
+	* Added SpamHash, a spam blocker plugin based on JS.
 
 2005-07-24  Samuel Abels  <spam debain org>
 	

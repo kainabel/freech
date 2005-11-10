@@ -43,7 +43,7 @@
         $order_by_time     = $url->get_string();
       }
       $version[url]  = "http://debain.org/software/tefinch/";
-      $version[text] = "Tefinch Forum v0.9.6";
+      $version[text] = "Tefinch Forum v0.9.8";
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);

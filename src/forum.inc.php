@@ -28,6 +28,7 @@
   include_once 'functions/table_names.inc.php';
   include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
+  include_once 'functions/files.inc.php';
   
   include_once 'error.inc.php';
   
@@ -55,11 +56,13 @@
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
   include_once 'services/accountdb.class.php';
+  include_once 'services/plugin_registry.class.php';
   
   
   class TefinchForum {
     var $db;
     var $forum;
+    var $registry;
     var $smarty;
     var $folding;
     
@@ -87,6 +90,11 @@
         or die("TefinchForum::TefinchForum(): Error: Can't connect."
              . " Please check username, password and hostname.");
       $this->forum = &new ForumDB($this->db);
+
+      $this->registry = &new PluginRegistry();
+      $this->registry->read_plugins("plugins");
+      $this->registry->activate_plugins(); //FIXME: Make activation configurable.
+      $this->registry->emit("on_construct");
       
       // Init Smarty.
       $this->smarty = &new Smarty();
@@ -379,6 +387,7 @@
     
     function destroy() {
       $this->db->Close();
+      $this->registry->emit("on_destroy");
     }
   }
 ?>

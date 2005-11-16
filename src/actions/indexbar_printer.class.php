@@ -22,9 +22,8 @@
   /**
    * Prints an index bar. An index bar is any bar with links to other pages.
    */
-  class IndexBarPrinter {
+  class IndexBarPrinter extends PrinterBase {
     var $print_strategy;
-    var $smarty;
     var $items;
     
     /// Constructor.
@@ -32,14 +31,13 @@
      * /param $_strategy The strategy to be used to draw the index bar.
      * /param $_args     The url to the page.
      */
-    function IndexBarPrinter(&$_smarty, $_strategy, $_args = array()) {
+    function IndexBarPrinter(&$_forum, $_strategy, $_args = array()) {
+      $this->PrinterBase($_forum);
+      $this->items  = array();
       $classname = "IndexBarStrategy_" . $_strategy;
       $this->print_strategy = &new $classname($_args);
       if (!$this->print_strategy)
         die("IndexBarPrinter::IndexBarPrinter(): Invalid strategy.");
-      
-      $this->smarty = &$_smarty;
-      $this->items  = array();
     }
     
     

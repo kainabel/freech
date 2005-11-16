@@ -11,8 +11,8 @@ include_once "spamhash.class.php";
 
 
 function spamhash_init(&$registry) {
-  $registry->add_callback("on_construct", "spamhash_on_construct");
-  $registry->add_callback("on_destroy",   "spamhash_on_destroy");
+  $registry->add_listener("on_construct", "spamhash_on_construct");
+  $registry->add_listener("on_destroy",   "spamhash_on_destroy");
 }
 
 

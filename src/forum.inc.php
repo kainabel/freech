@@ -37,12 +37,12 @@
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
   
+  include_once 'actions/printer_base.class.php';
   include_once 'actions/indexbar_strategy.class.php';
   include_once 'actions/indexbar_strategy_list_by_time.class.php';
   include_once 'actions/indexbar_strategy_list_by_thread.class.php';
   include_once 'actions/indexbar_strategy_read_message.class.php';
   include_once 'actions/indexbar_printer.class.php';
-  include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
@@ -57,6 +57,7 @@
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
   include_once 'services/accountdb.class.php';
+  include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
   
   
@@ -149,7 +150,7 @@
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
       $folding    = &new ThreadFolding(UNFOLDED, '');
       $msgprinter = &new MessagePrinter($this);
-      $index      = &new IndexBarPrinter($this->smarty,
+      $index      = &new IndexBarPrinter($this,
                                          'read_message',
                                          array(message => $message));
       $this->_print_breadcrumbs($message);
@@ -247,7 +248,7 @@
       $this->_print_breadcrumbs('');
       $n_entries = $this->forum->get_n_messages($_GET[forum_id]);
       $latest    = &new LatestPrinter($this);
-      $index     = &new IndexBarPrinter($this->smarty,
+      $index     = &new IndexBarPrinter($this,
                                         'list_by_time',
                                         array(n_messages          => $n_entries,
                                               n_messages_per_page => cfg("epp"),
@@ -266,7 +267,7 @@
       $this->_print_breadcrumbs('');
       $folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       $thread  = &new ThreadPrinter($this, $folding);
-      $index   = &new IndexBarPrinter($this->smarty,
+      $index   = &new IndexBarPrinter($this,
                                       'list_by_thread',
                                       array(n_threads          => $n_threads,
                                             n_threads_per_page => cfg("tpp"),

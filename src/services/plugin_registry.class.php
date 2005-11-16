@@ -1,18 +1,13 @@
 <?php
-//TODO: Split the event handling code into a notifier class.
-
-
 class PluginRegistry {
-  var $callbacks;
-  var $idmap;
-  var $idpool;
   var $plugins;
- 
+  var $eventbus;
+
   function PluginRegistry() {
-    $this->callbacks = array();
-    $this->idmap     = array();
-    $this->idpool    = 1;
+    // (Ab)use a Trackable as an eventbus.
+    $this->eventbus = &new Trackable;
   }
+ 
 
   /**
    * Reads the header information from a plugin file.
@@ -112,36 +107,23 @@ class PluginRegistry {
    *   The return value of the callback is ignored.
    *   Args: None.
    */
-  function add_callback($hook, $func) {
+  function add_listener($hook, $func) {
     if (!$hook || !preg_match("/^[a-z_]+$/", $hook))
-      die("PluginRegistry::add_callback(): Invalid hook.");
+      die("PluginRegistry::add_listener(): Invalid hook.");
     if (!$func)
-      die("PluginRegistry::add_callback(): Invalid function.");
-    $registered = &$this->callbacks[$hook];
-    if ($registered)
-      $registered[$this->idpool] = &$func;
-    else
-      $this->callbacks[$hook] = array($this->idpool => $func);
-    $this->idmap[$this->idpool] = $hook;
-    $this->idpool++;
-    return $this->idpool - 1;
+      die("PluginRegistry::add_listener(): Invalid function.");
+    return $this->eventbus->signal_connect($hook, $func);
   }
   
   /**
    * Unregisters the given function from the hook.
-   * Args: $id: The id that was returned by add_callback().
+   * Args: $id: The id that was returned by add_listener().
    * Returns: FALSE id the id was not found, TRUE otherwise.
    */
-  function remove_callback($id) {
+  function remove_listener($id) {
     if (!is_int($id))
-      die("PluginRegistry::remove_callback(): Invalid id.");
-    if (!isset($this->idmap[$id]))
-      return FALSE;
-    $hook       = $this->idmap[$id];
-    $registered = &$this->callbacks[$hook];
-    unset($this->idmap[$id]);
-    unset($registered[$id]);
-    return TRUE;
+      die("PluginRegistry::remove_listener(): Invalid id.");
+    return $this->eventbus->signal_disconnect($id);
   }
 
   /**
@@ -150,12 +132,8 @@ class PluginRegistry {
    */
   function emit($hook, $args = '') {
     if (!$hook || !preg_match("/^[a-z_]+$/", $hook)) 
-      die("PluginRegistry::add_callback(): Invalid hook.");
-    $registered = &$this->callbacks[$hook];
-    if (!$registered)
-      return;
-    foreach ($registered as $id => $func)
-      call_user_func($func, $args);
+      die("PluginRegistry::emit(): Invalid hook.");
+    return $this->eventbus->emit($hook, $args);
   }
 }
 ?>

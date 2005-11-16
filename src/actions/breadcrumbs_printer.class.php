@@ -19,14 +19,11 @@
   */
 ?>
 <?php
-  class BreadCrumbsPrinter {
-    var $smarty;
-    var $db;
+  class BreadCrumbsPrinter extends PrinterBase {
     var $breadcrumbs;
     
-    function BreadCrumbsPrinter(&$_smarty, &$_db) {
-      $this->smarty      = &$_smarty;
-      $this->db          = &$_db;
+    function BreadCrumbsPrinter(&$_forum) {
+      $this->PrinterBase(&$_forum);
       $this->breadcrumbs = array();
     }
     
@@ -37,7 +34,6 @@
     
     
     function show() {
-      
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('breadcrumbs', $this->breadcrumbs);
       $this->smarty->display('breadcrumbs.tmpl');

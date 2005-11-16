@@ -19,18 +19,15 @@
   */
 ?>
 <?php
-  class RSSPrinter {
-    var $smarty;
-    var $db;
+  class RSSPrinter extends PrinterBase {
     var $messages;
     var $title;
     var $descr;
     var $url;
     var $countrycode;
     
-    function RSSPrinter(&$_smarty, &$_db) {
-      $this->smarty   = &$_smarty;
-      $this->db       = &$_db;
+    function RSSPrinter(&$_forum) {
+      $this->PrinterBase(&$_forum);
       $this->messages = array();
     }
     

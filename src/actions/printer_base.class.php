@@ -1,6 +1,5 @@
 <?php
   /*
-  Tefinch.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -19,15 +18,21 @@
   */
 ?>
 <?php
-  class RegistrationPrinter extends PrinterBase {
+  class PrinterBase {
+    var $forum;
+    var $registry;
+    var $smarty;
+    var $db;
+    
+    function PrinterBase(&$_forum) {
+      $this->forum    = &$_forum;
+      $this->registry = $_forum->get_registry();
+      $this->smarty   = $_forum->get_smarty();
+      $this->db       = $_forum->get_forumdb();
+    }
+
     function show() {
-      $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->set_var('register', 1);
-      
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->smarty->display('registration.tmpl');
-      print("\n");
+      echo "PrinterBase:show(): not implemented\n";
     }
   }
 ?>

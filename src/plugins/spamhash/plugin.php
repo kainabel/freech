@@ -28,6 +28,7 @@ function spamhash_on_construct() {
     || $_POST[quote]
     || $_POST[preview]
     || $_POST[edit]) {
+    session_start();
     ob_start(spamhash_insert_hash);
     return;
   }

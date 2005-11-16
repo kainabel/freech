@@ -19,16 +19,7 @@
   */
 ?>
 <?php
-  class HeaderPrinter {
-    var $smarty;
-    var $db;
-    
-    function HeaderPrinter(&$_smarty, &$_db) {
-      $this->smarty  = &$_smarty;
-      $this->db      = &$_db;
-    }
-    
-    
+  class HeaderPrinter extends PrinterBase {
     function show() {
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
       $url->set_var('do_login', 1);

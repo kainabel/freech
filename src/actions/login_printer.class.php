@@ -19,16 +19,7 @@
   */
 ?>
 <?php
-  class LoginPrinter {
-    var $smarty;
-    var $db;
-    
-    function LoginPrinter(&$_smarty, &$_db) {
-      $this->smarty  = &$_smarty;
-      $this->db      = &$_db;
-    }
-    
-    
+  class LoginPrinter extends PrinterBase {
     function show($_hint = '') {
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
       $url->set_var('do_login', 1);

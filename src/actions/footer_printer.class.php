@@ -19,16 +19,7 @@
   */
 ?>
 <?php
-  class FooterPrinter {
-    var $smarty;
-    var $db;
-    
-    function FooterPrinter(&$_smarty, &$_db) {
-      $this->smarty = &$_smarty;
-      $this->db     = &$_db;
-    }
-    
-    
+  class FooterPrinter extends PrinterBase {
     function show() {
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('list',     1);

@@ -19,17 +19,14 @@
   */
 ?>
 <?php
-  class ThreadPrinter {
-    var $smarty;
+  class ThreadPrinter extends PrinterBase {
     var $folding;
-    var $db;
     var $messages;
     var $urls;
     var $foldurls;
     
-    function ThreadPrinter(&$_smarty, &$_db, &$_folding) {
-      $this->smarty   = &$_smarty;
-      $this->db       = &$_db;
+    function ThreadPrinter(&$_forum, &$_folding) {
+      $this->PrinterBase(&$_forum);
       $this->folding  = &$_folding;
       $this->messages = array();
       $this->urls     = array();

@@ -42,6 +42,7 @@
   include_once 'actions/indexbar_strategy_list_by_thread.class.php';
   include_once 'actions/indexbar_strategy_read_message.class.php';
   include_once 'actions/indexbar_printer.class.php';
+  include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
@@ -147,7 +148,7 @@
     function _message_read() {
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
       $folding    = &new ThreadFolding(UNFOLDED, '');
-      $msgprinter = &new MessagePrinter($this->smarty, $this->db);
+      $msgprinter = &new MessagePrinter($this);
       $index      = &new IndexBarPrinter($this->smarty,
                                          'read_message',
                                          array(message => $message));
@@ -155,9 +156,7 @@
       $index->show();
       $msgprinter->show($message);
       if ($message && $message->has_thread() && $_COOKIE[thread] != 'hide') {
-        $threadprinter = &new ThreadPrinter($this->smarty,
-                                           $this->forum,
-                                           $folding);
+        $threadprinter = &new ThreadPrinter($this, $folding);
         $threadprinter->show($_GET[forum_id], $_GET[msg_id], 0);
       }
       $index->show();
@@ -167,7 +166,7 @@
     // Write an answer to a message.
     function _message_answer() {
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
-      $msgprinter = &new MessagePrinter($this->smarty, $this->db);
+      $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_reply($message, '', TRUE);
     }
     
@@ -175,7 +174,7 @@
     // Write a new message.
     function _message_compose() {
       $message    = &new Message;
-      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose($message, '', FALSE);
     }
     
@@ -183,7 +182,7 @@
     // Edit a message.
     function _message_edit() {
       $message    = &new Message;
-      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $msgprinter = &new MessagePrinter($this);
       $message->set_username($_POST[name]);
       $message->set_subject($_POST[subject]);
       $message->set_body($_POST[message]);
@@ -195,7 +194,7 @@
     function _message_quote() {
       $quoted_msg = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
       $message    = &new Message;
-      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $msgprinter = &new MessagePrinter($this);
       $message->set_username($_POST[name]);
       $message->set_subject($_POST[subject]);
       $message->set_body($_POST[message]);
@@ -206,7 +205,7 @@
     // Print a preview of a message.
     function _message_preview() {
       global $err;
-      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $msgprinter = &new MessagePrinter($this);
       $message    = &new Message;
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
@@ -224,7 +223,7 @@
     // Saves the posted message.
     function _message_submit() {
       global $err;
-      $msgprinter = &new MessagePrinter($this->smarty, $this->forum);
+      $msgprinter = &new MessagePrinter($this);
       $message    = &new Message;
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
@@ -247,13 +246,13 @@
     function _list_by_time() {
       $this->_print_breadcrumbs('');
       $n_entries = $this->forum->get_n_messages($_GET[forum_id]);
-      $latest    = &new LatestPrinter($this->smarty, $this->forum);
+      $latest    = &new LatestPrinter($this);
       $index     = &new IndexBarPrinter($this->smarty,
-                                       'list_by_time',
-                                       array(n_messages          => $n_entries,
-                                             n_messages_per_page => cfg("epp"),
-                                             n_offset            => $_GET[hs],
-                                             n_pages_per_index   => cfg("ppi")));
+                                        'list_by_time',
+                                        array(n_messages          => $n_entries,
+                                              n_messages_per_page => cfg("epp"),
+                                              n_offset            => $_GET[hs],
+                                              n_pages_per_index   => cfg("ppi")));
       $index->show();
       $latest->show();
       $index->show();
@@ -266,14 +265,14 @@
       $n_threads = $this->forum->get_n_threads($_GET[forum_id]);
       $this->_print_breadcrumbs('');
       $folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
-      $thread  = &new ThreadPrinter($this->smarty, $this->forum, $folding);
+      $thread  = &new ThreadPrinter($this, $folding);
       $index   = &new IndexBarPrinter($this->smarty,
-                                     'list_by_thread',
-                                     array(n_threads          => $n_threads,
-                                           n_threads_per_page => cfg("tpp"),
-                                           n_offset           => $_GET[hs],
-                                           n_pages_per_index  => cfg("ppi"),
-                                           folding            => $folding));
+                                      'list_by_thread',
+                                      array(n_threads          => $n_threads,
+                                            n_threads_per_page => cfg("tpp"),
+                                            n_offset           => $_GET[hs],
+                                            n_pages_per_index  => cfg("ppi"),
+                                            folding            => $folding));
       $index->show();
       $thread->show($_GET['forum_id'], 0, $_GET[hs]);
       $index->show();
@@ -296,7 +295,7 @@
       $forumurl->set_var('list',     1);
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
-      $breadcrumbs = &new BreadCrumbsPrinter($this->smarty, $this->forum);
+      $breadcrumbs = &new BreadCrumbsPrinter($this);
       $breadcrumbs->add_item(lang("forum"), $forumurl);
       
       if ($_GET[read] || $_GET[llist]) {
@@ -314,20 +313,20 @@
     
     // Prints the footer of the page.
     function _print_footer() {
-      $footer = &new FooterPrinter($this->smarty, $this->db);
+      $footer = &new FooterPrinter($this);
       $footer->show();
     }
     
     
     function _show_login() {
-      $login = &new LoginPrinter($this->smarty, $this->db);
+      $login = &new LoginPrinter($this);
       $login->show();
     }
     
     
     function _user_print($_user, $_data) { print $_user->get_login() . "<br>"; } //FIXME
     function _register() {
-      $registration = &new RegistrationPrinter($this->smarty, $this->db);
+      $registration = &new RegistrationPrinter($this);
       $registration->show();
       //$group     = &new Group;
       //$accountdb = &new AccountDB($this->db);
@@ -335,8 +334,23 @@
     }
     
     
+    function &get_registry() {
+      return $this->registry;
+    }
+
+
+    function &get_smarty() {
+      return $this->smarty;
+    }
+
+
+    function &get_forumdb() {
+      return $this->forum;
+    }
+
+
     function print_head() {
-      $header = &new HeaderPrinter($this->smarty, $this->forum);
+      $header = &new HeaderPrinter($this);
       $header->show();
     }
     
@@ -376,7 +390,7 @@
                        $_descr,
                        $_off,
                        $_n_entries) {
-      $rss = &new RSSPrinter($this->smarty, $this->forum);
+      $rss = &new RSSPrinter($this);
       $rss->set_base_url(cfg("rss_url"));
       $rss->set_title($_title);
       $rss->set_description($_descr);

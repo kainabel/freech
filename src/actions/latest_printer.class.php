@@ -19,14 +19,11 @@
   */
 ?>
 <?php
-  class LatestPrinter {
-    var $smarty;
-    var $db;
+  class LatestPrinter extends PrinterBase {
     var $messages;
     
-    function LatestPrinter(&$_smarty, &$_db) {
-      $this->smarty   = &$_smarty;
-      $this->db       = &$_db;
+    function LatestPrinter(&$_forum) {
+      $this->PrinterBase(&$_forum);
       $this->messages = array();
     }
     

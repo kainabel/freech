@@ -19,16 +19,7 @@
   */
 ?>
 <?php
-  class MessagePrinter {
-    var $smarty;
-    var $db;
-    
-    function MessagePrinter(&$_smarty, &$_db) {
-      $this->smarty = &$_smarty;
-      $this->db     = &$_db;
-    }
-    
-    
+  class MessagePrinter extends PrinterBase {
     function show(&$_message) {
       if (!$_message) {
         $_message = new Message;

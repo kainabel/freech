@@ -63,8 +63,7 @@
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('n_rows',   $n);
       $this->smarty->assign_by_ref('messages', $this->messages);
-      $this->smarty->display('latest.tmpl');
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('latest.tmpl'));
     }
   }
 ?>

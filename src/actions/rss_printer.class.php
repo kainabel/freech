@@ -94,8 +94,7 @@
       $this->smarty->assign_by_ref('language',    $this->countrycode);
       $this->smarty->assign_by_ref('description', $this->descr);
       $this->smarty->assign_by_ref('messages',    $this->messages);
-      $this->smarty->display('../../rss.tmpl');
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('../../rss.tmpl'));
     }
   }
 ?>

@@ -27,8 +27,7 @@
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('hint',   $hint);
       $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->smarty->display('login.tmpl');
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('login.tmpl'));
     }
   }
 ?>

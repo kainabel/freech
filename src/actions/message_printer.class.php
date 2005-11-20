@@ -33,8 +33,7 @@
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('message', $_message);
-      $this->smarty->display('message.tmpl');
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('message.tmpl'));
     }
     
     
@@ -55,7 +54,7 @@
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       if ($_quotebutton)
         $this->smarty->assign('msg_id', (int)$_GET[msg_id]);
-      $this->smarty->display('message_compose.tmpl');
+      $this->parent->append_content($this->smarty->fetch('message_compose.tmpl'));
     }
     
     
@@ -112,7 +111,7 @@
       $this->smarty->assign_by_ref('action',    $url->get_string());
       $this->smarty->assign_by_ref('message',   $_message);
       $this->smarty->assign('msg_id', (int)$_parent_id);
-      $this->smarty->display('message_preview.tmpl');
+      $this->parent->append_content($this->smarty->fetch('message_preview.tmpl'));
       
       return 0;
     }
@@ -139,7 +138,7 @@
       if ($_GET[msg_id]) 
         $this->smarty->assign_by_ref('parenturl', $parenturl->get_string());
       $this->smarty->assign_by_ref('forumurl', $forumurl->get_string());
-      $this->smarty->display('message_created.tmpl');
+      $this->parent->append_content($this->smarty->fetch('message_created.tmpl'));
     }
   }
 ?>

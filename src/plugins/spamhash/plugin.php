@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin:      SpamHash
-Version:     0.1
+Version:     0.2
 Author:      Samuel Abels, Elliott Back
 Description: Client-side Javascript computes an md5 code, server double
              checks. Blocks spam bots and makes DoS a little more difficult.
@@ -10,29 +10,57 @@ Constructor: spamhash_init
 include_once "spamhash.class.php";
 
 
-function spamhash_init(&$registry) {
-  $registry->add_listener("on_construct", "spamhash_on_construct");
-  $registry->add_listener("on_destroy",   "spamhash_on_destroy");
-}
+$spamhash = ''; // The spamhash instance.
 
 
-function spamhash_insert_hash($page) {
-  $spamhash = new SpamHash("commentform");
-  return $spamhash->insert_hash($page);
+function spamhash_init(&$forum) {
+  $eventbus = &$forum->get_eventbus();
+  $eventbus->signal_connect("on_construct",            "spamhash_on_construct");
+  //$eventbus->signal_connect("on_destroy",              "spamhash_on_destroy");
+  $eventbus->signal_connect("on_header_print_before",  "spamhash_on_header_print");
+  $eventbus->signal_connect("on_content_print_before", "spamhash_on_content_print");
 }
 
 
 function spamhash_on_construct() {
-  // Insert the hashes only if we are editing a comment.
-  if ($_GET[write]
-    || $_POST[quote]
-    || $_POST[preview]
-    || $_POST[edit]) {
-    session_start();
-    ob_start(spamhash_insert_hash);
+  global $spamhash;
+  if (!$_POST[send]
+    && !$_GET[write]
+    && !$_POST[quote]
+    && !$_POST[preview]
+    && !$_POST[edit])
     return;
-  }
+  $spamhash = new SpamHash("commentform");
+}
 
+
+function spamhash_on_header_print(&$html) {
+  global $spamhash;
+  if (!spamhash_check_hash())
+    return;
+  if (!$_GET[write]
+    && !$_POST[quote]
+    && !$_POST[preview]
+    && !$_POST[edit])
+    return;
+  $html = $spamhash->insert_header_code($html);
+  $html = $spamhash->insert_body_code($html);
+}
+
+
+function spamhash_on_content_print(&$html) {
+  global $spamhash;
+  if (!$_GET[write]
+    && !$_POST[quote]
+    && !$_POST[preview]
+    && !$_POST[edit])
+    return;
+  $html = $spamhash->insert_form_code($html);
+  $html = $spamhash->insert_body_code($html);
+}
+
+
+function spamhash_check_hash() {
   // If this is an attempt to submit a comment, check the hash.
   if (!$_POST[send])
     return TRUE;

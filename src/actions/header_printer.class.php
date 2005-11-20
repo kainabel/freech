@@ -25,8 +25,7 @@
       $url->set_var('do_login', 1);
       
       $this->smarty->clear_all_assign();
-      $this->smarty->display("header.tmpl");
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch("header.tmpl"));
     }
   }
 ?>

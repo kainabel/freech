@@ -39,8 +39,7 @@
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
       $this->smarty->assign_by_ref('version',         $version);
-      $this->smarty->display("footer.tmpl");
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('footer.tmpl'));
     }
   }
 ?>

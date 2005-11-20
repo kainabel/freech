@@ -26,8 +26,7 @@
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->smarty->display('registration.tmpl');
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('registration.tmpl'));
     }
   }
 ?>

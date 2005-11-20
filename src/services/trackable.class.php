@@ -60,7 +60,7 @@ class Trackable {
     if (!$registered)
       return;
     foreach ($registered as $id => $func)
-      call_user_func($func, $args);
+      call_user_func($func, &$args);
   }
 }
 ?>

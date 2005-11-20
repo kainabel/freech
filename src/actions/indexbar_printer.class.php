@@ -63,8 +63,7 @@
       if (count($this->items) <= 0)
         $this->print_strategy->foreach_link(array(&$this, '_add_item'));
       $this->smarty->assign_by_ref('items', $this->items);
-      $this->smarty->display('indexbar.tmpl');
-      print("\n");
+      $this->parent->append_content($this->smarty->fetch('indexbar.tmpl'));
     }
   }
 ?>

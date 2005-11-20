@@ -1,11 +1,8 @@
 <?php
 class PluginRegistry {
   var $plugins;
-  var $eventbus;
 
   function PluginRegistry() {
-    // (Ab)use a Trackable as an eventbus.
-    $this->eventbus = &new Trackable;
   }
  
 
@@ -21,6 +18,7 @@ class PluginRegistry {
     $tag = '';
     fgets($fp);
     fgets($fp);
+    $plugin->active = false;
     while ($line = fgets($fp)) {
       if (preg_match("/^(Plugin:)\s+(.*)$/", $line, $matches)) {
         $tag          = $matches[1];
@@ -37,6 +35,11 @@ class PluginRegistry {
       else if (preg_match("/^(Constructor:)\s+(.*)$/", $line, $matches)) {
         $tag                 = $matches[1];
         $plugin->constructor = $matches[2];
+      }
+      else if (preg_match("/^(Active:)\s+(.*)$/", $line, $matches)) {
+        $tag            = $matches[1];
+        if ($matches[2] == "1")
+          $plugin->active = true;
       }
       else if (preg_match("/^(Description:)\s+(.*)$/", $line, $matches)) {
         $tag           = $matches[1];
@@ -80,60 +83,16 @@ class PluginRegistry {
 
   /**
    * Activates all known plugins.
+   * Args: $args: Arguments passed to the plugin constructor.
    */
-  function activate_plugins() {
+  function activate_plugins($args = '') {
     foreach ($this->plugins as $path => $plugin) {
+      if (!$plugin->active)
+        continue;
       include "$path/plugin.php";
       $init = $plugin->constructor;
-      $init($this);
+      $init($args);
     }
-  }
-  
-  /**
-   * Purpose: Hook a function into Tefinch.
-   * Args: $hook: The name of the hook.
-   *       $func: The function to be called by the hook.
-   * Returns: An id that can be used later to unregister the hook.
-   *
-   * Currently supported hooks:
-   * on_construct:
-   *   Called from within the TefinchForum() constructor before any
-   *   other output is produced.
-   *   The return value of the callback is ignored.
-   *   Args: None.
-   *
-   * on_destroy:
-   *   Called from within TefinchForum->destroy().
-   *   The return value of the callback is ignored.
-   *   Args: None.
-   */
-  function add_listener($hook, $func) {
-    if (!$hook || !preg_match("/^[a-z_]+$/", $hook))
-      die("PluginRegistry::add_listener(): Invalid hook.");
-    if (!$func)
-      die("PluginRegistry::add_listener(): Invalid function.");
-    return $this->eventbus->signal_connect($hook, $func);
-  }
-  
-  /**
-   * Unregisters the given function from the hook.
-   * Args: $id: The id that was returned by add_listener().
-   * Returns: FALSE id the id was not found, TRUE otherwise.
-   */
-  function remove_listener($id) {
-    if (!is_int($id))
-      die("PluginRegistry::remove_listener(): Invalid id.");
-    return $this->eventbus->signal_disconnect($id);
-  }
-
-  /**
-   * Triggers the event with the given name.
-   * If $args is given, the value is passed to the event handler.
-   */
-  function emit($hook, $args = '') {
-    if (!$hook || !preg_match("/^[a-z_]+$/", $hook)) 
-      die("PluginRegistry::emit(): Invalid hook.");
-    return $this->eventbus->emit($hook, $args);
   }
 }
 ?>

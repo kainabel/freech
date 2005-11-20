@@ -65,6 +65,7 @@
     var $db;
     var $forum;
     var $registry;
+    var $eventbus;
     var $smarty;
     var $folding;
     
@@ -87,6 +88,9 @@
       textdomain($domain);
       bind_textdomain_codeset($domain, 'UTF-8');
       
+      // (Ab)use a Trackable as an eventbus.
+      $this->eventbus = &new Trackable;
+
       // Connect to the DB.
       $this->db    = &ADONewConnection(cfg("db_dbn"))
         or die("TefinchForum::TefinchForum(): Error: Can't connect."
@@ -95,8 +99,15 @@
 
       $this->registry = &new PluginRegistry();
       $this->registry->read_plugins("plugins");
-      $this->registry->activate_plugins(); //FIXME: Make activation configurable.
-      $this->registry->emit("on_construct");
+      $this->registry->activate_plugins($this); //FIXME: Make activation configurable.
+
+      /* Plugin hook: on_construct
+       *   Called from within the TefinchForum() constructor before any
+       *   other output is produced.
+       *   The return value of the callback is ignored.
+       *   Args: None.
+       */
+      $this->eventbus->emit("on_construct");
       
       // Init Smarty.
       $this->smarty = &new Smarty();
@@ -340,6 +351,11 @@
     }
 
 
+    function &get_eventbus() {
+      return $this->eventbus;
+    }
+
+
     function &get_smarty() {
       return $this->smarty;
     }
@@ -350,13 +366,35 @@
     }
 
 
+    function append_content(&$_content) {
+      $this->content .= $_content;
+    }
+
+
     function print_head() {
+      if (!headers_sent())
+        header("Content-Type: text/html; charset=utf-8");
+      $this->content = "";
       $header = &new HeaderPrinter($this);
       $header->show();
+      
+      /* Plugin hook: on_header_print_before
+       *   Called before the HTML header is sent.
+       *   Args: $html: A reference to the HTML header.
+       */
+      $this->eventbus->emit("on_header_print_before", &$this->content);
+      print($this->content);
+      
+      /* Plugin hook: on_header_print_before
+       *   Called after the HTML header was sent.
+       *   Args: none
+       */
+      $this->eventbus->emit("on_header_print_after");
     }
     
     
     function show() {
+      $this->content = "";
       if ($_GET['read'])
         $this->_message_read();     // Read a message.
       elseif ($_GET['write'] && $_GET['msg_id'])
@@ -381,7 +419,20 @@
       elseif ($_GET['list'] || $_GET['forum_id'])
         $this->_list_by_thread();   // Show the forum, thread order.
       else
-        print("internal error");
+        die("internal error");
+
+      /* Plugin hook: on_content_print_before
+       *   Called before the HTML content is sent.
+       *   Args: $html: A reference to the content.
+       */
+      $this->eventbus->emit("on_content_print_before", &$this->content);
+      print($this->content);
+
+      /* Plugin hook: on_content_print_after
+       *   Called after the HTML content was sent.
+       *   Args: none.
+       */
+      $this->eventbus->emit("on_content_print_after");
     }
     
     
@@ -391,18 +442,26 @@
                        $_descr,
                        $_off,
                        $_n_entries) {
+      $this->content = "";
       $rss = &new RSSPrinter($this);
       $rss->set_base_url(cfg("rss_url"));
       $rss->set_title($_title);
       $rss->set_description($_descr);
       $rss->set_language(lang("countrycode"));
       $rss->show($_forum_id, $_off, $_n_entries);
+      print($this->content);
     } 
     
     
     function destroy() {
+      unset($this->content);
       $this->db->Close();
-      $this->registry->emit("on_destroy");
+      /* Plugin hook: on_destroy
+       *   Called from within TefinchForum->destroy().
+       *   The return value of the callback is ignored.
+       *   Args: None.
+       */
+      $this->eventbus->emit("on_destroy");
     }
   }
 ?>

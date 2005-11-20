@@ -19,6 +19,8 @@ class SpamHash {
   var $form_id;       // Id of the HTML form into which a hash is inserted.
   var $form_action;   // Name of the JS function that is called by onsubmit().
   var $form_field_id; // Id of the hidden field inserted into the form.
+  var $fn_enable_name;// Name of the on_load() JS function.
+  var $js;            // The entire generated JS snippet.
   
   /**
    * Instantiate a SpamHash generator.
@@ -27,10 +29,56 @@ class SpamHash {
   function SpamHash($form_id) {
     // A running session is required.
     $this->session_id = session_id();
-    if (empty($this->session_id))
+    if (empty($this->session_id)) {
       session_start();
-    $this->user_rand = strlen(ABSPATH) * 60124 % 32768;  // Whatever.
-    $this->form_id   = $form_id;
+      $this->session_id = session_id();
+    }
+
+    // Random values.
+    $this->user_rand      = strlen(ABSPATH) * 60124 % 32768;
+    $this->form_id        = $form_id;
+    $this->form_action    = $this->_get_random_string(rand(6, 18));
+    $this->form_field_id  = $this->_get_random_string(rand(6, 18));
+    $this->fn_enable_name = $this->_get_random_string(rand(6, 18));
+    $md5_name             = $this->_get_random_string(rand(6, 18));
+    $val_name             = $this->_get_random_string(rand(6, 18));
+    $eElement             = $this->_get_random_string(rand(6, 18));
+    $in_str               = $this->_get_random_string(rand(6, 18));
+    
+    /**
+     * Define Javascript snippets.
+     */
+    // The Javascript that calculates the MD5 checksums.
+    $bits = $this->_get_md5_javascript($md5_name);
+    
+    $script  = "function " . $this->form_action . "($in_str){";
+    $script .=   "$eElement=document.getElementById('$this->form_field_id');";
+    $script .=   "if(!$eElement){ return false; }";
+    $script .=   "else { $eElement" . ".name = $md5_name($in_str);";
+    $script .=   $eElement . ".value = $val_name(); return true; }}";
+    $bits[]  = $script;
+    
+    $bits[] = $this->_get_field_value_js($val_name);
+
+    // The Javascript that enables all input fields and the form.
+    $script  = 'function ' . $this->fn_enable_name . '(){';
+    $script .=   'form = document.getElementById("commentform");';
+    $script .=   'inputs = document.evaluate("//input", form, null,';
+    $script .=                              'XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);';
+    $script .=   'for (var i = 0; i < inputs.snapshotLength; i++) {';
+    $script .=      'thisinput = inputs.snapshotItem(i); thisinput.disabled = false; }';
+    $script .= "document.getElementById('" . $this->form_id . "').style.display = 'block';";
+    $script .= '}';
+    $bits [] = $script;
+
+    // Merge script snippets together.
+    shuffle($bits);
+    $this->js = '<script type="text/javascript">' . "\n"
+              . '<!--'                            . "\n"
+              . implode(" ", $bits)               . "\n"
+              . '-->'                             . "\n"
+              . '</script>'                       . "\n"
+              . '<style type="text/css">#' . $this->form_id . "{display: none;}</style>\n";
   }
   
   /**
@@ -61,7 +109,7 @@ class SpamHash {
     for ($i = 0; $i < 22; $i++) {
       do {
         $str = $this->_get_random_string(rand(2, 8));
-      } while (in_array($reserved, $str) || in_array($names, $string));
+      } while (in_array($str, $reserved) || in_array($str, $names));
       array_push($names, $str);
     }
 
@@ -323,7 +371,7 @@ class SpamHash {
    * Takes: An array matching the form html.
    * Returns: The "improved" form html code.
    */
-  function _form_replace_callback($matches){
+  function &_form_replace_callback(&$matches){
     $field_name = $this->_get_random_string(rand(6, 18));
 
     // Insert hidden field into the form.
@@ -353,66 +401,35 @@ class SpamHash {
   }
 
   /**
-   * Takes: A single page
-   * Returns: The same page with a random hidden field and others added.
-   * This is the workhorse of SpamHash.
+   * Takes: A single HTML header.
+   * Returns: The same page with a Javascript code added.
    */
-  function insert_hash($page) {
-    $this->form_action   = $this->_get_random_string(rand(6, 18));
-    $this->form_field_id = $this->_get_random_string(rand(6, 18));
-    $md5_name            = $this->_get_random_string(rand(6, 18));
-    $val_name            = $this->_get_random_string(rand(6, 18));
-    $eElement            = $this->_get_random_string(rand(6, 18));
-    $in_str              = $this->_get_random_string(rand(6, 18));
-    $fn_enable_name      = $this->_get_random_string(rand(6, 18));
-    
-    /**
-     * 1) Define Javascript snippets.
-     */
-    // The Javascript that calculates the MD5 checksums.
-    $bits = $this->_get_md5_javascript($md5_name);
-    
-    $script  = "function " . $this->form_action . "($in_str){";
-    $script .=   "$eElement=document.getElementById('$this->form_field_id');";
-    $script .=   "if(!$eElement){ return false; }";
-    $script .=   "else { $eElement" . ".name = $md5_name($in_str);";
-    $script .=   $eElement . ".value = $val_name(); return true; }}";
-    $bits[]  = $script;
-    
-    $bits[] = $this->_get_field_value_js($val_name);
-
-    // The Javascript that enables all input fields and the form.
-    $script  = 'function ' . $fn_enable_name . '(){';
-    $script .=   'form = document.getElementById("commentform");';
-    $script .=   'inputs = document.evaluate("//input", form, null,';
-    $script .=                              'XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);';
-    $script .=   'for (var i = 0; i < inputs.snapshotLength; i++) {';
-    $script .=      'thisinput = inputs.snapshotItem(i); thisinput.disabled = false; }';
-    $script .= "document.getElementById('" . $this->form_id . "').style.display = 'block';";
-    $script .= '}';
-    $bits [] = $script;
-
-    /**
-     * 2) Insert the snippets into the page.
-     */
+  function &insert_header_code(&$page) {
     // Insert the bulk of the snippets into <head>.
-    shuffle($bits);
-    $js = '<script type="text/javascript">' . "\n"
-        . '<!--'                            . "\n"
-        . implode(" ", $bits)               . "\n"
-        . '-->'                             . "\n"
-        . '</script>'                       . "\n"
-        . '<style type="text/css">#' . $this->form_id . "{display: none;}</style>\n";
-    $page = str_replace("</head>", "$js</head>", $page);
+    return str_replace("</head>", "$this->js</head>", $page);
+  }
 
-    // Insert more snippets into the form. (hide input fields, register
+
+  /**
+   * Takes: A single HTML header.
+   * Returns: The same page with a Javascript code added.
+   */
+  function &insert_body_code(&$page) {
+    return str_replace('<body', '<body onload="' . $this->fn_enable_name . '();"', $page);
+  }
+
+
+  /**
+   * Takes: A single HTML header.
+   * Returns: The same page with a Javascript code added.
+   */
+  function &insert_form_code(&$page) {
+    // Insert snippets into the form. (hide input fields, register
     // onsubmit(), etc)
     $form = '/<form[^>]*?' . $this->form_id . '.*?<\/form>/si';
-    $page = preg_replace_callback($form, array(&$this, "_form_replace_callback"), $page);
-    
-    // Re-enable input fields using Javascript.
-    return str_replace('<body', '<body onload="' . $fn_enable_name . '();"', $page);
+    return preg_replace_callback($form, array(&$this, "_form_replace_callback"), $page);
   }
+
 
   /**
    * Returns: 0 if the tag matches, an error code otherwise.

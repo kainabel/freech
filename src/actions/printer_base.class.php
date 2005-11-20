@@ -19,16 +19,18 @@
 ?>
 <?php
   class PrinterBase {
-    var $forum;
+    var $parent;
     var $registry;
+    var $eventbus;
     var $smarty;
     var $db;
     
-    function PrinterBase(&$_forum) {
-      $this->forum    = &$_forum;
-      $this->registry = $_forum->get_registry();
-      $this->smarty   = $_forum->get_smarty();
-      $this->db       = $_forum->get_forumdb();
+    function PrinterBase(&$_parent) {
+      $this->parent   = &$_parent;
+      $this->registry = $_parent->get_registry();
+      $this->eventbus = $_parent->get_eventbus();
+      $this->smarty   = $_parent->get_smarty();
+      $this->db       = $_parent->get_forumdb();
     }
 
     function show() {

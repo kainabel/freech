@@ -16,7 +16,6 @@ $spamhash = ''; // The spamhash instance.
 function spamhash_init(&$forum) {
   $eventbus = &$forum->get_eventbus();
   $eventbus->signal_connect("on_construct",            "spamhash_on_construct");
-  //$eventbus->signal_connect("on_destroy",              "spamhash_on_destroy");
   $eventbus->signal_connect("on_header_print_before",  "spamhash_on_header_print");
   $eventbus->signal_connect("on_content_print_before", "spamhash_on_content_print");
 }
@@ -96,9 +95,5 @@ function spamhash_check_hash() {
     break;
   }
   return TRUE;
-}
-
-function spamhash_on_destroy() {
-  ob_end_flush();
 }
 ?>

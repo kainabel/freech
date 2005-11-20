@@ -367,7 +367,7 @@
 
 
     function append_content(&$_content) {
-      $this->content .= $_content;
+      $this->content .= $_content . "\n";
     }
 
 

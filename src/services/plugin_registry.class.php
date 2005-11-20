@@ -18,7 +18,7 @@ class PluginRegistry {
     $tag = '';
     fgets($fp);
     fgets($fp);
-    $plugin->active = false;
+    $plugin->active = true;
     while ($line = fgets($fp)) {
       if (preg_match("/^(Plugin:)\s+(.*)$/", $line, $matches)) {
         $tag          = $matches[1];
@@ -38,8 +38,8 @@ class PluginRegistry {
       }
       else if (preg_match("/^(Active:)\s+(.*)$/", $line, $matches)) {
         $tag            = $matches[1];
-        if ($matches[2] == "1")
-          $plugin->active = true;
+        if ($matches[2] == "0")
+          $plugin->active = false;
       }
       else if (preg_match("/^(Description:)\s+(.*)$/", $line, $matches)) {
         $tag           = $matches[1];

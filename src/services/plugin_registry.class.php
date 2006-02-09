@@ -51,14 +51,19 @@ class PluginRegistry {
       else if (preg_match("/^\s*\*\/$/", $line))
         break;
       else
-        die("Invalid header in plugin '$filename'.");
+        die("Invalid line in header of plugin '$filename': $line");
     }
     if (!$plugin->name
       || !$plugin->version
       || !$plugin->author
       || !$plugin->descr
       || !$plugin->constructor) {
-      echo "Incomplete plugin header in '$filename'.";
+      echo "Incomplete plugin header in '$filename'.<br>";
+      echo "Name: $plugin->name<br>";
+      echo "Version: $plugin->version<br>";
+      echo "Author: $plugin->author<br>";
+      echo "Description: $plugin->descr<br>";
+      echo "Constructor: $plugin->constructor<br>";
       return;
     }
     return $plugin;

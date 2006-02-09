@@ -35,12 +35,9 @@ function spamhash_on_construct() {
 
 function spamhash_on_header_print(&$html) {
   global $spamhash;
-  if (!spamhash_check_hash())
+  if (!$spamhash)
     return;
-  if (!$_GET[write]
-    && !$_POST[quote]
-    && !$_POST[preview]
-    && !$_POST[edit])
+  if ($_POST[send] && !spamhash_check_hash())
     return;
   $html = $spamhash->insert_header_code($html);
   $html = $spamhash->insert_body_code($html);
@@ -49,21 +46,24 @@ function spamhash_on_header_print(&$html) {
 
 function spamhash_on_content_print(&$html) {
   global $spamhash;
-  if (!$_GET[write]
-    && !$_POST[quote]
-    && !$_POST[preview]
-    && !$_POST[edit])
+  if (!$spamhash)
     return;
+  if ($_POST[send] && !spamhash_html_contains_form($html)) {
+    unset($spamhash);
+    return;
+  }
   $html = $spamhash->insert_form_code($html);
   $html = $spamhash->insert_body_code($html);
 }
 
 
+function spamhash_html_contains_form(&$html) {
+  return preg_match("/<form /i", $html) > 0;
+}
+
+
 function spamhash_check_hash() {
-  // If this is an attempt to submit a comment, check the hash.
-  if (!$_POST[send])
-    return TRUE;
-  $spamhash = new SpamHash("commentform");
+  global $spamhash;
   switch ($spamhash->check_hash()) {
   case SPAMHASH_ERROR_REFERRER:
     echo "Error: Invalid referrer - sorry, blocked due to spam protection.";

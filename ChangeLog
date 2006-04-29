@@ -1,6 +1,8 @@
-2005-??-??  Samuel Abels  <spam debain org>
+2006-03-12  Samuel Abels  <spam debain org>
 
+	* Release 0.9.10
 	* Fix: Make the SpamHash plugin initialize the session when first ticked.
+	* Fix: SpamHash plugin now works on non-gecko based browsers.
 	* Minor code cleanups.
 	
 2005-11-10  Samuel Abels  <spam debain org>

@@ -282,9 +282,11 @@
     
     
     function check_complete() {
-      if (ctype_space($this->_fields[username])
-       || ctype_space($this->_fields[subject])
-       || ctype_space($this->_fields[body]))
+      // The appended "\n" on the following three lines is a workaround for a bug in PHP.
+      // http://bugs.php.net/bug.php?id=30945
+      if (ctype_space($this->_fields[username] . "\n")
+       || ctype_space($this->_fields[subject]  . "\n")
+       || ctype_space($this->_fields[body]     . "\n"))
         return ERR_MESSAGE_INCOMPLETE;
       
       if (strlen($this->_fields[username]) > cfg("max_namelength"))

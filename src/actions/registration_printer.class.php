@@ -20,13 +20,56 @@
 ?>
 <?php
   class RegistrationPrinter extends PrinterBase {
-    function show() {
+    function show($_nick = "", $_firstname = "", $_lastname = "", $_mail = "", $_hint = "") {
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
       $url->set_var('register', 1);
+      $url->mask(array('register'));
       
       $this->smarty->clear_all_assign();
+      if ( $_hint !== "") {
+        $this->smarty->assign_by_ref('nick',$_nick);
+        $this->smarty->assign_by_ref('firstname',$_firstname);
+        $this->smarty->assign_by_ref('lastname',$_lastname);
+        $this->smarty->assign_by_ref('mail',$_mail);
+        $this->smarty->assign_by_ref('hint',$_hint);
+      }
       $this->smarty->assign_by_ref('action', $url->get_string());
       $this->parent->append_content($this->smarty->fetch('registration.tmpl'));
+    }
+    
+   function show_sendmail() {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('register', 1);
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign_by_ref('action', $url->get_string());
+      $this->smarty->assign_by_ref('firstname', $_POST['acc_firstname']);
+      $this->smarty->assign_by_ref('lastname', $_POST['acc_lastname']);
+      $text = preg_replace("/\[MAIL\]/",$_POST['acc_mail'],lang("register_mailsentto"));
+      $this->smarty->assign_by_ref('sendtomail', $text);
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('list', 1);
+      $this->smarty->assign_by_ref('backlink', $url->get_string());
+      $this->parent->append_content($this->smarty->fetch('registration_mailsent.tmpl'));
+    }
+    
+    function show_confirm($_user,$_secret) {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('validate', 1);
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign_by_ref('action', $url->get_string());
+      $text = preg_replace("/\[NICK\]/",$_user,lang("register_complete_long"));
+      $this->smarty->assign_by_ref('register_complete_long', $text);
+      $this->smarty->assign_by_ref('user',$_user);
+      $this->smarty->assign_by_ref('secret',$_secret);
+      $this->parent->append_content($this->smarty->fetch('registration_confirm.tmpl'));
+    }
+    
+    function show_confirmed($_user) {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('validate', 1);
+      $this->smarty->clear_all_assign();
+      $this->parent->append_content($this->smarty->fetch('registration_confirmed.tmpl'));
+      //TODO: create Template
     }
   }
 ?>

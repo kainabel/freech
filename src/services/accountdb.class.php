@@ -77,9 +77,10 @@
         return $this->users[$_id];
       $sql   = "SELECT *";
       $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE id={id}";
+      //FIXME: HACK: replaced id by login
+      $sql  .= " WHERE login={id}";
       $query = &new SqlQuery($sql);
-      $query->set_int('id', $_id);
+      $query->set_string('id', $_id);
       $row   = $this->db->GetRow($query->sql()) or die("AccountDB::get_user()");
       $user  = &new User;
       $user->set_from_db($row);
@@ -118,8 +119,9 @@
         $sql  .= "  {mail}, {homepage}, {im}, {signature}, {updated}, NULL";
         $sql  .= ")";
         $query->set_sql($sql);
-        $newid = $this->db->Execute($query->sql())
+        $this->db->Execute($query->sql())
                               or die("AccountDB::save_user");
+        $newid = $this->db->Insert_Id();
         $_user->set_id($newid);
         $this->users[$newid] = &$_user;
         //FIXME: Map to groups.
@@ -214,7 +216,7 @@
      *
      * Returns: The number of users processed.
      */
-    function foreach_user($_groupip, $_offset, $_limit, $_func, $_data) {
+    function foreach_user($_groupid, $_offset, $_limit, $_func, $_data) {
       $sql   = "SELECT u.*,";
       $sql  .= " g.id g_id, g.name g_name, g.active g_active,";
       $sql  .= " g.created g_created,g.updated g_updated";
@@ -315,10 +317,10 @@
       return $numrows;
     }
     
-    
+    //FIXME: the 'or' after $this->db->GetOne will match too, if the query returns 0 (affects next function also)
     /* Returns the number of users in the group with the given id, the
      * number of all users if no group was given. */
-    function get_n_users($_groupip = -1) {
+    function get_n_users($_groupid = -1) {
       if ($_groupid > 0) {
         $sql  = "SELECT COUNT(*)";
         $sql .= " FROM {t_group_user} gu";
@@ -352,6 +354,18 @@
       $n = $this->db->GetOne($query->sql())
                         or die("AccountDB::get_n_groups(): 3");
       return $n;
+    }
+    
+    /* checks if loginname is already in use */
+    function login_exists($_login) {
+      $query = &new SqlQuery("SELECT IF(COUNT(login),'false','true') FROM {t_user} WHERE login={login}");
+      $query->set_string('login',$_login);
+      $n = $this->db->GetOne($query->sql())
+                        or die("AccountDB::login_exists".$n);
+      if ($n == 'false')
+        return false;
+      else
+        return true;
     }
   }
 ?>

@@ -93,7 +93,6 @@
   $lang[register_welcome]    = "Herzlich willkommen!\n"
                              . "Bitte registrieren Sie sich hier, um aktiv an"
                              . " den Diskussionsforen und an anderen Diensten"
-                             . " (wie zum Beispiel Online-Umfragen)"
                              . " teilnehmen zu können. Sie benötigen"
                              . " dafür lediglich eine gültige E-Mail-Adresse"
                              . " und wenige Minuten Zeit.";
@@ -111,6 +110,8 @@
                              . " vollständigen Namen an, da die"
                              . " Registrierung sonst nicht gültig ist.";
   $lang[register_mail]       = "E-Mail-Adresse:";
+  $lang[register_mail_l]     = "Geben Sie hier eine gültige E-Mail-Adresse an,"
+                             . " an die eine Bestätigungsmail versandt wird.";
   $lang[register_publicmail] = "Öffentliche E-Mail-Adresse:";
   $lang[register_public_l]   = "Klicken Sie hier, wenn Ihre E-Mail-Adresse"
                              . " über Ihren Beiträgen erscheinen soll.";
@@ -124,20 +125,72 @@
                              . " Ansonsten drücken Sie bitte \"Abbrechen\".";
   $lang[register_agree]      = "Ich stimme zu";
   $lang[register_disagree]   = "Abbrechen";
+  $lang[register_check]      = "Bitte überprüfen Sie nochmals Ihre Eingaben."
+                             . " Wollen Sie diese ändern, so klicken Sie auf"
+                             . " \"Bearbeiten\".";
+  $lang[register_pw]         = "Wählen Sie ein Passwort (nur Buchstaben und Zahlen,"
+                             . " keine Umlaute oder Leerzeichen, zwischen "
+                             . cfg('min_passwordlength')." und ".cfg('max_passwordlength')." Zeichen)";
+  $lang[register_confirm_pw] = "Passwort bestätigen:";
+  $lang[register_wrong_nick] = "Der Benutzername muß zwischen ".cfg('min_loginlength')." und"
+                             . " ".cfg('max_loginlength')." Zeichen"
+                             . " enthalten! Der Benutzername darf nur aus Buchstaben,"
+                             . " Zahlen und den Sonderzeichen \" _ \ @ - \" bestehen!"
+                             . " Bitte wählen Sie einen anderen.";
+  $lang[register_nick_exists]= "Leider verwendet bereits ein anderer User Ihr Pseudonym."
+                             . " Wählen Sie bitte ein anderes.";
+  $lang[register_wrong_name] = "Vor-und Nachname dürfen keine Sonderzeichen enthalten!";
+  $lang[register_no_name]    = "Bitte geben Sie Ihren Vor- und Nachnamen an!";
+  $lang[register_short_fname]= "Der angegebene Vorname ist zu kurz";
+  $lang[register_short_lname]= "Der angegebene Nachname ist zu kurz";
+  $lang[register_long_fname] = "Der angegebene Vorname ist zu lang";
+  $lang[register_long_lname] = "Der angegebene Nachname ist zu lang";
+  $lang[register_wrong_mail] = "Geben Sie eine gültige E-Mail-Adresse an!";
+  $lang[register_thanks]     = "Vielen Dank für Ihre Registrierung, "; // $firstname $lastname.
+  $lang[register_keepsecret] = "Bitte halten Sie den Benutzernamen und das Passwort unter Verschluss.";
+  $lang[register_mailsentto] = "Die Informationen, die Sie zur Freischaltung Ihres"
+                             . " Accounts benötigen, wurden an [MAIL] geschickt.";
+  $lang[register_short_pw]   = "Das angebene Passwort ist zu kurz";
+  $lang[register_long_pw]    = "Das angebene Passwort ist zu lang";
+  $lang[register_unequal_pw] = "Die angebenen Passwörter stimmen nicht überein";
+  $lang[register_invalid_pw] = "Das angegebene Passwort enthält ungültige Zeichen";
+  $lang[register_complete]   = "Account freischalten";
+  $lang[register_complete_long] = "Um Ihren Account »[NICK]« endgültig freizuschalten, geben Sie"
+                             . " bitte Ihr Passwort ein und drücken auf \"Freischalten\"";
+  $lang[register_confirm]    = "Freischalten";
   
   // Login
-  $lang[havetoregister]   = "Um unsere personalisierten Dienste nutzen zu "
-                          . "können, müssen Sie sich zunächst "
-                          . "<a href='registration/'>registrieren</a>. Erst "
-                          . "danach können Sie sich hier einloggen.";
-  $lang[passwdforgotten]  = "Wenn Sie Ihre <a href='registration/?forgot'>"
-                          . "Zugangsdaten vergessen</a> haben, dann können "
-                          . "Sie diese bei uns anfordern.";
-  $lang[enteruserdata]    = "User-Daten eingeben";
-  $lang[username]         = "User-Name";
-  $lang[passwd]           = "Passwort";
-  $lang[rememberpasswd]   = "Passwort merken";
-  $lang[remembpasswdlong] = "Klicken Sie hier, wenn wir ein dauerhaftes Cookie "
-                          . "setzen sollen.";
-  $lang[login]            = "Anmelden";
+  $lang[havetoregister]     = "Um sich einloggen zu können, benötigen Sie ein Benutzer"
+                            . "konto. Sie können sich hier registrieren: ";
+  $lang[passwdforgotten]    = "Wenn Sie Ihre <a href='registration/?forgot'>"
+                            . "Zugangsdaten vergessen</a> haben, dann können "
+                            . "Sie diese bei uns anfordern.";
+  $lang[enteruserdata]      = "User-Daten eingeben";
+  $lang[username]           = "User-Name";
+  $lang[passwd]             = "Passwort";
+  $lang[rememberpasswd]     = "Passwort merken";
+  $lang[remembpasswdlong]   = "Klicken Sie hier, wenn wir ein dauerhaftes Cookie "
+                            . "setzen sollen.";
+  $lang[login_wrongpw]      = "Wir konnten Sie nicht einloggen, weil Benutzername und Passwort"
+                            . " nicht zueinander passen. Möglicherweise haben Sie sich noch gar"
+                            . " nicht registriert.";
+  $lang[login]              = "Anmelden";
+  $lang[login_welcome]      = "Herzlich willkommen!";
+  $lang[settings_activated] = "Das Einloggen war erfolgreich.<br />Ab sofort sind Ihre "
+                            . "persönlichen Einstellungen aktiviert.";
+  $lang[login_startpage]    = "Sprung zur Forenstartseite";
+  $lang[login_editaccount]  = "Persönliche Einstellungen überarbeiten";
+  
+  $lang[logout]             = "Logout";
+  $lang[account_edit]       = "Account bearbeiten";
+  $lang[account_login]      = $lang[register_nick];
+  $lang[account_password]   = "Passwort:";
+  $lang[account_password2]  = $lang[register_confirm_pw];
+  $lang[account_firstname]  = "Vorname:";
+  $lang[account_lastname]   = "Nachname:";
+  $lang[account_fullname]   = "Vor- und Nachname:";
+  $lang[account_mail]       = "E-Mail-Adresse:";
+  $lang[account_homepage]   = "Homepage:";
+  $lang[account_im]         = "Instant-Messenger-Adresse:";
+  $lang[account_signature]  = "Signatur";
 ?>

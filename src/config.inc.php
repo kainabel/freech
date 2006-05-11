@@ -24,6 +24,7 @@
     'sid' => $_GET[sid]                 // to every URL. If unsure leave
   );                                    // unchanged.
   
+  
   // *************************************************************
   // Forum appearance.
   $cfg[theme]               = 'heise2'; // Theme used. Files are in 'themes/' 
@@ -50,5 +51,21 @@
                                         // your RSS file.
   $cfg[rss_maxitems]        = 20;       // The maximum number of entries in
                                         // your RSS file.
+  
+  // *************************************************************
+  // Usermanagement
+  $cfg[login_time]              = 60*60*24*120; // maximum lifetime of login-cookies in seconds
+  $cfg[min_loginlength]         = 3;
+  $cfg[max_loginlength]         = 30;
+  $cfg[min_passwordlength]      = 5;
+  $cfg[max_passwordlength]      = 20;
+  $cfg[min_firstnamelength]     = 3;
+  $cfg[max_firstnamelength]     = 30;
+  $cfg[min_lastnamelength]      = 3;
+  $cfg[max_lastnamelength]      = 30;
+  $cfg[max_maillength]          = 50;
+  $cfg[max_homepageurllength]   = 30;
+  $cfg[max_imlength]            = 20;
+  $cfg[max_signaturelength]     = 100;
   
 ?>

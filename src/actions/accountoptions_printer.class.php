@@ -19,28 +19,24 @@
   */
 ?>
 <?php
-  class LoginPrinter extends PrinterBase {
-    function show($_hint = '') {
-      $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->set_var('do_login', 1); 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('hint', $_hint);
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $url = new URL('?',cfg("urlvars"));
-      $url->set_var('register', 1);
-      $this->smarty->assign_by_ref('register', $url->get_string());
-      $this->parent->append_content($this->smarty->fetch('login.tmpl'));
-    }
-    
-    function show_successful() {
-      $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->delete_var('do_login', 1);
-      
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('start_url', $url->get_string());
+  class AccountOptionsPrinter extends PrinterBase {
+    function show($_user, $_hint = '') {
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('edit_account', 1);
-      $this->smarty->assign_by_ref('edit_account_url', $url->get_string());
-      $this->parent->append_content($this->smarty->fetch('logged_in.tmpl'));
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign_by_ref('hint'  , $_hint);
+      $data = array(
+                login     => $this->user->get_login(),
+                firstname => $this->user->get_firstname(),
+                lastname  => $this->user->get_lastname(),
+                mail      => $this->user->get_mail(),
+                homepage  => $this->user->get_homepage(),
+                im        => $this->user->get_im(),
+                signature => $this->user->get_signature()
+            );
+      $this->smarty->assign_by_ref('data'  , $data);
+      $this->smarty->assign_by_ref('action', $url->get_string());
+      $this->parent->append_content($this->smarty->fetch('account_options.tmpl'));
     }
   }
 ?>

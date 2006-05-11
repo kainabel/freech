@@ -532,7 +532,7 @@
       $sql .= " FROM {t_message}";
       if ($_forumid)
         $sql .= " WHERE forumid={forumid}";
-      if ($updates)
+      if ($_updates)
         $sql .= " ORDER BY updated";
       else
         $sql .= " ORDER BY created";

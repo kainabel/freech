@@ -80,7 +80,7 @@
         return ERR_USER_LOGIN_TOO_SHORT;
       if (strlen($_login) > cfg("max_loginlength"))
         return ERR_USER_LOGIN_TOO_LONG;
-      $this->fields[login] = $_login * 1;
+      $this->fields[login] = $_login;
     }
     
     
@@ -89,16 +89,18 @@
     }
     
     
-    function set_password($_password) {
-      if (strlen($_password) < cfg("min_passwordlength"))
+    function set_password($_password1, $_password2) {
+      if ($_password1 != $_password2)
+        return ERR_USER_PASSWORD_NOT_EQUAL;
+      if (strlen($_password1) < cfg("min_passwordlength"))
         return ERR_USER_PASSWORD_TOO_SHORT;
-      if (strlen($_password) > cfg("max_passwordlength"))
+      if (strlen($_password1) > cfg("max_passwordlength"))
         return ERR_USER_PASSWORD_TOO_LONG;
-      $this->fields[passwordhash] = crypt($_password);
+      $this->fields[passwordhash] = crypt($_password1);
     }
     
     
-    function &get_password_hash($_password) {
+    function &get_password_hash() {
       return $this->fields[passwordhash];
     }
     
@@ -109,7 +111,7 @@
     
     
     function is_valid_password($_password) {
-      return crypt($_password, $this->fields[passwordhash])
+      return crypt($_password , $this->fields[passwordhash])
           == $this->fields[passwordhash];
     }
     
@@ -143,8 +145,11 @@
     
     
     function set_mail($_mail) {
-      //FIXME: make a much better check.
-      if (!preg_match("/^[a-z0-9\._]+@[a-z0-9\-\._]+\.[a-z]+$/i", $_mail))
+      /* FIXME: make a much better check.
+       * http://us2.php.net/manual/en/function.mailparse-rfc822-parse-addresses.php
+       * http://pear.php.net/manual/en/package.mail.mail-rfc822.parseaddresslist.php
+       */
+      if (!preg_match("/^[a-z0-9\._+-]+@[a-z0-9\-\.]+\.[a-z]+$/i", $_mail))
         return ERR_USER_MAIL_NOT_VALID;
       if (strlen($_mail) > cfg("max_maillength"))
         return ERR_USER_MAIL_TOO_LONG;
@@ -158,10 +163,10 @@
     
     
     function set_homepage($_homepage) {
-      if (!preg_match("/^http/i", $_homepage))
+      if ($_homepage != "" && !preg_match("/^http/i", $_homepage))
         $_homepage = "http://" . $_homepage;
       //FIXME: make a much better check.
-      if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $_homepage))
+      if ($_homepage != "" && !preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $_homepage))
         return ERR_USER_HOMEPAGE_NOT_VALID;
       if (strlen($_homepage) > cfg("max_homepageurllength"))
         return ERR_USER_HOMEPAGE_TOO_LONG;

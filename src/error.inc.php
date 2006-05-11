@@ -28,9 +28,11 @@
   define("ERR_USER_LOGIN_INCOMPLETE",        -201);
   define("ERR_USER_LOGIN_TOO_SHORT",         -202);
   define("ERR_USER_LOGIN_TOO_LONG",          -203);
+  define("ERR_USER_LOGIN_EXISTS",            -204);
   define("ERR_USER_PASSWORD_INCOMPLETE",     -211);
   define("ERR_USER_PASSWORD_TOO_SHORT",      -212);
   define("ERR_USER_PASSWORD_TOO_LONG",       -213);
+  define("ERR_USER_PASSWORD_NOT_EQUAL",      -214);
   define("ERR_USER_FIRSTNAME_INCOMPLETE",    -221);
   define("ERR_USER_FIRSTNAME_TOO_SHORT",     -222);
   define("ERR_USER_FIRSTNAME_TOO_LONG",      -223);
@@ -55,4 +57,20 @@
   $err[ERR_MESSAGE_TITLE_TOO_LONG]       = lang("titletoolong");
   $err[ERR_MESSAGE_BODY_TOO_LONG]        = lang("messagetoolong");
   $err[ERR_MESSAGE_BODY_NO_UTF8]         = lang("pvw_invalidchars");
+  $err[ERR_USER_LOGIN_INCOMPLETE]        = lang("register_wrong_nick");
+  $err[ERR_USER_LOGIN_TOO_SHORT]         = lang("register_wrong_nick");
+  $err[ERR_USER_LOGIN_TOO_LONG]          = lang("register_wrong_nick");
+  $err[ERR_USER_LOGIN_EXISTS]            = lang("register_nick_exists");
+  $err[ERR_USER_LASTNAME_TOO_LONG]       = lang("register_long_lname");
+  $err[ERR_USER_LASTNAME_TOO_SHORT]      = lang("register_short_lname");
+  $err[ERR_USER_LASTNAME_INCOMPLETE]     = lang("register_wrong_name");
+  $err[ERR_USER_FIRSTNAME_TOO_LONG]      = lang("register_long_fname");
+  $err[ERR_USER_FIRSTNAME_TOO_SHORT]     = lang("register_short_fname");
+  $err[ERR_USER_FIRSTNAME_INCOMPLETE]    = lang("register_wrong_name");
+  $err[ERR_USER_MAIL_NOT_VALID]          = lang("register_wrong_mail");
+  $err[ERR_USER_MAIL_TOO_LONG]           = lang("register_wrong_mail");
+  $err[ERR_USER_PASSWORD_INCOMPLETE]     = lang("register_invalid_pw");
+  $err[ERR_USER_PASSWORD_TOO_SHORT]      = lang("register_short_pw");
+  $err[ERR_USER_PASSWORD_TOO_LONG]       = lang("register_long_pw");
+  $err[ERR_USER_PASSWORD_NOT_EQUAL]      = lang("register_unequal_pw");
 ?>

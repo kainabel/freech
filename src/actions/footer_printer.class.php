@@ -33,9 +33,25 @@
         $order_by_thread   = '';
         $order_by_time     = $url->get_string();
       }
+      $this->smarty->clear_all_assign();
+      $url = new URL('?', cfg("urlvars"));
+      /*FIXME: use group to distinguish between logged in users
+       *       and anonymous users
+       */
+      if ($this->user->get_id()) {
+        $url_options = $url;
+        $url_options->set_var('edit_account', 1);
+        $this->smarty->assign_by_ref('edit_account', $url_options->get_string());
+        $url_logout = $url;
+        $url_logout->set_var('logout', 1);
+        $this->smarty->assign_by_ref('logout', $url_logout->get_string());
+      } else {
+        $url_login = $url;
+        $url_login->set_var('do_login', 1);
+        $this->smarty->assign_by_ref('login', $url_login->get_string());
+      }        
       $version[url]  = "http://debain.org/software/tefinch/";
       $version[text] = "Tefinch Forum v0.9.10";
-      $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
       $this->smarty->assign_by_ref('version',         $version);

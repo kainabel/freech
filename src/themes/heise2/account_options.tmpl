@@ -1,0 +1,49 @@
+<p>
+	<h2>{lang text="account_edit"|escape}</h2>
+	{if $hint != ""}<p style="color:red;">{$hint}</p>{/if}
+	<form action="{$action}" method="post" accept-charset="utf-8">
+		<table>
+			<tr>
+				<td>{lang text="account_login"|escape}</td>
+			  <td>{$data.login}</td>
+			</tr>
+			<tr>
+				<td>{lang text="account_firstname"|escape}</td>
+			  <td><input type="text" name="firstname" value="{$data.firstname}" /></td>
+			</tr>
+			<tr>
+				<td>{lang text="account_lastname"|escape}</td>
+				<td><input type="text" name="lastname" value="{$data.lastname}" /></td>
+			</tr>
+			<tr>
+				<td>{lang text="account_mail"|escape}</td>
+			  <td><input type="text" name="mail" value="{$data.mail}" /></td>
+			</tr>
+			<tr>
+				<td>{lang text="account_homepage"}</td>
+			  <td><input type="text" name="homepage" value="{$data.homepage}" /></td>
+			</tr>
+			<tr>
+				<td>{lang text="account_im"}</td>
+			  <td><input type="text" name="im" value="{$data.im}" /></td>
+			</tr>
+			<tr>
+			  <td>{lang text="account_signature"}</td>
+			  <td><textarea name="signature">{$data.signature}</textarea></td>
+			</tr>
+			<tr>
+				<td>{lang text="account_password"}</td>
+				<td><input type="password" name="password1" /></td>
+			</tr>
+			<tr>
+				<td>{lang text="account_password2"}</td>
+				<td><input type="password" name="password2" /></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" name="submit" value="{lang text="send"|escape}" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</p>

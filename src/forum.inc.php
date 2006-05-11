@@ -52,6 +52,7 @@
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
+  include_once 'actions/accountoptions_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
   include_once 'services/sql_query.class.php';
@@ -68,6 +69,7 @@
     var $eventbus;
     var $smarty;
     var $folding;
+    var $user;
     
     // Prepare the forum, set cookies, etc. To be called before the http header 
     // was sent.
@@ -118,8 +120,44 @@
       $this->smarty->register_function('lang', 'smarty_lang');
       
       $this->_handle_cookies();
+      
+      // Login/User Stuff
+      /* may be moved elsewhere, but must be before any output,
+       * should set $this->user
+       * anonymous, not logged in user should be in a separate group
+       */
+      if (array_key_exists('logout',$_GET)) {
+        $this->_set_cookie('identity',"");
+        $this->_set_cookie('login',"");
+        $this->user = &new User();
+      } elseif (array_key_exists('do_login',$_GET) && array_key_exists('username',$_POST)) {
+        // new explicit login
+        $accounts = &new AccountDB($this->get_db());
+        $this->user = $accounts->get_user($_POST['username'],'login');
+        if ($this->user->is_valid_password($_POST['password'])) {
+          if ($_POST['permanent'])
+            $time = time()+cfg("login_time");
+          $this->_set_cookie('identity',$this->_create_secret($this->user),$time);
+          $this->_set_cookie('login',$this->user->get_login(),$time);
+        }
+        $this->user->set_last_login_time(time());
+        $accounts->save_user($this->user);
+      } elseif (array_key_exists('identity',$_COOKIE) AND array_key_exists('login',$_COOKIE)) {
+        // 'relogin', hidden
+        $accounts = &new AccountDB($this->get_db());
+        $this->user = $accounts->get_user($_COOKIE['login'],'login');
+        if ($_COOKIE['identity'] != $this->_create_secret($this->user))
+          $this->user->clear();
+      } else
+        $this->user = &new User();
     }
     
+    function _create_secret($_user) {
+       // maybe choose another more fix timestamp
+       return md5($_user->get_login().
+                  $_user->get_password_hash().
+                  $_user->get_updated_unixtime());
+    }
     
     function _handle_cookies() {
       if (get_magic_quotes_gpc()) {
@@ -128,7 +166,7 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
-      $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
+      $_GET[forum_id] = array_key_exists('forum_id',$_GET)? $_GET[forum_id] * 1 : 1;
       
       $this->folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       if ($_GET['c']) {
@@ -245,7 +283,7 @@
         $newmsg_id = $this->forum->insert_entry($_GET[forum_id],
                                                 $_GET[msg_id],
                                                 $message);
-      if ($ret < 0 || $new_id < 0)
+      if ($ret < 0 || $newmsg_id < 0)
         $msgprinter->show_compose($message,
                                   $err[$ret],
                                   $_POST[msg_id] ? TRUE : FALSE);
@@ -293,9 +331,9 @@
     
     
     // Changes a cookie only if necessary.
-    function _set_cookie($_name, $_value) {
+    function _set_cookie($_name, $_value, $_expire = 0) {
       if ($_COOKIE[$_name] != $_value) {
-        setcookie($_name, $_value);
+        setcookie($_name, $_value, $_expire);
         $_COOKIE[$_name] = $_value;
       }
     }
@@ -335,6 +373,15 @@
       $login->show();
     }
     
+    function _logged_in() {
+      $login = &new LoginPrinter($this);
+      if ($this->user->is_valid_password($_POST['password'])) {
+        $login->show_successful();
+      } else {
+        $login->show(lang("login_wrongpw"));
+      }
+    }
+    
     
     function _user_print($_user, $_data) { print $_user->get_login() . "<br>"; } //FIXME
     function _register() {
@@ -345,6 +392,84 @@
       //$accountdb->foreach_user(-1, 0, -1, array(&$this, "_user_print"), '');
     }
     
+    function _register_send() {
+      global $err;
+      $registration = &new RegistrationPrinter($this);
+      $user = &new User;
+      $ret[0] = $user->set_login($_POST['acc_nick']);
+      $ret[1] = $user->set_firstname($_POST['acc_firstname']);
+      $ret[2] = $user->set_lastname($_POST['acc_lastname']);
+      $ret[3] = $user->set_mail($_POST['acc_mail']);
+      $ret[4] = $user->set_password($_POST['passwd1'],$_POST['passwd2']);
+      for ($i=0;$i<=4;$i++) {
+        if ($ret[$i] < 0) {
+          $_error = $err[$ret[$i]];
+        }
+      }
+      if (!isset($_error) and !$accounts->login_exists($_POST['acc_nick'])) {
+        $_error = $err[ERR_USER_LOGIN_EXISTS];
+      }
+      if (isset($_error)) {
+        $registration->show($_POST['acc_nick'],
+                            $_POST['acc_firstname'],
+                            $_POST['acc_lastname'],
+                            $_POST['acc_mail'],
+                            $_error);
+      } else {
+        //TODO: set user inactive; group for users, who have not yet confirmed the email-link?
+        $user->set_id(0);
+        $accounts = &new AccountDB($this->get_db());
+        $newid = $accounts->save_user($user);
+        //TODO: send mail. (re)use the mailer of IlohaWebMail or PEAR?
+        $registration->show_sendmail();
+      }      
+    }
+    
+    function _validate() {
+      $registration = &new RegistrationPrinter($this);
+      //TODO: check for $_GET['user'] and $_GET['key']
+      $registration->show_confirm($_GET['user'],$_GET['key']);
+    }
+    
+    function _validated() {
+      /* TODO: do the work here
+       * - remove user from inactive group (or add to normal group)
+       * - log user in?
+       */
+      $registration = &new RegistrationPrinter($this);
+      $registration->show_confirmed($_POST['user']);  
+    }
+    
+    function _edit_account() {
+      $accountoptions = &new AccountOptionsPrinter($this);
+      $accountoptions->show($this->get_user());
+    }
+    
+    function _edited_account() {
+      global $err;
+      $ret[0] = $this->user->set_firstname($_POST['firstname']);
+      $ret[1] = $this->user->set_lastname($_POST['lastname']);
+      $ret[2] = $this->user->set_mail($_POST['mail']);
+      $ret[3] = $this->user->set_homepage($_POST['homepage']);
+      $ret[4] = $this->user->set_im($_POST['im']);
+      $ret[5] = $this->user->set_signature($_POST['signature']);
+      if (!empty($_POST['password1']))
+        $ret[6] = $this->user->set_password($_POST['password1'],$_POST['password2']);
+      for ($i=0;$i<count($ret);$i++)
+        if ($ret[$i] < 0)
+          $_error .= $err[$ret[$i]].". ";
+      if (isset($_error)) {
+        $accountoptions = &new AccountOptionsPrinter($this);
+        $accountoptions->show($this->get_user(), $_error);
+      } else {
+        $accounts = &new AccountDB($this->get_db());
+        $accounts->save_user($this->user);
+        //FIXME: redirect to startpage or create "account-edited-template"
+        $url = &new URL('?', cfg("urlvars"));
+        print "<a href='".$url->get_string()."'>Zurück</a>";
+      }
+      
+    }
     
     function &get_registry() {
       return $this->registry;
@@ -364,7 +489,17 @@
     function &get_forumdb() {
       return $this->forum;
     }
+    
+    
+    function &get_db() {
+      return $this->db;
+    }
 
+
+    function &get_user() {
+      return $this->user;
+    }
+    
 
     function append_content(&$_content) {
       $this->content .= $_content . "\n";
@@ -395,31 +530,45 @@
     
     function show() {
       $this->content = "";
-      if ($_GET['read'])
+      if (array_key_exists('read',$_GET))
         $this->_message_read();     // Read a message.
-      elseif ($_GET['write'] && $_GET['msg_id'])
+      elseif (array_key_exists('write',$_GET) && array_key_exists('msg_id',$_GET))
         $this->_message_answer();   // Write an answer.
-      elseif ($_GET['write'])
+      elseif (array_key_exists('write',$_GET))
         $this->_message_compose();  // Write a new message.
-      elseif ($_POST['edit'])
+      elseif (array_key_exists('edit',$_POST))
         $this->_message_edit();     // Edit a message.
-      elseif ($_POST['quote'])
+      elseif (array_key_exists('quote',$_POST))
         $this->_message_quote();    // Insert a quote from the parent message.
-      elseif ($_POST['preview'])
+      elseif (array_key_exists('preview',$_POST))
         $this->_message_preview();  // A message preview was requested.
-      elseif ($_POST['send'])
+      elseif (array_key_exists('send',$_POST))
         $this->_message_submit();   // A message was posted and should be saved.
-      elseif ($_GET['do_login'])
+      elseif (array_key_exists('do_login',$_GET) && array_key_exists('username',$_POST))
+        $this->_logged_in();        // Logindata was sent and should be processed
+      elseif (array_key_exists('do_login',$_GET))
         $this->_show_login();       // Show a login form.
-      elseif ($_GET['register'])
+      elseif (array_key_exists('edit_account', $_GET) && array_key_exists('submit', $_POST))
+        $this->_edited_account();   // Changed Accountdata was sent and should be processed
+      elseif (array_key_exists('edit_account', $_GET))
+        $this->_edit_account();     // Edit Accountoptions like name, mail, homepage, etc
+      elseif (array_key_exists('validate', $_GET) && array_key_exists('passwd1', $_POST))
+        $this->_validated();        // Validationdata was sent and should be processed
+      elseif (array_key_exists('validate', $_GET))
+        $this->_validate();         // Page shown after clicking on a link in an email
+      elseif (array_key_exists('register',$_GET) && array_key_exists('acc_create',$_POST))
+        $this->_register_send();    // Registrationrequest was sent
+      elseif (array_key_exists('register',$_GET) && ! array_key_exists('acc_cancel',$_POST))
         $this->_register();         // Show a registration form.
-      elseif (($_GET['list'] || $_GET['forum_id'])
+      elseif ((array_key_exists('list',$_GET) || array_key_exists('forum_id',$_GET))
               && $_COOKIE['view'] === 'plain')
         $this->_list_by_time();     // Show the forum, time order.
-      elseif ($_GET['list'] || $_GET['forum_id'])
+      elseif (array_key_exists('list',$_GET) || array_key_exists('forum_id',$_GET) || 
+              (array_key_exists('register',$_GET) && array_key_exists('acc_cancel',$_POST)))
         $this->_list_by_thread();   // Show the forum, thread order.
       else
         die("internal error");
+        //TODO: List all Forums
 
       /* Plugin hook: on_content_print_before
        *   Called before the HTML content is sent.

@@ -1,7 +1,8 @@
+<p>{lang text="havetoregister"|escape} <a href="{$register|escape}">{lang text="register_title"|escape}</a></p>
 <p>
-{$hint}
+<span style="color:red;">{$hint}</span>
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
-  <div align="left">
+  <div align="center">
     <table border="0" cellpadding="2">
       <tr>
         <td bgcolor="#CCCCCC">&nbsp;</td>
@@ -23,7 +24,7 @@
         <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="rememberpasswd"|escape}</td>
         <td bgcolor="#CCCCCC">
           <font size="2">{lang text="remembpasswdlong"|escape}<br /></font>
-          <input type="checkbox" name="permanent" value="ON"><br>
+          <input type="checkbox" name="permanent" value="true"><br>
         </td>
       </tr>
       <tr>

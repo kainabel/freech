@@ -2,11 +2,12 @@
 * Create a template for the page that is shown when the account was
   created and add a corresponding method to the RegistrationPrinter.
   That page should also show a note that an email containing a link
-  was sent out.
+  was sent out. - done
 * Create a template for the page that is shown when the email with
   the link was confirmed by the user and add a corresponding method
-  to the RegistrationPrinter.
+  to the RegistrationPrinter. - 1/2 done. 
 * Create an AccountOptionsPrinter object and a corresponding template.
+	- done
 * Create a MenuPrinter class and a corresponding template.
 * Derive an AdminMenuPrinter class from MenuPrinter.
 * Create a GroupOverviewPrinter class and a corresponding template.

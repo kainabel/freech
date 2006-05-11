@@ -24,6 +24,7 @@
     var $eventbus;
     var $smarty;
     var $db;
+    var $user;
     
     function PrinterBase(&$_parent) {
       $this->parent   = &$_parent;
@@ -31,6 +32,7 @@
       $this->eventbus = $_parent->get_eventbus();
       $this->smarty   = $_parent->get_smarty();
       $this->db       = $_parent->get_forumdb();
+      $this->user     = $_parent->get_user();
     }
 
     function show() {

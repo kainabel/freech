@@ -36,6 +36,8 @@
   $cfg[ppi]                 = 5;        // Maximum number of pages shown in the
                                         // index before the [...] button
                                         // appears.
+  $cfg[thread_arrow_rev]    = FALSE;    // If TRUE, ">>" points to the previous
+                                        // thread.
   $cfg[remember_page]       = FALSE;    // If TRUE, the current page in the
                                         // index is remembered even when reading
                                         // a message. This comes at the cost

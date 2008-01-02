@@ -60,19 +60,28 @@
       
       // "Previous/Next Thread" buttons.
       call_user_func($_func);
-      if ($this->message->get_prev_thread_id() > 0) {
-        $url->set_var('msg_id', $this->message->get_prev_thread_id());
-        call_user_func($_func, lang("prev_symbol"), $url);
+      $prev_url = $url;
+      $next_url = $url;
+      if (cfg("thread_arrow_rev") == TRUE) {
+        // Heise style (reversed) thread buttons
+        $prev_url->set_var('msg_id', $this->message->get_next_thread_id());
+        $next_url->set_var('msg_id', $this->message->get_prev_thread_id());
+        if ($this->message->get_prev_thread_id() <= 0)
+          $next_url = NULL;
+        if ($this->message->get_next_thread_id() <= 0)
+          $prev_url = NULL;
+      } else {
+        // Tefinch style thread buttons
+        $prev_url->set_var('msg_id', $this->message->get_prev_thread_id());
+        $next_url->set_var('msg_id', $this->message->get_next_thread_id());
+        if ($this->message->get_prev_thread_id() <= 0)
+          $prev_url = NULL;
+        if ($this->message->get_next_thread_id() <= 0)
+          $next_url = NULL;
       }
-      else
-        call_user_func($_func, lang("prev_symbol"));
+      call_user_func($_func, lang("prev_symbol"), $prev_url);
       call_user_func($_func, lang("thread"));
-      if ($this->message->get_next_thread_id() > 0) {
-        $url->set_var('msg_id', $this->message->get_next_thread_id());
-        call_user_func($_func, lang("next_symbol"), $url);
-      }
-      else
-        call_user_func($_func, lang("next_symbol"));
+      call_user_func($_func, lang("next_symbol"), $next_url);
       
       // "Reply" button.
       call_user_func($_func);

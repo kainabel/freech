@@ -311,10 +311,12 @@ define("USER_STATUS_BLOCKED",     2);
         return ERR_USER_MAIL_TOO_LONG;
 
       //FIXME: make a much better check.
-      if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $this->fields[homepage]))
-        return ERR_USER_HOMEPAGE_NOT_VALID;
-      if (strlen($this->fields[homepage]) > cfg("max_homepageurllength"))
-        return ERR_USER_HOMEPAGE_TOO_LONG;
+      if ($this->fields[homepage]) {
+        if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $this->fields[homepage]))
+          return ERR_USER_HOMEPAGE_NOT_VALID;
+        if (strlen($this->fields[homepage]) > cfg("max_homepageurllength"))
+          return ERR_USER_HOMEPAGE_TOO_LONG;
+      }
 
       if (strlen($this->fields[im]) > cfg("max_imlength"))
         return ERR_USER_IM_TOO_LONG;

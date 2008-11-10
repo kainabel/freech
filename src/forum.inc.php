@@ -483,12 +483,6 @@
       $ret = $user->check_complete();
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
-      if (!$user->get_mail())
-        return $registration->show($user, $err[ERR_REGISTER_INVALID_MAIL]);
-      if (!$user->get_firstname())
-        return $registration->show($user, $err[ERR_REGISTER_INVALID_FIRSTNAME]);
-      if (!$user->get_lastname())
-        return $registration->show($user, $err[ERR_REGISTER_INVALID_LASTNAME]);
       if ($_POST['password'] !== $_POST['password2'])
         return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
 

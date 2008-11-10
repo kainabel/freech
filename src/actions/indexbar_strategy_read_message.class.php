@@ -60,8 +60,8 @@
       
       // "Previous/Next Thread" buttons.
       call_user_func($_func);
-      $prev_url = $url;
-      $next_url = $url;
+      $prev_url = clone($url);
+      $next_url = clone($url);
       if (cfg("thread_arrow_rev") == TRUE) {
         // Heise style (reversed) thread buttons
         $prev_url->set_var('msg_id', $this->message->get_next_thread_id());

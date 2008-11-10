@@ -87,6 +87,7 @@ CREATE TABLE tefinch_message (
   text          text                NOT NULL,
   updated       TIMESTAMP,
   created       TIMESTAMP,
+  ip_address    varchar(50)         NOT NULL,
   active        tinyint(3) unsigned DEFAULT 1,
   PRIMARY KEY (id),
   INDEX(forumid),

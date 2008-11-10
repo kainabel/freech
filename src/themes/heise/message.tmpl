@@ -8,7 +8,8 @@
   <font color='#555555' size='-1'>{$message->get_created_time()}</font><br />
   <b>{$message->get_subject()|escape}</b><br />
   <i>{$message->get_username()|escape}</i>
-  <img src="themes/heise/img/{$message->get_user_type()}_user.png" title="{lang text=$message->get_user_type()}" />
+  <img src="themes/heise/img/{$message->get_user_type()|escape}_user.png"
+       title="{lang text=$message->get_user_type()|escape}" />
 {if $message->get_user_type() == "anonymous"}
   (Salziger IP-Hash: {$message->get_ip_address_hash()|truncate:10:''|escape})
 {/if}

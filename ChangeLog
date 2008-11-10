@@ -1,3 +1,7 @@
+2008-11-10  Samuel Abels  <spam debain org>
+
+	* Rename the project from Tefinch to Freech.
+
 2008-11-09  Samuel Abels  <spam debain org>
 
 	* Initial support for accounts, including user registration.

@@ -1,14 +1,14 @@
 --
--- Database: `tefinch`
+-- Database: `freech`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_forum`
+-- Table structure for table `freech_forum`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_forum` (
+CREATE TABLE IF NOT EXISTS `freech_forum` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(100) collate latin1_general_ci NOT NULL default '',
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS `tefinch_forum` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_group`
+-- Table structure for table `freech_group`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_group` (
+CREATE TABLE IF NOT EXISTS `freech_group` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(100) collate latin1_general_ci NOT NULL default '',
   `active` tinyint(3) unsigned default '1',
@@ -38,10 +38,10 @@ CREATE TABLE IF NOT EXISTS `tefinch_group` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_group_permission`
+-- Table structure for table `freech_group_permission`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_group_permission` (
+CREATE TABLE IF NOT EXISTS `freech_group_permission` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `g_id` int(11) unsigned default '0',
   `p_id` int(11) unsigned default '0',
@@ -55,10 +55,10 @@ CREATE TABLE IF NOT EXISTS `tefinch_group_permission` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_group_user`
+-- Table structure for table `freech_group_user`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_group_user` (
+CREATE TABLE IF NOT EXISTS `freech_group_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `g_id` int(11) unsigned default '0',
   `u_id` int(11) unsigned default '0',
@@ -72,10 +72,10 @@ CREATE TABLE IF NOT EXISTS `tefinch_group_user` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_message`
+-- Table structure for table `freech_message`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_message` (
+CREATE TABLE IF NOT EXISTS `freech_message` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forumid` int(11) unsigned NOT NULL default '0',
   `threadid` int(11) unsigned NOT NULL default '0',
@@ -103,10 +103,10 @@ CREATE TABLE IF NOT EXISTS `tefinch_message` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_permission`
+-- Table structure for table `freech_permission`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_permission` (
+CREATE TABLE IF NOT EXISTS `freech_permission` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(100) collate latin1_general_ci NOT NULL default '',
   `description` varchar(100) collate latin1_general_ci NOT NULL default '',
@@ -118,10 +118,10 @@ CREATE TABLE IF NOT EXISTS `tefinch_permission` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tefinch_user`
+-- Table structure for table `freech_user`
 --
 
-CREATE TABLE IF NOT EXISTS `tefinch_user` (
+CREATE TABLE IF NOT EXISTS `freech_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `login` varchar(100) collate latin1_general_ci NOT NULL default '',
   `password` varchar(100) collate latin1_general_ci NOT NULL default '',
@@ -144,35 +144,35 @@ CREATE TABLE IF NOT EXISTS `tefinch_user` (
 --
 
 --
--- Constraints for table `tefinch_forum`
+-- Constraints for table `freech_forum`
 --
-ALTER TABLE `tefinch_forum`
-  ADD CONSTRAINT `0_776` FOREIGN KEY (`ownerid`) REFERENCES `tefinch_user` (`id`) ON DELETE SET NULL;
+ALTER TABLE `freech_forum`
+  ADD CONSTRAINT `0_776` FOREIGN KEY (`ownerid`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `tefinch_group_permission`
+-- Constraints for table `freech_group_permission`
 --
-ALTER TABLE `tefinch_group_permission`
-  ADD CONSTRAINT `0_770` FOREIGN KEY (`g_id`) REFERENCES `tefinch_group` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_771` FOREIGN KEY (`p_id`) REFERENCES `tefinch_permission` (`id`) ON DELETE CASCADE;
+ALTER TABLE `freech_group_permission`
+  ADD CONSTRAINT `0_770` FOREIGN KEY (`g_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_771` FOREIGN KEY (`p_id`) REFERENCES `freech_permission` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `tefinch_group_user`
+-- Constraints for table `freech_group_user`
 --
-ALTER TABLE `tefinch_group_user`
-  ADD CONSTRAINT `0_773` FOREIGN KEY (`g_id`) REFERENCES `tefinch_group` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_774` FOREIGN KEY (`u_id`) REFERENCES `tefinch_user` (`id`) ON DELETE CASCADE;
+ALTER TABLE `freech_group_user`
+  ADD CONSTRAINT `0_773` FOREIGN KEY (`g_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_774` FOREIGN KEY (`u_id`) REFERENCES `freech_user` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `tefinch_message`
+-- Constraints for table `freech_message`
 --
-ALTER TABLE `tefinch_message`
-  ADD CONSTRAINT `0_778` FOREIGN KEY (`forumid`) REFERENCES `tefinch_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_779` FOREIGN KEY (`u_id`) REFERENCES `tefinch_user` (`id`) ON DELETE SET NULL;
+ALTER TABLE `freech_message`
+  ADD CONSTRAINT `0_778` FOREIGN KEY (`forumid`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_779` FOREIGN KEY (`u_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
-INSERT INTO tefinch_user (id, login, password, firstname, lastname, mail, created)
+INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (1, 'root', '', 'root', 'root', '', NULL);
-INSERT INTO tefinch_user (id, login, password, firstname, lastname, mail, created)
+INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
-INSERT INTO tefinch_forum (name, description, ownerid, created)
+INSERT INTO freech_forum (name, description, ownerid, created)
                    VALUES ('Forum', 'Default forum', 1, NULL);

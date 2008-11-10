@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -34,13 +34,13 @@
      * Private API.
      ***********************************************************************/
     function _lock_write($_forum) {
-      $query = &new TefinchSqlQuery("LOCK TABLE {$_forum} WRITE");
+      $query = &new FreechSqlQuery("LOCK TABLE {$_forum} WRITE");
       //$this->db->execute($query->sql()) or die("ForumDB::lock_write()");
     }
     
     
     function _unlock_write() {
-      $query = &new TefinchSqlQuery("UNLOCK TABLES");
+      $query = &new FreechSqlQuery("UNLOCK TABLES");
       //$this->db->execute($query->sql()) or die("ForumDB::unlock_write()");
     }
     
@@ -59,7 +59,7 @@
     function _get_path($_id) {
       $sql  = "SELECT path FROM {t_message} t1";
       $sql .= " WHERE t1.id={id}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $row = $this->db->GetRow($query->sql()) or die("ForumDB::_get_path()");
       return $row[path];
@@ -68,7 +68,7 @@
     
     function _get_threadid($_id) {
       $sql = "SELECT threadid FROM {t_message} WHERE id={id}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $row = $this->db->GetRow($query->sql());
       return $row && $row[threadid] ? $row[threadid] : 0;
@@ -101,7 +101,7 @@
       $sql .= " AND active=1";
       $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
       $sql .= " ORDER BY HEX(path) DESC";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('threadid', $_threadid);
       $query->set_hex('path',     $_path);
       $res = $this->db->SelectLimit($query->sql(), 1)
@@ -122,7 +122,7 @@
       if ($_path)
         $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
       $sql .= " ORDER BY HEX(path)";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('threadid', $_threadid);
       $query->set_hex('path',     $_path);
       $res = $this->db->SelectLimit($query->sql(), 1)
@@ -141,7 +141,7 @@
       $sql .= " WHERE forumid={forumid} AND threadid<{threadid}";
       $sql .= " AND (active=1 OR n_children>0)";
       $sql .= " ORDER BY threadid DESC";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid',  $_forumid);
       $query->set_int('threadid', $_threadid);
       $res = $this->db->SelectLimit($query->sql(), 1)
@@ -160,7 +160,7 @@
       $sql .= " WHERE forumid={forumid} AND threadid>{threadid}";
       $sql .= " AND (active=1 OR n_children>0)";
       $sql .= " ORDER BY threadid";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid',  $_forumid);
       $query->set_int('threadid', $_threadid);
       $res = $this->db->SelectLimit($query->sql(), 1)
@@ -192,7 +192,7 @@
       $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM {t_message}";
       $sql .= " WHERE id={id}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       if (!$row = $this->db->GetRow($query->sql()))
         return;
@@ -232,7 +232,7 @@
       $sql  = "SELECT forumid,threadid,HEX(path) path,active";
       $sql .= " FROM {t_message}";
       $sql .= " WHERE id={parentid}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('parentid', $_parentid);
       $parentrow = $this->db->GetRow($query->sql());
       
@@ -257,7 +257,7 @@
         $sql .= " {forumid}, {threadid}, {u_id}, {name},";
         $sql .= " {subject}, {body}, {hash}, {ip_address}, NULL";
         $sql .= ")";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid',  $parentrow[forumid]);
         $query->set_int('threadid', $parentrow[threadid]);
         $query->set_int('u_id',     $_message->get_user_id());
@@ -282,7 +282,7 @@
           $sql .= " 0x" . $this->_int2hex($newid) . "00";
         }
         $sql .= " WHERE id={newid}";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('newid', $newid);
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): Path.");
@@ -293,7 +293,7 @@
           $sql .= " SET n_children=n_children+1,";
           $sql .= " n_descendants=n_descendants+1";
           $sql .= " WHERE id={parentid}";
-          $query = &new TefinchSqlQuery($sql);
+          $query = &new FreechSqlQuery($sql);
           $query->set_int('parentid', $_parentid);
           $this->db->Execute($query->sql())
                   or die("ForumDB::insert_entry(): n++");
@@ -303,14 +303,14 @@
         else {
           $sql  = "UPDATE {t_message} SET n_children=n_children+1";
           $sql .= " WHERE id={threadid}";
-          $query = &new TefinchSqlQuery($sql);
+          $query = &new FreechSqlQuery($sql);
           $query->set_int('threadid', $parentrow[threadid]);
           $this->db->Execute($query->sql())
                   or die("ForumDB::insert_entry(): n_child fail");
           
           $sql  = "UPDATE {t_message} SET n_descendants=n_descendants+1";
           $sql .= " WHERE id={parentid}";
-          $query = &new TefinchSqlQuery($sql);
+          $query = &new FreechSqlQuery($sql);
           $query->set_int('parentid', $_parentid);
           $this->db->Execute($query->sql())
                   or die("ForumDB::insert_entry(): n_desc");
@@ -326,7 +326,7 @@
         $sql .= " '', {forumid}, {u_id}, 0, 1, {name},";
         $sql .= " {subject}, {body}, {hash}, {ip_address}, NULL";
         $sql .= ")";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid', $_forumid);
         $query->set_int('u_id',    $_message->get_user_id());
         $query->set_string('name',    $_message->get_username());
@@ -342,7 +342,7 @@
         // FIXME: Is there a better way to do this?
         $sql  = "UPDATE {t_message} SET threadid={newid}";
         $sql .= " WHERE id={newid}";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('newid', $newid);
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): threadid");
@@ -359,7 +359,7 @@
       $sql  = "SELECT id";
       $sql .= " FROM {t_message}";
       $sql .= " WHERE created > FROM_UNIXTIME({since}) AND hash={hash}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('since', time() - 60 * 60 * 2);
       $query->set_string('hash', $_message->get_hash());
       $res = $this->db->Execute($query->sql())
@@ -400,7 +400,7 @@
         $sql  = "SELECT id,HEX(path) path";
         $sql .= " FROM {t_message}";
         $sql .= " WHERE id={id}";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('id', $_id);
         $res = $this->db->Execute($query->sql())
                        or die("ForumDB::foreach_child(): 1");
@@ -411,7 +411,7 @@
         $sql .= " FROM {t_message}";
         $sql .= " WHERE forumid={forumid} AND is_parent=1";
         $sql .= " ORDER BY threadid DESC,path";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid', $_forumid);
         //$this->db->debug=1;
         $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
@@ -443,7 +443,7 @@
       $sql .= ") ORDER BY threadid DESC,path";
       
       // Walk through those threads.
-      $query   = &new TefinchSqlQuery($sql);
+      $query   = &new FreechSqlQuery($sql);
       $res     = $this->db->Execute($query->sql())
                               or die("ForumDB::foreach_child: 3");
       $row     = &$res->FetchRow();
@@ -563,7 +563,7 @@
       else
         $sql .= " ORDER BY created";
       $sql .= " DESC";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                           or die("ForumDB::foreach_latest_message()");
@@ -584,7 +584,7 @@
       $sql .= " WHERE created > FROM_UNIXTIME({since})";
       if ($_forumid)
         $sql .= " and forumid={forumid}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);
       $query->set_int('since',   $_since);
       $n = $this->db->GetOne($query->sql());
@@ -598,7 +598,7 @@
       $sql .= " FROM {t_message}";
       if ($_forumid)
         $sql .= " WHERE forumid={forumid}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);
       $n = $this->db->GetOne($query->sql());
       return $n;
@@ -608,7 +608,7 @@
     /* Returns the number of nodes below $id. */
     function get_n_children($_forumid, $_id) {
       $sql = "SELECT n_children FROM {t_message} WHERE id={id}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $n = $this->db->GetOne($query->sql());
       return $n;

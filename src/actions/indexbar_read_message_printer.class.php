@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -72,7 +72,7 @@
         if ($this->message->get_next_thread_id() <= 0)
           $prev_url = NULL;
       } else {
-        // Tefinch style thread buttons
+        // Freech style thread buttons
         $prev_url->set_var('msg_id', $this->message->get_prev_thread_id());
         $next_url->set_var('msg_id', $this->message->get_next_thread_id());
         if ($this->message->get_prev_thread_id() <= 0)

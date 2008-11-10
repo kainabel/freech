@@ -4,11 +4,11 @@
                                         // 'localhost'.
   $cfg[db_usr]          = 'user';       // Username on your database host.
   $cfg[db_pass]         = 'password';   // Password on your database host.
-  $cfg[db_name]         = 'tefinch';    // Database name.
+  $cfg[db_name]         = 'freech';    // Database name.
   $cfg[db_dbn]          = "mysqlt://$cfg[db_usr]:" // If unsure leave unchanged.
                         . urlencode($cfg[db_pass])
                         . "@$cfg[db_host]/$cfg[db_name]";
-  $cfg[db_tablebase]    = 'tefinch_';   // Table basename, if unsure leave
+  $cfg[db_tablebase]    = 'freech_';   // Table basename, if unsure leave
                                         // unchanged.
 
   // Site and RSS settings.
@@ -17,7 +17,7 @@
   $cfg[mail_from]       = 'noreply@debain.org';  // Sender address of mails 
                                                  // sent by the forum.
   $cfg[site_url]        = 'http://debain.org/';  // URL of your domain.
-  $cfg[site_title]      = 'Tefinch Forum';       // The name of your site.
+  $cfg[site_title]      = 'Freech Forum';       // The name of your site.
   $cfg[site_language]   = 'en';         // The country code of the language 
                                         // of your site.
   $cfg[rss_description] = 'Das Forum fuer den Notfall';

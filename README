@@ -1,4 +1,4 @@
-About Tefinch   [http://www.debain.org/software/tefinch]
+About Freech   [http://www.debain.org/software/freech]
 - - - - - - -
 
 This forum has been written 2003 by Samuel Abels and was rewritten in 2005
@@ -14,10 +14,10 @@ Have Fun!
 Additional Notes
 - - - - - - - - -
 
-Created a great theme? Send us a link and we will put it on the Tefinch
-homepage. Please also let us know the Tefinch version number for which the
+Created a great theme? Send us a link and we will put it on the Freech
+homepage. Please also let us know the Freech version number for which the
 theme was created.
-If you have translated Tefinch to a new language, send us the translation!
+If you have translated Freech to a new language, send us the translation!
 
 
 
@@ -44,15 +44,15 @@ Q: Is RSS supported? Where is the RSS file?
 A: RSS2.0 is supported. The RSS file is in the same directory in which the
    index.php file is. You likely want to enter the following path into your
    newsreader:
-   http://www.mydomain.com/tefinch/rss.php
+   http://www.mydomain.com/freech/rss.php
 
 Q: But the RSS file gives me the messages from all forums, I want to track only
    the messages from one single forum.
 A: Try
-   http://www.mydomain.com/tefinch/rss.php?forum_id=1
+   http://www.mydomain.com/freech/rss.php?forum_id=1
    (where "1" is of course replaced by the correct forum id.)
 
 Q: The forum does not work, the trees are all broken when they get larger.
 A: Your MySQL server does not support InnoDB tables. You need to delete all
    existing database tables, then configure MySQL to support InnoDB. After
-   that, re-install Tefinch by following the instructions in the INSTALL file.
+   that, re-install Freech by following the instructions in the INSTALL file.

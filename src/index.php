@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
                      Robert Weidlich, <tefinch xenim de>
   
@@ -22,7 +22,7 @@
 <?php
   include_once 'forum.inc.php';
   
-  $forum = new TefinchForum();
+  $forum = new FreechForum();
   
   $forum->print_head();
   print("<table width='100%'>"

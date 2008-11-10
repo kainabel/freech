@@ -27,9 +27,9 @@
  * @version $Revision: 1.3 $
  * @package openrat.services
  */
-class TefinchSqlQuery extends SqlQuery {
+class FreechSqlQuery extends SqlQuery {
   // Constructor.
-  function TefinchSqlQuery($query = '')
+  function FreechSqlQuery($query = '')
   {
     parent::SqlQuery($query);
     $tables = array (

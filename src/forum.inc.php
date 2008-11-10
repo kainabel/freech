@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
   
   This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@
   include_once 'services/plugin_registry.class.php';
 
   
-  class TefinchForum {
+  class FreechForum {
     var $db;
     var $forum;
     var $registry;
@@ -69,7 +69,7 @@
     
     // Prepare the forum, set cookies, etc. To be called before the http header 
     // was sent.
-    function TefinchForum() {
+    function FreechForum() {
       // Select a language.
       $l = cfg("lang");
       if ($l == 'auto')
@@ -81,7 +81,7 @@
       if (!function_exists("gettext"))
         die("This webserver does not have gettext installed.<br/>"
           . "Please contact your webspace provider.");
-      $domain = 'tefinch';
+      $domain = 'freech';
       bindtextdomain($domain, "./language");
       textdomain($domain);
       bind_textdomain_codeset($domain, 'UTF-8');
@@ -91,7 +91,7 @@
 
       // Connect to the DB.
       $this->db    = &ADONewConnection(cfg("db_dbn"))
-        or die("TefinchForum::TefinchForum(): Error: Can't connect."
+        or die("FreechForum::FreechForum(): Error: Can't connect."
              . " Please check username, password and hostname.");
       $this->forum = &new ForumDB($this->db);
 
@@ -100,7 +100,7 @@
       $this->registry->activate_plugins($this); //FIXME: Make activation configurable.
 
       /* Plugin hook: on_construct
-       *   Called from within the TefinchForum() constructor before any
+       *   Called from within the FreechForum() constructor before any
        *   other output is produced.
        *   The return value of the callback is ignored.
        *   Args: None.
@@ -711,7 +711,7 @@
       unset($this->content);
       $this->db->Close();
       /* Plugin hook: on_destroy
-       *   Called from within TefinchForum->destroy().
+       *   Called from within FreechForum->destroy().
        *   The return value of the callback is ignored.
        *   Args: None.
        */

@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
   
   This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 <?php
   include_once 'forum.inc.php';
   
-  $forum = new TefinchForum();
+  $forum = new FreechForum();
   header("Content-Type: text/xml; charset=utf-8");
   if ($_GET[forum_id] != 1)
     die("If you touch that URL again I will sue you!");

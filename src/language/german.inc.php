@@ -1,6 +1,6 @@
 <?
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
                      Robert Weidlich, <tefinch xenim de>
 

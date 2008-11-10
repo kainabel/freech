@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -33,8 +33,8 @@
         $order_by_thread   = '';
         $order_by_time     = $url->get_string();
       }
-      $version[url]  = "http://debain.org/software/tefinch/";
-      $version[text] = "Tefinch Forum v0.9.10";
+      $version[url]  = "http://debain.org/software/freech/";
+      $version[text] = "Freech Forum v0.9.10";
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);

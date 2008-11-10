@@ -1,6 +1,6 @@
 <?php
   /*
-  Tefinch.
+  Freech.
   Copyright (C) 2003 Samuel Abels, <spam debain org>
 
   This program is free software; you can redistribute it and/or modify
@@ -37,13 +37,13 @@
      * Private API.
      ***********************************************************************/
     function _lock_write($_forum) {
-      $query = &new TefinchSqlQuery("LOCK TABLE {$_forum} WRITE");
+      $query = &new FreechSqlQuery("LOCK TABLE {$_forum} WRITE");
       //$this->db->execute($query->sql()) or die("AccountDB::lock_write()");
     }
     
     
     function _unlock_write() {
-      $query = &new TefinchSqlQuery("UNLOCK TABLES");
+      $query = &new FreechSqlQuery("UNLOCK TABLES");
       //$this->db->execute($query->sql()) or die("AccountDB::unlock_write()");
     }
     
@@ -78,7 +78,7 @@
       $sql   = "SELECT *";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE id={id}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $row   = $this->db->GetRow($query->sql()) or die("AccountDB::get_user()");
       $user  = &new User;
@@ -97,7 +97,7 @@
       $sql   = "SELECT *";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE login={login}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_string('login', $_login);
       $row   = $this->db->GetRow($query->sql());
       if (!$row)
@@ -117,7 +117,7 @@
     function save_user(&$_user) {
       if (!is_object($_user))
         die("AccountDB::save_user(): Invalid arg.");
-      $query = &new TefinchSqlQuery();
+      $query = &new FreechSqlQuery();
       $query->set_int   ('id',        $_user->get_id());
       $query->set_int   ('status',    $_user->get_status());
       $query->set_int   ('lastlogin', $_user->get_last_login_unixtime());
@@ -175,7 +175,7 @@
       $sql   = "SELECT *";
       $sql  .= " FROM {t_group}";
       $sql  .= " WHERE id={id}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $row  = $this->db->GetRow($query->sql()) or die("AccountDB::get_group()");
       $group = &new Group;
@@ -193,7 +193,7 @@
     function save_group(&$_group) {
       if (!is_object($_group))
         die("AccountDB::save_group(): Invalid arg.");
-      $query = &new TefinchSqlQuery();
+      $query = &new FreechSqlQuery();
       $query->set_int   ('id',      $_group->get_id());
       $query->set_int   ('updated', $_group->get_updated_unixtime());
       $query->set_string('name',    $_group->get_name());
@@ -247,7 +247,7 @@
         $sql  .= " LEFT JOIN {t_user}       u   ON gu2.u_id=u.id";
         $sql  .= " LEFT JOIN {t_group}      g   ON gu2.g_id=g.id";
         $sql  .= " WHERE gu1.g_id={g_id}";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('g_id', $_groupid);
       }
       elseif ($_groupid == 0) {
@@ -255,13 +255,13 @@
         $sql  .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
         $sql  .= " LEFT JOIN {t_group}      g  ON gu.g_id=g.id";
         $sql  .= " WHERE g.id IS NULL";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
       }
       else {
         $sql  .= " FROM      {t_user}       u";
         $sql  .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
         $sql  .= " LEFT JOIN {t_group}      g  ON gu.g_id=g.id";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
       }
       $res     = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
                               or die("AccountDB::foreach_user(): Select");
@@ -319,7 +319,7 @@
     function foreach_group($_offset, $_limit, $_func, $_data) {
       $sql   = "SELECT g.*";
       $sql  .= " FROM {t_group}";
-      $query = &new TefinchSqlQuery($sql);
+      $query = &new FreechSqlQuery($sql);
       $res   = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
                             or die("AccountDB::foreach_user(): Select");
       $numrows = $res->RecordCount();
@@ -345,7 +345,7 @@
         $sql  = "SELECT COUNT(*)";
         $sql .= " FROM {t_group_user} gu";
         $sql .= " WHERE gu.g_id={g_id}";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $query->set_int('g_id', $_group->get_id());
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 1");
@@ -355,12 +355,12 @@
         $sql .= " FROM      {t_user}       u";
         $sql .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
         $sql .= " WHERE g.id=NULL";
-        $query = &new TefinchSqlQuery($sql);
+        $query = &new FreechSqlQuery($sql);
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 2");
       }
       else {
-        $query = &new TefinchSqlQuery("SELECT COUNT(*) FROM {t_user}");
+        $query = &new FreechSqlQuery("SELECT COUNT(*) FROM {t_user}");
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 3");
       }
@@ -370,7 +370,7 @@
 
     /* Returns the number of groups. */
     function get_n_groups() {
-      $query = &new TefinchSqlQuery("SELECT COUNT(*) FROM {t_group}");
+      $query = &new FreechSqlQuery("SELECT COUNT(*) FROM {t_group}");
       $n = $this->db->GetOne($query->sql())
                         or die("AccountDB::get_n_groups(): 3");
       return $n;

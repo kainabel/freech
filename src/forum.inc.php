@@ -453,8 +453,8 @@
       $head    = "From: ".cfg("mail_from")."\r\n";
       $subject = lang("registration_mail_subject");
       $body    = lang("registration_mail_body");
-      $hash    = $user->get_confirmation_hash();
-      $login   = $user->get_login();
+      $hash    = urlencode($user->get_confirmation_hash());
+      $login   = urlencode($user->get_login());
       $url     = cfg('site_url') . "?login=$login&confirm=$hash";
       $body    = preg_replace("/\[LOGIN\]/",       $user->get_login(),     $body);
       $body    = preg_replace("/\[FIRSTNAME\]/",   $user->get_firstname(), $body);

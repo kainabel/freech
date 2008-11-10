@@ -499,7 +499,10 @@
         return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
 
       $accountdb = $this->get_accountdb();
-      $ret       = $accountdb->save_user($user);
+      if ($accountdb->get_user_from_login($user->get_login()))
+        return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
+
+      $ret = $accountdb->save_user($user);
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
 

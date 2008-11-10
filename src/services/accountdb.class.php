@@ -375,20 +375,5 @@
                         or die("AccountDB::get_n_groups(): 3");
       return $n;
     }
-
-
-    /* Checks if loginname is already in use. */
-    function login_exists($_login) {
-      $sql   = "SELECT IF(COUNT(login), 0, 1)";
-      $sql  .= " FROM {t_user} WHERE login={login}";
-      $query = &new SqlQuery($sql);
-      $query->set_string('login',$_login);
-      $n = $this->db->GetOne($query->sql())
-                        or die("AccountDB::login_exists".$n);
-      if ($n == 0)
-        return false;
-      else
-        return true;
-    }
   }
 ?>

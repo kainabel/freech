@@ -54,6 +54,7 @@
   define("ERR_REGISTER_INVALID_FIRSTNAME",   -402);
   define("ERR_REGISTER_INVALID_LASTNAME",    -403);
   define("ERR_REGISTER_INVALID_MAIL",        -404);
+  define("ERR_REGISTER_USER_EXISTS",         -405);
 
   define("ERR_LOGIN_FAILED",                 -501);
   define("ERR_LOGIN_UNCONFIRMED",            -502);
@@ -68,6 +69,7 @@
   $err[ERR_REGISTER_INVALID_FIRSTNAME]   = lang("invalidfirstname");
   $err[ERR_REGISTER_INVALID_LASTNAME]    = lang("invalidlastname");
   $err[ERR_REGISTER_INVALID_MAIL]        = lang("invalidmail");
+  $err[ERR_REGISTER_USER_EXISTS]         = lang("usernamenotavailable");
   $err[ERR_LOGIN_FAILED]                 = lang("loginfailed");
   $err[ERR_LOGIN_UNCONFIRMED]            = lang("loginunconfirmed");
   $err[ERR_USER_LOGIN_INVALID_CHARS]     = lang("logininvalidchars");

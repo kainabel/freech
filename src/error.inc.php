@@ -73,6 +73,8 @@
   $err[ERR_LOGIN_FAILED]                 = lang("loginfailed");
   $err[ERR_LOGIN_UNCONFIRMED]            = lang("loginunconfirmed");
   $err[ERR_USER_LOGIN_INVALID_CHARS]     = lang("logininvalidchars");
+  $err[ERR_USER_LOGIN_TOO_SHORT]         = lang("logintooshort");
+  $err[ERR_USER_LOGIN_TOO_LONG]          = lang("logintoolong");
   $err[ERR_USER_PASSWORD_TOO_SHORT]      = lang("passwordtooshort");
   $err[ERR_USER_PASSWORD_TOO_LONG]       = lang("passwordtoolong");
 ?>

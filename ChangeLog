@@ -1,6 +1,7 @@
 2008-11-10  Samuel Abels  <spam debain org>
 
 	* Rename the project from Tefinch to Freech.
+	* Fix: Properly handle too short usernames.
 
 2008-11-09  Samuel Abels  <spam debain org>
 

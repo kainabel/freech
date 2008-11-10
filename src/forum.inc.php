@@ -438,11 +438,7 @@
 
     function &_fetch_user_data() {
       $user = &new User;
-      if ($_POST['login']) {
-        $ret = $user->set_login($_POST['login']);
-        if ($ret < 0)
-          return $ret;
-      }
+      $user->set_login($_POST['login']);
       $user->set_password($_POST['password']);
       $user->set_firstname($_POST['acc_firstname']);
       $user->set_lastname($_POST['acc_lastname']);
@@ -484,8 +480,6 @@
       $registration = &new RegistrationPrinter($this);
       $user         = $this->_fetch_user_data();
 
-      if ($user < 0)
-        return $registration->show($user, $err[$user]);
       $ret = $user->check_complete();
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);

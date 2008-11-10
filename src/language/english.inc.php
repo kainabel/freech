@@ -171,6 +171,10 @@
   $lang[loginfailed]      = "Login failfed.";
   $lang[loginunconfirmed] = "Your account is not yet confirmed.";
   $lang[resendconfirm]    = "Resend confirmation email";
+  $lang[logintooshort]    = "Your chosen name is too short. Please enter at"
+                          . "least $cfg[min_loginlength] characters.";
+  $lang[logintoolong]     = "Your chosen name is too long. Please enter at"
+                          . "most $cfg[max_loginlength] characters.";
   $lang[logininvalidchars]    = "Your login name contains invalid characters."
                               . " Please enter letters, digits or spaces only.";
   $lang[usernamenotavailable] = "The entered username is not available.";

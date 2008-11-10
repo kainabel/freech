@@ -184,6 +184,12 @@
   $lang[loginfailed]      = "Login fehlgeschlagen.";
   $lang[loginunconfirmed] = "Der Account ist noch nicht freigeschaltet.";
   $lang[resendconfirm]    = "Bestätigungsmail erneut versenden";
+  $lang[logintooshort]    = "Der von ihnen gewählte Benutzername ist zu kurz."
+                          . " Bitte mindestens $cfg[min_loginlength] Zeichen"
+                          . " eingeben.";
+  $lang[logintoolong]     = "Der von ihnen gewählte Benutzername ist zu lang."
+                          . " Bitte maximal $cfg[max_loginlength] Zeichen"
+                          . " eingeben.";
   $lang[logininvalidchars]    = "Der von ihnen gewählte Name enthält ungültige"
                               . " Zeichen. Bitte nur"
                               . " Buchstaben, Zahlen, oder Leerzeichen,"

@@ -83,15 +83,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_login($_login) {
-      $_login = trim($_login);
-      if (strlen($_login) < cfg("min_loginlength"))
-        return ERR_USER_LOGIN_TOO_SHORT;
-      if (strlen($_login) > cfg("max_loginlength"))
-        return ERR_USER_LOGIN_TOO_LONG;
-      if (!preg_match(cfg("login_pattern"), $_login))
-        return ERR_USER_LOGIN_INVALID_CHARS;
-      $this->fields[login] = $_login;
-      return 0;
+      $this->fields[login] = trim($_login);
     }
     
     
@@ -127,12 +119,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_firstname($_firstname) {
-      $_firstname = trim($_firstname);
-      if (strlen($_firstname) < cfg("min_firstnamelength"))
-        return ERR_USER_FIRSTNAME_TOO_SHORT;
-      if (strlen($_firstname) > cfg("max_firstnamelength"))
-        return ERR_USER_FIRSTNAME_TOO_LONG;
-      $this->fields[firstname] = $_firstname;
+      $this->fields[firstname] = trim($_firstname);
     }
     
     
@@ -142,12 +129,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_lastname($_lastname) {
-      $_lastname = trim($_lastname);
-      if (strlen($_lastname) < cfg("min_lastnamelength"))
-        return ERR_USER_LASTNAME_TOO_SHORT;
-      if (strlen($_lastname) > cfg("max_lastnamelength"))
-        return ERR_USER_LASTNAME_TOO_LONG;
-      $this->fields[lastname] = $_lastname;
+      $this->fields[lastname] = trim($_lastname);
     }
     
     
@@ -157,13 +139,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_mail($_mail, $_mail_is_public = FALSE) {
-      $_mail = strtolower(trim($_mail));
-      //FIXME: make a much better check.
-      if (!preg_match("/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/", $_mail))
-        return ERR_USER_MAIL_NOT_VALID;
-      if (strlen($_mail) > cfg("max_maillength"))
-        return ERR_USER_MAIL_TOO_LONG;
-      $this->fields[mail]        = $_mail;
+      $this->fields[mail]        = strtolower(trim($_mail));
       $this->fields[public_mail] = $_mail_is_public;
     }
     
@@ -177,11 +153,6 @@ define("USER_STATUS_BLOCKED",     2);
       $_homepage = trim($_homepage);
       if (!preg_match("/^http/i", $_homepage))
         $_homepage = "http://" . $_homepage;
-      //FIXME: make a much better check.
-      if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $_homepage))
-        return ERR_USER_HOMEPAGE_NOT_VALID;
-      if (strlen($_homepage) > cfg("max_homepageurllength"))
-        return ERR_USER_HOMEPAGE_TOO_LONG;
       $this->fields[homepage] = $_homepage;
     }
     
@@ -193,10 +164,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     /// Instant messenger address.
     function set_im($_im) {
-      $_im = trim($_im);
-      if (strlen($_im) > cfg("max_imlength"))
-        return ERR_USER_IM_TOO_LONG;
-      $this->fields[im] = $_im;
+      $this->fields[im] = trim($_im);
     }
     
     
@@ -207,10 +175,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     /// A signature that can be addded below a message that the user writes.
     function set_signature($_signature) {
-      $_signature = trim($_signature);
-      if (strlen($_signature) > cfg("max_signaturelength"))
-        return ERR_USER_SIGNATURE_TOO_LONG;
-      $this->fields[signature] = $_signature;
+      $this->fields[signature] = trim($_signature);
     }
     
     
@@ -315,16 +280,47 @@ define("USER_STATUS_BLOCKED",     2);
     function check_complete() {
       if (ctype_space($this->fields[login]))
         return ERR_USER_LOGIN_INCOMPLETE;
+      if (strlen($this->fields[login]) < cfg("min_loginlength"))
+        return ERR_USER_LOGIN_TOO_SHORT;
+      if (strlen($this->fields[login]) > cfg("max_loginlength"))
+        return ERR_USER_LOGIN_TOO_LONG;
+      if (!preg_match(cfg("login_pattern"), $this->fields[login]))
+        return ERR_USER_LOGIN_INVALID_CHARS;
       
       if (ctype_space($this->fields[passwordhash]))
         return ERR_USER_PASSWORD_INCOMPLETE;
       
       if (ctype_space($this->fields[firstname]))
         return ERR_USER_FIRSTNAME_INCOMPLETE;
+      if (strlen($this->fields[firstname]) < cfg("min_firstnamelength"))
+        return ERR_USER_FIRSTNAME_TOO_SHORT;
+      if (strlen($this->fields[firstname]) > cfg("max_firstnamelength"))
+        return ERR_USER_FIRSTNAME_TOO_LONG;
       
       if (ctype_space($this->fields[lastname]))
         return ERR_USER_LASTNAME_INCOMPLETE;
+      if (strlen($this->fields[lastname]) < cfg("min_lastnamelength"))
+        return ERR_USER_LASTNAME_TOO_SHORT;
+      if (strlen($this->fields[lastname]) > cfg("max_lastnamelength"))
+        return ERR_USER_LASTNAME_TOO_LONG;
       
+      //FIXME: make a much better check.
+      if (!preg_match("/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/", $this->fields[mail]))
+        return ERR_USER_MAIL_NOT_VALID;
+      if (strlen($this->fields[mail]) > cfg("max_maillength"))
+        return ERR_USER_MAIL_TOO_LONG;
+
+      //FIXME: make a much better check.
+      if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $this->fields[homepage]))
+        return ERR_USER_HOMEPAGE_NOT_VALID;
+      if (strlen($this->fields[homepage]) > cfg("max_homepageurllength"))
+        return ERR_USER_HOMEPAGE_TOO_LONG;
+
+      if (strlen($this->fields[im]) > cfg("max_imlength"))
+        return ERR_USER_IM_TOO_LONG;
+
+      if (strlen($this->fields[signature]) > cfg("max_signaturelength"))
+        return ERR_USER_SIGNATURE_TOO_LONG;
       return 0;
     }
   }

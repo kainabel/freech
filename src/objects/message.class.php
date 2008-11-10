@@ -140,6 +140,13 @@
     }
     
     
+    function _url2link($match) {
+      return '<a href="'.$match[0].'">'
+           . $match[0]
+           . '</a>';
+    }
+
+
     function &get_body_html($_quotecolor = "#990000") {
       $body = wordwrap_smart($this->_fields[body]);
       $body = string_escape($body);
@@ -148,6 +155,10 @@
       $body = preg_replace("/^(&gt;&nbsp;.*)/m",
                            "<font color='$_quotecolor'>$1</font>",
                            $body);
+      if (cfg("autolink_urls"))
+        $body = preg_replace_callback('~' . cfg("autolink_pattern") . '~',
+                                      array($this, '_url2link'),
+                                      $body);
       return $body;
     }
     

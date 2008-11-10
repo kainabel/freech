@@ -17,7 +17,7 @@
 // |	Richard Tango-Lowy <richtl@arscognita.com>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: ADOdb.php,v 1.1 2005-07-23 10:01:09 knipknap Exp $
+// $Id: ADOdb.php,v 1.1 2005/07/23 10:01:09 knipknap Exp $
 //
 
 require_once 'Auth/Container.php';

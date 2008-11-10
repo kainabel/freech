@@ -45,7 +45,7 @@
       
       // The url behind the "+/-" folding toggle button.
       if ($_GET[read]) {
-        $foldurl = $url;
+        $foldurl = clone($url);
         $foldurl->delete_var[hs];
         $foldurl->set_var('showthread', -1);
       }

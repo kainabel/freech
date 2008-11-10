@@ -27,7 +27,7 @@
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Seite";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum (bisher [MESSAGES] Beiträge,";
+  $lang[forum_long]       = "Forum (bisher [MESSAGES] Beiträge,"
                           . " [NEWMESSAGES] neu)";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";

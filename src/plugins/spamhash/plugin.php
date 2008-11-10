@@ -64,7 +64,12 @@ function spamhash_html_contains_form(&$html) {
 
 function spamhash_check_hash() {
   global $spamhash;
-  switch ($spamhash->check_hash()) {
+  $err = $spamhash->check_hash();
+  switch ($err) {
+  case 0:
+    //echo "Successfully checked hash.";
+    break;
+
   case SPAMHASH_ERROR_REFERRER:
     echo "Error: Invalid referrer - sorry, blocked due to spam protection.";
     die();
@@ -91,8 +96,8 @@ function spamhash_check_hash() {
     return FALSE;
 
   default:
-    //echo "Successfully checked hash.";
-    break;
+    die("Hash check returned an unknown error code ($err)");
+    return FALSE;
   }
   return TRUE;
 }

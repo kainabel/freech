@@ -1,8 +1,12 @@
-<p>{lang text="havetoregister"|escape} <a href="{$register|escape}">{lang text="register_title"|escape}</a></p>
 <p>
-<span style="color:red;">{$hint}</span>
+{lang text="login_text"|escape}
+
+{if $hint}
+<p>
+<font color='red' size='+1'>{$hint|escape}</font>
+{/if}
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
-  <div align="center">
+  <div align="left">
     <table border="0" cellpadding="2">
       <tr>
         <td bgcolor="#CCCCCC">&nbsp;</td>
@@ -11,7 +15,7 @@
       <tr>
         <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="username"|escape}</td>
         <td bgcolor="#CCCCCC">
-          <input type="text" name="username" size="20">
+          <input type="text" name="login" size="20" value="{$user->get_login()}">
         </td>
       </tr>
       <tr>
@@ -24,13 +28,21 @@
         <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="rememberpasswd"|escape}</td>
         <td bgcolor="#CCCCCC">
           <font size="2">{lang text="remembpasswdlong"|escape}<br /></font>
-          <input type="checkbox" name="permanent" value="true"><br>
+          <input type="checkbox" name="permanent" value="ON"><br>
         </td>
       </tr>
       <tr>
         <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC"><input type=submit value='{lang text="login"|escape}'></td>
+        <td bgcolor="#CCCCCC"><input type="submit" value='{lang text="login"|escape}'></td>
       </tr>
+{if $user->get_status() == 1}
+      <tr>
+        <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
+        <td bgcolor="#CCCCCC">
+          <a href="{$resend_url|escape}">{lang text="resendconfirm"|escape}</a>
+        </td>
+      </tr>
+{/if}
     </table>
   </div>
 </form>

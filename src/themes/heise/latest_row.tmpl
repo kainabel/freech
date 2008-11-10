@@ -1,6 +1,6 @@
 <!-- latest_row -->
 <tr valign='middle' bgcolor='#ffffff'>
-  <td align='center' width=8><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width=8><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left'>{strip}
 {if $message->url == ""}
   <font size='-1'>&nbsp;{$message->get_subject()|escape}</font>
@@ -9,12 +9,18 @@
 {/if}
   </td>
 {/strip}
-  <td><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
 {if $message->is_selected()}
-  <td align='left'><font size='-1' color='green'>{$message->get_username()|escape}</font></td>
+  {assign var="attr" value=" color='green'"}
 {else}
-  <td align='left'><font size='-1'>{$message->get_username()|escape}</font></td>
+  {assign var="attr" value=""}
 {/if}
+  <td align='left'>
+    &nbsp;<font size='-1'{$attr}>{$message->get_username()|escape}</font>
+{if $message->get_user_type() != "registered"}
+    <img src="themes/heise/img/{$message->get_user_type()}_user.png" title="{lang text=$message->get_user_type()}" />
+{/if}
+  </td>
 {if $message->is_selected()}
   <td align='right' nowrap><font size='-1' color='green'>{$message->get_created_time()}</font></td>
 {elseif $message->is_new()}
@@ -22,6 +28,6 @@
 {else}
   <td align='right' nowrap><font size='-1'>{$message->get_created_time()}</font></td>
 {/if}
-  <td align='center' width=8><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width=8><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
  </tr>
 <!-- end latest_row -->

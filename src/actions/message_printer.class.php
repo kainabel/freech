@@ -46,12 +46,16 @@
       $url->set_var('msg_id',   (int)$_GET[msg_id]);
       $url->set_var('forum_id', (int)$_GET[forum_id]);
       
+      $user = $this->parent->get_current_user() or new User;
+
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('action',          $url->get_string());
       $this->smarty->assign_by_ref('hint',            $_hint);
+      $this->smarty->assign_by_ref('user',            $user);
       $this->smarty->assign_by_ref('message',         $_message);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+
       if ($_quotebutton)
         $this->smarty->assign('msg_id', (int)$_GET[msg_id]);
       $this->parent->append_content($this->smarty->fetch('message_compose.tmpl'));
@@ -118,7 +122,7 @@
     
     
     // Shows a page explaining that the message was successfully created.
-    function show_created($_newmsg_id) {
+    function show_created($_newmsg_id, $_hint = '') {
       $messageurl = new URL('?', cfg("urlvars"));
       $messageurl->set_var('read',     1);
       $messageurl->set_var('msg_id',   $_newmsg_id);
@@ -137,6 +141,7 @@
       $this->smarty->assign_by_ref('messageurl', $messageurl->get_string());
       if ($_GET[msg_id]) 
         $this->smarty->assign_by_ref('parenturl', $parenturl->get_string());
+      $this->smarty->assign_by_ref('hint',     $_hint);
       $this->smarty->assign_by_ref('forumurl', $forumurl->get_string());
       $this->parent->append_content($this->smarty->fetch('message_created.tmpl'));
     }

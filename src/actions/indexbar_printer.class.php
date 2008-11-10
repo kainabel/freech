@@ -20,27 +20,11 @@
 ?>
 <?php
   /**
-   * Prints an index bar. An index bar is any bar with links to other pages.
+   * Concrete strategy, prints the index bar for the "threaded" list.
    */
   class IndexBarPrinter extends PrinterBase {
-    var $print_strategy;
     var $items;
-    
-    /// Constructor.
-    /**
-     * /param $_strategy The strategy to be used to draw the index bar.
-     * /param $_args     The url to the page.
-     */
-    function IndexBarPrinter(&$_forum, $_strategy, $_args = array()) {
-      $this->PrinterBase($_forum);
-      $this->items  = array();
-      $classname = "IndexBarStrategy_" . $_strategy;
-      $this->print_strategy = &new $classname($_args);
-      if (!$this->print_strategy)
-        die("IndexBarPrinter::IndexBarPrinter(): Invalid strategy.");
-    }
-    
-    
+
     /// Adds a link, text or separator to the index.
     /**
      * Adds a link, text or separator to the index.
@@ -53,15 +37,15 @@
         $item[url] = $_url->get_string();
       array_push($this->items, $item);
     }
-    
-    
+
+
     /// Prints the index bar using Smarty.
     /**
      * The bar is printed to the smarty instance.
      */
     function show() {
       if (count($this->items) <= 0)
-        $this->print_strategy->foreach_link(array(&$this, '_add_item'));
+        $this->_update_items();
       $this->smarty->assign_by_ref('items', $this->items);
       $this->parent->append_content($this->smarty->fetch('indexbar.tmpl'));
     }

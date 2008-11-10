@@ -27,106 +27,21 @@
  * @version $Revision: 1.3 $
  * @package openrat.services
  */
-class SqlQuery
-{
-  var $query = '';
-  var $data  = Array();
-  
+class TefinchSqlQuery extends SqlQuery {
   // Constructor.
-  function SqlQuery($query = '')
+  function TefinchSqlQuery($query = '')
   {
-    $this->query = $query;
-    $this->data  = array();
-    
-    foreach( table_names() as $t=>$name )
-    {
-      $this->query = str_replace( '{'.$t.'}',$name,$this->query );
-    }
-  }
-  
-  
-  // Overwrites the SQL query.
-  function set_sql($query = '')
-  {
-    $this->query = $query;
-    
-    foreach( table_names() as $t=>$name )
-    {
-      $this->query = str_replace( '{'.$t.'}',$name,$this->query );
-    }
-    
-    foreach( $this->data as $name=>$data )
-    {
-      if ( $data['type']=='string' ) $this->set_string($name,$data['value'] );
-      if ( $data['type']=='hex'    ) $this->set_hex   ($name,$data['value'] );
-      if ( $data['type']=='int'    ) $this->set_int   ($name,$data['value'] );
-      if ( $data['type']=='null'   ) $this->set_null  ($name                );
-    }
-  }
-  
-  
-  function set_var($name, $value)
-  {
-    if   ( is_string($value) )
-         $this->set_string( $name,$value );
-  
-    if   ( is_null($value) )
-         $this->set_null( $name );
-    
-    if   ( is_int($value) )
-         $this->set_int( $name,$value );
-  }
-  
-  
-  function set_int($name, $value)
-  {
-    $this->data[ $name ] = array( 'type'=>'int','value'=>$value );
-    $this->query = str_replace( '{'.$name.'}',intval($value),$this->query );
-  }
-  
-  
-  function set_string($name, $value)
-  {
-    $this->data[ $name ] = array( 'type'=>'string','value'=>$value );
-    $value = addslashes($value);
-    $value = "'".$value."'";
-    $this->query = str_replace( '{'.$name.'}',$value,$this->query );
-  }
-  
-  
-  function set_hex($name, $value)
-  {
-    $this->data[ $name ] = array( 'type'=>'hex','value'=>$value );
-    $value = addslashes($value);
-    $value = "0x".$value;
-    $this->query = str_replace( '{'.$name.'}',$value,$this->query );
-  }
-  
-  
-  function set_boolean($name, $value)
-  {
-    if        ( $value )
-         $this->set_int( $name,1 );
-    else        $this->setInt( $name,0 );
-  }
-  
-  
-  function set_null($name)
-  {
-    $this->data[ $name ] = array( 'type'=>'null' );
-    $this->query = str_replace( '{'.$name.'}','NULL',$this->query );
-  }
-  
-  
-  function sql()
-  {
-    return $this->get_sql();
-  }
-  
-  
-  function &get_sql()
-  {
-    return $this->query;
+    parent::SqlQuery($query);
+    $tables = array (
+      t_group            => cfg("db_tablebase") . 'group',
+      t_user             => cfg("db_tablebase") . 'user',
+      t_permission       => cfg("db_tablebase") . 'permission',
+      t_group_permission => cfg("db_tablebase") . 'group_permission',
+      t_group_user       => cfg("db_tablebase") . 'group_user',
+      t_forum            => cfg("db_tablebase") . 'forum',
+      t_message          => cfg("db_tablebase") . 'message'
+    );
+    $this->set_table_names($tables);
   }
 }
 ?>

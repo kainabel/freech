@@ -1,8 +1,7 @@
 <?php
   /*
-  Tefinch.
-  Copyright (C) 2003 Samuel Abels, <spam debain org>
-
+  Copyright (C) 2005 Samuel Abels, <spam debain org>
+  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -19,19 +18,15 @@
   */
 ?>
 <?php
-  /**
-   * Abstract function. Shame on PHP4 for not having an abstract keyword.
-   * IndexBarPrinterStrategies are different algorithms to print an index bar.
-   */
-  class IndexBarStrategy {
-    /// Calls the given function $func once for each page.
-    /**
-     * Calls the given callback function $func once for each page.
-     * Args passed to the callback are:
-     * - $text The text of the link, or NULL if a separator.
-     * - $url  The url to the page, or NULL if not a link.
-     * /param $_func The function to be called for each page.
-     */
-    function foreach_link($_func) { }
+if (!function_exists('scandir')) {
+  function scandir($directory) {
+    $handle = opendir($directory);
+    $files  = array();
+    while ($file = readdir($handle))
+      if ($file != "." && $file != "..")
+        array_push($files, $file);
+    closedir($handle);
+    return $files;
   }
+}
 ?>

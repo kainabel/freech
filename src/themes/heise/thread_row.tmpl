@@ -1,6 +1,6 @@
 <!-- thread_row -->
 <tr valign='middle' bgcolor='#ffffff'>
-  <td align='center' width=8><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width=8><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left'>{strip}
   <table border=0 cellspacing=0 cellpadding=0>
     <tr>
@@ -12,9 +12,9 @@
 *}
 {foreach item=indent from=$message->indent}
   {if $indent == 1}
-     <img src='themes/heise2/img/l.png' width=20 height=23 alt='|' />
+     <img src='themes/heise/img/l.png' width=20 height=23 alt='|' />
   {else}
-     <img src='themes/heise2/img/null.png' width=20 height=23 alt='&nbsp;' />
+     <img src='themes/heise/img/null.png' width=20 height=23 alt='&nbsp;' />
   {/if}
 {/foreach}
 {*
@@ -28,20 +28,20 @@
   7: CHILD_WITH_CHILDREN
 *}
 {if $message->get_relation() == 1}
-     <img src='themes/heise2/img/o.png' width=9 height=21 alt='' />
+     <img src='themes/heise/img/o.png' width=9 height=21 alt='' />
 {elseif $message->get_relation() == 2}
-     <a href='{$message->foldurl|escape}'><img src='themes/heise2/img/m.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$message->foldurl|escape}'><img src='themes/heise/img/m.png' border=0 width=9 height=21 alt='0' /></a>
 {elseif $message->get_relation() == 3}
-     <a href='{$message->foldurl|escape}'><img src='themes/heise2/img/p.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$message->foldurl|escape}'><img src='themes/heise/img/p.png' border=0 width=9 height=21 alt='0' /></a>
 {elseif $message->get_relation() == 4 || $message->get_relation() == 5}
-     <img src='themes/heise2/img/e.png' width=20 height=23 alt='`-' />
+     <img src='themes/heise/img/e.png' width=20 height=23 alt='`-' />
 {elseif $message->get_relation() == 6 || $message->get_relation() == 7}
-     <img src='themes/heise2/img/x.png' width=20 height=23 alt='|-' />
+     <img src='themes/heise/img/x.png' width=20 height=23 alt='|-' />
 {/if}
      </td>
      <td align='left'>
 {if $message->url == ""}
-     <font size='-1'>&nbsp;{$message->get_subject()|truncate:$max_titlelength|escape}</font>
+     &nbsp;<font size='-1'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>
 {elseif $message->is_selected()}
      &nbsp;<font size='-1' color='green'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>
 {else}
@@ -53,12 +53,18 @@
    </table>
   </td>
 {/strip}
-  <td><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
 {if $message->is_selected()}
-  <td align='left'><font size='-1' color='green'>{$message->get_username()|escape}</font></td>
+  {assign var="attr" value=" color='green'"}
 {else}
-  <td align='left'><font size='-1'>{$message->get_username()|escape}</font></td>
+  {assign var="attr" value=""}
 {/if}
+  <td align='left'>
+    &nbsp;<font size='-1' {$attr}>{$message->get_username()|escape}</font>
+{if $message->get_user_type() != "registered"}
+    <img src="themes/heise/img/{$message->get_user_type()}_user.png" title="{lang text=$message->get_user_type()}" />
+{/if}
+  </td>
 {if $message->is_selected()}
   <td align='right' nowrap><font size='-1' color='green'>{$message->get_created_time()}</font></td>
 {elseif $message->is_new()}
@@ -66,6 +72,6 @@
 {else}
   <td align='right' nowrap><font size='-1'>{$message->get_created_time()}</font></td>
 {/if}
-  <td align='center' width=8><img src='themes/heise2/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width=8><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
  </tr>
 <!-- end thread_row -->

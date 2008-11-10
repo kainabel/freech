@@ -1,108 +1,178 @@
-CREATE TABLE tefinch_group (
-  id            int(11)    unsigned auto_increment,
-  name          varchar(100)        NOT NULL,
-  active        tinyint(3) unsigned DEFAULT '1',
-  updated       TIMESTAMP,
-  created       TIMESTAMP,
-  PRIMARY KEY (id)
-) TYPE=innoDB;
+--
+-- Database: `tefinch`
+--
 
+-- --------------------------------------------------------
 
-CREATE TABLE tefinch_user (
-  id            int(11)    unsigned auto_increment,
-  login         varchar(100)        NOT NULL,
-  password      varchar(100)        NOT NULL,
-  firstname     varchar(100)        NOT NULL,
-  lastname      varchar(100)        NOT NULL,
-  mail          varchar(200)        NOT NULL,
-  homepage      varchar(255),
-  im            varchar(100),
-  signature     varchar(255),
-  updated       TIMESTAMP,
-  created       TIMESTAMP,
-  lastlogin     TIMESTAMP,
-  PRIMARY KEY (id)
-) TYPE=innoDB;
+--
+-- Table structure for table `tefinch_forum`
+--
 
+CREATE TABLE IF NOT EXISTS `tefinch_forum` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `description` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `active` tinyint(3) unsigned default '1',
+  `ownerid` int(11) unsigned default NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  KEY `ownerid` (`ownerid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=2 ;
 
-CREATE TABLE tefinch_permission (
-  id            int(11)    unsigned auto_increment,
-  name          varchar(100)        NOT NULL,
-  description   varchar(100)        NOT NULL,
-  updated       TIMESTAMP,
-  created       TIMESTAMP,
-  PRIMARY KEY (id)
-) TYPE=innoDB;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `tefinch_group`
+--
 
-CREATE TABLE tefinch_group_permission (
-  id            int(11)    unsigned auto_increment,
-  g_id          int(11)    unsigned DEFAULT 0,
-  p_id          int(11)    unsigned DEFAULT 0,
-  PRIMARY KEY (id),
-  INDEX(g_id),
-  INDEX(p_id),
-  FOREIGN KEY (g_id) REFERENCES tefinch_group(id)      ON DELETE CASCADE,
-  FOREIGN KEY (p_id) REFERENCES tefinch_permission(id) ON DELETE CASCADE
-) TYPE=innoDB;
+CREATE TABLE IF NOT EXISTS `tefinch_group` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `active` tinyint(3) unsigned default '1',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
 
-CREATE TABLE tefinch_group_user (
-  id            int(11)    unsigned auto_increment,
-  g_id          int(11)    unsigned DEFAULT 0,
-  u_id          int(11)    unsigned DEFAULT 0,
-  PRIMARY KEY (id),
-  INDEX(g_id),
-  INDEX(u_id),
-  FOREIGN KEY (g_id) REFERENCES tefinch_group(id) ON DELETE CASCADE,
-  FOREIGN KEY (u_id) REFERENCES tefinch_user(id)  ON DELETE CASCADE
-) TYPE=innoDB;
+--
+-- Table structure for table `tefinch_group_permission`
+--
 
+CREATE TABLE IF NOT EXISTS `tefinch_group_permission` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `g_id` int(11) unsigned default '0',
+  `p_id` int(11) unsigned default '0',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  KEY `g_id` (`g_id`),
+  KEY `p_id` (`p_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
-CREATE TABLE tefinch_forum (
-  id            int(11)    unsigned auto_increment,
-  name          varchar(100)        NOT NULL,
-  description   varchar(255)        NOT NULL,
-  active        tinyint(3) unsigned DEFAULT '1',
-  ownerid       int(11)    unsigned,
-  updated       TIMESTAMP,
-  created       TIMESTAMP,
-  PRIMARY KEY (id),
-  INDEX(ownerid),
-  FOREIGN KEY (ownerid) REFERENCES tefinch_user(id) ON DELETE SET NULL
-) TYPE=innoDB;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `tefinch_group_user`
+--
 
-CREATE TABLE tefinch_message (
-  id            int(11)    unsigned auto_increment,
-  forumid       int(11)    unsigned NOT NULL,
-  threadid      int(11)    unsigned NOT NULL,
-  is_parent     int(3)     unsigned DEFAULT 0,
-  n_children    int(11)    unsigned DEFAULT 0,
-  n_descendants int(11)    unsigned DEFAULT 0,
-  path          varbinary(255),
-  u_id          int(11)    unsigned DEFAULT 0,
-  name          varchar(255)        NOT NULL,
-  title         varchar(255)        NOT NULL,
-  text          text                NOT NULL,
-  updated       TIMESTAMP,
-  created       TIMESTAMP,
-  ip_address    varchar(50)         NOT NULL,
-  active        tinyint(3) unsigned DEFAULT 1,
-  PRIMARY KEY (id),
-  INDEX(forumid),
-  INDEX(threadid),
-  INDEX(is_parent),
-  INDEX(u_id),
-  FOREIGN KEY (forumid) REFERENCES tefinch_forum(id) ON DELETE CASCADE,
-  FOREIGN KEY (u_id)    REFERENCES tefinch_user(id)  ON DELETE SET NULL
-) TYPE=innoDB;
+CREATE TABLE IF NOT EXISTS `tefinch_group_user` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `g_id` int(11) unsigned default '0',
+  `u_id` int(11) unsigned default '0',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  KEY `g_id` (`g_id`),
+  KEY `u_id` (`u_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tefinch_message`
+--
+
+CREATE TABLE IF NOT EXISTS `tefinch_message` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `forumid` int(11) unsigned NOT NULL default '0',
+  `threadid` int(11) unsigned NOT NULL default '0',
+  `is_parent` int(3) unsigned default '0',
+  `n_children` int(11) unsigned default '0',
+  `n_descendants` int(11) unsigned default '0',
+  `path` varchar(255) character set latin1 collate latin1_bin default NULL,
+  `u_id` int(11) unsigned default '0',
+  `name` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `title` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `text` text collate latin1_general_ci NOT NULL,
+  `hash` varchar(100) collate latin1_general_ci NOT NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `active` tinyint(3) unsigned default '1',
+  `ip_address` varchar(50) collate latin1_general_ci NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `forumid` (`forumid`),
+  KEY `threadid` (`threadid`),
+  KEY `is_parent` (`is_parent`),
+  KEY `u_id` (`u_id`),
+  KEY `hash` (`hash`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=6218 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tefinch_permission`
+--
+
+CREATE TABLE IF NOT EXISTS `tefinch_permission` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `description` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tefinch_user`
+--
+
+CREATE TABLE IF NOT EXISTS `tefinch_user` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `login` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `password` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `firstname` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `lastname` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `mail` varchar(200) collate latin1_general_ci NOT NULL default '',
+  `homepage` varchar(255) collate latin1_general_ci default NULL,
+  `im` varchar(100) collate latin1_general_ci default NULL,
+  `signature` varchar(255) collate latin1_general_ci default NULL,
+  `status` int(11) unsigned default '1',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `lastlogin` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `login` (`login`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=41 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tefinch_forum`
+--
+ALTER TABLE `tefinch_forum`
+  ADD CONSTRAINT `0_776` FOREIGN KEY (`ownerid`) REFERENCES `tefinch_user` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `tefinch_group_permission`
+--
+ALTER TABLE `tefinch_group_permission`
+  ADD CONSTRAINT `0_770` FOREIGN KEY (`g_id`) REFERENCES `tefinch_group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_771` FOREIGN KEY (`p_id`) REFERENCES `tefinch_permission` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tefinch_group_user`
+--
+ALTER TABLE `tefinch_group_user`
+  ADD CONSTRAINT `0_773` FOREIGN KEY (`g_id`) REFERENCES `tefinch_group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_774` FOREIGN KEY (`u_id`) REFERENCES `tefinch_user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tefinch_message`
+--
+ALTER TABLE `tefinch_message`
+  ADD CONSTRAINT `0_778` FOREIGN KEY (`forumid`) REFERENCES `tefinch_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_779` FOREIGN KEY (`u_id`) REFERENCES `tefinch_user` (`id`) ON DELETE SET NULL;
 
 INSERT INTO tefinch_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (1, 'root', '', 'root', 'root', '', NULL);
 INSERT INTO tefinch_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
-
 INSERT INTO tefinch_forum (name, description, ownerid, created)
                    VALUES ('Forum', 'Default forum', 1, NULL);

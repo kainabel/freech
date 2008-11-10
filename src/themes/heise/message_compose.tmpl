@@ -4,8 +4,12 @@
 <font size='+1' color='red'>{lang text="writeamessage"|escape}</font>
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
 <p>
+{if $user}
+<input type='hidden' name='name' value='{$user->get_login()|escape}'>
+{else}
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='name' id='name' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>
+{/if}
 <p>
 <b>{lang text="msgtitle"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='subject' id='subject' value='{$message->get_subject()|escape}' maxlength='{$max_titlelength}'>

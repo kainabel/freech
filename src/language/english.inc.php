@@ -26,6 +26,7 @@
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Page";
   $lang[forum]            = "Forum";
+  $lang[forum_long]       = "Forum ([MESSAGES] messages, [NEWMESSAGES] new)";
   $lang[unfoldall]        = "Unfold All";
   $lang[foldall]          = "Fold All";
   $lang[prev]             = "Older Threads";
@@ -43,6 +44,10 @@
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
   $lang[postedby]         = "Written by [USER]";
+  $lang[moderator]        = "Moderator";
+  $lang[anonymous]        = "Anonymous User";
+  $lang[registered]       = "Registered User";
+  $lang[deleted]          = "Deleted User";
 
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
@@ -69,6 +74,7 @@
   $lang[somethingmissing] = "Warning! Your message is incomplete.";
   $lang[onlywhitespace]   = "Warning! Your message has no visible text."; // Not used
   $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
+  $lang[messageduplicate] = "Your message has already been sent.";
   $lang[pvw_invalidchars] = "Warning! Your message contains invalid characters.";
   $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_namelength] characters. Please choose a shorter name.";
   $lang[titletoolong]     = "The subject is longer than $cfg[max_titlelength] characters. Please choose a shorter subject.";
@@ -85,6 +91,7 @@
   $lang[backtoindex]      = "Go Back to the Forum";
   
   // Registration
+  $lang[register]            = "Register Account";
   $lang[register_title]      = "User Registration";
   $lang[register_welcome]    = "Welcome!\n"
                              . "By registering you will be able to"
@@ -98,9 +105,9 @@
                              . " None of your personal data is given to any"
                              . " third parties.";
   $lang[register_nick]       = "Username:";
-  $lang[register_nick_l]     = "Please select a username (letters and digits"
-                             . " only). The username is used to log into"
-                             . " your account later.";
+  $lang[register_nick_l]     = "Please select a username (letters, digits,"
+                             . " and spaces only). The username is used to log"
+                             . " into your account later.";
   $lang[register_fullname]   = "Firstname And Lastname:";
   $lang[register_fullname_l] = "Please enter valid information, "
                              . " your registration is invalid otherwise"
@@ -116,8 +123,39 @@
                              . " conditions of usage.";
   $lang[register_agree]      = "I Agree, Register";
   $lang[register_disagree]   = "I Do Not Agree, Cancel";
+  $lang[register_mail_sent]  = "A confirmation mail has been sent.";
+  $lang[register_done]       = "Your registration is complete.";
+  $lang[invalidmail]         = "Please enter a valid email address.";
+  $lang[invalidfirstname]    = "Please enter a valid first name.";
+  $lang[invalidlastname]     = "Please enter a valid last name.";
+
+  // Registration mail.
+  $lang[registration_mail_subject] = "Your registration at $cfg[rss_title]";
+  $lang[registration_mail_body]    = "Hello [FIRSTNAME] [LASTNAME],\n"
+                                   . "\n"
+                                   . "Thank you for registering at"
+                                   . " $cfg[rss_title]. Your account name"
+                                   . " is \"[LOGIN]\".\n"
+                                   . "\n"
+                                   . "Please confirm your email address by"
+                                   . " clicking the registration link below."
+                                   . "\n"
+                                   . "[CONFIRM_URL]\n";
   
+  // Change password.
+  $lang[change_password_title] = "Password Change";
+  $lang[change_password_text]  = "Please assign your personal login password.";
+  $lang[change_password_btn]   = "Change Password";
+  $lang[change_password]       = "Password:";
+  $lang[change_password2]      = "Repeat:";
+  $lang[passwordsdonotmatch]   = "Error: Passwords do not match.";
+  $lang[passwordtooshort]      = "Please choose a password with at least"
+                               . " $cfg[min_passwordlength] characters.";
+  $lang[passwordtoolong]       = "Please choose a password with at most"
+                               . " $cfg[max_passwordlength] characters.";
+
   // Login
+  $lang[login_text]       = "To log in your browser must support cookies.";
   $lang[havetoregister]   = "In order to be able to use personalized features"
                           . " you need to <a href='registration/'>register</a>."
                           . " After that you can log in.";
@@ -129,4 +167,11 @@
   $lang[rememberpasswd]   = "Remember password";
   $lang[remembpasswdlong] = "Click here if you want do set a persistent cookie.";
   $lang[login]            = "Log in";
+  $lang[logout]           = "Log out";
+  $lang[loginfailed]      = "Login failfed.";
+  $lang[loginunconfirmed] = "Your account is not yet confirmed.";
+  $lang[resendconfirm]    = "Resend confirmation email";
+  $lang[logininvalidchars]    = "Your login name contains invalid characters."
+                              . " Please enter letters, digits or spaces only.";
+  $lang[usernamenotavailable] = "The entered username is not available.";
 ?>

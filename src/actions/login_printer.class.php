@@ -20,27 +20,20 @@
 ?>
 <?php
   class LoginPrinter extends PrinterBase {
-    function show($_hint = '') {
+    function show($_user, $_hint = '') {
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->set_var('do_login', 1); 
+      $url->set_var('do_login', 1);
+
+      $resend_url = new URL('?', array_merge(cfg("urlvars")));
+      $resend_url->set_var('resend_confirm', 1);
+      $resend_url->set_var('login', $_user->get_login());
+
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('hint', $_hint);
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $url = new URL('?',cfg("urlvars"));
-      $url->set_var('register', 1);
-      $this->smarty->assign_by_ref('register', $url->get_string());
+      $this->smarty->assign_by_ref('user',       $_user);
+      $this->smarty->assign_by_ref('hint',       $_hint);
+      $this->smarty->assign_by_ref('action',     $url->get_string());
+      $this->smarty->assign_by_ref('resend_url', $resend_url->get_string());
       $this->parent->append_content($this->smarty->fetch('login.tmpl'));
-    }
-    
-    function show_successful() {
-      $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->delete_var('do_login', 1);
-      
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('start_url', $url->get_string());
-      $url->set_var('edit_account', 1);
-      $this->smarty->assign_by_ref('edit_account_url', $url->get_string());
-      $this->parent->append_content($this->smarty->fetch('logged_in.tmpl'));
     }
   }
 ?>

@@ -46,7 +46,9 @@
       $this->_fields[created]      = time();
       $this->_fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->_fields[active]       = TRUE;
+      $this->_fields[u_id]         = 2; // Anonymous user.
       $this->_fields[allow_answer] = TRUE;
+      $this->_fields[ip_address]   = $_SERVER['REMOTE_ADDR'];
     }
     
     
@@ -57,12 +59,14 @@
       $this->clear();
       $this->_fields[id]              = $_db_row[id];
       $this->_fields[forum_id]        = $_db_row[forumid];
+      $this->_fields[u_id]            = $_db_row[u_id];
       $this->_fields[username]        = $_db_row[username];
       $this->_fields[subject]         = $_db_row[subject];
       $this->_fields[body]            = $_db_row[body];
       $this->_fields[updated]         = $_db_row[updated];
       $this->_fields[created]         = $_db_row[created];
       $this->_fields[n_children]      = $_db_row[n_children];
+      $this->_fields[ip_address]      = $_db_row[ip_address];
       if (isset($_db_row[relation]))
         $this->_fields[relation]      = $_db_row[relation];
       $this->_fields[active]          = $_db_row[active];
@@ -96,8 +100,18 @@
     }
     
     
+    function set_user_id($_user_id) {
+      $this->_fields[u_id] = $_user_id;
+    }
+
+
+    function &get_user_id() {
+      return $this->_fields[u_id];
+    }
+
+
     function set_username($_username) {
-      $this->_fields[username] = $_username;
+      $this->_fields[username] = trim($_username);
     }
     
     
@@ -107,7 +121,7 @@
     
     
     function set_subject($_subject) {
-      $this->_fields[subject] = $_subject;
+      $this->_fields[subject] = trim($_subject);
     }
     
     
@@ -117,7 +131,7 @@
     
     
     function set_body($_body) {
-      $this->_fields[body] = $_body;
+      $this->_fields[body] = trim($_body);
     }
     
     
@@ -138,6 +152,13 @@
     }
     
     
+    function &get_hash() {
+      return md5($this->get_username()
+               . $this->get_subject()
+               . $this->get_body());
+    }
+
+
     function get_created_unixtime() {
       return $this->_fields[created];
     }
@@ -153,12 +174,7 @@
     
     // Returns whether the row was newly created in the last X minutes.
     function is_new() {
-      return (time() - $this->_fields[created] < 60 * 60 * 24);
-    }
-    
-    
-    function set_updated_time($_updated) {
-      $this->_fields[updated] = $_updated * 1;
+      return (time() - $this->_fields[created] < cfg("new_post_time"));
     }
     
     
@@ -191,6 +207,21 @@
     }
     
     
+    function &get_ip_address() {
+      return $this->_fields[ip_address];
+    }
+
+
+    function &get_ip_address_hash() {
+      return md5(preg_replace('/\d+$/', '', $this->_fields[ip_address]) . "mysalt");
+    }
+
+
+    function &get_hostname() {
+      return GetHostByAddr($this->_fields[ip_address]);
+    }
+
+
     // The relation is the relation in the tree, see the define()s above.
     function set_relation($_relation) {
       $this->_fields[relation] = $_relation;
@@ -212,6 +243,18 @@
     }
     
     
+    function &get_user_type() {
+      if ($this->_fields[u_id] == 1)
+        return 'moderator';
+      elseif ($this->_fields[u_id] == 2)
+        return 'anonymous';
+      elseif ($this->_fields[u_id])
+        return 'registered';
+      else
+        return 'deleted';
+    }
+
+
     function set_allow_answer($_allow = TRUE) {
       $this->_fields[allow_answer] = $_allow;
     }

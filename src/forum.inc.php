@@ -22,10 +22,10 @@
 <?php
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';
+  include_once 'libuseful/SqlQuery.class.php5';
   
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
-  include_once 'functions/table_names.inc.php';
   include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
   include_once 'functions/files.inc.php';
@@ -38,11 +38,10 @@
   include_once 'objects/group.class.php';
   
   include_once 'actions/printer_base.class.php';
-  include_once 'actions/indexbar_strategy.class.php';
-  include_once 'actions/indexbar_strategy_list_by_time.class.php';
-  include_once 'actions/indexbar_strategy_list_by_thread.class.php';
-  include_once 'actions/indexbar_strategy_read_message.class.php';
   include_once 'actions/indexbar_printer.class.php';
+  include_once 'actions/indexbar_by_time_printer.class.php';
+  include_once 'actions/indexbar_by_thread_printer.class.php';
+  include_once 'actions/indexbar_read_message_printer.class.php';
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
@@ -52,7 +51,6 @@
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
-  include_once 'actions/accountoptions_printer.class.php';
   
   include_once 'services/thread_folding.class.php';
   include_once 'services/sql_query.class.php';
@@ -60,7 +58,7 @@
   include_once 'services/accountdb.class.php';
   include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
-  
+
   
   class TefinchForum {
     var $db;
@@ -69,7 +67,6 @@
     var $eventbus;
     var $smarty;
     var $folding;
-    var $user;
     
     // Prepare the forum, set cookies, etc. To be called before the http header 
     // was sent.
@@ -119,46 +116,63 @@
       $this->smarty->config_dir   = "smarty/configs";
       $this->smarty->register_function('lang', 'smarty_lang');
       
+      if ($_POST['permanent'] === "ON")
+        session_set_cookie_params(cfg("login_time"));
+      session_start();
       $this->_handle_cookies();
-      
-      // Login/User Stuff
-      /* may be moved elsewhere, but must be before any output,
-       * should set $this->user
-       * anonymous, not logged in user should be in a separate group
-       */
-      if (array_key_exists('logout',$_GET)) {
-        $this->_set_cookie('identity',"");
-        $this->_set_cookie('login',"");
-        $this->user = &new User();
-      } elseif (array_key_exists('do_login',$_GET) && array_key_exists('username',$_POST)) {
-        // new explicit login
-        $accounts = &new AccountDB($this->get_db());
-        $this->user = $accounts->get_user($_POST['username'],'login');
-        if ($this->user->is_valid_password($_POST['password'])) {
-          if ($_POST['permanent'])
-            $time = time()+cfg("login_time");
-          $this->_set_cookie('identity',$this->_create_secret($this->user),$time);
-          $this->_set_cookie('login',$this->user->get_login(),$time);
-        }
-        $this->user->set_last_login_time(time());
-        $accounts->save_user($this->user);
-      } elseif (array_key_exists('identity',$_COOKIE) AND array_key_exists('login',$_COOKIE)) {
-        // 'relogin', hidden
-        $accounts = &new AccountDB($this->get_db());
-        $this->user = $accounts->get_user($_COOKIE['login'],'login');
-        if ($_COOKIE['identity'] != $this->_create_secret($this->user))
-          $this->user->clear();
-      } else
-        $this->user = &new User();
+
+      $this->current_user = FALSE;
+      $this->login_error  = 0;
+      if ($_GET['do_login'] && $_POST['login'])
+        $this->login_error = $this->_try_login();
+      if ($_GET['do_logout'])
+        session_unset();
+    }
+
+
+    function get_accountdb() {
+      if (!$this->accountdb)
+        $this->accountdb = &new AccountDB($this->db);
+      return $this->accountdb;
+    }
+
+
+    function _try_login() {
+      $accountdb = $this->get_accountdb();
+      $user      = $accountdb->get_user_from_login($_POST['login']);
+      if (!$user)
+        return ERR_LOGIN_FAILED;
+      if ($user->get_status() == USER_STATUS_UNCONFIRMED)
+        return ERR_LOGIN_UNCONFIRMED;
+      if ($user->get_status() != USER_STATUS_ACTIVE)
+        return ERR_LOGIN_FAILED;
+      if (!$user->is_valid_password($_POST['password']))
+        return ERR_LOGIN_FAILED;
+
+      // Save user to update his timestamp.
+      $user->set_last_login_time(time());
+      $ret = $accountdb->save_user($user);
+      if ($ret < 0)
+        die("Failed to log in user, return code $ret");
+      $_SESSION['login'] = $user->get_login();
+      $_GET['do_login']  = 0;
+      return 0;
     }
     
-    function _create_secret($_user) {
-       // maybe choose another more fix timestamp
-       return md5($_user->get_login().
-                  $_user->get_password_hash().
-                  $_user->get_updated_unixtime());
-    }
     
+    function get_current_user() {
+      if (session_id() === '')
+        return FALSE;
+      if (!$_SESSION['login'])
+        return FALSE;
+      if ($this->current_user)
+        return $this->current_user;
+      $accountdb          = $this->get_accountdb();
+      $this->current_user = $accountdb->get_user_from_login($_SESSION['login']);
+      return $this->current_user;
+    }
+
+
     function _handle_cookies() {
       if (get_magic_quotes_gpc()) {
         $_GET    = array_map('stripslashes_deep', $_GET);
@@ -166,7 +180,7 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
-      $_GET[forum_id] = array_key_exists('forum_id',$_GET)? $_GET[forum_id] * 1 : 1;
+      $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
       
       $this->folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       if ($_GET['c']) {
@@ -199,9 +213,7 @@
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
       $folding    = &new ThreadFolding(UNFOLDED, '');
       $msgprinter = &new MessagePrinter($this);
-      $index      = &new IndexBarPrinter($this,
-                                         'read_message',
-                                         array(message => $message));
+      $index      = &new IndexBarReadMessagePrinter($this, $message);
       $this->_print_breadcrumbs($message);
       $index->show();
       $msgprinter->show($message);
@@ -274,16 +286,44 @@
     function _message_submit() {
       global $err;
       $msgprinter = &new MessagePrinter($this);
+      $user       = $this->get_current_user();
       $message    = &new Message;
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
+
+      if (!preg_match(cfg("login_pattern"), $message->get_username()))
+        return $msgprinter->show_compose($message,
+                                         $err[ERR_USER_LOGIN_INVALID_CHARS],
+                                         $_POST[msg_id] ? TRUE : FALSE);
+
+      if ($user && $user->get_login() !== $message->get_username())
+        die("Username does not match currently logged in user");
+      elseif (!$user) {
+        $accountdb = $this->get_accountdb();
+        $user      = $accountdb->get_user_from_login($_POST['name']);
+        if ($user) {
+          $msgprinter->show_compose($message,
+                                    lang("usernamenotavailable"),
+                                    $_POST[msg_id] ? TRUE : FALSE);
+          return;
+        }
+      }
+
+      if ($user)
+        $message->set_user_id($user->get_id());
+
+      $duplicate_id = $this->forum->find_duplicate($message);
+      if ($duplicate_id)
+        return $msgprinter->show_created($duplicate_id,
+                                         lang("messageduplicate"));
+
       $ret = $message->check_complete();
       if ($ret == 0)
         $newmsg_id = $this->forum->insert_entry($_GET[forum_id],
                                                 $_GET[msg_id],
                                                 $message);
-      if ($ret < 0 || $newmsg_id < 0)
+      if ($ret < 0 || $new_id < 0)
         $msgprinter->show_compose($message,
                                   $err[$ret],
                                   $_POST[msg_id] ? TRUE : FALSE);
@@ -297,12 +337,11 @@
       $this->_print_breadcrumbs('');
       $n_entries = $this->forum->get_n_messages($_GET[forum_id]);
       $latest    = &new LatestPrinter($this);
-      $index     = &new IndexBarPrinter($this,
-                                        'list_by_time',
-                                        array(n_messages          => $n_entries,
-                                              n_messages_per_page => cfg("epp"),
-                                              n_offset            => $_GET[hs],
-                                              n_pages_per_index   => cfg("ppi")));
+      $args      = array(n_messages          => $n_entries,
+                         n_messages_per_page => cfg("epp"),
+                         n_offset            => $_GET[hs],
+                         n_pages_per_index   => cfg("ppi"));
+      $index     = &new IndexBarByTimePrinter($this, $args);
       $index->show();
       $latest->show();
       $index->show();
@@ -316,13 +355,12 @@
       $this->_print_breadcrumbs('');
       $folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       $thread  = &new ThreadPrinter($this, $folding);
-      $index   = &new IndexBarPrinter($this,
-                                      'list_by_thread',
-                                      array(n_threads          => $n_threads,
-                                            n_threads_per_page => cfg("tpp"),
-                                            n_offset           => $_GET[hs],
-                                            n_pages_per_index  => cfg("ppi"),
-                                            folding            => $folding));
+      $args    = array(n_threads          => $n_threads,
+                       n_threads_per_page => cfg("tpp"),
+                       n_offset           => $_GET[hs],
+                       n_pages_per_index  => cfg("ppi"),
+                       folding            => $folding);
+      $index   = &new IndexBarByThreadPrinter($this, $args);
       $index->show();
       $thread->show($_GET['forum_id'], 0, $_GET[hs]);
       $index->show();
@@ -331,9 +369,9 @@
     
     
     // Changes a cookie only if necessary.
-    function _set_cookie($_name, $_value, $_expire = 0) {
+    function _set_cookie($_name, $_value) {
       if ($_COOKIE[$_name] != $_value) {
-        setcookie($_name, $_value, $_expire);
+        setcookie($_name, $_value);
         $_COOKIE[$_name] = $_value;
       }
     }
@@ -346,9 +384,18 @@
       $forumurl->set_var('forum_id', $_GET[forum_id]);
       
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $forumurl);
       
-      if ($_GET[read] || $_GET[llist]) {
+      if (!$_GET[read] && !$_GET[llist]) {
+        $n_messages = $this->forum->get_n_messages($_GET[forum_id]);
+        $start      = time() - cfg("new_post_time");
+        $n_new      = $this->forum->get_n_messages($_GET[forum_id], $start);
+        $text       = lang("forum_long");
+        $text       = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
+        $text       = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
+        $breadcrumbs->add_item($text, $forumurl);
+      }
+      else {
+        $breadcrumbs->add_item(lang("forum"), $forumurl);
         if (!$_message)
           $breadcrumbs->add_item(lang("noentrytitle"));
         elseif (!$_message->is_active())
@@ -369,108 +416,175 @@
     
     
     function _show_login() {
+      global $err;
+      $user  = $this->_fetch_user_data();
       $login = &new LoginPrinter($this);
-      $login->show();
-    }
-    
-    function _logged_in() {
-      $login = &new LoginPrinter($this);
-      if ($this->user->is_valid_password($_POST['password'])) {
-        $login->show_successful();
-      } else {
-        $login->show(lang("login_wrongpw"));
+      $user->set_status(USER_STATUS_ACTIVE);
+      if ($this->login_error == 0)
+        $login->show($user);
+      elseif ($this->login_error == ERR_LOGIN_UNCONFIRMED) {
+        $user->set_status(USER_STATUS_UNCONFIRMED);
+        $login->show($user, $err[$this->login_error]);
       }
+      else
+        $login->show($user, $err[$this->login_error]);
     }
     
     
-    function _user_print($_user, $_data) { print $_user->get_login() . "<br>"; } //FIXME
     function _register() {
       $registration = &new RegistrationPrinter($this);
-      $registration->show();
-      //$group     = &new Group;
-      //$accountdb = &new AccountDB($this->db);
-      //$accountdb->foreach_user(-1, 0, -1, array(&$this, "_user_print"), '');
+      $registration->show(new User);
     }
-    
-    function _register_send() {
-      global $err;
-      $registration = &new RegistrationPrinter($this);
+
+
+    function &_fetch_user_data() {
       $user = &new User;
-      $ret[0] = $user->set_login($_POST['acc_nick']);
-      $ret[1] = $user->set_firstname($_POST['acc_firstname']);
-      $ret[2] = $user->set_lastname($_POST['acc_lastname']);
-      $ret[3] = $user->set_mail($_POST['acc_mail']);
-      $ret[4] = $user->set_password($_POST['passwd1'],$_POST['passwd2']);
-      for ($i=0;$i<=4;$i++) {
-        if ($ret[$i] < 0) {
-          $_error = $err[$ret[$i]];
-        }
+      if ($_POST['login']) {
+        $ret = $user->set_login($_POST['login']);
+        if ($ret < 0)
+          return $ret;
       }
-      if (!isset($_error) and !$accounts->login_exists($_POST['acc_nick'])) {
-        $_error = $err[ERR_USER_LOGIN_EXISTS];
-      }
-      if (isset($_error)) {
-        $registration->show($_POST['acc_nick'],
-                            $_POST['acc_firstname'],
-                            $_POST['acc_lastname'],
-                            $_POST['acc_mail'],
-                            $_error);
-      } else {
-        //TODO: set user inactive; group for users, who have not yet confirmed the email-link?
-        $user->set_id(0);
-        $accounts = &new AccountDB($this->get_db());
-        $newid = $accounts->save_user($user);
-        //TODO: send mail. (re)use the mailer of IlohaWebMail or PEAR?
-        $registration->show_sendmail();
-      }      
+      $user->set_password($_POST['password']);
+      $user->set_firstname($_POST['acc_firstname']);
+      $user->set_lastname($_POST['acc_lastname']);
+      $user->set_mail($_POST['acc_mail'],
+                      $_POST['acc_publicmail'] ? TRUE : FALSE);
+      return $user;
     }
-    
-    function _validate() {
+
+
+    function _send_confirmation_mail(&$user) {
+      // Send a registration mail.
+      $head    = "From: ".cfg("mail_from")."\r\n";
+      $subject = lang("registration_mail_subject");
+      $body    = lang("registration_mail_body");
+      $hash    = $user->get_confirmation_hash();
+      $login   = $user->get_login();
+      $url     = cfg('site_url') . "?login=$login&confirm=$hash";
+      $body    = preg_replace("/\[LOGIN\]/",       $user->get_login(),     $body);
+      $body    = preg_replace("/\[FIRSTNAME\]/",   $user->get_firstname(), $body);
+      $body    = preg_replace("/\[LASTNAME\]/",    $user->get_lastname(),  $body);
+      $body    = preg_replace("/\[CONFIRM_URL\]/", $url,                   $body);
+      mail($user->get_mail(), $subject, $body, $head);
       $registration = &new RegistrationPrinter($this);
-      //TODO: check for $_GET['user'] and $_GET['key']
-      $registration->show_confirm($_GET['user'],$_GET['key']);
+      $registration->show_mail_sent($user);
     }
-    
-    function _validated() {
-      /* TODO: do the work here
-       * - remove user from inactive group (or add to normal group)
-       * - log user in?
-       */
-      $registration = &new RegistrationPrinter($this);
-      $registration->show_confirmed($_POST['user']);  
+
+
+    function _resend_confirmation_mail() {
+      $accountdb = $this->get_accountdb();
+      $user      = $accountdb->get_user_from_login($_GET['login']);
+      if ($user->get_status() != USER_STATUS_UNCONFIRMED)
+        die("User is already confirmed.");
+      $this->_send_confirmation_mail($user);
     }
-    
-    function _edit_account() {
-      $accountoptions = &new AccountOptionsPrinter($this);
-      $accountoptions->show($this->get_user());
-    }
-    
-    function _edited_account() {
+
+
+    function _account_create() {
       global $err;
-      $ret[0] = $this->user->set_firstname($_POST['firstname']);
-      $ret[1] = $this->user->set_lastname($_POST['lastname']);
-      $ret[2] = $this->user->set_mail($_POST['mail']);
-      $ret[3] = $this->user->set_homepage($_POST['homepage']);
-      $ret[4] = $this->user->set_im($_POST['im']);
-      $ret[5] = $this->user->set_signature($_POST['signature']);
-      if (!empty($_POST['password1']))
-        $ret[6] = $this->user->set_password($_POST['password1'],$_POST['password2']);
-      for ($i=0;$i<count($ret);$i++)
-        if ($ret[$i] < 0)
-          $_error .= $err[$ret[$i]].". ";
-      if (isset($_error)) {
-        $accountoptions = &new AccountOptionsPrinter($this);
-        $accountoptions->show($this->get_user(), $_error);
-      } else {
-        $accounts = &new AccountDB($this->get_db());
-        $accounts->save_user($this->user);
-        //FIXME: redirect to startpage or create "account-edited-template"
-        $url = &new URL('?', cfg("urlvars"));
-        print "<a href='".$url->get_string()."'>Zurück</a>";
-      }
-      
+      $registration = &new RegistrationPrinter($this);
+      $user         = $this->_fetch_user_data();
+
+      if ($user < 0)
+        return $registration->show($user, $err[$user]);
+      $ret = $user->check_complete();
+      if ($ret < 0)
+        return $registration->show($user, $err[$ret]);
+      if (!$user->get_mail())
+        return $registration->show($user, $err[ERR_REGISTER_INVALID_MAIL]);
+      if (!$user->get_firstname())
+        return $registration->show($user, $err[ERR_REGISTER_INVALID_FIRSTNAME]);
+      if (!$user->get_lastname())
+        return $registration->show($user, $err[ERR_REGISTER_INVALID_LASTNAME]);
+      if ($_POST['password'] !== $_POST['password2'])
+        return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
+
+      $accountdb = $this->get_accountdb();
+      $ret       = $accountdb->save_user($user);
+      if ($ret < 0)
+        return $registration->show($user, $err[$ret]);
+
+      $this->_send_confirmation_mail($user);
     }
-    
+
+
+    function _get_current_or_confirming_user() {
+      if ($_GET['login'] && $_GET['confirm']) {
+        $accountdb    = $this->get_accountdb();
+        $user         = $accountdb->get_user_from_login($_GET['login']);
+        $this->_check_confirmation_hash($user);
+        return $user;
+      }
+
+      $user = $this->get_current_user();
+      if (!$user)
+        die("Invalid user");
+      return $user;
+    }
+
+    function _change_password() {
+      $user         = $this->_get_current_or_confirming_user();
+      $registration = &new RegistrationPrinter($this);
+      $registration->show_change_password($user);
+    }
+
+
+    function _change_password_submit() {
+      global $err;
+      $regist = &new RegistrationPrinter($this);
+      if ($_POST['password'] !== $_POST['password2']) {
+        $error = lang("passwordsdonotmatch");
+        return $regist->show_change_password($user, $error);
+      }
+
+      $user = $this->_get_current_or_confirming_user();
+      $ret  = $user->set_password($_POST['password']);
+      if ($ret < 0) {
+        $regist->show_change_password($user, $err[$ret]);
+        return;
+      }
+
+      $user->set_status(USER_STATUS_ACTIVE);
+      $accountdb = $this->get_accountdb();
+      $ret       = $accountdb->save_user($user);
+      if ($ret < 0) {
+        $regist->show_change_password($user, $err[$ret]);
+        return;
+      }
+
+      $regist->show_done($user);
+    }
+
+
+    function _check_confirmation_hash(&$user) {
+      $hash = $user->get_confirmation_hash();
+      if (!$user)
+        die("Invalid user name");
+      if ($user->get_confirmation_hash() !== $_GET['confirm'])
+        die("Invalid confirmation hash");
+      if ($user->get_status() == USER_STATUS_BLOCKED)
+        die("User is blocked");
+    }
+
+
+    function _account_confirm() {
+      $accountdb = $this->get_accountdb();
+      $user      = $accountdb->get_user_from_login($_GET['login']);
+      $this->_check_confirmation_hash($user);
+
+      if (!$user->get_password_hash())
+        return $this->_change_password();
+
+      $user->set_status(USER_STATUS_ACTIVE);
+      $ret = $accountdb->save_user($user);
+      if ($ret < 0)
+        die("User activation failed");
+
+      $registration = &new RegistrationPrinter($this);
+      $registration->show_done($user);
+    }
+
+
     function &get_registry() {
       return $this->registry;
     }
@@ -489,17 +603,7 @@
     function &get_forumdb() {
       return $this->forum;
     }
-    
-    
-    function &get_db() {
-      return $this->db;
-    }
 
-
-    function &get_user() {
-      return $this->user;
-    }
-    
 
     function append_content(&$_content) {
       $this->content .= $_content . "\n";
@@ -507,17 +611,20 @@
 
 
     function print_head() {
-      if (!headers_sent())
-        header("Content-Type: text/html; charset=utf-8");
       $this->content = "";
-      $header = &new HeaderPrinter($this);
-      $header->show();
-      
+
+      if (!headers_sent()) {
+        header("Content-Type: text/html; charset=utf-8");
+        $header = &new HeaderPrinter($this);
+        $header->show();
+      }
+
       /* Plugin hook: on_header_print_before
        *   Called before the HTML header is sent.
        *   Args: $html: A reference to the HTML header.
        */
       $this->eventbus->emit("on_header_print_before", &$this->content);
+
       print($this->content);
       
       /* Plugin hook: on_header_print_before
@@ -530,45 +637,41 @@
     
     function show() {
       $this->content = "";
-      if (array_key_exists('read',$_GET))
+      if ($_GET['read'])
         $this->_message_read();     // Read a message.
-      elseif (array_key_exists('write',$_GET) && array_key_exists('msg_id',$_GET))
+      elseif ($_GET['write'] && $_GET['msg_id'])
         $this->_message_answer();   // Write an answer.
-      elseif (array_key_exists('write',$_GET))
+      elseif ($_GET['write'])
         $this->_message_compose();  // Write a new message.
-      elseif (array_key_exists('edit',$_POST))
+      elseif ($_POST['edit'])
         $this->_message_edit();     // Edit a message.
-      elseif (array_key_exists('quote',$_POST))
+      elseif ($_POST['quote'])
         $this->_message_quote();    // Insert a quote from the parent message.
-      elseif (array_key_exists('preview',$_POST))
+      elseif ($_POST['preview'])
         $this->_message_preview();  // A message preview was requested.
-      elseif (array_key_exists('send',$_POST))
+      elseif ($_POST['send'])
         $this->_message_submit();   // A message was posted and should be saved.
-      elseif (array_key_exists('do_login',$_GET) && array_key_exists('username',$_POST))
-        $this->_logged_in();        // Logindata was sent and should be processed
-      elseif (array_key_exists('do_login',$_GET))
+      elseif ($_GET['do_login'])
         $this->_show_login();       // Show a login form.
-      elseif (array_key_exists('edit_account', $_GET) && array_key_exists('submit', $_POST))
-        $this->_edited_account();   // Changed Accountdata was sent and should be processed
-      elseif (array_key_exists('edit_account', $_GET))
-        $this->_edit_account();     // Edit Accountoptions like name, mail, homepage, etc
-      elseif (array_key_exists('validate', $_GET) && array_key_exists('passwd1', $_POST))
-        $this->_validated();        // Validationdata was sent and should be processed
-      elseif (array_key_exists('validate', $_GET))
-        $this->_validate();         // Page shown after clicking on a link in an email
-      elseif (array_key_exists('register',$_GET) && array_key_exists('acc_create',$_POST))
-        $this->_register_send();    // Registrationrequest was sent
-      elseif (array_key_exists('register',$_GET) && ! array_key_exists('acc_cancel',$_POST))
-        $this->_register();         // Show a registration form.
-      elseif ((array_key_exists('list',$_GET) || array_key_exists('forum_id',$_GET))
+      elseif ($_GET['register'])
+        $this->_register();                 // Show a registration form.
+      elseif ($_GET['create_account'])
+        $this->_account_create();           // Register a new user.
+      elseif ($_GET['submit_password'])
+        $this->_change_password_submit();   // Change the password.
+      elseif ($_GET['confirm'])
+        $this->_account_confirm();          // Confirm a new user.
+      elseif ($_GET['resend_confirm'])
+        $this->_resend_confirmation_mail(); // Send a confirmation mail.
+      elseif ($_GET['change_password'])
+        $this->_change_password();  // Show form for changing the password.
+      elseif (($_GET['list'] || $_GET['forum_id'])
               && $_COOKIE['view'] === 'plain')
         $this->_list_by_time();     // Show the forum, time order.
-      elseif (array_key_exists('list',$_GET) || array_key_exists('forum_id',$_GET) || 
-              (array_key_exists('register',$_GET) && array_key_exists('acc_cancel',$_POST)))
+      elseif ($_GET['list'] || $_GET['forum_id'])
         $this->_list_by_thread();   // Show the forum, thread order.
       else
         die("internal error");
-        //TODO: List all Forums
 
       /* Plugin hook: on_content_print_before
        *   Called before the HTML content is sent.
@@ -593,7 +696,7 @@
                        $_n_entries) {
       $this->content = "";
       $rss = &new RSSPrinter($this);
-      $rss->set_base_url(cfg("rss_url"));
+      $rss->set_base_url(cfg("site_url"));
       $rss->set_title($_title);
       $rss->set_description($_descr);
       $rss->set_language(lang("countrycode"));

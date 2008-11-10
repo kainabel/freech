@@ -37,13 +37,13 @@
      * Private API.
      ***********************************************************************/
     function _lock_write($_forum) {
-      $query = &new SqlQuery("LOCK TABLE {$_forum} WRITE");
+      $query = &new TefinchSqlQuery("LOCK TABLE {$_forum} WRITE");
       //$this->db->execute($query->sql()) or die("AccountDB::lock_write()");
     }
     
     
     function _unlock_write() {
-      $query = &new SqlQuery("UNLOCK TABLES");
+      $query = &new TefinchSqlQuery("UNLOCK TABLES");
       //$this->db->execute($query->sql()) or die("AccountDB::unlock_write()");
     }
     
@@ -77,10 +77,9 @@
         return $this->users[$_id];
       $sql   = "SELECT *";
       $sql  .= " FROM {t_user}";
-      //FIXME: HACK: replaced id by login
-      $sql  .= " WHERE login={id}";
-      $query = &new SqlQuery($sql);
-      $query->set_string('id', $_id);
+      $sql  .= " WHERE id={id}";
+      $query = &new TefinchSqlQuery($sql);
+      $query->set_int('id', $_id);
       $row   = $this->db->GetRow($query->sql()) or die("AccountDB::get_user()");
       $user  = &new User;
       $user->set_from_db($row);
@@ -89,6 +88,27 @@
     }
     
     
+    /* Returns the user with the given name.
+     * $_login: The login name of the user.
+     */
+    function &get_user_from_login($_login) {
+      if (!$_login)
+        die("AccountDB::get_user(): Invalid login name.");
+      $sql   = "SELECT *";
+      $sql  .= " FROM {t_user}";
+      $sql  .= " WHERE login={login}";
+      $query = &new TefinchSqlQuery($sql);
+      $query->set_string('login', $_login);
+      $row   = $this->db->GetRow($query->sql());
+      if (!$row)
+        return;
+      $user = &new User;
+      $user->set_from_db($row);
+      $this->users[$row[id]] = &$user;
+      return $user;
+    }
+
+
     /* Insert a new user or save an existing one.
      *
      * $_user:    The user to be saved.
@@ -97,8 +117,10 @@
     function save_user(&$_user) {
       if (!is_object($_user))
         die("AccountDB::save_user(): Invalid arg.");
-      $query = &new SqlQuery();
+      $query = &new TefinchSqlQuery();
       $query->set_int   ('id',        $_user->get_id());
+      $query->set_int   ('status',    $_user->get_status());
+      $query->set_int   ('lastlogin', $_user->get_last_login_unixtime());
       $query->set_string('login',     $_user->get_login());
       $query->set_string('password',  $_user->get_password_hash());
       $query->set_string('firstname', $_user->get_firstname());
@@ -107,21 +129,20 @@
       $query->set_string('homepage',  $_user->get_homepage());
       $query->set_string('im',        $_user->get_im());
       $query->set_string('signature', $_user->get_signature());
-      $query->set_string('updated',   $_user->get_updated_unixtime());
       if ($_user->get_id() < 1) {
         $sql   = "INSERT INTO {t_user}";
         $sql  .= " (";
         $sql  .= "  login, password, firstname, lastname,";
-        $sql  .= "  mail, homepage, im, signature, updated, created";
+        $sql  .= "  mail, homepage, im, signature, status, created, lastlogin";
         $sql  .= " )";
         $sql  .= " VALUES (";
         $sql  .= "  {login}, {password}, {firstname}, {lastname},";
-        $sql  .= "  {mail}, {homepage}, {im}, {signature}, {updated}, NULL";
+        $sql  .= "  {mail}, {homepage}, {im}, {signature},";
+        $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
         $sql  .= ")";
         $query->set_sql($sql);
-        $this->db->Execute($query->sql())
-                              or die("AccountDB::save_user");
-        $newid = $this->db->Insert_Id();
+        $this->db->Execute($query->sql()) or die("AccountDB::save_user: Ins");
+        $newid = $this->db->Insert_ID();
         $_user->set_id($newid);
         $this->users[$newid] = &$_user;
         //FIXME: Map to groups.
@@ -132,8 +153,8 @@
       $sql  .= " login={login}, password={password},";
       $sql  .= " firstname={firstname}, lastname={lastname},";
       $sql  .= " mail={mail}, homepage={homepage},";
-      $sql  .= " im={im}, signature={signature},";
-      $sql  .= " updated={updated}";
+      $sql  .= " im={im}, signature={signature}, status={status},";
+      $sql  .= " lastlogin=FROM_UNIXTIME({lastlogin})";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);
       $this->db->Execute($query->sql()) or die("AccountDB::save_user(): Upd");
@@ -154,7 +175,7 @@
       $sql   = "SELECT *";
       $sql  .= " FROM {t_group}";
       $sql  .= " WHERE id={id}";
-      $query = &new SqlQuery($sql);
+      $query = &new TefinchSqlQuery($sql);
       $query->set_int('id', $_id);
       $row  = $this->db->GetRow($query->sql()) or die("AccountDB::get_group()");
       $group = &new Group;
@@ -172,11 +193,11 @@
     function save_group(&$_group) {
       if (!is_object($_group))
         die("AccountDB::save_group(): Invalid arg.");
-      $query = &new SqlQuery();
+      $query = &new TefinchSqlQuery();
       $query->set_int   ('id',      $_group->get_id());
+      $query->set_int   ('updated', $_group->get_updated_unixtime());
       $query->set_string('name',    $_group->get_name());
       $query->set_string('active',  $_group->get_active());
-      $query->set_string('updated', $_group->get_updated_unixtime());
       if ($_group->get_id() < 1) {
         $sql   = "INSERT INTO {t_group}";
         $sql  .= " (";
@@ -216,7 +237,7 @@
      *
      * Returns: The number of users processed.
      */
-    function foreach_user($_groupid, $_offset, $_limit, $_func, $_data) {
+    function foreach_user($_groupip, $_offset, $_limit, $_func, $_data) {
       $sql   = "SELECT u.*,";
       $sql  .= " g.id g_id, g.name g_name, g.active g_active,";
       $sql  .= " g.created g_created,g.updated g_updated";
@@ -226,7 +247,7 @@
         $sql  .= " LEFT JOIN {t_user}       u   ON gu2.u_id=u.id";
         $sql  .= " LEFT JOIN {t_group}      g   ON gu2.g_id=g.id";
         $sql  .= " WHERE gu1.g_id={g_id}";
-        $query = &new SqlQuery($sql);
+        $query = &new TefinchSqlQuery($sql);
         $query->set_int('g_id', $_groupid);
       }
       elseif ($_groupid == 0) {
@@ -234,13 +255,13 @@
         $sql  .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
         $sql  .= " LEFT JOIN {t_group}      g  ON gu.g_id=g.id";
         $sql  .= " WHERE g.id IS NULL";
-        $query = &new SqlQuery($sql);
+        $query = &new TefinchSqlQuery($sql);
       }
       else {
         $sql  .= " FROM      {t_user}       u";
         $sql  .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
         $sql  .= " LEFT JOIN {t_group}      g  ON gu.g_id=g.id";
-        $query = &new SqlQuery($sql);
+        $query = &new TefinchSqlQuery($sql);
       }
       $res     = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
                               or die("AccountDB::foreach_user(): Select");
@@ -271,7 +292,6 @@
           $group->set_name($row[g_name]);
           $group->set_active($row[g_active]);
           $group->set_created_unixtime($row[g_created]);
-          $group->set_updated_unixtime($row[g_updated]);
           
           // Attach a reference to the group to the user.
           $user->add_to_group($group);
@@ -299,7 +319,7 @@
     function foreach_group($_offset, $_limit, $_func, $_data) {
       $sql   = "SELECT g.*";
       $sql  .= " FROM {t_group}";
-      $query = &new SqlQuery($sql);
+      $query = &new TefinchSqlQuery($sql);
       $res   = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
                             or die("AccountDB::foreach_user(): Select");
       $numrows = $res->RecordCount();
@@ -316,16 +336,16 @@
       }
       return $numrows;
     }
-    
-    //FIXME: the 'or' after $this->db->GetOne will match too, if the query returns 0 (affects next function also)
+
+
     /* Returns the number of users in the group with the given id, the
      * number of all users if no group was given. */
-    function get_n_users($_groupid = -1) {
+    function get_n_users($_groupip = -1) {
       if ($_groupid > 0) {
         $sql  = "SELECT COUNT(*)";
         $sql .= " FROM {t_group_user} gu";
         $sql .= " WHERE gu.g_id={g_id}";
-        $query = &new SqlQuery($sql);
+        $query = &new TefinchSqlQuery($sql);
         $query->set_int('g_id', $_group->get_id());
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 1");
@@ -335,34 +355,37 @@
         $sql .= " FROM      {t_user}       u";
         $sql .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
         $sql .= " WHERE g.id=NULL";
-        $query = &new SqlQuery($sql);
+        $query = &new TefinchSqlQuery($sql);
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 2");
       }
       else {
-        $query = &new SqlQuery("SELECT COUNT(*) FROM {t_user}");
+        $query = &new TefinchSqlQuery("SELECT COUNT(*) FROM {t_user}");
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 3");
       }
       return $n;
     }
-    
-    
+
+
     /* Returns the number of groups. */
     function get_n_groups() {
-      $query = &new SqlQuery("SELECT COUNT(*) FROM {t_group}");
+      $query = &new TefinchSqlQuery("SELECT COUNT(*) FROM {t_group}");
       $n = $this->db->GetOne($query->sql())
                         or die("AccountDB::get_n_groups(): 3");
       return $n;
     }
-    
-    /* checks if loginname is already in use */
+
+
+    /* Checks if loginname is already in use. */
     function login_exists($_login) {
-      $query = &new SqlQuery("SELECT IF(COUNT(login),'false','true') FROM {t_user} WHERE login={login}");
+      $sql   = "SELECT IF(COUNT(login), 0, 1)";
+      $sql  .= " FROM {t_user} WHERE login={login}";
+      $query = &new SqlQuery($sql);
       $query->set_string('login',$_login);
       $n = $this->db->GetOne($query->sql())
                         or die("AccountDB::login_exists".$n);
-      if ($n == 'false')
+      if ($n == 0)
         return false;
       else
         return true;

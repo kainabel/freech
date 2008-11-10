@@ -14,12 +14,6 @@
   {else}
     <a href='{$order_by_time|escape}'>{lang text="plainview"|escape}</a>
   {/if}
-  {if $login == ""}
-  	&nbsp;&nbsp;&nbsp;<a href='{$edit_account}'>{lang text="account_edit"|escape}</a>
-  	&nbsp;&nbsp;&nbsp;<a href='{$logout}'>{lang text="logout"|escape}</a>
-  {else}
-  	&nbsp;&nbsp;&nbsp;<a href='{$login|escape}'>{lang text="login"|escape}</a>
-  {/if}
   </font>
 {/strip}
   </td>

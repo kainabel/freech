@@ -22,19 +22,20 @@
   /**
    * Concrete strategy, prints the index bar for the "threaded" list.
    */
-  class IndexBarStrategy_read_message extends IndexBarStrategy {
-    var $message;
-    
-    
+  class IndexBarReadMessagePrinter extends IndexBarPrinter {
     /// Constructor.
-    function IndexBarStrategy_read_message(&$_args) {
-      $this->message = $_args[message];
+    function IndexBarReadMessagePrinter(&$_parent, &$_message) {
+      $this->IndexBarPrinter($_parent);
+      $this->message = $_message;
     }
     
     
-    function foreach_link($_func) {
+    function _update_items() {
+      $additem     = array(&$this, '_add_item');
+      $this->items = array();
+
       if (!$this->message) {
-        call_user_func($_func);
+        call_user_func($additem);
         return;
       }
       
@@ -46,20 +47,20 @@
       // "Previous/Next Entry" buttons.
       if ($this->message->get_prev_message_id() > 0) {
         $url->set_var('msg_id', $this->message->get_prev_message_id());
-        call_user_func($_func, lang("prev_symbol"), $url);
+        call_user_func($additem, lang("prev_symbol"), $url);
       }
       else
-        call_user_func($_func, lang("prev_symbol"));
-      call_user_func($_func, lang("entry"));
+        call_user_func($additem, lang("prev_symbol"));
+      call_user_func($additem, lang("entry"));
       if ($this->message->get_next_message_id() > 0) {
         $url->set_var('msg_id', $this->message->get_next_message_id());
-        call_user_func($_func, lang("next_symbol"), $url);
+        call_user_func($additem, lang("next_symbol"), $url);
       }
       else
-        call_user_func($_func, lang("next_symbol"));
+        call_user_func($additem, lang("next_symbol"));
       
       // "Previous/Next Thread" buttons.
-      call_user_func($_func);
+      call_user_func($additem);
       $prev_url = clone($url);
       $next_url = clone($url);
       if (cfg("thread_arrow_rev") == TRUE) {
@@ -79,25 +80,25 @@
         if ($this->message->get_next_thread_id() <= 0)
           $next_url = NULL;
       }
-      call_user_func($_func, lang("prev_symbol"), $prev_url);
-      call_user_func($_func, lang("thread"));
-      call_user_func($_func, lang("next_symbol"), $next_url);
+      call_user_func($additem, lang("prev_symbol"), $prev_url);
+      call_user_func($additem, lang("thread"));
+      call_user_func($additem, lang("next_symbol"), $next_url);
       
       // "Reply" button.
-      call_user_func($_func);
+      call_user_func($additem);
       $url->delete_var('read');
       $url->set_var('write', 1);
       if ($this->message->is_active() && $this->message->get_allow_answer()) {
         $url->set_var('msg_id', $this->message->get_id());
-        call_user_func($_func, lang("writeanswer"), $url);
+        call_user_func($additem, lang("writeanswer"), $url);
       }
       else
-        call_user_func($_func, lang("writeanswer"));
+        call_user_func($additem, lang("writeanswer"));
       
       // "New Thread" button.
-      call_user_func($_func);
+      call_user_func($additem);
       $url->delete_var('msg_id');
-      call_user_func($_func, lang("writemessage"), $url);
+      call_user_func($additem, lang("writemessage"), $url);
       
       // "Show/Hide Thread" button.
       $url = new URL('?', cfg("urlvars"));
@@ -105,15 +106,15 @@
       $url->set_var('msg_id',   0);
       $url->set_var('forum_id', (int)$_GET[forum_id]);
       if ($this->message->has_thread()) {
-        call_user_func($_func);
+        call_user_func($additem);
         $url->set_var('msg_id', $this->message->get_id());
         if ($_COOKIE[thread] === 'hide') {
           $url->set_var('showthread', 1);
-          call_user_func($_func, lang("showthread"), $url);
+          call_user_func($additem, lang("showthread"), $url);
         }
         else {
           $url->set_var('showthread', -1);
-          call_user_func($_func, lang("hidethread"), $url);
+          call_user_func($additem, lang("hidethread"), $url);
         }
       }
     }

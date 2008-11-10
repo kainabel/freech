@@ -19,6 +19,10 @@
   */
 ?>
 <?php
+define("USER_STATUS_ACTIVE",      0);
+define("USER_STATUS_UNCONFIRMED", 1);
+define("USER_STATUS_BLOCKED",     2);
+
   /**
    * Represents a user.
    */
@@ -35,9 +39,10 @@
     /// Resets all values.
     function clear() {
       $this->fields = array();
-      $this->fields[login]        = "anonymous";
-      $this->fields[firstname]    = "Anonymous";
-      $this->fields[lastname]     = "George";
+      $this->fields[login]        = "";
+      $this->fields[firstname]    = "";
+      $this->fields[lastname]     = "";
+      $this->fields[status]       = USER_STATUS_UNCONFIRMED;
       $this->fields[created]      = time();
       $this->fields[lastlogin]    = time();
       $this->groups = array();
@@ -55,9 +60,11 @@
       $this->fields[firstname]    = $_db_row[firstname];
       $this->fields[lastname]     = $_db_row[lastname];
       $this->fields[mail]         = $_db_row[mail];
+      $this->fields[public_mail]  = $_db_row[public_mail];
       $this->fields[homepage]     = $_db_row[homepage];
       $this->fields[im]           = $_db_row[im];
       $this->fields[signature]    = $_db_row[signature];
+      $this->fields[status]       = $_db_row[status];
       $this->fields[created]      = $_db_row[created];
       $this->fields[updated]      = $_db_row[updated];
       $this->fields[lastlogin]    = $_db_row[lastlogin];
@@ -76,11 +83,15 @@
     
     
     function set_login($_login) {
+      $_login = trim($_login);
       if (strlen($_login) < cfg("min_loginlength"))
         return ERR_USER_LOGIN_TOO_SHORT;
       if (strlen($_login) > cfg("max_loginlength"))
         return ERR_USER_LOGIN_TOO_LONG;
+      if (!preg_match(cfg("login_pattern"), $_login))
+        return ERR_USER_LOGIN_INVALID_CHARS;
       $this->fields[login] = $_login;
+      return 0;
     }
     
     
@@ -89,14 +100,13 @@
     }
     
     
-    function set_password($_password1, $_password2) {
-      if ($_password1 != $_password2)
-        return ERR_USER_PASSWORD_NOT_EQUAL;
-      if (strlen($_password1) < cfg("min_passwordlength"))
+    function set_password($_password) {
+      if (strlen($_password) < cfg("min_passwordlength"))
         return ERR_USER_PASSWORD_TOO_SHORT;
-      if (strlen($_password1) > cfg("max_passwordlength"))
+      if (strlen($_password) > cfg("max_passwordlength"))
         return ERR_USER_PASSWORD_TOO_LONG;
-      $this->fields[passwordhash] = crypt($_password1);
+      $this->fields[passwordhash] = crypt($_password);
+      return 0;
     }
     
     
@@ -111,12 +121,13 @@
     
     
     function is_valid_password($_password) {
-      return crypt($_password , $this->fields[passwordhash])
+      return crypt($_password, $this->fields[passwordhash])
           == $this->fields[passwordhash];
     }
     
     
     function set_firstname($_firstname) {
+      $_firstname = trim($_firstname);
       if (strlen($_firstname) < cfg("min_firstnamelength"))
         return ERR_USER_FIRSTNAME_TOO_SHORT;
       if (strlen($_firstname) > cfg("max_firstnamelength"))
@@ -131,6 +142,7 @@
     
     
     function set_lastname($_lastname) {
+      $_lastname = trim($_lastname);
       if (strlen($_lastname) < cfg("min_lastnamelength"))
         return ERR_USER_LASTNAME_TOO_SHORT;
       if (strlen($_lastname) > cfg("max_lastnamelength"))
@@ -144,16 +156,15 @@
     }
     
     
-    function set_mail($_mail) {
-      /* FIXME: make a much better check.
-       * http://us2.php.net/manual/en/function.mailparse-rfc822-parse-addresses.php
-       * http://pear.php.net/manual/en/package.mail.mail-rfc822.parseaddresslist.php
-       */
-      if (!preg_match("/^[a-z0-9\._+-]+@[a-z0-9\-\.]+\.[a-z]+$/i", $_mail))
+    function set_mail($_mail, $_mail_is_public = FALSE) {
+      $_mail = strtolower(trim($_mail));
+      //FIXME: make a much better check.
+      if (!preg_match("/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/", $_mail))
         return ERR_USER_MAIL_NOT_VALID;
       if (strlen($_mail) > cfg("max_maillength"))
         return ERR_USER_MAIL_TOO_LONG;
-      $this->fields[mail] = $_mail;
+      $this->fields[mail]        = $_mail;
+      $this->fields[public_mail] = $_mail_is_public;
     }
     
     
@@ -163,10 +174,11 @@
     
     
     function set_homepage($_homepage) {
-      if ($_homepage != "" && !preg_match("/^http/i", $_homepage))
+      $_homepage = trim($_homepage);
+      if (!preg_match("/^http/i", $_homepage))
         $_homepage = "http://" . $_homepage;
       //FIXME: make a much better check.
-      if ($_homepage != "" && !preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $_homepage))
+      if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $_homepage))
         return ERR_USER_HOMEPAGE_NOT_VALID;
       if (strlen($_homepage) > cfg("max_homepageurllength"))
         return ERR_USER_HOMEPAGE_TOO_LONG;
@@ -181,6 +193,7 @@
     
     /// Instant messenger address.
     function set_im($_im) {
+      $_im = trim($_im);
       if (strlen($_im) > cfg("max_imlength"))
         return ERR_USER_IM_TOO_LONG;
       $this->fields[im] = $_im;
@@ -194,6 +207,7 @@
     
     /// A signature that can be addded below a message that the user writes.
     function set_signature($_signature) {
+      $_signature = trim($_signature);
       if (strlen($_signature) > cfg("max_signaturelength"))
         return ERR_USER_SIGNATURE_TOO_LONG;
       $this->fields[signature] = $_signature;
@@ -215,11 +229,6 @@
       if (!$_format)
         $_format = lang("dateformat");
       return date($_format, $this->fields[created]);
-    }
-    
-    
-    function set_updated_time($_updated) {
-      $this->fields[updated] = $_updated * 1;
     }
     
     
@@ -283,6 +292,25 @@
     }
     
     
+    function get_confirmation_hash() {
+      $hash = md5($this->get_id()
+                . $this->get_firstname()
+                . $this->get_lastname()
+                . $this->get_login());
+      return preg_replace("/\./", "x", $hash);
+    }
+
+
+    function set_status($_status) {
+      $this->fields[status] = $_status * 1;
+    }
+
+
+    function get_status() {
+      return $this->fields[status];
+    }
+
+
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
       if (ctype_space($this->fields[login]))

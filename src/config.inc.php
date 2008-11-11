@@ -39,6 +39,7 @@
   $cfg[ppi]                 = 5;        // Maximum number of pages shown in the
                                         // index before the [...] button
                                         // appears.
+  $cfg[updated_threads_first] = TRUE;   // Show threads with new posts first.
   $cfg[thread_arrow_rev]    = TRUE;     // If TRUE, ">>" points to the previous
                                         // thread.
   $cfg[remember_page]       = FALSE;    // If TRUE, the current page in the

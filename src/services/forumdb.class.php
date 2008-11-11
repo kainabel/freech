@@ -390,6 +390,7 @@
                            $_id,
                            $_offset,
                            $_limit,
+                           $_updated_threads_first,
                            $_fold,
                            $_func,
                            $_data) {
@@ -421,12 +422,16 @@
       // Build the SQL request to grab the complete threads.
       if ($res->RecordCount() <= 0)
         return;
-      $sql  = "SELECT id, forumid, u_id, HEX(path) path, n_children,";
-      $sql .= " n_descendants, name username, title subject, text body,";
-      $sql .= " active,ip_address,";
-      $sql .= " UNIX_TIMESTAMP(updated) updated,";
-      $sql .= " UNIX_TIMESTAMP(created) created";
-      $sql .= " FROM {t_message}";
+      $sql  = "SELECT a.id, a.forumid, a.u_id, HEX(a.path) path, a.n_children,";
+      $sql .= " a.n_descendants, a.name username, a.title subject, a.text body,";
+      $sql .= " a.active,a.ip_address,";
+      if ($_updated_threads_first)
+        $sql .= " MAX(b.id) threadupdate,";
+      $sql .= " UNIX_TIMESTAMP(a.updated) updated,";
+      $sql .= " UNIX_TIMESTAMP(a.created) created";
+      $sql .= " FROM {t_message} a";
+      if ($_updated_threads_first)
+        $sql .= " LEFT JOIN {t_message} b ON a.threadid=b.threadid";
       $sql .= " WHERE (";
       
       $first = 1;
@@ -434,13 +439,19 @@
         if (!$first)
           $sql .= " OR ";
         if ($_fold->is_folded($row[id]))
-          $sql .= "id=$row[id]";
+          $sql .= "a.id=$row[id]";
         else
-          $sql .= "threadid=$row[id]";
+          $sql .= "a.threadid=$row[id]";
         $first = 0;
       }
       
-      $sql .= ") ORDER BY threadid DESC,path";
+      $sql .= ")";
+      if ($_updated_threads_first) {
+        $sql .= " GROUP BY a.id";
+        $sql .= " ORDER BY threadupdate DESC, a.threadid DESC,path";
+      }
+      else
+        $sql .= " ORDER BY a.threadid DESC,path";
       
       // Walk through those threads.
       $query   = &new FreechSqlQuery($sql);
@@ -517,13 +528,19 @@
     /* This function performs exactly as foreach_child(), except that given a
      * an id, it first looks up the top-level parent of that node and walks
      * through all children of the top level node. */
-    function foreach_child_in_thread($_forumid, $_id, $_offset, $_limit,
-                                     $_fold, $_func, $_data) {
+    function foreach_child_in_thread($_forumid,
+                                     $_id,
+                                     $_offset,
+                                     $_limit,
+                                     $_fold,
+                                     $_func,
+                                     $_data) {
       $threadid = $this->_get_threadid($_id);
       return $this->foreach_child($_forumid,
                                   $threadid,
                                   $_offset,
                                   $_limit,
+                                  FALSE,
                                   $_fold,
                                   $_func,
                                   $_data);

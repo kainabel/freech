@@ -81,6 +81,7 @@
                                       $_msg_id,
                                       $_offset,
                                       cfg("tpp"),
+                                      cfg("updated_threads_first"),
                                       $this->folding,
                                       array(&$this, '_append_row'),
                                       '');

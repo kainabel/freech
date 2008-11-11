@@ -189,6 +189,21 @@
     }
     
     
+    // Returns a number between 0 (old) and 100 (new) depending on the 
+    // time since the messages was posted.
+    function get_newness() {
+      if (!$this->is_new())
+        return 0;
+      $oldness = time() - $this->_fields[created];
+      return 100 - ($oldness / cfg("new_post_time") * 100);
+    }
+    
+    
+    function get_newness_hex() {
+      return dechex($this->get_newness() / 100 * 255);
+    }
+    
+    
     function get_updated_unixtime() {
       return $this->_fields[updated];
     }

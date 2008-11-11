@@ -408,10 +408,19 @@
       }
       else {
         // Select all root nodes.
-        $sql  = "SELECT id,HEX(path) path, n_children";
-        $sql .= " FROM {t_message}";
-        $sql .= " WHERE forumid={forumid} AND is_parent=1";
-        $sql .= " ORDER BY threadid DESC,path";
+        $sql  = "SELECT a.id,HEX(a.path) path, a.n_children";
+        if ($_updated_threads_first)
+          $sql .= " ,MAX(b.id) threadupdate";
+        $sql .= " FROM {t_message} a";
+        if ($_updated_threads_first)
+          $sql .= " LEFT JOIN {t_message} b ON a.threadid=b.threadid";
+        $sql .= " WHERE a.forumid={forumid} AND a.is_parent=1";
+        if ($_updated_threads_first) {
+          $sql .= " GROUP BY a.id";
+          $sql .= " ORDER BY threadupdate DESC, a.threadid DESC,path";
+        }
+        else
+          $sql .= " ORDER BY a.threadid DESC,path";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid', $_forumid);
         //$this->db->debug=1;

@@ -271,6 +271,11 @@
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
+
+      $user = $this->get_current_user();
+      if ($user)
+        $message->set_user_id($user->get_id());
+
       $ret = $message->check_complete();
       if ($ret < 0)
         $msgprinter->show_compose($message,

@@ -115,9 +115,16 @@
       $this->smarty->config_dir   = "smarty/configs";
       $this->smarty->register_function('lang', 'smarty_lang');
       
-      if ($_POST['permanent'] === "ON")
-        session_set_cookie_params(cfg("login_time"));
-      session_start();
+      session_set_cookie_params(time() + cfg("login_time"));
+      if ($_COOKIE['permanent_session']) {
+        session_id($_COOKIE['permanent_session']);
+        session_start();
+      }
+      else {
+        session_start();
+        if ($_POST['permanent'] === "ON")
+          setcookie('permanent_session', session_id(), time() + cfg("login_time"));
+      }
       $this->_handle_cookies();
 
       $this->current_user = FALSE;

@@ -345,6 +345,9 @@
       
       if (strlen($this->_fields[username]) > cfg("max_namelength"))
         return ERR_MESSAGE_NAME_TOO_LONG;
+      if (!preg_match(cfg("login_pattern"), $this->_fields[username]))
+        return ERR_USER_LOGIN_INVALID_CHARS;
+
       
       if (strlen($this->_fields[subject]) > cfg("max_titlelength"))
         return ERR_MESSAGE_TITLE_TOO_LONG;

@@ -275,6 +275,10 @@
       $user = $this->get_current_user();
       if ($user)
         $message->set_user_id($user->get_id());
+      elseif ($this->_username_exists($message->get_username()))
+         return $msgprinter->show_compose($message,
+                                          lang("usernamenotavailable"),
+                                          $_POST[msg_id] ? TRUE : FALSE);
 
       $ret = $message->check_complete();
       if ($ret < 0)
@@ -296,26 +300,15 @@
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
 
-      if (!preg_match(cfg("login_pattern"), $message->get_username()))
-        return $msgprinter->show_compose($message,
-                                         $err[ERR_USER_LOGIN_INVALID_CHARS],
-                                         $_POST[msg_id] ? TRUE : FALSE);
-
       if ($user && $user->get_login() !== $message->get_username())
         die("Username does not match currently logged in user");
-      elseif (!$user) {
-        $accountdb = $this->get_accountdb();
-        $user      = $accountdb->get_user_from_login($_POST['name']);
-        if ($user) {
-          $msgprinter->show_compose($message,
-                                    lang("usernamenotavailable"),
-                                    $_POST[msg_id] ? TRUE : FALSE);
-          return;
-        }
-      }
 
       if ($user)
         $message->set_user_id($user->get_id());
+      elseif ($this->_username_exists($message->get_username()))
+         return $msgprinter->show_compose($message,
+                                          lang("usernamenotavailable"),
+                                          $_POST[msg_id] ? TRUE : FALSE);
 
       $duplicate_id = $this->forum->find_duplicate($message);
       if ($duplicate_id)
@@ -450,6 +443,14 @@
       $user->set_mail($_POST['acc_mail'],
                       $_POST['acc_publicmail'] ? TRUE : FALSE);
       return $user;
+    }
+
+
+    function _username_exists(&$username) {
+      $accountdb = $this->get_accountdb();
+      if ($accountdb->get_user_from_login($username))
+        return TRUE;
+      return FALSE;
     }
 
 

@@ -1,3 +1,8 @@
+2008-11-11  Samuel Abels  <spam debain org>
+
+	* Fix: It is no longer possible to use a registered user name anonymously by 
+	prefixing it with whitespace.
+
 2008-11-10  Samuel Abels  <spam debain org>
 
 	* Rename the project from Tefinch to Freech.

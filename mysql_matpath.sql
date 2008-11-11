@@ -136,7 +136,8 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   `lastlogin` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `login` (`login`)
+  UNIQUE KEY `login` (`login`),
+  UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=41 ;
 
 --

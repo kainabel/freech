@@ -39,12 +39,12 @@ define("USER_STATUS_BLOCKED",     2);
     /// Resets all values.
     function clear() {
       $this->fields = array();
-      $this->fields[login]        = "";
-      $this->fields[firstname]    = "";
-      $this->fields[lastname]     = "";
-      $this->fields[status]       = USER_STATUS_UNCONFIRMED;
-      $this->fields[created]      = time();
-      $this->fields[lastlogin]    = time();
+      $this->fields[login]     = "";
+      $this->fields[firstname] = "";
+      $this->fields[lastname]  = "";
+      $this->fields[status]    = USER_STATUS_UNCONFIRMED;
+      $this->fields[created]   = time();
+      $this->fields[lastlogin] = time();
       $this->groups = array();
     }
     
@@ -83,7 +83,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_login($_login) {
-      $this->fields[login] = trim($_login);
+      $this->fields[login] = preg_replace("/\s+/", " ", trim($_login));
     }
     
     
@@ -119,7 +119,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_firstname($_firstname) {
-      $this->fields[firstname] = trim($_firstname);
+      $this->fields[firstname] = preg_replace("/\s+/", " ", trim($_firstname));
     }
     
     
@@ -129,7 +129,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function set_lastname($_lastname) {
-      $this->fields[lastname] = trim($_lastname);
+      $this->fields[lastname] = preg_replace("/\s+/", " ", trim($_lastname));
     }
     
     

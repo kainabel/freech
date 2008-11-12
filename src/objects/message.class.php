@@ -111,7 +111,7 @@
 
 
     function set_username($_username) {
-      $this->_fields[username] = trim($_username);
+      $this->_fields[username] = preg_replace("/\s+/", " ", trim($_username));
     }
     
     
@@ -121,7 +121,7 @@
     
     
     function set_subject($_subject) {
-      $this->_fields[subject] = trim($_subject);
+      $this->_fields[subject] = preg_replace("/\s+/", " ", trim($_subject));
     }
     
     

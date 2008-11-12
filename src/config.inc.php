@@ -1,6 +1,6 @@
 <?
   // Database settings.
-  $cfg[salt]            = "tYAQom3OOLVNU"; // !!!CHANGE THIS!!! to a random value.
+  $cfg[salt]            = ""; // !!!CHANGE THIS!!! to a random value.
   $cfg[db_host]         = 'localhost';  // Your database hostname, usually
                                         // 'localhost'.
   $cfg[db_usr]          = 'user';       // Username on your database host.

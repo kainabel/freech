@@ -76,6 +76,9 @@
         $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg("lang_default"));
       //putenv("LANG=$l");
       setlocale(LC_MESSAGES, $l);
+
+      if (cfg("salt") === "")
+        die("Error: Please define the salt variable in config.inc.php!");
       
       // Setup gettext.
       if (!function_exists("gettext"))

@@ -149,6 +149,16 @@ define("USER_STATUS_BLOCKED",     2);
     }
     
     
+    function check_mail() {
+      //FIXME: make a much better check.
+      if (!preg_match("/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/", $this->fields[mail]))
+        return ERR_USER_MAIL_NOT_VALID;
+      if (strlen($this->fields[mail]) > cfg("max_maillength"))
+        return ERR_USER_MAIL_TOO_LONG;
+      return 0;
+    }
+
+
     function set_homepage($_homepage) {
       $_homepage = trim($_homepage);
       if (!preg_match("/^http/i", $_homepage))
@@ -305,12 +315,6 @@ define("USER_STATUS_BLOCKED",     2);
         return ERR_USER_LASTNAME_TOO_LONG;
       
       //FIXME: make a much better check.
-      if (!preg_match("/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/", $this->fields[mail]))
-        return ERR_USER_MAIL_NOT_VALID;
-      if (strlen($this->fields[mail]) > cfg("max_maillength"))
-        return ERR_USER_MAIL_TOO_LONG;
-
-      //FIXME: make a much better check.
       if ($this->fields[homepage]) {
         if (!preg_match("/[a-z0-9\._]\.[a-z0-9\._]+\.[a-z]+$/i", $this->fields[homepage]))
           return ERR_USER_HOMEPAGE_NOT_VALID;
@@ -323,7 +327,8 @@ define("USER_STATUS_BLOCKED",     2);
 
       if (strlen($this->fields[signature]) > cfg("max_signaturelength"))
         return ERR_USER_SIGNATURE_TOO_LONG;
-      return 0;
+
+      return $this->check_mail();
     }
   }
 ?>

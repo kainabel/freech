@@ -51,13 +51,11 @@
   define("ERR_GROUP_NAME_TOO_LONG",          -303);
 
   define("ERR_REGISTER_PASSWORDS_DIFFER",    -401);
-  define("ERR_REGISTER_INVALID_FIRSTNAME",   -402);
-  define("ERR_REGISTER_INVALID_LASTNAME",    -403);
-  define("ERR_REGISTER_INVALID_MAIL",        -404);
   define("ERR_REGISTER_USER_EXISTS",         -405);
 
   define("ERR_LOGIN_FAILED",                 -501);
   define("ERR_LOGIN_UNCONFIRMED",            -502);
+  define("ERR_LOGIN_NO_SUCH_MAIL",           -503);
   
   unset($err);
   $err[ERR_MESSAGE_INCOMPLETE]           = lang("somethingmissing");
@@ -65,13 +63,18 @@
   $err[ERR_MESSAGE_TITLE_TOO_LONG]       = lang("titletoolong");
   $err[ERR_MESSAGE_BODY_TOO_LONG]        = lang("messagetoolong");
   $err[ERR_MESSAGE_BODY_NO_UTF8]         = lang("pvw_invalidchars");
+  $err[ERR_USER_FIRSTNAME_INCOMPLETE]    = lang("invalidlastname");
+  $err[ERR_USER_FIRSTNAME_TOO_LONG]      = lang("invalidlastname");
+  $err[ERR_USER_FIRSTNAME_TOO_SHORT]     = lang("invalidlastname");
+  $err[ERR_USER_LASTNAME_INCOMPLETE]     = lang("invalidlastname");
+  $err[ERR_USER_LASTNAME_TOO_LONG]       = lang("invalidlastname");
+  $err[ERR_USER_LASTNAME_TOO_SHORT]      = lang("invalidlastname");
+  $err[ERR_USER_MAIL_NOT_VALID]          = lang("invalidmail");
   $err[ERR_REGISTER_PASSWORDS_DIFFER]    = lang("passwordsdonotmatch");
-  $err[ERR_REGISTER_INVALID_FIRSTNAME]   = lang("invalidfirstname");
-  $err[ERR_REGISTER_INVALID_LASTNAME]    = lang("invalidlastname");
-  $err[ERR_REGISTER_INVALID_MAIL]        = lang("invalidmail");
   $err[ERR_REGISTER_USER_EXISTS]         = lang("usernamenotavailable");
   $err[ERR_LOGIN_FAILED]                 = lang("loginfailed");
   $err[ERR_LOGIN_UNCONFIRMED]            = lang("loginunconfirmed");
+  $err[ERR_LOGIN_NO_SUCH_MAIL]           = lang("nosuchmail");
   $err[ERR_USER_LOGIN_INVALID_CHARS]     = lang("logininvalidchars");
   $err[ERR_USER_LOGIN_TOO_SHORT]         = lang("logintooshort");
   $err[ERR_USER_LOGIN_TOO_LONG]          = lang("logintoolong");

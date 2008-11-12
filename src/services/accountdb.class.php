@@ -93,12 +93,33 @@
      */
     function &get_user_from_login($_login) {
       if (!$_login)
-        die("AccountDB::get_user(): Invalid login name.");
+        die("AccountDB::get_user_from_login(): Invalid login name.");
       $sql   = "SELECT *";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE login={login}";
       $query = &new FreechSqlQuery($sql);
       $query->set_string('login', $_login);
+      $row   = $this->db->GetRow($query->sql());
+      if (!$row)
+        return;
+      $user = &new User;
+      $user->set_from_db($row);
+      $this->users[$row[id]] = &$user;
+      return $user;
+    }
+
+
+    /* Returns the user with the given email address.
+     * $_mail: The email address of the user.
+     */
+    function &get_user_from_mail($_mail) {
+      if (!$_mail)
+        die("AccountDB::get_user_from_mail(): Invalid email address.");
+      $sql   = "SELECT *";
+      $sql  .= " FROM {t_user}";
+      $sql  .= " WHERE mail={mail}";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_string('mail', $_mail);
       $row   = $this->db->GetRow($query->sql());
       if (!$row)
         return;

@@ -461,19 +461,25 @@
     }
 
 
+    function _send_account_mail(&$user, $subject, $body, $url) {
+      // Send a registration mail.
+      $head  = "From: ".cfg("mail_from")."\r\n";
+      $body  = preg_replace("/\[LOGIN\]/",     $user->get_login(),     $body);
+      $body  = preg_replace("/\[FIRSTNAME\]/", $user->get_firstname(), $body);
+      $body  = preg_replace("/\[LASTNAME\]/",  $user->get_lastname(),  $body);
+      $body  = preg_replace("/\[URL\]/",       $url,                   $body);
+      mail($user->get_mail(), $subject, $body, $head);
+    }
+
+
     function _send_confirmation_mail(&$user) {
       // Send a registration mail.
-      $head    = "From: ".cfg("mail_from")."\r\n";
       $subject = lang("registration_mail_subject");
       $body    = lang("registration_mail_body");
-      $hash    = urlencode($user->get_confirmation_hash());
       $login   = urlencode($user->get_login());
-      $url     = cfg('site_url') . "?login=$login&confirm=$hash";
-      $body    = preg_replace("/\[LOGIN\]/",       $user->get_login(),     $body);
-      $body    = preg_replace("/\[FIRSTNAME\]/",   $user->get_firstname(), $body);
-      $body    = preg_replace("/\[LASTNAME\]/",    $user->get_lastname(),  $body);
-      $body    = preg_replace("/\[CONFIRM_URL\]/", $url,                   $body);
-      mail($user->get_mail(), $subject, $body, $head);
+      $hash    = urlencode($user->get_confirmation_hash());
+      $url     = cfg('site_url') . "?confirm_account=1&login=$login&hash=$hash";
+      $this->_send_account_mail($user, $subject, $body, $url);
       $registration = &new RegistrationPrinter($this);
       $registration->show_mail_sent($user);
     }
@@ -512,9 +518,11 @@
 
 
     function _get_current_or_confirming_user() {
-      if ($_GET['login'] && $_GET['confirm']) {
-        $accountdb    = $this->get_accountdb();
-        $user         = $accountdb->get_user_from_login($_GET['login']);
+      if ($_GET['confirm_account']
+        || $_GET['confirm_password_mail']
+        || $_GET['reset_password_submit']) {
+        $accountdb = $this->get_accountdb();
+        $user      = $accountdb->get_user_from_login($_GET['login']);
         $this->_check_confirmation_hash($user);
         return $user;
       }
@@ -525,6 +533,7 @@
       return $user;
     }
 
+
     function _change_password() {
       $user         = $this->_get_current_or_confirming_user();
       $registration = &new RegistrationPrinter($this);
@@ -534,21 +543,22 @@
 
     function _change_password_submit() {
       global $err;
+      $accountdb = $this->get_accountdb();
+      $user      = $this->_fetch_user_data();
+      $user      = $accountdb->get_user_from_login($user->get_login());
       $regist = &new RegistrationPrinter($this);
       if ($_POST['password'] !== $_POST['password2']) {
         $error = lang("passwordsdonotmatch");
         return $regist->show_change_password($user, $error);
       }
 
-      $user = $this->_get_current_or_confirming_user();
-      $ret  = $user->set_password($_POST['password']);
+      $ret = $user->set_password($_POST['password']);
       if ($ret < 0) {
         $regist->show_change_password($user, $err[$ret]);
         return;
       }
 
       $user->set_status(USER_STATUS_ACTIVE);
-      $accountdb = $this->get_accountdb();
       $ret       = $accountdb->save_user($user);
       if ($ret < 0) {
         $regist->show_change_password($user, $err[$ret]);
@@ -559,11 +569,63 @@
     }
 
 
+    function _forgot_password() {
+      $user         = $this->_fetch_user_data();
+      $registration = &new RegistrationPrinter($this);
+      $registration->show_forgot_password($user);
+    }
+
+
+    function _password_mail_submit() {
+      global $err;
+      $registration = &new RegistrationPrinter($this);
+      $user         = $this->_fetch_user_data();
+      $ret          = $user->check_mail();
+      if ($ret != 0)
+        return $registration->show_forgot_password($user, $err[$ret]);
+
+      $accountdb = $this->get_accountdb();
+      $user      = $accountdb->get_user_from_mail($user->get_mail());
+      if (!$user) {
+        $msg = $err[ERR_LOGIN_NO_SUCH_MAIL];
+        return $registration->show_forgot_password($user, $msg);
+      }
+
+      if ($user->get_status() != USER_STATUS_ACTIVE) {
+        $msg = $err[ERR_LOGIN_UNCONFIRMED];
+        return $registration->show_forgot_password($user, $msg);
+      }
+
+      $subject = lang("reset_mail_subject");
+      $body    = lang("reset_mail_body");
+      $login   = urlencode($user->get_login());
+      $hash    = urlencode($user->get_confirmation_hash());
+      $url     = cfg('site_url') . "?confirm_password_mail=1"
+               . "&login=$login&hash=$hash";
+      $this->_send_account_mail($user, $subject, $body, $url);
+      $registration = &new RegistrationPrinter($this);
+      $registration->show_forgot_password_mail_sent($user);
+    }
+
+
+    function _confirm_password_mail() {
+      $user      = $this->_get_current_or_confirming_user();
+      $accountdb = $this->get_accountdb();
+      $user      = $accountdb->get_user_from_login($user->get_login());
+      $this->_check_confirmation_hash($user);
+
+      if ($user->get_status() != USER_STATUS_ACTIVE)
+        die("Error: User status is not active.");
+
+      $this->_change_password();
+    }
+
+
     function _check_confirmation_hash(&$user) {
       $hash = $user->get_confirmation_hash();
       if (!$user)
         die("Invalid user name");
-      if ($user->get_confirmation_hash() !== $_GET['confirm'])
+      if ($user->get_confirmation_hash() !== $_GET['hash'])
         die("Invalid confirmation hash");
       if ($user->get_status() == USER_STATUS_BLOCKED)
         die("User is blocked");
@@ -660,14 +722,20 @@
         $this->_register();                 // Show a registration form.
       elseif ($_GET['create_account'])
         $this->_account_create();           // Register a new user.
-      elseif ($_GET['submit_password'])
-        $this->_change_password_submit();   // Change the password.
-      elseif ($_GET['confirm'])
+      elseif ($_GET['confirm_account'])
         $this->_account_confirm();          // Confirm a new user.
       elseif ($_GET['resend_confirm'])
         $this->_resend_confirmation_mail(); // Send a confirmation mail.
       elseif ($_GET['change_password'])
-        $this->_change_password();  // Show form for changing the password.
+        $this->_change_password();          // Form for changing the password.
+      elseif ($_GET['submit_password'])
+        $this->_change_password_submit();   // Set the initial password.
+      elseif ($_GET['forgot_password'])
+        $this->_forgot_password();          // Form for requesting password mail.
+      elseif ($_GET['password_mail_submit'])
+        $this->_password_mail_submit();     // Send password mail request.
+      elseif ($_GET['confirm_password_mail'])
+        $this->_confirm_password_mail();    // Form for resetting the password.
       elseif (($_GET['list'] || $_GET['forum_id'])
               && $_COOKIE['view'] === 'plain')
         $this->_list_by_time();     // Show the forum, time order.

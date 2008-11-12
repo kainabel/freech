@@ -124,23 +124,22 @@
   $lang[register_agree]      = "I Agree, Register";
   $lang[register_disagree]   = "I Do Not Agree, Cancel";
   $lang[register_mail_sent]  = "A confirmation mail has been sent.";
-  $lang[register_done]       = "Your registration is complete.";
   $lang[invalidmail]         = "Please enter a valid email address.";
   $lang[invalidfirstname]    = "Please enter a valid first name.";
   $lang[invalidlastname]     = "Please enter a valid last name.";
 
   // Registration mail.
-  $lang[registration_mail_subject] = "Your registration at $cfg[rss_title]";
+  $lang[registration_mail_subject] = "Your registration at $cfg[site_title]";
   $lang[registration_mail_body]    = "Hello [FIRSTNAME] [LASTNAME],\n"
                                    . "\n"
                                    . "Thank you for registering at"
-                                   . " $cfg[rss_title]. Your account name"
+                                   . " $cfg[site_title]. Your account name"
                                    . " is \"[LOGIN]\".\n"
                                    . "\n"
                                    . "Please confirm your email address by"
                                    . " clicking the registration link below."
                                    . "\n"
-                                   . "[CONFIRM_URL]\n";
+                                   . "[URL]\n";
   
   // Change password.
   $lang[change_password_title] = "Password Change";
@@ -153,14 +152,35 @@
                                . " $cfg[min_passwordlength] characters.";
   $lang[passwordtoolong]       = "Please choose a password with at most"
                                . " $cfg[max_passwordlength] characters.";
+  $lang[password_changed]      = "Your password was changed. You may"
+                               . " now log in.";
 
+  // Reset password mail.
+  $lang[password_mail_sent] = "An email with instructions for resetting"
+                            . " your password has been sent to your email"
+                            . " address.";
+  $lang[reset_mail_subject] = "Your password at $cfg[site_title]";
+  $lang[reset_mail_body]    = "Hello [FIRSTNAME] [LASTNAME],\n"
+                            . "\n"
+                            . "We have received a password reset request"
+                            . " for your account \"[LOGIN]\".\n"
+                            . "\n"
+                            . "To change your password please click the link"
+                            . " below. If you did not request that your"
+                            . " password be changed you may ignore"
+                            . " this message.\n"
+                            . "\n"
+                            . "[URL]\n";
+  
   // Login
   $lang[login_text]       = "To log in your browser must support cookies.";
   $lang[havetoregister]   = "In order to be able to use personalized features"
                           . " you need to <a href='registration/'>register</a>."
                           . " After that you can log in.";
-  $lang[passwdforgotten]  = "If you <a href='registration/?forgot'>forgot "
-                          . "your password</a> you can order a new one.";
+  $lang[resetpasswd_title] = "Resetting Your Password";
+  $lang[resetpasswd]      = "Reset Password";
+  $lang[nosuchmail]       = "The given email address was not found.";
+  $lang[passwdforgotten]  = "Forgot your password?";
   $lang[enteruserdata]    = "Enter User Data";
   $lang[username]         = "Username";
   $lang[passwd]           = "Password";
@@ -168,7 +188,7 @@
   $lang[remembpasswdlong] = "Click here if you want do set a persistent cookie.";
   $lang[login]            = "Log in";
   $lang[logout]           = "Log out";
-  $lang[loginfailed]      = "Login failfed.";
+  $lang[loginfailed]      = "Login failed.";
   $lang[loginunconfirmed] = "Your account is not yet confirmed.";
   $lang[resendconfirm]    = "Resend confirmation email";
   $lang[logintooshort]    = "Your chosen name is too short. Please enter at"

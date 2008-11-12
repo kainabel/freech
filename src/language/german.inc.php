@@ -149,7 +149,7 @@
                                    . "Bitte bestätige deine Email-Adresse durch"
                                    . " Klick auf den folgenden Link:"
                                    . "\n"
-                                   . "[CONFIRM_URL]\n";
+                                   . "[URL]\n";
   
   // Change password.
   $lang[change_password_title] = "Passwort ändern";
@@ -162,7 +162,26 @@
                                . " $cfg[min_passwordlength] Zeichen wählen.";
   $lang[passwordtoolong]       = "Bitte ein Passwort mit maximal"
                                . " $cfg[max_passwordlength] Zeichen wählen.";
+  $lang[password_changed]      = "Ihr Passwort wurde geändert. Sie können"
+                               . " sich nun einloggen.";
 
+  // Reset password mail.
+  $lang[password_mail_sent] = "Eine Mail mit Anleitung zum Zurücksetzen"
+                            . " wurde an Ihre Email-Adresse versandt.";
+  $lang[reset_mail_subject] = "Dein Passwort bei $cfg[site_title]";
+  $lang[reset_mail_body]    = "Hallo [FIRSTNAME] [LASTNAME],\n"
+                            . "\n"
+                            . "Wir haben eine Anfrage zur Zurücksetzung des"
+                            . " Passwortes für deinen Account \"[LOGIN]\""
+                            . " erhalten.\n"
+                            . "Um das Passwort jetzt zurückzusetzen klicke" 
+                            . " bitte den Link unten an."
+                            . " Falls du keine Anfrage zur Zurücksetzung"
+                            . " gestellt hast, ignoriere bitte diese Mail."
+                            . "\n"
+                            . "\n"
+                            . "[URL]\n";
+  
   // Login
   $lang[login_text]       = "Hinweis: Um einzuloggen muss Ihr Browser Cookies"
                           . " akzeptieren.";
@@ -170,9 +189,10 @@
                           . "können, müssen Sie sich zunächst "
                           . "<a href='registration/'>registrieren</a>. Erst "
                           . "danach können Sie sich hier einloggen.";
-  $lang[passwdforgotten]  = "Wenn Sie Ihre <a href='registration/?forgot'>"
-                          . "Zugangsdaten vergessen</a> haben, dann können "
-                          . "Sie diese bei uns anfordern.";
+  $lang[resetpasswd_title] = "Zugangsdaten zurücksetzen";
+  $lang[resetpasswd]      = "Zurücksetzen";
+  $lang[nosuchmail]       = "Die angegebene Email-Adresse ist unbekannt.";
+  $lang[passwdforgotten]  = "Zugangsdaten vergessen";
   $lang[enteruserdata]    = "User-Daten eingeben";
   $lang[username]         = "User-Name";
   $lang[passwd]           = "Passwort";

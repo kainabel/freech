@@ -24,15 +24,19 @@
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
       $url->set_var('do_login', 1);
 
-      $resend_url = new URL('?', array_merge(cfg("urlvars")));
+      $resend_url = new URL('?', cfg("urlvars"));
       $resend_url->set_var('resend_confirm', 1);
       $resend_url->set_var('login', $_user->get_login());
+
+      $forgot_url = new URL('?', cfg("urlvars"));
+      $forgot_url->set_var('forgot_password', 1);
 
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('user',       $_user);
       $this->smarty->assign_by_ref('hint',       $_hint);
       $this->smarty->assign_by_ref('action',     $url->get_string());
       $this->smarty->assign_by_ref('resend_url', $resend_url->get_string());
+      $this->smarty->assign_by_ref('forgot_url', $forgot_url->get_string());
       $this->parent->append_content($this->smarty->fetch('login.tmpl'));
     }
   }

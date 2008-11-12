@@ -97,7 +97,7 @@ define("USER_STATUS_BLOCKED",     2);
         return ERR_USER_PASSWORD_TOO_SHORT;
       if (strlen($_password) > cfg("max_passwordlength"))
         return ERR_USER_PASSWORD_TOO_LONG;
-      $this->fields[passwordhash] = crypt($_password);
+      $this->fields[passwordhash] = crypt(cfg("salt") . $_password);
       return 0;
     }
     
@@ -113,7 +113,7 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function is_valid_password($_password) {
-      return crypt($_password, $this->fields[passwordhash])
+      return crypt(cfg("salt") . $_password, $this->fields[passwordhash])
           == $this->fields[passwordhash];
     }
     

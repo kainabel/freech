@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS `freech_permission` (
 CREATE TABLE IF NOT EXISTS `freech_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `login` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `soundexlogin` varchar(100) collate latin1_general_ci default NULL,
   `password` varchar(100) collate latin1_general_ci NOT NULL default '',
   `firstname` varchar(100) collate latin1_general_ci NOT NULL default '',
   `lastname` varchar(100) collate latin1_general_ci NOT NULL default '',
@@ -139,6 +140,22 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=41 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `freech_visitor`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_visitor` (
+  `id` int(11) NOT NULL auto_increment,
+  `ip` varchar(255) collate latin1_general_ci default NULL,
+  `ipname` varchar(255) collate latin1_general_ci default NULL,
+  `counter` bigint(20) default NULL,
+  `time` varchar(255) collate latin1_general_ci NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `counter` (`counter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1146450 ;
 
 --
 -- Constraints for dumped tables

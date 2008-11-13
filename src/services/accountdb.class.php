@@ -143,6 +143,7 @@
       $query->set_int   ('status',    $_user->get_status());
       $query->set_int   ('lastlogin', $_user->get_last_login_unixtime());
       $query->set_string('login',     $_user->get_login());
+      $query->set_string('soundex',   $_user->get_normalized_login());
       $query->set_string('password',  $_user->get_password_hash());
       $query->set_string('firstname', $_user->get_firstname());
       $query->set_string('lastname',  $_user->get_lastname());
@@ -153,11 +154,11 @@
       if ($_user->get_id() < 1) {
         $sql   = "INSERT INTO {t_user}";
         $sql  .= " (";
-        $sql  .= "  login, password, firstname, lastname,";
+        $sql  .= "  login, soundexlogin, password, firstname, lastname,";
         $sql  .= "  mail, homepage, im, signature, status, created, lastlogin";
         $sql  .= " )";
         $sql  .= " VALUES (";
-        $sql  .= "  {login}, {password}, {firstname}, {lastname},";
+        $sql  .= "  {login}, {soundex}, {password}, {firstname}, {lastname},";
         $sql  .= "  {mail}, {homepage}, {im}, {signature},";
         $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
         $sql  .= ")";
@@ -171,7 +172,7 @@
       }
       
       $sql   = "UPDATE {t_user} SET";
-      $sql  .= " login={login}, password={password},";
+      $sql  .= " login={login}, soundexlogin={soundex}, password={password},";
       $sql  .= " firstname={firstname}, lastname={lastname},";
       $sql  .= " mail={mail}, homepage={homepage},";
       $sql  .= " im={im}, signature={signature}, status={status},";

@@ -92,6 +92,26 @@ define("USER_STATUS_BLOCKED",     2);
     }
     
     
+    function &get_normalized_login() {
+      $map = array(
+        "." => " ",
+        "_" => " ",
+        "_" => " ",
+        "ß" => "ss",
+        "0" => "O",
+        "1" => "I",
+        "5" => "S",
+        "6" => "G",
+        "8" => "B",
+      );
+      $norm = $this->fields[login];
+      foreach ($map as $key => $value)
+        $norm = str_replace($key, $value, $norm);
+      $norm = preg_replace("/\s+/", " ", $norm);
+      return soundex(trim($norm));
+    }
+
+
     function set_password($_password) {
       if (strlen($_password) < cfg("min_passwordlength"))
         return ERR_USER_PASSWORD_TOO_SHORT;

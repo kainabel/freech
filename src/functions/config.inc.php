@@ -22,10 +22,16 @@
   unset($cfg);
   include_once 'config.inc.php';
   
-  function &cfg($_key) {
+  function &cfg($_key, $_default = NULL) {
     global $cfg;
-    if (!$_key || !isset($cfg[$_key]))
-      die("cfg(): Invalid configuration key '$_key'.\n");
-    return $cfg[$_key];
+    if ($_key && isset($cfg[$_key]))
+      return $cfg[$_key];
+    die("cfg(): Invalid configuration key '$_key'.\n");
+  }
+
+
+  function &cfg_is($_key, $_compare) {
+    global $cfg;
+    return $cfg[$_key] == $_compare;
   }
 ?>

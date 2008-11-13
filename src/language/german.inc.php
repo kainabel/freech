@@ -28,7 +28,8 @@
   $lang[index]            = "Seite";
   $lang[forum]            = "Forum";
   $lang[forum_long]       = "Forum (bisher [MESSAGES] Beiträge,"
-                          . " [NEWMESSAGES] neu)";
+                          . " [NEWMESSAGES] neu, zur Zeit [ONLINEUSERS]"
+                          . " User online)";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
   $lang[prev]             = "Ältere";

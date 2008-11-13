@@ -1,3 +1,7 @@
+2008-11-13  Samuel Abels  <spam debain org>
+
+	* Add a counter showing the number of currently online users.
+
 2008-11-11  Samuel Abels  <spam debain org>
 
 	* Fix: It is no longer possible to use a registered user name anonymously by 

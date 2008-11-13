@@ -55,6 +55,7 @@
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
   include_once 'services/accountdb.class.php';
+  include_once 'services/visitordb.class.php';
   include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
 
@@ -77,7 +78,7 @@
       //putenv("LANG=$l");
       setlocale(LC_MESSAGES, $l);
 
-      if (cfg("salt") === "")
+      if (cfg_is("salt", ""))
         die("Error: Please define the salt variable in config.inc.php!");
       
       // Setup gettext.
@@ -96,7 +97,9 @@
       $this->db    = &ADONewConnection(cfg("db_dbn"))
         or die("FreechForum::FreechForum(): Error: Can't connect."
              . " Please check username, password and hostname.");
-      $this->forum = &new ForumDB($this->db);
+      $this->forum     = &new ForumDB($this->db);
+      $this->visitordb = &new VisitorDB($this->db);
+      $this->visitordb->count();
 
       $this->registry = &new PluginRegistry();
       $this->registry->read_plugins("plugins");
@@ -396,9 +399,11 @@
         $n_messages = $this->forum->get_n_messages($_GET[forum_id]);
         $start      = time() - cfg("new_post_time");
         $n_new      = $this->forum->get_n_messages($_GET[forum_id], $start);
+        $n_online   = $this->visitordb->get_n_visitors(time() - 60 * 5);
         $text       = lang("forum_long");
         $text       = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
         $text       = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
+        $text       = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
         $breadcrumbs->add_item($text, $forumurl);
       }
       else {

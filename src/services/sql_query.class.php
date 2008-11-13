@@ -39,7 +39,8 @@ class FreechSqlQuery extends SqlQuery {
       t_group_permission => cfg("db_tablebase") . 'group_permission',
       t_group_user       => cfg("db_tablebase") . 'group_user',
       t_forum            => cfg("db_tablebase") . 'forum',
-      t_message          => cfg("db_tablebase") . 'message'
+      t_message          => cfg("db_tablebase") . 'message',
+      t_visitor          => cfg("db_tablebase") . 'visitor'
     );
     $this->set_table_names($tables);
   }

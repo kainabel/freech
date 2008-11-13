@@ -26,7 +26,8 @@
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Page";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum ([MESSAGES] messages, [NEWMESSAGES] new)";
+  $lang[forum_long]       = "Forum ([MESSAGES] messages, [NEWMESSAGES] new,"
+                          . " currently [ONLINEUSERS] users online)";
   $lang[unfoldall]        = "Unfold All";
   $lang[foldall]          = "Fold All";
   $lang[prev]             = "Older Threads";

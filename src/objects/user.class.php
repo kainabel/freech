@@ -93,20 +93,9 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function &get_normalized_login() {
-      $map = array(
-        "." => " ",
-        "_" => " ",
-        "_" => " ",
-        "ß" => "ss",
-        "0" => "O",
-        "1" => "I",
-        "5" => "S",
-        "6" => "G",
-        "8" => "B",
-      );
-      $norm = $this->fields[login];
-      foreach ($map as $key => $value)
-        $norm = str_replace($key, $value, $norm);
+      $src  = array(".", "_", "-", "ß",  "0", "1", "5", "6", "8");
+      $dst  = array(" ", " ", " ", "ss", "O", "I", "S", "G", "B");
+      $norm = str_replace($src, $dst, $this->fields[login]);
       $norm = preg_replace("/\s+/", " ", $norm);
       return soundex(trim($norm));
     }

@@ -10,7 +10,7 @@
 
 CREATE TABLE IF NOT EXISTS `freech_forum` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
   `active` tinyint(3) unsigned default '1',
   `ownerid` int(11) unsigned default NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   KEY `ownerid` (`ownerid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
 
 CREATE TABLE IF NOT EXISTS `freech_group` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
   `active` tinyint(3) unsigned default '1',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `freech_group_permission` (
   PRIMARY KEY  (`id`),
   KEY `g_id` (`g_id`),
   KEY `p_id` (`p_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `freech_group_user` (
   PRIMARY KEY  (`id`),
   KEY `g_id` (`g_id`),
   KEY `u_id` (`u_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -84,10 +84,10 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `n_descendants` int(11) unsigned default '0',
   `path` varchar(255) character set latin1 collate latin1_bin default NULL,
   `u_id` int(11) unsigned default '0',
-  `name` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
   `title` varchar(255) collate latin1_general_ci NOT NULL default '',
   `text` text collate latin1_general_ci NOT NULL,
-  `hash` varchar(100) collate latin1_general_ci NOT NULL,
+  `hash` varchar(40) collate latin1_general_ci NOT NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   `active` tinyint(3) unsigned default '1',
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   KEY `is_parent` (`is_parent`),
   KEY `u_id` (`u_id`),
   KEY `hash` (`hash`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=6218 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -108,12 +108,12 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
 
 CREATE TABLE IF NOT EXISTS `freech_permission` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(100) collate latin1_general_ci NOT NULL default '',
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
   `description` varchar(100) collate latin1_general_ci NOT NULL default '',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -123,12 +123,12 @@ CREATE TABLE IF NOT EXISTS `freech_permission` (
 
 CREATE TABLE IF NOT EXISTS `freech_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `login` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `soundexlogin` varchar(100) collate latin1_general_ci default NULL,
-  `password` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `firstname` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `lastname` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `mail` varchar(200) collate latin1_general_ci NOT NULL default '',
+  `login` varchar(50) collate latin1_general_ci NOT NULL,
+  `soundexlogin` varchar(5) collate latin1_general_ci default NULL,
+  `password` varchar(40) collate latin1_general_ci NOT NULL,
+  `firstname` varchar(50) collate latin1_general_ci NOT NULL,
+  `lastname` varchar(50) collate latin1_general_ci NOT NULL,
+  `mail` varchar(100) collate latin1_general_ci NOT NULL,
   `homepage` varchar(255) collate latin1_general_ci default NULL,
   `im` varchar(100) collate latin1_general_ci default NULL,
   `signature` varchar(255) collate latin1_general_ci default NULL,
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `mail` (`mail`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=41 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -149,13 +149,13 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
 
 CREATE TABLE IF NOT EXISTS `freech_visitor` (
   `id` int(11) NOT NULL auto_increment,
-  `ip` varchar(255) collate latin1_general_ci default NULL,
-  `ipname` varchar(255) collate latin1_general_ci default NULL,
+  `ip` varchar(20) collate latin1_general_ci default NULL,
+  `ipname` varchar(100) collate latin1_general_ci default NULL,
   `counter` bigint(20) default NULL,
   `time` varchar(255) collate latin1_general_ci NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `counter` (`counter`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1146450 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Constraints for dumped tables

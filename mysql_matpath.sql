@@ -138,7 +138,8 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `lastlogin` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `login` (`login`),
-  UNIQUE KEY `mail` (`mail`)
+  UNIQUE KEY `mail` (`mail`),
+  KEY `soundexlogin` (`soundexlogin`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------

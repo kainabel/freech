@@ -97,7 +97,28 @@ define("USER_STATUS_BLOCKED",     2);
       $dst  = array(" ", " ", " ", "ss", "O", "I", "S", "G", "B");
       $norm = str_replace($src, $dst, $this->fields[login]);
       $norm = preg_replace("/\s+/", " ", $norm);
-      return soundex(trim($norm));
+      return strtolower(trim($norm));
+    }
+
+
+    function &get_soundexed_login() {
+      return soundex($this->get_normalized_login());
+    }
+
+
+    function &get_lexical_similarity($_user) {
+      $login1 = $this->get_normalized_login();
+      $login2 = $_user->get_normalized_login();
+      $len    = max(strlen($login1), strlen($login2));
+      $dist   = levenshtein($login1, $login2);
+      if ($dist == 0)
+        return 100;
+      return 100 - ($dist / $len * 100);
+    }
+
+
+    function is_lexically_similar_to($_user) {
+      return $this->get_lexical_similarity($_user) > 75;
     }
 
 

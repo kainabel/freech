@@ -109,6 +109,32 @@
     }
 
 
+    /* Returns a list of all users whose login name is similar to the 
+     * login name of the given user.
+     * $_user: The user for which to find similar ones.
+     */
+    function &get_similiar_users($_user, $_limit = -1, $_offset = -1) {
+      if (!$_user)
+        die("AccountDB::get_simliar_users(): Invalid user.");
+      $sql   = "SELECT *";
+      $sql  .= " FROM {t_user}";
+      $sql  .= " WHERE soundexlogin={soundex}";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_string('soundex', $_user->get_soundexed_login());
+      $res = $this->db->SelectLimit($query->sql(), -1, $_offset)
+                             or die("AccountDB::get_simliar_users(): Select");
+      $users = array();
+      while ($row = &$res->FetchRow() && sizeof($users) != $_limit) {
+        $user = &new User;
+        $user->set_from_db($row);
+        $this->users[$row[id]] = &$user;
+        if ($user->is_lexically_similar_to($_user))
+          array_push($users, $user);
+      }
+      return $users;
+    }
+
+
     /* Returns the user with the given email address.
      * $_mail: The email address of the user.
      */
@@ -143,7 +169,7 @@
       $query->set_int   ('status',    $_user->get_status());
       $query->set_int   ('lastlogin', $_user->get_last_login_unixtime());
       $query->set_string('login',     $_user->get_login());
-      $query->set_string('soundex',   $_user->get_normalized_login());
+      $query->set_string('soundex',   $_user->get_soundexed_login());
       $query->set_string('password',  $_user->get_password_hash());
       $query->set_string('firstname', $_user->get_firstname());
       $query->set_string('lastname',  $_user->get_lastname());

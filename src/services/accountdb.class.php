@@ -115,14 +115,14 @@
      */
     function &get_similiar_users($_user, $_limit = -1, $_offset = -1) {
       if (!$_user)
-        die("AccountDB::get_simliar_users(): Invalid user.");
+        die("AccountDB::get_similiar_users(): Invalid user.");
       $sql   = "SELECT *";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE soundexlogin={soundex}";
       $query = &new FreechSqlQuery($sql);
       $query->set_string('soundex', $_user->get_soundexed_login());
       $res = $this->db->SelectLimit($query->sql(), -1, $_offset)
-                             or die("AccountDB::get_simliar_users(): Select");
+                             or die("AccountDB::get_similiar_users(): Select");
       $users = array();
       while ($row = &$res->FetchRow() && sizeof($users) != $_limit) {
         $user = &new User;

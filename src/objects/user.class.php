@@ -28,11 +28,12 @@ define("USER_STATUS_BLOCKED",     2);
    */
   class User {
     var $fields;  ///< Properties of the user, such as name, login, signature.
-    var $groups;  ///< The groups in which the user is.
+    var $groups;  ///< The groups in which the user is a member.
     
     /// Constructor.
-    function User() {
+    function User($_login = '') {
       $this->clear();
+      $this->set_login($_login);
     }
     
     
@@ -93,16 +94,20 @@ define("USER_STATUS_BLOCKED",     2);
     
     
     function &get_normalized_login() {
-      $src  = array(".", "_", "-", "ß",  "0", "1", "5", "6", "8");
-      $dst  = array(" ", " ", " ", "ss", "O", "I", "S", "G", "B");
+      $src  = array(".", "_", "-", "0", "1", "5", "6", "8");
+      $dst  = array(" ", " ", " ", "O", "I", "S", "G", "B");
       $norm = str_replace($src, $dst, $this->fields[login]);
+      $src  = array("ü",  "ä",  "ö",  "ß");
+      $dst  = array("ue", "ae", "oe", "ss");
+      $norm = str_replace($src, $dst, $norm);
       $norm = preg_replace("/\s+/", " ", $norm);
       return strtolower(trim($norm));
     }
 
 
     function &get_soundexed_login() {
-      return soundex($this->get_normalized_login());
+      $login = preg_replace("/\s*\d+\s*/", "", $this->get_normalized_login());
+      return soundex($login);
     }
 
 

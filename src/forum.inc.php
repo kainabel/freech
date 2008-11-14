@@ -288,7 +288,7 @@
       $user = $this->get_current_user();
       if ($user)
         $message->set_user_id($user->get_id());
-      elseif ($this->_username_exists($message->get_username()))
+      elseif (!$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
                                           $_POST[msg_id] ? TRUE : FALSE);
@@ -318,7 +318,7 @@
 
       if ($user)
         $message->set_user_id($user->get_id());
-      elseif ($this->_username_exists($message->get_username()))
+      elseif (!$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
                                           $_POST[msg_id] ? TRUE : FALSE);
@@ -461,9 +461,10 @@
     }
 
 
-    function _username_exists(&$username) {
+    function _username_available(&$_username) {
       $accountdb = $this->get_accountdb();
-      if ($accountdb->get_user_from_login($username))
+      $user      = new User($_username);
+      if (count($accountdb->get_similiar_users($user)) == 0)
         return TRUE;
       return FALSE;
     }
@@ -513,11 +514,11 @@
       if ($_POST['password'] !== $_POST['password2'])
         return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
 
-      $accountdb = $this->get_accountdb();
-      if ($accountdb->get_user_from_login($user->get_login()))
+      if (!$this->_username_available($user->get_login()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
 
-      $ret = $accountdb->save_user($user);
+      $accountdb = $this->get_accountdb();
+      $ret       = $accountdb->save_user($user);
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
 

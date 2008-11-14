@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forumid` int(11) unsigned NOT NULL default '0',
   `threadid` int(11) unsigned NOT NULL default '0',
+  `priority` int(11) NOT NULL default '0',
   `is_parent` int(3) unsigned default '0',
   `n_children` int(11) unsigned default '0',
   `n_descendants` int(11) unsigned default '0',

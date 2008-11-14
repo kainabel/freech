@@ -123,7 +123,7 @@ define("USER_STATUS_BLOCKED",     2);
 
 
     function is_lexically_similar_to($_user) {
-      return $this->get_lexical_similarity($_user) > 75;
+      return $this->get_lexical_similarity($_user) > 70;
     }
 
 

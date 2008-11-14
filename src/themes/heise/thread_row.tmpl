@@ -41,7 +41,7 @@
      </td>
      <td align='left'>
 {if $message->get_priority() > 0}
-     &nbsp;<img src='themes/heise/img/sticky.png' width="16" height="16" alt='|-' />
+     &nbsp;<img src='themes/heise/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
 {if $message->url == ""}
      &nbsp;<font size='-1'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>

@@ -27,19 +27,19 @@
   define("MESSAGE_RELATION_BRANCHEND",       5);
   define("MESSAGE_RELATION_CHILD_STUB",      6);
   define("MESSAGE_RELATION_CHILD",           7);
-  
+
   /**
    * Represents a message in the forum and all associated data.
    */
   class Message {
     var $_fields;
-    
+
     // Constructor.
     function Message() {
       $this->clear();
     }
-    
-    
+
+
     // Resets all values.
     function clear() {
       $this->_fields = array();
@@ -50,8 +50,8 @@
       $this->_fields[allow_answer] = TRUE;
       $this->_fields[ip_address]   = $_SERVER['REMOTE_ADDR'];
     }
-    
-    
+
+
     // Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
@@ -59,6 +59,7 @@
       $this->clear();
       $this->_fields[id]              = $_db_row[id];
       $this->_fields[forum_id]        = $_db_row[forumid];
+      $this->_fields[priority]        = $_db_row[priority];
       $this->_fields[u_id]            = $_db_row[u_id];
       $this->_fields[username]        = $_db_row[username];
       $this->_fields[subject]         = $_db_row[subject];
@@ -77,29 +78,39 @@
       $this->_fields[next_thread_id]  = $_db_row[next_thread_id];
       $this->_fields[prev_thread_id]  = $_db_row[prev_thread_id];
     }
-    
-    
+
+
     // Set a unique id for the message.
     function set_id($_id) {
       $this->_fields[id] = $_id * 1;
     }
-    
-    
+
+
     function get_id() {
       return $this->_fields[id];
     }
-    
-    
+
+
     function set_forum_id($_forum_id) {
       $this->_fields[forum_id] = $_forum_id * 1;
     }
-    
-    
+
+
     function get_forum_id() {
       return $this->_fields[forum_id];
     }
-    
-    
+
+
+    function set_priority($_priority) {
+      $this->_fields[priority] = $_priority * 1;
+    }
+
+
+    function get_priority() {
+      return $this->_fields[priority];
+    }
+
+
     function set_user_id($_user_id) {
       $this->_fields[u_id] = $_user_id;
     }
@@ -113,33 +124,33 @@
     function set_username($_username) {
       $this->_fields[username] = preg_replace("/\s+/", " ", trim($_username));
     }
-    
-    
+
+
     function &get_username() {
       return $this->_fields[username];
     }
-    
-    
+
+
     function set_subject($_subject) {
       $this->_fields[subject] = preg_replace("/\s+/", " ", trim($_subject));
     }
-    
-    
+
+
     function &get_subject() {
       return $this->_fields[subject];
     }
-    
-    
+
+
     function set_body($_body) {
       $this->_fields[body] = trim($_body);
     }
-    
-    
+
+
     function &get_body() {
       return $this->_fields[body];
     }
-    
-    
+
+
     function _url2link($match) {
       return '<a href="'.$match[0].'">'
            . $match[0]
@@ -161,8 +172,8 @@
                                       $body);
       return $body;
     }
-    
-    
+
+
     function &get_hash() {
       return md5($this->get_username()
                . $this->get_subject()
@@ -173,23 +184,23 @@
     function get_created_unixtime() {
       return $this->_fields[created];
     }
-    
-    
+
+
     // Returns the formatted time.
     function get_created_time($_format = '') {
       if (!$_format)
         $_format = lang("dateformat");
       return date($_format, $this->_fields[created]);
     }
-    
-    
+
+
     // Returns whether the row was newly created in the last X minutes.
     function is_new() {
       return (time() - $this->_fields[created] < cfg("new_post_time"));
     }
-    
-    
-    // Returns a number between 0 (old) and 100 (new) depending on the 
+
+
+    // Returns a number between 0 (old) and 100 (new) depending on the
     // time since the messages was posted.
     function get_newness() {
       if (!$this->is_new())
@@ -197,32 +208,32 @@
       $oldness = time() - $this->_fields[created];
       return 100 - ($oldness / cfg("new_post_time") * 100);
     }
-    
-    
+
+
     function get_newness_hex() {
       return dechex($this->get_newness() / 100 * 255);
     }
-    
-    
+
+
     function get_updated_unixtime() {
       return $this->_fields[updated];
     }
-    
-    
+
+
     // Returns the formatted time.
     function get_updated_time($_format = '') {
       if (!$_format)
         $_format = lang("dateformat");
       return date($_format, $this->_fields[updated]);
     }
-    
-    
+
+
     // The number of children.
     function set_n_children($_n_children) {
       $this->_fields[n_children] = $_n_children;
     }
-    
-    
+
+
     function get_n_children() {
       if ($this->_fields[relation] != MESSAGE_RELATION_PARENT_STUB
         && $this->_fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
@@ -231,8 +242,8 @@
           . " non-parent rows.");
       return $this->_fields[n_children] * 1;
     }
-    
-    
+
+
     function &get_ip_address() {
       return $this->_fields[ip_address];
     }
@@ -252,23 +263,23 @@
     function set_relation($_relation) {
       $this->_fields[relation] = $_relation;
     }
-    
-    
+
+
     function get_relation() {
       return $this->_fields[relation];
     }
-    
-    
+
+
     function set_active($_active = TRUE) {
       $this->_fields[active] = $_active;
     }
-    
-    
+
+
     function is_active() {
       return $this->_fields[active];
     }
-    
-    
+
+
     function &get_user_type() {
       if ($this->_fields[u_id] == 1)
         return 'moderator';
@@ -284,13 +295,13 @@
     function set_allow_answer($_allow = TRUE) {
       $this->_fields[allow_answer] = $_allow;
     }
-    
-    
+
+
     function get_allow_answer() {
       return $this->_fields[allow_answer];
     }
-    
-    
+
+
     function has_thread() {
       if ($this->_fields[relation] != MESSAGE_RELATION_PARENT_STUB
         && $this->_fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
@@ -298,58 +309,58 @@
         return TRUE;
       return $this->_fields[n_children] != 0;
     }
-    
-    
+
+
     function set_next_message_id($_next_message_id) {
       $this->_fields[next_message_id] = $_next_message_id * 1;
     }
-    
-    
+
+
     function get_next_message_id() {
       return $this->_fields[next_message_id];
     }
-    
-    
+
+
     function set_prev_message_id($_prev_message_id) {
       $this->_fields[prev_message_id] = $_prev_message_id * 1;
     }
-    
-    
+
+
     function get_prev_message_id() {
       return $this->_fields[prev_message_id];
     }
-    
-    
+
+
     function set_next_thread_id($_next_thread_id) {
       $this->_fields[next_thread_id] = $_next_thread_id * 1;
     }
-    
-    
+
+
     function get_next_thread_id() {
       return $this->_fields[next_thread_id];
     }
-    
-    
+
+
     function set_prev_thread_id($_prev_thread_id) {
       $this->_fields[prev_thread_id] = $_prev_thread_id * 1;
     }
-    
-    
+
+
     function get_prev_thread_id() {
       return $this->_fields[prev_thread_id];
     }
-    
-    
+
+
     function set_selected($_selected = TRUE) {
       $this->_fields[selected] = $_selected;
     }
-    
-    
+
+
     function is_selected() {
       return $this->_fields[selected];
     }
-    
-    
+
+
     function check_complete() {
       // The appended "\n" on the following three lines is a workaround for a bug in PHP.
       // http://bugs.php.net/bug.php?id=30945
@@ -357,24 +368,24 @@
        || ctype_space($this->_fields[subject]  . "\n")
        || ctype_space($this->_fields[body]     . "\n"))
         return ERR_MESSAGE_INCOMPLETE;
-      
+
       if (strlen($this->_fields[username]) > cfg("max_namelength"))
         return ERR_MESSAGE_NAME_TOO_LONG;
       if (!preg_match(cfg("login_pattern"), $this->_fields[username]))
         return ERR_USER_LOGIN_INVALID_CHARS;
 
-      
+
       if (strlen($this->_fields[subject]) > cfg("max_titlelength"))
         return ERR_MESSAGE_TITLE_TOO_LONG;
-      
+
       if (strlen($this->_fields[body]) > cfg("max_msglength"))
         return ERR_MESSAGE_BODY_TOO_LONG;
-      
+
       if (!is_utf8($this->_fields[username])
         || !is_utf8($this->_fields[subject])
         || !is_utf8($this->_fields[body]))
         return ERR_MESSAGE_BODY_NO_UTF8;
-      
+
       return 0;
     }
   }

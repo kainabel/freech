@@ -2,6 +2,9 @@
 <tr valign='middle' bgcolor='#ffffff'>
   <td align='center' width=8><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left'>{strip}
+{if $message->get_priority() > 0}
+  &nbsp;<img src='themes/heise/img/sticky.png' width="16" height="16" alt='|-' />
+{/if}
 {if $message->url == ""}
   <font size='-1'>&nbsp;{$message->get_subject()|escape}</font>
 {else}

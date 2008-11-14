@@ -185,8 +185,8 @@
      *            - time
      */
     function &get_message($_forumid, $_id) {
-      $sql  = "SELECT id,forumid,u_id,threadid,HEX(path) path,n_children,";
-      $sql .= "name username,title subject,text body,active,";
+      $sql  = "SELECT id,forumid,priority,u_id,threadid,HEX(path) path,";
+      $sql .= "n_children, name username,title subject,text body,active,";
       $sql .= "ip_address,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
@@ -251,15 +251,16 @@
         // Insert a new child.
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
-        $sql .= " (forumid, threadid, u_id, name, title, text, hash,";
-        $sql .= " ip_address, created)";
+        $sql .= " (forumid, threadid, priority, u_id, name, title, text,";
+        $sql .= " hash, ip_address, created)";
         $sql .= " VALUES (";
-        $sql .= " {forumid}, {threadid}, {u_id}, {name},";
+        $sql .= " {forumid}, {threadid}, {priority}, {u_id}, {name},";
         $sql .= " {subject}, {body}, {hash}, {ip_address}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid',  $parentrow[forumid]);
         $query->set_int('threadid', $parentrow[threadid]);
+        $query->set_int('priority', $_message->get_priority());
         $query->set_int('u_id',     $_message->get_user_id());
         $query->set_string('name',       $_message->get_username());
         $query->set_string('subject',    $_message->get_subject());
@@ -320,15 +321,16 @@
       // Insert a new thread.
       else {
         $sql  = "INSERT INTO {t_message}";
-        $sql .= " (path, forumid, u_id, threadid, is_parent, name, title,";
-        $sql .= "  text, hash, ip_address, created)";
+        $sql .= " (path, forumid, priority, u_id, threadid, is_parent, name,";
+        $sql .= "  title, text, hash, ip_address, created)";
         $sql .= " VALUES (";
-        $sql .= " '', {forumid}, {u_id}, 0, 1, {name},";
+        $sql .= " '', {forumid}, {priority}, {u_id}, 0, 1, {name},";
         $sql .= " {subject}, {body}, {hash}, {ip_address}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('forumid', $_forumid);
-        $query->set_int('u_id',    $_message->get_user_id());
+        $query->set_int('forumid',  $_forumid);
+        $query->set_int('priority', $_message->get_priority());
+        $query->set_int('u_id',     $_message->get_user_id());
         $query->set_string('name',    $_message->get_username());
         $query->set_string('subject', $_message->get_subject());
         $query->set_string('body',    $_message->get_body());
@@ -417,10 +419,11 @@
         $sql .= " WHERE a.forumid={forumid} AND a.is_parent=1";
         if ($_updated_threads_first) {
           $sql .= " GROUP BY a.id";
-          $sql .= " ORDER BY threadupdate DESC, a.threadid DESC,path";
+          $sql .= " ORDER BY a.priority DESC, threadupdate DESC,";
+          $sql .= " a.threadid DESC,path";
         }
         else
-          $sql .= " ORDER BY a.threadid DESC,path";
+          $sql .= " ORDER BY a.priority DESC, a.threadid DESC,path";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid', $_forumid);
         //$this->db->debug=1;
@@ -431,9 +434,9 @@
       // Build the SQL request to grab the complete threads.
       if ($res->RecordCount() <= 0)
         return;
-      $sql  = "SELECT a.id, a.forumid, a.u_id, HEX(a.path) path, a.n_children,";
-      $sql .= " a.n_descendants, a.name username, a.title subject, a.text body,";
-      $sql .= " a.active,a.ip_address,";
+      $sql  = "SELECT a.id,a.forumid,a.priority,a.u_id,HEX(a.path) path,";
+      $sql .= " a.n_children,a.n_descendants, a.name username, a.title subject,";
+      $sql .= " a.text body,a.active,a.ip_address,";
       if ($_updated_threads_first)
         $sql .= " MAX(b.id) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(a.updated) updated,";
@@ -441,6 +444,7 @@
       $sql .= " FROM {t_message} a";
       if ($_updated_threads_first)
         $sql .= " LEFT JOIN {t_message} b ON a.threadid=b.threadid";
+      $sql .= " LEFT JOIN {t_message} c ON a.threadid=c.id";
       $sql .= " WHERE (";
       
       $first = 1;
@@ -455,12 +459,13 @@
       }
       
       $sql .= ")";
+      $sql .= " GROUP BY a.id";
       if ($_updated_threads_first) {
-        $sql .= " GROUP BY a.id";
-        $sql .= " ORDER BY threadupdate DESC, a.threadid DESC,path";
+        $sql .= " ORDER BY c.priority DESC, threadupdate DESC,";
+        $sql .= " a.threadid DESC,path";
       }
       else
-        $sql .= " ORDER BY a.threadid DESC,path";
+        $sql .= " ORDER BY c.priority DESC, a.threadid DESC,path";
       
       // Walk through those threads.
       $query   = &new FreechSqlQuery($sql);
@@ -578,16 +583,17 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
       
-      $sql  = "SELECT id,forumid,u_id,name username,title subject,text body,active,";
+      $sql  = "SELECT id,forumid,priority,u_id,name username,";
+      $sql .= "title subject,text body,active,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM {t_message}";
       if ($_forumid)
         $sql .= " WHERE forumid={forumid}";
       if ($_updates)
-        $sql .= " ORDER BY updated";
+        $sql .= " ORDER BY priority DESC,updated";
       else
-        $sql .= " ORDER BY created";
+        $sql .= " ORDER BY priority DESC,created";
       $sql .= " DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);

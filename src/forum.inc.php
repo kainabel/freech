@@ -142,7 +142,7 @@
     }
 
 
-    function get_accountdb() {
+    function _get_accountdb() {
       if (!$this->accountdb)
         $this->accountdb = &new AccountDB($this->db);
       return $this->accountdb;
@@ -150,7 +150,7 @@
 
 
     function _try_login() {
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = $accountdb->get_user_from_login($_POST['login']);
       if (!$user)
         return ERR_LOGIN_FAILED;
@@ -179,9 +179,14 @@
         return FALSE;
       if ($this->current_user)
         return $this->current_user;
-      $accountdb          = $this->get_accountdb();
+      $accountdb          = $this->_get_accountdb();
       $this->current_user = $accountdb->get_user_from_login($_SESSION['login']);
       return $this->current_user;
+    }
+
+
+    function get_newest_users($_limit) {
+      return $this->_get_accountdb()->get_newest_users($_limit);
     }
 
 
@@ -450,8 +455,7 @@
 
 
     function &_fetch_user_data() {
-      $user = &new User;
-      $user->set_login($_POST['login']);
+      $user = &new User($_POST['login']);
       $user->set_password($_POST['password']);
       $user->set_firstname($_POST['acc_firstname']);
       $user->set_lastname($_POST['acc_lastname']);
@@ -462,7 +466,7 @@
 
 
     function _username_available(&$_username) {
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = new User($_username);
       if (count($accountdb->get_similiar_users($user)) == 0)
         return TRUE;
@@ -495,7 +499,7 @@
 
 
     function _resend_confirmation_mail() {
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = $accountdb->get_user_from_login($_GET['login']);
       if ($user->get_status() != USER_STATUS_UNCONFIRMED)
         die("User is already confirmed.");
@@ -517,7 +521,7 @@
       if (!$this->_username_available($user->get_login()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
 
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $ret       = $accountdb->save_user($user);
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
@@ -530,7 +534,7 @@
       if ($_GET['confirm_account']
         || $_GET['confirm_password_mail']
         || $_GET['reset_password_submit']) {
-        $accountdb = $this->get_accountdb();
+        $accountdb = $this->_get_accountdb();
         $user      = $accountdb->get_user_from_login($_GET['login']);
         $this->_check_confirmation_hash($user);
         return $user;
@@ -552,7 +556,7 @@
 
     function _change_password_submit() {
       global $err;
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = $this->_fetch_user_data();
       $user      = $accountdb->get_user_from_login($user->get_login());
       $regist = &new RegistrationPrinter($this);
@@ -593,7 +597,7 @@
       if ($ret != 0)
         return $registration->show_forgot_password($user, $err[$ret]);
 
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = $accountdb->get_user_from_mail($user->get_mail());
       if (!$user) {
         $msg = $err[ERR_LOGIN_NO_SUCH_MAIL];
@@ -619,7 +623,7 @@
 
     function _confirm_password_mail() {
       $user      = $this->_get_current_or_confirming_user();
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = $accountdb->get_user_from_login($user->get_login());
       $this->_check_confirmation_hash($user);
 
@@ -642,7 +646,7 @@
 
 
     function _account_confirm() {
-      $accountdb = $this->get_accountdb();
+      $accountdb = $this->_get_accountdb();
       $user      = $accountdb->get_user_from_login($_GET['login']);
       $this->_check_confirmation_hash($user);
 

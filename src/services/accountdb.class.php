@@ -67,7 +67,8 @@
     /***********************************************************************
      * Public API.
      ***********************************************************************/
-    /* Returns the user with the given id.
+    /**
+     * Returns the user with the given id.
      * $_id:    The id of the user.
      */
     function &get_user($_id) {
@@ -88,7 +89,8 @@
     }
     
     
-    /* Returns the user with the given name.
+    /**
+     * Returns the user with the given name.
      * $_login: The login name of the user.
      */
     function &get_user_from_login($_login) {
@@ -109,7 +111,8 @@
     }
 
 
-    /* Returns a list of all users whose login name is similar to the 
+    /**
+     * Returns a list of all users whose login name is similar to the 
      * login name of the given user.
      * $_user: The user for which to find similar ones.
      */
@@ -135,7 +138,8 @@
     }
 
 
-    /* Returns the user with the given email address.
+    /**
+     * Returns the user with the given email address.
      * $_mail: The email address of the user.
      */
     function &get_user_from_mail($_mail) {
@@ -156,7 +160,30 @@
     }
 
 
-    /* Insert a new user or save an existing one.
+    /**
+     * Returns the most recently created users.
+     * $_limit: The maximum number of results.
+     */
+    function &get_newest_users($_limit) {
+      $sql   = "SELECT *";
+      $sql  .= " FROM {t_user}";
+      $sql  .= " ORDER BY created DESC";
+      $query = &new FreechSqlQuery($sql);
+      $res = $this->db->SelectLimit($query->sql(), $_limit)
+                             or die("AccountDB::get_newest_users(): Select");
+      $users = array();
+      while ($row = &$res->FetchRow()) {
+        $user = &new User;
+        $user->set_from_db($row);
+        $this->users[$row[id]] = &$user;
+        array_push($users, $user);
+      }
+      return $users;
+    }
+
+
+    /**
+     * Insert a new user or save an existing one.
      *
      * $_user:    The user to be saved.
      * Returns:   The id of the (maybe newly inserted) user.

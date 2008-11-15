@@ -191,7 +191,7 @@ ALTER TABLE `freech_message`
   ADD CONSTRAINT `0_779` FOREIGN KEY (`u_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
-                  VALUES (1, 'root', '', 'root', 'root', '', NULL);
+                  VALUES (1, 'root', '', 'root', 'root', 'root', NULL);
 INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
 INSERT INTO freech_forum (name, description, ownerid, created)

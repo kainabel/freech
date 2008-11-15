@@ -2,7 +2,7 @@
   /*
   Freech.
   Copyright (C) 2003-2008 Samuel Abels, <http://debain.org>
-  
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -22,35 +22,38 @@
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';
   include_once 'libuseful/SqlQuery.class.php5';
-  
+
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
   include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
   include_once 'functions/files.inc.php';
-  
+
   include_once 'error.inc.php';
-  
+
   include_once 'objects/url.class.php';
   include_once 'objects/message.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
-  
+  include_once 'objects/indexbar_item.class.php';
+  include_once 'objects/indexbar.class.php';
+  include_once 'objects/indexbar_by_time.class.php';
+  include_once 'objects/indexbar_by_thread.class.php';
+  include_once 'objects/indexbar_read_message.class.php';
+  include_once 'objects/indexbar_user_postings.class.php';
+
   include_once 'actions/printer_base.class.php';
-  include_once 'actions/indexbar_printer.class.php';
-  include_once 'actions/indexbar_by_time_printer.class.php';
-  include_once 'actions/indexbar_by_thread_printer.class.php';
-  include_once 'actions/indexbar_read_message_printer.class.php';
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
   include_once 'actions/message_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
   include_once 'actions/login_printer.class.php';
+  include_once 'actions/profile_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
-  
+
   include_once 'services/thread_folding.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
@@ -59,7 +62,7 @@
   include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
 
-  
+
   class FreechForum {
     var $db;
     var $forum;
@@ -67,8 +70,8 @@
     var $eventbus;
     var $smarty;
     var $folding;
-    
-    // Prepare the forum, set cookies, etc. To be called before the http header 
+
+    // Prepare the forum, set cookies, etc. To be called before the http header
     // was sent.
     function FreechForum() {
       // Select a language.
@@ -80,7 +83,7 @@
 
       if (cfg_is("salt", ""))
         die("Error: Please define the salt variable in config.inc.php!");
-      
+
       // Setup gettext.
       if (!function_exists("gettext"))
         die("This webserver does not have gettext installed.<br/>"
@@ -89,7 +92,7 @@
       bindtextdomain($domain, "./language");
       textdomain($domain);
       bind_textdomain_codeset($domain, 'UTF-8');
-      
+
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus = &new Trackable;
 
@@ -112,7 +115,7 @@
        *   Args: None.
        */
       $this->eventbus->emit("on_construct");
-      
+
       // Init Smarty.
       $this->smarty = &new Smarty();
       $this->smarty->template_dir = "themes/" . cfg("theme");
@@ -120,7 +123,7 @@
       $this->smarty->cache_dir    = "smarty/cache";
       $this->smarty->config_dir   = "smarty/configs";
       $this->smarty->register_function('lang', 'smarty_lang');
-      
+
       session_set_cookie_params(time() + cfg("login_time"));
       if ($_COOKIE['permanent_session']) {
         session_id($_COOKIE['permanent_session']);
@@ -170,8 +173,8 @@
       $_GET['do_login']  = 0;
       return 0;
     }
-    
-    
+
+
     function get_current_user() {
       if (session_id() === '')
         return FALSE;
@@ -198,23 +201,23 @@
       }
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
       $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
-      
+
       $this->folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       if ($_GET['c']) {
         $this->folding->swap($_GET['c']);
         $this->_set_cookie('c', $this->folding->get_string());
       }
-      
+
       if ($_GET['changeview'] === 't')
         $this->_set_cookie('view', 'thread');
       elseif ($_GET['changeview'] === 'c')
         $this->_set_cookie('view', 'plain');
-      
+
       if ($_GET['showthread'] === '-1')
         $this->_set_cookie('thread', 'hide');
       elseif ($_GET['showthread'] === '1')
         $this->_set_cookie('thread', 'show');
-      
+
       if ($_GET['fold'] === '1') {
         $this->_set_cookie('fold', '1');
         $this->_set_cookie('c', '');
@@ -223,41 +226,32 @@
         $this->_set_cookie('c', '');
       }
     }
-    
-    
+
+
     // Read a message.
     function _message_read() {
-      $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
-      $folding    = &new ThreadFolding(UNFOLDED, '');
+      $this->_print_message_breadcrumbs($message);
       $msgprinter = &new MessagePrinter($this);
-      $index      = &new IndexBarReadMessagePrinter($this, $message);
-      $this->_print_breadcrumbs($message);
-      $index->show();
-      $msgprinter->show($message);
-      if ($message && $message->has_thread() && $_COOKIE[thread] != 'hide') {
-        $threadprinter = &new ThreadPrinter($this, $folding);
-        $threadprinter->show($_GET[forum_id], $_GET[msg_id], 0);
-      }
-      $index->show();
+      $msgprinter->show($_GET['forum_id'], $_GET['msg_id']);
     }
-    
-    
+
+
     // Write an answer to a message.
     function _message_answer() {
       $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_reply($message, '', TRUE);
     }
-    
-    
+
+
     // Write a new message.
     function _message_compose() {
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose($message, '', FALSE);
     }
-    
-    
+
+
     // Edit a message.
     function _message_edit() {
       $message    = &new Message;
@@ -267,8 +261,8 @@
       $message->set_body($_POST[message]);
       $msgprinter->show_compose($message, '', $_POST[msg_id] ? TRUE : FALSE);
     }
-    
-    
+
+
     // Insert a quote from the parent message.
     function _message_quote() {
       $quoted_msg = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
@@ -279,8 +273,8 @@
       $message->set_body($_POST[message]);
       $msgprinter->show_compose_quoted($message, $quoted_msg, '', FALSE);
     }
-    
-    
+
+
     // Print a preview of a message.
     function _message_preview() {
       global $err;
@@ -306,8 +300,8 @@
       else
         $msgprinter->show_preview($message, $_POST['msg_id']);
     }
-    
-    
+
+
     // Saves the posted message.
     function _message_submit() {
       global $err;
@@ -345,44 +339,27 @@
       else
         $msgprinter->show_created($newmsg_id);
     }
-    
-    
+
+
     // Shows the forum, time order.
     function _list_by_time() {
-      $this->_print_breadcrumbs('');
-      $n_entries = $this->forum->get_n_messages($_GET[forum_id]);
-      $latest    = &new LatestPrinter($this);
-      $args      = array(n_messages          => $n_entries,
-                         n_messages_per_page => cfg("epp"),
-                         n_offset            => $_GET[hs],
-                         n_pages_per_index   => cfg("ppi"));
-      $index     = &new IndexBarByTimePrinter($this, $args);
-      $index->show();
-      $latest->show();
-      $index->show();
+      $this->_print_list_breadcrumbs('');
+      $latest = &new LatestPrinter($this);
+      $latest->show($_GET['forum_id'], $_GET['hs']);
       $this->_print_footer();
     }
-    
-    
+
+
     // Shows the forum, thread order.
     function _list_by_thread() {
-      $n_threads = $this->forum->get_n_threads($_GET[forum_id]);
-      $this->_print_breadcrumbs('');
+      $this->_print_list_breadcrumbs('');
       $folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
       $thread  = &new ThreadPrinter($this, $folding);
-      $args    = array(n_threads          => $n_threads,
-                       n_threads_per_page => cfg("tpp"),
-                       n_offset           => $_GET[hs],
-                       n_pages_per_index  => cfg("ppi"),
-                       folding            => $folding);
-      $index   = &new IndexBarByThreadPrinter($this, $args);
-      $index->show();
       $thread->show($_GET['forum_id'], 0, $_GET[hs]);
-      $index->show();
       $this->_print_footer();
     }
-    
-    
+
+
     // Changes a cookie only if necessary.
     function _set_cookie($_name, $_value) {
       if ($_COOKIE[$_name] != $_value) {
@@ -390,48 +367,59 @@
         $_COOKIE[$_name] = $_value;
       }
     }
-    
-    
-    // Prints the head of the page.
-    function _print_breadcrumbs($_message) {
+
+
+    function _get_forumurl() {
       $forumurl = &new URL('?', cfg("urlvars"));
       $forumurl->set_var('list',     1);
       $forumurl->set_var('forum_id', $_GET[forum_id]);
-      
+      return $forumurl;
+    }
+
+
+    function _print_list_breadcrumbs() {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      
-      if (!$_GET[read] && !$_GET[llist]) {
-        $n_messages = $this->forum->get_n_messages($_GET[forum_id]);
-        $start      = time() - cfg("new_post_time");
-        $n_new      = $this->forum->get_n_messages($_GET[forum_id], $start);
-        $n_online   = $this->visitordb->get_n_visitors(time() - 60 * 5);
-        $text       = lang("forum_long");
-        $text       = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
-        $text       = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
-        $text       = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
-        $breadcrumbs->add_item($text, $forumurl);
-      }
-      else {
-        $breadcrumbs->add_item(lang("forum"), $forumurl);
-        if (!$_message)
-          $breadcrumbs->add_item(lang("noentrytitle"));
-        elseif (!$_message->is_active())
-          $breadcrumbs->add_item(lang("blockedtitle"));
-        else
-          $breadcrumbs->add_item($_message->get_subject());
-      }
-      
+      $n_messages = $this->forum->get_n_messages($_GET[forum_id]);
+      $start      = time() - cfg("new_post_time");
+      $n_new      = $this->forum->get_n_messages($_GET[forum_id], $start);
+      $n_online   = $this->visitordb->get_n_visitors(time() - 60 * 5);
+      $text       = lang("forum_long");
+      $text       = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
+      $text       = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
+      $text       = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
+      $breadcrumbs->add_item($text, $this->_get_forumurl());
       $breadcrumbs->show();
-    } 
-    
-    
+    }
+
+
+    function _print_profile_breadcrumbs($_user) {
+      $breadcrumbs = &new BreadCrumbsPrinter($this);
+      $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
+      $breadcrumbs->add_item($_user->get_login());
+      $breadcrumbs->show();
+    }
+
+
+    function _print_message_breadcrumbs($_message) {
+      $breadcrumbs = &new BreadCrumbsPrinter($this);
+      $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
+      if (!$_message)
+        $breadcrumbs->add_item(lang("noentrytitle"));
+      elseif (!$_message->is_active())
+        $breadcrumbs->add_item(lang("blockedtitle"));
+      else
+        $breadcrumbs->add_item($_message->get_subject());
+      $breadcrumbs->show();
+    }
+
+
     // Prints the footer of the page.
     function _print_footer() {
       $footer = &new FooterPrinter($this);
       $footer->show();
     }
-    
-    
+
+
     function _show_login() {
       global $err;
       $user  = $this->_fetch_user_data();
@@ -446,8 +434,8 @@
       else
         $login->show($user, $err[$this->login_error]);
     }
-    
-    
+
+
     function _register() {
       $registration = &new RegistrationPrinter($this);
       $registration->show(new User);
@@ -663,6 +651,20 @@
     }
 
 
+    function _show_profile() {
+      if ($_GET['login']) {
+        $accountdb = $this->_get_accountdb();
+        $user      = $accountdb->get_user_from_login($_GET['login']);
+      }
+      else
+        $user = $this->get_current_user();
+      $this->_print_profile_breadcrumbs($user);
+      $folding = &new ThreadFolding(UNFOLDED, '');
+      $profile = &new ProfilePrinter($this, $folding);
+      $profile->show($user);
+    }
+
+
     function &get_registry() {
       return $this->registry;
     }
@@ -704,15 +706,15 @@
       $this->eventbus->emit("on_header_print_before", &$this->content);
 
       print($this->content);
-      
+
       /* Plugin hook: on_header_print_before
        *   Called after the HTML header was sent.
        *   Args: none
        */
       $this->eventbus->emit("on_header_print_after");
     }
-    
-    
+
+
     function show() {
       $this->content = "";
       if ($_GET['read'])
@@ -729,6 +731,8 @@
         $this->_message_preview();  // A message preview was requested.
       elseif ($_POST['send'])
         $this->_message_submit();   // A message was posted and should be saved.
+      elseif ($_GET['profile'])
+        $this->_show_profile();     // Show the profile of one user.
       elseif ($_GET['do_login'])
         $this->_show_login();       // Show a login form.
       elseif ($_GET['register'])
@@ -751,9 +755,9 @@
         $this->_confirm_password_mail();    // Form for resetting the password.
       elseif (($_GET['list'] || $_GET['forum_id'])
               && $_COOKIE['view'] === 'plain')
-        $this->_list_by_time();     // Show the forum, time order.
+        $this->_list_by_time();      // Show the forum, time order.
       elseif ($_GET['list'] || $_GET['forum_id'])
-        $this->_list_by_thread();   // Show the forum, thread order.
+        $this->_list_by_thread();    // Show the forum, thread order.
       else
         die("internal error");
 
@@ -770,8 +774,8 @@
        */
       $this->eventbus->emit("on_content_print_after");
     }
-    
-    
+
+
     // Prints an RSS page.
     function print_rss($_forum_id,
                        $_title,
@@ -786,9 +790,9 @@
       $rss->set_language(lang("countrycode"));
       $rss->show($_forum_id, $_off, $_n_entries);
       print($this->content);
-    } 
-    
-    
+    }
+
+
     function destroy() {
       unset($this->content);
       $this->db->Close();

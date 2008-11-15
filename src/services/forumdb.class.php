@@ -564,7 +564,7 @@
     /* Returns latest messages from the given forum.
      * $_forum:   The forum id.
      * $_offset:  The offset of the first message.
-     * $_n:       The number of messages.
+     * $_limit:   The number of messages.
      * $_updates: Whether an updated entry is treated like a newly inserted one.
      * $_func:    A reference to the function to which each message will be
      *            passed.
@@ -609,6 +609,56 @@
     }
     
     
+    /**
+     * Returns messages of one particular user.
+     * $_user_id: The user id of the user.
+     * $_offset:  The offset of the first message.
+     * $_limit:   The number of messages.
+     * $_updates: Whether an updated entry is treated like a newly inserted one.
+     * $_func:    A reference to the function to which each message will be
+     *            passed.
+     * $_data:    User data, passed to $_func.
+     *
+     * Args passed to $_func:
+     *  $message: The Message object.
+     *  $data:    The data given this function in $_data.
+     */
+    function foreach_message_from_user($_user_id,
+                                       $_offset,
+                                       $_limit,
+                                       $_updates,
+                                       $_folding,
+                                       $_func,
+                                       $_data) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+      //FIXME: Unfolding is currently unsupported.
+      
+      $sql  = "SELECT id,forumid,priority,u_id,name username,";
+      $sql .= "title subject,text body,active,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
+      $sql .= " FROM {t_message}";
+      $sql .= " WHERE u_id={userid}";
+      if ($_updates)
+        $sql .= " ORDER BY priority DESC,updated DESC";
+      else
+        $sql .= " ORDER BY priority DESC,created DESC";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('userid', $_user_id);
+      $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
+                          or die("ForumDB::foreach_message_from_user()");
+      $numrows = $res->RecordCount();
+      $indents = array();
+      while ($row = $res->FetchRow()) {
+        $message = &new Message();
+        $message->set_from_db($row);
+        call_user_func($_func, $message, $indents, $_data);
+      }
+      return $numrows;
+    }
+    
+    
     /* Returns the total number of entries in the given forum. */
     function get_n_messages($_forumid, $_since = 0) {
       $sql  = "SELECT COUNT(*)";
@@ -619,6 +669,18 @@
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);
       $query->set_int('since',   $_since);
+      $n = $this->db->GetOne($query->sql());
+      return $n;
+    }
+    
+    
+    /* Returns the number of entries written by the given user. */
+    function get_n_messages_from_user($_user_id) {
+      $sql  = "SELECT COUNT(*)";
+      $sql .= " FROM {t_message}";
+      $sql .= " WHERE u_id={userid}";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('userid', $_user_id);
       $n = $this->db->GetOne($query->sql());
       return $n;
     }

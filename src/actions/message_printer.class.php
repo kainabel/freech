@@ -19,20 +19,44 @@
   */
 ?>
 <?php
-  class MessagePrinter extends PrinterBase {
-    function show(&$_message) {
-      if (!$_message) {
-        $_message = new Message;
-        $_message->set_subject(lang("noentrytitle"));
-        $_message->set_body(lang("noentrybody"));
+  class MessagePrinter extends ThreadPrinter {
+    function MessagePrinter(&$_parent) {
+      $this->ThreadPrinter(&$_parent, new ThreadFolding(UNFOLDED, ''));
+    }
+
+
+    function show(&$_forum_id, &$_msg_id) {
+      $msg        = $this->db->get_message($_forum_id, $_msg_id);
+      $indexbar   = &new IndexBarReadMessage($msg);
+      $showthread = $msg && $msg->has_thread() && $_COOKIE[thread] != 'hide';
+
+      if (!$msg) {
+        $msg = new Message;
+        $msg->set_subject(lang("noentrytitle"));
+        $msg->set_body(lang("noentrybody"));
       }
-      elseif (!$_message->is_active()) {
-        $_message->set_subject(lang("blockedtitle"));
-        $_message->set_body(lang("blockedentry"));
+      elseif (!$msg->is_active()) {
+        $msg->set_subject(lang("blockedtitle"));
+        $msg->set_body(lang("blockedentry"));
       }
       
+      if ($showthread)
+        $n = $this->db->foreach_child_in_thread($_forum_id,
+                                                $_msg_id,
+                                                0,
+                                                cfg("tpp"),
+                                                $this->folding,
+                                                array(&$this, '_append_row'),
+                                                '');
+
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('message', $_message);
+      $this->smarty->assign_by_ref('indexbar',   $indexbar);
+      $this->smarty->assign_by_ref('showthread', $showthread);
+      $this->smarty->assign_by_ref('n_rows',     $n);
+      $this->smarty->assign_by_ref('message',    $msg);
+      $this->smarty->assign_by_ref('messages',   $this->messages);
+      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       $this->parent->append_content($this->smarty->fetch('message.tmpl'));
     }
     

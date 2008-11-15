@@ -25,8 +25,8 @@
     var $urls;
     var $foldurls;
     
-    function ThreadPrinter(&$_forum, &$_folding) {
-      $this->PrinterBase(&$_forum);
+    function ThreadPrinter(&$_parent, &$_folding) {
+      $this->PrinterBase(&$_parent);
       $this->folding  = &$_folding;
       $this->messages = array();
       $this->urls     = array();
@@ -94,12 +94,21 @@
                                                 array(&$this, '_append_row'),
                                                 '');
       
+      $n_threads = $this->db->get_n_threads($_forum_id);
+      $args      = array(n_threads          => $n_threads,
+                         n_threads_per_page => cfg("tpp"),
+                         n_offset           => $_offset,
+                         n_pages_per_index  => cfg("ppi"),
+                         folding            => $this->folding);
+      $indexbar = &new IndexBarByThread($args);
+
       $this->smarty->clear_all_assign();
+      $this->smarty->assign_by_ref('indexbar',        $indexbar);
       $this->smarty->assign_by_ref('n_rows',          $n);
       $this->smarty->assign_by_ref('messages',        $this->messages);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('thread.tmpl'));
+      $this->parent->append_content($this->smarty->fetch('list_by_thread.tmpl'));
     }
   }
 ?>

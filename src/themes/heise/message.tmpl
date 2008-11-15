@@ -1,4 +1,5 @@
 <!-- message -->
+{include file="indexbar.tmpl"}
 <p>
 <font color='red' size='+1'>{$pagetitle}</font>
 <p>
@@ -25,4 +26,8 @@
   </td>
  </tr>
 </table>
+{if $showthread}
+{include file="thread.tmpl"}
+{/if}
+{include file="indexbar.tmpl"}
 <!-- end message -->

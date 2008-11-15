@@ -199,4 +199,7 @@
   $lang[logininvalidchars]    = "Your login name contains invalid characters."
                               . " Please enter letters, digits or spaces only.";
   $lang[usernamenotavailable] = "The entered username is not available.";
+
+  // Profile.
+  $lang[myprofile] = "My Profile";
 ?>

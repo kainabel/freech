@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2008 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,30 +20,28 @@
 ?>
 <?php
   /**
-   * Concrete strategy, prints the index bar for the "threaded" list.
+   * Represents the IndexBar that is shown when reading a message.
    */
-  class IndexBarReadMessagePrinter extends IndexBarPrinter {
-    /// Constructor.
-    function IndexBarReadMessagePrinter(&$_parent, &$_message) {
-      $this->IndexBarPrinter($_parent);
-      $this->message = $_message;
-    }
-    
-    
-    function _update_items() {
-      $additem     = array(&$this, '_add_item');
-      $this->items = array();
+  class IndexBarReadMessage extends IndexBar {
+    var $items;
 
+
+    // Constructor.
+    function IndexBarReadMessage($_message) {
+      $this->IndexBar();
+      $this->message = $_message;
+
+      $additem = array(&$this, 'add_item');
       if (!$this->message) {
         call_user_func($additem);
         return;
       }
-      
+
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   0);
       $url->set_var('forum_id', (int)$_GET[forum_id]);
-      
+
       // "Previous/Next Entry" buttons.
       if ($this->message->get_prev_message_id() > 0) {
         $url->set_var('msg_id', $this->message->get_prev_message_id());
@@ -58,7 +56,7 @@
       }
       else
         call_user_func($additem, lang("next_symbol"));
-      
+
       // "Previous/Next Thread" buttons.
       call_user_func($additem);
       $prev_url = clone($url);
@@ -83,8 +81,9 @@
       call_user_func($additem, lang("prev_symbol"), $prev_url);
       call_user_func($additem, lang("thread"));
       call_user_func($additem, lang("next_symbol"), $next_url);
-      
+
       // "Reply" button.
+      $url = clone($url);
       call_user_func($additem);
       $url->delete_var('read');
       $url->set_var('write', 1);
@@ -94,13 +93,15 @@
       }
       else
         call_user_func($additem, lang("writeanswer"));
-      
+
       // "New Thread" button.
+      $url = clone($url);
       call_user_func($additem);
       $url->delete_var('msg_id');
       call_user_func($additem, lang("writemessage"), $url);
-      
+
       // "Show/Hide Thread" button.
+      $url = clone($url);
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
       $url->set_var('msg_id',   0);

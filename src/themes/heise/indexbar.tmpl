@@ -4,13 +4,13 @@
   <td align='left'>
   <font color='white' size='-1'>
   {strip}
-{foreach item=item from=$items}
-  {if !$item.text}
+{foreach item=item from=$indexbar->get_items()}
+  {if !$item->get_text()}
     &nbsp;&nbsp;
-  {elseif !$item.url}
-    &nbsp;{$item.text|escape|replace:" ":"&nbsp;"}
+  {elseif !$item->get_url_string()}
+    &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
   {else}
-    &nbsp;<a href='{$item.url|escape}'>{$item.text|escape|replace:" ":"&nbsp;"}</a>
+    &nbsp;<a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
   {/if}
 {/foreach}
 {/strip}

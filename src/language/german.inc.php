@@ -217,4 +217,7 @@
                               . " keine Umlaute oder Sonderzeichen eingeben.";
   $lang[usernamenotavailable] = "Der Benutzername gehört bereits einem "
                               . " registrierten User.";
+
+  // Profile.
+  $lang[myprofile] = "Mein Profil";
 ?>

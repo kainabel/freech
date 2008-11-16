@@ -57,7 +57,7 @@
       $this->smarty->assign_by_ref('messages',   $this->messages);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('message.tmpl'));
+      $this->parent->append_content($this->smarty->fetch('message_read.tmpl'));
     }
     
     

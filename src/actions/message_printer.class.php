@@ -27,7 +27,7 @@
 
     function show(&$_forum_id, &$_msg) {
       $indexbar   = &new IndexBarReadMessage($_msg);
-      $showthread = $_msg && $msg->has_thread() && $_COOKIE[thread] != 'hide';
+      $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 
       if (!$_msg) {
         $_msg = new Message;

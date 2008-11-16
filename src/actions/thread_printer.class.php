@@ -35,6 +35,15 @@
     
     
     function _append_row(&$_message, $_indents, $_data) {
+      if ($_GET['profile']) {
+        $section  = 'profile';
+        $sectionc = 'profile_c';
+      }
+      else {
+        $section  = 'list';
+        $sectionc = 'c';
+      }
+
       // The URL to the message.
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('read',     1);
@@ -51,10 +60,10 @@
       }
       else {
         $foldurl = new URL('?', cfg("urlvars"));
-        $foldurl->set_var('list',     1);
+        $foldurl->set_var($section,   1);
         $foldurl->set_var('hs',       (int)$_GET[hs]);
         $foldurl->set_var('forum_id', $_message->get_forum_id());
-        $foldurl->set_var('c', $_message->get_id());
+        $foldurl->set_var($sectionc,  $_message->get_id());
       }
       
       // Required to enable correct formatting of the message.

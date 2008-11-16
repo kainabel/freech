@@ -202,10 +202,18 @@
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
       $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
 
-      $this->folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
+      $folding         = &new ThreadFolding($_COOKIE['fold'],
+                                            $_COOKIE['c']);
+      $profile_folding = &new ThreadFolding($_COOKIE['profile_fold'],
+                                            $_COOKIE['profile_c']);
       if ($_GET['c']) {
-        $this->folding->swap($_GET['c']);
-        $this->_set_cookie('c', $this->folding->get_string());
+        $folding->swap($_GET['c']);
+        $this->_set_cookie('c', $folding->get_string());
+      }
+
+      if ($_GET['profile_c']) {
+        $profile_folding->swap($_GET['profile_c']);
+        $this->_set_cookie('profile_c', $profile_folding->get_string());
       }
 
       if ($_GET['changeview'] === 't')
@@ -224,6 +232,14 @@
       } elseif ($_GET['fold'] === '2') {
         $this->_set_cookie('fold', '2');
         $this->_set_cookie('c', '');
+      }
+
+      if ($_GET['profile_fold'] === '1') {
+        $this->_set_cookie('profile_fold', '1');
+        $this->_set_cookie('profile_c', '');
+      } elseif ($_GET['profile_fold'] === '2') {
+        $this->_set_cookie('profile_fold', '2');
+        $this->_set_cookie('profile_c', '');
       }
     }
 
@@ -660,7 +676,8 @@
       else
         $user = $this->get_current_user();
       $this->_print_profile_breadcrumbs($user);
-      $folding = &new ThreadFolding(UNFOLDED, '');
+      $folding = &new ThreadFolding($_COOKIE['profile_fold'],
+                                    $_COOKIE['profile_c']);
       $profile = &new ProfilePrinter($this, $folding);
       $profile->show($user);
     }

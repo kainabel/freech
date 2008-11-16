@@ -659,9 +659,9 @@
       // Grab the direct responses to those postings.
       if ($res->RecordCount() <= 0)
         return;
-      $sql  = "SELECT b.id,b.forumid,b.priority,b.u_id,HEX(a.path) orderpath,";
-      $sql .= " b.n_children,b.n_descendants, b.name username, b.title subject,";
-      $sql .= " b.text body,b.active,b.ip_address,";
+      $sql  = "SELECT b.id,b.forumid,b.priority,b.u_id,";
+      $sql .= " b.n_descendants n_children,b.n_descendants,b.name username,";
+      $sql .= " b.title subject,b.text body,b.active,b.ip_address,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
       $sql .= " a.id=b.id is_parent,";
       if ($_updated_threads_first)
@@ -684,7 +684,7 @@
         if (!$first)
           $sql .= " OR ";
         if ($_folding->is_folded($row[id]))
-          $sql .= "b.id=$row[id]";
+          $sql .= "(a.id=$row[id] AND b.id=$row[id])";
         else
           $sql .= "a.id=$row[id]";
         $first = 0;
@@ -693,13 +693,13 @@
       $sql .= ")";
       if ($_updated_threads_first) {
         $sql .= " GROUP BY b.id";
-        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,orderpath,path";
+        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,path";
       }
       else
-        $sql .= " ORDER BY b.threadid DESC,orderpath,path";
+        $sql .= " ORDER BY b.threadid DESC,path";
 
       // Pass all postings to the given function.
-      $query = &new FreechSqlQuery($sql);
+      $query   = &new FreechSqlQuery($sql);
       $res     = $this->db->Execute($query->sql())
                           or die("ForumDB::foreach_message_from_user()");
       $numrows = $res->RecordCount();

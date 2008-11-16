@@ -108,6 +108,27 @@
       }
       else
         call_user_func($additem, lang("prev"), $url);
+      
+      // "Unfold all" link.
+      $url = clone($url);
+      call_user_func($additem);
+      $url->set_var('hs', (int)$_GET[hs]);
+      if ($fold != UNFOLDED || $swap != '') {
+        $url->set_var('profile_fold', UNFOLDED);
+        call_user_func($additem, lang("unfoldall"), $url);
+      }
+      else
+        call_user_func($additem, lang("unfoldall"));
+      
+      // "Fold all" link.
+      $url = clone($url);
+      call_user_func($additem);
+      if ($fold != FOLDED || $swap != '') {
+        $url->set_var('profile_fold', FOLDED);
+        call_user_func($additem, lang("foldall"), $url);
+      }
+      else
+        call_user_func($additem, lang("foldall"));
     }
   }
 ?>

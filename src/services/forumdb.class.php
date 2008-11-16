@@ -694,11 +694,11 @@
       
       $sql .= ")";
       if ($_updated_threads_first) {
-        $sql .= " GROUP BY a.id,b.id";
-        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,created";
+        $sql .= " GROUP BY b.id";
+        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,updated";
       }
       else
-        $sql .= " ORDER BY b.threadid DESC,created";
+        $sql .= " ORDER BY b.threadid DESC,a.created DESC,created";
 
       // Pass all postings to the given function.
       $query   = &new FreechSqlQuery($sql);

@@ -25,24 +25,23 @@
     }
 
 
-    function show(&$_forum_id, &$_msg_id) {
-      $msg        = $this->db->get_message($_forum_id, $_msg_id);
-      $indexbar   = &new IndexBarReadMessage($msg);
+    function show(&$_forum_id, &$_msg) {
+      $indexbar   = &new IndexBarReadMessage($_msg);
       $showthread = $msg && $msg->has_thread() && $_COOKIE[thread] != 'hide';
 
-      if (!$msg) {
-        $msg = new Message;
-        $msg->set_subject(lang("noentrytitle"));
-        $msg->set_body(lang("noentrybody"));
+      if (!$_msg) {
+        $_msg = new Message;
+        $_msg->set_subject(lang("noentrytitle"));
+        $_msg->set_body(lang("noentrybody"));
       }
-      elseif (!$msg->is_active()) {
-        $msg->set_subject(lang("blockedtitle"));
-        $msg->set_body(lang("blockedentry"));
+      elseif (!$_msg->is_active()) {
+        $_msg->set_subject(lang("blockedtitle"));
+        $_msg->set_body(lang("blockedentry"));
       }
       
       if ($showthread)
         $n = $this->db->foreach_child_in_thread($_forum_id,
-                                                $_msg_id,
+                                                $_msg->get_id(),
                                                 0,
                                                 cfg("tpp"),
                                                 $this->folding,
@@ -53,7 +52,7 @@
       $this->smarty->assign_by_ref('indexbar',   $indexbar);
       $this->smarty->assign_by_ref('showthread', $showthread);
       $this->smarty->assign_by_ref('n_rows',     $n);
-      $this->smarty->assign_by_ref('message',    $msg);
+      $this->smarty->assign_by_ref('message',    $_msg);
       $this->smarty->assign_by_ref('messages',   $this->messages);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));

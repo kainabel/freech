@@ -230,9 +230,10 @@
 
     // Read a message.
     function _message_read() {
-      $this->_print_message_breadcrumbs($message);
+      $msg = $this->forum->get_message($_GET['forum_id'], $_GET['msg_id']);
+      $this->_print_message_breadcrumbs($msg);
       $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show($_GET['forum_id'], $_GET['msg_id']);
+      $msgprinter->show($_GET['forum_id'], $msg);
     }
 
 

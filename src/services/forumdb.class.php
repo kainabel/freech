@@ -373,6 +373,72 @@
     }
 
 
+    function _walk_tree($_res, $_fold, $_func, $_data) {
+      $row     = &$_res->FetchRow();
+      $indent  = 0;
+      $indents = array();
+      $parents = array(&$row);
+      while ($row) {
+        $nextrow = &$_res->FetchRow();
+        
+        // Parent node types.
+        if ($this->_is_parent($row)
+          && !$this->_has_children($row))
+          $row[relation] = MESSAGE_RELATION_PARENT_STUB;
+        else if ($this->_is_parent($row) && !$_fold->is_folded($row[id]))
+          $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
+        else if ($this->_is_parent($row))
+          $row[relation] = MESSAGE_RELATION_PARENT_FOLDED;
+        
+        // Children at a branch end.
+        else if ($parents[$indent - 1][n_descendants] == 1
+               && !$this->_is_childof($row, $nextrow))
+          $row[relation] = MESSAGE_RELATION_BRANCHEND_STUB;
+        else if ($parents[$indent - 1][n_descendants] == 1)
+          $row[relation] = MESSAGE_RELATION_BRANCHEND;
+        
+        // Other children.
+        else if (!$this->_is_childof($row, $nextrow)) {
+          $row[relation] = MESSAGE_RELATION_CHILD_STUB;
+          $parents[$indent - 1][n_descendants]--;
+        }
+        else {
+          $row[relation] = MESSAGE_RELATION_CHILD;
+          $parents[$indent - 1][n_descendants]--;
+        }
+        //echo "$row[title] ($row[id], $row[path]): $row[relation]<br>\n";
+        
+        $message = &new Message();
+        $message->set_from_db($row);
+        call_user_func($_func, $message, $indents, $_data);
+        
+        // Indent.
+        $parents[$indent] = &$row;
+        if ($row[relation] == MESSAGE_RELATION_PARENT_UNFOLDED
+          || $row[relation] == MESSAGE_RELATION_CHILD
+          || $row[relation] == MESSAGE_RELATION_BRANCHEND) {
+          if ($row[relation] == MESSAGE_RELATION_CHILD)
+            $indents[$indent] = INDENT_DRAW_DASH;
+          else
+            $indents[$indent] = INDENT_DRAW_SPACE;
+          $indent++;
+        }
+        // If the last row was a branch end, unindent.
+        else if ($row[relation] == MESSAGE_RELATION_BRANCHEND_STUB) {
+          $relation = $parents[$indent][relation];
+          while ($relation == MESSAGE_RELATION_BRANCHEND_STUB
+            || $relation == MESSAGE_RELATION_BRANCHEND) {
+            $indent--;
+            unset($indents[$indent]);
+            $relation = $parents[$indent][relation];
+          }
+        }
+        
+        $row = &$nextrow;
+      }
+    }
+
+
     /* Walks through the tree starting from $id, passing each message to the
      * function given in $func.
      *
@@ -471,70 +537,8 @@
       $query   = &new FreechSqlQuery($sql);
       $res     = $this->db->Execute($query->sql())
                               or die("ForumDB::foreach_child: 3");
-      $row     = &$res->FetchRow();
       $numrows = $res->RecordCount();
-      $indent  = 0;
-      $indents = array();
-      $parents = array(&$row);
-      while ($row) {
-        $nextrow = &$res->FetchRow();
-        
-        // Parent node types.
-        if ($this->_is_parent($row)
-          && !$this->_has_children($row))
-          $row[relation] = MESSAGE_RELATION_PARENT_STUB;
-        else if ($this->_is_parent($row) && !$_fold->is_folded($row[id]))
-          $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
-        else if ($this->_is_parent($row))
-          $row[relation] = MESSAGE_RELATION_PARENT_FOLDED;
-        
-        // Children at a branch end.
-        else if ($parents[$indent - 1][n_descendants] == 1
-               && !$this->_is_childof($row, $nextrow))
-          $row[relation] = MESSAGE_RELATION_BRANCHEND_STUB;
-        else if ($parents[$indent - 1][n_descendants] == 1)
-          $row[relation] = MESSAGE_RELATION_BRANCHEND;
-        
-        // Other children.
-        else if (!$this->_is_childof($row, $nextrow)) {
-          $row[relation] = MESSAGE_RELATION_CHILD_STUB;
-          $parents[$indent - 1][n_descendants]--;
-        }
-        else {
-          $row[relation] = MESSAGE_RELATION_CHILD;
-          $parents[$indent - 1][n_descendants]--;
-        }
-        //echo "$row[title] ($row[id], $row[path]): $row[relation]<br>\n";
-        
-        $message = &new Message();
-        $message->set_from_db($row);
-        call_user_func($_func, $message, $indents, $_data);
-        
-        // Indent.
-        $parents[$indent] = &$row;
-        if ($row[relation] == MESSAGE_RELATION_PARENT_UNFOLDED
-          || $row[relation] == MESSAGE_RELATION_CHILD
-          || $row[relation] == MESSAGE_RELATION_BRANCHEND) {
-          if ($row[relation] == MESSAGE_RELATION_CHILD)
-            $indents[$indent] = INDENT_DRAW_DASH;
-          else
-            $indents[$indent] = INDENT_DRAW_SPACE;
-          $indent++;
-        }
-        // If the last row was a branch end, unindent.
-        else if ($row[relation] == MESSAGE_RELATION_BRANCHEND_STUB) {
-          $relation = $parents[$indent][relation];
-          while ($relation == MESSAGE_RELATION_BRANCHEND_STUB
-            || $relation == MESSAGE_RELATION_BRANCHEND) {
-            $indent--;
-            unset($indents[$indent]);
-            $relation = $parents[$indent][relation];
-          }
-        }
-        
-        $row = &$nextrow;
-      }
-      
+      $this->_walk_tree($res, $_fold, $_func, $_data);
       return $numrows;
     }
     
@@ -583,18 +587,17 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
       
-      $sql  = "SELECT id,forumid,priority,u_id,name username,";
-      $sql .= "title subject,text body,active,";
-      $sql .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql .= "UNIX_TIMESTAMP(created) created";
-      $sql .= " FROM {t_message}";
+      $sql  = "SELECT a.id,a.forumid,a.priority,a.u_id,a.name username,";
+      $sql .= "a.title subject,a.text body,a.active,";
+      $sql .= "UNIX_TIMESTAMP(a.updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(a.created) created";
+      $sql .= " FROM {t_message} a";
       if ($_forumid)
-        $sql .= " WHERE forumid={forumid}";
+        $sql .= " WHERE a.forumid={forumid}";
       if ($_updates)
-        $sql .= " ORDER BY priority DESC,updated";
+        $sql .= " ORDER BY a.priority DESC,a.updated DESC";
       else
-        $sql .= " ORDER BY priority DESC,created";
-      $sql .= " DESC";
+        $sql .= " ORDER BY a.priority DESC,a.created DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
@@ -626,35 +629,81 @@
     function foreach_message_from_user($_user_id,
                                        $_offset,
                                        $_limit,
-                                       $_updates,
+                                       $_updated_threads_first,
                                        $_folding,
                                        $_func,
                                        $_data) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
-      //FIXME: Unfolding is currently unsupported.
       
-      $sql  = "SELECT id,forumid,priority,u_id,name username,";
-      $sql .= "title subject,text body,active,";
-      $sql .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql .= "UNIX_TIMESTAMP(created) created";
-      $sql .= " FROM {t_message}";
-      $sql .= " WHERE u_id={userid}";
-      if ($_updates)
-        $sql .= " ORDER BY priority DESC,updated DESC";
+      // Select the postings of the user.
+      $sql  = "SELECT a.id,HEX(a.path) path, a.n_children";
+      if ($_updated_threads_first)
+        $sql .= " ,MAX(b.id) threadupdate";
+      $sql .= " FROM {t_message} a";
+      if ($_updated_threads_first)
+        $sql .= " LEFT JOIN {t_message} b ON a.threadid=b.threadid";
+      $sql .= " WHERE a.u_id={userid}";
+      if ($_updated_threads_first) {
+        $sql .= " GROUP BY a.id";
+        $sql .= " ORDER BY threadupdate DESC,a.threadid DESC,path";
+      }
       else
-        $sql .= " ORDER BY priority DESC,created DESC";
+        $sql .= " ORDER BY a.threadid DESC,path";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('userid', $_user_id);
+      //$this->db->debug=1;
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
+                     or die("ForumDB::foreach_message_from_user(): 1");
+
+      // Grab the direct responses to those postings.
+      if ($res->RecordCount() <= 0)
+        return;
+      $sql  = "SELECT b.id,b.forumid,b.priority,b.u_id,HEX(a.path) orderpath,";
+      $sql .= " b.n_children,b.n_descendants, b.name username, b.title subject,";
+      $sql .= " b.text body,b.active,b.ip_address,";
+      $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
+      $sql .= " a.id=b.id is_parent,";
+      if ($_updated_threads_first)
+        $sql .= " MAX(c.id) threadupdate,";
+      $sql .= " UNIX_TIMESTAMP(b.updated) updated,";
+      $sql .= " UNIX_TIMESTAMP(b.created) created";
+      $sql .= " FROM {t_message} a";
+      $sql .= " LEFT JOIN {t_message} b ON b.threadid=a.threadid";
+      $sql .= " AND b.path LIKE CONCAT(a.path, '%')";
+      $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
+      if ($_updated_threads_first) {
+        $sql .= " LEFT JOIN {t_message} c ON c.threadid=a.threadid";
+        $sql .= " AND c.path LIKE CONCAT(a.path, '%')";
+        $sql .= " AND LENGTH(c.path)<=LENGTH(a.path)+5";
+      }
+      $sql .= " WHERE (";
+      
+      $first = 1;
+      while ($row = &$res->FetchRow()) {
+        if (!$first)
+          $sql .= " OR ";
+        if ($_folding->is_folded($row[id]))
+          $sql .= "b.id=$row[id]";
+        else
+          $sql .= "a.id=$row[id]";
+        $first = 0;
+      }
+      
+      $sql .= ")";
+      if ($_updated_threads_first) {
+        $sql .= " GROUP BY b.id";
+        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,orderpath,path";
+      }
+      else
+        $sql .= " ORDER BY b.threadid DESC,orderpath,path";
+
+      // Pass all postings to the given function.
+      $query = &new FreechSqlQuery($sql);
+      $res     = $this->db->Execute($query->sql())
                           or die("ForumDB::foreach_message_from_user()");
       $numrows = $res->RecordCount();
-      $indents = array();
-      while ($row = $res->FetchRow()) {
-        $message = &new Message();
-        $message->set_from_db($row);
-        call_user_func($_func, $message, $indents, $_data);
-      }
+      $this->_walk_tree($res, $_folding, $_func, $_data);
       return $numrows;
     }
     

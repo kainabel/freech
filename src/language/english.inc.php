@@ -1,4 +1,4 @@
-<?
+<?php
   /*
   Freech.
   Copyright (C) 2003 Samuel Abels, <http://debain.org>
@@ -18,7 +18,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   */
 ?>
-<?
+<?php
 // German language file, 2003 by Samuel Abels
 
   // Forum

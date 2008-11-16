@@ -1,4 +1,4 @@
-<?
+<?php
   // Database settings.
   $cfg[salt]            = ""; // !!!CHANGE THIS!!! to a random value.
   $cfg[db_host]         = 'localhost';  // Your database hostname, usually

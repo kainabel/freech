@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `forumid` int(11) unsigned NOT NULL default '0',
   `threadid` int(11) unsigned NOT NULL default '0',
   `priority` int(11) NOT NULL default '0',
-  `is_parent` int(3) unsigned default '0',
+  `is_parent` tinyint(1) default '0',
   `n_children` int(11) unsigned default '0',
   `n_descendants` int(11) unsigned default '0',
   `path` varchar(255) character set latin1 collate latin1_bin default NULL,

@@ -660,7 +660,9 @@
       if ($res->RecordCount() <= 0)
         return;
       $sql  = "SELECT b.id,b.forumid,b.priority,b.u_id,";
-      $sql .= " b.n_descendants n_children,b.n_descendants,b.name username,";
+      $sql .= " b.n_descendants n_children,";
+      $sql .= " b.n_descendants,";
+      $sql .= " b.name username,";
       $sql .= " b.title subject,b.text body,b.active,b.ip_address,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
       $sql .= " a.id=b.id is_parent,";
@@ -692,11 +694,11 @@
       
       $sql .= ")";
       if ($_updated_threads_first) {
-        $sql .= " GROUP BY b.id";
-        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,path";
+        $sql .= " GROUP BY a.id,b.id";
+        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,created";
       }
       else
-        $sql .= " ORDER BY b.threadid DESC,path";
+        $sql .= " ORDER BY b.threadid DESC,created";
 
       // Pass all postings to the given function.
       $query   = &new FreechSqlQuery($sql);

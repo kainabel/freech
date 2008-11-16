@@ -33,6 +33,7 @@
       $this->n_messages_per_page = $_args[n_messages_per_page];
       $this->n_offset            = $_args[n_offset];
       $this->n_pages_per_index   = $_args[n_pages_per_index];
+      $this->folding             = $_args[folding];
 
       // Print the "Index" keyword, followed by a separator.
       $additem = array(&$this, 'add_item');
@@ -108,6 +109,12 @@
       }
       else
         call_user_func($additem, lang("prev"), $url);
+      
+      if (!$this->folding)
+        die("IndexBarUserPostings:foreach_page(): Folding.");
+      
+      $fold = $this->folding->get_default();
+      $swap = $this->folding->get_string_swap();
       
       // "Unfold all" link.
       $url = clone($url);

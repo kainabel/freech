@@ -111,10 +111,10 @@
         call_user_func($additem, lang("prev"));
       
       if (!$this->folding)
-        die("IndexBarStrategy_list_by_thread:foreach_page(): Folding.");
+        die("IndexBarByThread:foreach_page(): Folding.");
       
-      $fold  = $this->folding->get_default();
-      $swap  = $this->folding->get_string_swap();
+      $fold = $this->folding->get_default();
+      $swap = $this->folding->get_string_swap();
       
       // "Unfold all" link.
       $url = clone($url);

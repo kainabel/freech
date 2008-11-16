@@ -37,7 +37,8 @@
       $args      = array(n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_GET['hs'],
-                         n_pages_per_index   => cfg("ppi"));
+                         n_pages_per_index   => cfg("ppi"),
+                         folding             => $this->folding);
       $indexbar = &new IndexBarUserPostings($args);
 
       $this->smarty->clear_all_assign();

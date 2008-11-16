@@ -641,15 +641,18 @@
       if ($_updated_threads_first)
         $sql .= " ,MAX(b.id) threadupdate";
       $sql .= " FROM {t_message} a";
-      if ($_updated_threads_first)
+      if ($_updated_threads_first) {
         $sql .= " LEFT JOIN {t_message} b ON a.threadid=b.threadid";
+        $sql .= " AND b.path LIKE CONCAT(a.path, '%')";
+        $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
+      }
       $sql .= " WHERE a.u_id={userid}";
       if ($_updated_threads_first) {
         $sql .= " GROUP BY a.id";
-        $sql .= " ORDER BY threadupdate DESC,a.threadid DESC,path";
+        $sql .= " ORDER BY threadupdate DESC,a.created DESC";
       }
       else
-        $sql .= " ORDER BY a.threadid DESC,path";
+        $sql .= " ORDER BY a.created DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('userid', $_user_id);
       //$this->db->debug=1;
@@ -695,10 +698,10 @@
       $sql .= ")";
       if ($_updated_threads_first) {
         $sql .= " GROUP BY b.id";
-        $sql .= " ORDER BY threadupdate DESC, b.threadid DESC,updated";
+        $sql .= " ORDER BY threadupdate DESC,created";
       }
       else
-        $sql .= " ORDER BY b.threadid DESC,a.created DESC,created";
+        $sql .= " ORDER BY a.created DESC,created";
 
       // Pass all postings to the given function.
       $query   = &new FreechSqlQuery($sql);

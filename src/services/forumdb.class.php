@@ -655,6 +655,7 @@
         $sql .= " ORDER BY a.created DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('userid', $_user_id);
+      //echo $query->sql();
       //$this->db->debug=1;
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                      or die("ForumDB::foreach_message_from_user(): 1");
@@ -675,11 +676,11 @@
       $sql .= " UNIX_TIMESTAMP(b.created) created";
       $sql .= " FROM {t_message} a";
       $sql .= " LEFT JOIN {t_message} b ON b.threadid=a.threadid";
-      $sql .= " AND b.path LIKE CONCAT(a.path, '%')";
+      $sql .= " AND b.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
       $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
       if ($_updated_threads_first) {
         $sql .= " LEFT JOIN {t_message} c ON c.threadid=a.threadid";
-        $sql .= " AND c.path LIKE CONCAT(a.path, '%')";
+        $sql .= " AND c.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
         $sql .= " AND LENGTH(c.path)<=LENGTH(a.path)+5";
       }
       $sql .= " WHERE (";
@@ -705,6 +706,7 @@
 
       // Pass all postings to the given function.
       $query   = &new FreechSqlQuery($sql);
+      //echo $query->sql();
       $res     = $this->db->Execute($query->sql())
                           or die("ForumDB::foreach_message_from_user()");
       $numrows = $res->RecordCount();

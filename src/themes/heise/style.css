@@ -23,10 +23,10 @@ a:hover {
 
 tr.posting:hover
 {
-  background-color: #D4D0C8;
+  background-color: #EEEEEE;
 }
 
 tr.posting:hover a
 {
-  color: #000000;
+  text-decoration: underline;
 }

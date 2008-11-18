@@ -210,8 +210,11 @@
     }
 
 
-    function get_newness_hex() {
-      return dechex($this->get_newness() / 100 * 255);
+    function get_newness_hex($_reverse = FALSE) {
+      $value = $this->get_newness() / 100 * 255;
+      if ($_reverse)
+        $value = 255 - $value;
+      return substr("00" . dechex($value), -2);
     }
 
 

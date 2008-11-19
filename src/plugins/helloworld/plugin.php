@@ -18,22 +18,22 @@ function helloworld_init(&$forum) {
 }
 
 
-function helloworld_on_construct() {
+function helloworld_on_construct(&$forum) {
   print("Hello from helloworld_on_construct().");
 }
 
 
-function helloworld_on_header_print(&$html) {
+function helloworld_on_header_print(&$forum) {
   print("Hello from helloworld_on_header_print().");
 }
 
 
-function helloworld_on_content_print(&$html) {
+function helloworld_on_content_print(&$forum) {
   print("Hello from helloworld_on_content_print().");
 }
 
 
-function helloworld_on_destroy() {
+function helloworld_on_destroy(&$forum) {
   print("Hello from helloworld_on_destroy().");
 }
 ?>

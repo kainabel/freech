@@ -114,7 +114,7 @@
        *   The return value of the callback is ignored.
        *   Args: None.
        */
-      $this->eventbus->emit("on_construct");
+      $this->eventbus->emit("on_construct", &$this);
 
       // Init Smarty.
       $this->smarty = &new Smarty();
@@ -721,7 +721,7 @@
        *   Called before the HTML header is sent.
        *   Args: $html: A reference to the HTML header.
        */
-      $this->eventbus->emit("on_header_print_before", &$this->content);
+      $this->eventbus->emit("on_header_print_before", &$this);
 
       print($this->content);
 
@@ -729,7 +729,7 @@
        *   Called after the HTML header was sent.
        *   Args: none
        */
-      $this->eventbus->emit("on_header_print_after");
+      $this->eventbus->emit("on_header_print_after", &$this);
     }
 
 
@@ -783,14 +783,14 @@
        *   Called before the HTML content is sent.
        *   Args: $html: A reference to the content.
        */
-      $this->eventbus->emit("on_content_print_before", &$this->content);
+      $this->eventbus->emit("on_content_print_before", &$this);
       print($this->content);
 
       /* Plugin hook: on_content_print_after
        *   Called after the HTML content was sent.
        *   Args: none.
        */
-      $this->eventbus->emit("on_content_print_after");
+      $this->eventbus->emit("on_content_print_after", &$this);
     }
 
 
@@ -819,7 +819,7 @@
        *   The return value of the callback is ignored.
        *   Args: None.
        */
-      $this->eventbus->emit("on_destroy");
+      $this->eventbus->emit("on_destroy", &$this);
     }
   }
 ?>

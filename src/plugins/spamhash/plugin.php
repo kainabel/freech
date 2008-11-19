@@ -9,19 +9,20 @@ Constructor: spamhash_init
 */
 include_once "spamhash.class.php";
 
-
+define('CHECK_REGISTERED_ACCOUNTS', FALSE);
 $spamhash = ''; // The spamhash instance.
 
 
 function spamhash_init(&$forum) {
   $eventbus = &$forum->get_eventbus();
-  $eventbus->signal_connect("on_construct",            "spamhash_on_construct");
-  $eventbus->signal_connect("on_header_print_before",  "spamhash_on_header_print");
-  $eventbus->signal_connect("on_content_print_before", "spamhash_on_content_print");
+  $eventbus->signal_connect("on_construct",
+                            "spamhash_on_construct");
+  $eventbus->signal_connect("on_header_print_before",
+                            "spamhash_on_header_print");
 }
 
 
-function spamhash_on_construct() {
+function spamhash_on_construct(&$forum) {
   global $spamhash;
   if (!$_POST[send]
     && !$_GET[write]
@@ -33,27 +34,32 @@ function spamhash_on_construct() {
 }
 
 
-function spamhash_on_header_print(&$html) {
+function spamhash_on_header_print(&$forum) {
   global $spamhash;
   if (!$spamhash)
+    return;
+  if (!CHECK_REGISTERED_ACCOUNTS && $forum->get_current_user())
     return;
   if ($_POST[send] && !spamhash_check_hash())
     return;
-  $html = $spamhash->insert_header_code($html);
-  $html = $spamhash->insert_body_code($html);
+  $forum->content = $spamhash->insert_header_code($forum->content);
+  $forum->content = $spamhash->insert_body_code($forum->content);
+  $eventbus       = &$forum->get_eventbus();
+  $eventbus->signal_connect("on_content_print_before",
+                            "spamhash_on_content_print");
 }
 
 
-function spamhash_on_content_print(&$html) {
+function spamhash_on_content_print(&$forum) {
   global $spamhash;
   if (!$spamhash)
     return;
-  if ($_POST[send] && !spamhash_html_contains_form($html)) {
+  if ($_POST[send] && !spamhash_html_contains_form($forum->content)) {
     unset($spamhash);
     return;
   }
-  $html = $spamhash->insert_form_code($html);
-  $html = $spamhash->insert_body_code($html);
+  $forum->content = $spamhash->insert_form_code($forum->content);
+  $forum->content = $spamhash->insert_body_code($forum->content);
 }
 
 

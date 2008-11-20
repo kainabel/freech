@@ -716,15 +716,17 @@
     
     
     /* Returns the total number of entries in the given forum. */
-    function get_n_messages($_forumid, $_since = 0) {
+    function get_n_messages($_forumid = '', $_since = 0) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
-      $sql .= " WHERE created > FROM_UNIXTIME({since})";
+      $sql .= " WHERE 1";
       if ($_forumid)
-        $sql .= " and forumid={forumid}";
+        $sql .= " AND forumid={forumid}";
+      if ($_since)
+        $sql .= " AND created > FROM_UNIXTIME({since})";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forumid', $_forumid);
-      $query->set_int('since',   $_since);
+      $query->set_int('since', $_since);
       $n = $this->db->GetOne($query->sql());
       return $n;
     }

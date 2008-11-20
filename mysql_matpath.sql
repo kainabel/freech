@@ -98,7 +98,8 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   KEY `threadid` (`threadid`),
   KEY `is_parent` (`is_parent`),
   KEY `u_id` (`u_id`),
-  KEY `hash` (`hash`)
+  KEY `hash` (`hash`),
+  KEY `created` (`created`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------

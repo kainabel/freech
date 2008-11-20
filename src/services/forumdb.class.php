@@ -187,7 +187,7 @@
     function &get_message($_forumid, $_id) {
       $sql  = "SELECT id,forumid,priority,u_id,threadid,HEX(path) path,";
       $sql .= "n_children, name username,title subject,text body,active,";
-      $sql .= "ip_address,";
+      $sql .= "ip_hash,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM {t_message}";
@@ -252,21 +252,21 @@
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (forumid, threadid, priority, u_id, name, title, text,";
-        $sql .= " hash, ip_address, created)";
+        $sql .= " hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " {forumid}, {threadid}, {priority}, {u_id}, {name},";
-        $sql .= " {subject}, {body}, {hash}, {ip_address}, NULL";
+        $sql .= " {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid',  $parentrow[forumid]);
         $query->set_int('threadid', $parentrow[threadid]);
         $query->set_int('priority', $_message->get_priority());
         $query->set_int('u_id',     $_message->get_user_id());
-        $query->set_string('name',       $_message->get_username());
-        $query->set_string('subject',    $_message->get_subject());
-        $query->set_string('body',       $_message->get_body());
-        $query->set_string('hash',       $_message->get_hash());
-        $query->set_string('ip_address', $_message->get_ip_address());
+        $query->set_string('name',    $_message->get_username());
+        $query->set_string('subject', $_message->get_subject());
+        $query->set_string('body',    $_message->get_body());
+        $query->set_string('hash',    $_message->get_hash());
+        $query->set_string('ip_hash', $_message->get_ip_address_hash());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): Insert1.");
         $newid = $this->db->Insert_Id();
@@ -322,10 +322,10 @@
       else {
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (path, forumid, priority, u_id, threadid, is_parent, name,";
-        $sql .= "  title, text, hash, ip_address, created)";
+        $sql .= "  title, text, hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " '', {forumid}, {priority}, {u_id}, 0, 1, {name},";
-        $sql .= " {subject}, {body}, {hash}, {ip_address}, NULL";
+        $sql .= " {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forumid',  $_forumid);
@@ -335,7 +335,7 @@
         $query->set_string('subject', $_message->get_subject());
         $query->set_string('body',    $_message->get_body());
         $query->set_string('hash',    $_message->get_hash());
-        $query->set_string('ip_address', $_SERVER['REMOTE_ADDR']);
+        $query->set_string('ip_hash', $_message->get_ip_address_hash());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): Insert2.".$query->sql());
         $newid = $this->db->Insert_Id();
@@ -502,7 +502,7 @@
         return;
       $sql  = "SELECT a.id,a.forumid,a.priority,a.u_id,HEX(a.path) path,";
       $sql .= " a.n_children,a.n_descendants, a.name username, a.title subject,";
-      $sql .= " a.text body,a.active,a.ip_address,";
+      $sql .= " a.text body,a.active,a.ip_hash,";
       if ($_updated_threads_first)
         $sql .= " MAX(b.id) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(a.updated) updated,";
@@ -667,7 +667,7 @@
       $sql .= " b.n_descendants n_children,";
       $sql .= " b.n_descendants,";
       $sql .= " b.name username,";
-      $sql .= " b.title subject,b.text body,b.active,b.ip_address,";
+      $sql .= " b.title subject,b.text body,b.active,b.ip_hash,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
       $sql .= " a.id=b.id is_parent,";
       if ($_updated_threads_first)

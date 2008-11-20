@@ -27,6 +27,12 @@
     }
     
     
+    function &_ip_hash($_ip) {
+      $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
+      return md5($ip_net . cfg("salt"));
+    }
+
+
     /* Returns the id of the entry with the given ip, if it
      * has been here in the last n minutes.
      * $_ip: The ip address of the user.
@@ -34,9 +40,9 @@
      */
     function &_id_of($_ip, $_since) {
       $sql  = "SELECT id FROM {t_visitor}";
-      $sql .= " WHERE ip={ip} and time > {since}";
+      $sql .= " WHERE ip_hash={ip_hash} and visit > {since}";
       $query = &new FreechSqlQuery($sql);
-      $query->set_string('ip', $_ip);
+      $query->set_string('ip_hash', $_ip);
       $query->set_int('since', $_since);
       $row = $this->db->GetRow($query->sql());
       if (!$row)
@@ -47,10 +53,10 @@
 
     function _update_time($_id) {
       $sql  = "UPDATE {t_visitor}";
-      $sql .= " SET time={time}";
+      $sql .= " SET visit={visit}";
       $sql .= " WHERE id={id}";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int('time', time());
+      $query->set_int('visit', time());
       $query->set_string('id', $_id);
       $this->db->Execute($query->sql()) or die("VisitorDB::_update_time()");
     }
@@ -61,14 +67,13 @@
     }
 
 
-    function _insert_entry($_ip, $_host, $_count) {
+    function _insert_entry($_ip_hash, $_count) {
       $sql  = "INSERT INTO {t_visitor}";
-      $sql .= " (ip, ipname, counter, time)";
-      $sql .= " VALUES ({ip}, {ipname}, {counter}, {time})";
+      $sql .= " (ip_hash, counter, visit)";
+      $sql .= " VALUES ({ip_hash}, {counter}, {visit})";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int('time', time());
-      $query->set_string('ip',      $_ip);
-      $query->set_string('ipname',  $_host);
+      $query->set_int('visit', time());
+      $query->set_string('ip_hash', $_ip_hash);
       $query->set_string('counter', $_count);
       $this->db->Execute($query->sql()) or die("VisitorDB::_insert_entry()");
       $newid = $this->db->Insert_ID();
@@ -78,7 +83,7 @@
     /* Delete old and unneeded entries from the table. */
     function _flush() {
       $sql  = "DELETE FROM {t_visitor}";
-      $sql .= " WHERE time < {end}";
+      $sql .= " WHERE visit < {end}";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('end', time() - 60 * 60 * 24 * 30);
       $this->db->Execute($query->sql()) or die("VisitorDB::_flush()");
@@ -91,8 +96,9 @@
     function &count() {
       // If the current user was here in the last 10 minutes, just 
       // update his timestamp and return.
-      $ip = getenv("REMOTE_ADDR");
-      $id = $this->_id_of($ip, time() - 60 * 10);
+      $ip      = getenv("REMOTE_ADDR");
+      $ip_hash = $this->_ip_hash($ip);
+      $id      = $this->_id_of($ip_hash, time() - 60 * 10);
       if ($id)
         return $this->_update_time($id);
 
@@ -102,8 +108,9 @@
         return;
 
       // Ending up here we have a new visitor. Save it.
-      $count = $this->get_n_visitors();
-      $this->_insert_entry($ip, $host, $count + 1);
+      // Note that this needs to work with both, IPv4 and IPv6.
+      $count   = $this->get_n_visitors();
+      $this->_insert_entry($ip_hash, $count + 1);
 
       // To limit the number of rows, delete old entries.
       $this->_flush();
@@ -116,7 +123,7 @@
         $query = &new FreechSqlQuery("SELECT MAX(counter) FROM {t_visitor}");
       else {
         $sql   = "SELECT COUNT(*) FROM {t_visitor}";
-        $sql  .= " WHERE time > {start}";
+        $sql  .= " WHERE visit > {start}";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('start', $_since);
       }

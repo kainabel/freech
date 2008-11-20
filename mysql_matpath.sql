@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   `active` tinyint(3) unsigned default '1',
-  `ip_address` varchar(50) collate latin1_general_ci NOT NULL default '',
+  `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `forumid` (`forumid`),
   KEY `threadid` (`threadid`),
@@ -151,12 +151,13 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
 
 CREATE TABLE IF NOT EXISTS `freech_visitor` (
   `id` int(11) NOT NULL auto_increment,
-  `ip` varchar(20) collate latin1_general_ci default NULL,
-  `ipname` varchar(100) collate latin1_general_ci default NULL,
+  `ip_hash` varchar(40) collate latin1_general_ci default NULL,
   `counter` bigint(20) default NULL,
-  `time` varchar(255) collate latin1_general_ci NOT NULL default '0',
+  `visit` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `counter` (`counter`)
+  KEY `counter` (`counter`),
+  KEY `ip_hash` (`ip_hash`),
+  KEY `visit` (`visit`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --

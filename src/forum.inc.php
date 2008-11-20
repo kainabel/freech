@@ -118,10 +118,11 @@
 
       // Init Smarty.
       $this->smarty = &new Smarty();
-      $this->smarty->template_dir = "themes/" . cfg("theme");
-      $this->smarty->compile_dir  = "smarty/templates_c";
-      $this->smarty->cache_dir    = "smarty/cache";
-      $this->smarty->config_dir   = "smarty/configs";
+      $this->smarty->template_dir  = "themes/" . cfg("theme");
+      $this->smarty->compile_dir   = "smarty/templates_c";
+      $this->smarty->cache_dir     = "smarty/cache";
+      $this->smarty->config_dir    = "smarty/configs";
+      $this->smarty->compile_check = cfg("check_cache");
       $this->smarty->register_function('lang', 'smarty_lang');
 
       session_set_cookie_params(time() + cfg("login_time"));

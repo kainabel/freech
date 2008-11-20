@@ -23,7 +23,13 @@
                                         // of your site.
   $cfg[rss_description] = 'Das Forum fuer den Notfall';
                                         // The descripton included in the RSS.
-  
+  $cfg[check_cache]     = TRUE;         // Whether to check templates for
+                                        // changes. Setting this to FALSE
+                                        // will significantly enhance
+                                        // performance at the cost of
+                                        // changed templates getting out
+                                        // of date.
+
   // URL settings.
   $cfg[urlvars]         = array(        // Lets you append additional variables
     'sid' => $_GET[sid]                 // to every URL. If unsure leave

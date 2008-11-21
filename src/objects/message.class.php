@@ -48,8 +48,7 @@
       $this->_fields[active]       = TRUE;
       $this->_fields[u_id]         = 2; // Anonymous user.
       $this->_fields[allow_answer] = TRUE;
-      $this->_fields[ip_address]   = $_SERVER['REMOTE_ADDR'];
-      $this->_fields[ip_hash]      = $this->get_ip_address_hash();
+      $this->_fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
     }
 
 
@@ -68,7 +67,6 @@
       $this->_fields[updated]         = $_db_row[updated];
       $this->_fields[created]         = $_db_row[created];
       $this->_fields[n_children]      = $_db_row[n_children];
-      $this->_fields[ip_address]      = $_db_row[ip_address];
       $this->_fields[ip_hash]         = $_db_row[ip_hash];
       if (isset($_db_row[relation]))
         $this->_fields[relation]      = $_db_row[relation];
@@ -79,6 +77,13 @@
       $this->_fields[prev_message_id] = $_db_row[prev_message_id];
       $this->_fields[next_thread_id]  = $_db_row[next_thread_id];
       $this->_fields[prev_thread_id]  = $_db_row[prev_thread_id];
+    }
+
+
+    function &_ip_hash($_ip) {
+      // Note that this needs to work with both, IPv4 and IPv6.
+      $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
+      return md5($ip_net . cfg("salt"));
     }
 
 
@@ -249,15 +254,8 @@
     }
 
 
-    function &get_ip_address() {
-      return $this->_fields[ip_address];
-    }
-
-
     function &get_ip_address_hash() {
-      // Note that this needs to work with both, IPv4 and IPv6.
-      $ip_net = preg_replace('/[\d\w]+$/', '', $this->_fields['ip_address']);
-      return md5($ip_net . cfg("salt"));
+      return $this->_fields['ip_hash'];
     }
 
 

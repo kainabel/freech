@@ -28,6 +28,7 @@
     
     
     function &_ip_hash($_ip) {
+      // Note that this needs to work with both, IPv4 and IPv6.
       $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
       return md5($ip_net . cfg("salt"));
     }

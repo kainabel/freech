@@ -41,6 +41,7 @@
   include_once 'objects/indexbar_by_thread.class.php';
   include_once 'objects/indexbar_read_message.class.php';
   include_once 'objects/indexbar_user_postings.class.php';
+  include_once 'objects/indexbar_search_result.class.php';
 
   include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
@@ -50,11 +51,13 @@
   include_once 'actions/breadcrumbs_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
+  include_once 'actions/search_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
 
   include_once 'services/thread_folding.class.php';
+  include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
   include_once 'services/accountdb.class.php';
@@ -397,14 +400,15 @@
 
     function _print_list_breadcrumbs() {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $n_messages = $this->forum->get_n_messages($_GET[forum_id]);
-      $start      = time() - cfg("new_post_time");
-      $n_new      = $this->forum->get_n_messages($_GET[forum_id], $start);
-      $n_online   = $this->visitordb->get_n_visitors(time() - 60 * 5);
-      $text       = lang("forum_long");
-      $text       = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
-      $text       = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
-      $text       = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
+      $search      = array('forumid' => $_GET['forum_id']);
+      $n_messages  = $this->forum->get_n_messages($search);
+      $start       = time() - cfg("new_post_time");
+      $n_new       = $this->forum->get_n_messages($search, $start);
+      $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
+      $text        = lang("forum_long");
+      $text        = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
+      $text        = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
+      $text        = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
       $breadcrumbs->add_item($text, $this->_get_forumurl());
       $breadcrumbs->show();
     }
@@ -435,6 +439,19 @@
     function _print_footer() {
       $footer = &new FooterPrinter($this);
       $footer->show();
+    }
+
+
+    function _show_search_form() {
+      $printer = &new SearchPrinter($this);
+      $printer->show();
+    }
+
+
+    function _show_search_result() {
+      $search  = &new SearchQuery($_GET['q']);
+      $printer = &new SearchPrinter($this);
+      $printer->show($search, $_GET['hs']);
     }
 
 
@@ -751,9 +768,13 @@
       elseif ($_POST['send'])
         $this->_message_submit();   // A message was posted and should be saved.
       elseif ($_GET['profile'])
-        $this->_show_profile();     // Show the profile of one user.
+        $this->_show_profile();             // Show a user profile.
+      elseif ($_GET['search'] && $_GET['q'])
+        $this->_show_search_result();       // Run a search.
+      elseif ($_GET['search'])
+        $this->_show_search_form();         // Show the search form.
       elseif ($_GET['do_login'])
-        $this->_show_login();       // Show a login form.
+        $this->_show_login();               // Show a login form.
       elseif ($_GET['register'])
         $this->_register();                 // Show a registration form.
       elseif ($_GET['create_account'])

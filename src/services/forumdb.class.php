@@ -21,15 +21,15 @@
 <?php
   define("INDENT_DRAW_DASH",  1);
   define("INDENT_DRAW_SPACE", 2);
-  
+
   class ForumDB {
     var $db;
-    
+
     function ForumDB(&$_db) {
       $this->db = &$_db;
     }
-    
-    
+
+
     /***********************************************************************
      * Private API.
      ***********************************************************************/
@@ -37,22 +37,22 @@
       $query = &new FreechSqlQuery("LOCK TABLE {$_forum} WRITE");
       //$this->db->execute($query->sql()) or die("ForumDB::lock_write()");
     }
-    
-    
+
+
     function _unlock_write() {
       $query = &new FreechSqlQuery("UNLOCK TABLES");
       //$this->db->execute($query->sql()) or die("ForumDB::unlock_write()");
     }
-    
-    
+
+
     /* Given a decimal number, this function returns an 8 character wide
      * hexadecimal string representation of it.
      */
     function _int2hex($_n) {
       return substr("00000000" . dechex($_n), -8);
     }
-    
-    
+
+
     /* Given the id of any node, this function returns the hexadecimal string
      * representation of its binary path.
      */
@@ -64,8 +64,8 @@
       $row = $this->db->GetRow($query->sql()) or die("ForumDB::_get_path()");
       return $row[path];
     }
-    
-    
+
+
     function _get_threadid($_id) {
       $sql = "SELECT threadid FROM {t_message} WHERE id={id}";
       $query = &new FreechSqlQuery($sql);
@@ -73,23 +73,23 @@
       $row = $this->db->GetRow($query->sql());
       return $row && $row[threadid] ? $row[threadid] : 0;
     }
-    
-    
+
+
     function _is_parent(&$_row) {
       return $_row[path] == "";
     }
-    
-    
+
+
     function _has_children(&$_row) {
       return $_row[n_descendants] > 0;
     }
-    
-    
+
+
     function _is_childof(&$_row, &$_nextrow) {
       return strlen($_nextrow[path]) > strlen($_row[path]);
     }
-    
-    
+
+
     /* Given the id of any node, this function returns the id of the previous
      * entry in the same thread, or 0 if there is no previous entry.
      */
@@ -109,8 +109,8 @@
       $row = $res->FetchRow($res);
       return $row[id];
     }
-    
-    
+
+
     /* Given the path of any node, this function returns the id of the next
      * entry in the same thread, or 0 if there is no next entry.
      */
@@ -130,8 +130,8 @@
       $row = $res->FetchRow($res);
       return $row[id];
     }
-    
-    
+
+
     /* Given a threadid, this function returns the id of the previous
      * thread in the given forum, or 0 if there is no previous thread.
      * The threadid equals the id of the toplevel node in a thread.
@@ -149,8 +149,8 @@
       $row = $res->FetchRow($res);
       return $row[threadid];
     }
-    
-    
+
+
     /* Given a threadid, this function returns the id of the next
      * thread in the given forum, or 0 if there is no next thread.
      * The threadid equals the id of the toplevel node in a thread.
@@ -168,8 +168,8 @@
       $row = $res->FetchRow($res);
       return $row[threadid];
     }
-    
-    
+
+
     /***********************************************************************
      * Public API.
      ***********************************************************************/
@@ -210,13 +210,13 @@
         $row[allow_answer] = FALSE;
       if ($row[id] == $row[threadid])
         $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
-      
+
       $message = &new Message;
       $message->set_from_db($row);
       return $message;
     }
-    
-    
+
+
     /* Insert a new child.
      *
      * $_forum:   The forum id.
@@ -227,7 +227,7 @@
     function insert_entry($_forumid, $_parentid, &$_message) {
       $this->_lock_write("t_message");
       //$this->db->debug = true;
-      
+
       // Fetch the parent row.
       $sql  = "SELECT forumid,threadid,HEX(path) path,active";
       $sql .= " FROM {t_message}";
@@ -235,9 +235,9 @@
       $query = &new FreechSqlQuery($sql);
       $query->set_int('parentid', $_parentid);
       $parentrow = $this->db->GetRow($query->sql());
-      
+
       $this->db->StartTrans();
-      
+
       // Insert the new node.
       $username = mysql_escape_string($_message->get_username());
       $subject  = mysql_escape_string($_message->get_subject());
@@ -247,7 +247,7 @@
           die("ForumDB::insert_entry(): Parent inactive.\n");
         if (strlen($parentrow[path]) / 2 > 252)
           die("ForumDB::insert_entry(): Hierarchy too deep.\n");
-        
+
         // Insert a new child.
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
@@ -270,7 +270,7 @@
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): Insert1.");
         $newid = $this->db->Insert_Id();
-        
+
         // Update the child's path.
         $sql  = "UPDATE {t_message} SET path=";
         if ($parentrow[path] != '') {
@@ -287,7 +287,7 @@
         $query->set_int('newid', $newid);
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): Path.");
-        
+
         // Update n_descendants and n_children in one run...
         if ($_parentid == $parentrow[threadid]) {
           $sql  = "UPDATE {t_message}";
@@ -299,7 +299,7 @@
           $this->db->Execute($query->sql())
                   or die("ForumDB::insert_entry(): n++");
         }
-        
+
         // ...unless it is necessary to update two database sets.
         else {
           $sql  = "UPDATE {t_message} SET n_children=n_children+1";
@@ -308,7 +308,7 @@
           $query->set_int('threadid', $parentrow[threadid]);
           $this->db->Execute($query->sql())
                   or die("ForumDB::insert_entry(): n_child fail");
-          
+
           $sql  = "UPDATE {t_message} SET n_descendants=n_descendants+1";
           $sql .= " WHERE id={parentid}";
           $query = &new FreechSqlQuery($sql);
@@ -317,7 +317,7 @@
                   or die("ForumDB::insert_entry(): n_desc");
         }
       }
-      
+
       // Insert a new thread.
       else {
         $sql  = "INSERT INTO {t_message}";
@@ -339,7 +339,7 @@
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): Insert2.".$query->sql());
         $newid = $this->db->Insert_Id();
-        
+
         // Set the thread id.
         // FIXME: Is there a better way to do this?
         $sql  = "UPDATE {t_message} SET threadid={newid}";
@@ -349,14 +349,14 @@
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert_entry(): threadid");
       }
-      
+
       $this->db->CompleteTrans();
-      
+
       $this->_unlock_write();
       return $newid;
     }
-    
-    
+
+
     function find_duplicate($_message) {
       $sql  = "SELECT id";
       $sql .= " FROM {t_message}";
@@ -380,7 +380,7 @@
       $parents = array(&$row);
       while ($row) {
         $nextrow = &$_res->FetchRow();
-        
+
         // Parent node types.
         if ($this->_is_parent($row)
           && !$this->_has_children($row))
@@ -389,14 +389,14 @@
           $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
         else if ($this->_is_parent($row))
           $row[relation] = MESSAGE_RELATION_PARENT_FOLDED;
-        
+
         // Children at a branch end.
         else if ($parents[$indent - 1][n_descendants] == 1
                && !$this->_is_childof($row, $nextrow))
           $row[relation] = MESSAGE_RELATION_BRANCHEND_STUB;
         else if ($parents[$indent - 1][n_descendants] == 1)
           $row[relation] = MESSAGE_RELATION_BRANCHEND;
-        
+
         // Other children.
         else if (!$this->_is_childof($row, $nextrow)) {
           $row[relation] = MESSAGE_RELATION_CHILD_STUB;
@@ -407,11 +407,11 @@
           $parents[$indent - 1][n_descendants]--;
         }
         //echo "$row[title] ($row[id], $row[path]): $row[relation]<br>\n";
-        
+
         $message = &new Message();
         $message->set_from_db($row);
         call_user_func($_func, $message, $indents, $_data);
-        
+
         // Indent.
         $parents[$indent] = &$row;
         if ($row[relation] == MESSAGE_RELATION_PARENT_UNFOLDED
@@ -433,7 +433,7 @@
             $relation = $parents[$indent][relation];
           }
         }
-        
+
         $row = &$nextrow;
       }
     }
@@ -464,7 +464,7 @@
                            $_data) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
-      
+
       if ($_id != 0) {
         $sql  = "SELECT id,HEX(path) path";
         $sql .= " FROM {t_message}";
@@ -496,7 +496,7 @@
         $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                        or die("ForumDB::foreach_child(): 2");
       }
-      
+
       // Build the SQL request to grab the complete threads.
       if ($res->RecordCount() <= 0)
         return;
@@ -512,7 +512,7 @@
         $sql .= " LEFT JOIN {t_message} b ON a.threadid=b.threadid";
       $sql .= " LEFT JOIN {t_message} c ON a.threadid=c.id";
       $sql .= " WHERE (";
-      
+
       $first = 1;
       while ($row = &$res->FetchRow()) {
         if (!$first)
@@ -523,7 +523,7 @@
           $sql .= "a.threadid=$row[id]";
         $first = 0;
       }
-      
+
       $sql .= ")";
       $sql .= " GROUP BY a.id";
       if ($_updated_threads_first) {
@@ -532,7 +532,7 @@
       }
       else
         $sql .= " ORDER BY c.priority DESC, a.threadid DESC,path";
-      
+
       // Walk through those threads.
       $query   = &new FreechSqlQuery($sql);
       $res     = $this->db->Execute($query->sql())
@@ -541,8 +541,8 @@
       $this->_walk_tree($res, $_fold, $_func, $_data);
       return $numrows;
     }
-    
-    
+
+
     /* This function performs exactly as foreach_child(), except that given a
      * an id, it first looks up the top-level parent of that node and walks
      * through all children of the top level node. */
@@ -563,8 +563,120 @@
                                   $_func,
                                   $_data);
     }
-    
-    
+
+
+    function _add_where_expression($_query, $_search_values) {
+      $sql = $_query->get_sql();
+      if ($_search_values['forumid']) {
+        $sql .= " AND forumid={forumid}";
+        $_query->set_int('forumid', $_search_values['forumid']);
+      }
+      if ($_search_values['userid']) {
+        $sql .= " AND u_id={userid}";
+        $_query->set_int('userid', $_search_values['userid']);
+      }
+      if ($_search_values['username']) {
+        $sql .= " AND name LIKE {username}";
+        $_query->set_string('username', $_search_values['username']);
+      }
+      if ($_search_values['subject']) {
+        $sql .= " AND title LIKE {subject}";
+        $_query->set_string('subject', $_search_values['subject']);
+      }
+      if ($_search_values['body']) {
+        $sql .= " AND text LIKE {body}";
+        $_query->set_string('body', $_search_values['body']);
+      }
+      $_query->set_sql($sql);
+    }
+
+
+    function _walk_list($_res, $_func, $_data) {
+      $numrows = $_res->RecordCount();
+      while ($row = $_res->FetchRow()) {
+        $message = &new Message();
+        $message->set_from_db($row);
+        call_user_func($_func, $message, $_data);
+      }
+      return $numrows;
+    }
+
+
+    function foreach_message($_search_values,
+                             $_offset,
+                             $_limit,
+                             $_func,
+                             $_data) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+
+      $sql  = "SELECT id,forumid,priority,u_id,name username,";
+      $sql .= "title subject,text body,active,";
+      if ($_search_values['username'])
+        $sql .= "name LIKE {username} name_matches,";
+      else
+        $sql .= "0 name_matches,";
+      if ($_search_values['subject'])
+        $sql .= "title LIKE {subject} subject_matches,";
+      else
+        $sql .= "0 subject_matches,";
+      if ($_search_values['body'])
+        $sql .= "text LIKE {body} body_matches,";
+      else
+        $sql .= "0 body_matches,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
+      $sql  .= " FROM {t_message}";
+      $sql  .= " WHERE active=1";
+      $query = &new FreechSqlQuery($sql);
+      $this->_add_where_expression($query, $_search_values);
+      $sql  = $query->sql();
+      $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
+      $query->set_sql($sql);
+      echo $query->sql();
+      $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
+                                      or die("ForumDB::foreach_message()");
+      return $this->_walk_list($res, $_func, $_data);
+    }
+
+
+    function foreach_message_from_query($_search_query,
+                                        $_offset,
+                                        $_limit,
+                                        $_func,
+                                        $_data) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+
+      $sql  = "SELECT id,forumid,priority,u_id,name username,";
+      $sql .= "title subject,text body,active,";
+      if ($_search_query->uses_field('username'))
+        $sql .= "name LIKE {username} name_matches,";
+      else
+        $sql .= "0 name_matches,";
+      if ($_search_query->uses_field('subject'))
+        $sql .= "title LIKE {subject} subject_matches,";
+      else
+        $sql .= "0 subject_matches,";
+      if ($_search_query->uses_field('body'))
+        $sql .= "text LIKE {body} body_matches,";
+      else
+        $sql .= "0 body_matches,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
+      $sql  .= " FROM {t_message}";
+      $sql  .= " WHERE active=1 AND ";
+      $query = &new FreechSqlQuery($sql);
+      $_search_query->add_where_expression($query);
+      $sql  = $query->sql();
+      $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
+      $query->set_sql($sql);
+      $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
+                            or die("ForumDB::foreach_message_from_query()");
+      return $this->_walk_list($res, $_func, $_data);
+    }
+
+
     /* Returns latest messages from the given forum.
      * $_forum:   The forum id.
      * $_offset:  The offset of the first message.
@@ -586,7 +698,7 @@
                                     $_data) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
-      
+
       $sql  = "SELECT a.id,a.forumid,a.priority,a.u_id,a.name username,";
       $sql .= "a.title subject,a.text body,a.active,";
       $sql .= "UNIX_TIMESTAMP(a.updated) updated,";
@@ -602,16 +714,10 @@
       $query->set_int('forumid', $_forumid);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                           or die("ForumDB::foreach_latest_message()");
-      $numrows = $res->RecordCount();
-      while ($row = $res->FetchRow()) {
-        $message = &new Message();
-        $message->set_from_db($row);
-        call_user_func($_func, $message, $_data);
-      }
-      return $numrows;
+      return $this->_walk_list($res, $_func, $_data);
     }
-    
-    
+
+
     /**
      * Returns messages of one particular user.
      * $_user_id: The user id of the user.
@@ -635,7 +741,7 @@
                                        $_data) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
-      
+
       // Select the postings of the user.
       $sql  = "SELECT a.id,HEX(a.path) path, a.n_children";
       if ($_updated_threads_first)
@@ -684,7 +790,7 @@
         $sql .= " AND LENGTH(c.path)<=LENGTH(a.path)+5";
       }
       $sql .= " WHERE (";
-      
+
       $first = 1;
       while ($row = &$res->FetchRow()) {
         if (!$first)
@@ -695,7 +801,7 @@
           $sql .= "a.id=$row[id]";
         $first = 0;
       }
-      
+
       $sql .= ")";
       if ($_updated_threads_first) {
         $sql .= " GROUP BY b.id";
@@ -713,37 +819,32 @@
       $this->_walk_tree($res, $_folding, $_func, $_data);
       return $numrows;
     }
-    
-    
+
+
     /* Returns the total number of entries in the given forum. */
-    function get_n_messages($_forumid = '', $_since = 0) {
+    function get_n_messages($_search_values, $_since = 0) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
       $sql .= " WHERE 1";
-      if ($_forumid)
-        $sql .= " AND forumid={forumid}";
       if ($_since)
         $sql .= " AND created > FROM_UNIXTIME({since})";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int('forumid', $_forumid);
       $query->set_int('since', $_since);
-      $n = $this->db->GetOne($query->sql());
-      return $n;
+      $this->_add_where_expression($query, $_search_values);
+      return $this->db->GetOne($query->sql());
     }
-    
-    
-    /* Returns the number of entries written by the given user. */
-    function get_n_messages_from_user($_user_id) {
+
+
+    function get_n_messages_from_query($_search_query) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
-      $sql .= " WHERE u_id={userid}";
+      $sql .= " WHERE ";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int('userid', $_user_id);
-      $n = $this->db->GetOne($query->sql());
-      return $n;
+      $_search_query->add_where_expression($query);
+      return $this->db->GetOne($query->sql());
     }
-    
-    
+
+
      /* Returns the total number of threads in the given forum. */
     function get_n_threads($_forumid) {
       $sql  = "SELECT COUNT(DISTINCT threadid)";
@@ -755,8 +856,8 @@
       $n = $this->db->GetOne($query->sql());
       return $n;
     }
-    
-    
+
+
     /* Returns the number of nodes below $id. */
     function get_n_children($_forumid, $_id) {
       $sql = "SELECT n_children FROM {t_message} WHERE id={id}";

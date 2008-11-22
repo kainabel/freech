@@ -19,10 +19,10 @@
   */
 ?>
 <?php
-  class LatestPrinter extends PrinterBase {
+  class SearchPrinter extends PrinterBase {
     var $messages;
 
-    function LatestPrinter(&$_forum) {
+    function SearchPrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
       $this->messages = array();
     }
@@ -52,27 +52,33 @@
     }
 
 
-    function show($_forum_id, $_offset) {
-      $n = $this->db->foreach_latest_message((int)$_forum_id,
-                                             (int)$_offset,
-                                             cfg("epp"),
-                                             FALSE,
-                                             array(&$this, '_append_row'),
-                                             '');
-
-      $search    = array('forumid' => $_forum_id);
-      $n_entries = $this->db->get_n_messages($search);
-      $args      = array(n_messages          => $n_entries,
-                         n_messages_per_page => cfg("epp"),
-                         n_offset            => $_offset,
-                         n_pages_per_index   => cfg("ppi"));
-      $indexbar = &new IndexBarByTime($args);
-
+    function show($_query = NULL, $_offset = 0) {
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('indexbar', $indexbar);
-      $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('messages', $this->messages);
-      $this->parent->append_content($this->smarty->fetch('list_by_time.tmpl'));
+      $this->smarty->assign_by_ref('query', $_GET['q']);
+
+      if (!$_query) {
+        $this->parent->append_content($this->smarty->fetch('search.tmpl'));
+        return;
+      }
+
+      $func  = array(&$this, '_append_row');
+      $total = $this->db->get_n_messages_from_query($_query);
+      $rows  = $this->db->foreach_message_from_query($_query,
+                                                     (int)$_offset,
+                                                     cfg("epp"),
+                                                     $func,
+                                                     '');
+      $args  = array(n_messages          => $total,
+                     n_messages_per_page => cfg("epp"),
+                     n_offset            => $_offset,
+                     n_pages_per_index   => cfg("ppi"));
+      $indexbar = &new IndexBarSearchResult($args);
+
+      $this->smarty->assign_by_ref('indexbar',  $indexbar);
+      $this->smarty->assign_by_ref('n_results', $total);
+      $this->smarty->assign_by_ref('n_rows',    $rows);
+      $this->smarty->assign_by_ref('messages',  $this->messages);
+      $this->parent->append_content($this->smarty->fetch('search.tmpl'));
     }
   }
 ?>

@@ -23,19 +23,24 @@
   if (preg_match("/^[a-z0-9_]+$/i", cfg(lang)))
     include_once "language/" . cfg(lang) . ".inc.php";
   
-  function &lang($_phrase = '') {
+  function &lang($_phrase = '', $vars = array()) {
     global $lang;
     if (!$_phrase)
       return $lang;
-    if (!$lang[$_phrase])
+    $text = $lang[$_phrase];
+    if (!$text)
       return $_phrase;
-    return $lang[$_phrase];
+    foreach ($vars as $key => $value)
+      $text = str_replace('['.strtoupper($key).']', $value, $text);
+    return $text;
   }
   
   
   function &smarty_lang($params) {
     if (!isset($params[text]))
       die("smarty_lang(): No text given.");
-    return lang($params[text]);
+    $phrase = $params[text];
+    unset($params[text]);
+    return lang($phrase, $params);
   }
 ?>

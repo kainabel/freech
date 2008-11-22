@@ -202,4 +202,9 @@
 
   // Profile.
   $lang[myprofile] = "My Profile";
+
+  // Search.
+  $lang[search_title]   = "Search";
+  $lang[search_start]   = "Forum Search";
+  $lang[search_results] = "[RESULTS] results found.";
 ?>

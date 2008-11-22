@@ -33,7 +33,8 @@
                                                   array(&$this, '_append_row'),
                                                   '');
 
-      $n_entries = $this->db->get_n_messages_from_user($_user->get_id());
+      $search    = array('userid' => $_user->get_id());
+      $n_entries = $this->db->get_n_messages($search);
       $args      = array(n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_GET['hs'],

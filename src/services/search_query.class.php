@@ -29,9 +29,9 @@ class SearchQuery {
   function SearchQuery($_query = '')
   {
     $this->token_list = array(
-      array('and',          '/^and\b/'),
-      array('or',           '/^or\b/'),
-      array('not',          '/^not\b/'),
+      array('and',          '/^and\b/i'),
+      array('or',           '/^or\b/i'),
+      array('not',          '/^not\b/i'),
       array('openbracket',  '/^\(/'),
       array('closebracket', '/^\)/'),
       array('whitespace',   '/^\s+/'),
@@ -108,6 +108,7 @@ class SearchQuery {
     $open_brackets = 0;
     $field_number  = 1;
     list($token, $match) = $this->_get_next_token();
+    //echo "QUERY: ".$this->query."<br>";
     while ($token != 'EOF') {
       //echo "TOKEN: $token<br>";
       switch ($token) {
@@ -198,13 +199,13 @@ class SearchQuery {
       }
     }
     $sql .= str_repeat(')', $open_brackets);
-    //echo "SQL:".$sql; print_r($this->vars);
+    //echo "SQL:".$sql."<br>"; print_r($this->vars); print_r($this->fields);
     $this->sql    = $sql;
   }
 
 
   function uses_field($_name) {
-    return in_array($_name, $this->fields);
+    return isset($this->fields[$_name]);
   }
 
 

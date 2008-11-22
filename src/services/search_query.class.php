@@ -200,6 +200,8 @@ class SearchQuery {
 
 
   function get_field_values($_name) {
+    if (!$this->uses_field($_name))
+      return array();
     return $this->fields[$_name];
   }
 

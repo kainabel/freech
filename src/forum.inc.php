@@ -203,8 +203,11 @@
         $_POST   = array_map('stripslashes_deep', $_POST);
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
+
+      //FIXME: This is plain evil.
       $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
       $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
+      //FIXME end
 
       $folding         = &new ThreadFolding($_COOKIE['fold'],
                                             $_COOKIE['c']);

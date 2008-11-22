@@ -55,7 +55,7 @@
                                         // a message. This comes at the cost
                                         // of less stable URLs.
   $cfg[autolink_urls]       = TRUE;     // Whether to convert URL into links.
-  $cfg[autolink_pattern]    = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%;,]+';
+  $cfg[autolink_pattern]    = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+';
                                         // If unsure leave unchanged.
   $cfg[max_msglength]       = 10000;    // Maximum length of a message.
   $cfg[new_post_time]       = 60*60*24; // Seconds a posting is considered new.

@@ -650,18 +650,14 @@
 
       $sql  = "SELECT id,forumid,priority,u_id,name username,";
       $sql .= "title subject,text body,active,";
-      if ($_search_query->uses_field('username'))
-        $sql .= "name LIKE {username} name_matches,";
-      else
-        $sql .= "0 name_matches,";
-      if ($_search_query->uses_field('subject'))
-        $sql .= "title LIKE {subject} subject_matches,";
-      else
-        $sql .= "0 subject_matches,";
-      if ($_search_query->uses_field('body'))
-        $sql .= "text LIKE {body} body_matches,";
-      else
-        $sql .= "0 body_matches,";
+      $sql .= '(0';
+      foreach ($_search_query->get_field_values('title') as $value)
+        $sql .= ' OR title LIKE {'.$value.'}';
+      $sql .= ') subject_matches,';
+      $sql .= '(0';
+      foreach ($_search_query->get_field_values('text') as $value)
+        $sql .= ' OR text LIKE {'.$value.'}';
+      $sql .= ') body_matches,';
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_message}";
@@ -838,7 +834,7 @@
     function get_n_messages_from_query($_search_query) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
-      $sql .= " WHERE ";
+      $sql .= " WHERE active=1 AND ";
       $query = &new FreechSqlQuery($sql);
       $_search_query->add_where_expression($query);
       return $this->db->GetOne($query->sql());

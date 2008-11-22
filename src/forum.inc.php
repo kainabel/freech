@@ -443,12 +443,16 @@
 
 
     function _show_search_form() {
+      if (cfg("disable_search"))
+        die("Search is currently disabled.");
       $printer = &new SearchPrinter($this);
       $printer->show();
     }
 
 
     function _show_search_result() {
+      if (cfg("disable_search"))
+        die("Search is currently disabled.");
       $search  = &new SearchQuery($_GET['q']);
       $printer = &new SearchPrinter($this);
       $printer->show($search, $_GET['hs']);

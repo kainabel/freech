@@ -40,6 +40,14 @@ class SearchQuery {
       array('word',         '/^(\w+)\b/'),
       array('unknown',      '/^./')
     );
+    $this->field_names = array('name'     => 'name',
+                               'user'     => 'name',
+                               'username' => 'name',
+                               'forumid'  => 'forumid',
+                               'title'    => 'title',
+                               'subject'  => 'title',
+                               'text'     => 'text',
+                               'body'     => 'text');
     $this->set_query($_query);
   }
 
@@ -72,6 +80,15 @@ class SearchQuery {
   }
 
 
+  function _add_field($_fieldname, $_varname) {
+    if (!isset($this->fields[$_fieldname])) {
+      $this->fields[$_fieldname] = array($_varname);
+      return;
+    }
+    array_push($this->fields[$_fieldname], $_varname);
+  }
+
+
   function _parse() {
     $this->offset  = 0;
     $sql           = '1';
@@ -81,14 +98,6 @@ class SearchQuery {
     $this->vars    = array();
     $open_brackets = 0;
     $field_number  = 1;
-    $field_names   = array('name'     => 'name',
-                           'user'     => 'name',
-                           'username' => 'name',
-                           'forumid'  => 'forumid',
-                           'title'    => 'title',
-                           'subject'  => 'title',
-                           'text'     => 'text',
-                           'body'     => 'text');
     list($token, $match) = $this->_get_next_token();
     while ($token != 'EOF') {
       //echo "TOKEN: $token<br>";
@@ -96,7 +105,7 @@ class SearchQuery {
         case 'field':
           // If the given attribute does not exists, treat it like any 
           // other search term.
-          $field_name = $field_names[$match[1]];
+          $field_name = $this->field_names[$match[1]];
           if (!$field_name) {
             $token = 'word';
             continue;
@@ -116,7 +125,7 @@ class SearchQuery {
             $var_name       = "$field_name$field_number";
             $sql           .= " $next_op $field_name LIKE ".'{'.$var_name.'}';
             $field_number++;
-            array_push($this->fields, $field_name);
+            $this->_add_field($field_name, $var_name);
             $this->vars[$var_name] = $value;
           }
           $next_op = "AND";
@@ -135,8 +144,8 @@ class SearchQuery {
             $sql           .= ' text LIKE {'.$var_name.'}';
             $sql           .= ')';
             $field_number++;
-            array_push($this->fields, 'title');
-            array_push($this->fields, 'text');
+            $this->_add_field('title', $var_name);
+            $this->_add_field('text',  $var_name);
             $this->vars[$var_name] = $value;
           }
           $next_op = "AND";
@@ -187,6 +196,11 @@ class SearchQuery {
 
   function uses_field($_name) {
     return in_array($_name, $this->fields);
+  }
+
+
+  function get_field_values($_name) {
+    return $this->fields[$_name];
   }
 
 

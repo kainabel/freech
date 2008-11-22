@@ -453,7 +453,10 @@
     function _show_search_result() {
       if (cfg("disable_search"))
         die("Search is currently disabled.");
-      $search  = &new SearchQuery($_GET['q']);
+      $query = $_GET['q'];
+      if ($_GET['forum_id'])
+        $query = 'forumid:"'.(int)$_GET['forum_id'].'" AND ('.$_GET['q'].')';
+      $search  = &new SearchQuery($query);
       $printer = &new SearchPrinter($this);
       $printer->show($search, $_GET['hs']);
     }

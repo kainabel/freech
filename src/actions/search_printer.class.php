@@ -54,6 +54,7 @@
 
     function show($_query = NULL, $_offset = 0) {
       $this->smarty->clear_all_assign();
+      $this->smarty->assign('forum_id', (int)$_GET['forum_id']);
       $this->smarty->assign_by_ref('query', $_GET['q']);
 
       if (!$_query) {

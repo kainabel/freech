@@ -33,11 +33,15 @@
         $order_by_thread   = '';
         $order_by_time     = $url->get_string();
       }
+      $search = new URL('?', cfg("urlvars"));
+      $search->set_var('search',   1);
+      $search->set_var('forum_id', (int)$_GET[forum_id]);
       $version[url]  = "http://debain.org/software/freech/";
       $version[text] = "Freech Forum v0.9.10";
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
       $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
+      $this->smarty->assign_by_ref('search',          $search->get_string());
       $this->smarty->assign_by_ref('version',         $version);
       $this->parent->append_content($this->smarty->fetch('footer.tmpl'));
     }

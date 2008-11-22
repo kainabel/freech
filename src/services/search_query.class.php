@@ -42,12 +42,14 @@ class SearchQuery {
     );
     $this->field_names = array('name'     => 'name',
                                'user'     => 'name',
+                               'userid'   => 'u_id',
                                'username' => 'name',
                                'forumid'  => 'forumid',
                                'title'    => 'title',
                                'subject'  => 'title',
                                'text'     => 'text',
                                'body'     => 'text');
+    $this->int_columns = array('forumid', 'u_id');
     $this->set_query($_query);
   }
 
@@ -77,6 +79,13 @@ class SearchQuery {
 
     // Ending up here no matching token was found.
     return array(NULL, NULL);
+  }
+
+
+  function _format_value($_field, $_value) {
+    if (in_array($_field, $this->int_columns))
+      return (int)$_value;
+    return preg_replace("/%%+/", '', '%'.$_value.'%');
   }
 
 
@@ -119,7 +128,7 @@ class SearchQuery {
           }
 
           // Create the SQL statement.
-          $value = preg_replace("/%%+/", '', '%'.$match[1].'%');
+          $value = $this->_format_value($field_name, $match[1]);
           if ($value != '%') {
             $var_name = "$field_name$field_number";
             $sql     .= " $next_op $field_name LIKE ".'{'.$var_name.'}';
@@ -132,7 +141,7 @@ class SearchQuery {
           break;
 
         case 'word':
-          $value = preg_replace("/%%+/", '', '%'.$match[1].'%');
+          $value = $this->_format_value('text', $match[1]);
           if ($value != '%') {
             $var_name = "text$field_number";
             $sql     .= ' '.$next_op.' ';

@@ -222,6 +222,7 @@
   $lang[myprofile] = "Mein Profil";
 
   // Search.
+  $lang[search_forum]   = "Suchen";
   $lang[search_title]   = "Forensuche";
   $lang[search_start]   = "Suche starten";
   $lang[search_results] = "[RESULTS] Suchergebnisse gefunden.";

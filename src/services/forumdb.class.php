@@ -633,7 +633,6 @@
       $sql  = $query->sql();
       $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
       $query->set_sql($sql);
-      echo $query->sql();
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                                       or die("ForumDB::foreach_message()");
       return $this->_walk_list($res, $_func, $_data);

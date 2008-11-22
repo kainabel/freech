@@ -121,9 +121,8 @@ class SearchQuery {
           // Create the SQL statement.
           $value = preg_replace("/%%+/", '', '%'.$match[1].'%');
           if ($value != '%') {
-            $open_brackets -= substr_count($next_op, ')');
-            $var_name       = "$field_name$field_number";
-            $sql           .= " $next_op $field_name LIKE ".'{'.$var_name.'}';
+            $var_name = "$field_name$field_number";
+            $sql     .= " $next_op $field_name LIKE ".'{'.$var_name.'}';
             $field_number++;
             $this->_add_field($field_name, $var_name);
             $this->vars[$var_name] = $value;
@@ -135,14 +134,13 @@ class SearchQuery {
         case 'word':
           $value = preg_replace("/%%+/", '', '%'.$match[1].'%');
           if ($value != '%') {
-            $open_brackets -= substr_count($next_op, ')');
-            $var_name       = "text$field_number";
-            $sql           .= ' '.$next_op.' ';
-            $sql           .= '(';
-            $sql           .= ' title LIKE {'.$var_name.'}';
-            $sql           .= ' OR';
-            $sql           .= ' text LIKE {'.$var_name.'}';
-            $sql           .= ')';
+            $var_name = "text$field_number";
+            $sql     .= ' '.$next_op.' ';
+            $sql     .= '(';
+            $sql     .= ' title LIKE {'.$var_name.'}';
+            $sql     .= ' OR';
+            $sql     .= ' text LIKE {'.$var_name.'}';
+            $sql     .= ')';
             $field_number++;
             $this->_add_field('title', $var_name);
             $this->_add_field('text',  $var_name);
@@ -170,8 +168,10 @@ class SearchQuery {
           break;
 
         case 'closebracket':
-          if ($open_brackets > 0)
+          if ($open_brackets > 0) {
+            $open_brackets--;
             $sql .= ")";
+          }
           list($token, $match) = $this->_get_next_token();
           break;
 

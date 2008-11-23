@@ -204,8 +204,12 @@
   $lang[myprofile] = "My Profile";
 
   // Search.
-  $lang[search_forum]   = "Search this forum";
-  $lang[search_title]   = "Search";
-  $lang[search_start]   = "Forum Search";
-  $lang[search_results] = "[RESULTS] results found.";
+  $lang[search_forum]    = "Search this forum";
+  $lang[search_title]    = "Search";
+  $lang[search_start]    = "Forum Search";
+  $lang[search_results]  = "[RESULTS] results found.";
+  $lang[search_examples] = "Examples:";
+  $lang[search_hint]     = "apples AND \"peaches\"<br/>"
+                         . "NOT user:\"that guy\" AND (text:banana OR subject:fruit)<br/>"
+                         . "ban?na AND NOT subject:wildcard*matching";
 ?>

@@ -222,8 +222,12 @@
   $lang[myprofile] = "Mein Profil";
 
   // Search.
-  $lang[search_forum]   = "Suchen";
-  $lang[search_title]   = "Forensuche";
-  $lang[search_start]   = "Suche starten";
-  $lang[search_results] = "[RESULTS] Suchergebnisse gefunden.";
+  $lang[search_forum]    = "Suchen";
+  $lang[search_title]    = "Forensuche";
+  $lang[search_start]    = "Suche starten";
+  $lang[search_results]  = "[RESULTS] Suchergebnisse gefunden.";
+  $lang[search_examples] = "Beispiele:";
+  $lang[search_hint]     = "äpfel AND \"birnen\"<br/>"
+                         . "NOT user:\"der da\" AND (text:bananen OR subject:frucht)<br/>"
+                         . "ban?nen AND NOT subject:wildcard*matching";
 ?>

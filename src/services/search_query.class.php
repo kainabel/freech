@@ -37,7 +37,7 @@ class SearchQuery {
       array('whitespace',   '/^\s+/'),
       array('field',        '/^(\w+):/'),
       array('word',         '/^"([^"]*)"/'),
-      array('word',         '/^(\w+)\b/'),
+      array('word',         '/^([^"\:\s\(\)\\\']+)/'),
       array('unknown',      '/^./')
     );
     $this->field_names = array('name'     => 'name',
@@ -85,7 +85,17 @@ class SearchQuery {
   function _format_value($_field, $_value) {
     if (in_array($_field, $this->int_columns))
       return (int)$_value;
-    return preg_replace("/%%+/", '', '%'.$_value.'%');
+
+    // Escape special chars.
+    $value = str_replace('%', '\%', $_value);
+    $value = str_replace('_', '\_', $value);
+
+    // Translate wildcard chars.
+    $value = str_replace('*', '%',  $value);
+    $value = str_replace('?', '_',  $value);
+
+    // Add '%' at beginning and end, and remove duplicate '%'.
+    return preg_replace("/^%%+$/", '', '%'.$value.'%');
   }
 
 
@@ -131,6 +141,7 @@ class SearchQuery {
           // Create the SQL statement.
           $value = $this->_format_value($field_name, $match[1]);
           if ($value != '%') {
+            $open_brackets += substr_count($next_op, '(');
             $var_name = "$field_name$field_number";
             $sql     .= " $next_op $field_name LIKE ".'{'.$var_name.'}';
             $field_number++;
@@ -144,6 +155,7 @@ class SearchQuery {
         case 'word':
           $value = $this->_format_value('text', $match[1]);
           if ($value != '%') {
+            $open_brackets += substr_count($next_op, '(');
             $var_name = "text$field_number";
             $sql     .= ' '.$next_op.' ';
             $sql     .= '(';
@@ -173,7 +185,6 @@ class SearchQuery {
 
         case 'openbracket':
           $next_op .= " (";
-          $open_brackets++;
           list($token, $match) = $this->_get_next_token();
           break;
 

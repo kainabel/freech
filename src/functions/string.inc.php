@@ -23,35 +23,26 @@
   function string_escape(&$_string) {
     return htmlentities($_string, ENT_QUOTES, 'UTF-8');
   }
-  
-  
+
+
   function string_unescape(&$_string) {
     return html_entity_decode($_string, ENT_QUOTES);
   }
-  
-  
+
+
   // Removes the escapings that were added by magic-quotes.
   function stripslashes_deep(&$_value) {
     return is_array($_value)
          ? array_map('stripslashes_deep', $_value)
          : stripslashes($_value);
   }
-  
-  
+
+
   function is_utf8($_string) {
-    return preg_match('/^([\x00-\x7f]|'
-                    . '[\xc2-\xdf][\x80-\xbf]|'
-                    . '\xe0[\xa0-\xbf][\x80-\xbf]|'
-                    . '[\xe1-\xec][\x80-\xbf]{2}|'
-                    . '\xed[\x80-\x9f][\x80-\xbf]|'
-                    . '[\xee-\xef][\x80-\xbf]{2}|'
-                    . 'f0[\x90-\xbf][\x80-\xbf]{2}|'
-                    . '[\xf1-\xf3][\x80-\xbf]{3}|'
-                    . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/',
-                      $_string) > 0;
+    return mb_check_encoding($_string, 'utf8');
   }
-  
-  
+
+
   // Like wordwrap, but does not wrap lines beginning with ">" and allows to
   // set a hard limit.
   function wordwrap_except_quoted(&$_string) {
@@ -67,8 +58,8 @@
     }
     return $text;
   }
-  
-  
+
+
   // Like wordwrap, but when wrapping lines beginning with ">" it tries to be
   // smart in adding more ">" in the new line. It also sets a hard limit.
   function wordwrap_smart(&$_string) {
@@ -78,7 +69,7 @@
     preg_match("/^([> ]*)(.*)$/", $line, $matches);
     $block_depth = substr_count($matches[1], ">");
     $block       = $matches[2];
-    
+
     while (isset($line)) {
       if (list($trash, $next_line) = each($lines)) {
         preg_match("/^([> ]*)(.*)$/", $next_line, $matches);
@@ -91,7 +82,7 @@
         $line   = $next_line;
         continue;
       }
-      
+
       // Ending up here, a block was finished. Wrap it and format it.
       $block_wrapped = wordwrap($block,
                                 cfg("max_linelength_soft") - $block_depth);
@@ -100,7 +91,7 @@
                                 "\n",
                                 TRUE);
       $block_array   = explode("\n", $block_wrapped);
-      
+
       foreach ($block_array as $block_line) {
         if ($text != "")
           $text .= "\n";
@@ -108,12 +99,12 @@
           $text .= "> ";
         $text .= $block_line;
       }
-      
+
       $block       = $matches[2];
       $block_depth = $next_block_depth;
       $line        = $next_line;
     }
-    
+
     return $text;
   }
 ?>

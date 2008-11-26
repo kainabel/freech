@@ -1,4 +1,4 @@
--- $CVSHeader: freech/src/adodb/session/adodb-sessions.mysql.sql,v 1.1 2005/07/23 10:01:09 knipknap Exp $
+-- $CVSHeader$
 
 CREATE DATABASE /*! IF NOT EXISTS */ adodb_sessions;
 

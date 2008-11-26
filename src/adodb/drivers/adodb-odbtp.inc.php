@@ -1,6 +1,6 @@
 <?php
 /*
-  V4.65 22 July 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V5.06 16 Oct 2008   (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license.
   Whenever there is any discrepancy between the two licenses,
   the BSD license will take precedence. See License.txt.
@@ -149,11 +149,14 @@ class ADODB_odbtp extends ADOConnection{
 	//if uid & pwd can be separate
     function _connect($HostOrInterface, $UserOrDSN='', $argPassword='', $argDatabase='')
 	{
-		$this->_connectionID = @odbtp_connect($HostOrInterface,$UserOrDSN,$argPassword,$argDatabase);
+		$this->_connectionID = odbtp_connect($HostOrInterface,$UserOrDSN,$argPassword,$argDatabase);
 		if ($this->_connectionID === false) {
 			$this->_errorMsg = $this->ErrorMsg() ;
 			return false;
 		}
+		
+		odbtp_convert_datetime($this->_connectionID,true);
+		
 		if ($this->_dontPoolDBC) {
 			if (function_exists('odbtp_dont_pool_dbc'))
 				@odbtp_dont_pool_dbc($this->_connectionID);
@@ -189,7 +192,7 @@ class ADODB_odbtp extends ADOConnection{
 				$this->_canSelectDb = true;
 				$this->substr = "substring";
 				$this->length = 'len';
-				$this->identitySQL = 'select @@IDENTITY';
+				$this->identitySQL = 'select SCOPE_IDENTITY()';
 				$this->metaDatabasesSQL = "select name from master..sysdatabases where name <> 'master'";
 				$this->_canPrepareSP = true;
 				break;
@@ -215,6 +218,7 @@ class ADODB_odbtp extends ADOConnection{
 				$this->replaceQuote = "'+chr(39)+'";
 				$this->true = '.T.';
 				$this->false = '.F.';
+
 				break;
 			case 'oracle':
 				$this->databaseType = 'odbtp_oci8';
@@ -236,7 +240,7 @@ class ADODB_odbtp extends ADOConnection{
 				$this->rightOuter = '=*';
 				$this->hasInsertID = true;
 				$this->hasTransactions = true;
-				$this->identitySQL = 'select @@IDENTITY';
+				$this->identitySQL = 'select SCOPE_IDENTITY()';
 				break;
 			default:
 				$this->databaseType = 'odbtp';
@@ -264,11 +268,12 @@ class ADODB_odbtp extends ADOConnection{
 		if (!@odbtp_select_db($dbName, $this->_connectionID)) {
 			return false;
 		}
-		$this->databaseName = $dbName;
+		$this->database = $dbName;
+		$this->databaseName = $dbName; # obsolete, retained for compat with older adodb versions
 		return true;
 	}
 	
-	function &MetaTables($ttype='',$showSchema=false,$mask=false)
+	function MetaTables($ttype='',$showSchema=false,$mask=false)
 	{
 	global $ADODB_FETCH_MODE;
 
@@ -276,7 +281,7 @@ class ADODB_odbtp extends ADOConnection{
 		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 		if ($this->fetchMode !== false) $savefm = $this->SetFetchMode(false);
 		
-		$arr =& $this->GetArray("||SQLTables||||$ttype");
+		$arr = $this->GetArray("||SQLTables||||$ttype");
 		
 		if (isset($savefm)) $this->SetFetchMode($savefm);
 		$ADODB_FETCH_MODE = $savem;
@@ -285,12 +290,12 @@ class ADODB_odbtp extends ADOConnection{
 		for ($i=0; $i < sizeof($arr); $i++) {
 			if ($arr[$i][3] == 'SYSTEM TABLE' )	continue;
 			if ($arr[$i][2])
-				$arr2[] = $showSchema ? $arr[$i][1].'.'.$arr[$i][2] : $arr[$i][2];
+				$arr2[] = $showSchema && $arr[$i][1]? $arr[$i][1].'.'.$arr[$i][2] : $arr[$i][2];
 		}
 		return $arr2;
 	}
 	
-	function &MetaColumns($table,$upper=true)
+	function MetaColumns($table,$upper=true)
 	{
 	global $ADODB_FETCH_MODE;
 
@@ -311,6 +316,7 @@ class ADODB_odbtp extends ADOConnection{
 			$false = false;
 			return $false;
 		}
+		$retarr = array();
 		while (!$rs->EOF) {
 			//print_r($rs->fields);
 			if (strtoupper($rs->fields[2]) == $table) {
@@ -320,12 +326,13 @@ class ADODB_odbtp extends ADOConnection{
 				$fld->max_length = $rs->fields[6];
     			$fld->not_null = !empty($rs->fields[9]);
  				$fld->scale = $rs->fields[7];
- 				if (!is_null($rs->fields[12])) {
- 					$fld->has_default = true;
- 					$fld->default_value = $rs->fields[12];
-				}
+				if (isset($rs->fields[12])) // vfp does not have field 12
+	 				if (!is_null($rs->fields[12])) {
+	 					$fld->has_default = true;
+	 					$fld->default_value = $rs->fields[12];
+					}
 				$retarr[strtoupper($fld->name)] = $fld;
-			} else if (sizeof($retarr)>0)
+			} else if (!empty($retarr))
 				break;
 			$rs->MoveNext();
 		}
@@ -334,13 +341,13 @@ class ADODB_odbtp extends ADOConnection{
 		return $retarr;
 	}
 
-	function &MetaPrimaryKeys($table, $owner='')
+	function MetaPrimaryKeys($table, $owner='')
 	{
 	global $ADODB_FETCH_MODE;
 
 		$savem = $ADODB_FETCH_MODE;
 		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-		$arr =& $this->GetArray("||SQLPrimaryKeys||$owner|$table");
+		$arr = $this->GetArray("||SQLPrimaryKeys||$owner|$table");
 		$ADODB_FETCH_MODE = $savem;
 
 		//print_r($arr);
@@ -351,13 +358,13 @@ class ADODB_odbtp extends ADOConnection{
 		return $arr2;
 	}
 
-	function &MetaForeignKeys($table, $owner='', $upper=false)
+	function MetaForeignKeys($table, $owner='', $upper=false)
 	{
 	global $ADODB_FETCH_MODE;
 
 		$savem = $ADODB_FETCH_MODE;
 		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-		$constraints =& $this->GetArray("||SQLForeignKeys|||||$owner|$table");
+		$constraints = $this->GetArray("||SQLForeignKeys|||||$owner|$table");
 		$ADODB_FETCH_MODE = $savem;
 
 		$arr = false;
@@ -417,13 +424,13 @@ class ADODB_odbtp extends ADOConnection{
 		return $ret;
 	}
 
-	function &SelectLimit($sql,$nrows=-1,$offset=-1, $inputarr=false,$secs2cache=0)
+	function SelectLimit($sql,$nrows=-1,$offset=-1, $inputarr=false,$secs2cache=0)
 	{
 		// TOP requires ORDER BY for Visual FoxPro
 		if( $this->odbc_driver == ODB_DRIVER_FOXPRO ) {
 			if (!preg_match('/ORDER[ \t\r\n]+BY/is',$sql)) $sql .= ' ORDER BY 1';
 		}
-		$ret =& ADOConnection::SelectLimit($sql,$nrows,$offset,$inputarr,$secs2cache);
+		$ret = ADOConnection::SelectLimit($sql,$nrows,$offset,$inputarr,$secs2cache);
 		return $ret;
 	}
 
@@ -504,6 +511,56 @@ class ADODB_odbtp extends ADOConnection{
 		return @odbtp_execute( $stmt ) != false;
 	}
 
+	function MetaIndexes($table,$primary=false)
+	{
+		switch ( $this->odbc_driver) {
+			case ODB_DRIVER_MSSQL:
+				return $this->MetaIndexes_mssql($table, $primary);
+			default:
+				return array();
+		}
+	}
+	
+	function MetaIndexes_mssql($table,$primary=false)
+	{
+		$table = strtolower($this->qstr($table));
+
+		$sql = "SELECT i.name AS ind_name, C.name AS col_name, USER_NAME(O.uid) AS Owner, c.colid, k.Keyno, 
+			CASE WHEN I.indid BETWEEN 1 AND 254 AND (I.status & 2048 = 2048 OR I.Status = 16402 AND O.XType = 'V') THEN 1 ELSE 0 END AS IsPK,
+			CASE WHEN I.status & 2 = 2 THEN 1 ELSE 0 END AS IsUnique
+			FROM dbo.sysobjects o INNER JOIN dbo.sysindexes I ON o.id = i.id 
+			INNER JOIN dbo.sysindexkeys K ON I.id = K.id AND I.Indid = K.Indid 
+			INNER JOIN dbo.syscolumns c ON K.id = C.id AND K.colid = C.Colid
+			WHERE LEFT(i.name, 8) <> '_WA_Sys_' AND o.status >= 0 AND lower(O.Name) = $table
+			ORDER BY O.name, I.Name, K.keyno";
+
+		global $ADODB_FETCH_MODE;
+		$save = $ADODB_FETCH_MODE;
+        $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+        if ($this->fetchMode !== FALSE) {
+        	$savem = $this->SetFetchMode(FALSE);
+        }
+        
+        $rs = $this->Execute($sql);
+        if (isset($savem)) {
+        	$this->SetFetchMode($savem);
+        }
+        $ADODB_FETCH_MODE = $save;
+
+        if (!is_object($rs)) {
+        	return FALSE;
+        }
+
+		$indexes = array();
+		while ($row = $rs->FetchRow()) {
+			if ($primary && !$row[5]) continue;
+			
+            $indexes[$row[0]]['unique'] = $row[6];
+            $indexes[$row[0]]['columns'][] = $row[1];
+    	}
+        return $indexes;
+	}
+	
 	function IfNull( $field, $ifNull )
 	{
 		switch( $this->odbc_driver ) {
@@ -517,6 +574,8 @@ class ADODB_odbtp extends ADOConnection{
 
 	function _query($sql,$inputarr=false)
 	{
+	global $php_errormsg;
+	
  		if ($inputarr) {
 			if (is_array($sql)) {
 				$stmtid = $sql[1];
@@ -541,7 +600,7 @@ class ADODB_odbtp extends ADOConnection{
 				return false;
 			}
 		} else {
-			$stmtid = @odbtp_query($sql,$this->_connectionID);
+			$stmtid = odbtp_query($sql,$this->_connectionID);
    		}
 		$this->_lastAffectedRows = 0;
 		if ($stmtid) {
@@ -593,7 +652,7 @@ class ADORecordSet_odbtp extends ADORecordSet {
 		}
 	}
 
-	function &FetchField($fieldOffset = 0)
+	function FetchField($fieldOffset = 0)
 	{
 		$off=$fieldOffset; // offsets begin at 0
 		$o= new ADOFieldObject();
@@ -635,6 +694,12 @@ class ADORecordSet_odbtp extends ADORecordSet {
 				break;
             default:
 				$this->fields = @odbtp_fetch_array($this->_queryID, $type);
+		}
+		if ($this->databaseType = 'odbtp_vfp') {
+			if ($this->fields)
+			foreach($this->fields as $k => $v) {
+				if (strncmp($v,'1899-12-30',10) == 0) $this->fields[$k] = '';
+			}
 		}
 		return is_array($this->fields);
 	}

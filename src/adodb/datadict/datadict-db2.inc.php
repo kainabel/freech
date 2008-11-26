@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V4.65 22 July 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V5.06 16 Oct 2008   (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -71,7 +71,7 @@ class ADODB2_db2 extends ADODB_DataDict {
 	}
 	
 	
-	function xChangeTableSQL($tablename, $flds, $tableoptions = false)
+	function ChangeTableSQL($tablename, $flds, $tableoptions = false)
 	{
 		
 		/**
@@ -83,7 +83,7 @@ class ADODB2_db2 extends ADODB_DataDict {
 		$validTypes = array("CHAR","VARC");
 		$invalidTypes = array("BIGI","BLOB","CLOB","DATE", "DECI","DOUB", "INTE", "REAL","SMAL", "TIME");
 		// check table exists
-		$cols = &$this->MetaColumns($tablename);
+		$cols = $this->MetaColumns($tablename);
 		if ( empty($cols)) { 
 			return $this->CreateTableSQL($tablename, $flds, $tableoptions);
 		}

@@ -366,20 +366,20 @@
       $query->set_string('hash', $_message->get_hash());
       $res = $this->db->Execute($query->sql())
                 or die("ForumDB::find_duplicate()");
-      $row = $res->FetchRow();
-      if (!$row)
+      if ($res->EOF)
         return;
+      $row = $res->FetchRow();
       return $row[id];
     }
 
 
     function _walk_tree($_res, $_fold, $_func, $_data) {
-      $row     = &$_res->FetchRow();
+      $row     = $_res->FetchRow();
       $indent  = 0;
       $indents = array();
-      $parents = array(&$row);
+      $parents = array($row);
       while ($row) {
-        $nextrow = &$_res->FetchRow();
+        $nextrow = $_res->FetchRow();
 
         // Parent node types.
         if ($this->_is_parent($row)
@@ -413,7 +413,7 @@
         call_user_func($_func, $message, $indents, $_data);
 
         // Indent.
-        $parents[$indent] = &$row;
+        $parents[$indent] = $row;
         if ($row[relation] == MESSAGE_RELATION_PARENT_UNFOLDED
           || $row[relation] == MESSAGE_RELATION_CHILD
           || $row[relation] == MESSAGE_RELATION_BRANCHEND) {
@@ -434,7 +434,7 @@
           }
         }
 
-        $row = &$nextrow;
+        $row = $nextrow;
       }
     }
 

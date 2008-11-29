@@ -179,14 +179,14 @@
      * Returns: An object containing the fields
      *            - id
      *            - name
-     *            - title
-     *            - text
+     *            - subject
+     *            - body
      *            - active
      *            - time
      */
     function &get_message($_forumid, $_id) {
       $sql  = "SELECT id,forumid,priority,u_id,threadid,HEX(path) path,";
-      $sql .= "n_children, name username,title subject,text body,active,";
+      $sql .= "n_children, name username,subject,body,active,";
       $sql .= "ip_hash,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
@@ -251,7 +251,7 @@
         // Insert a new child.
         //FIXME: u_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
-        $sql .= " (forumid, threadid, priority, u_id, name, title, text,";
+        $sql .= " (forumid, threadid, priority, u_id, name, subject, body,";
         $sql .= " hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " {forumid}, {threadid}, {priority}, {u_id}, {name},";
@@ -322,7 +322,7 @@
       else {
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (path, forumid, priority, u_id, threadid, is_parent, name,";
-        $sql .= "  title, text, hash, ip_hash, created)";
+        $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " '', {forumid}, {priority}, {u_id}, 0, 1, {name},";
         $sql .= " {subject}, {body}, {hash}, {ip_hash}, NULL";
@@ -406,7 +406,7 @@
           $row[relation] = MESSAGE_RELATION_CHILD;
           $parents[$indent - 1][n_descendants]--;
         }
-        //echo "$row[title] ($row[id], $row[path]): $row[relation]<br>\n";
+        //echo "$row[subject] ($row[id], $row[path]): $row[relation]<br>\n";
 
         $message = &new Message();
         $message->set_from_db($row);
@@ -501,8 +501,8 @@
       if ($res->RecordCount() <= 0)
         return;
       $sql  = "SELECT a.id,a.forumid,a.priority,a.u_id,HEX(a.path) path,";
-      $sql .= " a.n_children,a.n_descendants, a.name username, a.title subject,";
-      $sql .= " a.text body,a.active,a.ip_hash,";
+      $sql .= " a.n_children,a.n_descendants, a.name username, a.subject,";
+      $sql .= " a.body,a.active,a.ip_hash,";
       if ($_updated_threads_first)
         $sql .= " MAX(b.id) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(a.updated) updated,";
@@ -580,11 +580,11 @@
         $_query->set_string('username', $_search_values['username']);
       }
       if ($_search_values['subject']) {
-        $sql .= " AND title LIKE {subject}";
+        $sql .= " AND subject LIKE {subject}";
         $_query->set_string('subject', $_search_values['subject']);
       }
       if ($_search_values['body']) {
-        $sql .= " AND text LIKE {body}";
+        $sql .= " AND body LIKE {body}";
         $_query->set_string('body', $_search_values['body']);
       }
       $_query->set_sql($sql);
@@ -611,17 +611,17 @@
       $offset = $_offset * 1;
 
       $sql  = "SELECT id,forumid,priority,u_id,name username,";
-      $sql .= "title subject,text body,active,";
+      $sql .= "subject,body,active,";
       if ($_search_values['username'])
         $sql .= "name LIKE {username} name_matches,";
       else
         $sql .= "0 name_matches,";
       if ($_search_values['subject'])
-        $sql .= "title LIKE {subject} subject_matches,";
+        $sql .= "subject LIKE {subject} subject_matches,";
       else
         $sql .= "0 subject_matches,";
       if ($_search_values['body'])
-        $sql .= "text LIKE {body} body_matches,";
+        $sql .= "body LIKE {body} body_matches,";
       else
         $sql .= "0 body_matches,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
@@ -648,14 +648,14 @@
       $offset = $_offset * 1;
 
       $sql  = "SELECT id,forumid,priority,u_id,name username,";
-      $sql .= "title subject,text body,active,";
+      $sql .= "subject,body,active,";
       $sql .= '(0';
-      foreach ($_search_query->get_field_values('title') as $value)
-        $sql .= ' OR title LIKE {'.$value.'}';
+      foreach ($_search_query->get_field_values('subject') as $value)
+        $sql .= ' OR subject LIKE {'.$value.'}';
       $sql .= ') subject_matches,';
       $sql .= '(0';
-      foreach ($_search_query->get_field_values('text') as $value)
-        $sql .= ' OR text LIKE {'.$value.'}';
+      foreach ($_search_query->get_field_values('body') as $value)
+        $sql .= ' OR body LIKE {'.$value.'}';
       $sql .= ') body_matches,';
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
@@ -695,7 +695,7 @@
       $offset = $_offset * 1;
 
       $sql  = "SELECT a.id,a.forumid,a.priority,a.u_id,a.name username,";
-      $sql .= "a.title subject,a.text body,a.active,";
+      $sql .= "a.subject,a.body,a.active,";
       $sql .= "UNIX_TIMESTAMP(a.updated) updated,";
       $sql .= "UNIX_TIMESTAMP(a.created) created";
       $sql .= " FROM {t_message} a";
@@ -768,7 +768,7 @@
       $sql .= " b.n_descendants n_children,";
       $sql .= " b.n_descendants,";
       $sql .= " b.name username,";
-      $sql .= " b.title subject,b.text body,b.active,b.ip_hash,";
+      $sql .= " b.subject,b.body,b.active,b.ip_hash,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
       $sql .= " a.id=b.id is_parent,";
       if ($_updated_threads_first)

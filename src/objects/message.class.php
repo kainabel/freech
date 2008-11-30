@@ -238,6 +238,11 @@
     }
 
 
+    function is_updated() {
+      return $this->get_created_unixtime() != $this->get_updated_unixtime();
+    }
+
+
     // The number of children.
     function set_n_children($_n_children) {
       $this->_fields[n_children] = $_n_children;

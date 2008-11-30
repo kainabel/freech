@@ -40,6 +40,7 @@
   $lang[thread]           = "Thread";
   $lang[threadview]       = "In Thread-Darstellung anzeigen";
   $lang[plainview]        = "In Eingangsreihenfolge anzeigen";
+  $lang[editmessage]      = "Bearbeiten";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
   $lang[noentries]        = "(Bisher keine Beiträge)";
@@ -47,6 +48,7 @@
   $lang[hidethread]       = "Thread-Anzeige ausblenden";
   $lang[showthread]       = "Thread-Anzeige einblenden";
   $lang[postedby]         = "Beitrag von [USER]";
+  $lang[lastupdated]      = "(Editiert am [TIME])";
   $lang[moderator]        = "Moderator";
   $lang[anonymous]        = "Anonymer User";
   $lang[registered]       = "Registrierter User";

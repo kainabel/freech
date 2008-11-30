@@ -3,7 +3,11 @@
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
  <tr valign='middle'>
   <td>
-  <font color='#555555' size='-1'>{$message->get_created_time()}</font><br />
+  <font color='#555555' size='-1'>{$message->get_created_time()}</font>
+{if $message->is_updated()}
+  <font color='red' size='-1'>{lang text="lastupdated" time=$message->get_updated_time()}</font>
+{/if}
+  <br />
   <b>{$message->get_subject()|escape}</b><br />
   <i>{$message->get_username()|escape}</i>
   <img src="themes/heise/img/{$message->get_user_type()|escape}_user.png"

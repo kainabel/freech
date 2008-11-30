@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
   `active` tinyint(3) unsigned default '1',
   `owner_id` int(11) unsigned default NULL,
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   KEY `owner_id` (`owner_id`)

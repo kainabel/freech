@@ -357,6 +357,43 @@
     }
 
 
+    function save_entry($_forum_id, $_parent_id, &$_message) {
+      //FIXME: This currently does not support moving messages (i.e. changing
+      // the path, thread, or forum)
+
+      $this->_lock_write("t_message");
+      //$this->db->debug = true;
+
+      $this->db->StartTrans();
+      $sql  = "UPDATE {t_message} SET";
+      $sql .= " forum_id={forum_id},";
+      $sql .= " priority={priority},";
+      $sql .= " user_id={user_id},";
+      $sql .= " username={username},";
+      $sql .= " subject={subject},";
+      $sql .= " body={body},";
+      $sql .= " hash={hash},";
+      $sql .= " ip_hash={ip_hash},";
+      $sql .= " updated=FROM_UNIXTIME({updated})";
+      $sql .= " WHERE id={id}";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('id',       $_message->get_id());
+      $query->set_int('forum_id', $_forum_id);
+      $query->set_int('priority', $_message->get_priority());
+      $query->set_int('user_id',  $_message->get_user_id());
+      $query->set_int('updated',  time());
+      $query->set_string('username', $_message->get_username());
+      $query->set_string('subject',  $_message->get_subject());
+      $query->set_string('body',     $_message->get_body());
+      $query->set_string('hash',     $_message->get_hash());
+      $query->set_string('ip_hash',  $_message->get_ip_address_hash());
+      $this->db->Execute($query->sql()) or die("ForumDB::save_entry(): 1");
+
+      $this->db->CompleteTrans();
+      $this->_unlock_write();
+    }
+
+
     function find_duplicate($_message) {
       $sql  = "SELECT id";
       $sql .= " FROM {t_message}";

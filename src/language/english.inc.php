@@ -38,6 +38,7 @@
   $lang[thread]           = "Thread";
   $lang[threadview]       = "Order by Thread";
   $lang[plainview]        = "Order by Date";
+  $lang[editmessage]      = "Edit";
   $lang[writeanswer]      = "Reply";
   $lang[writemessage]     = "New Message";
   $lang[noentries]        = "(No entries yet)";
@@ -45,6 +46,7 @@
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
   $lang[postedby]         = "Written by [USER]";
+  $lang[lastupdated]      = "(last edited [TIME])";
   $lang[moderator]        = "Moderator";
   $lang[anonymous]        = "Anonymous User";
   $lang[registered]       = "Registered User";

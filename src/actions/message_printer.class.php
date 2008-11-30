@@ -27,7 +27,10 @@
 
 
     function show(&$_forum_id, &$_msg) {
-      $indexbar   = &new IndexBarReadMessage($_msg);
+      $user       = $this->parent->get_current_user();
+      $may_edit   = cfg("postings_editable")
+                    && $user && $user->get_id() === $_msg->get_user_id();
+      $indexbar   = &new IndexBarReadMessage($_msg, $may_edit);
       $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 
       if (!$_msg) {
@@ -65,14 +68,22 @@
      * Shows a form for editing a message. The values given in $_message are
      * filled into the fields.
      */
-    function show_compose(&$_message, $_hint, $_quotebutton) {
-      $url = new URL('?', cfg("urlvars"));
-      $url->set_var('msg_id',   (int)$_GET[msg_id]);
-      $url->set_var('forum_id', (int)$_GET[forum_id]);
-      
-      $user = $this->parent->get_current_user() or new User;
+    function show_compose(&$_message,
+                          $_hint,
+                          $_parent_id,
+                          $_may_quote,
+                          $_did_quote = -1) {
+      $did_quote = $_did_quote === -1 ? (int)$_POST['did_quote'] : $_did_quote;
+      $forum_id  = $this->parent->get_forum_id();
+      $user      = $this->parent->get_current_user() or new User;
 
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('forum_id', $forum_id);
+      
       $this->smarty->clear_all_assign();
+      $this->smarty->assign('may_quote', $_may_quote);
+      $this->smarty->assign('did_quote', $did_quote);
+      $this->smarty->assign('parent_id', $_parent_id);
       $this->smarty->assign_by_ref('action',          $url->get_string());
       $this->smarty->assign_by_ref('hint',            $_hint);
       $this->smarty->assign_by_ref('user',            $user);
@@ -80,41 +91,47 @@
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
 
-      if ($_quotebutton)
-        $this->smarty->assign('msg_id', (int)$_GET[msg_id]);
       $this->parent->append_content($this->smarty->fetch('message_compose.tmpl'));
     }
-    
-    
+
+
     /**
      * Shows a form for editing a message. The values given in $_message are
      * filled into the fields, with the values from $_quoted inserted as a
      * quote.
      */
-    function show_compose_quoted(&$_message, &$_quoted, $_hint, $_quotebutton) {
+    function show_compose_quoted(&$_message,
+                                 &$_parent_msg,
+                                 $_hint,
+                                 $_may_quote) {
       // Add "Message written by ... on ..." before the quoted stuff.
-      if ($_GET[msg_id] && $_quoted->is_active()) {
+      if ($_parent_msg->is_active()) {
         $text  = preg_replace("/\[USER\]/",
-                              $_quoted->get_username(),
+                              $_parent_msg->get_username(),
                               lang("wrote"));
         $text  = preg_replace("/\[TIME\]/",
-                              $_quoted->get_created_time(),
+                              $_parent_msg->get_created_time(),
                               $text);
         $text .= "\n\n";
         $text .= preg_replace("/^/m",
                               "> ",
-                              wordwrap_smart($_quoted->get_body()));
+                              wordwrap_smart($_parent_msg->get_body()));
         $text .= "\n\n";
       }
       $_message->set_body($text . $_message->get_body());
-      $this->show_compose($_message, $_hint, $_quotebutton);
+
+      $this->show_compose($_message,
+                          $_hint,
+                          $_parent_msg->get_id(),
+                          $_may_quote,
+                          TRUE);
     }
     
     
     /**
      * Shows a form for editing a reply to the given message.
      */
-    function show_compose_reply(&$_parent_msg, $_hint, $_quotebutton) {
+    function show_compose_reply(&$_parent_msg, $_hint, $_may_quote) {
       $message = new Message;
       
       // Prepend 'Re: ' if necessary
@@ -125,7 +142,10 @@
       else
         $message->set_subject($_parent_msg->get_subject());
       
-      $this->show_compose($message, $_hint, $_quotebutton);
+      $this->show_compose($message,
+                          $_hint,
+                          $_parent_msg->get_id(),
+                          $_may_quote);
     }
     
     
@@ -135,10 +155,11 @@
       $url->mask(array('forum_id', 'msg_id', 'hs'));
       
       $this->smarty->clear_all_assign();
+      $this->smarty->assign('did_quote', $_POST['did_quote']);
+      $this->smarty->assign('parent_id', (int)$_parent_id);
       $this->smarty->assign_by_ref('pagetitle', lang("preview"));
       $this->smarty->assign_by_ref('action',    $url->get_string());
       $this->smarty->assign_by_ref('message',   $_message);
-      $this->smarty->assign('msg_id', (int)$_parent_id);
       $this->parent->append_content($this->smarty->fetch('message_preview.tmpl'));
       
       return 0;
@@ -154,7 +175,7 @@
       
       $parenturl = new URL('?', cfg("urlvars"));
       $parenturl->set_var('action',   'read');
-      $parenturl->set_var('msg_id',   (int)$_GET[msg_id]);
+      $parenturl->set_var('msg_id',   (int)$_POST[parent_id]);
       $parenturl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $forumurl = new URL('?', cfg("urlvars"));
@@ -163,7 +184,7 @@
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('messageurl', $messageurl->get_string());
-      if ($_GET[msg_id]) 
+      if ($_POST[parent_id]) 
         $this->smarty->assign_by_ref('parenturl', $parenturl->get_string());
       $this->smarty->assign_by_ref('hint',     $_hint);
       $this->smarty->assign_by_ref('forumurl', $forumurl->get_string());

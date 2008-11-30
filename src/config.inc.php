@@ -48,6 +48,7 @@
                                         // appears.
   $cfg[updated_threads_first] = TRUE;   // Show threads with new posts first.
   $cfg[disable_search]      = FALSE;    // Disable the forum search.
+  $cfg[postings_editable]   = TRUE;     // May users edit their postings?
   $cfg[thread_arrow_rev]    = TRUE;     // If TRUE, ">>" points to the previous
                                         // thread.
   $cfg[remember_page]       = FALSE;    // If TRUE, the current page in the

@@ -276,7 +276,8 @@
     // Write an answer to a message.
     function _message_answer() {
       $forum_id   = $this->get_forum_id();
-      $message    = $this->forum->get_message($forum_id, $_GET[msg_id]);
+      $parent_id  = (int)$_GET[parent_id];
+      $message    = $this->forum->get_message($forum_id, $parent_id);
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_reply($message, '', TRUE);
     }
@@ -284,33 +285,52 @@
 
     // Edit a saved message.
     function _message_edit_saved() {
-      //FIXME
+      $forum_id   = $this->get_forum_id();
+      $user       = $this->get_current_user();
+      $message    = $this->forum->get_message($forum_id, $_GET[msg_id]);
+      $msgprinter = &new MessagePrinter($this);
+
+      if (!cfg("postings_editable"))
+        die("Postings may not be changed as per configuration.");
+      if ($message->get_user_type() == 'anonymous')
+        die("Anonymous postings may not be changed.");
+      elseif (!$user)
+        die("You are not logged in.");
+      elseif ($user->get_id() != $message->get_user_id())
+        die("You are not the owner.");
+
+      $msgprinter->show_compose($message, '', 0, FALSE);
     }
 
 
     // Write a new message.
     function _message_compose() {
+      $parent_id  = (int)$_POST[parent_id];
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show_compose($message, '', FALSE);
+      $msgprinter->show_compose($message, '', $parent_id, FALSE);
     }
 
 
     // Edit an unsaved message.
     function _message_edit_unsaved() {
+      $parent_id  = (int)$_POST[parent_id];
+      $may_quote  = $parent_id ? TRUE : FALSE;
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
+      $message->set_id($_POST['msg_id']);
       $message->set_username($_POST[name]);
       $message->set_subject($_POST[subject]);
       $message->set_body($_POST[message]);
-      $msgprinter->show_compose($message, '', $_POST[msg_id] ? TRUE : FALSE);
+      $msgprinter->show_compose($message, '', $parent_id, $may_quote);
     }
 
 
     // Insert a quote from the parent message.
     function _message_quote() {
       $forum_id   = $this->get_forum_id();
-      $quoted_msg = $this->forum->get_message($forum_id, $_GET[msg_id]);
+      $parent_id  = (int)$_POST[parent_id];
+      $quoted_msg = $this->forum->get_message($forum_id, $parent_id);
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
       $message->set_username($_POST[name]);
@@ -323,8 +343,11 @@
     // Print a preview of a message.
     function _message_preview() {
       global $err;
+      $parent_id  = (int)$_POST[parent_id];
+      $may_quote  = $parent_id ? TRUE : FALSE;
       $msgprinter = &new MessagePrinter($this);
       $message    = &new Message;
+      $message->set_id($_POST['msg_id']);
       $message->set_username($_POST['name']);
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
@@ -335,15 +358,17 @@
       elseif (!$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
-                                          $_POST[msg_id] ? TRUE : FALSE);
+                                          $parent_id,
+                                          $may_quote);
 
       $ret = $message->check_complete();
       if ($ret < 0)
         $msgprinter->show_compose($message,
                                   $err[$ret],
-                                  $_POST[msg_id] ? TRUE : FALSE);
+                                  $parent_id,
+                                  $may_quote);
       else
-        $msgprinter->show_preview($message, $_POST['msg_id']);
+        $msgprinter->show_preview($message, $parent_id);
     }
 
 
@@ -352,8 +377,17 @@
       global $err;
       $msgprinter = &new MessagePrinter($this);
       $user       = $this->get_current_user();
-      $message    = &new Message;
-      $message->set_username($_POST['name']);
+      $parent_id  = (int)$_POST[parent_id];
+      $forum_id   = $this->get_forum_id();
+      $may_quote  = $parent_id ? TRUE : FALSE;
+      if ($_POST['msg_id'] && !cfg("postings_editable"))
+        die("Postings may not be changed as per configuration.");
+      elseif ($_POST['msg_id'])
+        $message = $this->forum->get_message($forum_id, $_POST['msg_id']);
+      else {
+        $message = &new Message;
+        $message->set_username($_POST['name']);
+      }
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
 
@@ -365,7 +399,8 @@
       elseif (!$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
-                                          $_POST[msg_id] ? TRUE : FALSE);
+                                          $parent_id,
+                                          $may_quote);
 
       $duplicate_id = $this->forum->find_duplicate($message);
       if ($duplicate_id)
@@ -373,16 +408,19 @@
                                          lang("messageduplicate"));
 
       $ret = $message->check_complete();
-      if ($ret == 0) {
-        $forum_id  = $this->get_forum_id();
+      if ($ret == 0 && !$message->get_id())
         $newmsg_id = $this->forum->insert_entry($forum_id,
-                                                $_GET[msg_id],
+                                                $parent_id,
                                                 $message);
+      elseif ($message->get_id()) {
+        $this->forum->save_entry($forum_id, $parent_id, $message);
+        $newmsg_id = $message->get_id();
       }
       if ($ret < 0 || $new_id < 0)
         $msgprinter->show_compose($message,
                                   $err[$ret],
-                                  $_POST[msg_id] ? TRUE : FALSE);
+                                  $parent_id,
+                                  $may_quote);
       else
         $msgprinter->show_created($newmsg_id);
     }

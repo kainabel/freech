@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function IndexBarReadMessage($_message) {
+    function IndexBarReadMessage($_message, $may_edit = FALSE) {
       $this->IndexBar();
       $this->message = $_message;
 
@@ -82,12 +82,22 @@
       call_user_func($additem, lang("thread"));
       call_user_func($additem, lang("next_symbol"), $next_url);
 
+      // "Edit" button.
+      if ($may_edit) {
+        $url = clone($url);
+        $url->set_var('msg_id', $this->message->get_id());
+        call_user_func($additem);
+        $url->set_var('action', 'edit');
+        call_user_func($additem, lang("editmessage"), $url);
+      }
+
       // "Reply" button.
       $url = clone($url);
       call_user_func($additem);
+      $url->delete_var('msg_id');
       $url->set_var('action', 'respond');
       if ($this->message->is_active() && $this->message->get_allow_answer()) {
-        $url->set_var('msg_id', $this->message->get_id());
+        $url->set_var('parent_id', $this->message->get_id());
         call_user_func($additem, lang("writeanswer"), $url);
       }
       else
@@ -96,7 +106,7 @@
       // "New Thread" button.
       $url = clone($url);
       call_user_func($additem);
-      $url->delete_var('msg_id');
+      $url->delete_var('parent_id');
       $url->set_var('action', 'write');
       call_user_func($additem, lang("writemessage"), $url);
 

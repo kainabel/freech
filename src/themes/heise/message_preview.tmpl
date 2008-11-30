@@ -3,6 +3,7 @@
 {include file="message.tmpl"}
 <p>
 <form action='{$action}' id='commentform' method='POST' accept-charset='utf-8'>
+<input type='hidden' name='action' value='message_submit'>
 <input type='hidden' name='name' id='name' value='{$message->get_username()|escape}'>
 <input type='hidden' name='subject' id='subject' value='{$message->get_subject()|escape}'>
 <input type='hidden' name='message' id='message' value='{$message->get_body()|escape}'>

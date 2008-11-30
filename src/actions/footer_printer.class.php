@@ -22,7 +22,7 @@
   class FooterPrinter extends PrinterBase {
     function show() {
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('list',     1);
+      $url->set_var('action',   'list');
       $url->set_var('forum_id', (int)$_GET[forum_id]);
       if ($_COOKIE[view] === 'plain') {
         $url->set_var('changeview', 't');
@@ -34,7 +34,7 @@
         $order_by_time     = $url->get_string();
       }
       $search = new URL('?', cfg("urlvars"));
-      $search->set_var('search',   1);
+      $search->set_var('action',   'search');
       $search->set_var('forum_id', (int)$_GET[forum_id]);
       $version[url]  = "http://debain.org/software/freech/";
       $version[text] = "Freech Forum v0.9.10";

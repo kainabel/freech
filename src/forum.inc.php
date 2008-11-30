@@ -35,6 +35,7 @@
   include_once 'objects/message.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
+  include_once 'objects/thread_state.class.php';
   include_once 'objects/indexbar_item.class.php';
   include_once 'objects/indexbar.class.php';
   include_once 'objects/indexbar_by_time.class.php';
@@ -56,7 +57,6 @@
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
 
-  include_once 'services/thread_folding.class.php';
   include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
@@ -72,7 +72,7 @@
     var $registry;
     var $eventbus;
     var $smarty;
-    var $folding;
+    var $thread_state;
 
     // Prepare the forum, set cookies, etc. To be called before the http header
     // was sent.
@@ -142,10 +142,13 @@
 
       $this->current_user = FALSE;
       $this->login_error  = 0;
-      if ($_GET['do_login'] && $_POST['login'])
+      if ($this->get_action() == 'do_login' && $_POST['login'])
         $this->login_error = $this->_try_login();
-      if ($_GET['do_logout'])
+      if ($this->get_action() == 'do_logout') {
         session_unset();
+        unset($_GET['action']);
+        unset($_POST['action']);
+      }
     }
 
 
@@ -174,7 +177,8 @@
       if ($ret < 0)
         die("Failed to log in user, return code $ret");
       $_SESSION['login'] = $user->get_login();
-      $_GET['do_login']  = 0;
+      unset($_GET['action']);
+      unset($_POST['action']);
       return 0;
     }
 
@@ -192,6 +196,16 @@
     }
 
 
+    function get_action() {
+      return $_GET['action'] ? $_GET['action'] : $_POST['action'];
+    }
+
+
+    function get_forum_id() {
+      return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
+    }
+
+
     function get_newest_users($_limit) {
       return $this->_get_accountdb()->get_newest_users($_limit);
     }
@@ -204,23 +218,21 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
 
-      //FIXME: This is plain evil.
-      $_GET[hs]       = $_GET[hs]       ? $_GET[hs]       * 1 : 0;
-      $_GET[forum_id] = $_GET[forum_id] ? $_GET[forum_id] * 1 : 1;
-      //FIXME end
+      if ($_GET[hs])
+        $_GET[hs] = (int)$_GET[hs];
 
-      $folding         = &new ThreadFolding($_COOKIE['fold'],
-                                            $_COOKIE['c']);
-      $profile_folding = &new ThreadFolding($_COOKIE['profile_fold'],
-                                            $_COOKIE['profile_c']);
+      $thread_state         = &new ThreadState($_COOKIE['fold'],
+                                               $_COOKIE['c']);
+      $profile_thread_state = &new ThreadState($_COOKIE['profile_fold'],
+                                               $_COOKIE['profile_c']);
       if ($_GET['c']) {
-        $folding->swap($_GET['c']);
-        $this->_set_cookie('c', $folding->get_string());
+        $thread_state->swap($_GET['c']);
+        $this->_set_cookie('c', $thread_state->get_string());
       }
 
       if ($_GET['profile_c']) {
-        $profile_folding->swap($_GET['profile_c']);
-        $this->_set_cookie('profile_c', $profile_folding->get_string());
+        $profile_thread_state->swap($_GET['profile_c']);
+        $this->_set_cookie('profile_c', $profile_thread_state->get_string());
       }
 
       if ($_GET['changeview'] === 't')
@@ -253,18 +265,26 @@
 
     // Read a message.
     function _message_read() {
-      $msg = $this->forum->get_message($_GET['forum_id'], $_GET['msg_id']);
-      $this->_print_message_breadcrumbs($msg);
+      $forum_id   = $this->get_forum_id();
+      $msg        = $this->forum->get_message($forum_id, $_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show($_GET['forum_id'], $msg);
+      $this->_print_message_breadcrumbs($msg);
+      $msgprinter->show($forum_id, $msg);
     }
 
 
     // Write an answer to a message.
     function _message_answer() {
-      $message    = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
+      $forum_id   = $this->get_forum_id();
+      $message    = $this->forum->get_message($forum_id, $_GET[msg_id]);
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_reply($message, '', TRUE);
+    }
+
+
+    // Edit a saved message.
+    function _message_edit_saved() {
+      //FIXME
     }
 
 
@@ -276,8 +296,8 @@
     }
 
 
-    // Edit a message.
-    function _message_edit() {
+    // Edit an unsaved message.
+    function _message_edit_unsaved() {
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
       $message->set_username($_POST[name]);
@@ -289,7 +309,8 @@
 
     // Insert a quote from the parent message.
     function _message_quote() {
-      $quoted_msg = $this->forum->get_message($_GET[forum_id], $_GET[msg_id]);
+      $forum_id   = $this->get_forum_id();
+      $quoted_msg = $this->forum->get_message($forum_id, $_GET[msg_id]);
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
       $message->set_username($_POST[name]);
@@ -327,7 +348,7 @@
 
 
     // Saves the posted message.
-    function _message_submit() {
+    function _message_send() {
       global $err;
       $msgprinter = &new MessagePrinter($this);
       $user       = $this->get_current_user();
@@ -352,10 +373,12 @@
                                          lang("messageduplicate"));
 
       $ret = $message->check_complete();
-      if ($ret == 0)
-        $newmsg_id = $this->forum->insert_entry($_GET[forum_id],
+      if ($ret == 0) {
+        $forum_id  = $this->get_forum_id();
+        $newmsg_id = $this->forum->insert_entry($forum_id,
                                                 $_GET[msg_id],
                                                 $message);
+      }
       if ($ret < 0 || $new_id < 0)
         $msgprinter->show_compose($message,
                                   $err[$ret],
@@ -368,8 +391,9 @@
     // Shows the forum, time order.
     function _list_by_time() {
       $this->_print_list_breadcrumbs('');
-      $latest = &new LatestPrinter($this);
-      $latest->show($_GET['forum_id'], $_GET['hs']);
+      $forum_id = $this->get_forum_id();
+      $latest   = &new LatestPrinter($this);
+      $latest->show($forum_id, $_GET['hs']);
       $this->_print_footer();
     }
 
@@ -377,9 +401,10 @@
     // Shows the forum, thread order.
     function _list_by_thread() {
       $this->_print_list_breadcrumbs('');
-      $folding = &new ThreadFolding($_COOKIE['fold'], $_COOKIE['c']);
-      $thread  = &new ThreadPrinter($this, $folding);
-      $thread->show($_GET['forum_id'], 0, $_GET[hs]);
+      $thread_state = &new ThreadState($_COOKIE['fold'], $_COOKIE['c']);
+      $forum_id     = $this->get_forum_id();
+      $thread       = &new ThreadPrinter($this, $thread_state);
+      $thread->show($forum_id, 0, $_GET[hs]);
       $this->_print_footer();
     }
 
@@ -394,16 +419,18 @@
 
 
     function _get_forumurl() {
+      $forum_id = $this->get_forum_id();
       $forumurl = &new URL('?', cfg("urlvars"));
-      $forumurl->set_var('list',     1);
-      $forumurl->set_var('forum_id', $_GET[forum_id]);
+      $forumurl->set_var('action',   'list');
+      $forumurl->set_var('forum_id', $forum_id);
       return $forumurl;
     }
 
 
     function _print_list_breadcrumbs() {
+      $forum_id    = $this->get_forum_id();
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $search      = array('forum_id' => $_GET['forum_id']);
+      $search      = array('forum_id' => $forum_id);
       $n_messages  = $this->forum->get_n_messages($search);
       $start       = time() - cfg("new_post_time");
       $n_new       = $this->forum->get_n_messages($search, $start);
@@ -457,8 +484,10 @@
       if (cfg("disable_search"))
         die("Search is currently disabled.");
       $query = $_GET['q'];
-      if ($_GET['forum_id'])
-        $query = 'forumid:"'.(int)$_GET['forum_id'].'" AND ('.$_GET['q'].')';
+      if ($_GET['forum_id']) {
+        $forum_id = $this->get_forum_id();
+        $query    = "forumid:$forum_id AND (".$_GET['q'].")";
+      }
       $search  = &new SearchQuery($query);
       $printer = &new SearchPrinter($this);
       $printer->show($search, $_GET['hs']);
@@ -524,7 +553,8 @@
       $body    = lang("registration_mail_body");
       $login   = urlencode($user->get_login());
       $hash    = urlencode($user->get_confirmation_hash());
-      $url     = cfg('site_url') . "?confirm_account=1&login=$login&hash=$hash";
+      $url     = cfg('site_url') . "?action=account_confirm"
+               . "&login=$login&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, $url);
       $registration = &new RegistrationPrinter($this);
       $registration->show_mail_sent($user);
@@ -564,9 +594,9 @@
 
 
     function _get_current_or_confirming_user() {
-      if ($_GET['confirm_account']
-        || $_GET['confirm_password_mail']
-        || $_GET['reset_password_submit']) {
+      if ($this->get_action() == 'account_confirm'
+        || $this->get_action() == 'confirm_password_mail'
+        || $this->get_action() == 'reset_password_submit') {
         $accountdb = $this->_get_accountdb();
         $user      = $accountdb->get_user_from_login($_GET['login']);
         $this->_check_confirmation_hash($user);
@@ -646,7 +676,7 @@
       $body    = lang("reset_mail_body");
       $login   = urlencode($user->get_login());
       $hash    = urlencode($user->get_confirmation_hash());
-      $url     = cfg('site_url') . "?confirm_password_mail=1"
+      $url     = cfg('site_url') . "?action=confirm_password_mail"
                . "&login=$login&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, $url);
       $registration = &new RegistrationPrinter($this);
@@ -704,9 +734,9 @@
       else
         $user = $this->get_current_user();
       $this->_print_profile_breadcrumbs($user);
-      $folding = &new ThreadFolding($_COOKIE['profile_fold'],
-                                    $_COOKIE['profile_c']);
-      $profile = &new ProfilePrinter($this, $folding);
+      $thread_state = &new ThreadState($_COOKIE['profile_fold'],
+                                       $_COOKIE['profile_c']);
+      $profile = &new ProfilePrinter($this, $thread_state);
       $profile->show($user);
     }
 
@@ -763,53 +793,96 @@
 
     function show() {
       $this->content = "";
-      if ($_GET['read'])
-        $this->_message_read();     // Read a message.
-      elseif ($_GET['write'] && $_GET['msg_id'])
-        $this->_message_answer();   // Write an answer.
-      elseif ($_GET['write'])
-        $this->_message_compose();  // Write a new message.
-      elseif ($_POST['edit'])
-        $this->_message_edit();     // Edit a message.
-      elseif ($_POST['quote'])
-        $this->_message_quote();    // Insert a quote from the parent message.
-      elseif ($_POST['preview'])
-        $this->_message_preview();  // A message preview was requested.
-      elseif ($_POST['send'])
-        $this->_message_submit();   // A message was posted and should be saved.
-      elseif ($_GET['profile'])
+      switch ($this->get_action()) {
+      case 'read':
+        $this->_message_read();             // Read a message.
+        break;
+
+      case 'write':
+        $this->_message_compose();          // Write a new message.
+        break;
+
+      case 'respond':
+        $this->_message_answer();           // Write an answer.
+        break;
+
+      case 'edit':
+        $this->_message_edit_saved();       // Edit a saved message.
+        break;
+
+      case 'message_submit':
+        if ($_POST['quote'])
+          $this->_message_quote();          // Quote the parent message.
+        elseif ($_POST['preview'])
+          $this->_message_preview();        // A message preview.
+        elseif ($_POST['send'])
+          $this->_message_send();           // Save posted message.
+        elseif ($_POST['edit'])
+          $this->_message_edit_unsaved();   // Edit the unsaved message.
+        break;
+
+      case 'profile':
         $this->_show_profile();             // Show a user profile.
-      elseif ($_GET['search'] && $_GET['q'])
-        $this->_show_search_result();       // Run a search.
-      elseif ($_GET['search'])
-        $this->_show_search_form();         // Show the search form.
-      elseif ($_GET['do_login'])
+        break;
+
+      case 'search':
+        if ($_GET['q'])
+          $this->_show_search_result();     // Run a search.
+        else
+          $this->_show_search_form();       // Show the search form.
+        break;
+
+      case 'do_login':
         $this->_show_login();               // Show a login form.
-      elseif ($_GET['register'])
+        break;
+
+      case 'register':
         $this->_register();                 // Show a registration form.
-      elseif ($_GET['create_account'])
+        break;
+
+      case 'account_create':
         $this->_account_create();           // Register a new user.
-      elseif ($_GET['confirm_account'])
+        break;
+
+      case 'account_confirm':
         $this->_account_confirm();          // Confirm a new user.
-      elseif ($_GET['resend_confirm'])
+        break;
+
+      case 'resend_confirm':
         $this->_resend_confirmation_mail(); // Send a confirmation mail.
-      elseif ($_GET['change_password'])
+        break;
+
+      case 'change_password':
         $this->_change_password();          // Form for changing the password.
-      elseif ($_GET['submit_password'])
+        break;
+
+      case 'submit_password':
         $this->_change_password_submit();   // Set the initial password.
-      elseif ($_GET['forgot_password'])
+        break;
+
+      case 'forgot_password':
         $this->_forgot_password();          // Form for requesting password mail.
-      elseif ($_GET['password_mail_submit'])
+        break;
+
+      case 'password_mail_submit':
         $this->_password_mail_submit();     // Send password mail request.
-      elseif ($_GET['confirm_password_mail'])
+        break;
+
+      case 'confirm_password_mail':
         $this->_confirm_password_mail();    // Form for resetting the password.
-      elseif (($_GET['list'] || $_GET['forum_id'])
-              && $_COOKIE['view'] === 'plain')
-        $this->_list_by_time();      // Show the forum, time order.
-      elseif ($_GET['list'] || $_GET['forum_id'])
-        $this->_list_by_thread();    // Show the forum, thread order.
-      else
+        break;
+
+      case 'list':
+      case '':
+        if ($_COOKIE['view'] === 'plain')
+          $this->_list_by_time();           // Show the forum, time order.
+        else
+          $this->_list_by_thread();         // Show the forum, thread order.
+        break;
+
+      default:
         die("internal error");
+      }
 
       /* Plugin hook: on_content_print_before
        *   Called before the HTML content is sent.

@@ -29,11 +29,12 @@
     // Constructor.
     function IndexBarUserPostings($_args) {
       $this->IndexBar();
+      $this->forum_id            = $_args[forum_id];
       $this->n_messages          = $_args[n_messages];
       $this->n_messages_per_page = $_args[n_messages_per_page];
       $this->n_offset            = $_args[n_offset];
       $this->n_pages_per_index   = $_args[n_pages_per_index];
-      $this->folding             = $_args[folding];
+      $this->thread_state        = $_args[thread_state];
 
       // Print the "Index" keyword, followed by a separator.
       $additem = array(&$this, 'add_item');
@@ -58,9 +59,9 @@
 
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('profile', 1);
-      $url->set_var('hs',    0);
-      $url->set_var('forum', (int)$_GET[forum_id]);
+      $url->set_var('action',   'profile');
+      $url->set_var('hs',       0);
+      $url->set_var('forum_id', $this->forum_id);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
         call_user_func($additem, 1, $url);
@@ -110,18 +111,18 @@
       else
         call_user_func($additem, lang("prev"), $url);
       
-      if (!$this->folding)
-        die("IndexBarUserPostings:foreach_page(): Folding.");
+      if (!$this->thread_state)
+        die("IndexBarUserPostings:foreach_page(): Thread state.");
       
-      $fold = $this->folding->get_default();
-      $swap = $this->folding->get_string_swap();
+      $fold = $this->thread_state->get_default();
+      $swap = $this->thread_state->get_string_swap();
       
       // "Unfold all" link.
       $url = clone($url);
       call_user_func($additem);
       $url->set_var('hs', (int)$_GET[hs]);
-      if ($fold != UNFOLDED || $swap != '') {
-        $url->set_var('profile_fold', UNFOLDED);
+      if ($fold != THREAD_STATE_UNFOLDED || $swap != '') {
+        $url->set_var('profile_fold', THREAD_STATE_UNFOLDED);
         call_user_func($additem, lang("unfoldall"), $url);
       }
       else
@@ -130,8 +131,8 @@
       // "Fold all" link.
       $url = clone($url);
       call_user_func($additem);
-      if ($fold != FOLDED || $swap != '') {
-        $url->set_var('profile_fold', FOLDED);
+      if ($fold != THREAD_STATE_FOLDED || $swap != '') {
+        $url->set_var('profile_fold', THREAD_STATE_FOLDED);
         call_user_func($additem, lang("foldall"), $url);
       }
       else

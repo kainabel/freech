@@ -24,11 +24,11 @@ function spamhash_init(&$forum) {
 
 function spamhash_on_construct(&$forum) {
   global $spamhash;
-  if (!$_POST[send]
-    && !$_GET[write]
-    && !$_POST[quote]
-    && !$_POST[preview]
-    && !$_POST[edit])
+  $action = $forum->get_action();
+  if ($action != 'write'
+    && $action != 'respond'
+    && $action != 'edit'
+    && $action != 'message_submit')
     return;
   $spamhash = new SpamHash("commentform");
 }
@@ -40,7 +40,9 @@ function spamhash_on_header_print(&$forum) {
     return;
   if (!CHECK_REGISTERED_ACCOUNTS && $forum->get_current_user())
     return;
-  if ($_POST[send] && !spamhash_check_hash())
+  if ($forum->get_action() == 'message_submit'
+    && $_POST[send]
+    && !spamhash_check_hash())
     return;
   $forum->content = $spamhash->insert_header_code($forum->content);
   $forum->content = $spamhash->insert_body_code($forum->content);
@@ -54,7 +56,9 @@ function spamhash_on_content_print(&$forum) {
   global $spamhash;
   if (!$spamhash)
     return;
-  if ($_POST[send] && !spamhash_html_contains_form($forum->content)) {
+  if ($forum->get_action() == 'message_submit'
+    && $_POST[send]
+    && !spamhash_html_contains_form($forum->content)) {
     unset($spamhash);
     return;
   }

@@ -20,54 +20,54 @@
 ?>
 <?php
   class ThreadPrinter extends PrinterBase {
-    var $folding;
+    var $thread_state;
     var $messages;
     var $urls;
     var $foldurls;
     
-    function ThreadPrinter(&$_parent, &$_folding) {
+    function ThreadPrinter(&$_parent, &$_thread_state) {
       $this->PrinterBase(&$_parent);
-      $this->folding  = &$_folding;
-      $this->messages = array();
-      $this->urls     = array();
-      $this->foldurls = array();
+      $this->thread_state = &$_thread_state;
+      $this->messages     = array();
+      $this->urls         = array();
+      $this->foldurls     = array();
     }
     
     
     function _append_row(&$_message, $_indents, $_data) {
       if ($_GET['profile']) {
-        $section  = 'profile';
-        $sectionc = 'profile_c';
+        $action  = 'profile';
+        $actionc = 'profile_c';
       }
       else {
-        $section  = 'list';
-        $sectionc = 'c';
+        $action  = 'list';
+        $actionc = 'c';
       }
 
       // The URL to the message.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('read',     1);
+      $url->set_var('action',   'read');
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
       if (cfg("remember_page"))
         $url->set_var('hs', (int)$_GET[hs]);
       
-      // The url behind the "+/-" folding toggle button.
-      if ($_GET[read]) {
+      // The url behind the "+/-" thread_state toggle button.
+      if ($_GET['action'] == 'read') {
         $foldurl = clone($url);
         $foldurl->delete_var[hs];
         $foldurl->set_var('showthread', -1);
       }
       else {
         $foldurl = new URL('?', cfg("urlvars"));
-        $foldurl->set_var($section,   1);
+        $foldurl->set_var('action',   $action);
         $foldurl->set_var('hs',       (int)$_GET[hs]);
         $foldurl->set_var('forum_id', $_message->get_forum_id());
-        $foldurl->set_var($sectionc,  $_message->get_id());
+        $foldurl->set_var($actionc,   $_message->get_id());
       }
       
       // Required to enable correct formatting of the message.
-      if ($_message->get_id() == $_GET[msg_id] && $_GET[read])
+      if ($_message->get_id() == $_GET[msg_id])
         $_message->set_selected();
       if (!$_message->is_active()) {
         $_message->set_subject(lang("blockedtitle"));
@@ -91,7 +91,7 @@
                                       $_offset,
                                       cfg("tpp"),
                                       cfg("updated_threads_first"),
-                                      $this->folding,
+                                      $this->thread_state,
                                       array(&$this, '_append_row'),
                                       '');
       else
@@ -99,16 +99,18 @@
                                                 $_msg_id,
                                                 $_offset,
                                                 cfg("tpp"),
-                                                $this->folding,
+                                                $this->thread_state,
                                                 array(&$this, '_append_row'),
                                                 '');
       
       $n_threads = $this->db->get_n_threads($_forum_id);
-      $args      = array(n_threads          => $n_threads,
+      $args      = array(forum_id           => $this->parent->get_forum_id(),
+                         n_messages         => $n_entries,
+                         n_threads          => $n_threads,
                          n_threads_per_page => cfg("tpp"),
                          n_offset           => $_offset,
                          n_pages_per_index  => cfg("ppi"),
-                         folding            => $this->folding);
+                         thread_state       => $this->thread_state);
       $indexbar = &new IndexBarByThread($args);
 
       $this->smarty->clear_all_assign();

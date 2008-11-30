@@ -21,7 +21,8 @@
 <?php
   class MessagePrinter extends ThreadPrinter {
     function MessagePrinter(&$_parent) {
-      $this->ThreadPrinter(&$_parent, new ThreadFolding(UNFOLDED, ''));
+      $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
+      $this->ThreadPrinter(&$_parent, $state);
     }
 
 
@@ -44,7 +45,7 @@
                                                 $_msg->get_id(),
                                                 0,
                                                 cfg("tpp"),
-                                                $this->folding,
+                                                $this->thread_state,
                                                 array(&$this, '_append_row'),
                                                 '');
 
@@ -147,17 +148,17 @@
     // Shows a page explaining that the message was successfully created.
     function show_created($_newmsg_id, $_hint = '') {
       $messageurl = new URL('?', cfg("urlvars"));
-      $messageurl->set_var('read',     1);
+      $messageurl->set_var('action',   'read');
       $messageurl->set_var('msg_id',   $_newmsg_id);
       $messageurl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $parenturl = new URL('?', cfg("urlvars"));
-      $parenturl->set_var('read',     1);
+      $parenturl->set_var('action',   'read');
       $parenturl->set_var('msg_id',   (int)$_GET[msg_id]);
       $parenturl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $forumurl = new URL('?', cfg("urlvars"));
-      $forumurl->set_var('list',     1);
+      $forumurl->set_var('action',   'list');
       $forumurl->set_var('forum_id', (int)$_GET[forum_id]);
       
       $this->smarty->clear_all_assign();

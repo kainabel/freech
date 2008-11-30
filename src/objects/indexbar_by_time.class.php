@@ -29,6 +29,7 @@
     // Constructor.
     function IndexBarByTime($_args) {
       $this->IndexBar();
+      $this->forum_id            = $_args[forum_id];
       $this->n_messages          = $_args[n_messages];
       $this->n_messages_per_page = $_args[n_messages_per_page];
       $this->n_offset            = $_args[n_offset];
@@ -57,9 +58,9 @@
 
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('list',  1);
-      $url->set_var('hs',    0);
-      $url->set_var('forum', (int)$_GET[forum_id]);
+      $url->set_var('action',   'list');
+      $url->set_var('hs',       0);
+      $url->set_var('forum_id', $this->forum_id);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
         call_user_func($additem, 1, $url);
@@ -112,8 +113,7 @@
       // "New message" link.
       $url = clone($url);
       $url->delete_var('hs');
-      $url->delete_var('list');
-      $url->set_var('write', 1);
+      $url->set_var('action', 'write');
       call_user_func($additem);
       call_user_func($additem, lang("writemessage"), $url);
     }

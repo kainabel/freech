@@ -22,7 +22,7 @@
   class HeaderPrinter extends PrinterBase {
     function show() {
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->set_var('do_login', 1);
+      $url->set_var('action', 'do_login');
       
       $this->smarty->clear_all_assign();
       $this->parent->append_content($this->smarty->fetch("header.tmpl"));

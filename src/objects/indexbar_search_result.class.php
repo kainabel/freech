@@ -57,7 +57,7 @@
 
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('search',   1);
+      $url->set_var('action',   'search');
       $url->set_var('q',        $_GET['q']);
       $url->set_var('hs',       0);
       $url->set_var('forum_id', (int)$_GET[forum_id]);

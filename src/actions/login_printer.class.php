@@ -22,14 +22,14 @@
   class LoginPrinter extends PrinterBase {
     function show($_user, $_hint = '') {
       $url = new URL('?', array_merge(cfg("urlvars"), $_GET));
-      $url->set_var('do_login', 1);
+      $url->set_var('action', 'do_login');
 
       $resend_url = new URL('?', cfg("urlvars"));
-      $resend_url->set_var('resend_confirm', 1);
+      $resend_url->set_var('action', 'resend_confirm');
       $resend_url->set_var('login', $_user->get_login());
 
       $forgot_url = new URL('?', cfg("urlvars"));
-      $forgot_url->set_var('forgot_password', 1);
+      $resend_url->set_var('action', 'forgot_password');
 
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('user',       $_user);

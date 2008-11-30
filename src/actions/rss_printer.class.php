@@ -58,7 +58,7 @@
       
       // The URL to the message.
       $url = new URL($this->url . "?", cfg("urlvars"));
-      $url->set_var('read',     1);
+      $user>set_var('action',   'read');
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
       if (cfg("remember_page"))

@@ -29,17 +29,18 @@
                                                   $_GET['hs'],
                                                   cfg("epp"),
                                                   cfg("updated_threads_first"),
-                                                  $this->folding,
+                                                  $this->thread_state,
                                                   array(&$this, '_append_row'),
                                                   '');
 
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->db->get_n_messages($search);
-      $args      = array(n_messages          => $n_entries,
+      $args      = array(forum_id            => $this->parent->get_forum_id(),
+                         n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_GET['hs'],
                          n_pages_per_index   => cfg("ppi"),
-                         folding             => $this->folding);
+                         thread_state        => $this->thread_state);
       $indexbar = &new IndexBarUserPostings($args);
 
       $this->smarty->clear_all_assign();

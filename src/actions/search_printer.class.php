@@ -31,14 +31,14 @@
     function _append_row(&$_message, $_data) {
       // The URL to the message.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('read',     1);
+      $url->set_var('action',   'read');
       $url->set_var('msg_id',   $_message->get_id());
       $url->set_var('forum_id', $_message->get_forum_id());
       if (cfg("remember_page"))
         $url->set_var('hs', (int)$_GET[hs]);
 
       // Required to enable correct formatting of the message.
-      $_message->set_selected($_row[id] == $_GET[msg_id] && $_GET[read]);
+      $_message->set_selected($_message->get_id() == $_GET[msg_id]);
       if (!$_message->is_active()) {
         $_message->set_subject(lang("blockedtitle"));
         $_message->set_username('------');

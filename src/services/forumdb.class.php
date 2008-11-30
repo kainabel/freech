@@ -373,7 +373,7 @@
     }
 
 
-    function _walk_tree($_res, $_fold, $_func, $_data) {
+    function _walk_tree($_res, $_thread_state, $_func, $_data) {
       $row     = $_res->FetchRow();
       $indent  = 0;
       $indents = array();
@@ -385,7 +385,8 @@
         if ($this->_is_parent($row)
           && !$this->_has_children($row))
           $row[relation] = MESSAGE_RELATION_PARENT_STUB;
-        else if ($this->_is_parent($row) && !$_fold->is_folded($row[id]))
+        else if ($this->_is_parent($row)
+              && !$_thread_state->is_folded($row[id]))
           $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
         else if ($this->_is_parent($row))
           $row[relation] = MESSAGE_RELATION_PARENT_FOLDED;
@@ -446,8 +447,7 @@
      *       $_id      The node whose children we want to print.
      *       $_offset  The offset.
      *       $_limit   The maximum number of threads to walk.
-     *       $_fold    An object identifying folded nodes.
-     *                 UNFOLDED).
+     *       $_thread_state An object identifying folded nodes.
      *       $_func    A reference to the function to which each row will be
      *                 passed.
      *       $_data    Passed through to $_func as an argument.
@@ -459,7 +459,7 @@
                            $_offset,
                            $_limit,
                            $_updated_threads_first,
-                           $_fold,
+                           $_thread_state,
                            $_func,
                            $_data) {
       $limit  = $_limit  * 1;
@@ -517,7 +517,7 @@
       while ($row = &$res->FetchRow()) {
         if (!$first)
           $sql .= " OR ";
-        if ($_fold->is_folded($row[id]))
+        if ($_thread_state->is_folded($row[id]))
           $sql .= "a.id=$row[id]";
         else
           $sql .= "a.thread_id=$row[id]";
@@ -538,7 +538,7 @@
       $res     = $this->db->Execute($query->sql())
                               or die("ForumDB::foreach_child: 3");
       $numrows = $res->RecordCount();
-      $this->_walk_tree($res, $_fold, $_func, $_data);
+      $this->_walk_tree($res, $_thread_state, $_func, $_data);
       return $numrows;
     }
 
@@ -550,7 +550,7 @@
                                      $_id,
                                      $_offset,
                                      $_limit,
-                                     $_fold,
+                                     $_thread_state,
                                      $_func,
                                      $_data) {
       $thread_id = $this->_get_thread_id($_id);
@@ -559,7 +559,7 @@
                                   $_offset,
                                   $_limit,
                                   FALSE,
-                                  $_fold,
+                                  $_thread_state,
                                   $_func,
                                   $_data);
     }
@@ -731,7 +731,7 @@
                                        $_offset,
                                        $_limit,
                                        $_updated_threads_first,
-                                       $_folding,
+                                       $_thread_state,
                                        $_func,
                                        $_data) {
       $limit  = $_limit  * 1;
@@ -790,7 +790,7 @@
       while ($row = &$res->FetchRow()) {
         if (!$first)
           $sql .= " OR ";
-        if ($_folding->is_folded($row[id]))
+        if ($_thread_state->is_folded($row[id]))
           $sql .= "(a.id=$row[id] AND b.id=$row[id])";
         else
           $sql .= "a.id=$row[id]";
@@ -811,7 +811,7 @@
       $res     = $this->db->Execute($query->sql())
                           or die("ForumDB::foreach_message_from_user()");
       $numrows = $res->RecordCount();
-      $this->_walk_tree($res, $_folding, $_func, $_data);
+      $this->_walk_tree($res, $_thread_state, $_func, $_data);
       return $numrows;
     }
 

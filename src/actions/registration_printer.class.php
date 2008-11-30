@@ -21,7 +21,8 @@
 <?php
   class RegistrationPrinter extends PrinterBase {
     function show($user, $error = '') {
-      $url = &new URL('?create_account=1', cfg("urlvars"));
+      $url = &new URL('?', cfg("urlvars"));
+      $url->set_var('action', 'account_create');
       
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('action',    $url->get_string());
@@ -48,7 +49,8 @@
     }
 
     function show_change_password($_user, $_hint = '') {
-      $url = &new URL('?submit_password=1', cfg("urlvars"));
+      $url = &new URL('?', cfg("urlvars"));
+      $url->set_var('action', 'submit_password');
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('action', $url->get_string());
       $this->smarty->assign_by_ref('user',   $_user);
@@ -57,7 +59,8 @@
     }
 
     function show_forgot_password($_user, $_hint = '') {
-      $url = new URL('?password_mail_submit=1', cfg("urlvars"));
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('action', 'password_mail_submit');
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('user',   $_user);
       $this->smarty->assign_by_ref('hint',   $_hint);

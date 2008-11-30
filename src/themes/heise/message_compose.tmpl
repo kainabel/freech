@@ -5,7 +5,8 @@
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
 <p>
 {if $user}
-<input type='hidden' name='name' value='{$user->get_login()|escape}'>
+<input type='hidden' name='action' value='message_submit'>
+<input type='hidden' name='name'   value='{$user->get_login()|escape}'>
 {else}
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='name' id='name' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>

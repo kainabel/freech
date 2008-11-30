@@ -19,18 +19,18 @@
   */
 ?>
 <?php
-  define("FOLDED",   1);
-  define("UNFOLDED", 2);
+  define("THREAD_STATE_FOLDED",   1);
+  define("THREAD_STATE_UNFOLDED", 2);
   
-  class ThreadFolding {
-    var $default = UNFOLDED;
+  class ThreadState {
+    var $default = THREAD_STATE_UNFOLDED;
     var $swapped = array();
     
-    function ThreadFolding($_defaultfolding, $_swapped) {
-      if ($_defaultfolding == FOLDED)
-        $this->default = FOLDED;
+    function ThreadState($_default_state, $_swapped) {
+      if ($_default_state == THREAD_STATE_FOLDED)
+        $this->default = THREAD_STATE_FOLDED;
       else
-        $this->default = UNFOLDED;
+        $this->default = THREAD_STATE_UNFOLDED;
       
       $_swapped = explode('.', $_swapped, 1000);
       $i = 0;
@@ -62,7 +62,7 @@
     function is_folded($_id) {
       $id = $_id * 1;
       $swapped = $this->swapped;
-      if ($this->default == FOLDED)
+      if ($this->default == THREAD_STATE_FOLDED)
         return $swapped[$id] != $id;
       return $swapped[$id] == $id;
     }

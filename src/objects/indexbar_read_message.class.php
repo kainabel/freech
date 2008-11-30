@@ -38,7 +38,7 @@
       }
 
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('read',     1);
+      $url->set_var('action',   'read');
       $url->set_var('msg_id',   0);
       $url->set_var('forum_id', (int)$_GET[forum_id]);
 
@@ -85,8 +85,7 @@
       // "Reply" button.
       $url = clone($url);
       call_user_func($additem);
-      $url->delete_var('read');
-      $url->set_var('write', 1);
+      $url->set_var('action', 'respond');
       if ($this->message->is_active() && $this->message->get_allow_answer()) {
         $url->set_var('msg_id', $this->message->get_id());
         call_user_func($additem, lang("writeanswer"), $url);
@@ -98,12 +97,13 @@
       $url = clone($url);
       call_user_func($additem);
       $url->delete_var('msg_id');
+      $url->set_var('action', 'write');
       call_user_func($additem, lang("writemessage"), $url);
 
       // "Show/Hide Thread" button.
       $url = clone($url);
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('read',     1);
+      $url->set_var('action',   'read');
       $url->set_var('msg_id',   0);
       $url->set_var('forum_id', (int)$_GET[forum_id]);
       if ($this->message->has_thread()) {

@@ -32,12 +32,12 @@
       . "  </td>"
       . " </tr>"
       . "</table><br />\n");
-  if ($_GET[forum_id] != 1)
+  if ($forum->get_forum_id() != 1)
     die("If you touch that URL again I will sue you!");
   if ($forum->get_current_user())
-    print("<a href='?do_logout=1'>".lang("logout")."</a>");
+    print("<a href='?action=do_logout'>".lang("logout")."</a>");
   else
-    print("<a href='?do_login=1'>".lang("login")."</a> <a href='?register=1'>".lang("register")."</a>");
+    print("<a href='?action=do_login'>".lang("login")."</a> <a href='?action=register'>".lang("register")."</a>");
   $forum->show();
   $forum->destroy();
   

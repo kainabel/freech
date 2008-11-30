@@ -29,7 +29,7 @@
       $resend_url->set_var('login', $_user->get_login());
 
       $forgot_url = new URL('?', cfg("urlvars"));
-      $resend_url->set_var('action', 'forgot_password');
+      $forgot_url->set_var('action', 'forgot_password');
 
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('user',       $_user);

@@ -1,6 +1,6 @@
 <!-- message_compose -->
 <p>
-<form action='{$action}' id='commentform' method='POST' accept-charset='utf-8'>
+<form action='{$action|escape}' id='commentform' method='POST' accept-charset='utf-8'>
 <font size='+1' color='red'>{lang text="writeamessage"|escape}</font>
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
 <p>

@@ -403,7 +403,7 @@
 
     function _print_list_breadcrumbs() {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $search      = array('forumid' => $_GET['forum_id']);
+      $search      = array('forum_id' => $_GET['forum_id']);
       $n_messages  = $this->forum->get_n_messages($search);
       $start       = time() - cfg("new_post_time");
       $n_new       = $this->forum->get_n_messages($search, $start);

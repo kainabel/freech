@@ -46,7 +46,7 @@
       $this->_fields[created]      = time();
       $this->_fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->_fields[active]       = TRUE;
-      $this->_fields[u_id]         = 2; // Anonymous user.
+      $this->_fields[user_id]         = 2; // Anonymous user.
       $this->_fields[allow_answer] = TRUE;
       $this->_fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
     }
@@ -58,9 +58,9 @@
         die("Message:set_from_db(): Non-array.");
       $this->clear();
       $this->_fields[id]              = $_db_row[id];
-      $this->_fields[forum_id]        = $_db_row[forumid];
+      $this->_fields[forum_id]        = $_db_row[forum_id];
       $this->_fields[priority]        = $_db_row[priority];
-      $this->_fields[u_id]            = $_db_row[u_id];
+      $this->_fields[user_id]         = $_db_row[user_id];
       $this->_fields[username]        = $_db_row[username];
       $this->_fields[subject]         = $_db_row[subject];
       $this->_fields[body]            = $_db_row[body];
@@ -119,12 +119,12 @@
 
 
     function set_user_id($_user_id) {
-      $this->_fields[u_id] = $_user_id;
+      $this->_fields[user_id] = $_user_id;
     }
 
 
     function &get_user_id() {
-      return $this->_fields[u_id];
+      return $this->_fields[user_id];
     }
 
 
@@ -286,11 +286,11 @@
 
 
     function &get_user_type() {
-      if ($this->_fields[u_id] == 1)
+      if ($this->_fields[user_id] == 1)
         return 'moderator';
-      elseif ($this->_fields[u_id] == 2)
+      elseif ($this->_fields[user_id] == 2)
         return 'anonymous';
-      elseif ($this->_fields[u_id])
+      elseif ($this->_fields[user_id])
         return 'registered';
       else
         return 'deleted';

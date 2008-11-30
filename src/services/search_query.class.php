@@ -40,16 +40,16 @@ class SearchQuery {
       array('word',         '/^([^"\:\s\(\)\\\']+)/'),
       array('unknown',      '/^./')
     );
-    $this->field_names = array('name'     => 'name',
-                               'user'     => 'name',
-                               'userid'   => 'u_id',
-                               'username' => 'name',
-                               'forumid'  => 'forumid',
-                               'title'    => 'title',
-                               'subject'  => 'title',
-                               'text'     => 'text',
-                               'body'     => 'text');
-    $this->int_columns = array('forumid', 'u_id');
+    $this->field_names = array('name'     => 'username',
+                               'user'     => 'username',
+                               'username' => 'username',
+                               'userid'   => 'user_id',
+                               'forumid'  => 'forum_id',
+                               'title'    => 'subject',
+                               'subject'  => 'subject',
+                               'text'     => 'body',
+                               'body'     => 'body');
+    $this->int_columns = array('forum_id', 'user_id');
     $this->set_query($_query);
   }
 
@@ -159,13 +159,13 @@ class SearchQuery {
             $var_name = "text$field_number";
             $sql     .= ' '.$next_op.' ';
             $sql     .= '(';
-            $sql     .= ' title LIKE {'.$var_name.'}';
+            $sql     .= ' subject LIKE {'.$var_name.'}';
             $sql     .= ' OR';
-            $sql     .= ' text LIKE {'.$var_name.'}';
+            $sql     .= ' body LIKE {'.$var_name.'}';
             $sql     .= ')';
             $field_number++;
-            $this->_add_field('title', $var_name);
-            $this->_add_field('text',  $var_name);
+            $this->_add_field('subject', $var_name);
+            $this->_add_field('body',  $var_name);
             $this->vars[$var_name] = $value;
           }
           $next_op = "AND";

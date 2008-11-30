@@ -13,11 +13,11 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
   `name` varchar(50) collate latin1_general_ci NOT NULL,
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
   `active` tinyint(3) unsigned default '1',
-  `ownerid` int(11) unsigned default NULL,
+  `owner_id` int(11) unsigned default NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
-  KEY `ownerid` (`ownerid`)
+  KEY `owner_id` (`owner_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -43,13 +43,13 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
 
 CREATE TABLE IF NOT EXISTS `freech_group_permission` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `g_id` int(11) unsigned default '0',
-  `p_id` int(11) unsigned default '0',
+  `group_id` int(11) unsigned default '0',
+  `permission_id` int(11) unsigned default '0',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
-  KEY `g_id` (`g_id`),
-  KEY `p_id` (`p_id`)
+  KEY `group_id` (`group_id`),
+  KEY `permission_id` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -60,13 +60,13 @@ CREATE TABLE IF NOT EXISTS `freech_group_permission` (
 
 CREATE TABLE IF NOT EXISTS `freech_group_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `g_id` int(11) unsigned default '0',
-  `u_id` int(11) unsigned default '0',
+  `group_id` int(11) unsigned default '0',
+  `user_id` int(11) unsigned default '0',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
-  KEY `g_id` (`g_id`),
-  KEY `u_id` (`u_id`)
+  KEY `group_id` (`group_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -77,15 +77,15 @@ CREATE TABLE IF NOT EXISTS `freech_group_user` (
 
 CREATE TABLE IF NOT EXISTS `freech_message` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `forumid` int(11) unsigned NOT NULL default '0',
-  `threadid` int(11) unsigned NOT NULL default '0',
+  `forum_id` int(11) unsigned NOT NULL default '0',
+  `thread_id` int(11) unsigned NOT NULL default '0',
   `priority` int(11) NOT NULL default '0',
   `is_parent` tinyint(1) default '0',
   `n_children` int(11) unsigned default '0',
   `n_descendants` int(11) unsigned default '0',
   `path` varchar(255) character set latin1 collate latin1_bin default NULL,
-  `u_id` int(11) unsigned default '0',
-  `name` varchar(50) collate latin1_general_ci NOT NULL,
+  `user_id` int(11) unsigned default '0',
+  `username` varchar(50) collate latin1_general_ci NOT NULL,
   `subject` varchar(255) collate latin1_general_ci NOT NULL default '',
   `body` text collate latin1_general_ci NOT NULL,
   `hash` varchar(40) collate latin1_general_ci NOT NULL,
@@ -94,10 +94,10 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `active` tinyint(3) unsigned default '1',
   `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `forumid` (`forumid`),
-  KEY `threadid` (`threadid`),
+  KEY `forum_id` (`forum_id`),
+  KEY `thread_id` (`thread_id`),
+  KEY `user_id` (`user_id`),
   KEY `is_parent` (`is_parent`),
-  KEY `u_id` (`u_id`),
   KEY `hash` (`hash`),
   KEY `created` (`created`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
@@ -169,32 +169,32 @@ CREATE TABLE IF NOT EXISTS `freech_visitor` (
 -- Constraints for table `freech_forum`
 --
 ALTER TABLE `freech_forum`
-  ADD CONSTRAINT `0_776` FOREIGN KEY (`ownerid`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `0_776` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_group_permission`
 --
 ALTER TABLE `freech_group_permission`
-  ADD CONSTRAINT `0_770` FOREIGN KEY (`g_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_771` FOREIGN KEY (`p_id`) REFERENCES `freech_permission` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `0_770` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_771` FOREIGN KEY (`permission_id`) REFERENCES `freech_permission` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_group_user`
 --
 ALTER TABLE `freech_group_user`
-  ADD CONSTRAINT `0_773` FOREIGN KEY (`g_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_774` FOREIGN KEY (`u_id`) REFERENCES `freech_user` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `0_773` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_774` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_message`
 --
 ALTER TABLE `freech_message`
-  ADD CONSTRAINT `0_778` FOREIGN KEY (`forumid`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_779` FOREIGN KEY (`u_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `0_778` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_779` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (1, 'root', '', 'root', 'root', 'root', NULL);
 INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
                   VALUES (2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
-INSERT INTO freech_forum (name, description, ownerid, created)
+INSERT INTO freech_forum (name, description, owner_id, created)
                    VALUES ('Forum', 'Default forum', 1, NULL);

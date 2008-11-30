@@ -52,12 +52,12 @@
       if (!is_object($_user))
         die("AccountDB::_add_to_group(): Invalid user.");
       $sql   = "INSERT INTO {t_group_user}";
-      $sql  .= "  (g_id, u_id)";
+      $sql  .= "  (group_id, user_id)";
       $sql  .= " VALUES";
-      $sql  .= "  ({g_id}, {u_id})";
+      $sql  .= "  ({group_id}, {user_id})";
       $query->set_sql($sql);
-      $query->set_int('g_id', $_groupid);
-      $query->set_int('u_id', $_user->get_id());
+      $query->set_int('group_id', $_groupid);
+      $query->set_int('user_id', $_user->get_id());
       $newid = $this->db->Execute($query->sql())
                             or die("AccountDB::_add_to_group");
       return $newid;
@@ -314,28 +314,28 @@
      */
     function foreach_user($_groupip, $_offset, $_limit, $_func, $_data) {
       $sql   = "SELECT u.*,";
-      $sql  .= " g.id g_id, g.name g_name, g.active g_active,";
+      $sql  .= " g.id group_id, g.name g_name, g.active g_active,";
       $sql  .= " g.created g_created,g.updated g_updated";
       if ($_groupid > 0) {
         $sql  .= " FROM      {t_group_user} gu1";
-        $sql  .= " LEFT JOIN {t_group_user} gu2 ON gu1.u_id=gu2.u_id";
-        $sql  .= " LEFT JOIN {t_user}       u   ON gu2.u_id=u.id";
-        $sql  .= " LEFT JOIN {t_group}      g   ON gu2.g_id=g.id";
-        $sql  .= " WHERE gu1.g_id={g_id}";
+        $sql  .= " LEFT JOIN {t_group_user} gu2 ON gu1.user_id=gu2.user_id";
+        $sql  .= " LEFT JOIN {t_user}       u   ON gu2.user_id=u.id";
+        $sql  .= " LEFT JOIN {t_group}      g   ON gu2.group_id=g.id";
+        $sql  .= " WHERE gu1.group_id={group_id}";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('g_id', $_groupid);
+        $query->set_int('group_id', $_groupid);
       }
       elseif ($_groupid == 0) {
         $sql  .= " FROM      {t_user}       u";
-        $sql  .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
-        $sql  .= " LEFT JOIN {t_group}      g  ON gu.g_id=g.id";
+        $sql  .= " LEFT JOIN {t_group_user} gu ON gu.user_id=u.id";
+        $sql  .= " LEFT JOIN {t_group}      g  ON gu.group_id=g.id";
         $sql  .= " WHERE g.id IS NULL";
         $query = &new FreechSqlQuery($sql);
       }
       else {
         $sql  .= " FROM      {t_user}       u";
-        $sql  .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
-        $sql  .= " LEFT JOIN {t_group}      g  ON gu.g_id=g.id";
+        $sql  .= " LEFT JOIN {t_group_user} gu ON gu.user_id=u.id";
+        $sql  .= " LEFT JOIN {t_group}      g  ON gu.group_id=g.id";
         $query = &new FreechSqlQuery($sql);
       }
       $res     = $this->db->SelectLimit($query->sql(), $_limit, $_offset)
@@ -355,15 +355,15 @@
         $user->set_from_db($row);
         
         // If the user also has a group attached, create one and let him know.
-        if ($row[g_id]) {
+        if ($row[group_id]) {
           // Create a group and cache it.
-          if (!isset($this->groups[$row[g_id]])) {
+          if (!isset($this->groups[$row[group_id]])) {
             $group = &new Group();
-            $this->groups[$row[g_id]] = &$group;
+            $this->groups[$row[group_id]] = &$group;
           }
           else
-            $group = &$this->groups[$row[g_id]];
-          $group->set_id($row[g_id]);
+            $group = &$this->groups[$row[group_id]];
+          $group->set_id($row[group_id]);
           $group->set_name($row[g_name]);
           $group->set_active($row[g_active]);
           $group->set_created_unixtime($row[g_created]);
@@ -419,16 +419,16 @@
       if ($_groupid > 0) {
         $sql  = "SELECT COUNT(*)";
         $sql .= " FROM {t_group_user} gu";
-        $sql .= " WHERE gu.g_id={g_id}";
+        $sql .= " WHERE gu.group_id={group_id}";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('g_id', $_group->get_id());
+        $query->set_int('group_id', $_group->get_id());
         $n = $this->db->GetOne($query->sql())
                           or die("AccountDB::get_n_users(): 1");
       }
       elseif ($_groupid == 0) {
         $sql  = "SELECT COUNT(*)";
         $sql .= " FROM      {t_user}       u";
-        $sql .= " LEFT JOIN {t_group_user} gu ON gu.u_id=u.id";
+        $sql .= " LEFT JOIN {t_group_user} gu ON gu.user_id=u.id";
         $sql .= " WHERE g.id=NULL";
         $query = &new FreechSqlQuery($sql);
         $n = $this->db->GetOne($query->sql())

@@ -51,6 +51,7 @@
         call_user_func($additem, lang("prev_symbol"));
       call_user_func($additem, lang("entry"));
       if ($this->message->get_next_message_id() > 0) {
+        $url = clone($url);
         $url->set_var('msg_id', $this->message->get_next_message_id());
         call_user_func($additem, lang("next_symbol"), $url);
       }

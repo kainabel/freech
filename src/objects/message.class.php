@@ -44,9 +44,10 @@
     function clear() {
       $this->_fields = array();
       $this->_fields[created]      = time();
+      $this->_fields[updated]      = $this->_fields[created];
       $this->_fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->_fields[active]       = TRUE;
-      $this->_fields[user_id]         = 2; // Anonymous user.
+      $this->_fields[user_id]      = 2; // Anonymous user.
       $this->_fields[allow_answer] = TRUE;
       $this->_fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
     }

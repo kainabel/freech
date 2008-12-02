@@ -70,6 +70,8 @@
   $err[ERR_USER_LASTNAME_TOO_LONG]       = lang("invalidlastname");
   $err[ERR_USER_LASTNAME_TOO_SHORT]      = lang("invalidlastname");
   $err[ERR_USER_MAIL_NOT_VALID]          = lang("invalidmail");
+  $err[ERR_USER_HOMEPAGE_NOT_VALID]      = lang("invalidhomepage");
+  $err[ERR_USER_HOMEPAGE_TOO_LONG]       = lang("invalidhomepage");
   $err[ERR_REGISTER_PASSWORDS_DIFFER]    = lang("passwordsdonotmatch");
   $err[ERR_REGISTER_USER_EXISTS]         = lang("usernamenotavailable");
   $err[ERR_LOGIN_FAILED]                 = lang("loginfailed");

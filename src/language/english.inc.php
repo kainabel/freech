@@ -128,6 +128,7 @@
   $lang[register_disagree]   = "I Do Not Agree, Cancel";
   $lang[register_mail_sent]  = "A confirmation mail has been sent.";
   $lang[invalidmail]         = "Please enter a valid email address.";
+  $lang[invalidhomepage]     = "Please enter a valid homepage URL.";
   $lang[invalidfirstname]    = "Please enter a valid first name.";
   $lang[invalidlastname]     = "Please enter a valid last name.";
 
@@ -202,8 +203,21 @@
                               . " Please enter letters, digits or spaces only.";
   $lang[usernamenotavailable] = "The entered username is not available.";
 
-  // Profile.
-  $lang[myprofile] = "My Profile";
+  // Profile and personal data.
+  $lang[myprofile]          = "My Profile";
+  $lang[account_data]       = "My Personal Data";
+  $lang[account_name]       = "Username:";
+  $lang[account_firstname]  = "Firstname:";
+  $lang[account_lastname]   = "Lastname:";
+  $lang[account_mail]       = "Email:";
+  $lang[account_publicmail] = "Display this email address publicly";
+  $lang[account_homepage]   = "Homepage:";
+  $lang[account_im]         = "Instant messenger:";
+  $lang[account_signature]  = "Signature:";
+  $lang[account_password]   = "Password:";
+  $lang[account_password2]  = "Repeat:";
+  $lang[account_save]       = "Save Personal Data";
+  $lang[account_saved]      = "Your data has been saved.";
 
   // Search.
   $lang[search_forum]    = "Search this forum";

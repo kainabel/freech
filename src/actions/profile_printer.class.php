@@ -54,16 +54,26 @@
     }
 
 
-    function show_user_data($_user) {
+    function show_user_data($_user, $_hint = '') {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('action', 'user_data_submit');
+
       // Render the template.
-      $this->smarty->assign_by_ref('user', $_user);
+      $this->smarty->assign_by_ref('user',   $_user);
+      $this->smarty->assign_by_ref('hint',   $_hint);
+      $this->smarty->assign_by_ref('action', $url->get_string());
       $this->parent->append_content($this->smarty->fetch('user_data.tmpl'));
     }
 
 
-    function show_user_options($_user) {
+    function show_user_options($_user, $_hint = '') {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('action', 'user_options_submit');
+
       // Render the template.
-      $this->smarty->assign_by_ref('user', $_user);
+      $this->smarty->assign_by_ref('user',   $_user);
+      $this->smarty->assign_by_ref('hint',   $_hint);
+      $this->smarty->assign_by_ref('action', $url->get_string());
       $this->parent->append_content($this->smarty->fetch('user_options.tmpl'));
     }
   }

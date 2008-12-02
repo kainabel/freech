@@ -159,6 +159,16 @@
     }
 
 
+    function set_signature($_signature) {
+      $this->_fields[signature] = trim($_signature);
+    }
+
+
+    function &get_signature() {
+      return $this->_fields[signature];
+    }
+
+
     function _url2link($match) {
       return '<a href="'.$match[0].'">'
            . $match[0]
@@ -167,7 +177,10 @@
 
 
     function &get_body_html($_quotecolor = "#990000") {
-      $body = wordwrap_smart($this->_fields[body]);
+      $body = $this->get_body();
+      if ($this->get_id() <= 0)
+        $body .= "\n\n" . $this->get_signature();
+      $body = wordwrap_smart($body);
       $body = string_escape($body);
       $body = preg_replace("/ /", "&nbsp;", $body);
       $body = nl2br($body);

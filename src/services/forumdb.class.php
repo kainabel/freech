@@ -225,6 +225,7 @@
      * Returns:   The id of the newly inserted entry.
      */
     function insert_entry($_forum_id, $_parentid, &$_message) {
+      $body = $_message->get_body() . "\n\n" . $_message->get_signature();
       $this->_lock_write("t_message");
       //$this->db->debug = true;
 
@@ -239,9 +240,6 @@
       $this->db->StartTrans();
 
       // Insert the new node.
-      $username = mysql_escape_string($_message->get_username());
-      $subject  = mysql_escape_string($_message->get_subject());
-      $body     = mysql_escape_string($_message->get_body());
       if ($parentrow) {
         if (!$parentrow[active])
           die("ForumDB::insert_entry(): Parent inactive.\n");
@@ -264,7 +262,7 @@
         $query->set_int('user_id',   $_message->get_user_id());
         $query->set_string('username', $_message->get_username());
         $query->set_string('subject',  $_message->get_subject());
-        $query->set_string('body',     $_message->get_body());
+        $query->set_string('body',     $body);
         $query->set_string('hash',     $_message->get_hash());
         $query->set_string('ip_hash',  $_message->get_ip_address_hash());
         $this->db->Execute($query->sql())
@@ -333,7 +331,7 @@
         $query->set_int('user_id',  $_message->get_user_id());
         $query->set_string('username', $_message->get_username());
         $query->set_string('subject',  $_message->get_subject());
-        $query->set_string('body',     $_message->get_body());
+        $query->set_string('body',     $body);
         $query->set_string('hash',     $_message->get_hash());
         $query->set_string('ip_hash',  $_message->get_ip_address_hash());
         $this->db->Execute($query->sql())

@@ -140,6 +140,7 @@
   $lang[invalidmail]         = "Bitte geben Sie eine gueltige Email-Adresse ein.";
   $lang[invalidfirstname]    = "Bitte geben Sie einen gueltigen Vornamen ein.";
   $lang[invalidlastname]     = "Bitte geben Sie einen gueltigen Nachnamen ein.";
+  $lang[invalidhomepage]     = "Bitte geben Sie eine gültige Homepage.";
   
   // Registration mail.
   $lang[registration_mail_subject] = "Deine Registrierung bei $cfg[site_title]";
@@ -220,8 +221,21 @@
   $lang[usernamenotavailable] = "Der Benutzername gehört bereits einem "
                               . " registrierten User.";
 
-  // Profile.
-  $lang[myprofile] = "Mein Profil";
+  // Profile and personal data.
+  $lang[myprofile]          = "Mein Profil";
+  $lang[account_data]       = "Meine persönlichen Daten";
+  $lang[account_name]       = "Username:";
+  $lang[account_firstname]  = "Vorname:";
+  $lang[account_lastname]   = "Nachname:";
+  $lang[account_mail]       = "Email:";
+  $lang[account_publicmail] = "Email-Adresse öffentlich anzeigen";
+  $lang[account_homepage]   = "Homepage:";
+  $lang[account_im]         = "Instant messenger:";
+  $lang[account_signature]  = "Signatur:";
+  $lang[account_password]   = "Passwort:";
+  $lang[account_password2]  = "Wiederholung:";
+  $lang[account_save]       = "Daten speichern";
+  $lang[account_saved]      = "Die Daten wurden gespeichert.";
 
   // Search.
   $lang[search_forum]    = "Suchen";

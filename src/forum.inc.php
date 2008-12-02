@@ -354,8 +354,10 @@
       $message->set_body($_POST['message']);
 
       $user = $this->get_current_user();
-      if ($user)
+      if ($user) {
         $message->set_user_id($user->get_id());
+        $message->set_signature($user->get_signature());
+      }
       elseif (!$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
@@ -395,8 +397,10 @@
       if ($user && $user->get_login() !== $message->get_username())
         die("Username does not match currently logged in user");
 
-      if ($user)
+      if ($user) {
         $message->set_user_id($user->get_id());
+        $message->set_signature($user->get_signature());
+      }
       elseif (!$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
@@ -555,13 +559,17 @@
     }
 
 
-    function &_fetch_user_data() {
-      $user = &new User($_POST['login']);
+    function &_fetch_user_data($user = '') {
+      if (!$user)
+        $user = &new User($_POST['login']);
       $user->set_password($_POST['password']);
       $user->set_firstname($_POST['acc_firstname']);
       $user->set_lastname($_POST['acc_lastname']);
       $user->set_mail($_POST['acc_mail'],
                       $_POST['acc_publicmail'] ? TRUE : FALSE);
+      $user->set_homepage($_POST['acc_homepage']);
+      $user->set_im($_POST['acc_im']);
+      $user->set_signature($_POST['acc_signature']);
       return $user;
     }
 
@@ -788,6 +796,32 @@
     }
 
 
+    function _submit_user_data() {
+      global $err;
+      $profile = &new ProfilePrinter($this);
+      $user    = $this->get_current_user();
+      if (!$user)
+        die("Not logged in.");
+
+      $this->_fetch_user_data($user);
+      $ret = $user->check_complete();
+      if ($ret < 0)
+        return $profile->show_user_data($user, $err[$ret]);
+      if ($_POST['password'] !== $_POST['password2'])
+        return $profile->show_user_data($user,
+                                        $err[ERR_REGISTER_PASSWORDS_DIFFER]);
+      if ($_POST['password'] != '')
+        $user->set_password($_POST['password']);
+
+      $accountdb = $this->_get_accountdb();
+      $ret       = $accountdb->save_user($user);
+      if ($ret < 0)
+        return $profile->show_user_data($user, $err[$ret]);
+
+      $profile->show_user_data($user, lang("account_saved"));
+    }
+
+
     function _show_user_options() {
       $user = $this->get_current_user();
       $this->_print_profile_breadcrumbs($user);
@@ -884,8 +918,16 @@
         $this->_show_user_data();           // Form for editing user data.
         break;
 
+      case 'user_data_submit':
+        $this->_submit_user_data();
+        break;
+
       case 'user_options':
         $this->_show_user_options();        // Show the user settings.
+        break;
+
+      case 'user_options_submit':
+        $this->_submit_user_options();
         break;
 
       case 'search':

@@ -803,6 +803,7 @@
       if (!$user)
         die("Not logged in.");
 
+      $this->_print_profile_breadcrumbs($user);
       $this->_fetch_user_data($user);
       $ret = $user->check_complete();
       if ($ret < 0)

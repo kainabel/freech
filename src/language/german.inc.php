@@ -140,7 +140,7 @@
   $lang[invalidmail]         = "Bitte geben Sie eine gueltige Email-Adresse ein.";
   $lang[invalidfirstname]    = "Bitte geben Sie einen gueltigen Vornamen ein.";
   $lang[invalidlastname]     = "Bitte geben Sie einen gueltigen Nachnamen ein.";
-  $lang[invalidhomepage]     = "Bitte geben Sie eine gültige Homepage.";
+  $lang[invalidhomepage]     = "Bitte geben Sie eine gültige Homepage ein.";
   
   // Registration mail.
   $lang[registration_mail_subject] = "Deine Registrierung bei $cfg[site_title]";
@@ -230,7 +230,7 @@
   $lang[account_mail]       = "Email:";
   $lang[account_publicmail] = "Email-Adresse öffentlich anzeigen";
   $lang[account_homepage]   = "Homepage:";
-  $lang[account_im]         = "Instant messenger:";
+  $lang[account_im]         = "Instant Messenger:";
   $lang[account_signature]  = "Signatur:";
   $lang[account_password]   = "Passwort:";
   $lang[account_password2]  = "Wiederholung:";

@@ -196,7 +196,7 @@ define("USER_STATUS_BLOCKED",     2);
 
     function set_homepage($_homepage) {
       $_homepage = trim($_homepage);
-      if (!preg_match("/^http/i", $_homepage))
+      if ($_homepage && !preg_match("/^http/i", $_homepage))
         $_homepage = "http://" . $_homepage;
       $this->fields[homepage] = $_homepage;
     }

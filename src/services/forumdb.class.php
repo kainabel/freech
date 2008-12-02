@@ -225,7 +225,7 @@
      * Returns:   The id of the newly inserted entry.
      */
     function insert_entry($_forum_id, $_parentid, &$_message) {
-      $body = $_message->get_body() . "\n\n" . $_message->get_signature();
+      $body = trim($_message->get_body() . "\n\n" . $_message->get_signature());
       $this->_lock_write("t_message");
       //$this->db->debug = true;
 

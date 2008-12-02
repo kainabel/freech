@@ -20,103 +20,30 @@
 ?>
 <?php
   class ThreadPrinter extends PrinterBase {
-    var $thread_state;
-    var $messages;
-    var $urls;
-    var $foldurls;
-    
-    function ThreadPrinter(&$_parent, &$_thread_state) {
-      $this->PrinterBase(&$_parent);
-      $this->thread_state = &$_thread_state;
-      $this->messages     = array();
-      $this->urls         = array();
-      $this->foldurls     = array();
-    }
-    
-    
-    function _append_row(&$_message, $_indents, $_data) {
-      if ($_GET['profile']) {
-        $action  = 'profile';
-        $actionc = 'profile_c';
-      }
-      else {
-        $action  = 'list';
-        $actionc = 'c';
-      }
-
-      // The URL to the message.
-      $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action',   'read');
-      $url->set_var('msg_id',   $_message->get_id());
-      $url->set_var('forum_id', $_message->get_forum_id());
-      if (cfg("remember_page"))
-        $url->set_var('hs', (int)$_GET[hs]);
-      
-      // The url behind the "+/-" thread_state toggle button.
-      if ($_GET['action'] == 'read') {
-        $foldurl = clone($url);
-        $foldurl->delete_var[hs];
-        $foldurl->set_var('showthread', -1);
-      }
-      else {
-        $foldurl = new URL('?', cfg("urlvars"));
-        $foldurl->set_var('action',   $action);
-        $foldurl->set_var('hs',       (int)$_GET[hs]);
-        $foldurl->set_var('forum_id', $_message->get_forum_id());
-        $foldurl->set_var($actionc,   $_message->get_id());
-      }
-      
-      // Required to enable correct formatting of the message.
-      if ($_message->get_id() == $_GET[msg_id])
-        $_message->set_selected();
-      if (!$_message->is_active()) {
-        $_message->set_subject(lang("blockedtitle"));
-        $_message->set_username('------');
-        $_message->set_body('');
-        unset($url);
-      }
-      
-      // Append everything to a list.
-      $_message->indent  = $_indents;
-      $_message->url     = $url     ? $url->get_string()     : '';
-      $_message->foldurl = $foldurl ? $foldurl->get_string() : '';
-      array_push($this->messages, $_message);
-    }
-    
-    
-    function show($_forum_id, $_msg_id, $_offset) {
+    function show($_forum_id, $_msg_id, $_offset, &$_thread_state) {
+      // Load messages from the database.
+      $loader = new ThreadLoader($this->db, $_thread_state);
       if ($_msg_id == 0)
-        $n = $this->db->foreach_child($_forum_id,
-                                      $_msg_id,
-                                      $_offset,
-                                      cfg("tpp"),
-                                      cfg("updated_threads_first"),
-                                      $this->thread_state,
-                                      array(&$this, '_append_row'),
-                                      '');
+        $loader->load_threads_from_forum($_forum_id, $_offset);
       else
-        $n = $this->db->foreach_child_in_thread($_forum_id,
-                                                $_msg_id,
-                                                $_offset,
-                                                cfg("tpp"),
-                                                $this->thread_state,
-                                                array(&$this, '_append_row'),
-                                                '');
-      
+        $loader->load_thread_from_message($_forum_id, $_msg_id, $_offset);
+
+      // Create the index bar.
       $n_threads = $this->db->get_n_threads($_forum_id);
-      $args      = array(forum_id           => $this->parent->get_forum_id(),
-                         n_messages         => $n_entries,
+      $args      = array(forum_id           => (int)$_forum_id,
                          n_threads          => $n_threads,
                          n_threads_per_page => cfg("tpp"),
                          n_offset           => $_offset,
                          n_pages_per_index  => cfg("ppi"),
-                         thread_state       => $this->thread_state);
+                         thread_state       => $_thread_state);
+      $n_rows   = count($loader->messages);
       $indexbar = &new IndexBarByThread($args);
 
+      // Render the template.
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('indexbar',        $indexbar);
-      $this->smarty->assign_by_ref('n_rows',          $n);
-      $this->smarty->assign_by_ref('messages',        $this->messages);
+      $this->smarty->assign_by_ref('n_rows',          $n_rows);
+      $this->smarty->assign_by_ref('messages',        $loader->messages);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       $this->parent->append_content($this->smarty->fetch('list_by_thread.tmpl'));

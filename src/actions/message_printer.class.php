@@ -21,8 +21,7 @@
 <?php
   class MessagePrinter extends ThreadPrinter {
     function MessagePrinter(&$_parent) {
-      $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
-      $this->ThreadPrinter(&$_parent, $state);
+      $this->ThreadPrinter(&$_parent);
     }
 
 
@@ -43,21 +42,18 @@
         $_msg->set_body(lang("blockedentry"));
       }
       
-      if ($showthread)
-        $n = $this->db->foreach_child_in_thread($_forum_id,
-                                                $_msg->get_id(),
-                                                0,
-                                                cfg("tpp"),
-                                                $this->thread_state,
-                                                array(&$this, '_append_row'),
-                                                '');
-
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('indexbar',   $indexbar);
       $this->smarty->assign_by_ref('showthread', $showthread);
-      $this->smarty->assign_by_ref('n_rows',     $n);
-      $this->smarty->assign_by_ref('message',    $_msg);
-      $this->smarty->assign_by_ref('messages',   $this->messages);
+      if ($showthread) {
+        $state  = new ThreadState(THREAD_STATE_UNFOLDED, '');
+        $loader = new ThreadLoader($this->db, $state);
+        $loader->load_thread_from_message($_forum_id, $_msg->get_id(), 0);
+        $this->smarty->assign_by_ref('n_rows',   count($loader->messages));
+        $this->smarty->assign_by_ref('messages', $loader->messages);
+      }
+
+      $this->smarty->assign_by_ref('indexbar', $indexbar);
+      $this->smarty->assign_by_ref('message',  $_msg);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       $this->parent->append_content($this->smarty->fetch('message_read.tmpl'));

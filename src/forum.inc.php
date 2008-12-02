@@ -60,6 +60,7 @@
   include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
+  include_once 'services/thread_loader.class.php';
   include_once 'services/accountdb.class.php';
   include_once 'services/visitordb.class.php';
   include_once 'services/trackable.class.php';
@@ -441,8 +442,8 @@
       $this->_print_list_breadcrumbs('');
       $thread_state = &new ThreadState($_COOKIE['fold'], $_COOKIE['c']);
       $forum_id     = $this->get_forum_id();
-      $thread       = &new ThreadPrinter($this, $thread_state);
-      $thread->show($forum_id, 0, $_GET[hs]);
+      $thread       = &new ThreadPrinter($this);
+      $thread->show($forum_id, 0, $_GET[hs], $thread_state);
       $this->_print_footer();
     }
 
@@ -774,8 +775,24 @@
       $this->_print_profile_breadcrumbs($user);
       $thread_state = &new ThreadState($_COOKIE['profile_fold'],
                                        $_COOKIE['profile_c']);
-      $profile = &new ProfilePrinter($this, $thread_state);
-      $profile->show($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show($user, $thread_state);
+    }
+
+
+    function _show_user_data() {
+      $user = $this->get_current_user();
+      $this->_print_profile_breadcrumbs($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_user_data($user);
+    }
+
+
+    function _show_user_options() {
+      $user = $this->get_current_user();
+      $this->_print_profile_breadcrumbs($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_user_options($user);
     }
 
 
@@ -861,6 +878,14 @@
 
       case 'profile':
         $this->_show_profile();             // Show a user profile.
+        break;
+
+      case 'user_data':
+        $this->_show_user_data();           // Form for editing user data.
+        break;
+
+      case 'user_options':
+        $this->_show_user_options();        // Show the user settings.
         break;
 
       case 'search':

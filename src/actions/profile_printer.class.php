@@ -19,20 +19,21 @@
   */
 ?>
 <?php
-  class ProfilePrinter extends ThreadPrinter {
-    function show($_user) {
+  class ProfilePrinter extends PrinterBase {
+    function show($_user, $_thread_state) {
       $current  = $this->parent->get_current_user();
       $showlist = $current && $_user->get_login() == $current->get_login();
 
-      if ($showlist)
-        $n = $this->db->foreach_message_from_user($_user->get_id(),
-                                                  $_GET['hs'],
-                                                  cfg("epp"),
-                                                  cfg("updated_threads_first"),
-                                                  $this->thread_state,
-                                                  array(&$this, '_append_row'),
-                                                  '');
+      // Load the threads (if they are to be displayed).
+      $this->smarty->clear_all_assign();
+      if ($showlist) {
+        $loader = new ThreadLoader($this->db, $_thread_state);
+        $loader->load_threads_from_user($_user->get_id(), (int)$_GET['hs']);
+        $this->smarty->assign_by_ref('n_rows',   count($loader->messages));
+        $this->smarty->assign_by_ref('messages', $loader->messages);
+      }
 
+      // Create the index bar.
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->db->get_n_messages($search);
       $args      = array(forum_id            => $this->parent->get_forum_id(),
@@ -40,18 +41,30 @@
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_GET['hs'],
                          n_pages_per_index   => cfg("ppi"),
-                         thread_state        => $this->thread_state);
+                         thread_state        => $_thread_state);
       $indexbar = &new IndexBarUserPostings($args);
 
-      $this->smarty->clear_all_assign();
+      // Render the template.
       $this->smarty->assign_by_ref('user',     $_user);
       $this->smarty->assign_by_ref('showlist', $showlist);
       $this->smarty->assign_by_ref('indexbar', $indexbar);
-      $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('messages', $this->messages);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       $this->parent->append_content($this->smarty->fetch('profile.tmpl'));
+    }
+
+
+    function show_user_data($_user) {
+      // Render the template.
+      $this->smarty->assign_by_ref('user', $_user);
+      $this->parent->append_content($this->smarty->fetch('user_data.tmpl'));
+    }
+
+
+    function show_user_options($_user) {
+      // Render the template.
+      $this->smarty->assign_by_ref('user', $_user);
+      $this->parent->append_content($this->smarty->fetch('user_options.tmpl'));
     }
   }
 ?>

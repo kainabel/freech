@@ -1,2 +1,7 @@
+* Cleanup POST and GET variable names.
+* Refactor the SearchPrinter.
+* Be more clear as to what variables to pass between actions and the Forum class.
+* Cleanup template names.
+* Cleanup the AccountDB and ForumDB APIs, and possibly get rid of the ThreadLoader.
 * Stop messing with the 'hs' and 'forum_id' variables in _handle_cookies().
-* Create a page for editing the user's personal data such as name and email.
+* Design a URL scheme that makes sense for URL rewriting.

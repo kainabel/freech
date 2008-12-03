@@ -21,7 +21,7 @@
     </tr>
     <tr>
       <td></td>
-      <td><input type="checkbox" name="acc_publicmail" />{lang text="account_publicmail"|escape}</td>
+      <td><input type="checkbox" name="acc_publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{lang text="account_publicmail"|escape}</td>
     </tr>
     <tr>
       <td>{lang text="account_homepage"}</td>

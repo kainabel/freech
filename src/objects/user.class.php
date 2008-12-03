@@ -40,12 +40,13 @@ define("USER_STATUS_BLOCKED",     2);
     /// Resets all values.
     function clear() {
       $this->fields = array();
-      $this->fields[login]     = "";
-      $this->fields[firstname] = "";
-      $this->fields[lastname]  = "";
-      $this->fields[status]    = USER_STATUS_UNCONFIRMED;
-      $this->fields[created]   = time();
-      $this->fields[lastlogin] = time();
+      $this->fields[login]       = "";
+      $this->fields[firstname]   = "";
+      $this->fields[lastname]    = "";
+      $this->fields[status]      = USER_STATUS_UNCONFIRMED;
+      $this->fields[public_mail] = FALSE;
+      $this->fields[created]     = time();
+      $this->fields[lastlogin]   = time();
       $this->groups = array();
     }
     
@@ -191,6 +192,11 @@ define("USER_STATUS_BLOCKED",     2);
       if (strlen($this->fields[mail]) > cfg("max_maillength"))
         return ERR_USER_MAIL_TOO_LONG;
       return 0;
+    }
+
+
+    function mail_is_public() {
+      return $this->fields[public_mail];
     }
 
 

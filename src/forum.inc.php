@@ -565,8 +565,7 @@
       $user->set_password($_POST['password']);
       $user->set_firstname($_POST['acc_firstname']);
       $user->set_lastname($_POST['acc_lastname']);
-      $user->set_mail($_POST['acc_mail'],
-                      $_POST['acc_publicmail'] ? TRUE : FALSE);
+      $user->set_mail($_POST['acc_mail'], $_POST['acc_publicmail'] == 'on');
       $user->set_homepage($_POST['acc_homepage']);
       $user->set_im($_POST['acc_im']);
       $user->set_signature($_POST['acc_signature']);

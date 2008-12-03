@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `firstname` varchar(50) collate latin1_general_ci NOT NULL,
   `lastname` varchar(50) collate latin1_general_ci NOT NULL,
   `mail` varchar(100) collate latin1_general_ci NOT NULL,
+  `public_mail` tinyint(1) NOT NULL default '0',
   `homepage` varchar(255) collate latin1_general_ci default NULL,
   `im` varchar(100) collate latin1_general_ci default NULL,
   `signature` varchar(255) collate latin1_general_ci default NULL,

@@ -232,6 +232,7 @@
   $lang[account_lastname]   = "Nachname:";
   $lang[account_mail]       = "Email:";
   $lang[account_publicmail] = "Email-Adresse öffentlich anzeigen";
+  $lang[account_hiddenmail] = "Nicht öffentlich";
   $lang[account_homepage]   = "Homepage:";
   $lang[account_im]         = "Instant Messenger:";
   $lang[account_signature]  = "Signatur:";
@@ -239,6 +240,7 @@
   $lang[account_password2]  = "Wiederholung:";
   $lang[account_save]       = "Daten speichern";
   $lang[account_saved]      = "Die Daten wurden gespeichert.";
+  $lang[account_emptyfield] = "Nicht angegeben";
 
   // Search.
   $lang[search_forum]    = "Suchen";

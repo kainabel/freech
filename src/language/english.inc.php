@@ -214,6 +214,7 @@
   $lang[account_lastname]   = "Lastname:";
   $lang[account_mail]       = "Email:";
   $lang[account_publicmail] = "Display this email address publicly";
+  $lang[account_hiddenmail] = "Not public";
   $lang[account_homepage]   = "Homepage:";
   $lang[account_im]         = "Instant messenger:";
   $lang[account_signature]  = "Signature:";
@@ -221,6 +222,7 @@
   $lang[account_password2]  = "Repeat:";
   $lang[account_save]       = "Save Personal Data";
   $lang[account_saved]      = "Your data has been saved.";
+  $lang[account_emptyfield] = "None";
 
   // Search.
   $lang[search_forum]    = "Search this forum";

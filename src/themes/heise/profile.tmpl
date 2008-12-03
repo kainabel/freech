@@ -14,20 +14,33 @@
     <td><b>{lang text="account_messages"|escape}</b></td>
     <td>{$n_messages|escape}</td>
   </tr>
-{if $user->mail_is_public()}
   <tr>
     <td><b>{lang text="account_mail"|escape}</b></td>
+{if $user->mail_is_public()}
     <td>{$user->get_mail()|escape}</td>
-  </tr>
+{else}
+    <td><i>{lang text="account_hiddenmail"|escape}</i></td>
 {/if}
+  </tr>
   <tr>
     <td><b>{lang text="account_homepage"}</b></td>
     <td>
-      <a href="{$user->get_homepage()|escape}">{$user->get_homepage()|escape}</a></td>
+{if $user->get_homepage()}
+      <a href="{$user->get_homepage()|escape}">{$user->get_homepage()|escape}</a>
+{else}
+      <i>{lang text="account_emptyfield"}</i>
+{/if}
+    </td>
   </tr>
   <tr>
     <td><b>{lang text="account_im"}</b></td>
-    <td>{$user->get_im()|escape}</td>
+    <td>
+{if $user->get_im()}
+      {$user->get_im()|escape}
+{else}
+      <i>{lang text="account_emptyfield"}</i>
+{/if}
+    </td>
   </tr>
 </table>
 </p>

@@ -195,6 +195,14 @@
     }
 
 
+    function &get_user_profile_url() {
+      $profile_url = new URL('?', cfg("urlvars"));
+      $profile_url->set_var('action', 'profile');
+      $profile_url->set_var('login', $this->get_username());
+      return $profile_url->get_string();
+    }
+
+
     function &get_hash() {
       return md5($this->get_username()
                . $this->get_subject()

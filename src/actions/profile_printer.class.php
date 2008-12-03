@@ -20,7 +20,19 @@
 ?>
 <?php
   class ProfilePrinter extends PrinterBase {
-    function show($_user, $_thread_state) {
+    function show($_user, $_hint = '') {
+      $search    = array('userid' => $_user->get_id());
+      $n_entries = $this->db->get_n_messages($search);
+
+      // Render the template.
+      $this->smarty->assign_by_ref('user',       $_user);
+      $this->smarty->assign_by_ref('hint',       $_hint);
+      $this->smarty->assign_by_ref('n_messages', $n_entries);
+      $this->parent->append_content($this->smarty->fetch('profile.tmpl'));
+    }
+
+
+    function show_user_postings($_user, $_thread_state) {
       $current  = $this->parent->get_current_user();
       $showlist = $current && $_user->get_login() == $current->get_login();
 
@@ -50,7 +62,7 @@
       $this->smarty->assign_by_ref('indexbar', $indexbar);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('profile.tmpl'));
+      $this->parent->append_content($this->smarty->fetch('list_by_thread.tmpl'));
     }
 
 

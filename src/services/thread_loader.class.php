@@ -107,9 +107,8 @@
       }
 
       // Append everything to a list.
-      $_message->indent  = $_indents;
-      $_message->url     = $url     ? $url->get_string()     : '';
-      $_message->foldurl = $foldurl ? $foldurl->get_string() : '';
+      $_message->indent = $_indents;
+      $_message->url    = $url ? $url->get_string() : '';
       array_push($this->messages, $_message);
     }
   }

@@ -773,6 +773,17 @@
 
 
     function _show_profile() {
+      $accountdb = $this->_get_accountdb();
+      $user      = $accountdb->get_user_from_login($_GET['login']);
+      if (!$user)
+        die("No such user.");
+      $this->_print_profile_breadcrumbs($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show($user);
+    }
+
+
+    function _show_user_postings() {
       if ($_GET['login']) {
         $accountdb = $this->_get_accountdb();
         $user      = $accountdb->get_user_from_login($_GET['login']);
@@ -783,7 +794,7 @@
       $thread_state = &new ThreadState($_COOKIE['profile_fold'],
                                        $_COOKIE['profile_c']);
       $profile = &new ProfilePrinter($this);
-      $profile->show($user, $thread_state);
+      $profile->show_user_postings($user, $thread_state);
     }
 
 
@@ -912,6 +923,10 @@
 
       case 'profile':
         $this->_show_profile();             // Show a user profile.
+        break;
+
+      case 'user_postings':
+        $this->_show_user_postings();       // Show the postings of one user.
         break;
 
       case 'user_data':

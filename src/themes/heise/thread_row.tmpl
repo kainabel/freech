@@ -63,10 +63,12 @@
   {assign var="attr" value=""}
 {/if}
   <td align='left'>
-    &nbsp;<font size='-1' {$attr}>{$message->get_username()|escape}</font>
 {if $message->get_user_type() != "registered"}
+    &nbsp;<font size='-1'{$attr}>{$message->get_username()|escape}</font>
     <img src="themes/heise/img/{$message->get_user_type()|escape}_user.png"
          title="{lang text=$message->get_user_type()|escape}" />
+{else}
+    &nbsp;<a href="{$message->get_user_profile_url()|escape}"><font size='-1'{$attr}>{$message->get_username()|escape}</font></a>
 {/if}
   </td>
 {if $message->is_selected()}

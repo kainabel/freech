@@ -9,7 +9,11 @@
 {/if}
   <br />
   <b>{$message->get_subject()|escape}</b><br />
+{if $message->get_user_type() == "anonymous"}
   <i>{$message->get_username()|escape}</i>
+{else}
+  <a href="{$message->get_user_profile_url()|escape}">{$message->get_username()|escape}</a>
+{/if}
   <img src="themes/heise/img/{$message->get_user_type()|escape}_user.png"
        title="{lang text=$message->get_user_type()|escape}" />
 {if $message->get_user_type() == "anonymous"}

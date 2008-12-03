@@ -1,5 +1,33 @@
-{if $showlist}
-{include file="indexbar.tmpl"}
-{include file="thread.tmpl"}
-{include file="indexbar.tmpl"}
+<p>
+<h2>{lang text="profile" name=$user->get_login()|escape}</h2>
+{if $hint}<p style="color:red;">{$hint}</p>{/if}
+<table>
+  <tr>
+    <td><b>{lang text="account_name"|escape}</b></td>
+    <td>{$user->get_login()|escape}</td>
+  </tr>
+  <tr>
+    <td><b>{lang text="account_created"|escape}</b></td>
+    <td>{$user->get_created_time()|escape}</td>
+  </tr>
+  <tr>
+    <td><b>{lang text="account_messages"|escape}</b></td>
+    <td>{$n_messages|escape}</td>
+  </tr>
+{if $user->mail_is_public()}
+  <tr>
+    <td><b>{lang text="account_mail"|escape}</b></td>
+    <td>{$user->get_mail()|escape}</td>
+  </tr>
 {/if}
+  <tr>
+    <td><b>{lang text="account_homepage"}</b></td>
+    <td>
+      <a href="{$user->get_homepage()|escape}">{$user->get_homepage()|escape}</a></td>
+  </tr>
+  <tr>
+    <td><b>{lang text="account_im"}</b></td>
+    <td>{$user->get_im()|escape}</td>
+  </tr>
+</table>
+</p>

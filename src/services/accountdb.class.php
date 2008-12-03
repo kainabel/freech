@@ -76,7 +76,9 @@
         die("AccountDB::get_user(): Invalid id.");
       if (isset($this->users[$_id]))
         return $this->users[$_id];
-      $sql   = "SELECT *";
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE id={id}";
       $query = &new FreechSqlQuery($sql);
@@ -96,7 +98,9 @@
     function &get_user_from_login($_login) {
       if (!$_login)
         die("AccountDB::get_user_from_login(): Invalid login name.");
-      $sql   = "SELECT *";
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE login={login}";
       $query = &new FreechSqlQuery($sql);
@@ -119,7 +123,9 @@
     function &get_similiar_users($_user, $_limit = -1, $_offset = -1) {
       if (!$_user)
         die("AccountDB::get_similiar_users(): Invalid user.");
-      $sql   = "SELECT *";
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE soundexlogin={soundex}";
       $query = &new FreechSqlQuery($sql);
@@ -145,7 +151,9 @@
     function &get_user_from_mail($_mail) {
       if (!$_mail)
         die("AccountDB::get_user_from_mail(): Invalid email address.");
-      $sql   = "SELECT *";
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE mail={mail}";
       $query = &new FreechSqlQuery($sql);
@@ -165,7 +173,9 @@
      * $_limit: The maximum number of results.
      */
     function &get_newest_users($_limit) {
-      $sql   = "SELECT *";
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " ORDER BY created DESC";
       $query = &new FreechSqlQuery($sql);

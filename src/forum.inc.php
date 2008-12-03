@@ -519,7 +519,7 @@
       if (cfg("disable_search"))
         die("Search is currently disabled.");
       $printer = &new SearchPrinter($this);
-      $printer->show();
+      $printer->show_messages();
     }
 
 
@@ -531,9 +531,14 @@
         $forum_id = $this->get_forum_id();
         $query    = "forumid:$forum_id AND (".$_GET['q'].")";
       }
-      $search  = &new SearchQuery($query);
       $printer = &new SearchPrinter($this);
-      $printer->show($search, $_GET['hs']);
+      if ($_GET['user_search']) {
+        $printer->show_users($search, $_GET['hs']);
+      }
+      else {
+        $search  = &new SearchQuery($query);
+        $printer->show_messages($search, $_GET['hs']);
+      }
     }
 
 
@@ -576,7 +581,7 @@
     function _username_available(&$_username) {
       $accountdb = $this->_get_accountdb();
       $user      = new User($_username);
-      if (count($accountdb->get_similiar_users($user)) == 0)
+      if (count($accountdb->get_similar_users($user)) == 0)
         return TRUE;
       return FALSE;
     }

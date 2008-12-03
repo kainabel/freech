@@ -20,15 +20,15 @@
 ?>
 <?php
   class SearchPrinter extends PrinterBase {
-    var $messages;
+    var $results;
 
     function SearchPrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
-      $this->messages = array();
+      $this->results = array();
     }
 
 
-    function _append_row(&$_message, $_data) {
+    function _append_message(&$_message, $_data) {
       // The URL to the message.
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action',   'read');
@@ -48,11 +48,11 @@
 
       // Append everything to a list.
       $_message->url = $url ? $url->get_string() : '';
-      array_push($this->messages, $_message);
+      array_push($this->results, $_message);
     }
 
 
-    function show($_query = NULL, $_offset = 0) {
+    function show_messages($_query = NULL, $_offset = 0) {
       $this->smarty->clear_all_assign();
       $this->smarty->assign('forum_id', (int)$_GET['forum_id']);
       $this->smarty->assign_by_ref('query', $_GET['q']);
@@ -62,7 +62,7 @@
         return;
       }
 
-      $func  = array(&$this, '_append_row');
+      $func  = array(&$this, '_append_message');
       $total = $this->db->get_n_messages_from_query($_query);
       $rows  = $this->db->foreach_message_from_query($_query,
                                                      (int)$_offset,
@@ -78,7 +78,39 @@
       $this->smarty->assign_by_ref('indexbar',  $indexbar);
       $this->smarty->assign_by_ref('n_results', $total);
       $this->smarty->assign_by_ref('n_rows',    $rows);
-      $this->smarty->assign_by_ref('messages',  $this->messages);
+      $this->smarty->assign_by_ref('messages',  $this->results);
+      $this->parent->append_content($this->smarty->fetch('search.tmpl'));
+    }
+
+
+    function _append_user(&$_user, $_data) {
+      array_push($this->results, $_user);
+    }
+
+
+    function show_users($_query = NULL, $_offset = 0) {
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign('forum_id', (int)$_GET['forum_id']);
+      $this->smarty->assign_by_ref('query', $_GET['q']);
+
+      $search    = array('login' => '%'.trim($_GET['q']).'%');
+      $accountdb = $this->parent->_get_accountdb();
+      $func      = array(&$this, '_append_user');
+      $n_rows    = $accountdb->foreach_user_from_query($search,
+                                                       50,
+                                                       (int)$_offset,
+                                                       $func,
+                                                       '');
+
+      if ($n_rows == 0) {
+        $user          = new User($_GET['q']);
+        $this->results = $accountdb->get_similar_users($user, 50);
+        $n_rows        = count($this->results);
+      }
+
+      $this->smarty->assign_by_ref('n_results', $n_rows);
+      $this->smarty->assign_by_ref('n_rows',    $n_rows);
+      $this->smarty->assign_by_ref('users',     $this->results);
       $this->parent->append_content($this->smarty->fetch('search.tmpl'));
     }
   }

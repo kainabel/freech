@@ -26,7 +26,7 @@ if ($_GET['name2']) {
   die("Similarity: ".$user->get_lexical_similarity($needle)."<br>");
 }
 
-$users = $accountdb->get_similiar_users($needle);
+$users = $accountdb->get_similar_users($needle);
 foreach ($users as $user)
   print_user($user, $needle);
 echo "DONE.";

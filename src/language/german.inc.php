@@ -243,12 +243,13 @@
   $lang[account_emptyfield] = "Nicht angegeben";
 
   // Search.
-  $lang[search_forum]    = "Suchen";
-  $lang[search_title]    = "Forensuche";
-  $lang[search_start]    = "Suche starten";
-  $lang[search_results]  = "[RESULTS] Suchergebnisse gefunden.";
-  $lang[search_examples] = "Beispiele:";
-  $lang[search_hint]     = "äpfel AND \"birnen\"<br/>"
-                         . "NOT user:\"der da\" AND (text:bananen OR subject:frucht)<br/>"
-                         . "ban?nen AND NOT subject:wildcard*matching";
+  $lang[search_forum]      = "Suchen";
+  $lang[search_title]      = "Forensuche";
+  $lang[msg_search_start]  = "Beiträge suchen";
+  $lang[user_search_start] = "Benutzer suchen";
+  $lang[search_results]    = "[RESULTS] Suchergebnisse gefunden.";
+  $lang[search_examples]   = "Beispiele:";
+  $lang[search_hint]       = "äpfel AND \"birnen\"<br/>"
+                           . "NOT user:\"der da\" AND (text:bananen OR subject:frucht)<br/>"
+                           . "ban?nen AND NOT subject:wildcard*matching";
 ?>

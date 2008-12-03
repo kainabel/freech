@@ -11,7 +11,8 @@
 <input type="hidden" name="action"   value="search">
 <input type="hidden" name="forum_id" value="{$forum_id}">
 <input type="text" name="q" size="50" value="{$query|escape}">
-<input type="submit" value="{lang text="search_start"|escape}"> 
+<input type="submit" value="{lang text="msg_search_start"|escape}"> 
+<input type="submit" name="user_search" value="{lang text="user_search_start"|escape}"> 
 </form>
 
 {if $messages}
@@ -20,6 +21,12 @@
 {include file="indexbar.tmpl"}
 {include file="latest.tmpl"}
 {include file="indexbar.tmpl"}
+{elseif $users}
+<p>
+{lang text="search_results" results=$n_results}<br/><br/>
+{foreach item=user from=$users}
+  <a href="{$user->get_profile_url()|escape}">{$user->get_login()|escape}</a><br/>
+{/foreach}
 {else}
 <table>
   <tr>

@@ -120,18 +120,19 @@
      * login name of the given user.
      * $_user: The user for which to find similar ones.
      */
-    function &get_similiar_users($_user, $_limit = -1, $_offset = -1) {
+    function get_similar_users($_user, $_limit = -1, $_offset = -1) {
       if (!$_user)
-        die("AccountDB::get_similiar_users(): Invalid user.");
+        die("AccountDB::get_similar_users(): Invalid user.");
       $sql   = "SELECT *,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE soundexlogin={soundex}";
+      $sql  .= " ORDER BY login";
       $query = &new FreechSqlQuery($sql);
       $query->set_string('soundex', $_user->get_soundexed_login());
       $res = $this->db->SelectLimit($query->sql(), -1, $_offset)
-                             or die("AccountDB::get_similiar_users(): Select");
+                             or die("AccountDB::get_similar_users(): Select");
       $users = array();
       while ($row = &$res->FetchRow() && sizeof($users) != $_limit) {
         $user = &new User;
@@ -141,6 +142,40 @@
           array_push($users, $user);
       }
       return $users;
+    }
+
+
+    function foreach_user_from_query($_search,
+                                     $_limit,
+                                     $_offset,
+                                     $_func,
+                                     $_data) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+
+      if (!$_search)
+        die("AccountDB::foreach_user_from_query(): Invalid query.");
+      $query = &new FreechSqlQuery();
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
+      $sql  .= " FROM {t_user}";
+      $sql  .= " WHERE status=0 AND (0";
+      foreach ($_search as $key => $value) {
+        $sql .= " OR $key LIKE {".$key.'}';
+        $query->set_var($key, $value);
+      }
+      $sql .= ')';
+      $sql .= " ORDER BY login";
+      $query->set_sql($sql);
+      $res     = $this->db->SelectLimit($query->sql(), $limit, $offset);
+      $numrows = $res->RecordCount();
+      while ($row = $res->FetchRow()) {
+        $user = &new User;
+        $user->set_from_db($row);
+        call_user_func($_func, $user, $_data);
+      }
+      return $numrows;
     }
 
 

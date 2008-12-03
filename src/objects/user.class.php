@@ -279,6 +279,14 @@ define("USER_STATUS_BLOCKED",     2);
     }
     
     
+    function &get_profile_url() {
+      $profile_url = new URL('?', cfg("urlvars"));
+      $profile_url->set_var('action', 'profile');
+      $profile_url->set_var('login', $this->get_login());
+      return $profile_url->get_string();
+    }
+
+
     function add_to_group(&$_group) {
       $this->groups[$_group->get_name()] =& $_group;
     }

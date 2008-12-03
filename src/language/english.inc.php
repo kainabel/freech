@@ -225,12 +225,13 @@
   $lang[account_emptyfield] = "None";
 
   // Search.
-  $lang[search_forum]    = "Search this forum";
-  $lang[search_title]    = "Search";
-  $lang[search_start]    = "Forum Search";
-  $lang[search_results]  = "[RESULTS] results found.";
-  $lang[search_examples] = "Examples:";
-  $lang[search_hint]     = "apples AND \"peaches\"<br/>"
-                         . "NOT user:\"that guy\" AND (text:banana OR subject:fruit)<br/>"
-                         . "ban?na AND NOT subject:wildcard*matching";
+  $lang[search_forum]      = "Search this forum";
+  $lang[search_title]      = "Search";
+  $lang[msg_search_start]  = "Find Postings";
+  $lang[user_search_start] = "Find Users";
+  $lang[search_results]    = "[RESULTS] results found.";
+  $lang[search_examples]   = "Examples:";
+  $lang[search_hint]       = "apples AND \"peaches\"<br/>"
+                           . "NOT user:\"that guy\" AND (text:banana OR subject:fruit)<br/>"
+                           . "ban?na AND NOT subject:wildcard*matching";
 ?>

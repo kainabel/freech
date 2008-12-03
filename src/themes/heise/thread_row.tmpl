@@ -30,9 +30,9 @@
 {if $message->get_relation() == 1}
      <img src='themes/heise/img/o.png' width=9 height=21 alt='' />
 {elseif $message->get_relation() == 2}
-     <a href='{$message->foldurl|escape}'><img src='themes/heise/img/m.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$message->get_fold_url()|escape}'><img src='themes/heise/img/m.png' border=0 width=9 height=21 alt='0' /></a>
 {elseif $message->get_relation() == 3}
-     <a href='{$message->foldurl|escape}'><img src='themes/heise/img/p.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$message->get_fold_url()|escape}'><img src='themes/heise/img/p.png' border=0 width=9 height=21 alt='0' /></a>
 {elseif $message->get_relation() == 4 || $message->get_relation() == 5}
      <img src='themes/heise/img/e.png' width=20 height=23 alt='`-' />
 {elseif $message->get_relation() == 6 || $message->get_relation() == 7}
@@ -43,12 +43,12 @@
 {if $message->get_priority() > 0}
      &nbsp;<img src='themes/heise/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
-{if $message->url == ""}
-     &nbsp;<font size='-1'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>
-{elseif $message->is_selected()}
+{if $message->is_selected()}
      &nbsp;<font size='-1' color='green'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>
+{elseif !$message->is_active()}
+     &nbsp;<font size='-1'>{$message->get_subject()|truncate:$max_titlelength|escape}</font>
 {else}
-     <font size='-1'>&nbsp;<a href='{$message->url|escape}'>{$message->get_subject()|truncate:$max_titlelength|escape}</a></font>
+     <font size='-1'>&nbsp;<a href='{$message->get_url()|escape}'>{$message->get_subject()|truncate:$max_titlelength|escape}</a></font>
 {/if}
 {if $message->get_relation() == 3}<font size='-1'>&nbsp;({$message->get_n_children()})</font>{/if}
      </td>

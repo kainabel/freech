@@ -5,10 +5,10 @@
 {if $message->get_priority() > 0}
   &nbsp;<img src='themes/heise/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
-{if $message->url == ""}
-  <font size='-1'>&nbsp;{$message->get_subject()|escape}</font>
+{if $message->is_active()}
+  <font size='-1'>&nbsp;<a href='{$message->get_url()|escape}'>{$message->get_subject()|escape}</a></font>
 {else}
-  <font size='-1'>&nbsp;<a href='{$message->url|escape}'>{$message->get_subject()|escape}</a></font>
+  <font size='-1'>&nbsp;{$message->get_subject()|escape}</font>
 {/if}
   </td>
 {/strip}

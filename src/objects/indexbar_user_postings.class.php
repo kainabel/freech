@@ -59,7 +59,7 @@
 
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action',   'profile');
+      $url->set_var('action',   'user_postings');
       $url->set_var('hs',       0);
       $url->set_var('forum_id', $this->forum_id);
       if ($n_indexoffset > 1) {
@@ -122,7 +122,7 @@
       call_user_func($additem);
       $url->set_var('hs', (int)$_GET[hs]);
       if ($fold != THREAD_STATE_UNFOLDED || $swap != '') {
-        $url->set_var('profile_fold', THREAD_STATE_UNFOLDED);
+        $url->set_var('user_postings_fold', THREAD_STATE_UNFOLDED);
         call_user_func($additem, lang("unfoldall"), $url);
       }
       else
@@ -132,7 +132,7 @@
       $url = clone($url);
       call_user_func($additem);
       if ($fold != THREAD_STATE_FOLDED || $swap != '') {
-        $url->set_var('profile_fold', THREAD_STATE_FOLDED);
+        $url->set_var('user_postings_fold', THREAD_STATE_FOLDED);
         call_user_func($additem, lang("foldall"), $url);
       }
       else

@@ -198,7 +198,11 @@
 
 
     function get_action() {
-      return $_GET['action'] ? $_GET['action'] : $_POST['action'];
+      if ($_GET['action'])
+        return $_GET['action'];
+      if ($_POST['action'])
+        return $_POST['action'];
+      return 'list';
     }
 
 
@@ -222,18 +226,19 @@
       if ($_GET[hs])
         $_GET[hs] = (int)$_GET[hs];
 
-      $thread_state         = &new ThreadState($_COOKIE['fold'],
-                                               $_COOKIE['c']);
-      $profile_thread_state = &new ThreadState($_COOKIE['profile_fold'],
-                                               $_COOKIE['profile_c']);
+      $thread_state        = &new ThreadState($_COOKIE['fold'],
+                                              $_COOKIE['c']);
+      $user_postings_state = &new ThreadState($_COOKIE['user_postings_fold'],
+                                              $_COOKIE['user_postings_c']);
       if ($_GET['c']) {
         $thread_state->swap($_GET['c']);
         $this->_set_cookie('c', $thread_state->get_string());
       }
 
-      if ($_GET['profile_c']) {
-        $profile_thread_state->swap($_GET['profile_c']);
-        $this->_set_cookie('profile_c', $profile_thread_state->get_string());
+      if ($_GET['user_postings_c']) {
+        $user_postings_state->swap($_GET['user_postings_c']);
+        $this->_set_cookie('user_postings_c',
+                           $user_postings_state->get_string());
       }
 
       if ($_GET['changeview'] === 't')
@@ -254,12 +259,12 @@
         $this->_set_cookie('c', '');
       }
 
-      if ($_GET['profile_fold'] === '1') {
-        $this->_set_cookie('profile_fold', '1');
-        $this->_set_cookie('profile_c', '');
-      } elseif ($_GET['profile_fold'] === '2') {
-        $this->_set_cookie('profile_fold', '2');
-        $this->_set_cookie('profile_c', '');
+      if ($_GET['user_postings_fold'] === '1') {
+        $this->_set_cookie('user_postings_fold', '1');
+        $this->_set_cookie('user_postings_c', '');
+      } elseif ($_GET['user_postings_fold'] === '2') {
+        $this->_set_cookie('user_postings_fold', '2');
+        $this->_set_cookie('user_postings_c', '');
       }
     }
 
@@ -796,8 +801,8 @@
       else
         $user = $this->get_current_user();
       $this->_print_profile_breadcrumbs($user);
-      $thread_state = &new ThreadState($_COOKIE['profile_fold'],
-                                       $_COOKIE['profile_c']);
+      $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
+                                       $_COOKIE['user_postings_c']);
       $profile = &new ProfilePrinter($this);
       $profile->show_user_postings($user, $thread_state);
     }

@@ -56,19 +56,10 @@
       if (!$_message->is_active())
         return;
       
-      // The URL to the message.
-      $url = new URL($this->url . "?", cfg("urlvars"));
-      $user>set_var('action',   'read');
-      $url->set_var('msg_id',   $_message->get_id());
-      $url->set_var('forum_id', $_message->get_forum_id());
-      if (cfg("remember_page"))
-        $url->set_var('hs', (int)$_GET[hs]);
-      
       // Required to enable correct formatting of the message.
       $_message->set_body(preg_replace("/&nbsp;/", " ", $_message->get_body()));
       
       // Append everything to a list.
-      $_message->url = $url ? $url->get_string()     : '';
       array_push($this->messages, $_message);
     }
     

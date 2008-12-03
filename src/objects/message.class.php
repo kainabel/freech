@@ -195,6 +195,49 @@
     }
 
 
+    function &get_url_obj() {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('action',   'read');
+      $url->set_var('msg_id',   $this->get_id());
+      $url->set_var('forum_id', $this->get_forum_id());
+      if (cfg("remember_page"))
+        $url->set_var('hs', (int)$_GET[hs]);
+      return $url;
+    }
+
+
+    function &get_url() {
+      return $this->get_url_obj()->get_string();
+    }
+
+
+    // The url behind the "+/-" toggle button.
+    function &get_fold_url() {
+      $action = $_GET['action'] ? $_GET['action'] : 'list';
+      if ($action == 'read') {
+        $url = $this->get_url_obj();
+        $url->set_var('showthread', -1);
+      }
+      elseif ($action == 'user_postings') {
+        $url = new URL('?', cfg("urlvars"));
+        $url->set_var('action', 'user_postings');
+        if ($_GET['hs'])
+          $url->set_var('hs', (int)$_GET[hs]);
+        $url->set_var('forum_id',        $this->get_forum_id());
+        $url->set_var('user_postings_c', $this->get_id());
+      }
+      else {
+        $url = new URL('?', cfg("urlvars"));
+        $url->set_var('action', 'list');
+        if ($_GET['hs'])
+          $url->set_var('hs', (int)$_GET[hs]);
+        $url->set_var('forum_id', $this->get_forum_id());
+        $url->set_var('c',        $this->get_id());
+      }
+      return $url->get_string();
+    }
+
+
     function &get_user_profile_url() {
       $profile_url = new URL('?', cfg("urlvars"));
       $profile_url->set_var('action', 'profile');

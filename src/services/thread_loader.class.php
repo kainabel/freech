@@ -65,37 +65,6 @@
 
 
     function _append_row(&$_message, $_indents, $_data) {
-      if ($_GET['profile']) {
-        $action  = 'profile';
-        $actionc = 'profile_c';
-      }
-      else {
-        $action  = 'list';
-        $actionc = 'c';
-      }
-
-      // The URL to the message.
-      $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action',   'read');
-      $url->set_var('msg_id',   $_message->get_id());
-      $url->set_var('forum_id', $_message->get_forum_id());
-      if (cfg("remember_page"))
-        $url->set_var('hs', (int)$_GET[hs]);
-
-      // The url behind the "+/-" thread_state toggle button.
-      if ($_GET['action'] == 'read') {
-        $foldurl = clone($url);
-        $foldurl->delete_var[hs];
-        $foldurl->set_var('showthread', -1);
-      }
-      else {
-        $foldurl = new URL('?', cfg("urlvars"));
-        $foldurl->set_var('action',   $action);
-        $foldurl->set_var('hs',       (int)$_GET[hs]);
-        $foldurl->set_var('forum_id', $_message->get_forum_id());
-        $foldurl->set_var($actionc,   $_message->get_id());
-      }
-
       // Required to enable correct formatting of the message.
       if ($_message->get_id() == $_GET[msg_id])
         $_message->set_selected();
@@ -103,12 +72,10 @@
         $_message->set_subject(lang("blockedtitle"));
         $_message->set_username('------');
         $_message->set_body('');
-        unset($url);
       }
 
       // Append everything to a list.
       $_message->indent = $_indents;
-      $_message->url    = $url ? $url->get_string() : '';
       array_push($this->messages, $_message);
     }
   }

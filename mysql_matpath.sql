@@ -125,8 +125,8 @@ CREATE TABLE IF NOT EXISTS `freech_permission` (
 
 CREATE TABLE IF NOT EXISTS `freech_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `login` varchar(50) collate latin1_general_ci NOT NULL,
-  `soundexlogin` varchar(5) collate latin1_general_ci default NULL,
+  `username` varchar(50) collate latin1_general_ci NOT NULL,
+  `soundexusername` varchar(5) collate latin1_general_ci default NULL,
   `password` varchar(40) collate latin1_general_ci NOT NULL,
   `firstname` varchar(50) collate latin1_general_ci NOT NULL,
   `lastname` varchar(50) collate latin1_general_ci NOT NULL,
@@ -140,9 +140,9 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   `lastlogin` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `login` (`login`),
+  UNIQUE KEY `username` (`username`),
   UNIQUE KEY `mail` (`mail`),
-  KEY `soundexlogin` (`soundexlogin`)
+  KEY `soundexusername` (`soundexusername`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -193,9 +193,9 @@ ALTER TABLE `freech_message`
   ADD CONSTRAINT `0_778` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `0_779` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
-INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
+INSERT INTO freech_user (id, username, password, firstname, lastname, mail, created)
                   VALUES (1, 'root', '', 'root', 'root', 'root', NULL);
-INSERT INTO freech_user (id, login, password, firstname, lastname, mail, created)
+INSERT INTO freech_user (id, username, password, firstname, lastname, mail, created)
                   VALUES (2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
 INSERT INTO freech_forum (name, description, owner_id, created)
                    VALUES ('Forum', 'Default forum', 1, NULL);

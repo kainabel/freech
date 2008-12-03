@@ -93,18 +93,18 @@
     
     /**
      * Returns the user with the given name.
-     * $_login: The login name of the user.
+     * $_username: The username of the user.
      */
-    function &get_user_from_login($_login) {
-      if (!$_login)
-        die("AccountDB::get_user_from_login(): Invalid login name.");
+    function &get_user_from_name($_username) {
+      if (!$_username)
+        die("AccountDB::get_user_from_name(): Invalid username.");
       $sql   = "SELECT *,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE login={login}";
+      $sql  .= " WHERE username={username}";
       $query = &new FreechSqlQuery($sql);
-      $query->set_string('login', $_login);
+      $query->set_string('username', $_username);
       $row   = $this->db->GetRow($query->sql());
       if (!$row)
         return;
@@ -116,8 +116,8 @@
 
 
     /**
-     * Returns a list of all users whose login name is similar to the 
-     * login name of the given user.
+     * Returns a list of all users whose username is similar to the 
+     * username of the given user.
      * $_user: The user for which to find similar ones.
      */
     function get_similar_users($_user, $_limit = -1, $_offset = -1) {
@@ -127,10 +127,10 @@
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE soundexlogin={soundex}";
-      $sql  .= " ORDER BY login";
+      $sql  .= " WHERE soundexusername={soundex}";
+      $sql  .= " ORDER BY username";
       $query = &new FreechSqlQuery($sql);
-      $query->set_string('soundex', $_user->get_soundexed_login());
+      $query->set_string('soundex', $_user->get_soundexed_username());
       $res = $this->db->SelectLimit($query->sql(), -1, $_offset)
                              or die("AccountDB::get_similar_users(): Select");
       $users = array();
@@ -166,7 +166,7 @@
         $query->set_var($key, $value);
       }
       $sql .= ')';
-      $sql .= " ORDER BY login";
+      $sql .= " ORDER BY username";
       $query->set_sql($sql);
       $res     = $this->db->SelectLimit($query->sql(), $limit, $offset);
       $numrows = $res->RecordCount();
@@ -241,8 +241,8 @@
       $query->set_int   ('status',      $_user->get_status());
       $query->set_int   ('lastlogin',   $_user->get_last_login_unixtime());
       $query->set_bool  ('public_mail', $_user->mail_is_public());
-      $query->set_string('login',       $_user->get_login());
-      $query->set_string('soundex',     $_user->get_soundexed_login());
+      $query->set_string('username',    $_user->get_username());
+      $query->set_string('soundex',     $_user->get_soundexed_username());
       $query->set_string('password',    $_user->get_password_hash());
       $query->set_string('firstname',   $_user->get_firstname());
       $query->set_string('lastname',    $_user->get_lastname());
@@ -253,12 +253,13 @@
       if ($_user->get_id() < 1) {
         $sql   = "INSERT INTO {t_user}";
         $sql  .= " (";
-        $sql  .= "  login, soundexlogin, password, firstname, lastname,";
+        $sql  .= "  username, soundexusername, password, firstname, lastname,";
         $sql  .= "  mail, public_mail, homepage, im, signature, status,";
         $sql  .= " created, lastlogin";
         $sql  .= " )";
         $sql  .= " VALUES (";
-        $sql  .= "  {login}, {soundex}, {password}, {firstname}, {lastname},";
+        $sql  .= "  {username}, {soundex}, {password},";
+        $sql  .= "  {firstname}, {lastname},";
         $sql  .= "  {mail}, {public_mail}, {homepage}, {im}, {signature},";
         $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
         $sql  .= ")";
@@ -272,7 +273,8 @@
       }
       
       $sql   = "UPDATE {t_user} SET";
-      $sql  .= " login={login}, soundexlogin={soundex}, password={password},";
+      $sql  .= " username={username}, soundexusername={soundex},";
+      $sql  .= " password={password},";
       $sql  .= " firstname={firstname}, lastname={lastname},";
       $sql  .= " mail={mail}, public_mail={public_mail}, homepage={homepage},";
       $sql  .= " im={im}, signature={signature}, status={status},";

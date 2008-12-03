@@ -143,7 +143,7 @@
 
       $this->current_user = FALSE;
       $this->login_error  = 0;
-      if ($this->get_action() == 'do_login' && $_POST['login'])
+      if ($this->get_action() == 'do_login' && $_POST['username'])
         $this->login_error = $this->_try_login();
       if ($this->get_action() == 'do_logout') {
         session_unset();
@@ -162,7 +162,7 @@
 
     function _try_login() {
       $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_login($_POST['login']);
+      $user      = $accountdb->get_user_from_name($_POST['username']);
       if (!$user)
         return ERR_LOGIN_FAILED;
       if ($user->get_status() == USER_STATUS_UNCONFIRMED)
@@ -177,7 +177,7 @@
       $ret = $accountdb->save_user($user);
       if ($ret < 0)
         die("Failed to log in user, return code $ret");
-      $_SESSION['login'] = $user->get_login();
+      $_SESSION['username'] = $user->get_username();
       unset($_GET['action']);
       unset($_POST['action']);
       return 0;
@@ -187,12 +187,13 @@
     function get_current_user() {
       if (session_id() === '')
         return FALSE;
-      if (!$_SESSION['login'])
+      if (!$_SESSION['username'])
         return FALSE;
       if ($this->current_user)
         return $this->current_user;
       $accountdb          = $this->_get_accountdb();
-      $this->current_user = $accountdb->get_user_from_login($_SESSION['login']);
+      $sessionuser        = $_SESSION['username'];
+      $this->current_user = $accountdb->get_user_from_name($sessionuser);
       return $this->current_user;
     }
 
@@ -399,7 +400,7 @@
       $message->set_subject($_POST['subject']);
       $message->set_body($_POST['message']);
 
-      if ($user && $user->get_login() !== $message->get_username())
+      if ($user && $user->get_username() !== $message->get_username())
         die("Username does not match currently logged in user");
 
       if ($user) {
@@ -495,7 +496,7 @@
     function _print_profile_breadcrumbs($_user) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
-      $breadcrumbs->add_item($_user->get_login());
+      $breadcrumbs->add_item($_user->get_username());
       $breadcrumbs->show();
     }
 
@@ -571,7 +572,7 @@
 
     function &_fetch_user_data($user = '') {
       if (!$user)
-        $user = &new User($_POST['login']);
+        $user = &new User($_POST['username']);
       $user->set_password($_POST['password']);
       $user->set_firstname($_POST['acc_firstname']);
       $user->set_lastname($_POST['acc_lastname']);
@@ -595,7 +596,7 @@
     function _send_account_mail(&$user, $subject, $body, $url) {
       // Send a registration mail.
       $head  = "From: ".cfg("mail_from")."\r\n";
-      $body  = preg_replace("/\[LOGIN\]/",     $user->get_login(),     $body);
+      $body  = preg_replace("/\[LOGIN\]/",     $user->get_username(),  $body);
       $body  = preg_replace("/\[FIRSTNAME\]/", $user->get_firstname(), $body);
       $body  = preg_replace("/\[LASTNAME\]/",  $user->get_lastname(),  $body);
       $body  = preg_replace("/\[URL\]/",       $url,                   $body);
@@ -605,12 +606,12 @@
 
     function _send_confirmation_mail(&$user) {
       // Send a registration mail.
-      $subject = lang("registration_mail_subject");
-      $body    = lang("registration_mail_body");
-      $login   = urlencode($user->get_login());
-      $hash    = urlencode($user->get_confirmation_hash());
-      $url     = cfg('site_url') . "?action=account_confirm"
-               . "&login=$login&hash=$hash";
+      $subject  = lang("registration_mail_subject");
+      $body     = lang("registration_mail_body");
+      $username = urlencode($user->get_username());
+      $hash     = urlencode($user->get_confirmation_hash());
+      $url      = cfg('site_url') . "?action=account_confirm"
+                . "&username=$username&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, $url);
       $registration = &new RegistrationPrinter($this);
       $registration->show_mail_sent($user);
@@ -619,7 +620,7 @@
 
     function _resend_confirmation_mail() {
       $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_login($_GET['login']);
+      $user      = $accountdb->get_user_from_name($_GET['username']);
       if ($user->get_status() != USER_STATUS_UNCONFIRMED)
         die("User is already confirmed.");
       $this->_send_confirmation_mail($user);
@@ -637,7 +638,7 @@
       if ($_POST['password'] !== $_POST['password2'])
         return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
 
-      if (!$this->_username_available($user->get_login()))
+      if (!$this->_username_available($user->get_username()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
 
       $accountdb = $this->_get_accountdb();
@@ -654,7 +655,7 @@
         || $this->get_action() == 'confirm_password_mail'
         || $this->get_action() == 'reset_password_submit') {
         $accountdb = $this->_get_accountdb();
-        $user      = $accountdb->get_user_from_login($_GET['login']);
+        $user      = $accountdb->get_user_from_name($_GET['username']);
         $this->_check_confirmation_hash($user);
         return $user;
       }
@@ -677,7 +678,7 @@
       global $err;
       $accountdb = $this->_get_accountdb();
       $user      = $this->_fetch_user_data();
-      $user      = $accountdb->get_user_from_login($user->get_login());
+      $user      = $accountdb->get_user_from_name($user->get_username());
       $regist = &new RegistrationPrinter($this);
       if ($_POST['password'] !== $_POST['password2']) {
         $error = lang("passwordsdonotmatch");
@@ -728,12 +729,12 @@
         return $registration->show_forgot_password($user, $msg);
       }
 
-      $subject = lang("reset_mail_subject");
-      $body    = lang("reset_mail_body");
-      $login   = urlencode($user->get_login());
-      $hash    = urlencode($user->get_confirmation_hash());
-      $url     = cfg('site_url') . "?action=confirm_password_mail"
-               . "&login=$login&hash=$hash";
+      $subject  = lang("reset_mail_subject");
+      $body     = lang("reset_mail_body");
+      $username = urlencode($user->get_username());
+      $hash     = urlencode($user->get_confirmation_hash());
+      $url      = cfg('site_url') . "?action=confirm_password_mail"
+                . "&username=$username&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, $url);
       $registration = &new RegistrationPrinter($this);
       $registration->show_forgot_password_mail_sent($user);
@@ -743,7 +744,7 @@
     function _confirm_password_mail() {
       $user      = $this->_get_current_or_confirming_user();
       $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_login($user->get_login());
+      $user      = $accountdb->get_user_from_name($user->get_username());
       $this->_check_confirmation_hash($user);
 
       if ($user->get_status() != USER_STATUS_ACTIVE)
@@ -766,7 +767,7 @@
 
     function _account_confirm() {
       $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_login($_GET['login']);
+      $user      = $accountdb->get_user_from_name($_GET['username']);
       $this->_check_confirmation_hash($user);
 
       if (!$user->get_password_hash())
@@ -784,7 +785,7 @@
 
     function _show_profile() {
       $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_login($_GET['login']);
+      $user      = $accountdb->get_user_from_name($_GET['username']);
       if (!$user)
         die("No such user.");
       $this->_print_profile_breadcrumbs($user);
@@ -794,9 +795,9 @@
 
 
     function _show_user_postings() {
-      if ($_GET['login']) {
+      if ($_GET['username']) {
         $accountdb = $this->_get_accountdb();
-        $user      = $accountdb->get_user_from_login($_GET['login']);
+        $user      = $accountdb->get_user_from_name($_GET['username']);
       }
       else
         $user = $this->get_current_user();

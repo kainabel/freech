@@ -34,7 +34,8 @@
 
     function show_user_postings($_user, $_thread_state) {
       $current  = $this->parent->get_current_user();
-      $showlist = $current && $_user->get_login() == $current->get_login();
+      $showlist = $current && $_user->get_username()
+                           == $current->get_username();
 
       // Load the threads (if they are to be displayed).
       $this->smarty->clear_all_assign();

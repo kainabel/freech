@@ -9,7 +9,7 @@
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
 <input type='hidden' name='did_quote' value='{$did_quote|escape}'>
 {if $user}
-<input type='hidden' name='name' value='{$user->get_login()|escape}'>
+<input type='hidden' name='name' value='{$user->get_username()|escape}'>
 {else}
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='name' id='name' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>

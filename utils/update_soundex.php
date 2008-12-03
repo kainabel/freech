@@ -13,7 +13,7 @@ $db = &ADONewConnection(cfg("db_dbn"))
        . " Please check username, password and hostname.");
 
 function print_user($user, $accountdb) {
-  echo "USER: ".$user->get_login()." = ".$user->get_soundexed_login()."<br>";
+  echo "USER: ".$user->get_username()." = ".$user->get_soundexed_username()."<br>";
   $accountdb->save_user($user);
 }
 

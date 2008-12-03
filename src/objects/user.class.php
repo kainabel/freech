@@ -27,20 +27,20 @@ define("USER_STATUS_BLOCKED",     2);
    * Represents a user.
    */
   class User {
-    var $fields;  ///< Properties of the user, such as name, login, signature.
+    var $fields;  ///< Properties of the user, such as name, mail, signature.
     var $groups;  ///< The groups in which the user is a member.
     
     /// Constructor.
-    function User($_login = '') {
+    function User($_username = '') {
       $this->clear();
-      $this->set_login($_login);
+      $this->set_username($_username);
     }
     
     
     /// Resets all values.
     function clear() {
       $this->fields = array();
-      $this->fields[login]       = "";
+      $this->fields[username]    = "";
       $this->fields[firstname]   = "";
       $this->fields[lastname]    = "";
       $this->fields[status]      = USER_STATUS_UNCONFIRMED;
@@ -57,7 +57,7 @@ define("USER_STATUS_BLOCKED",     2);
         die("User:set_from_db(): Non-array.");
       $this->clear();
       $this->fields[id]           = $_db_row[id];
-      $this->fields[login]        = $_db_row[login];
+      $this->fields[username]     = $_db_row[username];
       $this->fields[passwordhash] = $_db_row[password];
       $this->fields[firstname]    = $_db_row[firstname];
       $this->fields[lastname]     = $_db_row[lastname];
@@ -84,20 +84,20 @@ define("USER_STATUS_BLOCKED",     2);
     }
     
     
-    function set_login($_login) {
-      $this->fields[login] = preg_replace("/\s+/", " ", trim($_login));
+    function set_username($_username) {
+      $this->fields[username] = preg_replace("/\s+/", " ", trim($_username));
     }
     
     
-    function &get_login() {
-      return $this->fields[login];
+    function &get_username() {
+      return $this->fields[username];
     }
     
     
-    function &get_normalized_login() {
+    function &get_normalized_username() {
       $src  = array(".", "_", "-", "0", "1", "5", "6", "8");
       $dst  = array(" ", " ", " ", "O", "I", "S", "G", "B");
-      $norm = str_replace($src, $dst, $this->fields[login]);
+      $norm = str_replace($src, $dst, $this->fields[username]);
       $src  = array("ü",  "ä",  "ö",  "ß");
       $dst  = array("ue", "ae", "oe", "ss");
       $norm = str_replace($src, $dst, $norm);
@@ -106,17 +106,19 @@ define("USER_STATUS_BLOCKED",     2);
     }
 
 
-    function &get_soundexed_login() {
-      $login = preg_replace("/\s*\d+\s*/", "", $this->get_normalized_login());
-      return soundex($login);
+    function &get_soundexed_username() {
+      $username = preg_replace("/\s*\d+\s*/",
+                               "",
+                               $this->get_normalized_username());
+      return soundex($username);
     }
 
 
     function &get_lexical_similarity($_user) {
-      $login1 = $this->get_normalized_login();
-      $login2 = $_user->get_normalized_login();
-      $len    = max(strlen($login1), strlen($login2));
-      $dist   = levenshtein($login1, $login2);
+      $username1 = $this->get_normalized_username();
+      $username2 = $_user->get_normalized_username();
+      $len       = max(strlen($username1), strlen($username2));
+      $dist      = levenshtein($username1, $username2);
       if ($dist == 0)
         return 100;
       return 100 - ($dist / $len * 100);
@@ -281,8 +283,8 @@ define("USER_STATUS_BLOCKED",     2);
     
     function &get_profile_url() {
       $profile_url = new URL('?', cfg("urlvars"));
-      $profile_url->set_var('action', 'profile');
-      $profile_url->set_var('login', $this->get_login());
+      $profile_url->set_var('action',   'profile');
+      $profile_url->set_var('username', $this->get_username());
       return $profile_url->get_string();
     }
 
@@ -320,7 +322,7 @@ define("USER_STATUS_BLOCKED",     2);
       $hash = md5($this->get_id()
                 . $this->get_firstname()
                 . $this->get_lastname()
-                . $this->get_login());
+                . $this->get_username());
       return preg_replace("/\./", "x", $hash);
     }
 
@@ -337,13 +339,13 @@ define("USER_STATUS_BLOCKED",     2);
 
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
-      if (ctype_space($this->fields[login]))
+      if (ctype_space($this->fields[username]))
         return ERR_USER_LOGIN_INCOMPLETE;
-      if (strlen($this->fields[login]) < cfg("min_loginlength"))
+      if (strlen($this->fields[username]) < cfg("min_loginlength"))
         return ERR_USER_LOGIN_TOO_SHORT;
-      if (strlen($this->fields[login]) > cfg("max_loginlength"))
+      if (strlen($this->fields[username]) > cfg("max_loginlength"))
         return ERR_USER_LOGIN_TOO_LONG;
-      if (!preg_match(cfg("login_pattern"), $this->fields[login]))
+      if (!preg_match(cfg("login_pattern"), $this->fields[username]))
         return ERR_USER_LOGIN_INVALID_CHARS;
       
       if (ctype_space($this->fields[passwordhash]))

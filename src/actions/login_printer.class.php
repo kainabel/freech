@@ -25,8 +25,8 @@
       $url->set_var('action', 'do_login');
 
       $resend_url = new URL('?', cfg("urlvars"));
-      $resend_url->set_var('action', 'resend_confirm');
-      $resend_url->set_var('login', $_user->get_login());
+      $resend_url->set_var('action',   'resend_confirm');
+      $resend_url->set_var('username', $_user->get_username());
 
       $forgot_url = new URL('?', cfg("urlvars"));
       $forgot_url->set_var('action', 'forgot_password');

@@ -14,7 +14,7 @@
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
 <input type='hidden' name='action' value='account_create'>
 <b>{lang text="register_nick"|escape}</b><br/>
-<input type="text" name="login" size="20" value="{$user->get_login()|escape}"><br/>
+<input type="text" name="username" size="20" value="{$user->get_username()|escape}"><br/>
 <span class="size80">{lang text="register_nick_l"|escape}</span>
 
 <p>

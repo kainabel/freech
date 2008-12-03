@@ -1,10 +1,10 @@
 <p>
-<h2>{lang text="profile" name=$user->get_login()|escape}</h2>
+<h2>{lang text="profile" name=$user->get_username()|escape}</h2>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>
     <td><b>{lang text="account_name"|escape}</b></td>
-    <td>{$user->get_login()|escape}</td>
+    <td>{$user->get_username()|escape}</td>
   </tr>
   <tr>
     <td><b>{lang text="account_created"|escape}</b></td>

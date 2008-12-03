@@ -83,7 +83,7 @@
       $this->smarty->assign('forum_id', (int)$_GET['forum_id']);
       $this->smarty->assign_by_ref('query', $_GET['q']);
 
-      $search    = array('login' => '%'.trim($_GET['q']).'%');
+      $search    = array('username' => '%'.trim($_GET['q']).'%');
       $accountdb = $this->parent->_get_accountdb();
       $func      = array(&$this, '_append_user');
       $n_rows    = $accountdb->foreach_user_from_query($search,

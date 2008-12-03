@@ -25,7 +25,7 @@
 <p>
 {lang text="search_results" results=$n_results}<br/><br/>
 {foreach item=user from=$users}
-  <a href="{$user->get_profile_url()|escape}">{$user->get_login()|escape}</a><br/>
+  <a href="{$user->get_profile_url()|escape}">{$user->get_username()|escape}</a><br/>
 {/foreach}
 {else}
 <table>

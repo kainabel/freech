@@ -896,5 +896,24 @@
       $n = $this->db->GetOne($query->sql());
       return $n;
     }
+
+
+    function get_top_posters($_limit) {
+      $sql   = "SELECT username, count(*) n_postings";
+      $sql  .= " FROM {t_message}";
+      $sql  .= " WHERE user_id>2";
+      $sql  .= " GROUP BY user_id";
+      $sql  .= " ORDER BY `n_postings` DESC";
+      $query = &new FreechSqlQuery($sql);
+      $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
+                    or die("ForumDB::get_top_posters()");
+      $list  = array();
+      while ($row = $res->FetchRow()) {
+        $item = new Message;  // Abuse a message object.
+        $item->set_from_db($row);
+        array_push($list, $item);
+      }
+      return $list;
+    }
   }
 ?>

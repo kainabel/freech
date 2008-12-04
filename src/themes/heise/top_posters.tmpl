@@ -1,0 +1,4 @@
+<p>
+{foreach item=user from=$users}
+  <a href="{$user->get_user_profile_url()}">{$user->get_username()}</a><br/>
+{/foreach}

@@ -50,6 +50,7 @@
   include_once 'actions/rss_printer.class.php';
   include_once 'actions/message_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
+  include_once 'actions/list_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
   include_once 'actions/search_printer.class.php';
@@ -853,6 +854,12 @@
     }
 
 
+    function _show_top_posters() {
+      $printer = new ListPrinter($this);
+      $printer->show_top_posters();
+    }
+
+
     function &get_registry() {
       return $this->registry;
     }
@@ -1002,6 +1009,10 @@
 
       case 'confirm_password_mail':
         $this->_confirm_password_mail();    // Form for resetting the password.
+        break;
+
+      case 'top_posters':
+        $this->_show_top_posters();         // List of top posters.
         break;
 
       case 'list':

@@ -2,7 +2,8 @@ About Freech   [http://www.debain.org/software/freech]
 - - - - - - -
 
 This forum has been written 2003 by Samuel Abels and was rewritten in 2005
-by Robert Weidlich and Samuel Abels. For more information see the AUTHORS file.
+by Robert Weidlich and Samuel Abels. It has since been essentially rewritten 
+by Samuel Abels. For more information see the AUTHORS file.
 It is free software as distributed under the terms of the GPL which you should
 have received along with this package.
 
@@ -38,7 +39,7 @@ A: You did not read the installation instructions in the INSTALL file :-).
 
 Q: I changed the theme in the configfile but the old theme still appears.
 A: The theme is cached on the server. Delete the contents of
-   "src/smarty/templates_c/" and the theme should appear.
+   "src/smarty/templates_c/" and the new theme should appear.
 
 Q: Is RSS supported? Where is the RSS file?
 A: RSS2.0 is supported. The RSS file is in the same directory in which the

@@ -1,9 +1,9 @@
 Prerequirements for Installation
 - - - - - - - - - - - - - - - - -
 
- * A running MySQL database (4.1 or greater).
+ * A running MySQL database (5.0 or greater).
    The server *must* be configured to support InnoDB tables.
- * A webserver with PHP4 or PHP5 support.
+ * A webserver with PHP5 support.
  * PHP gettext support.
 
 

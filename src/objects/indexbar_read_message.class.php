@@ -39,7 +39,7 @@
 
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action',   'read');
-      $url->set_var('msg_id',   0);
+      $url->set_var('msg_id',   1);
       $url->set_var('forum_id', $_message->get_forum_id());
 
       // "Previous/Next Entry" buttons.
@@ -112,7 +112,6 @@
       call_user_func($additem, lang("writemessage"), $url);
 
       // "Show/Hide Thread" button.
-      $url = clone($url);
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   0);

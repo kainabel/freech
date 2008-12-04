@@ -9,26 +9,26 @@
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
 <input type='hidden' name='may_quote' value='{$may_quote|escape}'>
 {if $user}
-<input type='hidden' name='name' value='{$user->get_username()|escape}'>
+<input type='hidden' name='username' value='{$user->get_username()|escape}'>
 {else}
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
-<input type='text' size='80' name='name' id='name' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>
+<input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>
 {/if}
 <p>
 <b>{lang text="msgtitle"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
-<input type='text' size='80' name='subject' id='subject' value='{$message->get_subject()|escape}' maxlength='{$max_titlelength}'>
+<input type='text' size='80' name='subject' value='{$message->get_subject()|escape}' maxlength='{$max_titlelength}'>
 <p>
 <b>{lang text="msgbody"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 {strip}
-<textarea name='message' id='message' cols='80' rows='20' wrap='virtual'>
+<textarea name='body' cols='80' rows='20' wrap='virtual'>
 {$message->get_body()|escape}
 </textarea>
 {/strip}
 <p>
 {if $may_quote}
-<input type='submit' name='quote' id='quote' value='{lang text="quote"|escape}'>&nbsp;
+<input type='submit' name='quote' value='{lang text="quote"|escape}'>&nbsp;
 {/if}
-<input type='submit' name='preview' id='preview' value='{lang text="preview"|escape}'>&nbsp;
-<input type='submit' name='send' id='send' value='{lang text="send"|escape}'>
+<input type='submit' name='preview' value='{lang text="preview"|escape}'>&nbsp;
+<input type='submit' name='send' value='{lang text="send"|escape}'>
 </form>
 <!-- end message_compose -->

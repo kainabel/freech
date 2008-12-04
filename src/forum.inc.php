@@ -273,6 +273,16 @@
     }
 
 
+    function _fetch_message_data() {
+      $message = &new Message();
+      $message->set_id($_POST['msg_id']);
+      $message->set_username($_POST['username']);
+      $message->set_subject($_POST['subject']);
+      $message->set_body($_POST['body']);
+      return $message;
+    }
+
+
     // Read a message.
     function _message_read() {
       $forum_id   = $this->get_forum_id();
@@ -326,12 +336,8 @@
     function _message_edit_unsaved() {
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
-      $message    = &new Message;
+      $message    = $this->_fetch_message_data();
       $msgprinter = &new MessagePrinter($this);
-      $message->set_id($_POST['msg_id']);
-      $message->set_username($_POST[name]);
-      $message->set_subject($_POST[subject]);
-      $message->set_body($_POST[message]);
       $msgprinter->show_compose($message, '', $parent_id, $may_quote);
     }
 
@@ -341,11 +347,8 @@
       $forum_id   = $this->get_forum_id();
       $parent_id  = (int)$_POST['parent_id'];
       $quoted_msg = $this->forum->get_message($forum_id, $parent_id);
-      $message    = &new Message;
+      $message    = $this->_fetch_message_data();
       $msgprinter = &new MessagePrinter($this);
-      $message->set_username($_POST['name']);
-      $message->set_subject($_POST['subject']);
-      $message->set_body($_POST['message']);
       $msgprinter->show_compose_quoted($message, $quoted_msg, '');
     }
 
@@ -356,13 +359,9 @@
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
       $msgprinter = &new MessagePrinter($this);
-      $message    = &new Message;
-      $message->set_id($_POST['msg_id']);
-      $message->set_username($_POST['name']);
-      $message->set_subject($_POST['subject']);
-      $message->set_body($_POST['message']);
+      $message    = $this->_fetch_message_data();
+      $user       = $this->get_current_user();
 
-      $user = $this->get_current_user();
       if ($user) {
         $message->set_user_id($user->get_id());
         $message->set_signature($user->get_signature());
@@ -394,14 +393,13 @@
       $may_quote  = (int)$_POST['may_quote'];
       if ($_POST['msg_id'] && !cfg("postings_editable"))
         die("Postings may not be changed as per configuration.");
-      elseif ($_POST['msg_id'])
+      elseif ($_POST['msg_id']) {
         $message = $this->forum->get_message($forum_id, $_POST['msg_id']);
-      else {
-        $message = &new Message;
-        $message->set_username($_POST['name']);
+        $message->set_subject($_POST['subject']);
+        $message->set_body($_POST['body']);
       }
-      $message->set_subject($_POST['subject']);
-      $message->set_body($_POST['message']);
+      else
+        $message = $this->_fetch_message_data();
 
       if ($user && $user->get_username() !== $message->get_username())
         die("Username does not match currently logged in user");
@@ -572,7 +570,7 @@
     }
 
 
-    function &_fetch_user_data($user = '') {
+    function _fetch_user_data($user = '') {
       if (!$user)
         $user = &new User($_POST['username']);
       $user->set_password($_POST['password']);

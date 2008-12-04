@@ -21,27 +21,33 @@
 <?php
   class FooterPrinter extends PrinterBase {
     function show() {
-      $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action',   'list');
-      $url->set_var('forum_id', (int)$_GET[forum_id]);
+      // Create the URL pointing to the message search.
+      $search_url = new URL('?', cfg("urlvars"));
+      $search_url->set_var('action',   'search');
+      $search_url->set_var('forum_id', $this->parent->get_forum_id());
+
+      // Create the URLs for changing the message ordering.
+      $order_url = new URL('?', cfg("urlvars"));
+      $order_url->set_var('action',   'list');
+      $order_url->set_var('forum_id', $this->parent->get_forum_id());
       if ($_COOKIE[view] === 'plain') {
-        $url->set_var('changeview', 't');
-        $order_by_thread   = $url->get_string();
-        $order_by_time     = '';
-      } else {
-        $url->set_var('changeview', 'c');
-        $order_by_thread   = '';
-        $order_by_time     = $url->get_string();
+        $order_url->set_var('changeview', 't');
+        $order_by_thread_url = $order_url->get_string();
+        $order_by_time_url   = '';
       }
-      $search = new URL('?', cfg("urlvars"));
-      $search->set_var('action',   'search');
-      $search->set_var('forum_id', (int)$_GET[forum_id]);
+      else {
+        $order_url->set_var('changeview', 'c');
+        $order_by_thread_url = '';
+        $order_by_time_url   = $order_url->get_string();
+      }
+
+      // Render the resulting template.
       $version[url]  = "http://debain.org/software/freech/";
       $version[text] = "Freech Forum v0.9.10";
       $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('order_by_thread', $order_by_thread);
-      $this->smarty->assign_by_ref('order_by_time',   $order_by_time);
-      $this->smarty->assign_by_ref('search',          $search->get_string());
+      $this->smarty->assign_by_ref('order_by_thread', $order_by_thread_url);
+      $this->smarty->assign_by_ref('order_by_time',   $order_by_time_url);
+      $this->smarty->assign_by_ref('search',          $search_url->get_string());
       $this->smarty->assign_by_ref('version',         $version);
       $this->parent->append_content($this->smarty->fetch('footer.tmpl'));
     }

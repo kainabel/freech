@@ -1,6 +1,5 @@
 * Cleanup POST and GET variable names.
-* Be more clear as to what variables to pass between actions and the Forum class.
+* MessagePrinter should not access POST variables directly.
 * Cleanup template names.
 * Cleanup the AccountDB and ForumDB APIs, and possibly get rid of the ThreadLoader.
-* Stop messing with the 'hs' and 'forum_id' variables in _handle_cookies().
 * Design a URL scheme that makes sense for URL rewriting.

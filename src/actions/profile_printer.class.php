@@ -32,7 +32,7 @@
     }
 
 
-    function show_user_postings($_user, $_thread_state) {
+    function show_user_postings($_user, $_thread_state, $_offset = 0) {
       $current  = $this->parent->get_current_user();
       $showlist = $current && $_user->get_username()
                            == $current->get_username();
@@ -41,7 +41,7 @@
       $this->smarty->clear_all_assign();
       if ($showlist) {
         $loader = new ThreadLoader($this->db, $_thread_state);
-        $loader->load_threads_from_user($_user->get_id(), (int)$_GET['hs']);
+        $loader->load_threads_from_user($_user->get_id(), $_offset);
         $this->smarty->assign_by_ref('n_rows',   count($loader->messages));
         $this->smarty->assign_by_ref('messages', $loader->messages);
       }
@@ -52,7 +52,7 @@
       $args      = array(forum_id            => $this->parent->get_forum_id(),
                          n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
-                         n_offset            => $_GET['hs'],
+                         n_offset            => $_offset,
                          n_pages_per_index   => cfg("ppi"),
                          thread_state        => $_thread_state);
       $indexbar = &new IndexBarUserPostings($args);

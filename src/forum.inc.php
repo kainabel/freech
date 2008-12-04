@@ -212,6 +212,11 @@
     }
 
 
+    function get_message_id() {
+      return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
+    }
+
+
     function get_newest_users($_limit) {
       return $this->_get_accountdb()->get_newest_users($_limit);
     }
@@ -223,9 +228,6 @@
         $_POST   = array_map('stripslashes_deep', $_POST);
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
-
-      if ($_GET[hs])
-        $_GET[hs] = (int)$_GET[hs];
 
       $thread_state        = &new ThreadState($_COOKIE['fold'],
                                               $_COOKIE['c']);
@@ -416,6 +418,7 @@
       $duplicate_id = $this->forum->find_duplicate($message);
       if ($duplicate_id)
         return $msgprinter->show_created($duplicate_id,
+                                         $parent_id,
                                          lang("messageduplicate"));
 
       $ret = $message->check_complete();
@@ -433,7 +436,7 @@
                                   $parent_id,
                                   $may_quote);
       else
-        $msgprinter->show_created($newmsg_id);
+        $msgprinter->show_created($newmsg_id, $parent_id);
     }
 
 
@@ -803,7 +806,7 @@
       $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
                                        $_COOKIE['user_postings_c']);
       $profile = &new ProfilePrinter($this);
-      $profile->show_user_postings($user, $thread_state);
+      $profile->show_user_postings($user, $thread_state, (int)$_GET['hs']);
     }
 
 

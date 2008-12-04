@@ -30,7 +30,8 @@
 
     function _append_row(&$_message, $_data) {
       // Required to enable correct formatting of the message.
-      $_message->set_selected($_message->get_id() == $_GET[msg_id]);
+      $msg_id = $this->parent->get_message_id();
+      $_message->set_selected($_message->get_id() == $msg_id);
       if (!$_message->is_active()) {
         $_message->set_subject(lang("blockedtitle"));
         $_message->set_username('------');

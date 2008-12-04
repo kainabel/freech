@@ -41,7 +41,7 @@
                                         // subfolder
   $cfg[tpp]                 = 16;       // Maximum number of threads shown per
                                         // page. (when shown in thread order)
-  $cfg[epp]                 = 15;       // Maximum number of messages shown per
+  $cfg[epp]                 = 30;       // Maximum number of messages shown per
                                         // page. (when shown in time order)
   $cfg[ppi]                 = 5;        // Maximum number of pages shown in the
                                         // index before the [...] button

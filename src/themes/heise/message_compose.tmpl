@@ -7,7 +7,7 @@
 <input type='hidden' name='action'    value='message_submit'>
 <input type='hidden' name='parent_id' value='{$parent_id}'>
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
-<input type='hidden' name='did_quote' value='{$did_quote|escape}'>
+<input type='hidden' name='may_quote' value='{$may_quote|escape}'>
 {if $user}
 <input type='hidden' name='name' value='{$user->get_username()|escape}'>
 {else}
@@ -25,7 +25,7 @@
 </textarea>
 {/strip}
 <p>
-{if $may_quote && !$did_quote}
+{if $may_quote}
 <input type='submit' name='quote' id='quote' value='{lang text="quote"|escape}'>&nbsp;
 {/if}
 <input type='submit' name='preview' id='preview' value='{lang text="preview"|escape}'>&nbsp;

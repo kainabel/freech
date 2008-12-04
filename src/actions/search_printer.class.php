@@ -72,7 +72,9 @@
                                                      '');
 
       // Create the index bar.
-      $args  = array(n_messages          => $total,
+      $args  = array(forum_id            => $_forum_id,
+                     query               => $_query,
+                     n_messages          => $total,
                      n_messages_per_page => cfg("epp"),
                      n_offset            => $_offset,
                      n_pages_per_index   => cfg("ppi"));

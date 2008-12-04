@@ -285,10 +285,10 @@
     // Write an answer to a message.
     function _message_answer() {
       $forum_id   = $this->get_forum_id();
-      $parent_id  = (int)$_GET[parent_id];
+      $parent_id  = (int)$_GET['parent_id'];
       $message    = $this->forum->get_message($forum_id, $parent_id);
       $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show_compose_reply($message, '', TRUE);
+      $msgprinter->show_compose_reply($message, '');
     }
 
 
@@ -314,7 +314,7 @@
 
     // Write a new message.
     function _message_compose() {
-      $parent_id  = (int)$_POST[parent_id];
+      $parent_id  = (int)$_POST['parent_id'];
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose($message, '', $parent_id, FALSE);
@@ -323,8 +323,8 @@
 
     // Edit an unsaved message.
     function _message_edit_unsaved() {
-      $parent_id  = (int)$_POST[parent_id];
-      $may_quote  = $parent_id ? TRUE : FALSE;
+      $parent_id  = (int)$_POST['parent_id'];
+      $may_quote  = (int)$_POST['may_quote'];
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
       $message->set_id($_POST['msg_id']);
@@ -338,22 +338,22 @@
     // Insert a quote from the parent message.
     function _message_quote() {
       $forum_id   = $this->get_forum_id();
-      $parent_id  = (int)$_POST[parent_id];
+      $parent_id  = (int)$_POST['parent_id'];
       $quoted_msg = $this->forum->get_message($forum_id, $parent_id);
       $message    = &new Message;
       $msgprinter = &new MessagePrinter($this);
-      $message->set_username($_POST[name]);
-      $message->set_subject($_POST[subject]);
-      $message->set_body($_POST[message]);
-      $msgprinter->show_compose_quoted($message, $quoted_msg, '', FALSE);
+      $message->set_username($_POST['name']);
+      $message->set_subject($_POST['subject']);
+      $message->set_body($_POST['message']);
+      $msgprinter->show_compose_quoted($message, $quoted_msg, '');
     }
 
 
     // Print a preview of a message.
     function _message_preview() {
       global $err;
-      $parent_id  = (int)$_POST[parent_id];
-      $may_quote  = $parent_id ? TRUE : FALSE;
+      $parent_id  = (int)$_POST['parent_id'];
+      $may_quote  = (int)$_POST['may_quote'];
       $msgprinter = &new MessagePrinter($this);
       $message    = &new Message;
       $message->set_id($_POST['msg_id']);
@@ -379,7 +379,7 @@
                                   $parent_id,
                                   $may_quote);
       else
-        $msgprinter->show_preview($message, $parent_id);
+        $msgprinter->show_preview($message, $parent_id, $may_quote);
     }
 
 
@@ -388,9 +388,9 @@
       global $err;
       $msgprinter = &new MessagePrinter($this);
       $user       = $this->get_current_user();
-      $parent_id  = (int)$_POST[parent_id];
       $forum_id   = $this->get_forum_id();
-      $may_quote  = $parent_id ? TRUE : FALSE;
+      $parent_id  = (int)$_POST['parent_id'];
+      $may_quote  = (int)$_POST['may_quote'];
       if ($_POST['msg_id'] && !cfg("postings_editable"))
         die("Postings may not be changed as per configuration.");
       elseif ($_POST['msg_id'])

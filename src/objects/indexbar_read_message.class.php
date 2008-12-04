@@ -40,7 +40,7 @@
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   0);
-      $url->set_var('forum_id', (int)$_GET[forum_id]);
+      $url->set_var('forum_id', $_message->get_forum_id());
 
       // "Previous/Next Entry" buttons.
       if ($this->message->get_prev_message_id() > 0) {
@@ -116,7 +116,7 @@
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   0);
-      $url->set_var('forum_id', (int)$_GET[forum_id]);
+      $url->set_var('forum_id', $_message->get_forum_id());
       if ($this->message->has_thread()) {
         call_user_func($additem);
         $url->set_var('msg_id', $this->message->get_id());

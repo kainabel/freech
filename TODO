@@ -1,5 +1,3 @@
-* Cleanup POST and GET variable names.
-* MessagePrinter should not access POST variables directly.
 * Cleanup template names.
 * Cleanup the AccountDB and ForumDB APIs, and possibly get rid of the ThreadLoader.
 * Design a URL scheme that makes sense for URL rewriting.

@@ -6,7 +6,7 @@
 <input type='hidden' name='action'    value='message_submit'>
 <input type='hidden' name='parent_id' value='{$parent_id}'>
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
-<input type='hidden' name='did_quote' value='{$did_quote|escape}'>
+<input type='hidden' name='may_quote' value='{$may_quote|escape}'>
 <input type='hidden' name='name' id='name' value='{$message->get_username()|escape}'>
 <input type='hidden' name='subject' id='subject' value='{$message->get_subject()|escape}'>
 <input type='hidden' name='message' id='message' value='{$message->get_body()|escape}'>

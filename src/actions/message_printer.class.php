@@ -67,19 +67,16 @@
     function show_compose(&$_message,
                           $_hint,
                           $_parent_id,
-                          $_may_quote,
-                          $_did_quote = -1) {
-      $did_quote = $_did_quote === -1 ? (int)$_POST['did_quote'] : $_did_quote;
-      $forum_id  = $this->parent->get_forum_id();
-      $user      = $this->parent->get_current_user() or new User;
+                          $_may_quote) {
+      $forum_id = $this->parent->get_forum_id();
+      $user     = $this->parent->get_current_user() or new User;
 
-      $url  = new URL('?', cfg("urlvars"));
+      $url = new URL('?', cfg("urlvars"));
       $url->set_var('forum_id',  $forum_id);
       $url->set_var('parent_id', $_parent_id);
 
       $this->smarty->clear_all_assign();
       $this->smarty->assign('may_quote', $_may_quote);
-      $this->smarty->assign('did_quote', $did_quote);
       $this->smarty->assign('parent_id', $_parent_id);
       $this->smarty->assign_by_ref('action',          $url->get_string());
       $this->smarty->assign_by_ref('hint',            $_hint);
@@ -87,7 +84,6 @@
       $this->smarty->assign_by_ref('message',         $_message);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-
       $this->parent->append_content($this->smarty->fetch('message_compose.tmpl'));
     }
 
@@ -99,8 +95,7 @@
      */
     function show_compose_quoted(&$_message,
                                  &$_parent_msg,
-                                 $_hint,
-                                 $_may_quote) {
+                                 $_hint) {
       // Add "Message written by ... on ..." before the quoted stuff.
       if ($_parent_msg->is_active()) {
         $text  = preg_replace("/\[USER\]/",
@@ -120,15 +115,14 @@
       $this->show_compose($_message,
                           $_hint,
                           $_parent_msg->get_id(),
-                          $_may_quote,
-                          TRUE);
+                          FALSE);
     }
 
 
     /**
      * Shows a form for editing a reply to the given message.
      */
-    function show_compose_reply(&$_parent_msg, $_hint, $_may_quote) {
+    function show_compose_reply(&$_parent_msg, $_hint) {
       $message = new Message;
 
       // Prepend 'Re: ' if necessary
@@ -142,18 +136,18 @@
       $this->show_compose($message,
                           $_hint,
                           $_parent_msg->get_id(),
-                          $_may_quote);
+                          TRUE);
     }
 
 
     /* Show a preview form of the message. */
-    function show_preview(&$_message, $_parent_id = '') {
+    function show_preview(&$_message, $_parent_id, $_may_quote) {
       $url  = new URL('?', cfg("urlvars"));
       $url->set_var('forum_id',  $this->parent->get_forum_id());
       $url->set_var('parent_id', $_parent_id);
 
       $this->smarty->clear_all_assign();
-      $this->smarty->assign('did_quote', $_POST['did_quote']);
+      $this->smarty->assign('may_quote', $_may_quote);
       $this->smarty->assign('parent_id', (int)$_parent_id);
       $this->smarty->assign_by_ref('pagetitle', lang("preview"));
       $this->smarty->assign_by_ref('action',    $url->get_string());

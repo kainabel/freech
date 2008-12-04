@@ -224,6 +224,9 @@
   $lang[account_saved]      = "Your data has been saved.";
   $lang[account_emptyfield] = "None";
 
+  // Top user list.
+  $lang[n_postings] = "Postings";
+
   // Search.
   $lang[search_forum]      = "Search this forum";
   $lang[search_title]      = "Search";

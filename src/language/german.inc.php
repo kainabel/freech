@@ -242,6 +242,9 @@
   $lang[account_saved]      = "Die Daten wurden gespeichert.";
   $lang[account_emptyfield] = "Nicht angegeben";
 
+  // Top user list.
+  $lang[n_postings] = "Postings";
+
   // Search.
   $lang[search_forum]      = "Suchen";
   $lang[search_title]      = "Forensuche";

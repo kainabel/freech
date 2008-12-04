@@ -911,6 +911,7 @@
       while ($row = $res->FetchRow()) {
         $item = new Message;  // Abuse a message object.
         $item->set_from_db($row);
+        $item->n_postings = $row[n_postings];
         array_push($list, $item);
       }
       return $list;

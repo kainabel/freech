@@ -1,4 +1,13 @@
 <p>
+<table>
+  <tr>
+    <th align='left'>{lang text="username"}</th>
+    <th align='right'>{lang text="n_postings"}</th>
+  </tr>
 {foreach item=user from=$users}
-  <a href="{$user->get_user_profile_url()}">{$user->get_username()}</a><br/>
+  <tr>
+    <td><a href="{$user->get_user_profile_url()}">{$user->get_username()}</a></td>
+    <td>{$user->n_postings}</td>
+  </tr>
 {/foreach}
+</table>

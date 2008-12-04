@@ -525,26 +525,24 @@
       if (cfg("disable_search"))
         die("Search is currently disabled.");
       $printer = &new SearchPrinter($this);
-      $printer->show_messages();
+      $printer->show($_GET['forum_id'] ? (int)$_GET['forum_id'] : '',
+                     $_GET['q']);
     }
 
 
     function _show_search_result() {
       if (cfg("disable_search"))
         die("Search is currently disabled.");
-      $query = $_GET['q'];
-      if ($_GET['forum_id']) {
-        $forum_id = $this->get_forum_id();
-        $query    = "forumid:$forum_id AND (".$_GET['q'].")";
-      }
-      $printer = &new SearchPrinter($this);
-      if ($_GET['user_search']) {
-        $printer->show_users($search, $_GET['hs']);
-      }
-      else {
-        $search  = &new SearchQuery($query);
-        $printer->show_messages($search, $_GET['hs']);
-      }
+      if (!$_GET['q'] || trim($_GET['q']) == '')
+        return $this->_show_search_form();
+
+      // Search for messages or users.
+      $printer  = &new SearchPrinter($this);
+      $forum_id = (int)$_GET['forum_id'];
+      if ($_GET['user_search'])
+        $printer->show_users($_GET['q'], $_GET['hs']);
+      else
+        $printer->show_messages($forum_id, $_GET['q'], $_GET['hs']);
     }
 
 

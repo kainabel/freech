@@ -1,5 +1,4 @@
 * Cleanup POST and GET variable names.
-* Refactor the SearchPrinter.
 * Be more clear as to what variables to pass between actions and the Forum class.
 * Cleanup template names.
 * Cleanup the AccountDB and ForumDB APIs, and possibly get rid of the ThreadLoader.

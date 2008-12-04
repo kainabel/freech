@@ -42,29 +42,42 @@
     }
 
 
-    function show_messages($_query = NULL, $_offset = 0) {
+    function show($_forum_id = '', $_query = '') {
       $this->smarty->clear_all_assign();
-      $this->smarty->assign('forum_id', (int)$_GET['forum_id']);
-      $this->smarty->assign_by_ref('query', $_GET['q']);
+      $this->smarty->assign('forum_id', $_forum_id);
+      $this->smarty->assign('query',    $_query);
+      $this->parent->append_content($this->smarty->fetch('search.tmpl'));
+    }
 
-      if (!$_query) {
-        $this->parent->append_content($this->smarty->fetch('search.tmpl'));
-        return;
+
+    function show_messages($_forum_id = NULL, $_query = NULL, $_offset = 0) {
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign('query', $_query);
+
+      // Parse the query.
+      if ($_forum_id) {
+        $this->smarty->assign('forum_id', $_forum_id);
+        $_query = "forumid:$forum_id AND (".$_query.")";
       }
+      $query = &new SearchQuery($_query);
 
+      // Run the search.
       $func  = array(&$this, '_append_message');
-      $total = $this->db->get_n_messages_from_query($_query);
-      $rows  = $this->db->foreach_message_from_query($_query,
+      $total = $this->db->get_n_messages_from_query($query);
+      $rows  = $this->db->foreach_message_from_query($query,
                                                      (int)$_offset,
                                                      cfg("epp"),
                                                      $func,
                                                      '');
+
+      // Create the index bar.
       $args  = array(n_messages          => $total,
                      n_messages_per_page => cfg("epp"),
                      n_offset            => $_offset,
                      n_pages_per_index   => cfg("ppi"));
       $indexbar = &new IndexBarSearchResult($args);
 
+      // Render the result.
       $this->smarty->assign_by_ref('indexbar',  $indexbar);
       $this->smarty->assign_by_ref('n_results', $total);
       $this->smarty->assign_by_ref('n_rows',    $rows);
@@ -79,11 +92,12 @@
 
 
     function show_users($_query = NULL, $_offset = 0) {
+      $_query = trim($_query);
       $this->smarty->clear_all_assign();
-      $this->smarty->assign('forum_id', (int)$_GET['forum_id']);
-      $this->smarty->assign_by_ref('query', $_GET['q']);
+      $this->smarty->assign('query', $_query);
 
-      $search    = array('username' => '%'.trim($_GET['q']).'%');
+      // Run the search.
+      $search    = array('username' => '%'.trim($_query).'%');
       $accountdb = $this->parent->_get_accountdb();
       $func      = array(&$this, '_append_user');
       $n_rows    = $accountdb->foreach_user_from_query($search,
@@ -92,12 +106,14 @@
                                                        $func,
                                                        '');
 
+      // Search for similar results.
       if ($n_rows == 0) {
-        $user          = new User($_GET['q']);
+        $user          = new User($_query);
         $this->results = $accountdb->get_similar_users($user, 50);
         $n_rows        = count($this->results);
       }
 
+      // Render the result.
       $this->smarty->assign_by_ref('n_results', $n_rows);
       $this->smarty->assign_by_ref('n_rows',    $n_rows);
       $this->smarty->assign_by_ref('users',     $this->results);

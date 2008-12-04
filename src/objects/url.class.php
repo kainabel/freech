@@ -30,7 +30,8 @@
     // Constructor.
     function URL($_base = '?', $_vars = array()) {
       $this->base = $_base;
-      $this->vars = $_vars;
+      $this->vars = array();
+      $this->set_var_from_array($_vars);
     }
     
     
@@ -42,12 +43,14 @@
     
     // Appends the given variable to the URL.
     function set_var($_name, $_value) {
-      $this->vars[$_name] = $_value;
+      if ($_value)
+        $this->vars[$_name] = $_value;
     }
     
     
-    function set_var_from_array(&$_array) {
-      $this->vars = array_merge($this->vars, $_array);
+    function set_var_from_array($_array) {
+      foreach ($_array as $key => $value)
+        $this->set_var($key, $value);
     }
     
     

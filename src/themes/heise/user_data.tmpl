@@ -9,31 +9,31 @@
     </tr>
     <tr>
       <td>{lang text="account_firstname"|escape}</td>
-      <td><input size="70" type="text" name="acc_firstname" value="{$user->get_firstname()|escape}" /></td>
+      <td><input size="70" type="text" name="firstname" value="{$user->get_firstname()|escape}" /></td>
     </tr>
     <tr>
       <td>{lang text="account_lastname"|escape}</td>
-      <td><input size="70" type="text" name="acc_lastname" value="{$user->get_lastname()|escape}" /></td>
+      <td><input size="70" type="text" name="lastname" value="{$user->get_lastname()|escape}" /></td>
     </tr>
     <tr>
       <td>{lang text="account_mail"|escape}</td>
-      <td><input size="70" type="text" name="acc_mail" value="{$user->get_mail()|escape}" /></td>
+      <td><input size="70" type="text" name="mail" value="{$user->get_mail()|escape}" /></td>
     </tr>
     <tr>
       <td></td>
-      <td><input type="checkbox" name="acc_publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{lang text="account_publicmail"|escape}</td>
+      <td><input type="checkbox" name="publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{lang text="account_publicmail"|escape}</td>
     </tr>
     <tr>
       <td>{lang text="account_homepage"}</td>
-      <td><input size="70" type="text" name="acc_homepage" value="{$user->get_homepage()|escape}" /></td>
+      <td><input size="70" type="text" name="homepage" value="{$user->get_homepage()|escape}" /></td>
     </tr>
     <tr>
       <td>{lang text="account_im"}</td>
-      <td><input size="70" type="text" name="acc_im" value="{$user->get_im()|escape}" /></td>
+      <td><input size="70" type="text" name="im" value="{$user->get_im()|escape}" /></td>
     </tr>
     <tr>
       <td>{lang text="account_signature"}</td>
-      <td><textarea cols="80" name="acc_signature">{$user->get_signature()|escape}</textarea></td>
+      <td><textarea cols="80" name="signature">{$user->get_signature()|escape}</textarea></td>
     </tr>
     <tr>
       <td>{lang text="account_password"}</td>

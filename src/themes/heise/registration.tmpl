@@ -19,17 +19,17 @@
 
 <p>
 <b>{lang text="register_fullname"|escape}</b><br/>
-<input type="text" name="acc_firstname" size="20" value="{$user->get_firstname()|escape}">
-<input type="text" name="acc_lastname" size="20" value="{$user->get_lastname()|escape}"><br/>
+<input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}">
+<input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}"><br/>
 <span class="size80">{lang text="register_fullname_l"|escape}</span>
 
 <p>
 <b>{lang text="register_mail"|escape}</b><br/>
-<input type="text" name="acc_mail" size="42" value="{$user->get_mail()|escape}"><br/>
+<input type="text" name="mail" size="42" value="{$user->get_mail()|escape}"><br/>
 
 <p>
 <b>{lang text="register_publicmail"|escape}</b><br/>
-<input type="checkbox" name="acc_publicmail" >
+<input type="checkbox" name="publicmail" >
 {lang text="register_public_l"|escape}
 
 <p>
@@ -37,7 +37,7 @@
 {lang text="register_term"|escape}
 
 <p>
-<input type="submit" name="acc_create" value="{lang text="register_agree"|escape}"> 
+<input type="submit" name="create" value="{lang text="register_agree"|escape}"> 
 &nbsp;&nbsp;
-<input type="submit" name="acc_cancel" value="{lang text="register_disagree"|escape}">
+<input type="submit" name="cancel" value="{lang text="register_disagree"|escape}">
 </form>

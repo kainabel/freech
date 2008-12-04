@@ -45,6 +45,8 @@
     function set_var($_name, $_value) {
       if ($_value)
         $this->vars[$_name] = $_value;
+      else
+        $this->delete_var($_name);
     }
     
     

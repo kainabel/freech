@@ -575,12 +575,12 @@
       if (!$user)
         $user = &new User($_POST['username']);
       $user->set_password($_POST['password']);
-      $user->set_firstname($_POST['acc_firstname']);
-      $user->set_lastname($_POST['acc_lastname']);
-      $user->set_mail($_POST['acc_mail'], $_POST['acc_publicmail'] == 'on');
-      $user->set_homepage($_POST['acc_homepage']);
-      $user->set_im($_POST['acc_im']);
-      $user->set_signature($_POST['acc_signature']);
+      $user->set_firstname($_POST['firstname']);
+      $user->set_lastname($_POST['lastname']);
+      $user->set_mail($_POST['mail'], $_POST['publicmail'] == 'on');
+      $user->set_homepage($_POST['homepage']);
+      $user->set_im($_POST['im']);
+      $user->set_signature($_POST['signature']);
       return $user;
     }
 

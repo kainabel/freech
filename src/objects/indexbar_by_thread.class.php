@@ -120,7 +120,7 @@
       // "Unfold all" link.
       $url = clone($url);
       call_user_func($additem);
-      $url->set_var('hs', (int)$_GET[hs]);
+      $url->set_var('hs', $this->n_offset);
       if ($fold != THREAD_STATE_UNFOLDED || $swap != '') {
         $url->set_var('fold', THREAD_STATE_UNFOLDED);
         call_user_func($additem, lang("unfoldall"), $url);

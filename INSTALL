@@ -20,11 +20,11 @@ Installation Instructions
 1. Copy the contents of the "src/" directory to your webserver, including all
    subdirectories.
 
-2. Change the permissions of "src/smarty/templates_c/" so that the webserver
+2. Change the permissions of "src/data/" (recursively) so that the webserver
    can write into the directory. This can either be done somewhere in your
    FTP client (consult the documentation of the client in case you use one),
    or by using the command:
-   chmod 777 src/smarty/templates_c/
+   chmod -R 777 src/data/
    on the webserver.
 
 3. Edit the file "config.inc.php" according to your needs. It should be self

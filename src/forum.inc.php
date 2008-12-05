@@ -123,9 +123,9 @@
       // Init Smarty.
       $this->smarty = &new Smarty();
       $this->smarty->template_dir  = "themes/" . cfg("theme");
-      $this->smarty->compile_dir   = "smarty/templates_c";
-      $this->smarty->cache_dir     = "smarty/cache";
-      $this->smarty->config_dir    = "smarty/configs";
+      $this->smarty->compile_dir   = "data/smarty_templates_c";
+      $this->smarty->cache_dir     = "data/smarty_cache";
+      $this->smarty->config_dir    = "data/smarty_configs";
       $this->smarty->compile_check = cfg("check_cache");
       $this->smarty->register_function('lang', 'smarty_lang');
 

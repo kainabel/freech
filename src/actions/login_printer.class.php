@@ -22,7 +22,7 @@
   class LoginPrinter extends PrinterBase {
     function show($_user, $_hint = '') {
       $login_url = new URL('?', cfg("urlvars"));
-      $login_url->set_var('action', 'do_login');
+      $login_url->set_var('action', 'login');
 
       $resend_url = new URL('?', cfg("urlvars"));
       $resend_url->set_var('action',   'resend_confirm');

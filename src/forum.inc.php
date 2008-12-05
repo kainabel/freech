@@ -144,9 +144,9 @@
 
       $this->current_user = FALSE;
       $this->login_error  = 0;
-      if ($this->get_action() == 'do_login' && $_POST['username'])
+      if ($this->get_action() == 'login' && $_POST['username'])
         $this->login_error = $this->_try_login();
-      if ($this->get_action() == 'do_logout') {
+      if ($this->get_action() == 'logout') {
         session_unset();
         unset($_GET['action']);
         unset($_POST['action']);
@@ -969,7 +969,7 @@
           $this->_show_search_form();       // Show the search form.
         break;
 
-      case 'do_login':
+      case 'login':
         $this->_show_login();               // Show a login form.
         break;
 

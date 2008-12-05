@@ -128,9 +128,7 @@
         $query = &new FreechSqlQuery($sql);
         $query->set_int('start', $_since);
       }
-      $n = $this->db->GetOne($query->sql())
-                                    or die("VisitorDB::get_n_visitors()".$query->sql());
-      return $n;
+      return $this->db->GetOne($query->sql()) or 0;
     }
   }
 ?>

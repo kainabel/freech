@@ -405,6 +405,7 @@
 
       if ($user) {
         $message->set_user_id($user->get_id());
+        $message->set_group_id($user->get_group_id());
         $message->set_signature($user->get_signature());
       }
       elseif (!$this->_username_available($message->get_username()))

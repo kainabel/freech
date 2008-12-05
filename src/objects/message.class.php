@@ -48,6 +48,7 @@
       $this->_fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->_fields[active]       = TRUE;
       $this->_fields[user_id]      = 2; // Anonymous user.
+      $this->_fields[group_id]     = 2; // Anonymous group.
       $this->_fields[allow_answer] = TRUE;
       $this->_fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
       $this->_fields[indent]       = array();
@@ -63,6 +64,7 @@
       $this->_fields[forum_id]        = $_db_row[forum_id];
       $this->_fields[priority]        = $_db_row[priority];
       $this->_fields[user_id]         = $_db_row[user_id];
+      $this->_fields[group_id]        = $_db_row[group_id];
       $this->_fields[username]        = $_db_row[username];
       $this->_fields[subject]         = $_db_row[subject];
       $this->_fields[body]            = $_db_row[body];
@@ -127,6 +129,16 @@
 
     function &get_user_id() {
       return $this->_fields[user_id];
+    }
+
+
+    function set_group_id($_group_id) {
+      $this->_fields[group_id] = (int)$_group_id;
+    }
+
+
+    function get_group_id() {
+      return $this->_fields[group_id];
     }
 
 
@@ -361,14 +373,23 @@
 
 
     function &get_user_type() {
-      if ($this->_fields[user_id] == 1)
-        return 'moderator';
-      elseif ($this->_fields[user_id] == 2)
-        return 'anonymous';
-      elseif ($this->_fields[user_id])
-        return 'registered';
-      else
+      if (!$this->_fields[user_id])
         return 'deleted';
+      if ($this->_fields[group_id] == 1)
+        return 'admin';
+      elseif ($this->_fields[group_id] == 2)
+        return 'anonymous';
+      elseif ($this->_fields[group_id] == 4)
+        return 'moderator';
+      else
+        return 'registered';
+    }
+
+
+    function &get_user_icon() {
+      if (!$this->get_group_id())
+        return '';
+      return 'data/group_icons/'.$this->get_group_id().'.png';
     }
 
 

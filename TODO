@@ -1,4 +1,3 @@
 * Rework the header rendering logic.
 * Design a URL scheme that makes sense for URL rewriting.
-* Show a different icon for moderators/administrators.
 * Display the group name in the user profile.

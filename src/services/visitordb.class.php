@@ -128,7 +128,10 @@
         $query = &new FreechSqlQuery($sql);
         $query->set_int('start', $_since);
       }
-      return $this->db->GetOne($query->sql()) or 0;
+      $n = $this->db->GetOne($query->sql());
+      if (!$n)
+        return 0;
+      return $n;
     }
   }
 ?>

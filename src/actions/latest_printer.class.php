@@ -32,11 +32,7 @@
       // Required to enable correct formatting of the message.
       $msg_id = $this->parent->get_message_id();
       $_message->set_selected($_message->get_id() == $msg_id);
-      if (!$_message->is_active()) {
-        $_message->set_subject(lang("blockedtitle"));
-        $_message->set_username('------');
-        $_message->set_body('');
-      }
+      $_message->apply_block();
 
       // Append everything to a list.
       array_push($this->messages, $_message);

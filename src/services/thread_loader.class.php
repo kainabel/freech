@@ -64,18 +64,13 @@
     }
 
 
-    function _append_row(&$_message, $_indents, $_data) {
+    function _append_row(&$_message, $_data) {
       // Required to enable correct formatting of the message.
+      $_message->apply_block();
       if ($_message->get_id() == $_GET[msg_id])
         $_message->set_selected();
-      if (!$_message->is_active()) {
-        $_message->set_subject(lang("blockedtitle"));
-        $_message->set_username('------');
-        $_message->set_body('');
-      }
 
       // Append everything to a list.
-      $_message->indent = $_indents;
       array_push($this->messages, $_message);
     }
   }

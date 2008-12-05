@@ -27,19 +27,18 @@
 
     function show(&$_forum_id, &$_msg) {
       $user       = $this->parent->get_current_user();
-      $may_edit   = cfg("postings_editable")
-                    && $user && $user->get_id() === $_msg->get_user_id();
+      $msg_uid    = $_msg ? $_msg->get_user_id() : -1;
+      $uid        = $user ? $user->get_id()      : -1;
+      $may_edit   = cfg("postings_editable") && $user && $uid === $msg_uid;
       $indexbar   = &new IndexBarReadMessage($_msg, $may_edit);
       $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 
-      if (!$_msg) {
+      if ($_msg)
+        $_msg->apply_block();
+      else {
         $_msg = new Message;
         $_msg->set_subject(lang("noentrytitle"));
         $_msg->set_body(lang("noentrybody"));
-      }
-      elseif (!$_msg->is_active()) {
-        $_msg->set_subject(lang("blockedtitle"));
-        $_msg->set_body(lang("blockedentry"));
       }
 
       $this->smarty->clear_all_assign();

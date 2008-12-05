@@ -414,7 +414,7 @@
                                           $parent_id,
                                           $may_quote);
 
-      $duplicate_id = $this->forum->find_duplicate($message);
+      $duplicate_id = $this->forum->get_duplicate_id_from_message($message);
       if ($duplicate_id)
         return $msgprinter->show_created($duplicate_id,
                                          $parent_id,
@@ -422,11 +422,11 @@
 
       $ret = $message->check_complete();
       if ($ret == 0 && !$message->get_id())
-        $newmsg_id = $this->forum->insert_entry($forum_id,
-                                                $parent_id,
-                                                $message);
+        $newmsg_id = $this->forum->insert($forum_id,
+                                          $parent_id,
+                                          $message);
       elseif ($message->get_id()) {
-        $this->forum->save_entry($forum_id, $parent_id, $message);
+        $this->forum->save($forum_id, $parent_id, $message);
         $newmsg_id = $message->get_id();
       }
       if ($ret < 0 || $new_id < 0)

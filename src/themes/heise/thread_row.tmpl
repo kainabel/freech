@@ -6,11 +6,11 @@
     <tr>
      <td align='left'>
 {*
-  $indents:
+  $indent:
   1: INDENT_DRAW_DASH
   2: INDENT_DRAW_SPACE
 *}
-{foreach item=indent from=$message->indent}
+{foreach item=indent from=$message->get_indent()}
   {if $indent == 1}
      <img src='themes/heise/img/l.png' width=20 height=23 alt='|' />
   {else}

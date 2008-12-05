@@ -50,6 +50,7 @@
       $this->_fields[user_id]      = 2; // Anonymous user.
       $this->_fields[allow_answer] = TRUE;
       $this->_fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
+      $this->_fields[indent]       = array();
     }
 
 
@@ -355,6 +356,15 @@
     }
 
 
+    function apply_block() {
+      if ($this->is_active())
+        return;
+      $this->set_subject(lang("blockedtitle"));
+      $this->set_username('------');
+      $this->set_body('');
+    }
+
+
     function &get_user_type() {
       if ($this->_fields[user_id] == 1)
         return 'moderator';
@@ -423,6 +433,16 @@
 
     function get_prev_thread_id() {
       return $this->_fields[prev_thread_id];
+    }
+
+
+    function set_indent($_indent) {
+      $this->_fields[indent] = $_indent;
+    }
+
+
+    function get_indent() {
+      return $this->_fields[indent];
     }
 
 

@@ -61,7 +61,6 @@
   include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
-  include_once 'services/thread_loader.class.php';
   include_once 'services/accountdb.class.php';
   include_once 'services/visitordb.class.php';
   include_once 'services/trackable.class.php';

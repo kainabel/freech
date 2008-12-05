@@ -20,13 +20,42 @@
 ?>
 <?php
   class ThreadPrinter extends PrinterBase {
-    function show($_forum_id, $_msg_id, $_offset, &$_thread_state) {
+    function ThreadPrinter(&$_parent) {
+      $this->PrinterBase(&$_parent);
+      $this->messages = array();
+    }
+
+
+    function _append_message(&$_message, $_data) {
+      // Required to enable correct formatting of the message.
+      $msg_id = $this->parent->get_message_id();
+      $_message->set_selected($_message->get_id() == $msg_id);
+      $_message->apply_block();
+
+      // Append everything to a list.
+      array_push($this->messages, $_message);
+    }
+
+
+    function show($_forum_id, $_msg_id, $_offset, $_thread_state) {
       // Load messages from the database.
-      $loader = new ThreadLoader($this->db, $_thread_state);
       if ($_msg_id == 0)
-        $loader->load_threads_from_forum($_forum_id, $_offset);
+        $this->db->foreach_child($_forum_id,
+                                 0,
+                                 $_offset,
+                                 cfg("tpp"),
+                                 cfg("updated_threads_first"),
+                                 $_thread_state,
+                                 array(&$this, '_append_message'),
+                                 '');
       else
-        $loader->load_thread_from_message($_forum_id, $_msg_id, $_offset);
+        $this->db->foreach_child_in_thread($_forum_id,
+                                           $_msg_id,
+                                           $_offset,
+                                           cfg("tpp"),
+                                           $_thread_state,
+                                           array(&$this, '_append_message'),
+                                           '');
 
       // Create the index bar.
       $n_threads = $this->db->get_n_threads($_forum_id);
@@ -36,14 +65,14 @@
                          n_offset           => $_offset,
                          n_pages_per_index  => cfg("ppi"),
                          thread_state       => $_thread_state);
-      $n_rows   = count($loader->messages);
+      $n_rows   = count($this->messages);
       $indexbar = &new IndexBarByThread($args);
 
       // Render the template.
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('indexbar',        $indexbar);
       $this->smarty->assign_by_ref('n_rows',          $n_rows);
-      $this->smarty->assign_by_ref('messages',        $loader->messages);
+      $this->smarty->assign_by_ref('messages',        $this->messages);
       $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
       $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
       $this->parent->append_content($this->smarty->fetch('list_by_thread.tmpl'));

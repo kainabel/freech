@@ -20,6 +20,23 @@
 ?>
 <?php
   class ProfilePrinter extends PrinterBase {
+    function ProfilePrinter(&$_forum) {
+      $this->PrinterBase(&$_forum);
+      $this->messages = array();
+    }
+
+
+    function _append_message(&$_message, $_data) {
+      // Required to enable correct formatting of the message.
+      $msg_id = $this->parent->get_message_id();
+      $_message->set_selected($_message->get_id() == $msg_id);
+      $_message->apply_block();
+
+      // Append everything to a list.
+      array_push($this->messages, $_message);
+    }
+
+
     function show($_user, $_hint = '') {
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->db->get_n_messages($search);
@@ -40,10 +57,15 @@
       // Load the threads (if they are to be displayed).
       $this->smarty->clear_all_assign();
       if ($showlist) {
-        $loader = new ThreadLoader($this->db, $_thread_state);
-        $loader->load_threads_from_user($_user->get_id(), $_offset);
-        $this->smarty->assign_by_ref('n_rows',   count($loader->messages));
-        $this->smarty->assign_by_ref('messages', $loader->messages);
+        $this->db->foreach_message_from_user($_user->get_id(),
+                                             $_offset,
+                                             cfg("epp"),
+                                             cfg("updated_threads_first"),
+                                             $_thread_state,
+                                             array(&$this, '_append_message'),
+                                             '');
+        $this->smarty->assign_by_ref('n_rows',   count($this->messages));
+        $this->smarty->assign_by_ref('messages', $this->messages);
       }
 
       // Create the index bar.

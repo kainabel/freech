@@ -20,11 +20,6 @@
 ?>
 <?php
   class MessagePrinter extends ThreadPrinter {
-    function MessagePrinter(&$_parent) {
-      $this->ThreadPrinter(&$_parent);
-    }
-
-
     function show(&$_forum_id, &$_msg) {
       $user       = $this->parent->get_current_user();
       $msg_uid    = $_msg ? $_msg->get_user_id() : -1;
@@ -44,11 +39,16 @@
       $this->smarty->clear_all_assign();
       $this->smarty->assign_by_ref('showthread', $showthread);
       if ($showthread) {
-        $state  = new ThreadState(THREAD_STATE_UNFOLDED, '');
-        $loader = new ThreadLoader($this->db, $state);
-        $loader->load_thread_from_message($_forum_id, $_msg->get_id(), 0);
-        $this->smarty->assign_by_ref('n_rows',   count($loader->messages));
-        $this->smarty->assign_by_ref('messages', $loader->messages);
+        $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
+        $this->db->foreach_child_in_thread($_forum_id,
+                                           $_msg->get_id(),
+                                           0,
+                                           cfg("tpp"),
+                                           $state,
+                                           array(&$this, '_append_message'),
+                                           '');
+        $this->smarty->assign_by_ref('n_rows',   count($this->messages));
+        $this->smarty->assign_by_ref('messages', $this->messages);
       }
 
       $this->smarty->assign_by_ref('indexbar', $indexbar);

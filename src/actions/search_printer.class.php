@@ -20,8 +20,6 @@
 ?>
 <?php
   class SearchPrinter extends PrinterBase {
-    var $results;
-
     function SearchPrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
       $this->results = array();

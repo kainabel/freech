@@ -1,3 +1,8 @@
+* Display the group name in the user profile.
+* Make user profile editable by administrators.
+* Add a group profile that displays permissions.
+* Make group profile editable by administrators.
+* Add "user_is_special" and "user_icon" columns to message table (copied from group on insert), drop "group_id".
+* Replace default_group_id config key by a default_group based on the name.
 * Rework the header rendering logic.
 * Design a URL scheme that makes sense for URL rewriting.
-* Display the group name in the user profile.

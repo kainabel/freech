@@ -98,10 +98,10 @@
       $userdb = $this->parent->_get_userdb();
       $func   = array(&$this, '_append_user');
       $n_rows = $userdb->foreach_user_from_query($search,
-                                                       50,
-                                                       (int)$_offset,
-                                                       $func,
-                                                       '');
+                                                 50,
+                                                 (int)$_offset,
+                                                 $func,
+                                                 '');
 
       // Search for similar results.
       if ($n_rows == 0) {

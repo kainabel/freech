@@ -156,9 +156,9 @@
         $sql .= " AND $key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
-      $sql .= ')';
       $sql .= " ORDER BY username";
       $query->set_sql($sql);
+      echo $query->sql();
       $res     = $this->db->SelectLimit($query->sql(),
                                         (int)$_limit,
                                         (int)$_offset);

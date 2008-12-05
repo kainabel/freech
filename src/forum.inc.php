@@ -61,7 +61,7 @@
   include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
-  include_once 'services/accountdb.class.php';
+  include_once 'services/userdb.class.php';
   include_once 'services/visitordb.class.php';
   include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
@@ -153,16 +153,16 @@
     }
 
 
-    function _get_accountdb() {
-      if (!$this->accountdb)
-        $this->accountdb = &new AccountDB($this->db);
-      return $this->accountdb;
+    function _get_userdb() {
+      if (!$this->userdb)
+        $this->userdb = &new UserDB($this->db);
+      return $this->userdb;
     }
 
 
     function _try_login() {
-      $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_name($_POST['username']);
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_name($_POST['username']);
       if (!$user)
         return ERR_LOGIN_FAILED;
       if ($user->get_status() == USER_STATUS_UNCONFIRMED)
@@ -174,7 +174,7 @@
 
       // Save user to update his timestamp.
       $user->set_last_login_time(time());
-      $ret = $accountdb->save_user($user);
+      $ret = $userdb->save_user($user);
       if ($ret < 0)
         die("Failed to log in user, return code $ret");
       $_SESSION['username'] = $user->get_username();
@@ -191,9 +191,9 @@
         return FALSE;
       if ($this->current_user)
         return $this->current_user;
-      $accountdb          = $this->_get_accountdb();
+      $userdb             = $this->_get_userdb();
       $sessionuser        = $_SESSION['username'];
-      $this->current_user = $accountdb->get_user_from_name($sessionuser);
+      $this->current_user = $userdb->get_user_from_name($sessionuser);
       return $this->current_user;
     }
 
@@ -218,7 +218,7 @@
 
 
     function get_newest_users($_limit) {
-      return $this->_get_accountdb()->get_newest_users($_limit);
+      return $this->_get_userdb()->get_newest_users($_limit);
     }
 
 
@@ -285,7 +285,7 @@
     // Read a message.
     function _message_read() {
       $forum_id   = $this->get_forum_id();
-      $msg        = $this->forum->get_message($forum_id, $_GET['msg_id']);
+      $msg        = $this->forum->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
       $this->_print_message_breadcrumbs($msg);
       $msgprinter->show($forum_id, $msg);
@@ -296,7 +296,7 @@
     function _message_answer() {
       $forum_id   = $this->get_forum_id();
       $parent_id  = (int)$_GET['parent_id'];
-      $message    = $this->forum->get_message($forum_id, $parent_id);
+      $message    = $this->forum->get_message_from_id($parent_id);
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_reply($message, '');
     }
@@ -306,7 +306,7 @@
     function _message_edit_saved() {
       $forum_id   = $this->get_forum_id();
       $user       = $this->get_current_user();
-      $message    = $this->forum->get_message($forum_id, $_GET[msg_id]);
+      $message    = $this->forum->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
 
       if (!cfg("postings_editable"))
@@ -345,7 +345,7 @@
     function _message_quote() {
       $forum_id   = $this->get_forum_id();
       $parent_id  = (int)$_POST['parent_id'];
-      $quoted_msg = $this->forum->get_message($forum_id, $parent_id);
+      $quoted_msg = $this->forum->get_message_from_id($parent_id);
       $message    = $this->_fetch_message_data();
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_quoted($message, $quoted_msg, '');
@@ -393,7 +393,7 @@
       if ($_POST['msg_id'] && !cfg("postings_editable"))
         die("Postings may not be changed as per configuration.");
       elseif ($_POST['msg_id']) {
-        $message = $this->forum->get_message($forum_id, $_POST['msg_id']);
+        $message = $this->forum->get_message_from_id($_POST['msg_id']);
         $message->set_subject($_POST['subject']);
         $message->set_body($_POST['body']);
       }
@@ -584,9 +584,9 @@
 
 
     function _username_available(&$_username) {
-      $accountdb = $this->_get_accountdb();
-      $user      = new User($_username);
-      if (count($accountdb->get_similar_users($user)) == 0)
+      $userdb = $this->_get_userdb();
+      $user   = new User($_username);
+      if (count($userdb->get_similar_users($user)) == 0)
         return TRUE;
       return FALSE;
     }
@@ -618,8 +618,8 @@
 
 
     function _resend_confirmation_mail() {
-      $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_name($_GET['username']);
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_name($_GET['username']);
       if ($user->get_status() != USER_STATUS_UNCONFIRMED)
         die("User is already confirmed.");
       $this->_send_confirmation_mail($user);
@@ -640,8 +640,9 @@
       if (!$this->_username_available($user->get_username()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
 
-      $accountdb = $this->_get_accountdb();
-      $ret       = $accountdb->save_user($user);
+      $user->set_group_id(cfg("default_group_id"));
+      $userdb = $this->_get_userdb();
+      $ret    = $userdb->save_user($user);
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
 
@@ -653,8 +654,8 @@
       if ($this->get_action() == 'account_confirm'
         || $this->get_action() == 'confirm_password_mail'
         || $this->get_action() == 'reset_password_submit') {
-        $accountdb = $this->_get_accountdb();
-        $user      = $accountdb->get_user_from_name($_GET['username']);
+        $userdb = $this->_get_userdb();
+        $user   = $userdb->get_user_from_name($_GET['username']);
         $this->_check_confirmation_hash($user);
         return $user;
       }
@@ -675,9 +676,9 @@
 
     function _change_password_submit() {
       global $err;
-      $accountdb = $this->_get_accountdb();
-      $user      = $this->_fetch_user_data();
-      $user      = $accountdb->get_user_from_name($user->get_username());
+      $userdb = $this->_get_userdb();
+      $user   = $this->_fetch_user_data();
+      $user   = $userdb->get_user_from_name($user->get_username());
       $regist = &new RegistrationPrinter($this);
       if ($_POST['password'] !== $_POST['password2']) {
         $error = lang("passwordsdonotmatch");
@@ -691,7 +692,7 @@
       }
 
       $user->set_status(USER_STATUS_ACTIVE);
-      $ret       = $accountdb->save_user($user);
+      $ret = $userdb->save_user($user);
       if ($ret < 0) {
         $regist->show_change_password($user, $err[$ret]);
         return;
@@ -716,8 +717,8 @@
       if ($ret != 0)
         return $registration->show_forgot_password($user, $err[$ret]);
 
-      $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_mail($user->get_mail());
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_mail($user->get_mail());
       if (!$user) {
         $msg = $err[ERR_LOGIN_NO_SUCH_MAIL];
         return $registration->show_forgot_password($user, $msg);
@@ -741,9 +742,9 @@
 
 
     function _confirm_password_mail() {
-      $user      = $this->_get_current_or_confirming_user();
-      $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_name($user->get_username());
+      $user   = $this->_get_current_or_confirming_user();
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_name($user->get_username());
       $this->_check_confirmation_hash($user);
 
       if ($user->get_status() != USER_STATUS_ACTIVE)
@@ -765,15 +766,15 @@
 
 
     function _account_confirm() {
-      $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_name($_GET['username']);
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_name($_GET['username']);
       $this->_check_confirmation_hash($user);
 
       if (!$user->get_password_hash())
         return $this->_change_password();
 
       $user->set_status(USER_STATUS_ACTIVE);
-      $ret = $accountdb->save_user($user);
+      $ret = $userdb->save_user($user);
       if ($ret < 0)
         die("User activation failed");
 
@@ -783,8 +784,8 @@
 
 
     function _show_profile() {
-      $accountdb = $this->_get_accountdb();
-      $user      = $accountdb->get_user_from_name($_GET['username']);
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_name($_GET['username']);
       if (!$user)
         die("No such user.");
       $this->_print_profile_breadcrumbs($user);
@@ -795,8 +796,8 @@
 
     function _show_user_postings() {
       if ($_GET['username']) {
-        $accountdb = $this->_get_accountdb();
-        $user      = $accountdb->get_user_from_name($_GET['username']);
+        $userdb = $this->_get_userdb();
+        $user   = $userdb->get_user_from_name($_GET['username']);
       }
       else
         $user = $this->get_current_user();
@@ -834,8 +835,8 @@
       if ($_POST['password'] != '')
         $user->set_password($_POST['password']);
 
-      $accountdb = $this->_get_accountdb();
-      $ret       = $accountdb->save_user($user);
+      $userdb = $this->_get_userdb();
+      $ret    = $userdb->save_user($user);
       if ($ret < 0)
         return $profile->show_user_data($user, $err[$ret]);
 

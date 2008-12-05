@@ -4,7 +4,7 @@
 require_once 'adodb/adodb.inc.php';
 include_once 'libuseful/SqlQuery.class.php5';
 include_once 'services/sql_query.class.php';
-include_once 'services/accountdb.class.php';
+include_once 'services/userdb.class.php';
 include_once 'functions/config.inc.php';
 include_once 'objects/user.class.php';
 
@@ -16,8 +16,8 @@ function print_user($user, $needle) {
   echo "Match: ".$user->get_username()." = ".$user->get_lexical_similarity($needle)."<br>";
 }
 
-$accountdb = new AccountDB($db);
-$needle    = new User;
+$userdb = new UserDB($db);
+$needle = new User;
 $needle->set_username($_GET['name']);
 
 if ($_GET['name2']) {
@@ -26,7 +26,7 @@ if ($_GET['name2']) {
   die("Similarity: ".$user->get_lexical_similarity($needle)."<br>");
 }
 
-$users = $accountdb->get_similar_users($needle);
+$users = $userdb->get_similar_users($needle);
 foreach ($users as $user)
   print_user($user, $needle);
 echo "DONE.";

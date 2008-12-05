@@ -33,18 +33,6 @@
     /***********************************************************************
      * Private API.
      ***********************************************************************/
-    function _lock_write($_forum) {
-      $query = &new FreechSqlQuery("LOCK TABLE {$_forum} WRITE");
-      //$this->db->execute($query->sql()) or die("ForumDB::lock_write()");
-    }
-
-
-    function _unlock_write() {
-      $query = &new FreechSqlQuery("UNLOCK TABLES");
-      //$this->db->execute($query->sql()) or die("ForumDB::unlock_write()");
-    }
-
-
     /* Given a decimal number, this function returns an 8 character wide
      * hexadecimal string representation of it.
      */
@@ -173,50 +161,6 @@
     /***********************************************************************
      * Public API.
      ***********************************************************************/
-    /* Returns a message from the given forum.
-     * $_forum: The forum id.
-     * $_id:    The id of the message.
-     * Returns: An object containing the fields
-     *            - id
-     *            - username
-     *            - subject
-     *            - body
-     *            - active
-     *            - time
-     */
-    function &get_message($_forum_id, $_id) {
-      $sql  = "SELECT id,forum_id,priority,user_id,thread_id,HEX(path) path,";
-      $sql .= "n_children,username,subject,body,active,";
-      $sql .= "ip_hash,";
-      $sql .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql .= "UNIX_TIMESTAMP(created) created";
-      $sql .= " FROM {t_message}";
-      $sql .= " WHERE id={id}";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_int('id', $_id);
-      if (!$row = $this->db->GetRow($query->sql()))
-        return;
-      $row[prev_thread_id]   = $this->_get_prev_thread_id($_forum_id,
-                                                          $row[thread_id]);
-      $row[next_thread_id]   = $this->_get_next_thread_id($_forum_id,
-                                                          $row[thread_id]);
-      $row[prev_message_id]  = $this->_get_prev_entry_id($_forum_id,
-                                                         $row[thread_id],
-                                                         $row[path]);
-      $row[next_message_id]  = $this->_get_next_entry_id($_forum_id,
-                                                         $row[thread_id],
-                                                         $row[path]);
-      if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
-        $row[allow_answer] = FALSE;
-      if ($row[id] == $row[thread_id])
-        $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
-
-      $message = &new Message;
-      $message->set_from_db($row);
-      return $message;
-    }
-
-
     /* Insert a new child.
      *
      * $_forum:   The forum id.
@@ -226,7 +170,6 @@
      */
     function insert($_forum_id, $_parent_id, &$_message) {
       $body = trim($_message->get_body() . "\n\n" . $_message->get_signature());
-      $this->_lock_write("t_message");
       //$this->db->debug = true;
 
       // Fetch the parent row.
@@ -350,7 +293,6 @@
 
       $this->db->CompleteTrans();
 
-      $this->_unlock_write();
       return $newid;
     }
 
@@ -358,8 +300,6 @@
     function save($_forum_id, $_parent_id, &$_message) {
       //FIXME: This currently does not support moving messages (i.e. changing
       // the path, thread, or forum)
-
-      $this->_lock_write("t_message");
       //$this->db->debug = true;
 
       $this->db->StartTrans();
@@ -388,7 +328,50 @@
       $this->db->Execute($query->sql()) or die("ForumDB::save(): 1");
 
       $this->db->CompleteTrans();
-      $this->_unlock_write();
+    }
+
+
+    /* Returns a message from the given forum.
+     * $_forum: The forum id.
+     * $_id:    The id of the message.
+     * Returns: An object containing the fields
+     *            - id
+     *            - username
+     *            - subject
+     *            - body
+     *            - active
+     *            - time
+     */
+    function get_message_from_id($_id) {
+      $sql  = "SELECT id,forum_id,priority,user_id,thread_id,HEX(path) path,";
+      $sql .= "n_children,username,subject,body,active,";
+      $sql .= "ip_hash,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
+      $sql .= " FROM {t_message}";
+      $sql .= " WHERE id={id}";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('id', $_id);
+      if (!$row = $this->db->GetRow($query->sql()))
+        return;
+      $row[prev_thread_id]  = $this->_get_prev_thread_id($row[forum_id],
+                                                         $row[thread_id]);
+      $row[next_thread_id]  = $this->_get_next_thread_id($row[forum_id],
+                                                         $row[thread_id]);
+      $row[prev_message_id] = $this->_get_prev_entry_id($row[forum_id],
+                                                        $row[thread_id],
+                                                        $row[path]);
+      $row[next_message_id] = $this->_get_next_entry_id($row[forum_id],
+                                                        $row[thread_id],
+                                                        $row[path]);
+      if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
+        $row[allow_answer] = FALSE;
+      if ($row[id] == $row[thread_id])
+        $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
+
+      $message = &new Message;
+      $message->set_from_db($row);
+      return $message;
     }
 
 

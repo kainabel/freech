@@ -330,11 +330,6 @@
     }
 
 
-    function &get_hostname() {
-      return GetHostByAddr($this->_fields[ip_address]);
-    }
-
-
     // The relation is the relation in the tree, see the define()s above.
     function set_relation($_relation) {
       $this->_fields[relation] = $_relation;

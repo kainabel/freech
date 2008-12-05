@@ -24,7 +24,6 @@
    */
   class Group {
     var $fields;      ///< Properties of the group, such as name or id.
-    var $users;       ///< The list of users in this group.
     var $permissions; ///< The permissions of this group.
     
     /// Constructor.
@@ -37,7 +36,6 @@
     function clear() {
       $this->fields          = array();
       $this->fields[created] = time();
-      $this->users           = array();
       $this->permissions     = array();
     }
     
@@ -57,7 +55,7 @@
     
     /// Set a unique id for the user.
     function set_id($_id) {
-      $this->fields[id] = $_id * 1;
+      $this->fields[id] = (int)$_id;
     }
     
     
@@ -71,17 +69,17 @@
         return ERR_GROUP_NAME_TOO_SHORT;
       if (strlen($_name) > cfg("max_groupnamelength"))
         return ERR_GROUP_NAME_TOO_LONG;
-      $this->fields[login] = $_login * 1;
+      $this->fields[name] = (int)$_name;
     }
     
     
-    function &get_name() {
+    function get_name() {
       return $this->fields[name];
     }
     
     
     function set_active($_active = TRUE) {
-      $this->fields[active] = $_active;
+      $this->fields[active] = (bool)$_active;
     }
     
     
@@ -103,11 +101,6 @@
     }
     
     
-    function set_updated_time($_updated) {
-      $this->fields[updated] = $_updated * 1;
-    }
-    
-    
     function get_updated_unixtime() {
       return $this->fields[updated];
     }
@@ -121,27 +114,17 @@
     }
     
     
-    function add_user(&$_user) {
-      $this->users[$_user->get_name()] =& $_user;
-    }
-    
-    
-    function remove_user(&$_user) {
-      unset($this->groups[$_user->get_name()]);
-    }
-    
-    
-    function grant_permission(&$_permission) {
+    function grant($_permission) {
       $this->permissions[$_permission] = TRUE;
     }
     
     
-    function deny_permission(&$_permission) {
-      $this->permissions[$_permission] == FALSE;
+    function deny($_permission) {
+      $this->permissions[$_permission] = FALSE;
     }
     
     
-    function has_permission(&$_permission) {
+    function may($_permission) {
       return $this->permissions[$_permission] == TRUE;
     }
     
@@ -150,7 +133,6 @@
     function check_complete() {
       if (ctype_space($this->fields[name]))
         return ERR_GROUP_NAME_INCOMPLETE;
-      
       return 0;
     }
   }

@@ -94,10 +94,10 @@
       $this->smarty->assign('query', $_query);
 
       // Run the search.
-      $search    = array('username' => '%'.trim($_query).'%');
-      $accountdb = $this->parent->_get_accountdb();
-      $func      = array(&$this, '_append_user');
-      $n_rows    = $accountdb->foreach_user_from_query($search,
+      $search = array('username' => '%'.trim($_query).'%');
+      $userdb = $this->parent->_get_userdb();
+      $func   = array(&$this, '_append_user');
+      $n_rows = $userdb->foreach_user_from_query($search,
                                                        50,
                                                        (int)$_offset,
                                                        $func,
@@ -106,7 +106,7 @@
       // Search for similar results.
       if ($n_rows == 0) {
         $user          = new User($_query);
-        $this->results = $accountdb->get_similar_users($user, 50);
+        $this->results = $userdb->get_similar_users($user, 50);
         $n_rows        = count($this->results);
       }
 

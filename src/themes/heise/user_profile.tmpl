@@ -3,6 +3,10 @@
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>
+    <td><b>{lang text="group_name"|escape}</b></td>
+    <td>{$group->get_name()|escape}</td>
+  </tr>
+  <tr>
     <td><b>{lang text="account_name"|escape}</b></td>
     <td>{$user->get_username()|escape}</td>
   </tr>

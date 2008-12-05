@@ -203,9 +203,8 @@
                               . " Please enter letters, digits or spaces only.";
   $lang[usernamenotavailable] = "The entered username is not available.";
 
-  // Profile and personal data.
+  // User profile and personal data.
   $lang[profile]            = "Profile of [NAME]";
-  $lang[myprofile]          = "My Profile";
   $lang[account_data]       = "My Personal Data";
   $lang[account_created]    = "Member since:";
   $lang[account_messages]   = "Forum postings:";
@@ -223,6 +222,9 @@
   $lang[account_save]       = "Save Personal Data";
   $lang[account_saved]      = "Your data has been saved.";
   $lang[account_emptyfield] = "None";
+
+  // Group profile.
+  $lang[group_name] = "User group:";
 
   // Top user list.
   $lang[n_postings] = "Postings";

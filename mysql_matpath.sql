@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate latin1_general_ci NOT NULL,
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
-  `active` tinyint(3) unsigned default '1',
+  `active` tinyint(1) unsigned default '1',
   `owner_id` int(11) unsigned default NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
@@ -29,10 +29,12 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
 CREATE TABLE IF NOT EXISTS `freech_group` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate latin1_general_ci NOT NULL,
+  `is_special` tinyint(1) unsigned default '0',
   `active` tinyint(1) unsigned default '1',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------

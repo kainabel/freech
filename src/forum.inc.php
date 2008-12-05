@@ -58,6 +58,7 @@
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
 
+  include_once 'services/groupdb.class.php';
   include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
@@ -157,6 +158,13 @@
       if (!$this->userdb)
         $this->userdb = &new UserDB($this->db);
       return $this->userdb;
+    }
+
+
+    function _get_groupdb() {
+      if (!$this->groupdb)
+        $this->groupdb = &new GroupDB($this->db);
+      return $this->groupdb;
     }
 
 
@@ -791,7 +799,7 @@
         die("No such user.");
       $this->_print_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
-      $profile->show($user);
+      $profile->show_user_profile($user);
     }
 
 

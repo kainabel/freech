@@ -1,4 +1,3 @@
-* Display the group name in the user profile.
 * Make user profile editable by administrators.
 * Add a group profile that displays permissions.
 * Make group profile editable by administrators.
@@ -6,3 +5,4 @@
 * Replace default_group_id config key by a default_group based on the name.
 * Rework the header rendering logic.
 * Design a URL scheme that makes sense for URL rewriting.
+* Rename "active" columns to "is_active".

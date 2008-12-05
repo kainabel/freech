@@ -23,47 +23,45 @@
    * Represents a group of users.
    */
   class Group {
-    var $fields;      ///< Properties of the group, such as name or id.
-    var $permissions; ///< The permissions of this group.
-    
     /// Constructor.
     function Group() {
       $this->clear();
     }
-    
-    
+
+
     /// Resets all values.
     function clear() {
       $this->fields          = array();
       $this->fields[created] = time();
       $this->permissions     = array();
     }
-    
-    
+
+
     /// Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("User:set_from_db(): Non-array.");
+        die("Group:set_from_db(): Non-array.");
       $this->clear();
-      $this->fields[id]      = $_db_row[id];
-      $this->fields[name]    = $_db_row[name];
-      $this->fields[active]  = $_db_row[active];
-      $this->fields[created] = $_db_row[created];
-      $this->fields[updated] = $_db_row[updated];
+      $this->fields[id]         = $_db_row[id];
+      $this->fields[name]       = $_db_row[name];
+      $this->fields[is_special] = $_db_row[is_special];
+      $this->fields[active]     = $_db_row[active];
+      $this->fields[created]    = $_db_row[created];
+      $this->fields[updated]    = $_db_row[updated];
     }
-    
-    
+
+
     /// Set a unique id for the user.
     function set_id($_id) {
       $this->fields[id] = (int)$_id;
     }
-    
-    
+
+
     function get_id() {
       return $this->fields[id];
     }
-    
-    
+
+
     function set_name($_name) {
       if (strlen($_name) < cfg("min_groupnamelength"))
         return ERR_GROUP_NAME_TOO_SHORT;
@@ -71,64 +69,74 @@
         return ERR_GROUP_NAME_TOO_LONG;
       $this->fields[name] = (int)$_name;
     }
-    
-    
+
+
     function get_name() {
       return $this->fields[name];
     }
-    
-    
+
+
+    function set_special($_special = TRUE) {
+      $this->fields[is_special] = (bool)$_special;
+    }
+
+
+    function is_special() {
+      return $this->fields[is_special];
+    }
+
+
     function set_active($_active = TRUE) {
       $this->fields[active] = (bool)$_active;
     }
-    
-    
+
+
     function is_active() {
       return $this->fields[active];
     }
-    
-    
+
+
     function get_created_unixtime() {
       return $this->fields[created];
     }
-    
-    
+
+
     /// Returns the formatted time.
     function get_created_time($_format = '') {
       if (!$_format)
         $_format = lang("dateformat");
       return date($_format, $this->fields[created]);
     }
-    
-    
+
+
     function get_updated_unixtime() {
       return $this->fields[updated];
     }
-    
-    
+
+
     /// Returns the formatted time.
     function get_updated_time($_format = '') {
       if (!$_format)
         $_format = lang("dateformat");
       return date($_format, $this->fields[updated]);
     }
-    
-    
+
+
     function grant($_permission) {
       $this->permissions[$_permission] = TRUE;
     }
-    
-    
+
+
     function deny($_permission) {
       $this->permissions[$_permission] = FALSE;
     }
-    
-    
+
+
     function may($_permission) {
       return $this->permissions[$_permission] == TRUE;
     }
-    
-    
+
+
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
       if (ctype_space($this->fields[name]))

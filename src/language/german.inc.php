@@ -221,9 +221,8 @@
   $lang[usernamenotavailable] = "Der Benutzername gehört bereits einem "
                               . " registrierten User.";
 
-  // Profile and personal data.
+  // User profile and personal data.
   $lang[profile]            = "Profil von [NAME]";
-  $lang[myprofile]          = "Mein Profil";
   $lang[account_data]       = "Meine persönlichen Daten";
   $lang[account_created]    = "Mitglied seit:";
   $lang[account_messages]   = "Forenbeiträge bisher:";
@@ -241,6 +240,9 @@
   $lang[account_save]       = "Daten speichern";
   $lang[account_saved]      = "Die Daten wurden gespeichert.";
   $lang[account_emptyfield] = "Nicht angegeben";
+
+  // Group profile.
+  $lang[group_name] = "Benutzergruppe:";
 
   // Top user list.
   $lang[n_postings] = "Postings";

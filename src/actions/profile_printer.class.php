@@ -37,15 +37,19 @@
     }
 
 
-    function show($_user, $_hint = '') {
+    function show_user_profile($_user, $_hint = '') {
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->db->get_n_messages($search);
+      $groupdb   = $this->parent->_get_groupdb();
+      $search    = array('id' => $_user->get_id());
+      $group     = $groupdb->get_group_from_query($search);
 
       // Render the template.
       $this->smarty->assign_by_ref('user',       $_user);
+      $this->smarty->assign_by_ref('group',      $group);
       $this->smarty->assign_by_ref('hint',       $_hint);
       $this->smarty->assign_by_ref('n_messages', $n_entries);
-      $this->parent->append_content($this->smarty->fetch('profile.tmpl'));
+      $this->parent->append_content($this->smarty->fetch('user_profile.tmpl'));
     }
 
 
@@ -110,6 +114,14 @@
       $this->smarty->assign_by_ref('hint',   $_hint);
       $this->smarty->assign_by_ref('action', $url->get_string());
       $this->parent->append_content($this->smarty->fetch('user_options.tmpl'));
+    }
+
+
+    function show_group_profile($_group, $_hint = '') {
+      // Render the template.
+      $this->smarty->assign_by_ref('group', $_group);
+      $this->smarty->assign_by_ref('hint',  $_hint);
+      $this->parent->append_content($this->smarty->fetch('group_profile.tmpl'));
     }
   }
 ?>

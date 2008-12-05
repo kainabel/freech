@@ -32,8 +32,6 @@
    * Represents a message in the forum and all associated data.
    */
   class Message {
-    var $_fields;
-
     // Constructor.
     function Message() {
       $this->clear();
@@ -42,16 +40,16 @@
 
     // Resets all values.
     function clear() {
-      $this->_fields = array();
-      $this->_fields[created]      = time();
-      $this->_fields[updated]      = $this->_fields[created];
-      $this->_fields[relation]     = MESSAGE_RELATION_UNKNOWN;
-      $this->_fields[active]       = TRUE;
-      $this->_fields[user_id]      = 2; // Anonymous user.
-      $this->_fields[group_id]     = 2; // Anonymous group.
-      $this->_fields[allow_answer] = TRUE;
-      $this->_fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
-      $this->_fields[indent]       = array();
+      $this->fields = array();
+      $this->fields[created]      = time();
+      $this->fields[updated]      = $this->fields[created];
+      $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
+      $this->fields[active]       = TRUE;
+      $this->fields[user_id]      = 2; // Anonymous user.
+      $this->fields[group_id]     = 2; // Anonymous group.
+      $this->fields[allow_answer] = TRUE;
+      $this->fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
+      $this->fields[indent]       = array();
     }
 
 
@@ -60,27 +58,27 @@
       if (!is_array($_db_row))
         die("Message:set_from_db(): Non-array.");
       $this->clear();
-      $this->_fields[id]              = $_db_row[id];
-      $this->_fields[forum_id]        = $_db_row[forum_id];
-      $this->_fields[priority]        = $_db_row[priority];
-      $this->_fields[user_id]         = $_db_row[user_id];
-      $this->_fields[group_id]        = $_db_row[group_id];
-      $this->_fields[username]        = $_db_row[username];
-      $this->_fields[subject]         = $_db_row[subject];
-      $this->_fields[body]            = $_db_row[body];
-      $this->_fields[updated]         = $_db_row[updated];
-      $this->_fields[created]         = $_db_row[created];
-      $this->_fields[n_children]      = $_db_row[n_children];
-      $this->_fields[ip_hash]         = $_db_row[ip_hash];
+      $this->fields[id]              = $_db_row[id];
+      $this->fields[forum_id]        = $_db_row[forum_id];
+      $this->fields[priority]        = $_db_row[priority];
+      $this->fields[user_id]         = $_db_row[user_id];
+      $this->fields[group_id]        = $_db_row[group_id];
+      $this->fields[username]        = $_db_row[username];
+      $this->fields[subject]         = $_db_row[subject];
+      $this->fields[body]            = $_db_row[body];
+      $this->fields[updated]         = $_db_row[updated];
+      $this->fields[created]         = $_db_row[created];
+      $this->fields[n_children]      = $_db_row[n_children];
+      $this->fields[ip_hash]         = $_db_row[ip_hash];
       if (isset($_db_row[relation]))
-        $this->_fields[relation]      = $_db_row[relation];
-      $this->_fields[active]          = $_db_row[active];
+        $this->fields[relation]      = $_db_row[relation];
+      $this->fields[active]          = $_db_row[active];
       if (isset($_db_row[allow_answer]))
-        $this->_fields[allow_answer]  = $_db_row[allow_answer];
-      $this->_fields[next_message_id] = $_db_row[next_message_id];
-      $this->_fields[prev_message_id] = $_db_row[prev_message_id];
-      $this->_fields[next_thread_id]  = $_db_row[next_thread_id];
-      $this->_fields[prev_thread_id]  = $_db_row[prev_thread_id];
+        $this->fields[allow_answer]  = $_db_row[allow_answer];
+      $this->fields[next_message_id] = $_db_row[next_message_id];
+      $this->fields[prev_message_id] = $_db_row[prev_message_id];
+      $this->fields[next_thread_id]  = $_db_row[next_thread_id];
+      $this->fields[prev_thread_id]  = $_db_row[prev_thread_id];
     }
 
 
@@ -93,92 +91,92 @@
 
     // Set a unique id for the message.
     function set_id($_id) {
-      $this->_fields[id] = $_id * 1;
+      $this->fields[id] = $_id * 1;
     }
 
 
     function get_id() {
-      return $this->_fields[id];
+      return $this->fields[id];
     }
 
 
     function set_forum_id($_forum_id) {
-      $this->_fields[forum_id] = $_forum_id * 1;
+      $this->fields[forum_id] = $_forum_id * 1;
     }
 
 
     function get_forum_id() {
-      return $this->_fields[forum_id];
+      return $this->fields[forum_id];
     }
 
 
     function set_priority($_priority) {
-      $this->_fields[priority] = $_priority * 1;
+      $this->fields[priority] = $_priority * 1;
     }
 
 
     function get_priority() {
-      return $this->_fields[priority];
+      return $this->fields[priority];
     }
 
 
     function set_user_id($_user_id) {
-      $this->_fields[user_id] = $_user_id;
+      $this->fields[user_id] = $_user_id;
     }
 
 
     function &get_user_id() {
-      return $this->_fields[user_id];
+      return $this->fields[user_id];
     }
 
 
     function set_group_id($_group_id) {
-      $this->_fields[group_id] = (int)$_group_id;
+      $this->fields[group_id] = (int)$_group_id;
     }
 
 
     function get_group_id() {
-      return $this->_fields[group_id];
+      return $this->fields[group_id];
     }
 
 
     function set_username($_username) {
-      $this->_fields[username] = preg_replace("/\s+/", " ", trim($_username));
+      $this->fields[username] = preg_replace("/\s+/", " ", trim($_username));
     }
 
 
     function &get_username() {
-      return $this->_fields[username];
+      return $this->fields[username];
     }
 
 
     function set_subject($_subject) {
-      $this->_fields[subject] = preg_replace("/\s+/", " ", trim($_subject));
+      $this->fields[subject] = preg_replace("/\s+/", " ", trim($_subject));
     }
 
 
     function &get_subject() {
-      return $this->_fields[subject];
+      return $this->fields[subject];
     }
 
 
     function set_body($_body) {
-      $this->_fields[body] = trim($_body);
+      $this->fields[body] = trim($_body);
     }
 
 
     function &get_body() {
-      return $this->_fields[body];
+      return $this->fields[body];
     }
 
 
     function set_signature($_signature) {
-      $this->_fields[signature] = trim($_signature);
+      $this->fields[signature] = trim($_signature);
     }
 
 
     function &get_signature() {
-      return $this->_fields[signature];
+      return $this->fields[signature];
     }
 
 
@@ -267,7 +265,7 @@
 
 
     function get_created_unixtime() {
-      return $this->_fields[created];
+      return $this->fields[created];
     }
 
 
@@ -275,13 +273,13 @@
     function get_created_time($_format = '') {
       if (!$_format)
         $_format = lang("dateformat");
-      return date($_format, $this->_fields[created]);
+      return date($_format, $this->fields[created]);
     }
 
 
     // Returns whether the row was newly created in the last X minutes.
     function is_new() {
-      return (time() - $this->_fields[created] < cfg("new_post_time"));
+      return (time() - $this->fields[created] < cfg("new_post_time"));
     }
 
 
@@ -290,7 +288,7 @@
     function get_newness() {
       if (!$this->is_new())
         return 0;
-      $oldness = time() - $this->_fields[created];
+      $oldness = time() - $this->fields[created];
       return 100 - ($oldness / cfg("new_post_time") * 100);
     }
 
@@ -304,7 +302,7 @@
 
 
     function get_updated_unixtime() {
-      return $this->_fields[updated];
+      return $this->fields[updated];
     }
 
 
@@ -312,7 +310,7 @@
     function get_updated_time($_format = '') {
       if (!$_format)
         $_format = lang("dateformat");
-      return date($_format, $this->_fields[updated]);
+      return date($_format, $this->fields[updated]);
     }
 
 
@@ -323,43 +321,43 @@
 
     // The number of children.
     function set_n_children($_n_children) {
-      $this->_fields[n_children] = $_n_children;
+      $this->fields[n_children] = $_n_children;
     }
 
 
     function get_n_children() {
-      if ($this->_fields[relation] != MESSAGE_RELATION_PARENT_STUB
-        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
-        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
+      if ($this->fields[relation] != MESSAGE_RELATION_PARENT_STUB
+        && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
+        && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
         die("Message:get_n_children(): This function must not be called on"
           . " non-parent rows.");
-      return $this->_fields[n_children] * 1;
+      return $this->fields[n_children] * 1;
     }
 
 
     function &get_ip_address_hash() {
-      return $this->_fields['ip_hash'];
+      return $this->fields['ip_hash'];
     }
 
 
     // The relation is the relation in the tree, see the define()s above.
     function set_relation($_relation) {
-      $this->_fields[relation] = $_relation;
+      $this->fields[relation] = $_relation;
     }
 
 
     function get_relation() {
-      return $this->_fields[relation];
+      return $this->fields[relation];
     }
 
 
     function set_active($_active = TRUE) {
-      $this->_fields[active] = $_active;
+      $this->fields[active] = $_active;
     }
 
 
     function is_active() {
-      return $this->_fields[active];
+      return $this->fields[active];
     }
 
 
@@ -373,13 +371,13 @@
 
 
     function &get_user_type() {
-      if (!$this->_fields[user_id])
+      if (!$this->fields[user_id])
         return 'deleted';
-      if ($this->_fields[group_id] == 1)
+      if ($this->fields[group_id] == 1)
         return 'admin';
-      elseif ($this->_fields[group_id] == 2)
+      elseif ($this->fields[group_id] == 2)
         return 'anonymous';
-      elseif ($this->_fields[group_id] == 4)
+      elseif ($this->fields[group_id] == 4)
         return 'moderator';
       else
         return 'registered';
@@ -394,107 +392,107 @@
 
 
     function set_allow_answer($_allow = TRUE) {
-      $this->_fields[allow_answer] = $_allow;
+      $this->fields[allow_answer] = $_allow;
     }
 
 
     function get_allow_answer() {
-      return $this->_fields[allow_answer];
+      return $this->fields[allow_answer];
     }
 
 
     function has_thread() {
-      if ($this->_fields[relation] != MESSAGE_RELATION_PARENT_STUB
-        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
-        && $this->_fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
+      if ($this->fields[relation] != MESSAGE_RELATION_PARENT_STUB
+        && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
+        && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
         return TRUE;
-      return $this->_fields[n_children] != 0;
+      return $this->fields[n_children] != 0;
     }
 
 
     function set_next_message_id($_next_message_id) {
-      $this->_fields[next_message_id] = $_next_message_id * 1;
+      $this->fields[next_message_id] = $_next_message_id * 1;
     }
 
 
     function get_next_message_id() {
-      return $this->_fields[next_message_id];
+      return $this->fields[next_message_id];
     }
 
 
     function set_prev_message_id($_prev_message_id) {
-      $this->_fields[prev_message_id] = $_prev_message_id * 1;
+      $this->fields[prev_message_id] = $_prev_message_id * 1;
     }
 
 
     function get_prev_message_id() {
-      return $this->_fields[prev_message_id];
+      return $this->fields[prev_message_id];
     }
 
 
     function set_next_thread_id($_next_thread_id) {
-      $this->_fields[next_thread_id] = $_next_thread_id * 1;
+      $this->fields[next_thread_id] = $_next_thread_id * 1;
     }
 
 
     function get_next_thread_id() {
-      return $this->_fields[next_thread_id];
+      return $this->fields[next_thread_id];
     }
 
 
     function set_prev_thread_id($_prev_thread_id) {
-      $this->_fields[prev_thread_id] = $_prev_thread_id * 1;
+      $this->fields[prev_thread_id] = $_prev_thread_id * 1;
     }
 
 
     function get_prev_thread_id() {
-      return $this->_fields[prev_thread_id];
+      return $this->fields[prev_thread_id];
     }
 
 
     function set_indent($_indent) {
-      $this->_fields[indent] = $_indent;
+      $this->fields[indent] = $_indent;
     }
 
 
     function get_indent() {
-      return $this->_fields[indent];
+      return $this->fields[indent];
     }
 
 
     function set_selected($_selected = TRUE) {
-      $this->_fields[selected] = $_selected;
+      $this->fields[selected] = $_selected;
     }
 
 
     function is_selected() {
-      return $this->_fields[selected];
+      return $this->fields[selected];
     }
 
 
     function check_complete() {
       // The appended "\n" on the following three lines is a workaround for a bug in PHP.
       // http://bugs.php.net/bug.php?id=30945
-      if (ctype_space($this->_fields[username] . "\n")
-       || ctype_space($this->_fields[subject]  . "\n")
-       || ctype_space($this->_fields[body]     . "\n"))
+      if (ctype_space($this->fields[username] . "\n")
+       || ctype_space($this->fields[subject]  . "\n")
+       || ctype_space($this->fields[body]     . "\n"))
         return ERR_MESSAGE_INCOMPLETE;
 
-      if (strlen($this->_fields[username]) > cfg("max_namelength"))
+      if (strlen($this->fields[username]) > cfg("max_namelength"))
         return ERR_MESSAGE_NAME_TOO_LONG;
-      if (!preg_match(cfg("login_pattern"), $this->_fields[username]))
+      if (!preg_match(cfg("login_pattern"), $this->fields[username]))
         return ERR_USER_LOGIN_INVALID_CHARS;
 
 
-      if (strlen($this->_fields[subject]) > cfg("max_titlelength"))
+      if (strlen($this->fields[subject]) > cfg("max_titlelength"))
         return ERR_MESSAGE_TITLE_TOO_LONG;
 
-      if (strlen($this->_fields[body]) > cfg("max_msglength"))
+      if (strlen($this->fields[body]) > cfg("max_msglength"))
         return ERR_MESSAGE_BODY_TOO_LONG;
 
-      if (!is_utf8($this->_fields[username])
-        || !is_utf8($this->_fields[subject])
-        || !is_utf8($this->_fields[body]))
+      if (!is_utf8($this->fields[username])
+        || !is_utf8($this->fields[subject])
+        || !is_utf8($this->fields[body]))
         return ERR_MESSAGE_BODY_NO_UTF8;
 
       return 0;

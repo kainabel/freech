@@ -348,7 +348,7 @@ define("USER_STATUS_BLOCKED",     2);
 
       //FIXME: make a much better check.
       if ($this->fields[homepage]) {
-        if (!preg_match('/[a-z]+:\/\/[\w\._]+\.[a-z]+$/i', $this->fields[homepage]))
+        if (!preg_match('/^(ht|f)tp:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+$/i', $this->fields[homepage]))
           return ERR_USER_HOMEPAGE_NOT_VALID;
         if (strlen($this->fields[homepage]) > cfg("max_homepageurllength"))
           return ERR_USER_HOMEPAGE_TOO_LONG;

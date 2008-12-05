@@ -21,7 +21,7 @@
   $cfg[site_title]      = 'Freech Forum';       // The name of your site.
   $cfg[site_language]   = 'en';         // The country code of the language 
                                         // of your site.
-  $cfg[rss_description] = 'Das Forum fuer den Notfall';
+  $cfg[rss_description] = 'Freech Discussion Forum';
                                         // The descripton included in the RSS.
   $cfg[check_cache]     = TRUE;         // Whether to check templates for
                                         // changes. Setting this to FALSE

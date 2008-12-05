@@ -84,7 +84,7 @@
   $cfg[min_lastnamelength]      = 3;
   $cfg[max_lastnamelength]      = 30;
   $cfg[max_maillength]          = 50;
-  $cfg[max_homepageurllength]   = 30;
+  $cfg[max_homepageurllength]   = 100;
   $cfg[max_imlength]            = 20;
   $cfg[max_signaturelength]     = 100;
   $cfg[default_group_id]        = 3; // ID of the group of new users.

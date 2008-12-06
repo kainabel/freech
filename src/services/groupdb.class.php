@@ -111,7 +111,7 @@
 
       $sql   = "UPDATE {t_group} SET";
       $sql  .= " id={id},";
-      $sql  .= " name={groupname},";
+      $sql  .= " name={name},";
       $sql  .= " is_special={is_special},";
       $sql  .= " active={active}";
       $sql  .= " WHERE id={id}";

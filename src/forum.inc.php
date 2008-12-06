@@ -206,6 +206,19 @@
     }
 
 
+    function get_current_group() {
+      if ($this->current_group)
+        return $this->current_group;
+      $user = $this->get_current_user();
+      if (!$user)
+        return FALSE;
+      $groupdb             = $this->_get_groupdb();
+      $query               = array('id' => $user->get_group_id());
+      $this->current_group = $groupdb->get_group_from_query($query);
+      return $this->current_group;
+    }
+
+
     function get_action() {
       if ($_GET['action'])
         return $_GET['action'];

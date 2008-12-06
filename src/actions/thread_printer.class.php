@@ -69,13 +69,13 @@
       $indexbar = &new IndexBarByThread($args);
 
       // Render the template.
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('indexbar',        $indexbar);
-      $this->smarty->assign_by_ref('n_rows',          $n_rows);
-      $this->smarty->assign_by_ref('messages',        $this->messages);
-      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('list_by_thread.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('indexbar',        $indexbar);
+      $this->assign_by_ref('n_rows',          $n_rows);
+      $this->assign_by_ref('messages',        $this->messages);
+      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->render('list_by_thread.tmpl');
     }
   }
 ?>

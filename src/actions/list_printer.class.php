@@ -22,9 +22,9 @@
   class ListPrinter extends PrinterBase {
     function show_top_posters() {
       $users = $this->db->get_top_posters(20);
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign('users', $users);
-      $this->parent->append_content($this->smarty->fetch("top_posters.tmpl"));
+      $this->clear_all_assign();
+      $this->assign_by_ref('users', $users);
+      $this->render('top_posters.tmpl');
     }
   }
 ?>

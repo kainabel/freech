@@ -56,11 +56,11 @@
                          n_pages_per_index   => cfg("ppi"));
       $indexbar = &new IndexBarByTime($args);
 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('indexbar', $indexbar);
-      $this->smarty->assign_by_ref('n_rows',   $n);
-      $this->smarty->assign_by_ref('messages', $this->messages);
-      $this->parent->append_content($this->smarty->fetch('list_by_time.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('indexbar', $indexbar);
+      $this->assign_by_ref('n_rows',   $n);
+      $this->assign_by_ref('messages', $this->messages);
+      $this->render('list_by_time.tmpl');
     }
   }
 ?>

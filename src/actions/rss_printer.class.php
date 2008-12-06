@@ -79,13 +79,13 @@
                                         array(&$this, '_append_row'),
                                         $_forum_id);
       
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('title',       $this->title);
-      $this->smarty->assign_by_ref('link',        $this->url);
-      $this->smarty->assign_by_ref('language',    $this->countrycode);
-      $this->smarty->assign_by_ref('description', $this->descr);
-      $this->smarty->assign_by_ref('messages',    $this->messages);
-      $this->parent->append_content($this->smarty->fetch('../../rss.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('title',       $this->title);
+      $this->assign_by_ref('link',        $this->url);
+      $this->assign_by_ref('language',    $this->countrycode);
+      $this->assign_by_ref('description', $this->descr);
+      $this->assign_by_ref('messages',    $this->messages);
+      $this->render('../../rss.tmpl');
     }
   }
 ?>

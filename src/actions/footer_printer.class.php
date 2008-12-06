@@ -44,12 +44,12 @@
       // Render the resulting template.
       $version[url]  = "http://debain.org/software/freech/";
       $version[text] = "Freech Forum v0.9.10";
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('order_by_thread', $order_by_thread_url);
-      $this->smarty->assign_by_ref('order_by_time',   $order_by_time_url);
-      $this->smarty->assign_by_ref('search',          $search_url->get_string());
-      $this->smarty->assign_by_ref('version',         $version);
-      $this->parent->append_content($this->smarty->fetch('footer.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('order_by_thread', $order_by_thread_url);
+      $this->assign_by_ref('order_by_time',   $order_by_time_url);
+      $this->assign_by_ref('search',          $search_url->get_string());
+      $this->assign_by_ref('version',         $version);
+      $this->render('footer.tmpl');
     }
   }
 ?>

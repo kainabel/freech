@@ -21,8 +21,8 @@
 <?php
   class HeaderPrinter extends PrinterBase {
     function show() {
-      $this->smarty->clear_all_assign();
-      $this->parent->append_content($this->smarty->fetch("header.tmpl"));
+      $this->clear_all_assign();
+      $this->render('header.tmpl');
     }
   }
 ?>

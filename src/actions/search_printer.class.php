@@ -38,20 +38,20 @@
 
 
     function show($_forum_id = '', $_query = '') {
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign('forum_id', $_forum_id);
-      $this->smarty->assign('query',    $_query);
-      $this->parent->append_content($this->smarty->fetch('search.tmpl'));
+      $this->clear_all_assign();
+      $this->assign('forum_id', $_forum_id);
+      $this->assign('query',    $_query);
+      $this->render('search.tmpl');
     }
 
 
     function show_messages($_forum_id = NULL, $_query = NULL, $_offset = 0) {
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign('query', $_query);
+      $this->clear_all_assign();
+      $this->assign('query', $_query);
 
       // Parse the query.
       if ($_forum_id) {
-        $this->smarty->assign('forum_id', $_forum_id);
+        $this->assign('forum_id', $_forum_id);
         $_query = "forumid:$forum_id AND (".$_query.")";
       }
       $query = &new SearchQuery($_query);
@@ -75,11 +75,11 @@
       $indexbar = &new IndexBarSearchResult($args);
 
       // Render the result.
-      $this->smarty->assign_by_ref('indexbar',  $indexbar);
-      $this->smarty->assign_by_ref('n_results', $total);
-      $this->smarty->assign_by_ref('n_rows',    $rows);
-      $this->smarty->assign_by_ref('messages',  $this->results);
-      $this->parent->append_content($this->smarty->fetch('search.tmpl'));
+      $this->assign_by_ref('indexbar',  $indexbar);
+      $this->assign_by_ref('n_results', $total);
+      $this->assign_by_ref('n_rows',    $rows);
+      $this->assign_by_ref('messages',  $this->results);
+      $this->render('search.tmpl');
     }
 
 
@@ -90,8 +90,8 @@
 
     function show_users($_query = NULL, $_offset = 0) {
       $_query = trim($_query);
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign('query', $_query);
+      $this->clear_all_assign();
+      $this->assign('query', $_query);
 
       // Run the search.
       $search = array('username' => '%'.trim($_query).'%');
@@ -111,10 +111,10 @@
       }
 
       // Render the result.
-      $this->smarty->assign_by_ref('n_results', $n_rows);
-      $this->smarty->assign_by_ref('n_rows',    $n_rows);
-      $this->smarty->assign_by_ref('users',     $this->results);
-      $this->parent->append_content($this->smarty->fetch('search.tmpl'));
+      $this->assign_by_ref('n_results', $n_rows);
+      $this->assign_by_ref('n_rows',    $n_rows);
+      $this->assign_by_ref('users',     $this->results);
+      $this->render('search.tmpl');
     }
   }
 ?>

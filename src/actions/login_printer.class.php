@@ -31,13 +31,13 @@
       $forgot_url = new URL('?', cfg("urlvars"));
       $forgot_url->set_var('action', 'forgot_password');
 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('user',       $_user);
-      $this->smarty->assign_by_ref('hint',       $_hint);
-      $this->smarty->assign_by_ref('action',     $login_url->get_string());
-      $this->smarty->assign_by_ref('resend_url', $resend_url->get_string());
-      $this->smarty->assign_by_ref('forgot_url', $forgot_url->get_string());
-      $this->parent->append_content($this->smarty->fetch('login.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('user',       $_user);
+      $this->assign_by_ref('hint',       $_hint);
+      $this->assign_by_ref('action',     $login_url->get_string());
+      $this->assign_by_ref('resend_url', $resend_url->get_string());
+      $this->assign_by_ref('forgot_url', $forgot_url->get_string());
+      $this->render('login.tmpl');
     }
   }
 ?>

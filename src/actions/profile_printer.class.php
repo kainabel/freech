@@ -45,11 +45,11 @@
       $group     = $groupdb->get_group_from_query($search);
 
       // Render the template.
-      $this->smarty->assign_by_ref('user',       $_user);
-      $this->smarty->assign_by_ref('group',      $group);
-      $this->smarty->assign_by_ref('hint',       $_hint);
-      $this->smarty->assign_by_ref('n_messages', $n_entries);
-      $this->parent->append_content($this->smarty->fetch('user_profile.tmpl'));
+      $this->assign_by_ref('user',       $_user);
+      $this->assign_by_ref('group',      $group);
+      $this->assign_by_ref('hint',       $_hint);
+      $this->assign_by_ref('n_messages', $n_entries);
+      $this->render('user_profile.tmpl');
     }
 
 
@@ -59,7 +59,7 @@
                            == $current->get_username();
 
       // Load the threads (if they are to be displayed).
-      $this->smarty->clear_all_assign();
+      $this->clear_all_assign();
       if ($showlist) {
         $this->db->foreach_message_from_user($_user->get_id(),
                                              $_offset,
@@ -68,8 +68,8 @@
                                              $_thread_state,
                                              array(&$this, '_append_message'),
                                              '');
-        $this->smarty->assign_by_ref('n_rows',   count($this->messages));
-        $this->smarty->assign_by_ref('messages', $this->messages);
+        $this->assign_by_ref('n_rows',   count($this->messages));
+        $this->assign_by_ref('messages', $this->messages);
       }
 
       // Create the index bar.
@@ -84,12 +84,12 @@
       $indexbar = &new IndexBarUserPostings($args);
 
       // Render the template.
-      $this->smarty->assign_by_ref('user',     $_user);
-      $this->smarty->assign_by_ref('showlist', $showlist);
-      $this->smarty->assign_by_ref('indexbar', $indexbar);
-      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('list_by_thread.tmpl'));
+      $this->assign_by_ref('user',     $_user);
+      $this->assign_by_ref('showlist', $showlist);
+      $this->assign_by_ref('indexbar', $indexbar);
+      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->render('list_by_thread.tmpl');
     }
 
 
@@ -98,10 +98,10 @@
       $url->set_var('action', 'user_data_submit');
 
       // Render the template.
-      $this->smarty->assign_by_ref('user',   $_user);
-      $this->smarty->assign_by_ref('hint',   $_hint);
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->parent->append_content($this->smarty->fetch('user_data.tmpl'));
+      $this->assign_by_ref('user',   $_user);
+      $this->assign_by_ref('hint',   $_hint);
+      $this->assign_by_ref('action', $url->get_string());
+      $this->render('user_data.tmpl');
     }
 
 
@@ -110,18 +110,18 @@
       $url->set_var('action', 'user_options_submit');
 
       // Render the template.
-      $this->smarty->assign_by_ref('user',   $_user);
-      $this->smarty->assign_by_ref('hint',   $_hint);
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->parent->append_content($this->smarty->fetch('user_options.tmpl'));
+      $this->assign_by_ref('user',   $_user);
+      $this->assign_by_ref('hint',   $_hint);
+      $this->assign_by_ref('action', $url->get_string());
+      $this->render('user_options.tmpl');
     }
 
 
     function show_group_profile($_group, $_hint = '') {
       // Render the template.
-      $this->smarty->assign_by_ref('group', $_group);
-      $this->smarty->assign_by_ref('hint',  $_hint);
-      $this->parent->append_content($this->smarty->fetch('group_profile.tmpl'));
+      $this->assign_by_ref('group', $_group);
+      $this->assign_by_ref('hint',  $_hint);
+      $this->render('group_profile.tmpl');
     }
   }
 ?>

@@ -34,9 +34,9 @@
     
     
     function show() {
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('breadcrumbs', $this->breadcrumbs);
-      $this->parent->append_content($this->smarty->fetch('breadcrumbs.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('breadcrumbs', $this->breadcrumbs);
+      $this->render('breadcrumbs.tmpl');
     }
   }
 ?>

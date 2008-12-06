@@ -36,8 +36,8 @@
         $_msg->set_body(lang("noentrybody"));
       }
 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('showthread', $showthread);
+      $this->clear_all_assign();
+      $this->assign_by_ref('showthread', $showthread);
       if ($showthread) {
         $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
         $this->db->foreach_child_in_thread($_forum_id,
@@ -47,15 +47,15 @@
                                            $state,
                                            array(&$this, '_append_message'),
                                            '');
-        $this->smarty->assign_by_ref('n_rows',   count($this->messages));
-        $this->smarty->assign_by_ref('messages', $this->messages);
+        $this->assign_by_ref('n_rows',   count($this->messages));
+        $this->assign_by_ref('messages', $this->messages);
       }
 
-      $this->smarty->assign_by_ref('indexbar', $indexbar);
-      $this->smarty->assign_by_ref('message',  $_msg);
-      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('message_read.tmpl'));
+      $this->assign_by_ref('indexbar', $indexbar);
+      $this->assign_by_ref('message',  $_msg);
+      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->render('message_read.tmpl');
     }
 
 
@@ -74,16 +74,16 @@
       $url->set_var('forum_id',  $forum_id);
       $url->set_var('parent_id', $_parent_id);
 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign('may_quote', $_may_quote);
-      $this->smarty->assign('parent_id', $_parent_id);
-      $this->smarty->assign_by_ref('action',          $url->get_string());
-      $this->smarty->assign_by_ref('hint',            $_hint);
-      $this->smarty->assign_by_ref('user',            $user);
-      $this->smarty->assign_by_ref('message',         $_message);
-      $this->smarty->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->smarty->assign_by_ref('max_titlelength', cfg("max_titlelength"));
-      $this->parent->append_content($this->smarty->fetch('message_compose.tmpl'));
+      $this->clear_all_assign();
+      $this->assign('may_quote', $_may_quote);
+      $this->assign('parent_id', $_parent_id);
+      $this->assign_by_ref('action',          $url->get_string());
+      $this->assign_by_ref('hint',            $_hint);
+      $this->assign_by_ref('user',            $user);
+      $this->assign_by_ref('message',         $_message);
+      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
+      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->render('message_compose.tmpl');
     }
 
 
@@ -145,13 +145,13 @@
       $url->set_var('forum_id',  $this->parent->get_forum_id());
       $url->set_var('parent_id', $_parent_id);
 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign('may_quote', $_may_quote);
-      $this->smarty->assign('parent_id', (int)$_parent_id);
-      $this->smarty->assign_by_ref('pagetitle', lang("preview"));
-      $this->smarty->assign_by_ref('action',    $url->get_string());
-      $this->smarty->assign_by_ref('message',   $_message);
-      $this->parent->append_content($this->smarty->fetch('message_preview.tmpl'));
+      $this->clear_all_assign();
+      $this->assign('may_quote', $_may_quote);
+      $this->assign('parent_id', (int)$_parent_id);
+      $this->assign_by_ref('pagetitle', lang("preview"));
+      $this->assign_by_ref('action',    $url->get_string());
+      $this->assign_by_ref('message',   $_message);
+      $this->render('message_preview.tmpl');
 
       return 0;
     }
@@ -173,13 +173,13 @@
       $forumurl->set_var('action',   'list');
       $forumurl->set_var('forum_id', $this->parent->get_forum_id());
 
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('messageurl', $messageurl->get_string());
+      $this->clear_all_assign();
+      $this->assign_by_ref('messageurl', $messageurl->get_string());
       if ($_parent_id)
-        $this->smarty->assign_by_ref('parenturl', $parenturl->get_string());
-      $this->smarty->assign_by_ref('hint',     $_hint);
-      $this->smarty->assign_by_ref('forumurl', $forumurl->get_string());
-      $this->parent->append_content($this->smarty->fetch('message_created.tmpl'));
+        $this->assign_by_ref('parenturl', $parenturl->get_string());
+      $this->assign_by_ref('hint',     $_hint);
+      $this->assign_by_ref('forumurl', $forumurl->get_string());
+      $this->render('message_created.tmpl');
     }
   }
 ?>

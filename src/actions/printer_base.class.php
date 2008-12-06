@@ -33,8 +33,24 @@
       $this->db       = $_parent->get_forumdb();
     }
 
-    function show() {
-      echo "PrinterBase:show(): not implemented\n";
+    function clear_all_assign() {
+      $this->smarty->clear_all_assign();
+    }
+
+    function assign($_name, $_value) {
+      $this->smarty->assign($_name, $_value);
+    }
+
+    function assign_by_ref($_name, $_value) {
+      $this->smarty->assign_by_ref($_name, $_value);
+    }
+
+    function render($_template) {
+      $user  = $this->parent->get_current_user();
+      $group = $this->parent->get_current_group();
+      $this->smarty->assign_by_ref('__user',  $user);
+      $this->smarty->assign_by_ref('__group', $group);
+      $this->parent->append_content($this->smarty->fetch($_template));
     }
   }
 ?>

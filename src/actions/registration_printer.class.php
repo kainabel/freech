@@ -24,20 +24,20 @@
       $url = &new URL('?', cfg("urlvars"));
       $url->set_var('action', 'account_create');
       
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('action',    $url->get_string());
-      $this->smarty->assign_by_ref('user',      $user);
-      $this->smarty->assign_by_ref('password',  $_POST['password']);
-      $this->smarty->assign_by_ref('password2', $_POST['password2']);
-      $this->smarty->assign_by_ref('error',     $error);
-      $this->parent->append_content($this->smarty->fetch('registration.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('action',    $url->get_string());
+      $this->assign_by_ref('user',      $user);
+      $this->assign_by_ref('password',  $_POST['password']);
+      $this->assign_by_ref('password2', $_POST['password2']);
+      $this->assign_by_ref('error',     $error);
+      $this->render('registration.tmpl');
     }
 
     function show_tmpl($_tmpl, $_user, $_hint = '') {
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('user', $_user);
-      $this->smarty->assign_by_ref('hint', $_hint);
-      $this->parent->append_content($this->smarty->fetch($_tmpl));
+      $this->clear_all_assign();
+      $this->assign_by_ref('user', $_user);
+      $this->assign_by_ref('hint', $_hint);
+      $this->render($_tmpl);
     }
 
     function show_mail_sent($user, $_hint = '') {
@@ -51,21 +51,21 @@
     function show_change_password($_user, $_hint = '') {
       $url = &new URL('?', cfg("urlvars"));
       $url->set_var('action', 'submit_password');
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->smarty->assign_by_ref('user',   $_user);
-      $this->smarty->assign_by_ref('hint',   $_hint);
-      $this->parent->append_content($this->smarty->fetch('change_password.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('action', $url->get_string());
+      $this->assign_by_ref('user',   $_user);
+      $this->assign_by_ref('hint',   $_hint);
+      $this->render('change_password.tmpl');
     }
 
     function show_forgot_password($_user, $_hint = '') {
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action', 'password_mail_submit');
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign_by_ref('user',   $_user);
-      $this->smarty->assign_by_ref('hint',   $_hint);
-      $this->smarty->assign_by_ref('action', $url->get_string());
-      $this->parent->append_content($this->smarty->fetch('forgot_password.tmpl'));
+      $this->clear_all_assign();
+      $this->assign_by_ref('user',   $_user);
+      $this->assign_by_ref('hint',   $_hint);
+      $this->assign_by_ref('action', $url->get_string());
+      $this->render('forgot_password.tmpl');
     }
 
     function show_forgot_password_mail_sent($user, $_hint = '') {

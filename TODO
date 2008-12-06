@@ -1,4 +1,4 @@
-* Make some standard variables available to the templates ($__user, $__group).
+* User the __user and __group variables in templates where applicable.
 * Make user profile editable by administrators.
 * Add a group profile that displays permissions.
 * Make group profile editable by administrators.

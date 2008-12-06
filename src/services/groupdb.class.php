@@ -33,16 +33,20 @@
         $_search = array();
 
       $query = new FreechSqlQuery();
-      $sql   = "SELECT *,";
-      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql  .= "UNIX_TIMESTAMP(created) created";
-      $sql  .= " FROM {t_group}";
+      $sql   = "SELECT g.*,";
+      $sql  .= " UNIX_TIMESTAMP(g.updated) updated,";
+      $sql  .= " UNIX_TIMESTAMP(g.created) created,";
+      $sql  .= " p.id permission_id,";
+      $sql  .= " p.name permission_name,";
+      $sql  .= " p.allow permission_allow";
+      $sql  .= " FROM {t_group} g";
+      $sql  .= " LEFT JOIN {t_permission} p ON p.group_id=g.id";
       $sql  .= " WHERE 1";
       foreach ($_search as $key => $value) {
-        $sql .= " AND $key LIKE {".$key.'}';
+        $sql .= " AND g.$key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
-      $sql .= " ORDER BY name";
+      $sql .= " ORDER BY g.name";
       $query->set_sql($sql);
       return $query->sql();
     }
@@ -54,6 +58,23 @@
       $group = new Group;
       $group->set_from_db($row);
       $this->groups[$row[id]] = $group;
+      return $group;
+    }
+
+
+    function _pop_group_from_result($res) {
+      if (!$row = $res->FetchRow())
+        return;
+      $group = $this->_get_group_from_row($row);
+      do {
+        if ($row[permission_id]) {
+          if ($row[permission_allow])
+            $group->grant($row[permission_name]);
+          else
+            $group->deny($row[permission_name]);
+        }
+        $row = $res->FetchRow();
+      } while ($row && $row[id] == $group->get_id());
       return $group;
     }
 
@@ -107,8 +128,9 @@
      */
     function get_group_from_query($_search) {
       $sql = $this->_get_sql_from_query($_search);
-      $row = $this->db->GetRow($sql);
-      return $this->_get_group_from_row($row);
+      $res = $this->db->Execute($sql)
+                              or die("GroupDB::get_group_from_query()");
+      return $this->_pop_group_from_result($res);
     }
 
 
@@ -123,12 +145,8 @@
                                       $_offset = 0) {
       $sql  = $this->_get_sql_from_query($_search);
       $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
-      $rows = $res->RecordCount();
-      while ($row = $res->FetchRow()) {
-        $group = $this->_get_group_from_row($row);
+      while ($group = $this->_pop_group_from_result($res))
         call_group_func($_func, $group, $_data);
-      }
-      return $rows;
     }
   }
 ?>

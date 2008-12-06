@@ -41,7 +41,7 @@
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->db->get_n_messages($search);
       $groupdb   = $this->parent->_get_groupdb();
-      $search    = array('id' => $_user->get_id());
+      $search    = array('id' => $_user->get_group_id());
       $group     = $groupdb->get_group_from_query($search);
 
       // Render the template.

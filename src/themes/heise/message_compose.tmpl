@@ -8,8 +8,8 @@
 <input type='hidden' name='parent_id' value='{$parent_id}'>
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
 <input type='hidden' name='may_quote' value='{$may_quote|escape}'>
-{if $user}
-<input type='hidden' name='username' value='{$user->get_username()|escape}'>
+{if $__logged_in}
+<input type='hidden' name='username' value='{$__user->get_username()|escape}'>
 {else}
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>

@@ -68,21 +68,19 @@
                           $_parent_id,
                           $_may_quote) {
       $forum_id = $this->parent->get_forum_id();
-      $user     = $this->parent->get_current_user() or new User;
 
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('forum_id',  $forum_id);
       $url->set_var('parent_id', $_parent_id);
 
       $this->clear_all_assign();
-      $this->assign('may_quote', $_may_quote);
-      $this->assign('parent_id', $_parent_id);
-      $this->assign_by_ref('action',          $url->get_string());
-      $this->assign_by_ref('hint',            $_hint);
-      $this->assign_by_ref('user',            $user);
-      $this->assign_by_ref('message',         $_message);
-      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->assign('may_quote',       $_may_quote);
+      $this->assign('parent_id',       $_parent_id);
+      $this->assign('action',          $url->get_string());
+      $this->assign('hint',            $_hint);
+      $this->assign('max_namelength',  cfg("max_namelength"));
+      $this->assign('max_titlelength', cfg("max_titlelength"));
+      $this->assign_by_ref('message', $_message);
       $this->render('message_compose.tmpl');
     }
 
@@ -152,8 +150,6 @@
       $this->assign_by_ref('action',    $url->get_string());
       $this->assign_by_ref('message',   $_message);
       $this->render('message_preview.tmpl');
-
-      return 0;
     }
 
 

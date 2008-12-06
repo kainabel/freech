@@ -422,11 +422,13 @@
                                           $parent_id,
                                           $may_quote);
 
-      $duplicate_id = $this->forum->get_duplicate_id_from_message($message);
-      if ($duplicate_id)
-        return $msgprinter->show_created($duplicate_id,
-                                         $parent_id,
-                                         lang("messageduplicate"));
+      if ($message->get_id() > 0) {
+        $duplicate_id = $this->forum->get_duplicate_id_from_message($message);
+        if ($duplicate_id)
+          return $msgprinter->show_created($duplicate_id,
+                                           $parent_id,
+                                           lang("messageduplicate"));
+      }
 
       $ret = $message->check_complete();
       if ($ret == 0 && !$message->get_id())

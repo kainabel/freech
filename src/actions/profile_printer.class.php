@@ -85,8 +85,8 @@
       $this->assign_by_ref('user',     $_user);
       $this->assign_by_ref('showlist', $showlist);
       $this->assign_by_ref('indexbar', $indexbar);
-      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
+      $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
       $this->render('list_by_thread.tmpl');
     }
 

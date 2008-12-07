@@ -7,3 +7,4 @@
 * Rename PrinterBase->db to PrinterBase->forumdb.
 * Add PrinterBase->userdb.
 * Add PrinterBase->groupdb.
+* Replace "title" by "subject" everywhere.

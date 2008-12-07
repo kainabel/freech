@@ -352,11 +352,11 @@ define("USER_STATUS_BLOCKED",     2);
     function check_complete() {
       if (ctype_space($this->fields[username]))
         return ERR_USER_LOGIN_INCOMPLETE;
-      if (strlen($this->fields[username]) < cfg("min_loginlength"))
+      if (strlen($this->fields[username]) < cfg("min_usernamelength"))
         return ERR_USER_LOGIN_TOO_SHORT;
-      if (strlen($this->fields[username]) > cfg("max_loginlength"))
+      if (strlen($this->fields[username]) > cfg("max_usernamelength"))
         return ERR_USER_LOGIN_TOO_LONG;
-      if (!preg_match(cfg("login_pattern"), $this->fields[username]))
+      if (!preg_match(cfg("username_pattern"), $this->fields[username]))
         return ERR_USER_LOGIN_INVALID_CHARS;
 
       if (ctype_space($this->fields[passwordhash]))

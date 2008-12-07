@@ -84,7 +84,7 @@
   $lang[messagetoolong]   = "Ihr Beitrag ist länger als $cfg[max_msglength] Zeichen. Bitte kürzen sie den Text.";
   $lang[messageduplicate] = "Ihr Beitrag wurde schon einmal abgeschickt.";
   $lang[pvw_invalidchars] = "Achtung! Ihr Beitrag enthält ungültige Zeichen.";
-  $lang[nametoolong]      = "Der von ihnen gewählte Name ist länger als $cfg[max_namelength] Zeichen. Bitte kürzen sie den Namen.";
+  $lang[nametoolong]      = "Der von ihnen gewählte Name ist länger als $cfg[max_usernamelength] Zeichen. Bitte kürzen sie den Namen.";
   $lang[titletoolong]     = "Der von ihnen gewählte Beitragstitel ist länger als $cfg[max_titlelength] Zeichen. Bitte kürzen sie den Titel.";
   $lang[forgotname]       = "Bitte einen Namen eingeben."; // Not used
   $lang[forgottitle]      = "Bitte einen Titel eingeben."; // Not used
@@ -210,10 +210,10 @@
   $lang[loginlocked]      = "Der Account ist gesperrt.";
   $lang[resendconfirm]    = "Bestätigungsmail erneut versenden";
   $lang[logintooshort]    = "Der von ihnen gewählte Benutzername ist zu kurz."
-                          . " Bitte mindestens $cfg[min_loginlength] Zeichen"
+                          . " Bitte mindestens $cfg[min_usernamelength] Zeichen"
                           . " eingeben.";
   $lang[logintoolong]     = "Der von ihnen gewählte Benutzername ist zu lang."
-                          . " Bitte maximal $cfg[max_loginlength] Zeichen"
+                          . " Bitte maximal $cfg[max_usernamelength] Zeichen"
                           . " eingeben.";
   $lang[logininvalidchars]    = "Der von ihnen gewählte Name enthält ungültige"
                               . " Zeichen. Bitte nur"

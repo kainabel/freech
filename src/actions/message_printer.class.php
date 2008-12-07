@@ -52,8 +52,8 @@
 
       $this->assign_by_ref('indexbar', $indexbar);
       $this->assign_by_ref('message',  $_msg);
-      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
+      $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
       $this->render('message_read.tmpl');
     }
 
@@ -73,12 +73,12 @@
       $url->set_var('parent_id', $_parent_id);
 
       $this->clear_all_assign();
-      $this->assign('may_quote',       $_may_quote);
-      $this->assign('parent_id',       $_parent_id);
-      $this->assign('action',          $url->get_string());
-      $this->assign('hint',            $_hint);
-      $this->assign('max_namelength',  cfg("max_namelength"));
-      $this->assign('max_titlelength', cfg("max_titlelength"));
+      $this->assign('may_quote',          $_may_quote);
+      $this->assign('parent_id',          $_parent_id);
+      $this->assign('action',             $url->get_string());
+      $this->assign('hint',               $_hint);
+      $this->assign('max_usernamelength', cfg("max_usernamelength"));
+      $this->assign('max_titlelength',    cfg("max_titlelength"));
       $this->assign_by_ref('message', $_message);
       $this->render('message_compose.tmpl');
     }

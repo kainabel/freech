@@ -10,7 +10,7 @@
 <input type='hidden' name='may_quote' value='{$may_quote|escape}'>
 {if $__user->is_anonymous()}
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
-<input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_namelength}'>
+<input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_usernamelength}'>
 {else}
 <input type='hidden' name='username' value='{$__user->get_username()|escape}'>
 {/if}

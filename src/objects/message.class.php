@@ -496,9 +496,9 @@
        || ctype_space($this->fields[body]     . "\n"))
         return ERR_MESSAGE_INCOMPLETE;
 
-      if (strlen($this->fields[username]) > cfg("max_namelength"))
+      if (strlen($this->fields[username]) > cfg("max_usernamelength"))
         return ERR_MESSAGE_NAME_TOO_LONG;
-      if (!preg_match(cfg("login_pattern"), $this->fields[username]))
+      if (!preg_match(cfg("username_pattern"), $this->fields[username]))
         return ERR_USER_LOGIN_INVALID_CHARS;
 
 

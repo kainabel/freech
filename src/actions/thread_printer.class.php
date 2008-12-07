@@ -69,11 +69,11 @@
 
       // Render the template.
       $this->clear_all_assign();
-      $this->assign_by_ref('indexbar',        $indexbar);
-      $this->assign_by_ref('n_rows',          $n_rows);
-      $this->assign_by_ref('messages',        $this->messages);
-      $this->assign_by_ref('max_namelength',  cfg("max_namelength"));
-      $this->assign_by_ref('max_titlelength', cfg("max_titlelength"));
+      $this->assign_by_ref('indexbar',           $indexbar);
+      $this->assign_by_ref('n_rows',             $n_rows);
+      $this->assign_by_ref('messages',           $this->messages);
+      $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
+      $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
       $this->render('list_by_thread.tmpl');
     }
   }

@@ -68,9 +68,9 @@
 
 
     function set_name($_name) {
-      if (strlen($_name) < cfg("min_loginlength"))
+      if (strlen($_name) < cfg("min_usernamelength"))
         return ERR_GROUP_NAME_TOO_SHORT;
-      if (strlen($_name) > cfg("max_loginlength"))
+      if (strlen($_name) > cfg("max_usernamelength"))
         return ERR_GROUP_NAME_TOO_LONG;
       $this->fields[name] = $_name;
     }

@@ -79,7 +79,7 @@
   $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
   $lang[messageduplicate] = "Your message has already been sent.";
   $lang[pvw_invalidchars] = "Warning! Your message contains invalid characters.";
-  $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_namelength] characters. Please choose a shorter name.";
+  $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_usernamelength] characters. Please choose a shorter name.";
   $lang[titletoolong]     = "The subject is longer than $cfg[max_titlelength] characters. Please choose a shorter subject.";
   $lang[forgotname]       = "Please enter a name."; // Not used
   $lang[forgottitle]      = "Please enter a title."; // Not used
@@ -197,9 +197,9 @@
   $lang[loginlocked]      = "Your account is locked.";
   $lang[resendconfirm]    = "Resend confirmation email";
   $lang[logintooshort]    = "Your chosen name is too short. Please enter at"
-                          . "least $cfg[min_loginlength] characters.";
+                          . "least $cfg[min_usernamelength] characters.";
   $lang[logintoolong]     = "Your chosen name is too long. Please enter at"
-                          . "most $cfg[max_loginlength] characters.";
+                          . "most $cfg[max_usernamelength] characters.";
   $lang[logininvalidchars]    = "Your login name contains invalid characters."
                               . " Please enter letters, digits or spaces only.";
   $lang[usernamenotavailable] = "The entered username is not available.";

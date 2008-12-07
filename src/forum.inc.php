@@ -384,6 +384,7 @@
       }
       $group = new Group;
       $group->set_id(2);             // Anonymous group. FIXME: hardcoded
+      $group->set_special();
       $group->set_name('anonymous'); // Anonymous group. FIXME: hardcoded
       $message->set_from_group($group);
       return $message;

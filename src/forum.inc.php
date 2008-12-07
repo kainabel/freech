@@ -105,7 +105,7 @@
       $this->db    = &ADONewConnection(cfg("db_dbn"))
         or die("FreechForum::FreechForum(): Error: Can't connect."
              . " Please check username, password and hostname.");
-      $this->forum     = &new ForumDB($this->db);
+      $this->forumdb   = &new ForumDB($this->db);
       $this->visitordb = &new VisitorDB($this->db);
       $this->visitordb->count();
 
@@ -430,7 +430,7 @@
 
 
     function &_get_forumdb() {
-      return $this->forum;
+      return $this->forumdb;
     }
 
 
@@ -447,9 +447,9 @@
       $forum_id    = $this->get_current_forum_id();
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       $search      = array('forum_id' => $forum_id);
-      $n_messages  = $this->forum->get_n_messages($search);
+      $n_messages  = $this->forumdb->get_n_messages($search);
       $start       = time() - cfg("new_post_time");
-      $n_new       = $this->forum->get_n_messages($search, $start);
+      $n_new       = $this->forumdb->get_n_messages($search, $start);
       $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
       $text        = lang("forum_long");
       $text        = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
@@ -500,7 +500,7 @@
 
     // Read a message.
     function _message_read() {
-      $msg        = $this->forum->get_message_from_id($_GET['msg_id']);
+      $msg        = $this->forumdb->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
       $this->_print_message_breadcrumbs($msg);
       $msgprinter->show($msg);
@@ -519,7 +519,7 @@
     // Write a response to a message.
     function _message_answer() {
       $parent_id  = (int)$_GET['parent_id'];
-      $message    = $this->forum->get_message_from_id($parent_id);
+      $message    = $this->forumdb->get_message_from_id($parent_id);
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_reply($message, '');
     }
@@ -528,7 +528,7 @@
     // Edit a saved message.
     function _message_edit_saved() {
       $user       = $this->get_current_user();
-      $message    = $this->forum->get_message_from_id($_GET['msg_id']);
+      $message    = $this->forumdb->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
 
       if (!cfg("postings_editable"))
@@ -557,7 +557,7 @@
     // Insert a quote from the parent message.
     function _message_quote() {
       $parent_id  = (int)$_POST['parent_id'];
-      $quoted_msg = $this->forum->get_message_from_id($parent_id);
+      $quoted_msg = $this->forumdb->get_message_from_id($parent_id);
       $message    = $this->_init_message_from_post_data();
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_quoted($message, $quoted_msg, '');
@@ -611,7 +611,7 @@
       // Fetch the message from the database (when editing an existing one) or
       // create a new one from the POST data.
       if ($_POST['msg_id']) {
-        $message = $this->forum->get_message_from_id($_POST['msg_id']);
+        $message = $this->forumdb->get_message_from_id($_POST['msg_id']);
         $message->set_subject($_POST['subject']);
         $message->set_body($_POST['body']);
       }
@@ -635,7 +635,7 @@
 
       // If the message a new one (not an edited one), check for duplicates.
       if ($message->get_id() <= 0) {
-        $duplicate_id = $this->forum->get_duplicate_id_from_message($message);
+        $duplicate_id = $this->forumdb->get_duplicate_id_from_message($message);
         if ($duplicate_id)
           return $msgprinter->show_created($duplicate_id,
                                            $parent_id,
@@ -652,9 +652,9 @@
 
       // Save the message.
       if ($message->get_id())
-        $this->forum->save($forum_id, $parent_id, $message);
+        $this->forumdb->save($forum_id, $parent_id, $message);
       else
-        $this->forum->insert($forum_id, $parent_id, $message);
+        $this->forumdb->insert($forum_id, $parent_id, $message);
       if (!$message->get_id())
         return $msgprinter->show_compose($message,
                                          lang("message_save_failed"),

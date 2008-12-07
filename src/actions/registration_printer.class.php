@@ -31,6 +31,7 @@
       $this->assign_by_ref('password2', $_POST['password2']);
       $this->assign_by_ref('error',     $error);
       $this->render('registration.tmpl');
+      $this->parent->_set_title(lang('register_title'));
     }
 
     function show_tmpl($_tmpl, $_user, $_hint = '') {
@@ -56,6 +57,7 @@
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('hint',   $_hint);
       $this->render('change_password.tmpl');
+      $this->parent->_set_title(lang('change_password_title'));
     }
 
     function show_forgot_password($_user, $_hint = '') {

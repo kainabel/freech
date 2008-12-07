@@ -252,6 +252,7 @@
   $lang[group_name] = "Benutzergruppe:";
 
   // Top user list.
+  $lang[top_users]   = "User-Statistik";
   $lang[alltime_top] = "Top 20";
   $lang[weekly_top]  = "Top 20 der letzten 7 Tage";
   $lang[n_postings]  = "Postings";

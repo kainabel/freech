@@ -50,6 +50,7 @@
       $this->assign_by_ref('hint',       $_hint);
       $this->assign_by_ref('n_messages', $n_entries);
       $this->render('user_profile.tmpl');
+      $this->parent->_set_title($_user->get_username());
     }
 
 
@@ -89,6 +90,7 @@
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
       $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
       $this->render('list_by_thread.tmpl');
+      $this->parent->_set_title($_user->get_username());
     }
 
 
@@ -116,6 +118,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_data.tmpl');
+      $this->parent->_set_title($_user->get_username());
     }
 
 
@@ -128,6 +131,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_options.tmpl');
+      $this->parent->_set_title($_user->get_username());
     }
 
 
@@ -136,6 +140,7 @@
       $this->assign_by_ref('group', $_group);
       $this->assign_by_ref('hint',  $_hint);
       $this->render('group_profile.tmpl');
+      $this->parent->_set_title($_group->get_name());
     }
   }
 ?>

@@ -86,11 +86,11 @@
       //putenv("LANG=$l");
       setlocale(LC_MESSAGES, $l);
 
-      if (cfg_is("salt", ""))
+      if (cfg_is('salt', ''))
         die("Error: Please define the salt variable in config.inc.php!");
 
       // Setup gettext.
-      if (!function_exists("gettext"))
+      if (!function_exists('gettext'))
         die("This webserver does not have gettext installed.<br/>"
           . "Please contact your webspace provider.");
       $domain = 'freech';
@@ -102,7 +102,7 @@
       $this->eventbus = &new Trackable;
 
       // Connect to the DB.
-      $this->db    = &ADONewConnection(cfg("db_dbn"))
+      $this->db    = &ADONewConnection(cfg('db_dbn'))
         or die("FreechForum::FreechForum(): Error: Can't connect."
              . " Please check username, password and hostname.");
       $this->forumdb   = &new ForumDB($this->db);
@@ -130,6 +130,7 @@
       $this->smarty->compile_check = cfg("check_cache");
       $this->smarty->register_function('lang', 'smarty_lang');
 
+      // Start the PHP session.
       session_set_cookie_params(time() + cfg("login_time"));
       if ($_COOKIE['permanent_session']) {
         session_id($_COOKIE['permanent_session']);
@@ -142,6 +143,7 @@
       }
       $this->_handle_cookies();
 
+      // Attempt to login, if requested.
       $this->current_user = FALSE;
       $this->login_error  = 0;
       if ($this->get_current_action() == 'login' && $_POST['username'])
@@ -151,6 +153,9 @@
         unset($_GET['action']);
         unset($_POST['action']);
       }
+
+      // Go.
+      $this->_run();
     }
 
 
@@ -431,6 +436,11 @@
 
     function &_get_forumdb() {
       return $this->forumdb;
+    }
+
+
+    function _set_title(&$_title) {
+      $this->title = $_title;
     }
 
 
@@ -1008,103 +1018,12 @@
 
 
     /*************************************************************
-     * Public.
+     * Main entry point. Called by the constructor.
      *************************************************************/
-    function &get_eventbus() {
-      return $this->eventbus;
-    }
-
-
-    function get_current_user() {
-      if ($this->current_user)
-        return $this->current_user;
-      if (session_id() !== '' && $_SESSION['user_id'])
-        $this->current_user = $this->_get_user_from_id($_SESSION['user_id']);
-      elseif (cfg('manage_anonymous_users')) {
-        $user_id            = cfg('anonymous_user_id');
-        $this->current_user = $this->_get_user_from_id($user_id);
-      }
-      else {
-        $this->current_user = new User;
-        $this->current_user->set_id(cfg('anonymous_user_id'));
-      }
-      return $this->current_user;
-    }
-
-
-    function get_current_group() {
-      if ($this->current_group)
-        return $this->current_group;
-      $user = $this->get_current_user();
-      if ($user->is_anonymous() && !cfg('manage_anonymous_users')) {
-        $this->current_group = new Group;
-        $this->current_group->set_id(cfg('anonymous_group_id'));
-        $this->current_group->set_name(cfg('anonymous_group_name'));
-        $this->current_group->set_special();
-      }
-      elseif ($user->is_anonymous()) {
-        $group_id = cfg('anonymous_group_id');
-        $this->current_group = $this->_get_group_from_id($group_id);
-      }
-      else {
-        $group_id = $user->get_group_id();
-        $this->current_group = $this->_get_group_from_id($group_id);
-      }
-      return $this->current_group;
-    }
-
-
-    function get_current_action() {
-      if ($_GET['action'])
-        return $_GET['action'];
-      if ($_POST['action'])
-        return $_POST['action'];
-      return 'list';
-    }
-
-
-    function get_current_forum_id() {
-      return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
-    }
-
-
-    function get_current_message_id() {
-      return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
-    }
-
-
-    function get_newest_users($_limit) {
-      return $this->_get_userdb()->get_newest_users($_limit);
-    }
-
-
-    function print_head() {
+    function _run() {
+      $this->title   = "";
       $this->content = "";
 
-      if (!headers_sent()) {
-        header("Content-Type: text/html; charset=utf-8");
-        $header = &new HeaderPrinter($this);
-        $header->show();
-      }
-
-      /* Plugin hook: on_header_print_before
-       *   Called before the HTML header is sent.
-       *   Args: $html: A reference to the HTML header.
-       */
-      $this->eventbus->emit("on_header_print_before", &$this);
-
-      print($this->content);
-
-      /* Plugin hook: on_header_print_before
-       *   Called after the HTML header was sent.
-       *   Args: none
-       */
-      $this->eventbus->emit("on_header_print_after", &$this);
-    }
-
-
-    function show() {
-      $this->content = "";
       switch ($this->get_current_action()) {
       case 'read':
         $this->_message_read();             // Read a message.
@@ -1219,12 +1138,117 @@
       default:
         die("internal error");
       }
+    }
 
+
+    /*************************************************************
+     * Public.
+     *************************************************************/
+    function &get_eventbus() {
+      return $this->eventbus;
+    }
+
+
+    function get_current_user() {
+      if ($this->current_user)
+        return $this->current_user;
+      if (session_id() !== '' && $_SESSION['user_id'])
+        $this->current_user = $this->_get_user_from_id($_SESSION['user_id']);
+      elseif (cfg('manage_anonymous_users')) {
+        $user_id            = cfg('anonymous_user_id');
+        $this->current_user = $this->_get_user_from_id($user_id);
+      }
+      else {
+        $this->current_user = new User;
+        $this->current_user->set_id(cfg('anonymous_user_id'));
+      }
+      return $this->current_user;
+    }
+
+
+    function get_current_group() {
+      if ($this->current_group)
+        return $this->current_group;
+      $user = $this->get_current_user();
+      if ($user->is_anonymous() && !cfg('manage_anonymous_users')) {
+        $this->current_group = new Group;
+        $this->current_group->set_id(cfg('anonymous_group_id'));
+        $this->current_group->set_name(cfg('anonymous_group_name'));
+        $this->current_group->set_special();
+      }
+      elseif ($user->is_anonymous()) {
+        $group_id = cfg('anonymous_group_id');
+        $this->current_group = $this->_get_group_from_id($group_id);
+      }
+      else {
+        $group_id = $user->get_group_id();
+        $this->current_group = $this->_get_group_from_id($group_id);
+      }
+      return $this->current_group;
+    }
+
+
+    function get_current_action() {
+      if ($_GET['action'])
+        return $_GET['action'];
+      if ($_POST['action'])
+        return $_POST['action'];
+      return 'list';
+    }
+
+
+    function get_current_forum_id() {
+      return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
+    }
+
+
+    function get_current_message_id() {
+      return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
+    }
+
+
+    function get_newest_users($_limit) {
+      return $this->_get_userdb()->get_newest_users($_limit);
+    }
+
+
+    function print_head() {
+      $oldcontent    = $this->content;
+      $this->content = "";
+
+      if (!headers_sent()) {
+        header("Content-Type: text/html; charset=utf-8");
+        $header = &new HeaderPrinter($this);
+        if ($this->title)
+          $header->show($this->title.' - '.cfg('site_title'));
+        else
+          $header->show(cfg('site_title'));
+      }
+
+      /* Plugin hook: on_header_print_before
+       *   Called before the HTML header is sent.
+       *   Args: $html: A reference to the HTML header.
+       */
+      $this->eventbus->emit("on_header_print_before", &$this);
+
+      print($this->content);
+
+      /* Plugin hook: on_header_print_before
+       *   Called after the HTML header was sent.
+       *   Args: none
+       */
+      $this->eventbus->emit("on_header_print_after", &$this);
+      $this->content = $oldcontent;
+    }
+
+
+    function show() {
       /* Plugin hook: on_content_print_before
        *   Called before the HTML content is sent.
        *   Args: $html: A reference to the content.
        */
       $this->eventbus->emit("on_content_print_before", &$this);
+
       print($this->content);
 
       /* Plugin hook: on_content_print_after

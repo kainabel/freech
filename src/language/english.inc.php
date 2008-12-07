@@ -234,6 +234,7 @@
   $lang[group_name] = "User group:";
 
   // Top user list.
+  $lang[top_users]   = "Top Users";
   $lang[alltime_top] = "All Time Top 20";
   $lang[weekly_top]  = "Weekly Top 20";
   $lang[n_postings]  = "Postings";

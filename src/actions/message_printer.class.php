@@ -56,6 +56,7 @@
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
       $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
       $this->render('message_read.tmpl');
+      $this->parent->_set_title($_msg->get_subject());
     }
 
 
@@ -82,6 +83,7 @@
       $this->assign('max_titlelength',    cfg("max_titlelength"));
       $this->assign_by_ref('message', $_message);
       $this->render('message_compose.tmpl');
+      $this->parent->_set_title($_message->get_subject());
     }
 
 
@@ -150,6 +152,7 @@
       $this->assign_by_ref('action',    $url->get_string());
       $this->assign_by_ref('message',   $_message);
       $this->render('message_preview.tmpl');
+      $this->parent->_set_title($_message->get_subject());
     }
 
 

@@ -20,8 +20,9 @@
 ?>
 <?php
   class HeaderPrinter extends PrinterBase {
-    function show() {
+    function show($_title) {
       $this->clear_all_assign();
+      $this->assign('title', $_title);
       $this->render('header.tmpl');
     }
   }

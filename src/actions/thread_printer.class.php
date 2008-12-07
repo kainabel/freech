@@ -39,25 +39,26 @@
 
     function show($_forum_id, $_msg_id, $_offset, $_thread_state) {
       // Load messages from the database.
+      $func = array(&$this, '_append_message');
       if ($_msg_id == 0)
-        $this->db->foreach_child($_forum_id,
-                                 0,
-                                 $_offset,
-                                 cfg("tpp"),
-                                 cfg("updated_threads_first"),
-                                 $_thread_state,
-                                 array(&$this, '_append_message'),
-                                 '');
+        $this->forumdb->foreach_child($_forum_id,
+                                      0,
+                                      $_offset,
+                                      cfg("tpp"),
+                                      cfg("updated_threads_first"),
+                                      $_thread_state,
+                                      $func,
+                                      '');
       else
-        $this->db->foreach_child_in_thread($_msg_id,
-                                           $_offset,
-                                           cfg("tpp"),
-                                           $_thread_state,
-                                           array(&$this, '_append_message'),
-                                           '');
+        $this->forumdb->foreach_child_in_thread($_msg_id,
+                                                $_offset,
+                                                cfg("tpp"),
+                                                $_thread_state,
+                                                $func,
+                                                '');
 
       // Create the index bar.
-      $n_threads = $this->db->get_n_threads($_forum_id);
+      $n_threads = $this->forumdb->get_n_threads($_forum_id);
       $args      = array(forum_id           => (int)$_forum_id,
                          n_threads          => $n_threads,
                          n_threads_per_page => cfg("tpp"),

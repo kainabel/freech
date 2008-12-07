@@ -72,12 +72,12 @@
       if ($_n_entries > cfg("rss_maxitems"))
         $n_entries = cfg("rss_maxitems");
       
-      $this->db->foreach_latest_message($_forum_id,
-                                        $_off,
-                                        $_n_entries,
-                                        FALSE,
-                                        array(&$this, '_append_row'),
-                                        $_forum_id);
+      $this->forumdb->foreach_latest_message($_forum_id,
+                                             $_off,
+                                             $_n_entries,
+                                             FALSE,
+                                             array(&$this, '_append_row'),
+                                             $_forum_id);
       
       $this->clear_all_assign();
       $this->assign_by_ref('title',       $this->title);

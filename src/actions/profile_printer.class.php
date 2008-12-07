@@ -39,7 +39,7 @@
 
     function show_user_profile($_user, $_hint = '') {
       $search    = array('userid' => $_user->get_id());
-      $n_entries = $this->db->get_n_messages($search);
+      $n_entries = $this->forumdb->get_n_messages($search);
       $groupdb   = $this->parent->_get_groupdb();
       $search    = array('id' => $_user->get_group_id());
       $group     = $groupdb->get_group_from_query($search);
@@ -60,20 +60,21 @@
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();
       if ($showlist) {
-        $this->db->foreach_message_from_user($_user->get_id(),
-                                             $_offset,
-                                             cfg("epp"),
-                                             cfg("updated_threads_first"),
-                                             $_thread_state,
-                                             array(&$this, '_append_message'),
-                                             '');
+        $func = array(&$this, '_append_message');
+        $this->forumdb->foreach_message_from_user($_user->get_id(),
+                                                  $_offset,
+                                                  cfg("epp"),
+                                                  cfg("updated_threads_first"),
+                                                  $_thread_state,
+                                                  $func,
+                                                  '');
         $this->assign_by_ref('n_rows',   count($this->messages));
         $this->assign_by_ref('messages', $this->messages);
       }
 
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
-      $n_entries = $this->db->get_n_messages($search);
+      $n_entries = $this->forumdb->get_n_messages($search);
       $args      = array(n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_offset,

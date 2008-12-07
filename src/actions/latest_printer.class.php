@@ -40,15 +40,15 @@
 
 
     function show($_forum_id, $_offset) {
-      $n = $this->db->foreach_latest_message((int)$_forum_id,
-                                             (int)$_offset,
-                                             cfg("epp"),
-                                             FALSE,
-                                             array(&$this, '_append_row'),
-                                             '');
+      $n = $this->forumdb->foreach_latest_message((int)$_forum_id,
+                                                  (int)$_offset,
+                                                  cfg("epp"),
+                                                  FALSE,
+                                                  array(&$this, '_append_row'),
+                                                  '');
 
       $search    = array('forum_id' => (int)$_forum_id);
-      $n_entries = $this->db->get_n_messages($search);
+      $n_entries = $this->forumdb->get_n_messages($search);
       $args      = array(forum_id            => (int)$_forum_id,
                          n_messages          => (int)$n_entries,
                          n_messages_per_page => cfg("epp"),

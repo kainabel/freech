@@ -58,12 +58,12 @@
 
       // Run the search.
       $func  = array(&$this, '_append_message');
-      $total = $this->db->get_n_messages_from_query($query);
-      $rows  = $this->db->foreach_message_from_query($query,
-                                                     (int)$_offset,
-                                                     cfg("epp"),
-                                                     $func,
-                                                     '');
+      $total = $this->forumdb->get_n_messages_from_query($query);
+      $rows  = $this->forumdb->foreach_message_from_query($query,
+                                                          (int)$_offset,
+                                                          cfg("epp"),
+                                                          $func,
+                                                          '');
 
       // Create the index bar.
       $args  = array(forum_id            => $_forum_id,

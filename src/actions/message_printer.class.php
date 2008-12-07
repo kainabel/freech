@@ -40,12 +40,13 @@
       $this->assign_by_ref('showthread', $showthread);
       if ($showthread) {
         $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
-        $this->db->foreach_child_in_thread($_msg->get_id(),
-                                           0,
-                                           cfg("tpp"),
-                                           $state,
-                                           array(&$this, '_append_message'),
-                                           '');
+        $func  = array(&$this, '_append_message');
+        $this->forumdb->foreach_child_in_thread($_msg->get_id(),
+                                                0,
+                                                cfg("tpp"),
+                                                $state,
+                                                $func,
+                                                '');
         $this->assign_by_ref('n_rows',   count($this->messages));
         $this->assign_by_ref('messages', $this->messages);
       }

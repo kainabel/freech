@@ -21,7 +21,7 @@
 <?php
   class ListPrinter extends PrinterBase {
     function show_top_posters() {
-      $users = $this->db->get_top_posters(20);
+      $users = $this->forumdb->get_top_posters(20);
       $this->clear_all_assign();
       $this->assign_by_ref('users', $users);
       $this->render('top_posters.tmpl');

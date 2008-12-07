@@ -292,7 +292,8 @@
     function _init_user_from_post_data($_user = NULL) {
       if (!$_user)
         $_user = new User;
-      $_user->set_username($_POST['username']);
+      if ($_POST['username'])
+        $_user->set_username($_POST['username']);
       $_user->set_password($_POST['password']);
       $_user->set_firstname($_POST['firstname']);
       $_user->set_lastname($_POST['lastname']);
@@ -315,7 +316,7 @@
     }
 
 
-    // Returns an new Message object that is initialized for the current 
+    // Returns a new Message object that is initialized for the current 
     // user/group.
     function _get_new_message() {
       $message = new Message;

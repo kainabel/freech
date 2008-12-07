@@ -97,8 +97,17 @@
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('action', 'user_data_submit');
 
+      // Load a list of group names.
+      $groupdb = $this->parent->_get_groupdb();
+      $query   = array();
+      $list    = $groupdb->get_groups_from_query($query);
+      $groups  = array();
+      foreach ($list as $group)
+        $groups[$group->get_id()] = $group->get_name();
+
       // Render the template.
       $this->assign_by_ref('user',   $_user);
+      $this->assign_by_ref('groups', $groups);
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_data.tmpl');

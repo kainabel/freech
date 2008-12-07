@@ -2,10 +2,17 @@
 <h2>{lang text="account_data"|escape}</h2>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <form action="{$action|escape}" method="post" accept-charset="utf-8">
+<input type="hidden" name="username" value="{$user->get_username()|escape}">
   <table>
     <tr>
       <td>{lang text="account_name"|escape}</td>
+{if $__group->may('administer')}
+      <td>
+      {html_options name="group_id" options=$groups selected=$user->get_group_id()}
+      </td>
+{else}
       <td>{$user->get_username()|escape}</td>
+{/if}
     </tr>
     <tr>
       <td>{lang text="account_firstname"|escape}</td>

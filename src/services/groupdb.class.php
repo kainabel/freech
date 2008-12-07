@@ -57,24 +57,29 @@
         return;
       $group = new Group;
       $group->set_from_db($row);
-      $this->groups[$row[id]] = $group;
+      $this->groups[$row->id] = $group;
       return $group;
     }
 
 
     function _pop_group_from_result($res) {
-      if (!$row = $res->FetchRow())
+      if ($res->EOF)
         return;
+      $row   = $res->FetchObj();
       $group = $this->_get_group_from_row($row);
       do {
-        if ($row[permission_id]) {
-          if ($row[permission_allow])
-            $group->grant($row[permission_name]);
+        if ($row->permission_id) {
+          if ($row->permission_allow)
+            $group->grant($row->permission_name);
           else
-            $group->deny($row[permission_name]);
+            $group->deny($row->permission_name);
         }
-        $row = $res->FetchRow();
-      } while ($row && $row[id] == $group->get_id());
+        $res->MoveNext();
+        if (!$row = $res->FetchObj())
+          break;
+        if ($row->id != $group->get_id())
+          break;
+      } while (TRUE);
       return $group;
     }
 
@@ -131,6 +136,20 @@
       $res = $this->db->Execute($sql)
                               or die("GroupDB::get_group_from_query()");
       return $this->_pop_group_from_result($res);
+    }
+
+
+    /**
+     * Returns all groups that match the given criteria.
+     * $_search: The search values.
+     */
+    function get_groups_from_query($_search, $_limit = -1, $_offset = 0) {
+      $sql  = $this->_get_sql_from_query($_search);
+      $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
+      $list = array();
+      while ($group = $this->_pop_group_from_result($res))
+        array_push($list, $group);
+      return $list;
     }
 
 

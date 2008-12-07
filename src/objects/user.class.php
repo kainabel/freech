@@ -291,11 +291,19 @@ define("USER_STATUS_BLOCKED",     2);
     }
 
 
-    function &get_profile_url() {
-      $profile_url = new URL('?', cfg("urlvars"));
-      $profile_url->set_var('action',   'profile');
-      $profile_url->set_var('username', $this->get_username());
-      return $profile_url->get_string();
+    function get_user_data_url() {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('action',   'user_data');
+      $url->set_var('username', $this->get_username());
+      return $url->get_string();
+    }
+
+
+    function get_profile_url() {
+      $url = new URL('?', cfg("urlvars"));
+      $url->set_var('action',   'profile');
+      $url->set_var('username', $this->get_username());
+      return $url->get_string();
     }
 
 

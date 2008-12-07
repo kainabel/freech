@@ -1,5 +1,10 @@
 <p>
-<h2>{lang text="profile" name=$user->get_username()|escape}</h2>
+<h2>
+  {lang text="profile" name=$user->get_username()|escape}
+{if $__user->get_id() == $user->get_id() or $__group->may('administer')}
+  <a href="{$user->get_user_data_url()|escape}">{lang text="account_edit"}</a>
+{/if}
+</h2>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>

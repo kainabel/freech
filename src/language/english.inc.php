@@ -222,6 +222,7 @@
   $lang[account_save]       = "Save Personal Data";
   $lang[account_saved]      = "Your data has been saved.";
   $lang[account_emptyfield] = "None";
+  $lang[account_edit]       = "[Edit]";
 
   // Group profile.
   $lang[group_name] = "User group:";

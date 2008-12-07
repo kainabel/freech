@@ -834,8 +834,20 @@
     }
 
 
+    function _get_user_if_granted($_action, $_username) {
+      if (!$user = $this->get_current_user())
+        die("Not logged in");
+      if (!$this->get_current_group()->may($_action))
+        die("Permission denied");
+      return $this->_get_userdb()->get_user_from_name($_username);
+    }
+
+
     function _show_user_data() {
-      $user = $this->get_current_user();
+      if (!$user = $this->get_current_user())
+        die("Not logged in");
+      if ($_GET['username'] && $_GET['username'] != $user->get_username())
+        $user = $this->_get_user_if_granted('administer', $_GET['username']);
       $this->_print_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
       $profile->show_user_data($user);
@@ -845,9 +857,12 @@
     function _submit_user_data() {
       global $err;
       $profile = &new ProfilePrinter($this);
-      $user    = $this->get_current_user();
-      if (!$user)
-        die("Not logged in.");
+      if (!$user = $this->get_current_user())
+        die("Not logged in");
+      if ($_POST['username'] && $_POST['username'] != $user->get_username()) {
+        $user = $this->_get_user_if_granted('administer', $_POST['username']);
+        $user->set_group_id($_POST['group_id']);
+      }
 
       $this->_print_profile_breadcrumbs($user);
       $this->_fetch_user_data($user);

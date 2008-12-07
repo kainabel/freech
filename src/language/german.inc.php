@@ -240,6 +240,7 @@
   $lang[account_save]       = "Daten speichern";
   $lang[account_saved]      = "Die Daten wurden gespeichert.";
   $lang[account_emptyfield] = "Nicht angegeben";
+  $lang[account_edit]       = "[Bearbeiten]";
 
   // Group profile.
   $lang[group_name] = "Benutzergruppe:";

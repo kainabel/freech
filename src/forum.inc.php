@@ -1197,6 +1197,14 @@
     }
 
 
+    // Returns a title for the current site.
+    function get_current_title() {
+      if (!$this->title)
+        return cfg('site_title');
+      return $this->title.' - '.cfg('site_title');
+    }
+
+
     function get_current_forum_id() {
       return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
     }
@@ -1219,10 +1227,7 @@
       if (!headers_sent()) {
         header("Content-Type: text/html; charset=utf-8");
         $header = &new HeaderPrinter($this);
-        if ($this->title)
-          $header->show($this->title.' - '.cfg('site_title'));
-        else
-          $header->show(cfg('site_title'));
+        $header->show($this->get_current_title());
       }
 
       /* Plugin hook: on_header_print_before

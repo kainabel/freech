@@ -154,31 +154,5 @@
       $this->render('message_preview.tmpl');
       $this->parent->_set_title($_message->get_subject());
     }
-
-
-    // Shows a page explaining that the message was successfully created.
-    function show_created($_newmsg_id, $_parent_id = '', $_hint = '') {
-      $messageurl = new URL('?', cfg("urlvars"));
-      $messageurl->set_var('action',   'read');
-      $messageurl->set_var('msg_id',   $_newmsg_id);
-      $messageurl->set_var('forum_id', $this->parent->get_current_forum_id());
-
-      $parenturl = new URL('?', cfg("urlvars"));
-      $parenturl->set_var('action',   'read');
-      $parenturl->set_var('msg_id',   $_parent_id);
-      $parenturl->set_var('forum_id', $this->parent->get_current_forum_id());
-
-      $forumurl = new URL('?', cfg("urlvars"));
-      $forumurl->set_var('action',   'list');
-      $forumurl->set_var('forum_id', $this->parent->get_current_forum_id());
-
-      $this->clear_all_assign();
-      $this->assign_by_ref('messageurl', $messageurl->get_string());
-      if ($_parent_id)
-        $this->assign_by_ref('parenturl', $parenturl->get_string());
-      $this->assign_by_ref('hint',     $_hint);
-      $this->assign_by_ref('forumurl', $forumurl->get_string());
-      $this->render('message_created.tmpl');
-    }
   }
 ?>

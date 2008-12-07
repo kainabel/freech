@@ -424,6 +424,17 @@
     }
 
 
+    function _refer_to_message_id($_message_id) {
+      $url = &new URL(cfg('site_url').'?', cfg('urlvars'));
+      $url->set_var('action',   'read');
+      $url->set_var('msg_id',   $_message_id);
+      $url->set_var('forum_id', $this->get_current_forum_id());
+      header('HTTP/1.1 301 Moved Permanently');
+      header('Location: '.$url->get_string());
+      die();
+    }
+
+
     function &_get_registry() {
       return $this->registry;
     }
@@ -647,9 +658,7 @@
       if ($message->get_id() <= 0) {
         $duplicate_id = $this->forumdb->get_duplicate_id_from_message($message);
         if ($duplicate_id)
-          return $msgprinter->show_created($duplicate_id,
-                                           $parent_id,
-                                           lang("messageduplicate"));
+          $this->_refer_to_message_id($duplicate_id);
       }
 
       // Check the message for completeness.
@@ -672,13 +681,7 @@
                                          $may_quote);
 
       // Success! Refer to the new item.
-      $url = &new URL(cfg('site_url').'?', cfg('urlvars'));
-      $url->set_var('action',   'read');
-      $url->set_var('msg_id',   $message->get_id());
-      $url->set_var('forum_id', $forum_id);
-      header('HTTP/1.1 301 Moved Permanently');
-      header('Location: '.$url->get_string());
-      die();
+      $this->_refer_to_message_id($message->get_id());
     }
 
 

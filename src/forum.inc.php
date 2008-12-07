@@ -185,7 +185,7 @@
       $ret = $userdb->save_user($user);
       if ($ret < 0)
         die("Failed to log in user, return code $ret");
-      $_SESSION['username'] = $user->get_username();
+      $_SESSION['user_id'] = $user->get_id();
       unset($_GET['action']);
       unset($_POST['action']);
       return 0;
@@ -195,13 +195,13 @@
     function get_current_user() {
       if (session_id() === '')
         return FALSE;
-      if (!$_SESSION['username'])
+      if (!$_SESSION['user_id'])
         return FALSE;
       if ($this->current_user)
         return $this->current_user;
       $userdb             = $this->_get_userdb();
-      $sessionuser        = $_SESSION['username'];
-      $this->current_user = $userdb->get_user_from_name($sessionuser);
+      $sessionuser        = (int)$_SESSION['user_id'];
+      $this->current_user = $userdb->get_user_from_id($sessionuser);
       return $this->current_user;
     }
 
@@ -826,6 +826,8 @@
       }
       else
         $user = $this->get_current_user();
+      if (!$user)
+        die('No such user.');
       $this->_print_profile_breadcrumbs($user);
       $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
                                        $_COOKIE['user_postings_c']);
@@ -834,20 +836,17 @@
     }
 
 
-    function _get_user_if_granted($_action, $_username) {
-      if (!$user = $this->get_current_user())
-        die("Not logged in");
-      if (!$this->get_current_group()->may($_action))
-        die("Permission denied");
-      return $this->_get_userdb()->get_user_from_name($_username);
-    }
-
-
     function _show_user_data() {
       if (!$user = $this->get_current_user())
         die("Not logged in");
-      if ($_GET['username'] && $_GET['username'] != $user->get_username())
-        $user = $this->_get_user_if_granted('administer', $_GET['username']);
+      if ($_GET['username'] && $_GET['username'] != $user->get_username()) {
+        if (!$this->get_current_group()->may('administer'))
+          die("Permission denied");
+        $user = $this->_get_userdb()->get_user_from_name($_GET['username']);
+        if (!$user)
+          die('No such user.');
+      }
+
       $this->_print_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
       $profile->show_user_data($user);
@@ -859,8 +858,11 @@
       $profile = &new ProfilePrinter($this);
       if (!$user = $this->get_current_user())
         die("Not logged in");
-      if ($_POST['username'] && $_POST['username'] != $user->get_username()) {
-        $user = $this->_get_user_if_granted('administer', $_POST['username']);
+      if ($_POST['user_id'] != $user->get_id()) {
+        if (!$this->get_current_group()->may('administer'))
+          die("Permission denied");
+        $user = $this->_get_userdb()->get_user_from_id($_POST['user_id']);
+        $user->set_username($_POST['username']);
         $user->set_group_id($_POST['group_id']);
       }
 

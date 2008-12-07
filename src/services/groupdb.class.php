@@ -75,8 +75,9 @@
             $group->deny($row->permission_name);
         }
         $res->MoveNext();
-        if (!$row = $res->FetchObj())
+        if ($res->EOF)
           break;
+        $row = $res->FetchObj();
         if ($row->id != $group->get_id())
           break;
       } while (TRUE);

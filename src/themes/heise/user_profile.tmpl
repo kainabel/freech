@@ -8,23 +8,23 @@
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>
-    <td><b>{lang text="group_name"|escape}</b></td>
+    <td>{lang text="group_name"|escape}</td>
     <td>{$group->get_name()|escape}</td>
   </tr>
   <tr>
-    <td><b>{lang text="account_name"|escape}</b></td>
+    <td>{lang text="account_name"|escape}</td>
     <td>{$user->get_username()|escape}</td>
   </tr>
   <tr>
-    <td><b>{lang text="account_created"|escape}</b></td>
+    <td>{lang text="account_created"|escape}</td>
     <td>{$user->get_created_time()|escape}</td>
   </tr>
   <tr>
-    <td><b>{lang text="account_messages"|escape}</b></td>
+    <td>{lang text="account_messages"|escape}</td>
     <td>{$n_messages|escape}</td>
   </tr>
   <tr>
-    <td><b>{lang text="account_mail"|escape}</b></td>
+    <td>{lang text="account_mail"|escape}</td>
 {if $user->mail_is_public()}
     <td>{$user->get_mail()|escape}</td>
 {else}
@@ -32,7 +32,7 @@
 {/if}
   </tr>
   <tr>
-    <td><b>{lang text="account_homepage"}</b></td>
+    <td>{lang text="account_homepage"}</td>
     <td>
 {if $user->get_homepage()}
       <a href="{$user->get_homepage()|escape}">{$user->get_homepage()|escape}</a>
@@ -42,7 +42,7 @@
     </td>
   </tr>
   <tr>
-    <td><b>{lang text="account_im"}</b></td>
+    <td>{lang text="account_im"}</td>
     <td>
 {if $user->get_im()}
       {$user->get_im()|escape}

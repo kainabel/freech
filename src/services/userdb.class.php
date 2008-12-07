@@ -90,59 +90,7 @@
     }
 
 
-    /**
-     * Returns the user with the given name.
-     * $_username: The username of the user.
-     */
-    function get_user_from_name($_username) {
-      if (!$_username)
-        die("UserDB::get_user_from_name(): Invalid username.");
-      $sql   = "SELECT *,";
-      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql  .= "UNIX_TIMESTAMP(created) created";
-      $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE username={username}";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_string('username', $_username);
-      $row   = $this->db->GetRow($query->sql());
-      if (!$row)
-        return;
-      $user = &new User;
-      $user->set_from_db($row);
-      $this->users[$row[id]] = &$user;
-      return $user;
-    }
-
-
-    /**
-     * Returns the user with the given email address.
-     * $_mail: The email address of the user.
-     */
-    function get_user_from_mail($_mail) {
-      if (!$_mail)
-        die("UserDB::get_user_from_mail(): Invalid email address.");
-      $sql   = "SELECT *,";
-      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql  .= "UNIX_TIMESTAMP(created) created";
-      $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE mail={mail}";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_string('mail', $_mail);
-      $row   = $this->db->GetRow($query->sql());
-      if (!$row)
-        return;
-      $user = &new User;
-      $user->set_from_db($row);
-      $this->users[$row[id]] = &$user;
-      return $user;
-    }
-
-
-    function foreach_user_from_query($_search,
-                                     $_limit,
-                                     $_offset,
-                                     $_func,
-                                     $_data = NULL) {
+    function _get_sql_from_query($_search) {
       if (!$_search)
         $_search = array();
 
@@ -158,13 +106,69 @@
       }
       $sql .= " ORDER BY username";
       $query->set_sql($sql);
-      $res     = $this->db->SelectLimit($query->sql(),
-                                        (int)$_limit,
-                                        (int)$_offset);
-      $numrows = $res->RecordCount();
+      return $query->sql();
+    }
+
+
+    function _get_user_from_row($row) {
+      if (!$row)
+        return;
+      $user = &new User;
+      $user->set_from_db($row);
+      $this->users[$row[id]] = $user;
+      return $user;
+    }
+
+
+    /**
+     * Returns the user with the given id.
+     * $_id: The id of the user.
+     */
+    function get_user_from_id($_id) {
+      if (!$_id)
+        die("UserDB::get_user_from_id(): Invalid id.");
+      $sql = $this->_get_sql_from_query(array('id' => $_id));
+      $row = $this->db->GetRow($sql);
+      return $this->_get_user_from_row($row);
+    }
+
+
+    /**
+     * Returns the user with the given name.
+     * $_username: The username of the user.
+     */
+    function get_user_from_name($_username) {
+      if (!$_username)
+        die("UserDB::get_user_from_name(): Invalid username.");
+      $sql = $this->_get_sql_from_query(array('username' => $_username));
+      $row = $this->db->GetRow($sql);
+      return $this->_get_user_from_row($row);
+    }
+
+
+    /**
+     * Returns the user with the given email address.
+     * $_mail: The email address of the user.
+     */
+    function get_user_from_mail($_mail) {
+      if (!$_mail)
+        die("UserDB::get_user_from_mail(): Invalid email address.");
+      $sql = $this->_get_sql_from_query(array('mail' => $_mail));
+      $row = $this->db->GetRow($sql);
+      return $this->_get_user_from_row($row);
+    }
+
+
+    function foreach_user_from_query($_search,
+                                     $_limit,
+                                     $_offset,
+                                     $_func,
+                                     $_data = NULL) {
+      $sql  = $this->_get_sql_from_query($_search);
+      $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
+      $rows = $res->RecordCount();
       while ($row = $res->FetchRow()) {
-        $user = &new User;
-        $user->set_from_db($row);
+        $user = $this->_get_user_from_row($row);
         call_user_func($_func, $user, $_data);
       }
       return $numrows;
@@ -196,24 +200,17 @@
      * username of the given user.
      * $_user: The user for which to find similar ones.
      */
-    function get_similar_users($_user, $_limit = -1, $_offset = -1) {
+    function get_similar_users($_user, $_limit = -1, $_offset = 0) {
       if (!$_user)
         die("UserDB::get_similar_users(): Invalid user.");
-      $sql   = "SELECT *,";
-      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql  .= "UNIX_TIMESTAMP(created) created";
-      $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE soundexusername={soundex}";
-      $sql  .= " ORDER BY username";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_string('soundex', $_user->get_soundexed_username());
-      $res = $this->db->SelectLimit($query->sql(), -1, $_offset)
+      $soundex = $_user->get_soundexed_username();
+      $search  = array('soundexusername' => $soundex);
+      $sql     = $this->_get_sql_from_query($search);
+      $res     = $this->db->SelectLimit($sql, -1, $_offset)
                              or die("UserDB::get_similar_users(): Select");
       $users = array();
       while ($row = &$res->FetchRow() && sizeof($users) != $_limit) {
-        $user = &new User;
-        $user->set_from_db($row);
-        $this->users[$row[id]] = &$user;
+        $user = $this->_get_user_from_row($row);
         if ($user->is_lexically_similar_to($_user))
           array_push($users, $user);
       }

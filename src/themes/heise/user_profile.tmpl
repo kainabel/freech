@@ -9,7 +9,10 @@
 <table>
   <tr>
     <td>{lang text="group_name"|escape}</td>
-    <td>{$group->get_name()|escape}</td>
+    <td>
+      {$group->get_name()|escape}
+      <img src="{$group->get_icon()}" title="{$group->get_name()}" />
+    </td>
   </tr>
   <tr>
     <td>{lang text="account_name"|escape}</td>

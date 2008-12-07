@@ -293,13 +293,14 @@
     }
 
 
-    function _fetch_message_data() {
-      $message = &new Message();
-      $message->set_id($_POST['msg_id']);
-      $message->set_username($_POST['username']);
-      $message->set_subject($_POST['subject']);
-      $message->set_body($_POST['body']);
-      return $message;
+    function _fetch_message_data($_message = NULL) {
+      if (!$_message)
+        $_message = &new Message();
+      $_message->set_id($_POST['msg_id']);
+      $_message->set_username($_POST['username']);
+      $_message->set_subject($_POST['subject']);
+      $_message->set_body($_POST['body']);
+      return $_message;
     }
 
 
@@ -332,7 +333,7 @@
 
       if (!cfg("postings_editable"))
         die("Postings may not be changed as per configuration.");
-      if ($message->get_user_type() == 'anonymous')
+      if ($message->get_user_is_anonymous())
         die("Anonymous postings may not be changed.");
       elseif (!$user)
         die("You are not logged in.");
@@ -373,21 +374,32 @@
     }
 
 
+    function _get_new_message() {
+      $message = new Message;
+      $user    = $this->get_current_user();
+      if ($user) {
+        $message->set_from_group($this->get_current_group());
+        $message->set_from_user($user);
+        return $message;
+      }
+      $group = new Group;
+      $group->set_id(2);             // Anonymous group. FIXME: hardcoded
+      $group->set_name('anonymous'); // Anonymous group. FIXME: hardcoded
+      $message->set_from_group($group);
+      return $message;
+    }
+
     // Print a preview of a message.
     function _message_preview() {
       global $err;
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
       $msgprinter = &new MessagePrinter($this);
-      $message    = $this->_fetch_message_data();
       $user       = $this->get_current_user();
+      $message    = $this->_get_new_message();
+      $this->_fetch_message_data($message);
 
-      if ($user) {
-        $message->set_user_id($user->get_id());
-        $message->set_group_id($user->get_group_id());
-        $message->set_signature($user->get_signature());
-      }
-      elseif (!$this->_username_available($message->get_username()))
+      if (!$user && !$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
                                           $parent_id,
@@ -412,6 +424,10 @@
       $forum_id   = $this->get_forum_id();
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
+      $user       = $this->get_current_user();
+
+      // Fetch the message from the database (when editing an existing one) or
+      // create a new one from the POST data.
       if ($_POST['msg_id'] && !cfg("postings_editable"))
         die("Postings may not be changed as per configuration.");
       elseif ($_POST['msg_id']) {
@@ -419,23 +435,21 @@
         $message->set_subject($_POST['subject']);
         $message->set_body($_POST['body']);
       }
-      else
-        $message = $this->_fetch_message_data();
+      else {
+        $message = $this->_get_new_message();
+        $this->_fetch_message_data($message);
+      }
 
+      // Make sure that the username is not in use.
       if ($user && $user->get_username() !== $message->get_username())
         die("Username does not match currently logged in user");
-
-      if ($user) {
-        $message->set_user_id($user->get_id());
-        $message->set_group_id($user->get_group_id());
-        $message->set_signature($user->get_signature());
-      }
-      elseif (!$this->_username_available($message->get_username()))
+      if (!$user && !$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
                                           $parent_id,
                                           $may_quote);
 
+      // If the message a new one (not an edited one), check for duplicates.
       if ($message->get_id() <= 0) {
         $duplicate_id = $this->forum->get_duplicate_id_from_message($message);
         if ($duplicate_id)
@@ -444,22 +458,27 @@
                                            lang("messageduplicate"));
       }
 
+      // Check the message for completeness.
       $ret = $message->check_complete();
-      if ($ret == 0 && !$message->get_id())
-        $newmsg_id = $this->forum->insert($forum_id,
-                                          $parent_id,
-                                          $message);
-      elseif ($message->get_id()) {
+      if ($ret < 0)
+        return $msgprinter->show_compose($message,
+                                         $err[$ret],
+                                         $parent_id,
+                                         $may_quote);
+
+      // Save the message.
+      if ($message->get_id())
         $this->forum->save($forum_id, $parent_id, $message);
-        $newmsg_id = $message->get_id();
-      }
-      if ($ret < 0 || $new_id < 0)
-        $msgprinter->show_compose($message,
-                                  $err[$ret],
-                                  $parent_id,
-                                  $may_quote);
       else
-        $msgprinter->show_created($newmsg_id, $parent_id);
+        $this->forum->insert($forum_id, $parent_id, $message);
+      if (!$message->get_id())
+        return $msgprinter->show_compose($message,
+                                         lang("message_save_failed"),
+                                         $parent_id,
+                                         $may_quote);
+
+      // Success!
+      $msgprinter->show_created($message->get_id(), $parent_id);
     }
 
 

@@ -46,7 +46,6 @@
       $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->fields[active]       = TRUE;
       $this->fields[user_id]      = 2; // Anonymous user.
-      $this->fields[group_id]     = 2; // Anonymous group.
       $this->fields[allow_answer] = TRUE;
       $this->fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
       $this->fields[indent]       = array();
@@ -62,8 +61,10 @@
       $this->fields[forum_id]        = $_db_row[forum_id];
       $this->fields[priority]        = $_db_row[priority];
       $this->fields[user_id]         = $_db_row[user_id];
-      $this->fields[group_id]        = $_db_row[group_id];
       $this->fields[username]        = $_db_row[username];
+      $this->fields[user_is_special] = $_db_row[user_is_special];
+      $this->fields[user_icon]       = $_db_row[user_icon];
+      $this->fields[user_icon_name]  = $_db_row[user_icon_name];
       $this->fields[subject]         = $_db_row[subject];
       $this->fields[body]            = $_db_row[body];
       $this->fields[updated]         = $_db_row[updated];
@@ -130,13 +131,51 @@
     }
 
 
-    function set_group_id($_group_id) {
-      $this->fields[group_id] = (int)$_group_id;
+    function set_from_group($_group) {
+      $this->set_user_icon($_group->get_icon());
+      $this->set_user_icon_name($_group->get_name());
+      $this->set_user_is_special($_group->is_special());
     }
 
 
-    function get_group_id() {
-      return $this->fields[group_id];
+    function set_from_user($_user) {
+      $this->set_user_id($_user->get_id());
+      $this->set_signature($_user->get_signature());
+    }
+
+
+    function set_user_is_special($_special) {
+      $this->fields[user_is_special] = $_special;
+    }
+
+
+    function get_user_is_special() {
+      return $this->fields[user_is_special];
+    }
+
+
+    function get_user_is_anonymous() {
+      return $this->fields[user_id] == 2; // FIXME: Hardcoding sucks
+    }
+
+
+    function set_user_icon($_icon) {
+      $this->fields[user_icon] = $_icon;
+    }
+
+
+    function get_user_icon() {
+      return $this->fields[user_icon];
+    }
+
+
+    function set_user_icon_name($_name) {
+      $this->fields[user_icon_name] = $_name;
+    }
+
+
+    function get_user_icon_name() {
+      return $this->fields[user_icon_name];
     }
 
 
@@ -367,27 +406,6 @@
       $this->set_subject(lang("blockedtitle"));
       $this->set_username('------');
       $this->set_body('');
-    }
-
-
-    function &get_user_type() {
-      if (!$this->fields[user_id])
-        return 'deleted';
-      if ($this->fields[group_id] == 1)
-        return 'admin';
-      elseif ($this->fields[group_id] == 2)
-        return 'anonymous';
-      elseif ($this->fields[group_id] == 4)
-        return 'moderator';
-      else
-        return 'registered';
-    }
-
-
-    function &get_user_icon() {
-      if (!$this->get_group_id())
-        return '';
-      return 'data/group_icons/'.$this->get_group_id().'.png';
     }
 
 

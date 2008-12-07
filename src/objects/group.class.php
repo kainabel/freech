@@ -63,16 +63,21 @@
 
 
     function set_name($_name) {
-      if (strlen($_name) < cfg("min_groupnamelength"))
+      if (strlen($_name) < cfg("min_loginlength"))
         return ERR_GROUP_NAME_TOO_SHORT;
-      if (strlen($_name) > cfg("max_groupnamelength"))
+      if (strlen($_name) > cfg("max_loginlength"))
         return ERR_GROUP_NAME_TOO_LONG;
-      $this->fields[name] = (int)$_name;
+      $this->fields[name] = $_name;
     }
 
 
     function get_name() {
       return $this->fields[name];
+    }
+
+
+    function get_icon() {
+      return 'data/group_icons/'.$this->fields[id].'.png';
     }
 
 

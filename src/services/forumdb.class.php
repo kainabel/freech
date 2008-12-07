@@ -168,8 +168,8 @@
      * $_message: The message to be inserted.
      * Returns:   The id of the newly inserted entry.
      */
-    function insert($_forum_id, $_parent_id, &$_message) {
-      $body = trim($_message->get_body() . "\n\n" . $_message->get_signature());
+    function insert($_forum_id, $_parent_id, &$_msg) {
+      $body = trim($_msg->get_body() . "\n\n" . $_msg->get_signature());
       //$this->db->debug = true;
 
       // Fetch the parent row.
@@ -192,26 +192,30 @@
         // Insert a new child.
         //FIXME: user_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
-        $sql .= " (forum_id, thread_id, priority, user_id, group_id,";
+        $sql .= " (forum_id, thread_id, priority,";
+        $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= "  username, subject, body,";
         $sql .= "  hash, ip_hash, created)";
         $sql .= " VALUES (";
-        $sql .= " {forum_id}, {thread_id}, {priority}, {user_id}, {group_id},";
+        $sql .= " {forum_id}, {thread_id}, {priority},";
+        $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int   ('forum_id',  $parentrow[forum_id]);
-        $query->set_int   ('thread_id', $parentrow[thread_id]);
-        $query->set_int   ('priority',  $_message->get_priority());
-        $query->set_int   ('user_id',   $_message->get_user_id());
-        $query->set_int   ('group_id',  $_message->get_group_id());
-        $query->set_string('username',  $_message->get_username());
-        $query->set_string('subject',   $_message->get_subject());
-        $query->set_string('body',      $body);
-        $query->set_string('hash',      $_message->get_hash());
-        $query->set_string('ip_hash',   $_message->get_ip_address_hash());
+        $query->set_int   ('forum_id',        $parentrow[forum_id]);
+        $query->set_int   ('thread_id',       $parentrow[thread_id]);
+        $query->set_int   ('priority',        $_msg->get_priority());
+        $query->set_int   ('user_id',         $_msg->get_user_id());
+        $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
+        $query->set_string('user_icon',       $_msg->get_user_icon());
+        $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
+        $query->set_string('username',        $_msg->get_username());
+        $query->set_string('subject',         $_msg->get_subject());
+        $query->set_string('body',            $body);
+        $query->set_string('hash',            $_msg->get_hash());
+        $query->set_string('ip_hash',         $_msg->get_ip_address_hash());
         $this->db->Execute($query->sql()) or die("ForumDB::insert(): Ins1");
-        $newid = $this->db->Insert_Id();
+        $_msg->set_id($this->db->Insert_Id());
 
         // Update the child's path.
         $sql  = "UPDATE {t_message} SET path=";
@@ -219,14 +223,14 @@
           $len = strlen($parentrow[path]);
           $parentrow[path] = substr($parentrow[path], 0, $len - 2);
           $sql .= " CONCAT(0x$parentrow[path],";
-          $sql .= "        0x" . $this->_int2hex($newid) . "00)";
+          $sql .= "        0x" . $this->_int2hex($_msg->get_id()) . "00)";
         }
         else {
-          $sql .= " 0x" . $this->_int2hex($newid) . "00";
+          $sql .= " 0x" . $this->_int2hex($_msg->get_id()) . "00";
         }
         $sql .= " WHERE id={newid}";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('newid', $newid);
+        $query->set_int('newid', $_msg->get_id());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Path.");
 
@@ -263,40 +267,44 @@
       // Insert a new thread.
       else {
         $sql  = "INSERT INTO {t_message}";
-        $sql .= " (path, forum_id, priority, user_id, group_id, thread_id,";
-        $sql .= "  is_parent, username,";
+        $sql .= " (path, forum_id, priority,";
+        $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
+        $sql .= "  thread_id, is_parent, username,";
         $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
-        $sql .= " '', {forum_id}, {priority}, {user_id}, {group_id}, 0, 1,";
+        $sql .= " '', {forum_id}, {priority},";
+        $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
+        $sql .= " 0, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int   ('forum_id', $_forum_id);
-        $query->set_int   ('priority', $_message->get_priority());
-        $query->set_int   ('user_id',  $_message->get_user_id());
-        $query->set_int   ('group_id', $_message->get_group_id());
-        $query->set_string('username', $_message->get_username());
-        $query->set_string('subject',  $_message->get_subject());
-        $query->set_string('body',     $body);
-        $query->set_string('hash',     $_message->get_hash());
-        $query->set_string('ip_hash',  $_message->get_ip_address_hash());
+        $query->set_int   ('forum_id',        $_forum_id);
+        $query->set_int   ('priority',        $_msg->get_priority());
+        $query->set_int   ('user_id',         $_msg->get_user_id());
+        $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
+        $query->set_string('user_icon',       $_msg->get_user_icon());
+        $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
+        $query->set_string('username',        $_msg->get_username());
+        $query->set_string('subject',         $_msg->get_subject());
+        $query->set_string('body',            $body);
+        $query->set_string('hash',            $_msg->get_hash());
+        $query->set_string('ip_hash',         $_msg->get_ip_address_hash());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Insert2.".$query->sql());
-        $newid = $this->db->Insert_Id();
+        $_msg->set_id($this->db->Insert_Id());
 
         // Set the thread id.
         // FIXME: Is there a better way to do this?
         $sql  = "UPDATE {t_message} SET thread_id={newid}";
         $sql .= " WHERE id={newid}";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('newid', $newid);
+        $query->set_int('newid', $_msg->get_id());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): thread_id");
       }
 
       $this->db->CompleteTrans();
-
-      return $newid;
+      return $_msg->get_id();
     }
 
 
@@ -310,7 +318,9 @@
       $sql .= " forum_id={forum_id},";
       $sql .= " priority={priority},";
       $sql .= " user_id={user_id},";
-      $sql .= " group_id={group_id},";
+      $sql .= " user_is_special={user_is_special},";
+      $sql .= " user_icon={user_icon},";
+      $sql .= " user_icon_name={user_icon_name},";
       $sql .= " username={username},";
       $sql .= " subject={subject},";
       $sql .= " body={body},";
@@ -319,17 +329,19 @@
       $sql .= " updated=FROM_UNIXTIME({updated})";
       $sql .= " WHERE id={id}";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int   ('id',       $_message->get_id());
-      $query->set_int   ('forum_id', $_forum_id);
-      $query->set_int   ('priority', $_message->get_priority());
-      $query->set_int   ('user_id',  $_message->get_user_id());
-      $query->set_int   ('group_id', $_message->get_group_id());
-      $query->set_int   ('updated',  time());
-      $query->set_string('username', $_message->get_username());
-      $query->set_string('subject',  $_message->get_subject());
-      $query->set_string('body',     $_message->get_body());
-      $query->set_string('hash',     $_message->get_hash());
-      $query->set_string('ip_hash',  $_message->get_ip_address_hash());
+      $query->set_int   ('id',              $_message->get_id());
+      $query->set_int   ('forum_id',        $_forum_id);
+      $query->set_int   ('priority',        $_message->get_priority());
+      $query->set_int   ('updated',         time());
+      $query->set_int   ('user_id',         $_message->get_user_id());
+      $query->set_bool  ('user_is_special', $_message->get_user_is_special());
+      $query->set_string('user_icon',       $_message->get_user_icon());
+      $query->set_string('user_icon_name',  $_message->get_user_icon_name());
+      $query->set_string('username',        $_message->get_username());
+      $query->set_string('subject',         $_message->get_subject());
+      $query->set_string('body',            $_message->get_body());
+      $query->set_string('hash',            $_message->get_hash());
+      $query->set_string('ip_hash',         $_message->get_ip_address_hash());
       $this->db->Execute($query->sql()) or die("ForumDB::save(): 1");
 
       $this->db->CompleteTrans();
@@ -339,18 +351,11 @@
     /* Returns a message from the given forum.
      * $_forum: The forum id.
      * $_id:    The id of the message.
-     * Returns: An object containing the fields
-     *            - id
-     *            - username
-     *            - subject
-     *            - body
-     *            - active
-     *            - time
+     * Returns: The message.
      */
     function get_message_from_id($_id) {
-      $sql  = "SELECT id,forum_id,priority,user_id,group_id,thread_id,";
-      $sql .= "HEX(path) path,n_children,username,subject,body,active,";
-      $sql .= "ip_hash,";
+      $sql  = "SELECT *,";
+      $sql .= "HEX(path) path,";
       $sql .= "UNIX_TIMESTAMP(updated) updated,";
       $sql .= "UNIX_TIMESTAMP(created) created";
       $sql .= " FROM {t_message}";
@@ -508,10 +513,8 @@
       // Build the SQL request to grab the complete threads.
       if ($res->RecordCount() <= 0)
         return;
-      $sql  = "SELECT a.id,a.forum_id,a.priority,a.user_id,a.group_id,";
+      $sql  = "SELECT a.*,";
       $sql .= " HEX(a.path) path,";
-      $sql .= " a.n_children,a.n_descendants, a.username, a.subject,";
-      $sql .= " a.body,a.active,a.ip_hash,";
       if ($_updated_threads_first)
         $sql .= " MAX(b.id) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(a.updated) updated,";
@@ -619,8 +622,7 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
-      $sql  = "SELECT id,forum_id,priority,user_id,group_id,username,";
-      $sql .= "subject,body,active,";
+      $sql  = "SELECT *,";
       $sql .= '(0';
       foreach ($_search_query->get_field_values('subject') as $value)
         $sql .= ' OR subject LIKE {'.$value.'}';
@@ -666,8 +668,7 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
-      $sql  = "SELECT a.id,a.forum_id,a.priority,a.user_id,a.group_id,";
-      $sql .= "a.username,a.subject,a.body,a.active,";
+      $sql  = "SELECT a.*,";
       $sql .= "UNIX_TIMESTAMP(a.updated) updated,";
       $sql .= "UNIX_TIMESTAMP(a.created) created";
       $sql .= " FROM {t_message} a";
@@ -736,11 +737,8 @@
       // Grab the direct responses to those postings.
       if ($res->RecordCount() <= 0)
         return;
-      $sql  = "SELECT b.id,b.forum_id,b.priority,b.user_id,";
-      $sql .= " b.group_id,b.n_descendants n_children,";
-      $sql .= " b.n_descendants,";
-      $sql .= " b.username,";
-      $sql .= " b.subject,b.body,b.active,b.ip_hash,";
+      $sql  = "SELECT b.*,";
+      $sql .= " b.n_descendants n_children,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
       $sql .= " a.id=b.id is_parent,";
       if ($_updated_threads_first)

@@ -53,8 +53,10 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `n_descendants` int(11) unsigned default '0',
   `path` varchar(255) character set latin1 collate latin1_bin default NULL,
   `user_id` int(11) unsigned default '0',
-  `group_id` int(11) unsigned default NULL,
   `username` varchar(50) collate latin1_general_ci NOT NULL,
+  `user_is_special` tinyint(1) unsigned default '0',
+  `user_icon` varchar(50) collate latin1_general_ci default NULL,
+  `user_icon_name` varchar(50) collate latin1_general_ci default NULL,
   `subject` varchar(100) collate latin1_general_ci NOT NULL,
   `body` text collate latin1_general_ci NOT NULL,
   `hash` varchar(40) collate latin1_general_ci NOT NULL,
@@ -68,8 +70,7 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   KEY `created` (`created`),
   KEY `forum_id` (`forum_id`),
   KEY `thread_id` (`thread_id`),
-  KEY `user_id` (`user_id`),
-  KEY `group_id` (`group_id`)
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -149,7 +150,6 @@ ALTER TABLE `freech_forum`
 -- Constraints for table `freech_message`
 --
 ALTER TABLE `freech_message`
-  ADD CONSTRAINT `freech_message_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `0_778` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `0_779` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 

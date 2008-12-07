@@ -671,8 +671,14 @@
                                          $parent_id,
                                          $may_quote);
 
-      // Success!
-      $msgprinter->show_created($message->get_id(), $parent_id);
+      // Success! Refer to the new item.
+      $url = &new URL(cfg('site_url').'?', cfg('urlvars'));
+      $url->set_var('action',   'read');
+      $url->set_var('msg_id',   $message->get_id());
+      $url->set_var('forum_id', $forum_id);
+      header('HTTP/1.1 301 Moved Permanently');
+      header('Location: '.$url->get_string());
+      die();
     }
 
 

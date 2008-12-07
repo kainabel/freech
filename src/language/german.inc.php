@@ -207,6 +207,7 @@
   $lang[logout]           = "Ausloggen";
   $lang[loginfailed]      = "Login fehlgeschlagen.";
   $lang[loginunconfirmed] = "Der Account ist noch nicht freigeschaltet.";
+  $lang[loginlocked]      = "Der Account ist gesperrt.";
   $lang[resendconfirm]    = "Bestätigungsmail erneut versenden";
   $lang[logintooshort]    = "Der von ihnen gewählte Benutzername ist zu kurz."
                           . " Bitte mindestens $cfg[min_loginlength] Zeichen"

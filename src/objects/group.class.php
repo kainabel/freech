@@ -62,6 +62,11 @@
     }
 
 
+    function is_anonymous() {
+      return $this->get_id() == cfg('anonymous_group_id');
+    }
+
+
     function set_name($_name) {
       if (strlen($_name) < cfg("min_loginlength"))
         return ERR_GROUP_NAME_TOO_SHORT;

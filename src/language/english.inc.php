@@ -194,6 +194,7 @@
   $lang[logout]           = "Log out";
   $lang[loginfailed]      = "Login failed.";
   $lang[loginunconfirmed] = "Your account is not yet confirmed.";
+  $lang[loginlocked]      = "Your account is locked.";
   $lang[resendconfirm]    = "Resend confirmation email";
   $lang[logintooshort]    = "Your chosen name is too short. Please enter at"
                           . "least $cfg[min_loginlength] characters.";

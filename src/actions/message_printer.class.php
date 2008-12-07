@@ -20,11 +20,11 @@
 ?>
 <?php
   class MessagePrinter extends ThreadPrinter {
-    function show(&$_forum_id, &$_msg) {
+    function show(&$_msg) {
       $user       = $this->parent->get_current_user();
       $msg_uid    = $_msg ? $_msg->get_user_id() : -1;
-      $uid        = $user ? $user->get_id()      : -1;
-      $may_edit   = cfg("postings_editable") && $user && $uid === $msg_uid;
+      $may_edit   = cfg("postings_editable") && !$user->is_anonymous()
+                 && $user->get_id() === $msg_uid;
       $indexbar   = &new IndexBarReadMessage($_msg, $may_edit);
       $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 
@@ -40,8 +40,7 @@
       $this->assign_by_ref('showthread', $showthread);
       if ($showthread) {
         $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
-        $this->db->foreach_child_in_thread($_forum_id,
-                                           $_msg->get_id(),
+        $this->db->foreach_child_in_thread($_msg->get_id(),
                                            0,
                                            cfg("tpp"),
                                            $state,
@@ -67,7 +66,7 @@
                           $_hint,
                           $_parent_id,
                           $_may_quote) {
-      $forum_id = $this->parent->get_forum_id();
+      $forum_id = $this->parent->get_current_forum_id();
 
       $url = new URL('?', cfg("urlvars"));
       $url->set_var('forum_id',  $forum_id);
@@ -140,7 +139,7 @@
     /* Show a preview form of the message. */
     function show_preview(&$_message, $_parent_id, $_may_quote) {
       $url  = new URL('?', cfg("urlvars"));
-      $url->set_var('forum_id',  $this->parent->get_forum_id());
+      $url->set_var('forum_id',  $this->parent->get_current_forum_id());
       $url->set_var('parent_id', $_parent_id);
 
       $this->clear_all_assign();
@@ -158,16 +157,16 @@
       $messageurl = new URL('?', cfg("urlvars"));
       $messageurl->set_var('action',   'read');
       $messageurl->set_var('msg_id',   $_newmsg_id);
-      $messageurl->set_var('forum_id', $this->parent->get_forum_id());
+      $messageurl->set_var('forum_id', $this->parent->get_current_forum_id());
 
       $parenturl = new URL('?', cfg("urlvars"));
       $parenturl->set_var('action',   'read');
       $parenturl->set_var('msg_id',   $_parent_id);
-      $parenturl->set_var('forum_id', $this->parent->get_forum_id());
+      $parenturl->set_var('forum_id', $this->parent->get_current_forum_id());
 
       $forumurl = new URL('?', cfg("urlvars"));
       $forumurl->set_var('action',   'list');
-      $forumurl->set_var('forum_id', $this->parent->get_forum_id());
+      $forumurl->set_var('forum_id', $this->parent->get_current_forum_id());
 
       $this->clear_all_assign();
       $this->assign_by_ref('messageurl', $messageurl->get_string());

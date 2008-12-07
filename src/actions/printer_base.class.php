@@ -27,10 +27,10 @@
     
     function PrinterBase(&$_parent) {
       $this->parent   = &$_parent;
-      $this->registry = $_parent->get_registry();
+      $this->registry = $_parent->_get_registry();
+      $this->smarty   = $_parent->_get_smarty();
+      $this->db       = $_parent->_get_forumdb();
       $this->eventbus = $_parent->get_eventbus();
-      $this->smarty   = $_parent->get_smarty();
-      $this->db       = $_parent->get_forumdb();
     }
 
     function clear_all_assign() {
@@ -46,14 +46,11 @@
     }
 
     function render($_template) {
-      $current_user  = $this->parent->get_current_user();
-      $current_group = $this->parent->get_current_group();
-      $user          = $current_user  ? $current_user  : new User;
-      $group         = $current_group ? $current_group : new Group;
-      $this->smarty->assign       ('__logged_in', $current_user ? TRUE : FALSE);
-      $this->smarty->assign_by_ref('__user',      $user);
-      $this->smarty->assign_by_ref('__group',     $group);
-      $this->parent->append_content($this->smarty->fetch($_template));
+      $user  = $this->parent->get_current_user();
+      $group = $this->parent->get_current_group();
+      $this->smarty->assign_by_ref('__user',  $user);
+      $this->smarty->assign_by_ref('__group', $group);
+      $this->parent->_append_content($this->smarty->fetch($_template));
     }
   }
 ?>

@@ -20,16 +20,16 @@
 ?>
 <?php
   class FooterPrinter extends PrinterBase {
-    function show() {
+    function show($_forum_id) {
       // Create the URL pointing to the message search.
       $search_url = new URL('?', cfg("urlvars"));
       $search_url->set_var('action',   'search');
-      $search_url->set_var('forum_id', $this->parent->get_forum_id());
+      $search_url->set_var('forum_id', (int)$_forum_id);
 
       // Create the URLs for changing the message ordering.
       $order_url = new URL('?', cfg("urlvars"));
       $order_url->set_var('action',   'list');
-      $order_url->set_var('forum_id', $this->parent->get_forum_id());
+      $order_url->set_var('forum_id', (int)$_forum_id);
       if ($_COOKIE[view] === 'plain') {
         $order_url->set_var('changeview', 't');
         $order_by_thread_url = $order_url->get_string();

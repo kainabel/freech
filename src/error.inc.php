@@ -56,6 +56,7 @@
   define("ERR_LOGIN_FAILED",                 -501);
   define("ERR_LOGIN_UNCONFIRMED",            -502);
   define("ERR_LOGIN_NO_SUCH_MAIL",           -503);
+  define("ERR_LOGIN_LOCKED",                 -504);
   
   unset($err);
   $err[ERR_MESSAGE_INCOMPLETE]           = lang("somethingmissing");
@@ -77,6 +78,7 @@
   $err[ERR_LOGIN_FAILED]                 = lang("loginfailed");
   $err[ERR_LOGIN_UNCONFIRMED]            = lang("loginunconfirmed");
   $err[ERR_LOGIN_NO_SUCH_MAIL]           = lang("nosuchmail");
+  $err[ERR_LOGIN_LOCKED]                 = lang("loginlocked");
   $err[ERR_USER_LOGIN_INVALID_CHARS]     = lang("logininvalidchars");
   $err[ERR_USER_LOGIN_TOO_SHORT]         = lang("logintooshort");
   $err[ERR_USER_LOGIN_TOO_LONG]          = lang("logintoolong");

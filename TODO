@@ -4,4 +4,6 @@
 * Rework the header rendering logic.
 * Design a URL scheme that makes sense for URL rewriting.
 * Rename "active" columns to "is_active".
-* Clean forum.inc.php up.
+* Rename PrinterBase->db to PrinterBase->forumdb.
+* Add PrinterBase->userdb.
+* Add PrinterBase->groupdb.

@@ -28,7 +28,7 @@
 
     function _append_message(&$_message, $_data) {
       // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_message_id();
+      $msg_id = $this->parent->get_current_message_id();
       $_message->set_selected($_message->get_id() == $msg_id);
       $_message->apply_block();
 
@@ -105,8 +105,7 @@
 
       // Search for similar results.
       if ($n_rows == 0) {
-        $user          = new User($_query);
-        $this->results = $userdb->get_similar_users($user, 50);
+        $this->results = $userdb->get_similar_users_from_name($_query, 50);
         $n_rows        = count($this->results);
       }
 

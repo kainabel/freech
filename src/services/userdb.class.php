@@ -171,7 +171,7 @@
         $user = $this->_get_user_from_row($row);
         call_user_func($_func, $user, $_data);
       }
-      return $numrows;
+      return $rows;
     }
 
 
@@ -197,22 +197,23 @@
 
     /**
      * Returns a list of all users whose username is similar to the
-     * username of the given user.
-     * $_user: The user for which to find similar ones.
+     * given one.
+     * $_name: The name for which to find similar users.
      */
-    function get_similar_users($_user, $_limit = -1, $_offset = 0) {
-      if (!$_user)
-        die("UserDB::get_similar_users(): Invalid user.");
-      $soundex = $_user->get_soundexed_username();
+    function get_similar_users_from_name($_name, $_limit = -1, $_offset = 0) {
+      if (!$_name)
+        die("UserDB::get_similar_users_from_name(): Invalid name.");
+      $user    = new User($_name);
+      $soundex = $user->get_soundexed_username();
       $search  = array('soundexusername' => $soundex);
       $sql     = $this->_get_sql_from_query($search);
       $res     = $this->db->SelectLimit($sql, -1, $_offset)
-                             or die("UserDB::get_similar_users(): Select");
+                      or die("UserDB::get_similar_users_from_name(): Select");
       $users = array();
       while ($row = &$res->FetchRow() && sizeof($users) != $_limit) {
-        $user = $this->_get_user_from_row($row);
-        if ($user->is_lexically_similar_to($_user))
-          array_push($users, $user);
+        $potential_user = $this->_get_user_from_row($row);
+        if ($potential_user->is_lexically_similar_to($user))
+          array_push($users, $potential_user);
       }
       return $users;
     }

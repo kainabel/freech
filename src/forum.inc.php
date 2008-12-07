@@ -144,9 +144,9 @@
 
       $this->current_user = FALSE;
       $this->login_error  = 0;
-      if ($this->get_action() == 'login' && $_POST['username'])
+      if ($this->get_current_action() == 'login' && $_POST['username'])
         $this->login_error = $this->_try_login();
-      if ($this->get_action() == 'logout') {
+      if ($this->get_current_action() == 'logout') {
         session_unset();
         unset($_GET['action']);
         unset($_POST['action']);
@@ -154,20 +154,9 @@
     }
 
 
-    function _get_userdb() {
-      if (!$this->userdb)
-        $this->userdb = &new UserDB($this->db);
-      return $this->userdb;
-    }
-
-
-    function _get_groupdb() {
-      if (!$this->groupdb)
-        $this->groupdb = &new GroupDB($this->db);
-      return $this->groupdb;
-    }
-
-
+    /*************************************************************
+     * Login and cookie handling.
+     *************************************************************/
     function _try_login() {
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_name($_POST['username']);
@@ -192,54 +181,12 @@
     }
 
 
-    function get_current_user() {
-      if (session_id() === '')
-        return FALSE;
-      if (!$_SESSION['user_id'])
-        return FALSE;
-      if ($this->current_user)
-        return $this->current_user;
-      $userdb             = $this->_get_userdb();
-      $sessionuser        = (int)$_SESSION['user_id'];
-      $this->current_user = $userdb->get_user_from_id($sessionuser);
-      return $this->current_user;
-    }
-
-
-    function get_current_group() {
-      if ($this->current_group)
-        return $this->current_group;
-      $user = $this->get_current_user();
-      if (!$user)
-        return FALSE;
-      $groupdb             = $this->_get_groupdb();
-      $query               = array('id' => $user->get_group_id());
-      $this->current_group = $groupdb->get_group_from_query($query);
-      return $this->current_group;
-    }
-
-
-    function get_action() {
-      if ($_GET['action'])
-        return $_GET['action'];
-      if ($_POST['action'])
-        return $_POST['action'];
-      return 'list';
-    }
-
-
-    function get_forum_id() {
-      return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
-    }
-
-
-    function get_message_id() {
-      return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
-    }
-
-
-    function get_newest_users($_limit) {
-      return $this->_get_userdb()->get_newest_users($_limit);
+    // Changes a cookie only if necessary.
+    function _set_cookie($_name, $_value) {
+      if ($_COOKIE[$_name] != $_value) {
+        setcookie($_name, $_value);
+        $_COOKIE[$_name] = $_value;
+      }
     }
 
 
@@ -293,9 +240,73 @@
     }
 
 
-    function _fetch_message_data($_message = NULL) {
+    /*************************************************************
+     * Private utilities.
+     *************************************************************/
+    function _get_userdb() {
+      if (!$this->userdb)
+        $this->userdb = &new UserDB($this->db);
+      return $this->userdb;
+    }
+
+
+    function _get_user_from_id($_id) {
+      return $this->_get_userdb()->get_user_from_id((int)$_id);
+    }
+
+
+    function _get_user_from_id_or_die($_id) {
+      $user = $this->_get_user_from_id($_id);
+      if (!$user)
+        die('No such user');
+      return $user;
+    }
+
+
+    function _get_user_from_name($_name) {
+      return $this->_get_userdb()->get_user_from_name($_name);
+    }
+
+
+    function _get_user_from_name_or_die($_name) {
+      $user = $this->_get_user_from_name($_name);
+      if (!$user)
+        die('No such user');
+      return $user;
+    }
+
+
+    function _get_groupdb() {
+      if (!$this->groupdb)
+        $this->groupdb = &new GroupDB($this->db);
+      return $this->groupdb;
+    }
+
+
+    function _get_group_from_id($_id) {
+      $query = array('id' => (int)$_id);
+      return $this->_get_groupdb()->get_group_from_query($query);
+    }
+
+
+    function _init_user_from_post_data($_user = NULL) {
+      if (!$_user)
+        $_user = new User;
+      $_user->set_username($_POST['username']);
+      $_user->set_password($_POST['password']);
+      $_user->set_firstname($_POST['firstname']);
+      $_user->set_lastname($_POST['lastname']);
+      $_user->set_mail($_POST['mail'], $_POST['publicmail'] == 'on');
+      $_user->set_homepage($_POST['homepage']);
+      $_user->set_im($_POST['im']);
+      $_user->set_signature($_POST['signature']);
+      return $_user;
+    }
+
+
+    function _init_message_from_post_data($_message = NULL) {
       if (!$_message)
-        $_message = &new Message();
+        $_message = new Message;
       $_message->set_id($_POST['msg_id']);
       $_message->set_username($_POST['username']);
       $_message->set_subject($_POST['subject']);
@@ -304,43 +315,196 @@
     }
 
 
+    // Returns an new Message object that is initialized for the current 
+    // user/group.
+    function _get_new_message() {
+      $message = new Message;
+      $message->set_from_group($this->get_current_group());
+      $message->set_from_user($this->get_current_user());
+      return $message;
+    }
+
+
+    // Returns an URL that points to the current forum.
+    function _get_forumurl() {
+      $forum_id = $this->get_current_forum_id();
+      $forumurl = &new URL('?', cfg('urlvars'));
+      $forumurl->set_var('action',   'list');
+      $forumurl->set_var('forum_id', $forum_id);
+      return $forumurl;
+    }
+
+
+    // Returns TRUE if the username is available, FALSE otherwise.
+    function _username_available(&$_username) {
+      $userdb = $this->_get_userdb();
+      return count($userdb->get_similar_users_from_name($_username)) == 0;
+    }
+
+
+    // Wrapper around get_current_user() that also works if a matching
+    // user/hash combination was passed in through the GET request.
+    function _get_current_or_confirming_user() {
+      if ($this->get_current_action() == 'account_confirm'
+        || $this->get_current_action() == 'confirm_password_mail'
+        || $this->get_current_action() == 'reset_password_submit') {
+        $userdb = $this->_get_userdb();
+        $user   = $userdb->get_user_from_name($_GET['username']);
+        $this->_assert_confirmation_hash_is_valid($user);
+        return $user;
+      }
+
+      return $this->get_current_user();
+    }
+
+
+    // Dies if the confirmation hash passed in through GET is not valid.
+    function _assert_confirmation_hash_is_valid(&$user) {
+      if (!$user)
+        die("Invalid user");
+      $hash = $user->get_confirmation_hash();
+      if ($user->get_confirmation_hash() !== $_GET['hash'])
+        die("Invalid confirmation hash");
+      if ($user->get_status() == USER_STATUS_BLOCKED)
+        die("User is blocked");
+    }
+
+
+    // Sends an email to the given user.
+    function _send_account_mail(&$user, $subject, $body, $vars) {
+      $head  = "From: ".cfg("mail_from")."\r\n";
+      $vars['login']     = $user->get_username();
+      $vars['firstname'] = $user->get_firstname();
+      $vars['lastname']  = $user->get_lastname();
+      foreach ($vars as $key => $value) {
+        $subject = str_replace('['.strtoupper($key).']', $value, $subject);
+        $body    = str_replace('['.strtoupper($key).']', $value, $body);
+      }
+      mail($user->get_mail(), $subject, $body, $head);
+    }
+
+
+    // Convenience wrapper around _send_account_mail().
+    function _send_confirmation_mail(&$user) {
+      $subject  = lang("registration_mail_subject");
+      $body     = lang("registration_mail_body");
+      $username = urlencode($user->get_username());
+      $hash     = urlencode($user->get_confirmation_hash());
+      $url      = cfg('site_url') . "?action=account_confirm"
+                . "&username=$username&hash=$hash";
+      $this->_send_account_mail($user, $subject, $body, array('url' => $url));
+      $registration = &new RegistrationPrinter($this);
+      $registration->show_mail_sent($user);
+    }
+
+
+    // Convenience wrapper around _send_confirmation_mail().
+    function _resend_confirmation_mail() {
+      $userdb = $this->_get_userdb();
+      $user   = $userdb->get_user_from_name($_GET['username']);
+      if ($user->get_status() != USER_STATUS_UNCONFIRMED)
+        die("User is already confirmed.");
+      $this->_send_confirmation_mail($user);
+    }
+
+
+    // Convenience wrapper around _send_account_mail().
+    function _send_password_reset_mail($user) {
+      $subject  = lang("reset_mail_subject");
+      $body     = lang("reset_mail_body");
+      $username = urlencode($user->get_username());
+      $hash     = urlencode($user->get_confirmation_hash());
+      $url      = cfg('site_url') . "?action=confirm_password_mail"
+                . "&username=$username&hash=$hash";
+      $this->_send_account_mail($user, $subject, $body, array('url' => $url));
+    }
+
+
+    function &_get_registry() {
+      return $this->registry;
+    }
+
+
+    function &_get_smarty() {
+      return $this->smarty;
+    }
+
+
+    function &_get_forumdb() {
+      return $this->forum;
+    }
+
+
+    function _append_content(&$_content) {
+      $this->content .= $_content . "\n";
+    }
+
+
+    /*************************************************************
+     * Action controllers for the forum overview.
+     *************************************************************/
+    // Shows the breadcrumbs for the forum in thread or time order.
+    function _print_list_breadcrumbs() {
+      $forum_id    = $this->get_current_forum_id();
+      $breadcrumbs = &new BreadCrumbsPrinter($this);
+      $search      = array('forum_id' => $forum_id);
+      $n_messages  = $this->forum->get_n_messages($search);
+      $start       = time() - cfg("new_post_time");
+      $n_new       = $this->forum->get_n_messages($search, $start);
+      $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
+      $text        = lang("forum_long");
+      $text        = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
+      $text        = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
+      $text        = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
+      $breadcrumbs->add_item($text, $this->_get_forumurl());
+      $breadcrumbs->show();
+    }
+
+
+    // Shows the forum, time order.
+    function _list_by_time() {
+      $this->_print_list_breadcrumbs('');
+      $forum_id = $this->get_current_forum_id();
+      $latest   = &new LatestPrinter($this);
+      $latest->show($forum_id, (int)$_GET['hs']);
+      $this->_print_footer();
+    }
+
+
+    // Shows the forum, thread order.
+    function _list_by_thread() {
+      $this->_print_list_breadcrumbs('');
+      $thread_state = &new ThreadState($_COOKIE['fold'], $_COOKIE['c']);
+      $forum_id     = $this->get_current_forum_id();
+      $thread       = &new ThreadPrinter($this);
+      $thread->show($forum_id, 0, (int)$_GET['hs'], $thread_state);
+      $this->_print_footer();
+    }
+
+
+    /*************************************************************
+     * Action controllers for reading and editing messages.
+     *************************************************************/
+    // Prints the breadcrumbs pointing to the given message.
+    function _print_message_breadcrumbs($_message) {
+      $breadcrumbs = &new BreadCrumbsPrinter($this);
+      $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
+      if (!$_message)
+        $breadcrumbs->add_item(lang("noentrytitle"));
+      elseif (!$_message->is_active())
+        $breadcrumbs->add_item(lang("blockedtitle"));
+      else
+        $breadcrumbs->add_item($_message->get_subject());
+      $breadcrumbs->show();
+    }
+
+
     // Read a message.
     function _message_read() {
-      $forum_id   = $this->get_forum_id();
       $msg        = $this->forum->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
       $this->_print_message_breadcrumbs($msg);
-      $msgprinter->show($forum_id, $msg);
-    }
-
-
-    // Write an answer to a message.
-    function _message_answer() {
-      $forum_id   = $this->get_forum_id();
-      $parent_id  = (int)$_GET['parent_id'];
-      $message    = $this->forum->get_message_from_id($parent_id);
-      $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show_compose_reply($message, '');
-    }
-
-
-    // Edit a saved message.
-    function _message_edit_saved() {
-      $forum_id   = $this->get_forum_id();
-      $user       = $this->get_current_user();
-      $message    = $this->forum->get_message_from_id($_GET['msg_id']);
-      $msgprinter = &new MessagePrinter($this);
-
-      if (!cfg("postings_editable"))
-        die("Postings may not be changed as per configuration.");
-      if ($message->get_user_is_anonymous())
-        die("Anonymous postings may not be changed.");
-      elseif (!$user)
-        die("You are not logged in.");
-      elseif ($user->get_id() != $message->get_user_id())
-        die("You are not the owner.");
-
-      $msgprinter->show_compose($message, '', 0, FALSE);
+      $msgprinter->show($msg);
     }
 
 
@@ -353,11 +517,39 @@
     }
 
 
+    // Write a response to a message.
+    function _message_answer() {
+      $parent_id  = (int)$_GET['parent_id'];
+      $message    = $this->forum->get_message_from_id($parent_id);
+      $msgprinter = &new MessagePrinter($this);
+      $msgprinter->show_compose_reply($message, '');
+    }
+
+
+    // Edit a saved message.
+    function _message_edit_saved() {
+      $user       = $this->get_current_user();
+      $message    = $this->forum->get_message_from_id($_GET['msg_id']);
+      $msgprinter = &new MessagePrinter($this);
+
+      if (!cfg("postings_editable"))
+        die("Postings may not be changed as per configuration.");
+      if ($message->get_user_is_anonymous())
+        die("Anonymous postings may not be changed.");
+      elseif ($user->is_anonymous())
+        die("You are not logged in.");
+      elseif ($user->get_id() != $message->get_user_id())
+        die("You are not the owner.");
+
+      $msgprinter->show_compose($message, '', 0, FALSE);
+    }
+
+
     // Edit an unsaved message.
     function _message_edit_unsaved() {
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
-      $message    = $this->_fetch_message_data();
+      $message    = $this->_init_message_from_post_data();
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose($message, '', $parent_id, $may_quote);
     }
@@ -365,30 +557,13 @@
 
     // Insert a quote from the parent message.
     function _message_quote() {
-      $forum_id   = $this->get_forum_id();
       $parent_id  = (int)$_POST['parent_id'];
       $quoted_msg = $this->forum->get_message_from_id($parent_id);
-      $message    = $this->_fetch_message_data();
+      $message    = $this->_init_message_from_post_data();
       $msgprinter = &new MessagePrinter($this);
       $msgprinter->show_compose_quoted($message, $quoted_msg, '');
     }
 
-
-    function _get_new_message() {
-      $message = new Message;
-      $user    = $this->get_current_user();
-      if ($user) {
-        $message->set_from_group($this->get_current_group());
-        $message->set_from_user($user);
-        return $message;
-      }
-      $group = new Group;
-      $group->set_id(2);             // Anonymous group. FIXME: hardcoded
-      $group->set_special();
-      $group->set_name('anonymous'); // Anonymous group. FIXME: hardcoded
-      $message->set_from_group($group);
-      return $message;
-    }
 
     // Print a preview of a message.
     function _message_preview() {
@@ -398,53 +573,62 @@
       $msgprinter = &new MessagePrinter($this);
       $user       = $this->get_current_user();
       $message    = $this->_get_new_message();
-      $this->_fetch_message_data($message);
+      $this->_init_message_from_post_data($message);
 
-      if (!$user && !$this->_username_available($message->get_username()))
+      // Make sure that the username is not in use.
+      if ($user->is_anonymous()
+        && !$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
                                           $parent_id,
                                           $may_quote);
 
+      // Check the message for completeness.
       $ret = $message->check_complete();
       if ($ret < 0)
-        $msgprinter->show_compose($message,
-                                  $err[$ret],
-                                  $parent_id,
-                                  $may_quote);
-      else
-        $msgprinter->show_preview($message, $parent_id, $may_quote);
+        return $msgprinter->show_compose($message,
+                                         $err[$ret],
+                                         $parent_id,
+                                         $may_quote);
+
+      // Success.
+      $msgprinter->show_preview($message, $parent_id, $may_quote);
     }
 
 
     // Saves the posted message.
     function _message_send() {
       global $err;
-      $msgprinter = &new MessagePrinter($this);
-      $user       = $this->get_current_user();
-      $forum_id   = $this->get_forum_id();
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
+      $msgprinter = &new MessagePrinter($this);
       $user       = $this->get_current_user();
+      $forum_id   = $this->get_current_forum_id();
+
+      // Check whether editing is allowed per configuration.
+      if ($_POST['msg_id'] && !cfg("postings_editable"))
+        die("Postings may not be changed as per configuration.");
 
       // Fetch the message from the database (when editing an existing one) or
       // create a new one from the POST data.
-      if ($_POST['msg_id'] && !cfg("postings_editable"))
-        die("Postings may not be changed as per configuration.");
-      elseif ($_POST['msg_id']) {
+      if ($_POST['msg_id']) {
         $message = $this->forum->get_message_from_id($_POST['msg_id']);
         $message->set_subject($_POST['subject']);
         $message->set_body($_POST['body']);
       }
       else {
         $message = $this->_get_new_message();
-        $this->_fetch_message_data($message);
+        $this->_init_message_from_post_data($message);
       }
 
-      // Make sure that the username is not in use.
-      if ($user && $user->get_username() !== $message->get_username())
+      // Make sure that the user is not trying to spoof a name.
+      if (!$user->is_anonymous()
+        && $user->get_username() !== $message->get_username())
         die("Username does not match currently logged in user");
-      if (!$user && !$this->_username_available($message->get_username()))
+
+      // Make sure that the username is not in use.
+      if ($user->is_anonymous()
+        && !$this->_username_available($message->get_username()))
          return $msgprinter->show_compose($message,
                                           lang("usernamenotavailable"),
                                           $parent_id,
@@ -483,62 +667,9 @@
     }
 
 
-    // Shows the forum, time order.
-    function _list_by_time() {
-      $this->_print_list_breadcrumbs('');
-      $forum_id = $this->get_forum_id();
-      $latest   = &new LatestPrinter($this);
-      $latest->show($forum_id, $_GET['hs']);
-      $this->_print_footer();
-    }
-
-
-    // Shows the forum, thread order.
-    function _list_by_thread() {
-      $this->_print_list_breadcrumbs('');
-      $thread_state = &new ThreadState($_COOKIE['fold'], $_COOKIE['c']);
-      $forum_id     = $this->get_forum_id();
-      $thread       = &new ThreadPrinter($this);
-      $thread->show($forum_id, 0, $_GET[hs], $thread_state);
-      $this->_print_footer();
-    }
-
-
-    // Changes a cookie only if necessary.
-    function _set_cookie($_name, $_value) {
-      if ($_COOKIE[$_name] != $_value) {
-        setcookie($_name, $_value);
-        $_COOKIE[$_name] = $_value;
-      }
-    }
-
-
-    function _get_forumurl() {
-      $forum_id = $this->get_forum_id();
-      $forumurl = &new URL('?', cfg("urlvars"));
-      $forumurl->set_var('action',   'list');
-      $forumurl->set_var('forum_id', $forum_id);
-      return $forumurl;
-    }
-
-
-    function _print_list_breadcrumbs() {
-      $forum_id    = $this->get_forum_id();
-      $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $search      = array('forum_id' => $forum_id);
-      $n_messages  = $this->forum->get_n_messages($search);
-      $start       = time() - cfg("new_post_time");
-      $n_new       = $this->forum->get_n_messages($search, $start);
-      $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
-      $text        = lang("forum_long");
-      $text        = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
-      $text        = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
-      $text        = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
-      $breadcrumbs->add_item($text, $this->_get_forumurl());
-      $breadcrumbs->show();
-    }
-
-
+    /*************************************************************
+     * Action controllers for the user profile.
+     *************************************************************/
     function _print_profile_breadcrumbs($_user) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
@@ -547,37 +678,124 @@
     }
 
 
-    function _print_message_breadcrumbs($_message) {
-      $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
-      if (!$_message)
-        $breadcrumbs->add_item(lang("noentrytitle"));
-      elseif (!$_message->is_active())
-        $breadcrumbs->add_item(lang("blockedtitle"));
+    // Lists all postings of one user.
+    function _show_user_postings() {
+      if ($_GET['username'])
+        $user = $this->_get_user_from_name_or_die($_GET['username']);
       else
-        $breadcrumbs->add_item($_message->get_subject());
-      $breadcrumbs->show();
+        $user = $this->get_current_user();
+      $this->_print_profile_breadcrumbs($user);
+      $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
+                                       $_COOKIE['user_postings_c']);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_user_postings($user, $thread_state, (int)$_GET['hs']);
     }
 
 
+    // Display information of one user.
+    function _show_profile() {
+      $user = $this->_get_user_from_name_or_die($_GET['username']);
+      $this->_print_profile_breadcrumbs($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_user_profile($user);
+    }
+
+
+    // Edit personal data.
+    function _show_user_data() {
+      $user     = $this->get_current_user();
+      $username = $_GET['username'] ? $_GET['username'] : $user->get_username();
+
+      // Check permissions.
+      if ($user->is_anonymous())
+        die('Not logged in');
+      if ($username != $user->get_username()) {
+        if (!$this->get_current_group()->may('administer'))
+          die("Permission denied");
+        $user = $this->_get_user_from_name_or_die($_GET['username']);
+      }
+
+      // Accepted.
+      $this->_print_profile_breadcrumbs($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_user_data($user);
+    }
+
+
+    // Submit personal data.
+    function _submit_user_data() {
+      global $err;
+      $profile = &new ProfilePrinter($this);
+      $user    = $this->get_current_user();
+
+      // Check permissions.
+      if ($user->is_anonymous())
+        die('Not logged in');
+      if ($_POST['user_id'] != $user->get_id()) {
+        if (!$this->get_current_group()->may('administer'))
+          die("Permission denied");
+        $user = $this->_get_user_from_id_or_die($_POST['user_id']);
+        $user->set_username($_POST['username']);
+        $user->set_group_id($_POST['group_id']);
+        $user->set_status($_POST['status']);
+      }
+
+      $this->_print_profile_breadcrumbs($user);
+
+      // Make sure that the data is complete and valid.
+      $this->_init_user_from_post_data($user);
+      $ret = $user->check_complete();
+      if ($ret < 0)
+        return $profile->show_user_data($user, $err[$ret]);
+
+      // Make sure that the passwords match.
+      if ($_POST['password'] !== $_POST['password2'])
+        return $profile->show_user_data($user,
+                                        $err[ERR_REGISTER_PASSWORDS_DIFFER]);
+      if ($_POST['password'] != '')
+        $user->set_password($_POST['password']);
+
+      // Save the user.
+      $ret = $this->_get_userdb()->save_user($user);
+      if ($ret < 0)
+        return $profile->show_user_data($user, $err[$ret]);
+
+      // Done.
+      $profile->show_user_data($user, lang("account_saved"));
+    }
+
+
+    function _show_user_options() {
+      $user = $this->get_current_user();
+      $this->_print_profile_breadcrumbs($user);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_user_options($user);
+    }
+
+
+    /*************************************************************
+     * Action controllers for the page header and page footer.
+     *************************************************************/
     // Prints the footer of the page.
     function _print_footer() {
       $footer = &new FooterPrinter($this);
-      $footer->show();
+      $footer->show($this->get_current_forum_id());
     }
 
 
+    /*************************************************************
+     * Action controllers for the search.
+     *************************************************************/
     function _show_search_form() {
-      if (cfg("disable_search"))
+      if (cfg('disable_search'))
         die("Search is currently disabled.");
       $printer = &new SearchPrinter($this);
-      $printer->show($_GET['forum_id'] ? (int)$_GET['forum_id'] : '',
-                     $_GET['q']);
+      $printer->show((int)$_GET['forum_id'], $_GET['q']);
     }
 
 
     function _show_search_result() {
-      if (cfg("disable_search"))
+      if (cfg('disable_search'))
         die("Search is currently disabled.");
       if (!$_GET['q'] || trim($_GET['q']) == '')
         return $this->_show_search_form();
@@ -592,9 +810,12 @@
     }
 
 
+    /*************************************************************
+     * Action controllers for login and user registration.
+     *************************************************************/
     function _show_login() {
       global $err;
-      $user  = $this->_fetch_user_data();
+      $user  = $this->_init_user_from_post_data();
       $login = &new LoginPrinter($this);
       $user->set_status(USER_STATUS_ACTIVE);
       if ($this->login_error == 0)
@@ -614,154 +835,94 @@
     }
 
 
-    function _fetch_user_data($user = '') {
-      if (!$user)
-        $user = &new User($_POST['username']);
-      $user->set_password($_POST['password']);
-      $user->set_firstname($_POST['firstname']);
-      $user->set_lastname($_POST['lastname']);
-      $user->set_mail($_POST['mail'], $_POST['publicmail'] == 'on');
-      $user->set_homepage($_POST['homepage']);
-      $user->set_im($_POST['im']);
-      $user->set_signature($_POST['signature']);
-      return $user;
-    }
-
-
-    function _username_available(&$_username) {
-      $userdb = $this->_get_userdb();
-      $user   = new User($_username);
-      if (count($userdb->get_similar_users($user)) == 0)
-        return TRUE;
-      return FALSE;
-    }
-
-
-    function _send_account_mail(&$user, $subject, $body, $url) {
-      // Send a registration mail.
-      $head  = "From: ".cfg("mail_from")."\r\n";
-      $body  = preg_replace("/\[LOGIN\]/",     $user->get_username(),  $body);
-      $body  = preg_replace("/\[FIRSTNAME\]/", $user->get_firstname(), $body);
-      $body  = preg_replace("/\[LASTNAME\]/",  $user->get_lastname(),  $body);
-      $body  = preg_replace("/\[URL\]/",       $url,                   $body);
-      mail($user->get_mail(), $subject, $body, $head);
-    }
-
-
-    function _send_confirmation_mail(&$user) {
-      // Send a registration mail.
-      $subject  = lang("registration_mail_subject");
-      $body     = lang("registration_mail_body");
-      $username = urlencode($user->get_username());
-      $hash     = urlencode($user->get_confirmation_hash());
-      $url      = cfg('site_url') . "?action=account_confirm"
-                . "&username=$username&hash=$hash";
-      $this->_send_account_mail($user, $subject, $body, $url);
-      $registration = &new RegistrationPrinter($this);
-      $registration->show_mail_sent($user);
-    }
-
-
-    function _resend_confirmation_mail() {
-      $userdb = $this->_get_userdb();
-      $user   = $userdb->get_user_from_name($_GET['username']);
-      if ($user->get_status() != USER_STATUS_UNCONFIRMED)
-        die("User is already confirmed.");
-      $this->_send_confirmation_mail($user);
-    }
-
-
     function _account_create() {
       global $err;
       $registration = &new RegistrationPrinter($this);
-      $user         = $this->_fetch_user_data();
+      $user         = $this->_init_user_from_post_data();
 
+      // Check the data for completeness.
       $ret = $user->check_complete();
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
       if ($_POST['password'] !== $_POST['password2'])
         return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
 
+      // Make sure that the name is available.
       if (!$this->_username_available($user->get_username()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
 
-      $user->set_group_id(cfg("default_group_id"));
+      // Create the user.
+      $user->set_group_id(cfg('default_group_id'));
       $userdb = $this->_get_userdb();
       $ret    = $userdb->save_user($user);
       if ($ret < 0)
         return $registration->show($user, $err[$ret]);
 
+      // Done.
       $this->_send_confirmation_mail($user);
     }
 
 
-    function _get_current_or_confirming_user() {
-      if ($this->get_action() == 'account_confirm'
-        || $this->get_action() == 'confirm_password_mail'
-        || $this->get_action() == 'reset_password_submit') {
-        $userdb = $this->_get_userdb();
-        $user   = $userdb->get_user_from_name($_GET['username']);
-        $this->_check_confirmation_hash($user);
-        return $user;
-      }
-
-      $user = $this->get_current_user();
-      if (!$user)
-        die("Invalid user");
-      return $user;
-    }
-
-
+    // Show a form for changing the password.
     function _change_password() {
-      $user         = $this->_get_current_or_confirming_user();
+      $user = $this->_get_current_or_confirming_user();
+      if (!$user || $user->is_anonymous())
+        die("Invalid user");
       $registration = &new RegistrationPrinter($this);
       $registration->show_change_password($user);
     }
 
 
+    // Submit a new password.
     function _change_password_submit() {
       global $err;
-      $userdb = $this->_get_userdb();
-      $user   = $this->_fetch_user_data();
-      $user   = $userdb->get_user_from_name($user->get_username());
-      $regist = &new RegistrationPrinter($this);
+      $userdb   = $this->_get_userdb();
+      $user     = $this->_init_user_from_post_data();
+      $user     = $userdb->get_user_from_name($user->get_username());
+      $register = &new RegistrationPrinter($this);
+
+      // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {
         $error = lang("passwordsdonotmatch");
-        return $regist->show_change_password($user, $error);
+        return $register->show_change_password($user, $error);
       }
 
+      // Make sure that the password is valid.
       $ret = $user->set_password($_POST['password']);
-      if ($ret < 0) {
-        $regist->show_change_password($user, $err[$ret]);
-        return;
-      }
+      if ($ret < 0)
+        return $register->show_change_password($user, $err[$ret]);
 
+      // Save the password.
       $user->set_status(USER_STATUS_ACTIVE);
       $ret = $userdb->save_user($user);
-      if ($ret < 0) {
-        $regist->show_change_password($user, $err[$ret]);
-        return;
-      }
+      if ($ret < 0)
+        return $register->show_change_password($user, $err[$ret]);
 
-      $regist->show_done($user);
+      // Done.
+      $register->show_done($user);
     }
 
 
+    // Show a form for requesting that the password should be reset.
     function _forgot_password() {
-      $user         = $this->_fetch_user_data();
+      $user         = $this->_init_user_from_post_data();
       $registration = &new RegistrationPrinter($this);
       $registration->show_forgot_password($user);
     }
 
 
+    // Send an email with the URL for resetting the password.
     function _password_mail_submit() {
       global $err;
       $registration = &new RegistrationPrinter($this);
-      $user         = $this->_fetch_user_data();
-      $ret          = $user->check_mail();
+      $user         = $this->_init_user_from_post_data();
+
+      // Make sure that the email address is valid.
+      $ret = $user->check_mail();
       if ($ret != 0)
         return $registration->show_forgot_password($user, $err[$ret]);
 
+      // Find the user with the given mail address.
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_mail($user->get_mail());
       if (!$user) {
@@ -769,28 +930,30 @@
         return $registration->show_forgot_password($user, $msg);
       }
 
-      if ($user->get_status() != USER_STATUS_ACTIVE) {
-        $msg = $err[ERR_LOGIN_UNCONFIRMED];
+      // Send the mail.
+      if ($user->get_status() == USER_STATUS_UNCONFIRMED)
+        $this->_resend_confirmation_mail($user);
+      elseif ($user->get_status() == USER_STATUS_ACTIVE)
+        $this->_send_password_reset_mail($user);
+      elseif ($user->get_status() == USER_STATUS_BLOCKED) {
+        $msg = $err[ERR_LOGIN_LOCKED];
         return $registration->show_forgot_password($user, $msg);
       }
+      else
+        die("Invalid user status");
 
-      $subject  = lang("reset_mail_subject");
-      $body     = lang("reset_mail_body");
-      $username = urlencode($user->get_username());
-      $hash     = urlencode($user->get_confirmation_hash());
-      $url      = cfg('site_url') . "?action=confirm_password_mail"
-                . "&username=$username&hash=$hash";
-      $this->_send_account_mail($user, $subject, $body, $url);
+      // Done.
       $registration = &new RegistrationPrinter($this);
       $registration->show_forgot_password_mail_sent($user);
     }
 
 
+    // Called when the user opens the link in the password reset mail.
     function _confirm_password_mail() {
       $user   = $this->_get_current_or_confirming_user();
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_name($user->get_username());
-      $this->_check_confirmation_hash($user);
+      $this->_assert_confirmation_hash_is_valid($user);
 
       if ($user->get_status() != USER_STATUS_ACTIVE)
         die("Error: User status is not active.");
@@ -799,150 +962,123 @@
     }
 
 
-    function _check_confirmation_hash(&$user) {
-      $hash = $user->get_confirmation_hash();
-      if (!$user)
-        die("Invalid user name");
-      if ($user->get_confirmation_hash() !== $_GET['hash'])
-        die("Invalid confirmation hash");
-      if ($user->get_status() == USER_STATUS_BLOCKED)
-        die("User is blocked");
-    }
-
-
+    // Called when the user opens the link in the initial account confirmation
+    // mail.
     function _account_confirm() {
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_name($_GET['username']);
-      $this->_check_confirmation_hash($user);
+      $this->_assert_confirmation_hash_is_valid($user);
 
+      // See if the user still needs to set a password.
       if (!$user->get_password_hash())
         return $this->_change_password();
 
+      // Make the user active.
       $user->set_status(USER_STATUS_ACTIVE);
       $ret = $userdb->save_user($user);
       if ($ret < 0)
         die("User activation failed");
 
+      // Done.
       $registration = &new RegistrationPrinter($this);
       $registration->show_done($user);
     }
 
 
-    function _show_profile() {
-      $userdb = $this->_get_userdb();
-      $user   = $userdb->get_user_from_name($_GET['username']);
-      if (!$user)
-        die("No such user.");
-      $this->_print_profile_breadcrumbs($user);
-      $profile = &new ProfilePrinter($this);
-      $profile->show_user_profile($user);
-    }
-
-
-    function _show_user_postings() {
-      if ($_GET['username']) {
-        $userdb = $this->_get_userdb();
-        $user   = $userdb->get_user_from_name($_GET['username']);
-      }
-      else
-        $user = $this->get_current_user();
-      if (!$user)
-        die('No such user.');
-      $this->_print_profile_breadcrumbs($user);
-      $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
-                                       $_COOKIE['user_postings_c']);
-      $profile = &new ProfilePrinter($this);
-      $profile->show_user_postings($user, $thread_state, (int)$_GET['hs']);
-    }
-
-
-    function _show_user_data() {
-      if (!$user = $this->get_current_user())
-        die("Not logged in");
-      if ($_GET['username'] && $_GET['username'] != $user->get_username()) {
-        if (!$this->get_current_group()->may('administer'))
-          die("Permission denied");
-        $user = $this->_get_userdb()->get_user_from_name($_GET['username']);
-        if (!$user)
-          die('No such user.');
-      }
-
-      $this->_print_profile_breadcrumbs($user);
-      $profile = &new ProfilePrinter($this);
-      $profile->show_user_data($user);
-    }
-
-
-    function _submit_user_data() {
-      global $err;
-      $profile = &new ProfilePrinter($this);
-      if (!$user = $this->get_current_user())
-        die("Not logged in");
-      if ($_POST['user_id'] != $user->get_id()) {
-        if (!$this->get_current_group()->may('administer'))
-          die("Permission denied");
-        $user = $this->_get_userdb()->get_user_from_id($_POST['user_id']);
-        $user->set_username($_POST['username']);
-        $user->set_group_id($_POST['group_id']);
-        $user->set_status($_POST['status']);
-      }
-
-      $this->_print_profile_breadcrumbs($user);
-      $this->_fetch_user_data($user);
-      $ret = $user->check_complete();
-      if ($ret < 0)
-        return $profile->show_user_data($user, $err[$ret]);
-      if ($_POST['password'] !== $_POST['password2'])
-        return $profile->show_user_data($user,
-                                        $err[ERR_REGISTER_PASSWORDS_DIFFER]);
-      if ($_POST['password'] != '')
-        $user->set_password($_POST['password']);
-
-      $userdb = $this->_get_userdb();
-      $ret    = $userdb->save_user($user);
-      if ($ret < 0)
-        return $profile->show_user_data($user, $err[$ret]);
-
-      $profile->show_user_data($user, lang("account_saved"));
-    }
-
-
-    function _show_user_options() {
-      $user = $this->get_current_user();
-      $this->_print_profile_breadcrumbs($user);
-      $profile = &new ProfilePrinter($this);
-      $profile->show_user_options($user);
-    }
-
-
+    /*************************************************************
+     * Other action controllers.
+     *************************************************************/
     function _show_top_posters() {
       $printer = new ListPrinter($this);
       $printer->show_top_posters();
     }
 
 
-    function &get_registry() {
-      return $this->registry;
+    // Prints an RSS feed.
+    function print_rss($_forum_id,
+                       $_title,
+                       $_descr,
+                       $_off,
+                       $_n_entries) {
+      $this->content = "";
+      $rss = &new RSSPrinter($this);
+      $rss->set_base_url(cfg("site_url"));
+      $rss->set_title($_title);
+      $rss->set_description($_descr);
+      $rss->set_language(lang("countrycode"));
+      $rss->show($_forum_id, $_off, $_n_entries);
+      print($this->content);
     }
 
 
+    /*************************************************************
+     * Public.
+     *************************************************************/
     function &get_eventbus() {
       return $this->eventbus;
     }
 
 
-    function &get_smarty() {
-      return $this->smarty;
+    function get_current_user() {
+      if ($this->current_user)
+        return $this->current_user;
+      if (session_id() !== '' && $_SESSION['user_id'])
+        $this->current_user = $this->_get_user_from_id($_SESSION['user_id']);
+      elseif (cfg('manage_anonymous_users')) {
+        $user_id            = cfg('anonymous_user_id');
+        $this->current_user = $this->_get_user_from_id($user_id);
+      }
+      else {
+        $this->current_user = new User;
+        $this->current_user->set_id(cfg('anonymous_user_id'));
+      }
+      return $this->current_user;
     }
 
 
-    function &get_forumdb() {
-      return $this->forum;
+    function get_current_group() {
+      if ($this->current_group)
+        return $this->current_group;
+      $user = $this->get_current_user();
+      if ($user->is_anonymous() && !cfg('manage_anonymous_users')) {
+        $this->current_group = new Group;
+        $this->current_group->set_id(cfg('anonymous_group_id'));
+        $this->current_group->set_name(cfg('anonymous_group_name'));
+        $this->current_group->set_special();
+      }
+      elseif ($user->is_anonymous()) {
+        $group_id = cfg('anonymous_group_id');
+        $this->current_group = $this->_get_group_from_id($group_id);
+      }
+      else {
+        $group_id = $user->get_group_id();
+        $this->current_group = $this->_get_group_from_id($group_id);
+      }
+      return $this->current_group;
     }
 
 
-    function append_content(&$_content) {
-      $this->content .= $_content . "\n";
+    function get_current_action() {
+      if ($_GET['action'])
+        return $_GET['action'];
+      if ($_POST['action'])
+        return $_POST['action'];
+      return 'list';
+    }
+
+
+    function get_current_forum_id() {
+      return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
+    }
+
+
+    function get_current_message_id() {
+      return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
+    }
+
+
+    function get_newest_users($_limit) {
+      return $this->_get_userdb()->get_newest_users($_limit);
     }
 
 
@@ -973,7 +1109,7 @@
 
     function show() {
       $this->content = "";
-      switch ($this->get_action()) {
+      switch ($this->get_current_action()) {
       case 'read':
         $this->_message_read();             // Read a message.
         break;
@@ -1100,23 +1236,6 @@
        *   Args: none.
        */
       $this->eventbus->emit("on_content_print_after", &$this);
-    }
-
-
-    // Prints an RSS page.
-    function print_rss($_forum_id,
-                       $_title,
-                       $_descr,
-                       $_off,
-                       $_n_entries) {
-      $this->content = "";
-      $rss = &new RSSPrinter($this);
-      $rss->set_base_url(cfg("site_url"));
-      $rss->set_title($_title);
-      $rss->set_description($_descr);
-      $rss->set_language(lang("countrycode"));
-      $rss->show($_forum_id, $_off, $_n_entries);
-      print($this->content);
     }
 
 

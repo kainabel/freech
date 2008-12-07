@@ -558,15 +558,14 @@
     /* This function performs exactly as foreach_child(), except that given a
      * an id, it first looks up the top-level parent of that node and walks
      * through all children of the top level node. */
-    function foreach_child_in_thread($_forum_id,
-                                     $_id,
+    function foreach_child_in_thread($_id,
                                      $_offset,
                                      $_limit,
                                      $_thread_state,
                                      $_func,
                                      $_data) {
       $thread_id = $this->_get_thread_id($_id);
-      return $this->foreach_child($_forum_id,
+      return $this->foreach_child(-1,
                                   $thread_id,
                                   $_offset,
                                   $_limit,

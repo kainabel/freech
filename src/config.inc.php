@@ -88,4 +88,20 @@
   $cfg[max_imlength]            = 20;
   $cfg[max_signaturelength]     = 100;
   $cfg[default_group_id]        = 3; // ID of the group of new users.
+
+  // If the following is set to FALSE, the permissions set for anonymous
+  // users in the DB are ignored. Instead, the forum will use a default
+  // set of permissions.
+  // Setting this to TRUE has a negative performance impact because the
+  // database needs to be contacted to determine the user permissions.
+  $cfg[manage_anonymous_users] = TRUE;
+
+  // If manage_anonymous_users is FALSE, the default anonymous user uses
+  // the following name.
+  $cfg[anonymous_group_name] = 'anonymous';
+
+  // Anonymous users are automatically logged into the forum as the user/group
+  // with the given id.
+  $cfg[anonymous_user_id]    = 2;
+  $cfg[anonymous_group_id]   = 2;
 ?>

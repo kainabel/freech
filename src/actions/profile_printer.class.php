@@ -28,7 +28,7 @@
 
     function _append_message(&$_message, $_data) {
       // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_message_id();
+      $msg_id = $this->parent->get_current_message_id();
       $_message->set_selected($_message->get_id() == $msg_id);
       $_message->apply_block();
 
@@ -55,8 +55,7 @@
 
     function show_user_postings($_user, $_thread_state, $_offset = 0) {
       $current  = $this->parent->get_current_user();
-      $showlist = $current && $_user->get_username()
-                           == $current->get_username();
+      $showlist = $_user->get_username() == $current->get_username();
 
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();

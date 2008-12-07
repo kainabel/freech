@@ -30,7 +30,7 @@
 
     function _append_row(&$_message, $_data) {
       // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_message_id();
+      $msg_id = $this->parent->get_current_message_id();
       $_message->set_selected($_message->get_id() == $msg_id);
       $_message->apply_block();
 
@@ -47,12 +47,12 @@
                                              array(&$this, '_append_row'),
                                              '');
 
-      $search    = array('forum_id' => $_forum_id);
+      $search    = array('forum_id' => (int)$_forum_id);
       $n_entries = $this->db->get_n_messages($search);
-      $args      = array(forum_id            => $this->parent->get_forum_id(),
-                         n_messages          => $n_entries,
+      $args      = array(forum_id            => (int)$_forum_id,
+                         n_messages          => (int)$n_entries,
                          n_messages_per_page => cfg("epp"),
-                         n_offset            => $_offset,
+                         n_offset            => (int)$_offset,
                          n_pages_per_index   => cfg("ppi"));
       $indexbar = &new IndexBarByTime($args);
 

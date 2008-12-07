@@ -28,7 +28,7 @@
 
     function _append_message(&$_message, $_data) {
       // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_message_id();
+      $msg_id = $this->parent->get_current_message_id();
       $_message->set_selected($_message->get_id() == $msg_id);
       $_message->apply_block();
 
@@ -49,8 +49,7 @@
                                  array(&$this, '_append_message'),
                                  '');
       else
-        $this->db->foreach_child_in_thread($_forum_id,
-                                           $_msg_id,
+        $this->db->foreach_child_in_thread($_msg_id,
                                            $_offset,
                                            cfg("tpp"),
                                            $_thread_state,

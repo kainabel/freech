@@ -32,9 +32,9 @@
       . "  </td>"
       . " </tr>"
       . "</table><br />\n");
-  if ($forum->get_forum_id() != 1)
+  if ($forum->get_current_forum_id() != 1)
     die("If you touch that URL again I will sue you!");
-  if ($forum->get_current_user())
+  if (!$forum->get_current_user()->is_anonymous())
     print("<a href='?action=logout'>".lang("logout")."</a>");
   else
     print("<a href='?action=login'>".lang("login")."</a> <a href='?action=register'>".lang("register")."</a>");

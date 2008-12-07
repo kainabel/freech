@@ -84,6 +84,11 @@ define("USER_STATUS_BLOCKED",     2);
     }
 
 
+    function is_anonymous() {
+      return $this->get_id() == cfg('anonymous_user_id');
+    }
+
+
     function set_group_id($_group_id) {
       $this->fields[group_id] = (int)$_group_id;
     }

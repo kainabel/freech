@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate latin1_general_ci NOT NULL,
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
-  `active` tinyint(1) unsigned default '1',
+  `is_active` tinyint(1) unsigned default '1',
   `owner_id` int(11) unsigned default NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate latin1_general_ci NOT NULL,
   `is_special` tinyint(1) unsigned default '0',
-  `active` tinyint(1) unsigned default '1',
+  `is_active` tinyint(1) unsigned default '1',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   `hash` varchar(40) collate latin1_general_ci NOT NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
-  `active` tinyint(3) unsigned default '1',
+  `is_active` tinyint(1) unsigned default '1',
   `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `is_parent` (`is_parent`),
@@ -166,22 +166,22 @@ ALTER TABLE `freech_user`
   ADD CONSTRAINT `freech_user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
 
 -- Create admin group.
-INSERT INTO freech_group (id, name, is_special, active, created)
+INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (1, 'admin', 1, 1, NULL);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'administer', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'moderate',   1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'delete',     1);
 
 -- Create anonymous group.
-INSERT INTO freech_group (id, name, is_special, active, created)
+INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (2, 'anonymous',  1, 1, NULL);
 
 -- Create group for normal users.
-INSERT INTO freech_group (id, name, is_special, active, created)
+INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (3, 'users', 0, 1, NULL);
 
 -- Create group for moderators.
-INSERT INTO freech_group (id, name, is_special, active, created)
+INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (4, 'moderators', 1, 1, NULL);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'moderate', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'delete',   1);

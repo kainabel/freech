@@ -44,7 +44,7 @@
       $this->fields[created]      = time();
       $this->fields[updated]      = $this->fields[created];
       $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
-      $this->fields[active]       = TRUE;
+      $this->fields[is_active]    = TRUE;
       $this->fields[user_id]      = 2; // Anonymous user.
       $this->fields[allow_answer] = TRUE;
       $this->fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
@@ -73,7 +73,7 @@
       $this->fields[ip_hash]         = $_db_row[ip_hash];
       if (isset($_db_row[relation]))
         $this->fields[relation]      = $_db_row[relation];
-      $this->fields[active]          = $_db_row[active];
+      $this->fields[is_active]       = $_db_row[is_active];
       if (isset($_db_row[allow_answer]))
         $this->fields[allow_answer]  = $_db_row[allow_answer];
       $this->fields[next_message_id] = $_db_row[next_message_id];
@@ -391,12 +391,12 @@
 
 
     function set_active($_active = TRUE) {
-      $this->fields[active] = $_active;
+      $this->fields[is_active] = $_active;
     }
 
 
     function is_active() {
-      return $this->fields[active];
+      return $this->fields[is_active];
     }
 
 

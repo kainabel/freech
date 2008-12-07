@@ -45,7 +45,7 @@
       $this->fields[id]         = $_db_row->id;
       $this->fields[name]       = $_db_row->name;
       $this->fields[is_special] = $_db_row->is_special;
-      $this->fields[active]     = $_db_row->active;
+      $this->fields[is_active]  = $_db_row->is_active;
       $this->fields[created]    = $_db_row->created;
       $this->fields[updated]    = $_db_row->updated;
     }
@@ -97,12 +97,12 @@
 
 
     function set_active($_active = TRUE) {
-      $this->fields[active] = (bool)$_active;
+      $this->fields[is_active] = (bool)$_active;
     }
 
 
     function is_active() {
-      return $this->fields[active];
+      return $this->fields[is_active];
     }
 
 

@@ -98,14 +98,14 @@
       $query->set_int   ('id',         $_group->get_id());
       $query->set_string('name',       $_group->get_groupname());
       $query->set_bool  ('is_special', $_group->is_special());
-      $query->set_bool  ('active',     $_group->is_active());
+      $query->set_bool  ('is_active',  $_group->is_active());
       if ($_group->get_id() < 1) {
         $sql   = "INSERT INTO {t_group}";
         $sql  .= " (";
-        $sql  .= "  id, name, is_special, active, created";
+        $sql  .= "  id, name, is_special, is_active, created";
         $sql  .= " )";
         $sql  .= " VALUES (";
-        $sql  .= "  {id}, {name}, {is_special}, {active}, NULL";
+        $sql  .= "  {id}, {name}, {is_special}, {is_active}, NULL";
         $sql  .= " )";
         $query->set_sql($sql);
         $this->db->Execute($query->sql()) or die("GroupDB::save_group: Ins");
@@ -119,7 +119,7 @@
       $sql  .= " id={id},";
       $sql  .= " name={name},";
       $sql  .= " is_special={is_special},";
-      $sql  .= " active={active}";
+      $sql  .= " is_active={is_active}";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);
       $this->db->Execute($query->sql()) or die("GroupDB::save_group(): Upd");

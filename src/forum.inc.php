@@ -314,7 +314,7 @@
     }
 
 
-    // Returns a new Message object that is initialized for the current 
+    // Returns a new Message object that is initialized for the current
     // user/group.
     function _get_new_message() {
       $message = new Message;

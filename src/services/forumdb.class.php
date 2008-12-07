@@ -86,7 +86,7 @@
         return 0;
       $sql  = "SELECT id FROM {t_message}";
       $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND active=1";
+      $sql .= " AND is_active=1";
       $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
       $sql .= " ORDER BY HEX(path) DESC";
       $query = &new FreechSqlQuery($sql);
@@ -105,7 +105,7 @@
     function _get_next_entry_id($_forum_id, $_thread_id, $_path) {
       $sql  = "SELECT id FROM {t_message}";
       $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND active=1";
+      $sql .= " AND is_active=1";
       $sql .= " AND is_parent=0";
       if ($_path)
         $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
@@ -127,7 +127,7 @@
     function _get_prev_thread_id($_forum_id, $_thread_id) {
       $sql  = "SELECT thread_id FROM {t_message}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
-      $sql .= " AND (active=1 OR n_children>0)";
+      $sql .= " AND (is_active=1 OR n_children>0)";
       $sql .= " ORDER BY thread_id DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $_forum_id);
@@ -146,7 +146,7 @@
     function _get_next_thread_id($_forum_id, $_thread_id) {
       $sql  = "SELECT thread_id FROM {t_message}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
-      $sql .= " AND (active=1 OR n_children>0)";
+      $sql .= " AND (is_active=1 OR n_children>0)";
       $sql .= " ORDER BY thread_id";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $_forum_id);
@@ -173,7 +173,7 @@
       //$this->db->debug = true;
 
       // Fetch the parent row.
-      $sql  = "SELECT forum_id,thread_id,HEX(path) path,active";
+      $sql  = "SELECT forum_id,thread_id,HEX(path) path,is_active";
       $sql .= " FROM {t_message}";
       $sql .= " WHERE id={parent_id}";
       $query = &new FreechSqlQuery($sql);
@@ -184,13 +184,12 @@
 
       // Insert the new node.
       if ($parentrow) {
-        if (!$parentrow[active])
+        if (!$parentrow[is_active])
           die("ForumDB::insert(): Parent inactive.\n");
         if (strlen($parentrow[path]) / 2 > 252)
           die("ForumDB::insert(): Hierarchy too deep.\n");
 
         // Insert a new child.
-        //FIXME: user_id as an arg, as soon as logins are implemented.
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
@@ -633,7 +632,7 @@
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_message}";
-      $sql  .= " WHERE active=1 AND ";
+      $sql  .= " WHERE is_active=1 AND ";
       $query = &new FreechSqlQuery($sql);
       $_search_query->add_where_expression($query);
       $sql  = $query->sql();
@@ -801,7 +800,7 @@
     function get_n_messages_from_query($_search_query) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
-      $sql .= " WHERE active=1 AND ";
+      $sql .= " WHERE is_active=1 AND ";
       $query = &new FreechSqlQuery($sql);
       $_search_query->add_where_expression($query);
       return $this->db->GetOne($query->sql());

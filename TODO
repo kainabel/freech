@@ -3,7 +3,6 @@
 * Replace default_group_id config key by a default_group based on the name.
 * Rework the header rendering logic.
 * Design a URL scheme that makes sense for URL rewriting.
-* Rename "active" columns to "is_active".
 * Rename PrinterBase->db to PrinterBase->forumdb.
 * Add PrinterBase->userdb.
 * Add PrinterBase->groupdb.

@@ -836,13 +836,16 @@
     }
 
 
-    function get_top_posters($_limit) {
+    function get_top_posters($_limit, $_since = 0) {
       $sql   = "SELECT username, count(*) n_postings";
       $sql  .= " FROM {t_message}";
       $sql  .= " WHERE user_id>2";
+      if ($_since > 0)
+        $sql .= " AND created>FROM_UNIXTIME({since})";
       $sql  .= " GROUP BY user_id";
       $sql  .= " ORDER BY `n_postings` DESC";
       $query = &new FreechSqlQuery($sql);
+      $query->set_int('since', $_since);
       $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
                     or die("ForumDB::get_top_posters()");
       $list  = array();

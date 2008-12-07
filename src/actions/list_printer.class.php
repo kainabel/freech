@@ -21,9 +21,11 @@
 <?php
   class ListPrinter extends PrinterBase {
     function show_top_posters() {
-      $users = $this->forumdb->get_top_posters(20);
+      $all_time = $this->forumdb->get_top_posters(20);
+      $week     = $this->forumdb->get_top_posters(20, time() - 60*60*24*7);
       $this->clear_all_assign();
-      $this->assign_by_ref('users', $users);
+      $this->assign_by_ref('all_time', $all_time);
+      $this->assign_by_ref('weekly',   $week);
       $this->render('top_posters.tmpl');
     }
   }

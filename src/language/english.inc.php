@@ -234,7 +234,9 @@
   $lang[group_name] = "User group:";
 
   // Top user list.
-  $lang[n_postings] = "Postings";
+  $lang[alltime_top] = "All Time Top 20";
+  $lang[weekly_top]  = "Weekly Top 20";
+  $lang[n_postings]  = "Postings";
 
   // Search.
   $lang[search_forum]      = "Search this forum";

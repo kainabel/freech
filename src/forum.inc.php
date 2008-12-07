@@ -291,9 +291,7 @@
 
     function _init_user_from_post_data($_user = NULL) {
       if (!$_user)
-        $_user = new User;
-      if ($_POST['username'])
-        $_user->set_username($_POST['username']);
+        $_user = new User($_POST['username']);
       $_user->set_password($_POST['password']);
       $_user->set_firstname($_POST['firstname']);
       $_user->set_lastname($_POST['lastname']);

@@ -326,6 +326,23 @@ define("USER_STATUS_BLOCKED",     2);
     }
 
 
+    function get_status_names($_status = -1) {
+      $list = array(
+        USER_STATUS_ACTIVE      => lang('USER_STATUS_ACTIVE'),
+        USER_STATUS_UNCONFIRMED => lang('USER_STATUS_UNCONFIRMED'),
+        USER_STATUS_BLOCKED     => lang('USER_STATUS_BLOCKED')
+      );
+      if ($_status >= 0)
+        return $list[$_status];
+      return $list;
+    }
+
+
+    function get_status_name() {
+      return $this->get_status_names($this->fields[status]);
+    }
+
+
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
       if (ctype_space($this->fields[username]))

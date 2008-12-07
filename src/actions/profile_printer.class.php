@@ -99,18 +99,21 @@
 
       // Load a list of group names.
       $groupdb = $this->parent->_get_groupdb();
-      $query   = array('id' => $_user->get_group_id());
-      $group   = $groupdb->get_group_from_query($query);
-      $query   = array();
-      $list    = $groupdb->get_groups_from_query($query);
+      $list    = $groupdb->get_groups_from_query(array());
       $groups  = array();
       foreach ($list as $group)
         $groups[$group->get_id()] = $group->get_name();
+
+      // Fetch some variables.
+      $query  = array('id' => $_user->get_group_id());
+      $group  = $groupdb->get_group_from_query($query);
+      $status = $_user->get_status_names();
 
       // Render the template.
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('group',  $group);
       $this->assign_by_ref('groups', $groups);
+      $this->assign_by_ref('status', $status);
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_data.tmpl');

@@ -224,8 +224,9 @@
   // User profile and personal data.
   $lang[profile]            = "Profil von [NAME]";
   $lang[account_data]       = "Persönliche Daten von [NAME]";
+  $lang[account_status]     = "Account-Status:";
   $lang[account_created]    = "Mitglied seit:";
-  $lang[account_messages]   = "Forenbeiträge bisher:";
+  $lang[account_messages]   = "Forenbeiträge:";
   $lang[account_name]       = "Username:";
   $lang[account_firstname]  = "Vorname:";
   $lang[account_lastname]   = "Nachname:";
@@ -241,6 +242,10 @@
   $lang[account_saved]      = "Die Daten wurden gespeichert.";
   $lang[account_emptyfield] = "Nicht angegeben";
   $lang[account_edit]       = "[Bearbeiten]";
+
+  $lang[USER_STATUS_ACTIVE]      = "Aktiv";
+  $lang[USER_STATUS_UNCONFIRMED] = "Nicht freigeschaltet";
+  $lang[USER_STATUS_BLOCKED]     = "Gesperrt";
 
   // Group profile.
   $lang[group_name] = "Benutzergruppe:";

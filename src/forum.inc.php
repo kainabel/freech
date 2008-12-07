@@ -864,6 +864,7 @@
         $user = $this->_get_userdb()->get_user_from_id($_POST['user_id']);
         $user->set_username($_POST['username']);
         $user->set_group_id($_POST['group_id']);
+        $user->set_status($_POST['status']);
       }
 
       $this->_print_profile_breadcrumbs($user);

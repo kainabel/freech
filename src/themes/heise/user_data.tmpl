@@ -23,6 +23,16 @@
 {/if}
     </tr>
     <tr>
+      <td>{lang text="account_status"|escape}</td>
+{if $__group->may('administer')}
+      <td>
+      {html_options name="status" options=$status selected=$user->get_status()}
+      </td>
+{else}
+      <td>{$user->get_status_name()|escape}</td>
+{/if}
+    </tr>
+    <tr>
       <td>{lang text="account_firstname"|escape}</td>
       <td><input size="70" type="text" name="firstname" value="{$user->get_firstname()|escape}" /></td>
     </tr>

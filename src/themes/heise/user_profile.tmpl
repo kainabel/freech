@@ -16,6 +16,10 @@
     <td>{$user->get_username()|escape}</td>
   </tr>
   <tr>
+    <td>{lang text="account_status"|escape}</td>
+    <td>{$user->get_status_name()|escape}</td>
+  </tr>
+  <tr>
     <td>{lang text="account_created"|escape}</td>
     <td>{$user->get_created_time()|escape}</td>
   </tr>

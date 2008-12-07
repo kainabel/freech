@@ -773,16 +773,6 @@
 
 
     /*************************************************************
-     * Action controllers for the page header and page footer.
-     *************************************************************/
-    // Prints the footer of the page.
-    function _print_footer() {
-      $footer = &new FooterPrinter($this);
-      $footer->show($this->get_current_forum_id());
-    }
-
-
-    /*************************************************************
      * Action controllers for the search.
      *************************************************************/
     function _show_search_form() {
@@ -987,6 +977,13 @@
     /*************************************************************
      * Other action controllers.
      *************************************************************/
+    // Prints the footer of the page.
+    function _print_footer() {
+      $footer = &new FooterPrinter($this);
+      $footer->show($this->get_current_forum_id());
+    }
+
+
     function _show_top_posters() {
       $printer = new ListPrinter($this);
       $printer->show_top_posters();

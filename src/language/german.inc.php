@@ -54,6 +54,11 @@
   $lang[registered]       = "Registrierter User";
   $lang[deleted]          = "Gelöschter User";
 
+  // Message administration.
+  $lang[message_lock]     = "Beitrag sperren";
+  $lang[message_unlock]   = "Beitrag freigeben";
+  $lang[message_stick]    = "Pin setzen";
+  $lang[message_unstick]  = "Pin entfernen";
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
                            ."eine rechtswidrige Äußerung oder verletzte "

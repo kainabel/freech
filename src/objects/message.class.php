@@ -111,6 +111,13 @@
     }
 
 
+    function is_parent() {
+      return $this->fields[relation] == MESSAGE_RELATION_PARENT_STUB
+          || $this->fields[relation] == MESSAGE_RELATION_PARENT_FOLDED
+          || $this->fields[relation] == MESSAGE_RELATION_PARENT_UNFOLDED;
+    }
+
+
     function set_priority($_priority) {
       $this->fields[priority] = $_priority * 1;
     }

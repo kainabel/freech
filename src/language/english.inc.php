@@ -52,6 +52,11 @@
   $lang[registered]       = "Registered User";
   $lang[deleted]          = "Deleted User";
 
+  // Message administration.
+  $lang[message_lock]     = "Lock message";
+  $lang[message_unlock]   = "Unlock message";
+  $lang[message_stick]    = "Make sticky";
+  $lang[message_unstick]  = "Remove sticky";
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
                           . "our terms of usage.";

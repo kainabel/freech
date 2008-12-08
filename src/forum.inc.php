@@ -1011,13 +1011,14 @@
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_mail($user->get_mail());
       if (!$user) {
-        $msg = $err[ERR_LOGIN_NO_SUCH_MAIL];
+        $user = $this->_init_user_from_post_data();
+        $msg  = $err[ERR_LOGIN_NO_SUCH_MAIL];
         return $registration->show_forgot_password($user, $msg);
       }
 
       // Send the mail.
       if ($user->get_status() == USER_STATUS_UNCONFIRMED)
-        $this->_resend_confirmation_mail($user);
+        return $this->_send_confirmation_mail($user);
       elseif ($user->get_status() == USER_STATUS_ACTIVE)
         $this->_send_password_reset_mail($user);
       elseif ($user->get_status() == USER_STATUS_BLOCKED) {

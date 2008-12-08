@@ -275,6 +275,23 @@
         $url = $this->get_url_obj();
         $url->set_var('showthread', -1);
       }
+      elseif ($action == 'user_postings') {
+        $url = new URL('?', cfg("urlvars"));
+        $url->set_var('action', 'user_postings');
+        if ($_GET['hs'])
+          $url->set_var('hs', (int)$_GET[hs]);
+        $url->set_var('forum_id',        $this->get_forum_id());
+        $url->set_var('user_postings_c', $this->get_id());
+      }
+      else {
+        $url = new URL('?', cfg("urlvars"));
+        $url->set_var('action', 'list');
+        if ($_GET['hs'])
+          $url->set_var('hs', (int)$_GET[hs]);
+        $url->set_var('forum_id', $this->get_forum_id());
+        $url->set_var('c',        $this->get_id());
+      }
+      return $url->get_string();
     }
 
 

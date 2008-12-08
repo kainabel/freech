@@ -149,8 +149,7 @@
         $this->login_error = $this->_try_login();
       if ($this->get_current_action() == 'logout') {
         session_unset();
-        unset($_GET['action']);
-        unset($_POST['action']);
+        $this->_refer_to($this->_get_forum_url()->get_string());
       }
 
       // Go.
@@ -344,12 +343,12 @@
 
 
     // Returns an URL that points to the current forum.
-    function _get_forumurl() {
+    function _get_forum_url() {
       $forum_id = $this->get_current_forum_id();
-      $forumurl = &new URL('?', cfg('urlvars'));
-      $forumurl->set_var('action',   'list');
-      $forumurl->set_var('forum_id', $forum_id);
-      return $forumurl;
+      $forum_url = &new URL('?', cfg('urlvars'));
+      $forum_url->set_var('action',   'list');
+      $forum_url->set_var('forum_id', $forum_id);
+      return $forum_url;
     }
 
 
@@ -452,7 +451,7 @@
            or $_GET['action'] == 'logout'
            or $_POST['action'] == 'login'
            or $_POST['action'] == 'logout')
-        return $this->_get_forumurl()->get_string();
+        return $this->_get_forum_url()->get_string();
       elseif ($_SERVER['REQUEST_URI'] == '/')
         return '';
       else
@@ -517,7 +516,7 @@
       $text        = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
       $text        = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
       $text        = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
-      $breadcrumbs->add_item($text, $this->_get_forumurl());
+      $breadcrumbs->add_item($text, $this->_get_forum_url());
       $breadcrumbs->show();
     }
 
@@ -549,7 +548,7 @@
     // Prints the breadcrumbs pointing to the given message.
     function _print_message_breadcrumbs($_message) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
+      $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
       if (!$_message)
         $breadcrumbs->add_item(lang("noentrytitle"));
       elseif (!$_message->is_active())
@@ -762,7 +761,7 @@
      *************************************************************/
     function _print_profile_breadcrumbs($_user) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $this->_get_forumurl());
+      $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
       $breadcrumbs->add_item($_user->get_username());
       $breadcrumbs->show();
     }

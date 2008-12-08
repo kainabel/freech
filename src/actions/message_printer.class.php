@@ -54,7 +54,7 @@
       $this->assign_by_ref('indexbar', $indexbar);
       $this->assign_by_ref('message',  $_msg);
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
-      $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
+      $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
       $this->render('message_read.tmpl');
       $this->parent->_set_title($_msg->get_subject());
     }
@@ -80,7 +80,7 @@
       $this->assign('action',             $url->get_string());
       $this->assign('hint',               $_hint);
       $this->assign('max_usernamelength', cfg("max_usernamelength"));
-      $this->assign('max_titlelength',    cfg("max_titlelength"));
+      $this->assign('max_subjectlength',  cfg("max_subjectlength"));
       $this->assign_by_ref('message', $_message);
       $this->render('message_compose.tmpl');
       $this->parent->_set_title($_message->get_subject());
@@ -127,7 +127,7 @@
       // Prepend 'Re: ' if necessary
       if (strpos($_parent_msg->get_subject(), lang("answer")) !== 0) {
         $subject = lang("answer") . $_parent_msg->get_subject();
-        $message->set_subject(substr($subject, 0, cfg("max_titlelength")));
+        $message->set_subject(substr($subject, 0, cfg("max_subjectlength")));
       }
       else
         $message->set_subject($_parent_msg->get_subject());

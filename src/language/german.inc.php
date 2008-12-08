@@ -89,7 +89,7 @@
   $lang[messagetoolong]   = "Ihr Beitrag ist länger als $cfg[max_msglength] Zeichen. Bitte kürzen sie den Text.";
   $lang[pvw_invalidchars] = "Achtung! Ihr Beitrag enthält ungültige Zeichen.";
   $lang[nametoolong]      = "Der von ihnen gewählte Name ist länger als $cfg[max_usernamelength] Zeichen. Bitte kürzen sie den Namen.";
-  $lang[titletoolong]     = "Der von ihnen gewählte Beitragstitel ist länger als $cfg[max_titlelength] Zeichen. Bitte kürzen sie den Titel.";
+  $lang[titletoolong]     = "Der von ihnen gewählte Beitragstitel ist länger als $cfg[max_subjectlength] Zeichen. Bitte kürzen sie den Titel.";
   $lang[forgotname]       = "Bitte einen Namen eingeben."; // Not used
   $lang[forgottitle]      = "Bitte einen Titel eingeben."; // Not used
   $lang[forgottext]       = "Sie haben keinen Text eingegeben."; // Not used

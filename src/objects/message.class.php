@@ -548,7 +548,7 @@
         return ERR_USER_LOGIN_INVALID_CHARS;
 
 
-      if (strlen($this->fields[subject]) > cfg("max_titlelength"))
+      if (strlen($this->fields[subject]) > cfg("max_subjectlength"))
         return ERR_MESSAGE_TITLE_TOO_LONG;
 
       if (strlen($this->fields[body]) > cfg("max_msglength"))

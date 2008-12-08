@@ -77,7 +77,7 @@
   $cfg[new_post_time] = 60*60*24;
 
   // Maximum length of the subject line.
-  $cfg[max_titlelength] = 70;
+  $cfg[max_subjectlength] = 70;
 
   // Maximum length of a message. If the length is exceeded the forum displays
   // an error message at the time a message is submitted.

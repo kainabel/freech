@@ -1,5 +1,7 @@
 * Add a group profile that displays permissions.
 * Make group profile editable by administrators.
-* Replace default_group_id config key by a default_group based on the name.
 * Design a URL scheme that makes sense for URL rewriting.
-* Replace "title" by "subject" everywhere.
+* Add a moderation log.
+* Display the moderation log when viewing a locked message.
+* Display the moderation log in the moderator's profile.
+* Let moderators view all postings of one particular user.

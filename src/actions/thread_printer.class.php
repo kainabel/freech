@@ -74,7 +74,7 @@
       $this->assign_by_ref('n_rows',             $n_rows);
       $this->assign_by_ref('messages',           $this->messages);
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
-      $this->assign_by_ref('max_titlelength',    cfg("max_titlelength"));
+      $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
       $this->render('list_by_thread.tmpl');
     }
   }

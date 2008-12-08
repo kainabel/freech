@@ -84,7 +84,7 @@
   $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
   $lang[pvw_invalidchars] = "Warning! Your message contains invalid characters.";
   $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_usernamelength] characters. Please choose a shorter name.";
-  $lang[titletoolong]     = "The subject is longer than $cfg[max_titlelength] characters. Please choose a shorter subject.";
+  $lang[titletoolong]     = "The subject is longer than $cfg[max_subjectlength] characters. Please choose a shorter subject.";
   $lang[forgotname]       = "Please enter a name."; // Not used
   $lang[forgottitle]      = "Please enter a title."; // Not used
   $lang[forgottext]       = "No text was entered."; // Not used

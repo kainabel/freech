@@ -676,6 +676,7 @@
         $message = $this->forumdb->get_message_from_id($_POST['msg_id']);
         $message->set_subject($_POST['subject']);
         $message->set_body($_POST['body']);
+        $message->set_updated_unixtime(time());
       }
       else {
         $message = $this->_get_new_message();

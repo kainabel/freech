@@ -332,7 +332,7 @@
       $query->set_int   ('id',              $_message->get_id());
       $query->set_int   ('forum_id',        $_forum_id);
       $query->set_int   ('priority',        $_message->get_priority());
-      $query->set_int   ('updated',         time());
+      $query->set_int   ('updated',         $_message->get_updated_unixtime());
       $query->set_int   ('user_id',         $_message->get_user_id());
       $query->set_bool  ('user_is_special', $_message->get_user_is_special());
       $query->set_string('user_icon',       $_message->get_user_icon());

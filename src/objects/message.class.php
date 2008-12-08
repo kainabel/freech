@@ -381,6 +381,11 @@
     }
 
 
+    function set_updated_unixtime($_time) {
+      $this->fields[updated] = (int)$_time;
+    }
+
+
     function get_updated_unixtime() {
       return $this->fields[updated];
     }

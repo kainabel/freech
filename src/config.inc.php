@@ -51,6 +51,10 @@
   // a negative performance impact.
   $cfg[updated_threads_first] = FALSE;
 
+  // Disable the message counter that is shown above the forum. Note that
+  // disabling the search provides a significant performance gain.
+  $cfg[disable_message_counter] = FALSE;
+
   // Disable the forum search.
   $cfg[disable_search] = FALSE;
 

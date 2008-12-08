@@ -507,15 +507,20 @@
     function _print_list_breadcrumbs() {
       $forum_id    = $this->get_current_forum_id();
       $breadcrumbs = &new BreadCrumbsPrinter($this);
+      if (cfg('disable_message_counter')) {
+        $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
+        $breadcrumbs->show();
+        return;
+      }
       $search      = array('forum_id' => $forum_id);
       $n_messages  = $this->forumdb->get_n_messages($search);
       $start       = time() - cfg("new_post_time");
       $n_new       = $this->forumdb->get_n_messages($search, $start);
       $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
-      $text        = lang("forum_long");
-      $text        = preg_replace("/\[MESSAGES\]/",    $n_messages, $text);
-      $text        = preg_replace("/\[NEWMESSAGES\]/", $n_new,      $text);
-      $text        = preg_replace("/\[ONLINEUSERS\]/", $n_online,   $text);
+      $vars        = array('messages'    => $n_messages,
+                           'newmessages' => $n_new,
+                           'onlineusers' => $n_online);
+      $text        = lang('forum_long', $vars);
       $breadcrumbs->add_item($text, $this->_get_forum_url());
       $breadcrumbs->show();
     }

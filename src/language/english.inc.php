@@ -77,7 +77,6 @@
   $lang[somethingmissing] = "Warning! Your message is incomplete.";
   $lang[onlywhitespace]   = "Warning! Your message has no visible text."; // Not used
   $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
-  $lang[messageduplicate] = "Your message has already been sent.";
   $lang[pvw_invalidchars] = "Warning! Your message contains invalid characters.";
   $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_usernamelength] characters. Please choose a shorter name.";
   $lang[titletoolong]     = "The subject is longer than $cfg[max_titlelength] characters. Please choose a shorter subject.";
@@ -86,12 +85,6 @@
   $lang[forgottext]       = "No text was entered."; // Not used
   $lang[change]           = "Edit Message";
   $lang[send]             = "Send Message";
-  
-  // Submit.
-  $lang[entrysuccess]     = "Your message was saved.";
-  $lang[backtoentry]      = "Show Your Message";
-  $lang[backtoparent]     = "Show the Answered Message";
-  $lang[backtoindex]      = "Go Back to the Forum";
   
   // Registration
   $lang[register]            = "Register Account";

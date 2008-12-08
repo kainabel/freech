@@ -3,6 +3,27 @@
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
  <tr valign='middle'>
   <td>
+{if $__group->may('moderate')}
+{if $message->is_active()}
+ <a href="{$message->get_lock_url()|escape}">
+   <img border='0' src='themes/heise/img/unlock.png' title='{lang text="message_lock"|escape}'>
+ </a>
+{else}
+ <a href="{$message->get_unlock_url()|escape}">
+   <img border='0' src='themes/heise/img/lock.png' title='{lang text="message_unlock"|escape}'>
+ </a>
+{/if}
+{if $message->get_priority() == 0}
+ <a href="{$message->get_prioritize_url(1)|escape}">
+   <img border='0' src='themes/heise/img/sticky.png' title='{lang text="message_prioritize"|escape}'>
+ </a>
+{else}
+ <a href="{$message->get_prioritize_url(0)|escape}">
+   <img border='0' src='themes/heise/img/sticky_red.png' title='{lang text="message_prioritize"|escape}'>
+ </a>
+{/if}
+  <br />
+{/if}
   <font color='#555555' size='-1'>{$message->get_created_time()}</font>
 {if $message->is_updated()}
   <font color='red' size='-1'>{lang text="lastupdated" time=$message->get_updated_time()}</font>

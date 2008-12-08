@@ -4,6 +4,29 @@
   <td align='left'>{strip}
   <table border=0 cellspacing=0 cellpadding=0>
     <tr>
+{if $__group->may('moderate')}
+     <td align='left'>
+{if $message->is_active()}
+     <a href="{$message->get_lock_url()|escape}">
+       <img border='0' src='themes/heise/img/unlock.png' title='{lang text="message_lock"|escape}'>
+     </a>
+{else}
+     <a href="{$message->get_unlock_url()|escape}">
+       <img border='0' src='themes/heise/img/lock.png' title='{lang text="message_unlock"|escape}'>
+     </a>
+{/if}
+{if $message->get_priority() == 0}
+     <a href="{$message->get_prioritize_url(1)|escape}">
+       <img border='0' src='themes/heise/img/sticky.png' title='{lang text="message_prioritize"|escape}'>
+     </a>
+{else}
+     <a href="{$message->get_prioritize_url(0)|escape}">
+       <img border='0' src='themes/heise/img/sticky_red.png' title='{lang text="message_prioritize"|escape}'>
+     </a>
+{/if}
+     </td>
+     <td align='left'>&nbsp;</td>
+{/if}
      <td align='left'>
 {*
   $indent:

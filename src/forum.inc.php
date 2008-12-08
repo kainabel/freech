@@ -67,7 +67,6 @@
   include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
 
-
   class FreechForum {
     var $db;
     var $forum;
@@ -202,6 +201,8 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
 
+      $_GET = array_map('urldecode', $_GET);
+
       $thread_state        = &new ThreadState($_COOKIE['fold'],
                                               $_COOKIE['c']);
       $user_postings_state = &new ThreadState($_COOKIE['user_postings_fold'],
@@ -291,6 +292,20 @@
     function _get_group_from_id($_id) {
       $query = array('id' => (int)$_id);
       return $this->_get_groupdb()->get_group_from_query($query);
+    }
+
+
+    function _get_message_from_id_or_die($_id) {
+      $message = $this->forumdb->get_message_from_id((int)$_id);
+      if (!$message)
+        die('No such message.');
+      return $message;
+    }
+
+
+    function _assert_may($_action) {
+      if (!$this->get_current_group()->may($_action))
+        die('Permission denied.');
     }
 
 
@@ -424,14 +439,19 @@
     }
 
 
+    function _refer_to($_url) {
+      header('HTTP/1.1 301 Moved Permanently');
+      header('Location: '.$_url);
+      die();
+    }
+
+
     function _refer_to_message_id($_message_id) {
       $url = &new URL(cfg('site_url').'?', cfg('urlvars'));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $_message_id);
       $url->set_var('forum_id', $this->get_current_forum_id());
-      header('HTTP/1.1 301 Moved Permanently');
-      header('Location: '.$url->get_string());
-      die();
+      $this->_refer_to($url->get_string());
     }
 
 
@@ -682,6 +702,36 @@
 
       // Success! Refer to the new item.
       $this->_refer_to_message_id($message->get_id());
+    }
+
+
+    // Changes the priority of an existing message.
+    function _message_prioritize() {
+      $this->_assert_may('moderate');
+      $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
+      $message->set_priority((int)$_GET['priority']);
+      $this->forumdb->save($this->get_current_forum_id(), -1, $message);
+      $this->_refer_to($_GET['refer_to']);
+    }
+
+
+    // Locks an existing message.
+    function _message_lock() {
+      $this->_assert_may('moderate');
+      $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
+      $message->set_active(FALSE);
+      $this->forumdb->save($this->get_current_forum_id(), -1, $message);
+      $this->_refer_to($_GET['refer_to']);
+    }
+
+
+    // Unlocks an existing message.
+    function _message_unlock() {
+      $this->_assert_may('moderate');
+      $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
+      $message->set_active();
+      $this->forumdb->save($this->get_current_forum_id(), -1, $message);
+      $this->_refer_to($_GET['refer_to']);
     }
 
 
@@ -1059,6 +1109,18 @@
           $this->_message_send();           // Save posted message.
         elseif ($_POST['edit'])
           $this->_message_edit_unsaved();   // Edit the unsaved message.
+        break;
+
+      case 'message_prioritize':
+        $this->_message_prioritize();
+        break;
+
+      case 'message_lock':
+        $this->_message_lock();
+        break;
+
+      case 'message_unlock':
+        $this->_message_unlock();
         break;
 
       case 'profile':

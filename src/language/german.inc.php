@@ -82,7 +82,6 @@
   $lang[somethingmissing] = "Achtung! Ihr Beitrag ist nicht vollständig.";
   $lang[onlywhitespace]   = "Achtung! Ihr Beitrag enthält keinen sichtbaren Text."; // Not used
   $lang[messagetoolong]   = "Ihr Beitrag ist länger als $cfg[max_msglength] Zeichen. Bitte kürzen sie den Text.";
-  $lang[messageduplicate] = "Ihr Beitrag wurde schon einmal abgeschickt.";
   $lang[pvw_invalidchars] = "Achtung! Ihr Beitrag enthält ungültige Zeichen.";
   $lang[nametoolong]      = "Der von ihnen gewählte Name ist länger als $cfg[max_usernamelength] Zeichen. Bitte kürzen sie den Namen.";
   $lang[titletoolong]     = "Der von ihnen gewählte Beitragstitel ist länger als $cfg[max_titlelength] Zeichen. Bitte kürzen sie den Titel.";
@@ -91,12 +90,6 @@
   $lang[forgottext]       = "Sie haben keinen Text eingegeben."; // Not used
   $lang[change]           = "Bearbeiten";
   $lang[send]             = "Abschicken";
-  
-  // Submit.
-  $lang[entrysuccess]      = "Ihr Eintrag ist gespeichert.";
-  $lang[backtoentry]       = "Zu ihrem Beitrag";
-  $lang[backtoparent]      = "Beantworteten Beitrag anzeigen";
-  $lang[backtoindex]       = "Zum Forum";
   
   // Registration
   $lang[register]            = "Account registrieren";

@@ -325,6 +325,7 @@
       $sql .= " body={body},";
       $sql .= " hash={hash},";
       $sql .= " ip_hash={ip_hash},";
+      $sql .= " is_active={is_active},";
       $sql .= " updated=FROM_UNIXTIME({updated})";
       $sql .= " WHERE id={id}";
       $query = &new FreechSqlQuery($sql);
@@ -341,6 +342,7 @@
       $query->set_string('body',            $_message->get_body());
       $query->set_string('hash',            $_message->get_hash());
       $query->set_string('ip_hash',         $_message->get_ip_address_hash());
+      $query->set_string('is_active',       $_message->is_active());
       $this->db->Execute($query->sql()) or die("ForumDB::save(): 1");
 
       $this->db->CompleteTrans();

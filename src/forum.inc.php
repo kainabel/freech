@@ -179,9 +179,7 @@
       if ($ret < 0)
         die("Failed to log in user, return code $ret");
       $_SESSION['user_id'] = $user->get_id();
-      unset($_GET['action']);
-      unset($_POST['action']);
-      return 0;
+      $this->_refer_to($_POST['refer_to']);
     }
 
 
@@ -201,7 +199,8 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
 
-      $_GET = array_map('urldecode', $_GET);
+      $_GET  = array_map('urldecode', $_GET);
+      $_POST = array_map('urldecode', $_POST);
 
       $thread_state        = &new ThreadState($_COOKIE['fold'],
                                               $_COOKIE['c']);
@@ -436,6 +435,28 @@
       $url      = cfg('site_url') . "?action=confirm_password_mail"
                 . "&username=$username&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, array('url' => $url));
+    }
+
+
+    // Returns a (relative) url that points to the current page,
+    // except in cases where the login page is shown or where
+    // a referrer was already specified in the GET or POST variables.
+    // In other words, this function returns a URL to which the
+    // login form may refer after performing the login.
+    function _get_login_refer_url() {
+      if ($_GET['refer_to'])
+        return $_GET['refer_to'];
+      elseif ($_POST['refer_to'])
+        return $_POST['refer_to'];
+      elseif ($_GET['action'] == 'login'
+           or $_GET['action'] == 'logout'
+           or $_POST['action'] == 'login'
+           or $_POST['action'] == 'logout')
+        return $this->_get_forumurl()->get_string();
+      elseif ($_SERVER['REQUEST_URI'] == '/')
+        return '';
+      else
+        return $_SERVER['REQUEST_URI'];
     }
 
 
@@ -876,14 +897,15 @@
       $user  = $this->_init_user_from_post_data();
       $login = &new LoginPrinter($this);
       $user->set_status(USER_STATUS_ACTIVE);
+      $refer_to = $this->_get_login_refer_url();
       if ($this->login_error == 0)
-        $login->show($user);
+        $login->show($user, '', $refer_to);
       elseif ($this->login_error == ERR_LOGIN_UNCONFIRMED) {
         $user->set_status(USER_STATUS_UNCONFIRMED);
-        $login->show($user, $err[$this->login_error]);
+        $login->show($user, $err[$this->login_error], $refer_to);
       }
       else
-        $login->show($user, $err[$this->login_error]);
+        $login->show($user, $err[$this->login_error], $refer_to);
     }
 
 
@@ -1283,6 +1305,15 @@
 
     function get_current_message_id() {
       return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
+    }
+
+
+    function get_login_url() {
+      $refer_to = $this->_get_login_refer_url();
+      $url      = new URL('?', cfg('urlvars'));
+      $url->set_var('action',   'login');
+      $url->set_var('refer_to', urlencode($refer_to));
+      return $url->get_string();
     }
 
 

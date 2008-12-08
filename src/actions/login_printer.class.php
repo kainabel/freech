@@ -20,20 +20,21 @@
 ?>
 <?php
   class LoginPrinter extends PrinterBase {
-    function show($_user, $_hint = '') {
-      $login_url = new URL('?', cfg("urlvars"));
+    function show($_user, $_hint = '', $_refer_to) {
+      $login_url = new URL('?', cfg('urlvars'));
       $login_url->set_var('action', 'login');
 
-      $resend_url = new URL('?', cfg("urlvars"));
+      $resend_url = new URL('?', cfg('urlvars'));
       $resend_url->set_var('action',   'resend_confirm');
       $resend_url->set_var('username', $_user->get_username());
 
-      $forgot_url = new URL('?', cfg("urlvars"));
+      $forgot_url = new URL('?', cfg('urlvars'));
       $forgot_url->set_var('action', 'forgot_password');
 
       $this->clear_all_assign();
       $this->assign_by_ref('user',       $_user);
       $this->assign_by_ref('hint',       $_hint);
+      $this->assign_by_ref('refer_to',   urlencode($_refer_to));
       $this->assign_by_ref('action',     $login_url->get_string());
       $this->assign_by_ref('resend_url', $resend_url->get_string());
       $this->assign_by_ref('forgot_url', $forgot_url->get_string());

@@ -178,7 +178,7 @@
       if ($ret < 0)
         die("Failed to log in user, return code $ret");
       $_SESSION['user_id'] = $user->get_id();
-      $this->_refer_to($_POST['refer_to']);
+      $this->_refer_to(urldecode($_POST['refer_to']));
     }
 
 
@@ -343,7 +343,6 @@
     function _get_forum_url() {
       $forum_id = $this->get_current_forum_id();
       $forum_url = &new URL('?', cfg('urlvars'));
-      $forum_url->set_var('action',   'list');
       $forum_url->set_var('forum_id', $forum_id);
       return $forum_url;
     }
@@ -1315,7 +1314,7 @@
       $refer_to = $this->_get_login_refer_url();
       $url      = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'login');
-      $url->set_var('refer_to', urlencode($refer_to));
+      $url->set_var('refer_to', $refer_to);
       return $url->get_string();
     }
 

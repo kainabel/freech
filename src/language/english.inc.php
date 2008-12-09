@@ -50,6 +50,7 @@
   $lang[anonymous]        = "Anonymous User";
   $lang[registered]       = "Registered User";
   $lang[deleted]          = "Deleted User";
+  $lang[ip_hash]          = "(IP hash: [HASH])";
 
   // Message administration.
   $lang[message_lock]     = "Lock message";

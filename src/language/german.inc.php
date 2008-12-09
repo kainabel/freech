@@ -52,6 +52,7 @@
   $lang[anonymous]        = "Anonymer User";
   $lang[registered]       = "Registrierter User";
   $lang[deleted]          = "Gelöschter User";
+  $lang[ip_hash]          = "(Salziger IP-Hash: [HASH])";
 
   // Message administration.
   $lang[message_lock]     = "Beitrag sperren";

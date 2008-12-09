@@ -414,7 +414,9 @@
     }
 
 
-    function &get_ip_address_hash() {
+    function get_ip_address_hash($maxlen = NULL) {
+      if ($maxlen)
+        return substr($this->fields['ip_hash'], 0, $maxlen);
       return $this->fields['ip_hash'];
     }
 

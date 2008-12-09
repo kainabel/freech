@@ -29,7 +29,7 @@
     </td>
 {if $message->get_user_is_anonymous()}
     <td>
-      (Salziger IP-Hash: {$message->get_ip_address_hash()|truncate:10:''|escape})
+      {lang text="ip_hash" hash=$message->get_ip_address_hash(10)|escape}
     </td>
 {/if}
   </tr>

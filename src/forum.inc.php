@@ -198,9 +198,6 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
 
-      $_GET  = array_map('urldecode', $_GET);
-      $_POST = array_map('urldecode', $_POST);
-
       $thread_state        = &new ThreadState($_COOKIE['fold'],
                                               $_COOKIE['c']);
       $user_postings_state = &new ThreadState($_COOKIE['user_postings_fold'],
@@ -444,9 +441,9 @@
     // login form may refer after performing the login.
     function _get_login_refer_url() {
       if ($_GET['refer_to'])
-        return $_GET['refer_to'];
+        return urldecode($_GET['refer_to']);
       elseif ($_POST['refer_to'])
-        return $_POST['refer_to'];
+        return urldecode($_POST['refer_to']);
       elseif ($_GET['action'] == 'login'
            or $_GET['action'] == 'logout'
            or $_POST['action'] == 'login'
@@ -640,14 +637,6 @@
       $message    = $this->_get_new_message();
       $this->_init_message_from_post_data($message);
 
-      // Make sure that the username is not in use.
-      if ($user->is_anonymous()
-        && !$this->_username_available($message->get_username()))
-         return $msgprinter->show_compose($message,
-                                          lang("usernamenotavailable"),
-                                          $parent_id,
-                                          $may_quote);
-
       // Check the message for completeness.
       $ret = $message->check_complete();
       if ($ret < 0)
@@ -655,6 +644,14 @@
                                          $err[$ret],
                                          $parent_id,
                                          $may_quote);
+
+      // Make sure that the username is not in use.
+      if ($user->is_anonymous()
+        && !$this->_username_available($message->get_username()))
+         return $msgprinter->show_compose($message,
+                                          lang("usernamenotavailable"),
+                                          $parent_id,
+                                          $may_quote);
 
       // Success.
       $msgprinter->show_preview($message, $parent_id, $may_quote);
@@ -692,6 +689,14 @@
         && $user->get_username() !== $message->get_username())
         die("Username does not match currently logged in user");
 
+      // Check the message for completeness.
+      $ret = $message->check_complete();
+      if ($ret < 0)
+        return $msgprinter->show_compose($message,
+                                         $err[$ret],
+                                         $parent_id,
+                                         $may_quote);
+
       // Make sure that the username is not in use.
       if ($user->is_anonymous()
         && !$this->_username_available($message->get_username()))
@@ -706,14 +711,6 @@
         if ($duplicate_id)
           $this->_refer_to_message_id($duplicate_id);
       }
-
-      // Check the message for completeness.
-      $ret = $message->check_complete();
-      if ($ret < 0)
-        return $msgprinter->show_compose($message,
-                                         $err[$ret],
-                                         $parent_id,
-                                         $may_quote);
 
       // Save the message.
       if ($message->get_id())
@@ -737,7 +734,7 @@
       $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
       $message->set_priority((int)$_GET['priority']);
       $this->forumdb->save($this->get_current_forum_id(), -1, $message);
-      $this->_refer_to($_GET['refer_to']);
+      $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
 
@@ -747,7 +744,7 @@
       $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
       $message->set_active(FALSE);
       $this->forumdb->save($this->get_current_forum_id(), -1, $message);
-      $this->_refer_to($_GET['refer_to']);
+      $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
 
@@ -757,7 +754,7 @@
       $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
       $message->set_active();
       $this->forumdb->save($this->get_current_forum_id(), -1, $message);
-      $this->_refer_to($_GET['refer_to']);
+      $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
 

@@ -294,34 +294,31 @@
 
     // The url for locking the message.
     function get_lock_url() {
-      $refer_to = urlencode($_SERVER['REQUEST_URI']);
       $url      = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'message_lock');
       $url->set_var('msg_id',   $this->get_id());
-      $url->set_var('refer_to', $refer_to);
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       return $url->get_string();
     }
 
 
     // The url for unlocking the message.
     function get_unlock_url() {
-      $refer_to = urlencode($_SERVER['REQUEST_URI']);
       $url      = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'message_unlock');
       $url->set_var('msg_id',   $this->get_id());
-      $url->set_var('refer_to', $refer_to);
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       return $url->get_string();
     }
 
 
     // The url for changing the message priority.
     function get_prioritize_url($_priority) {
-      $refer_to = urlencode($_SERVER['REQUEST_URI']);
       $url      = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'message_prioritize');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('priority', (int)$_priority);
-      $url->set_var('refer_to', $refer_to);
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       return $url->get_string();
     }
 

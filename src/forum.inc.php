@@ -781,10 +781,10 @@
     /*************************************************************
      * Action controllers for the user profile.
      *************************************************************/
-    function _print_profile_breadcrumbs($_user) {
+    function _print_profile_breadcrumbs($_named_item) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
-      $breadcrumbs->add_item($_user->get_name());
+      $breadcrumbs->add_item($_named_item->get_name());
       $breadcrumbs->show();
     }
 
@@ -887,18 +887,10 @@
     /*************************************************************
      * Action controllers for the group profile.
      *************************************************************/
-    function _print_group_profile_breadcrumbs($_group) {
-      $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
-      $breadcrumbs->add_item($_group->get_name());
-      $breadcrumbs->show();
-    }
-
-
     // Lists all postings of one user.
     function _show_group_profile() {
       $group = $this->_get_group_from_name_or_die($_GET['groupname']);
-      $this->_print_group_profile_breadcrumbs($group);
+      $this->_print_profile_breadcrumbs($group);
       $profile = &new ProfilePrinter($this);
       $profile->show_group_profile($group, (int)$_GET['hs']);
     }

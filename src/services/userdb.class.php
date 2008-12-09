@@ -187,10 +187,9 @@
         $sql .= " AND $key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
-      $sql .= ')';
       $query->set_sql($sql);
       $n_users = $this->db->GetOne($query->sql())
-                                    or die("UserDB::get_n_users()");
+                              or die("UserDB::get_n_users_from_query()");
       return $n_users;
     }
 
@@ -200,22 +199,43 @@
      * given one.
      * $_name: The name for which to find similar users.
      */
-    function get_similar_users_from_name($_name, $_limit = -1, $_offset = 0) {
+    function get_similar_users_from_name($_name,
+                                         $_limit = -1,
+                                         $_offset = 0) {
       if (!$_name)
         die("UserDB::get_similar_users_from_name(): Invalid name.");
       $user    = new User($_name);
       $soundex = $user->get_soundexed_username();
       $search  = array('soundexusername' => $soundex);
       $sql     = $this->_get_sql_from_query($search);
-      $res     = $this->db->SelectLimit($sql, -1, $_offset)
+      $res     = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset)
                       or die("UserDB::get_similar_users_from_name(): Select");
       $users = array();
-      while ($row = &$res->FetchRow() && sizeof($users) != $_limit) {
-        $potential_user = $this->_get_user_from_row($row);
-        if ($potential_user->is_lexically_similar_to($user))
-          array_push($users, $potential_user);
-      }
+      while ($row = &$res->FetchRow())
+        array_push($users, $this->_get_user_from_row($row));
       return $users;
+    }
+
+
+    /**
+     * Returns the number of all users whose username is similar to the
+     * given one.
+     * $_name: The name for which to find similar users.
+     */
+    function count_similar_users_from_name($_name) {
+      if (!$_name)
+        die("UserDB::count_similar_users_from_name(): Invalid name.");
+      $user    = new User($_name);
+      $soundex = $user->get_soundexed_username();
+
+      $query = &new FreechSqlQuery();
+      $sql   = "SELECT COUNT(*) FROM {t_user}";
+      $sql  .= " WHERE soundexusername={soundexusername}";
+      $query->set_sql($sql);
+      $query->set_string('soundexusername', $soundex);
+      $n_users = $this->db->GetOne($query->sql())
+                         or die("UserDB::count_similar_users_from_name()");
+      return $n_users;
     }
 
 

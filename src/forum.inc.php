@@ -40,9 +40,11 @@
   include_once 'objects/indexbar.class.php';
   include_once 'objects/indexbar_by_time.class.php';
   include_once 'objects/indexbar_by_thread.class.php';
+  include_once 'objects/indexbar_group_profile.class.php';
   include_once 'objects/indexbar_read_message.class.php';
   include_once 'objects/indexbar_user_postings.class.php';
   include_once 'objects/indexbar_search_result.class.php';
+  include_once 'objects/indexbar_search_users.class.php';
 
   include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
@@ -290,6 +292,20 @@
     }
 
 
+    function _get_group_from_name($_name) {
+      $query = array('name' => $_name);
+      return $this->_get_groupdb()->get_group_from_query($query);
+    }
+
+
+    function _get_group_from_name_or_die($_name) {
+      $group = $this->_get_group_from_name($_name);
+      if (!$group)
+        die('No such group');
+      return $group;
+    }
+
+
     function _get_message_from_id_or_die($_id) {
       $message = $this->forumdb->get_message_from_id((int)$_id);
       if (!$message)
@@ -351,7 +367,12 @@
     // Returns TRUE if the username is available, FALSE otherwise.
     function _username_available(&$_username) {
       $userdb = $this->_get_userdb();
-      return count($userdb->get_similar_users_from_name($_username)) == 0;
+      $needle = new User($_username);
+      $users  = $userdb->get_similar_users_from_name($_username);
+      foreach ($users as $user)
+        if ($user->is_lexically_similar_to($needle))
+          return FALSE;
+      return TRUE;
     }
 
 
@@ -864,6 +885,26 @@
 
 
     /*************************************************************
+     * Action controllers for the group profile.
+     *************************************************************/
+    function _print_group_profile_breadcrumbs($_group) {
+      $breadcrumbs = &new BreadCrumbsPrinter($this);
+      $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
+      $breadcrumbs->add_item($_group->get_name());
+      $breadcrumbs->show();
+    }
+
+
+    // Lists all postings of one user.
+    function _show_group_profile() {
+      $group = $this->_get_group_from_name_or_die($_GET['groupname']);
+      $this->_print_group_profile_breadcrumbs($group);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_group_profile($group, (int)$_GET['hs']);
+    }
+
+
+    /*************************************************************
      * Action controllers for the search.
      *************************************************************/
     function _show_search_form() {
@@ -1169,6 +1210,10 @@
 
       case 'user_options_submit':
         $this->_submit_user_options();
+        break;
+
+      case 'group_profile':
+        $this->_show_group_profile();       // Show a group profile.
         break;
 
       case 'search':

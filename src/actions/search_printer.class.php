@@ -96,22 +96,38 @@
       $this->assign('query', $_query);
 
       // Run the search.
-      $search = array('username' => '%'.trim($_query).'%');
-      $userdb = $this->parent->_get_userdb();
-      $func   = array(&$this, '_append_user');
-      $n_rows = $userdb->foreach_user_from_query($search,
-                                                 50,
-                                                 (int)$_offset,
-                                                 $func,
-                                                 '');
+      $search    = array('username' => '%'.trim($_query).'%');
+      $userdb    = $this->parent->_get_userdb();
+      $n_entries = $userdb->get_n_users_from_query($search);
+      $n_rows    = 0;
+      if ($n_entries > 0) {
+        $func   = array(&$this, '_append_user');
+        $n_rows = $userdb->foreach_user_from_query($search,
+                                                   cfg('epp'),
+                                                   (int)$_offset,
+                                                   $func,
+                                                   '');
+      }
 
       // Search for similar results.
       if ($n_rows == 0) {
-        $this->results = $userdb->get_similar_users_from_name($_query, 50);
+        $n_entries     = $userdb->count_similar_users_from_name($_query);
+        $this->results = $userdb->get_similar_users_from_name($_query,
+                                                              cfg('epp'),
+                                                              (int)$_offset);
         $n_rows        = count($this->results);
       }
 
+      // Create the index bar.
+      $args      = array(query             => $_query,
+                         n_users           => $n_entries,
+                         n_users_per_page  => cfg("epp"),
+                         n_offset          => $_offset,
+                         n_pages_per_index => cfg("ppi"));
+      $indexbar = &new IndexBarSearchUsers($args);
+
       // Render the result.
+      $this->assign_by_ref('indexbar',  $indexbar);
       $this->assign_by_ref('n_results', $n_rows);
       $this->assign_by_ref('n_rows',    $n_rows);
       $this->assign_by_ref('users',     $this->results);

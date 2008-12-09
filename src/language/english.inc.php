@@ -231,7 +231,16 @@
   $lang[USER_STATUS_BLOCKED]     = "Locked";
 
   // Group profile.
-  $lang[group_name] = "User group:";
+  $lang[group_profile]         = "Profile of [NAME]";
+  $lang[group_name]            = "User group:";
+  $lang[group_special]         = "Special functionality:";
+  $lang[group_is_special]      = "Yes";
+  $lang[group_is_not_special]  = "None";
+  $lang[group_status]          = "Status:";
+  $lang[group_status_active]   = "Active";
+  $lang[group_status_inactive] = "Inactive";
+  $lang[group_created]         = "Created on:";
+  $lang[group_edit]            = "[Edit]";
 
   // Top user list.
   $lang[top_users]   = "Top Users";

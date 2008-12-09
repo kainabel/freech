@@ -249,7 +249,16 @@
   $lang[USER_STATUS_BLOCKED]     = "Gesperrt";
 
   // Group profile.
-  $lang[group_name] = "Benutzergruppe:";
+  $lang[group_profile]         = "Gruppenprofil von [NAME]";
+  $lang[group_name]            = "Benutzergruppe:";
+  $lang[group_special]         = "Spezialfunktionen:";
+  $lang[group_is_special]      = "Ja";
+  $lang[group_is_not_special]  = "Keine";
+  $lang[group_status]          = "Status:";
+  $lang[group_status_active]   = "Aktiv";
+  $lang[group_status_inactive] = "Inaktiv";
+  $lang[group_created]         = "Erstellt am:";
+  $lang[group_edit]            = "[Bearbeiten]";
 
   // Top user list.
   $lang[top_users]   = "User-Statistik";

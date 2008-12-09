@@ -297,7 +297,7 @@ define("USER_STATUS_BLOCKED",     2);
 
 
     function get_user_data_url() {
-      $url = new URL('?', cfg("urlvars"));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'user_data');
       $url->set_var('username', $this->get_username());
       return $url->get_string();
@@ -305,7 +305,7 @@ define("USER_STATUS_BLOCKED",     2);
 
 
     function get_profile_url() {
-      $url = new URL('?', cfg("urlvars"));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'profile');
       $url->set_var('username', $this->get_username());
       return $url->get_string();

@@ -1,0 +1,38 @@
+<p>
+<h2>
+  {lang text="group_profile" name=$group->get_name()|escape}
+{if $__group->may('administer')}
+  <a href="{$group->get_group_data_url()|escape}">{lang text="group_edit"}</a>
+{/if}
+</h2>
+{if $hint}<p style="color:red;">{$hint}</p>{/if}
+<table>
+  <tr>
+    <td>{lang text="group_name"|escape}</td>
+    <td>
+      {$group->get_name()|escape}
+      <img src="{$group->get_icon()}" title="{$group->get_name()}" />
+    </td>
+  </tr>
+  <tr>
+    <td>{lang text="group_special"|escape}</td>
+{if $group->is_special()}
+    <td>{lang text="group_is_special"|escape}</td>
+{else}
+    <td>{lang text="group_is_not_special"|escape}</td>
+{/if}
+  </tr>
+  <tr>
+    <td>{lang text="group_status"|escape}</td>
+    <td>{$group->get_status_name()}</td>
+  </tr>
+  <tr>
+    <td>{lang text="group_created"|escape}</td>
+    <td>{$group->get_created_time()|escape}</td>
+  </tr>
+</table>
+</p>
+<p>
+{include file="indexbar.tmpl"}
+{include file="user_list.tmpl"}
+{include file="indexbar.tmpl"}

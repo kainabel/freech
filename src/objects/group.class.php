@@ -106,6 +106,14 @@
     }
 
 
+    function get_status_name() {
+      if ($this->is_active())
+        return lang('group_status_active');
+      else
+        return lang('group_status_inactive');
+    }
+
+
     function get_created_unixtime() {
       return $this->fields[created];
     }
@@ -129,6 +137,22 @@
       if (!$_format)
         $_format = lang("dateformat");
       return date($_format, $this->fields[updated]);
+    }
+
+
+    function get_profile_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action',    'group_profile');
+      $url->set_var('groupname', $this->get_name());
+      return $url->get_string();
+    }
+
+
+    function get_group_data_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action',    'group_data');
+      $url->set_var('groupname', $this->get_name());
+      return $url->get_string();
     }
 
 

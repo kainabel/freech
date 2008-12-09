@@ -25,10 +25,10 @@
 {include file="indexbar.tmpl"}
 {elseif $users}
 <p>
-{lang text="search_results" results=$n_results}<br/><br/>
-{foreach item=user from=$users}
-  <a href="{$user->get_profile_url()|escape}">{$user->get_username()|escape}</a><br/>
-{/foreach}
+{lang text="search_results" results=$n_results}<br/>
+{include file="indexbar.tmpl"}
+{include file="user_list.tmpl"}
+{include file="indexbar.tmpl"}
 {else}
 <table>
   <tr>

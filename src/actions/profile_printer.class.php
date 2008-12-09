@@ -23,6 +23,7 @@
     function ProfilePrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
       $this->messages = array();
+      $this->users    = array();
     }
 
 
@@ -34,6 +35,11 @@
 
       // Append everything to a list.
       array_push($this->messages, $_message);
+    }
+
+
+    function _append_user(&$_user, $_data) {
+      array_push($this->users, $_user);
     }
 
 
@@ -111,6 +117,7 @@
       $status = $_user->get_status_names();
 
       // Render the template.
+      $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('group',  $group);
       $this->assign_by_ref('groups', $groups);
@@ -127,6 +134,7 @@
       $url->set_var('action', 'user_options_submit');
 
       // Render the template.
+      $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
@@ -135,10 +143,31 @@
     }
 
 
-    function show_group_profile($_group, $_hint = '') {
+    function show_group_profile($_group, $_offset = 0) {
+      // Load a list of users.
+      $search = array('group_id' => $_group->get_id());
+      $userdb = $this->parent->_get_userdb();
+      $n_rows = $userdb->foreach_user_from_query($search,
+                                                 cfg("epp"),
+                                                 $_offset,
+                                                 array(&$this, '_append_user'),
+                                                 '');
+
+      // Create the index bar.
+      $n_entries = $userdb->get_n_users_from_query($search);
+      $args      = array(group             => $_group,
+                         n_users           => $n_entries,
+                         n_users_per_page  => cfg("epp"),
+                         n_offset          => $_offset,
+                         n_pages_per_index => cfg("ppi"));
+      $indexbar = &new IndexBarGroupProfile($args);
+
       // Render the template.
-      $this->assign_by_ref('group', $_group);
-      $this->assign_by_ref('hint',  $_hint);
+      $this->clear_all_assign();
+      $this->assign_by_ref('indexbar', $indexbar);
+      $this->assign_by_ref('group',    $_group);
+      $this->assign_by_ref('n_rows',   $n_rows);
+      $this->assign_by_ref('users',    $this->users);
       $this->render('group_profile.tmpl');
       $this->parent->_set_title($_group->get_name());
     }

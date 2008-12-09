@@ -10,7 +10,7 @@
   <tr>
     <td>{lang text="group_name"|escape}</td>
     <td>
-      {$group->get_name()|escape}
+      <a href="{$group->get_profile_url()}">{$group->get_name()|escape}</a>
       <img src="{$group->get_icon()}" title="{$group->get_name()}" />
     </td>
   </tr>

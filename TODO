@@ -1,5 +1,6 @@
 * I18N for the IP hash in message view.
-* Add a group profile that displays permissions.
+* Replace user->get_username() by user->get_name().
+* Merge Forum->_print_group_profile_breadcrumbs with _print_profile_breadcrumbs.
 * Make group profile editable by administrators.
 * Design a URL scheme that makes sense for URL rewriting.
 * Add a moderation log.

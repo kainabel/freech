@@ -59,7 +59,6 @@
       
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action',   'list');
       $url->set_var('hs',       0);
       $url->set_var('forum_id', $this->forum_id);
       if ($n_indexoffset > 1) {

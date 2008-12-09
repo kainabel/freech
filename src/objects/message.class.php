@@ -269,12 +269,11 @@
 
     // The url behind the "+/-" toggle button.
     function get_fold_url() {
-      $action = $_GET['action'] ? $_GET['action'] : 'list';
-      if ($action == 'read') {
+      if ($_GET['action'] == 'read') {
         $url = $this->get_url_obj();
         $url->set_var('showthread', -1);
       }
-      elseif ($action == 'user_postings') {
+      elseif ($_GET['action'] == 'user_postings') {
         $url = new URL('?', cfg("urlvars"));
         $url->set_var('action', 'user_postings');
         if ($_GET['hs'])
@@ -284,7 +283,6 @@
       }
       else {
         $url = new URL('?', cfg("urlvars"));
-        $url->set_var('action', 'list');
         if ($_GET['hs'])
           $url->set_var('hs', (int)$_GET[hs]);
         $url->set_var('forum_id', $this->get_forum_id());

@@ -389,6 +389,8 @@ define("USER_STATUS_BLOCKED",     2);
 
       if (strlen($this->fields[signature]) > cfg("max_signaturelength"))
         return ERR_USER_SIGNATURE_TOO_LONG;
+      if (substr_count($this->fields[signature], "\n") > cfg("max_signature_lines"))
+        return ERR_USER_SIGNATURE_TOO_MANY_LINES;
 
       return $this->check_mail();
     }

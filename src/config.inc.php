@@ -100,7 +100,7 @@
   // profile.
   $cfg[min_usernamelength]    = 3;
   $cfg[max_usernamelength]    = 30;
-  $cfg[username_pattern]      = "/^[a-z0-9 _\-\.]+$/i";
+  $cfg[username_pattern]      = '/^[a-z0-9 _\-\.]+$/i';
   $cfg[min_passwordlength]    = 5;
   $cfg[max_passwordlength]    = 20;
   $cfg[min_firstnamelength]   = 3;
@@ -111,6 +111,7 @@
   $cfg[max_homepageurllength] = 100;
   $cfg[max_imlength]          = 100;
   $cfg[max_signaturelength]   = 255;
+  $cfg[max_signature_lines]   = 3;
 
   // *************************************************************
   // Advanced settings.

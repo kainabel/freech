@@ -223,6 +223,8 @@
   $lang[account_saved]      = "Your data has been saved.";
   $lang[account_emptyfield] = "None";
   $lang[account_edit]       = "[Edit]";
+  $lang[signature_too_long] = "Please choose a shorter signature.";
+  $lang[signature_lines]    = "Too many lines in the signature.";
 
   $lang[USER_STATUS_ACTIVE]      = "Active";
   $lang[USER_STATUS_UNCONFIRMED] = "Unconfirmed";

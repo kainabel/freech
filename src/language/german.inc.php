@@ -241,6 +241,8 @@
   $lang[account_saved]      = "Die Daten wurden gespeichert.";
   $lang[account_emptyfield] = "Nicht angegeben";
   $lang[account_edit]       = "[Bearbeiten]";
+  $lang[signature_too_long] = "Die Signatur hat zu viele Zeichen.";
+  $lang[signature_lines]    = "Die Signatur hat zu viele Zeilen.";
 
   $lang[USER_STATUS_ACTIVE]      = "Aktiv";
   $lang[USER_STATUS_UNCONFIRMED] = "Nicht freigeschaltet";

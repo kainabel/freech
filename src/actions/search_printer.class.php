@@ -76,10 +76,11 @@
       $indexbar = &new IndexBarSearchResult($args);
 
       // Render the result.
-      $this->assign_by_ref('indexbar',  $indexbar);
-      $this->assign_by_ref('n_results', $total);
-      $this->assign_by_ref('n_rows',    $rows);
-      $this->assign_by_ref('messages',  $this->results);
+      $this->assign_by_ref('message_search', 1);
+      $this->assign_by_ref('indexbar',       $indexbar);
+      $this->assign_by_ref('n_results',      $total);
+      $this->assign_by_ref('n_rows',         $rows);
+      $this->assign_by_ref('messages',       $this->results);
       $this->render('search.tmpl');
       $this->parent->_set_title(lang('search_title'));
     }
@@ -127,10 +128,11 @@
       $indexbar = &new IndexBarSearchUsers($args);
 
       // Render the result.
-      $this->assign_by_ref('indexbar',  $indexbar);
-      $this->assign_by_ref('n_results', $n_rows);
-      $this->assign_by_ref('n_rows',    $n_rows);
-      $this->assign_by_ref('users',     $this->results);
+      $this->assign_by_ref('user_search', 1);
+      $this->assign_by_ref('indexbar',    $indexbar);
+      $this->assign_by_ref('n_results',   $n_entries);
+      $this->assign_by_ref('n_rows',      $n_rows);
+      $this->assign_by_ref('users',       $this->results);
       $this->render('search.tmpl');
       $this->parent->_set_title(lang('search_title'));
     }

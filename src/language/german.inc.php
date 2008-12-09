@@ -43,7 +43,6 @@
   $lang[editmessage]      = "Bearbeiten";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
-  $lang[noentries]        = "(Bisher keine Beiträge)";
   $lang[entryindex]       = "Beitragsübersicht";
   $lang[hidethread]       = "Thread-Anzeige ausblenden";
   $lang[showthread]       = "Thread-Anzeige einblenden";
@@ -267,6 +266,8 @@
   $lang[n_postings]  = "Postings";
 
   // Search.
+  $lang[search_no_message] = "(Keine Beiträge)";
+  $lang[search_no_users]   = "(Keine Benutzer gefunden)";
   $lang[search_forum]      = "Suchen";
   $lang[search_title]      = "Forensuche";
   $lang[msg_search_start]  = "Beiträge suchen";

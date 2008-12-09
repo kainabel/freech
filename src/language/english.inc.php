@@ -41,7 +41,6 @@
   $lang[editmessage]      = "Edit";
   $lang[writeanswer]      = "Reply";
   $lang[writemessage]     = "New Message";
-  $lang[noentries]        = "(No entries yet)";
   $lang[entryindex]       = "Message Overview";
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
@@ -249,6 +248,8 @@
   $lang[n_postings]  = "Postings";
 
   // Search.
+  $lang[search_no_message] = "(No messages found)";
+  $lang[search_no_users]   = "(No users found)";
   $lang[search_forum]      = "Search this forum";
   $lang[search_title]      = "Search";
   $lang[msg_search_start]  = "Find Postings";

@@ -188,8 +188,9 @@
         $query->set_var($key, $value);
       }
       $query->set_sql($sql);
-      $n_users = $this->db->GetOne($query->sql())
-                              or die("UserDB::get_n_users_from_query()");
+      $n_users = $this->db->GetOne($query->sql());
+      if (!$n_users)
+        return 0;
       return $n_users;
     }
 
@@ -233,8 +234,9 @@
       $sql  .= " WHERE soundexusername={soundexusername}";
       $query->set_sql($sql);
       $query->set_string('soundexusername', $soundex);
-      $n_users = $this->db->GetOne($query->sql())
-                         or die("UserDB::count_similar_users_from_name()");
+      $n_users = $this->db->GetOne($query->sql());
+      if (!$n_users)
+        return 0;
       return $n_users;
     }
 

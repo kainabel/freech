@@ -9,7 +9,9 @@
   <img src="{$group->get_icon()|escape}" title="{lang text=$group->get_name()|escape}" />
 {/if}
   </td>
-  <td width='20'>&nbsp;</td>
+  <td width='12'>&nbsp;</td>
+  <td align='left' nowrap>{$user->get_status_name()}</td>
+  <td width='12'>&nbsp;</td>
   <td align='right' nowrap>
   <font size='-1'>{lang text="account_created"} {$user->get_created_time()}</font>
   </td>

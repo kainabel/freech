@@ -1,3 +1,4 @@
+* I18N for the IP hash in message view.
 * Add a group profile that displays permissions.
 * Make group profile editable by administrators.
 * Design a URL scheme that makes sense for URL rewriting.

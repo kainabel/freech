@@ -3,26 +3,37 @@
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
  <tr valign='middle'>
   <td>
-{if $__group->may('moderate')}
-  {include file="moderator_buttons.tmpl"}
-  <br />
-{/if}
   <font color='#555555' size='-1'>{$message->get_created_time()}</font>
 {if $message->is_updated()}
   <font color='red' size='-1'>{lang text="lastupdated" time=$message->get_updated_time()}</font>
 {/if}
   <br />
-  <b>{$message->get_subject()|escape}</b><br />
+  <b>{$message->get_subject()|escape}</b>
+<table>
+  <tr>
+    <td>
 {if $message->get_user_is_anonymous()}
-  <i>{$message->get_username()|escape}</i>
+      <i>{$message->get_username()|escape}</i>
 {else}
-  <a href="{$message->get_user_profile_url()|escape}">{$message->get_username()|escape}</a>
+      <a href="{$message->get_user_profile_url()|escape}">{$message->get_username()|escape}</a>
 {/if}
-  <img src="{$message->get_user_icon()|escape}"
-       title="{lang text=$message->get_user_icon_name()|escape}" />
+    </td>
+    <td>
+    <img border='0' src="{$message->get_user_icon()|escape}"
+         title="{lang text=$message->get_user_icon_name()|escape}" />
+    </td>
+    <td>
+{if $__group->may('moderate')}
+    {include file="moderator_buttons.tmpl"}
+{/if}
+    </td>
 {if $message->get_user_is_anonymous()}
-  (Salziger IP-Hash: {$message->get_ip_address_hash()|truncate:10:''|escape})
+    <td>
+      (Salziger IP-Hash: {$message->get_ip_address_hash()|truncate:10:''|escape})
+    </td>
 {/if}
+  </tr>
+</table>
   </td>
  </tr>
  <tr>

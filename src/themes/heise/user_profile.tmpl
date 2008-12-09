@@ -1,6 +1,6 @@
 <p>
 <h2>
-  {lang text="profile" name=$user->get_username()|escape}
+  {lang text="profile" name=$user->get_name()|escape}
 {if $__user->get_id() == $user->get_id() or $__group->may('administer')}
   <a href="{$user->get_user_data_url()|escape}">{lang text="account_edit"}</a>
 {/if}
@@ -16,7 +16,7 @@
   </tr>
   <tr>
     <td>{lang text="account_name"|escape}</td>
-    <td>{$user->get_username()|escape}</td>
+    <td>{$user->get_name()|escape}</td>
   </tr>
   <tr>
     <td>{lang text="account_status"|escape}</td>

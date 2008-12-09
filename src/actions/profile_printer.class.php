@@ -56,13 +56,13 @@
       $this->assign_by_ref('hint',       $_hint);
       $this->assign_by_ref('n_messages', $n_entries);
       $this->render('user_profile.tmpl');
-      $this->parent->_set_title($_user->get_username());
+      $this->parent->_set_title($_user->get_name());
     }
 
 
     function show_user_postings($_user, $_thread_state, $_offset = 0) {
       $current  = $this->parent->get_current_user();
-      $showlist = $_user->get_username() == $current->get_username();
+      $showlist = $_user->get_name() == $current->get_name();
 
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();
@@ -96,7 +96,7 @@
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
       $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
       $this->render('list_by_thread.tmpl');
-      $this->parent->_set_title($_user->get_username());
+      $this->parent->_set_title($_user->get_name());
     }
 
 
@@ -125,7 +125,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_data.tmpl');
-      $this->parent->_set_title($_user->get_username());
+      $this->parent->_set_title($_user->get_name());
     }
 
 
@@ -139,7 +139,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_options.tmpl');
-      $this->parent->_set_title($_user->get_username());
+      $this->parent->_set_title($_user->get_name());
     }
 
 

@@ -12,7 +12,7 @@
 <b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
 <input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_usernamelength}'>
 {else}
-<input type='hidden' name='username' value='{$__user->get_username()|escape}'>
+<input type='hidden' name='username' value='{$__user->get_name()|escape}'>
 {/if}
 <p>
 <b>{lang text="msgtitle"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />

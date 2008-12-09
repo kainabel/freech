@@ -407,7 +407,7 @@
     // Sends an email to the given user.
     function _send_account_mail(&$user, $subject, $body, $vars) {
       $head  = "From: ".cfg("mail_from")."\r\n";
-      $vars['login']     = $user->get_username();
+      $vars['login']     = $user->get_name();
       $vars['firstname'] = $user->get_firstname();
       $vars['lastname']  = $user->get_lastname();
       foreach ($vars as $key => $value) {
@@ -422,7 +422,7 @@
     function _send_confirmation_mail(&$user) {
       $subject  = lang("registration_mail_subject");
       $body     = lang("registration_mail_body");
-      $username = urlencode($user->get_username());
+      $username = urlencode($user->get_name());
       $hash     = urlencode($user->get_confirmation_hash());
       $url      = cfg('site_url') . "?action=account_confirm"
                 . "&username=$username&hash=$hash";
@@ -446,7 +446,7 @@
     function _send_password_reset_mail($user) {
       $subject  = lang("reset_mail_subject");
       $body     = lang("reset_mail_body");
-      $username = urlencode($user->get_username());
+      $username = urlencode($user->get_name());
       $hash     = urlencode($user->get_confirmation_hash());
       $url      = cfg('site_url') . "?action=confirm_password_mail"
                 . "&username=$username&hash=$hash";
@@ -706,7 +706,7 @@
 
       // Make sure that the user is not trying to spoof a name.
       if (!$user->is_anonymous()
-        && $user->get_username() !== $message->get_username())
+        && $user->get_name() !== $message->get_username())
         die("Username does not match currently logged in user");
 
       // Check the message for completeness.
@@ -784,7 +784,7 @@
     function _print_profile_breadcrumbs($_user) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
-      $breadcrumbs->add_item($_user->get_username());
+      $breadcrumbs->add_item($_user->get_name());
       $breadcrumbs->show();
     }
 
@@ -815,12 +815,12 @@
     // Edit personal data.
     function _show_user_data() {
       $user     = $this->get_current_user();
-      $username = $_GET['username'] ? $_GET['username'] : $user->get_username();
+      $username = $_GET['username'] ? $_GET['username'] : $user->get_name();
 
       // Check permissions.
       if ($user->is_anonymous())
         die('Not logged in');
-      if ($username != $user->get_username()) {
+      if ($username != $user->get_name()) {
         if (!$this->get_current_group()->may('administer'))
           die("Permission denied");
         $user = $this->_get_user_from_name_or_die($_GET['username']);
@@ -846,7 +846,7 @@
         if (!$this->get_current_group()->may('administer'))
           die("Permission denied");
         $user = $this->_get_user_from_id_or_die($_POST['user_id']);
-        $user->set_username($_POST['username']);
+        $user->set_name($_POST['username']);
         $user->set_group_id($_POST['group_id']);
         $user->set_status($_POST['status']);
       }
@@ -970,7 +970,7 @@
         return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
 
       // Make sure that the name is available.
-      if (!$this->_username_available($user->get_username()))
+      if (!$this->_username_available($user->get_name()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
 
       // Create the user.
@@ -1000,7 +1000,7 @@
       global $err;
       $userdb   = $this->_get_userdb();
       $user     = $this->_init_user_from_post_data();
-      $user     = $userdb->get_user_from_name($user->get_username());
+      $user     = $userdb->get_user_from_name($user->get_name());
       $register = &new RegistrationPrinter($this);
 
       // Make sure that the passwords match.
@@ -1075,7 +1075,7 @@
     function _confirm_password_mail() {
       $user   = $this->_get_current_or_confirming_user();
       $userdb = $this->_get_userdb();
-      $user   = $userdb->get_user_from_name($user->get_username());
+      $user   = $userdb->get_user_from_name($user->get_name());
       $this->_assert_confirmation_hash_is_valid($user);
 
       if ($user->get_status() != USER_STATUS_ACTIVE)

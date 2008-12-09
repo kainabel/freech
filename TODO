@@ -1,4 +1,3 @@
-* Replace user->get_username() by user->get_name().
 * Merge Forum->_print_group_profile_breadcrumbs with _print_profile_breadcrumbs.
 * Make group profile editable by administrators.
 * Design a URL scheme that makes sense for URL rewriting.
@@ -7,3 +6,4 @@
 * Display the moderation log in the moderator's profile.
 * Let moderators view all postings of one particular user.
 * Implement a flood blocker.
+* Use gettext and .po/-mo-files to replace the home grown thingy.

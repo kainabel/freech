@@ -13,20 +13,19 @@ $db = &ADONewConnection(cfg("db_dbn"))
        . " Please check username, password and hostname.");
 
 function print_user($user, $needle) {
-  echo "Match: ".$user->get_username()." = ".$user->get_lexical_similarity($needle)."<br>";
+  echo "Match: ".$user->get_name()." = ".$user->get_lexical_similarity($needle)."<br>";
 }
 
 $userdb = new UserDB($db);
-$needle = new User;
-$needle->set_username($_GET['name']);
+$needle = new User($_GET['name']);
 
 if ($_GET['name2']) {
   $user = new User();
-  $user->set_username($_GET['name2']);
+  $user->set_name($_GET['name2']);
   die("Similarity: ".$user->get_lexical_similarity($needle)."<br>");
 }
 
-$users = $userdb->get_similar_users_from_name($needle->get_username());
+$users = $userdb->get_similar_users_from_name($needle->get_name());
 foreach ($users as $user)
   print_user($user, $needle);
 echo "DONE.";

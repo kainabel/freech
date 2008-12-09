@@ -98,8 +98,8 @@ CREATE TABLE IF NOT EXISTS `freech_permission` (
 CREATE TABLE IF NOT EXISTS `freech_user` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `group_id` int(11) unsigned NOT NULL,
-  `username` varchar(50) collate latin1_general_ci NOT NULL,
-  `soundexusername` varchar(5) collate latin1_general_ci default NULL,
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
+  `soundexname` varchar(5) collate latin1_general_ci default NULL,
   `password` varchar(40) collate latin1_general_ci NOT NULL,
   `firstname` varchar(50) collate latin1_general_ci NOT NULL,
   `lastname` varchar(50) collate latin1_general_ci NOT NULL,
@@ -114,8 +114,8 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `lastlogin` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `mail` (`mail`),
-  UNIQUE KEY `username` (`username`),
-  KEY `soundexusername` (`soundexusername`),
+  UNIQUE KEY `name` (`name`),
+  KEY `soundexname` (`soundexname`),
   KEY `group_id` (`group_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
@@ -187,9 +187,9 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'moderate', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'delete',   1);
 
 -- Create default users.
-INSERT INTO freech_user (id, group_id, username, password, firstname, lastname, mail, created)
+INSERT INTO freech_user (id, group_id, name, password, firstname, lastname, mail, created)
                   VALUES (1, 1, 'admin', '', 'admin', 'admin', 'admin', NULL);
-INSERT INTO freech_user (id, group_id, username, password, firstname, lastname, mail, created)
+INSERT INTO freech_user (id, group_id, name, password, firstname, lastname, mail, created)
                   VALUES (2, 2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
 
 -- Create a default forum.

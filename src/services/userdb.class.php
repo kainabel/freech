@@ -43,8 +43,8 @@
       $query->set_int   ('status',      $_user->get_status());
       $query->set_int   ('lastlogin',   $_user->get_last_login_unixtime());
       $query->set_bool  ('public_mail', $_user->mail_is_public());
-      $query->set_string('username',    $_user->get_username());
-      $query->set_string('soundex',     $_user->get_soundexed_username());
+      $query->set_string('name',        $_user->get_name());
+      $query->set_string('soundexname', $_user->get_soundexed_name());
       $query->set_string('password',    $_user->get_password_hash());
       $query->set_string('firstname',   $_user->get_firstname());
       $query->set_string('lastname',    $_user->get_lastname());
@@ -55,13 +55,13 @@
       if ($_user->get_id() < 1) {
         $sql   = "INSERT INTO {t_user}";
         $sql  .= " (";
-        $sql  .= "  group_id, username, soundexusername, password,";
+        $sql  .= "  group_id, name, soundexname, password,";
         $sql  .= "  firstname, lastname,";
         $sql  .= "  mail, public_mail, homepage, im, signature, status,";
         $sql  .= " created, lastlogin";
         $sql  .= " )";
         $sql  .= " VALUES (";
-        $sql  .= "  {group_id}, {username}, {soundex}, {password},";
+        $sql  .= "  {group_id}, {name}, {soundexname}, {password},";
         $sql  .= "  {firstname}, {lastname},";
         $sql  .= "  {mail}, {public_mail}, {homepage}, {im}, {signature},";
         $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
@@ -76,7 +76,7 @@
 
       $sql   = "UPDATE {t_user} SET";
       $sql  .= " group_id={group_id},";
-      $sql  .= " username={username}, soundexusername={soundex},";
+      $sql  .= " name={name}, soundexname={soundexname},";
       $sql  .= " password={password},";
       $sql  .= " firstname={firstname}, lastname={lastname},";
       $sql  .= " mail={mail}, public_mail={public_mail}, homepage={homepage},";
@@ -104,7 +104,7 @@
         $sql .= " AND $key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
-      $sql .= " ORDER BY username";
+      $sql .= " ORDER BY name";
       $query->set_sql($sql);
       return $query->sql();
     }
@@ -135,12 +135,12 @@
 
     /**
      * Returns the user with the given name.
-     * $_username: The username of the user.
+     * $_name: The name of the user.
      */
-    function get_user_from_name($_username) {
-      if (!$_username)
-        die("UserDB::get_user_from_name(): Invalid username.");
-      $sql = $this->_get_sql_from_query(array('username' => $_username));
+    function get_user_from_name($_name) {
+      if (!$_name)
+        die("UserDB::get_user_from_name(): Invalid name.");
+      $sql = $this->_get_sql_from_query(array('name' => $_name));
       $row = $this->db->GetRow($sql);
       return $this->_get_user_from_row($row);
     }
@@ -196,7 +196,7 @@
 
 
     /**
-     * Returns a list of all users whose username is similar to the
+     * Returns a list of all users whose name is similar to the
      * given one.
      * $_name: The name for which to find similar users.
      */
@@ -206,8 +206,8 @@
       if (!$_name)
         die("UserDB::get_similar_users_from_name(): Invalid name.");
       $user    = new User($_name);
-      $soundex = $user->get_soundexed_username();
-      $search  = array('soundexusername' => $soundex);
+      $soundex = $user->get_soundexed_name();
+      $search  = array('soundexname' => $soundex);
       $sql     = $this->_get_sql_from_query($search);
       $res     = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset)
                       or die("UserDB::get_similar_users_from_name(): Select");
@@ -219,7 +219,7 @@
 
 
     /**
-     * Returns the number of all users whose username is similar to the
+     * Returns the number of all users whose name is similar to the
      * given one.
      * $_name: The name for which to find similar users.
      */
@@ -227,13 +227,13 @@
       if (!$_name)
         die("UserDB::count_similar_users_from_name(): Invalid name.");
       $user    = new User($_name);
-      $soundex = $user->get_soundexed_username();
+      $soundex = $user->get_soundexed_name();
 
       $query = &new FreechSqlQuery();
       $sql   = "SELECT COUNT(*) FROM {t_user}";
-      $sql  .= " WHERE soundexusername={soundexusername}";
+      $sql  .= " WHERE soundexname={soundexname}";
       $query->set_sql($sql);
-      $query->set_string('soundexusername', $soundex);
+      $query->set_string('soundexname', $soundex);
       $n_users = $this->db->GetOne($query->sql());
       if (!$n_users)
         return 0;

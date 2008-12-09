@@ -97,7 +97,7 @@
       $this->assign('query', $_query);
 
       // Run the search.
-      $search    = array('username' => '%'.trim($_query).'%');
+      $search    = array('name' => '%'.trim($_query).'%');
       $userdb    = $this->parent->_get_userdb();
       $n_entries = $userdb->get_n_users_from_query($search);
       $n_rows    = 0;

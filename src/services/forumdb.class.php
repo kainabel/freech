@@ -740,7 +740,6 @@
       $sql  = "SELECT b.*,";
       $sql .= " b.n_descendants n_children,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
-      $sql .= " a.id=b.id is_parent,";
       if ($_updated_threads_first)
         $sql .= " MAX(c.id) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(b.updated) updated,";

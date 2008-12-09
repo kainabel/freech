@@ -73,6 +73,7 @@
       $this->fields[ip_hash]         = $_db_row[ip_hash];
       if (isset($_db_row[relation]))
         $this->fields[relation]      = $_db_row[relation];
+      $this->fields[is_parent]       = $_db_row[is_parent];
       $this->fields[is_active]       = $_db_row[is_active];
       if (isset($_db_row[allow_answer]))
         $this->fields[allow_answer]  = $_db_row[allow_answer];
@@ -112,9 +113,7 @@
 
 
     function is_parent() {
-      return $this->fields[relation] == MESSAGE_RELATION_PARENT_STUB
-          || $this->fields[relation] == MESSAGE_RELATION_PARENT_FOLDED
-          || $this->fields[relation] == MESSAGE_RELATION_PARENT_UNFOLDED;
+      return $this->fields[is_parent];
     }
 
 

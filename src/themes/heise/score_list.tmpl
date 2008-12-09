@@ -10,7 +10,7 @@
 {foreach item=user from=$users name=user}
   <tr>
     <td align='right'>{$smarty.foreach.user.iteration}.</td>
-    <td><a href="{$user->get_user_profile_url()}">{$user->get_name()}</a></td>
+    <td><a href="{$user->get_user_profile_url()}">{$user->get_username()}</a></td>
     <td align='right'>{$user->n_postings}</td>
   </tr>
 {/foreach}

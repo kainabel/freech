@@ -845,7 +845,7 @@
       $sql  .= " a.user_icon, a.user_icon_name";
       $sql  .= " FROM {t_message} a";
       $sql  .= " LEFT JOIN {t_message} b ON b.user_id=a.user_id";
-      $sql  .= " WHERE a.user_id>2";
+      $sql  .= " WHERE a.user_id != {anonymous}";
       $sql  .= " AND a.id IN (SELECT MAX(id)";
       $sql  .= "              FROM {t_message} WHERE user_id=a.user_id)";
       if ($_since > 0)
@@ -853,7 +853,8 @@
       $sql  .= " GROUP BY b.user_id";
       $sql  .= " ORDER BY n_postings DESC";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int('since', $_since);
+      $query->set_int('anonymous', cfg('anonymous_user_id'));
+      $query->set_int('since',     $_since);
       $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
                     or die("ForumDB::get_top_posters()");
       $list  = array();

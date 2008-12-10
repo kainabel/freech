@@ -143,8 +143,8 @@
 
   // Anonymous users are automatically logged into the forum as the user/group
   // with the given id.
-  $cfg[anonymous_user_id]  = 2;
-  $cfg[anonymous_group_id] = 2;
+  $cfg[anonymous_user_id]  = 1;
+  $cfg[anonymous_group_id] = 1;
 
   // *************************************************************
   // Performance tweaks.

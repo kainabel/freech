@@ -8,6 +8,10 @@
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>
+    <td>{lang text="group_id"|escape}</td>
+    <td>{$group->get_id()|escape}</td>
+  </tr>
+  <tr>
     <td>{lang text="group_name"|escape}</td>
     <td>
       {$group->get_name()|escape}

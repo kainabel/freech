@@ -251,6 +251,7 @@
 
   // Group profile.
   $lang[group_profile]         = "Gruppenprofil von [NAME]";
+  $lang[group_id]              = "Gruppen-ID:";
   $lang[group_name]            = "Benutzergruppe:";
   $lang[group_special]         = "Spezialfunktionen:";
   $lang[group_is_special]      = "Ja";

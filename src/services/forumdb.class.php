@@ -841,13 +841,17 @@
 
 
     function get_top_posters($_limit, $_since = 0) {
-      $sql   = "SELECT username, count(*) n_postings";
-      $sql  .= " FROM {t_message}";
-      $sql  .= " WHERE user_id>2";
+      $sql   = "SELECT a.username, count(*) n_postings,";
+      $sql  .= " a.user_icon, a.user_icon_name";
+      $sql  .= " FROM {t_message} a";
+      $sql  .= " LEFT JOIN {t_message} b ON b.user_id=a.user_id";
+      $sql  .= " WHERE a.user_id>2";
+      $sql  .= " AND a.id IN (SELECT MAX(id)";
+      $sql  .= "              FROM {t_message} WHERE user_id=a.user_id)";
       if ($_since > 0)
-        $sql .= " AND created>FROM_UNIXTIME({since})";
-      $sql  .= " GROUP BY user_id";
-      $sql  .= " ORDER BY `n_postings` DESC";
+        $sql .= " AND a.created>FROM_UNIXTIME({since})";
+      $sql  .= " GROUP BY b.user_id";
+      $sql  .= " ORDER BY n_postings DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('since', $_since);
       $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)

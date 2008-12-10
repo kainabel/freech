@@ -101,7 +101,10 @@
       $sql  .= " FROM {t_user}";
       $sql  .= " WHERE 1";
       foreach ($_search as $key => $value) {
-        $sql .= " AND $key LIKE {".$key.'}';
+        if (is_int($value))
+          $sql .= " AND $key={".$key.'}';
+        else
+          $sql .= " AND $key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
       $sql .= " ORDER BY name";
@@ -184,7 +187,10 @@
       $sql   = "SELECT COUNT(*) FROM {t_user}";
       $sql  .= " WHERE 1";
       foreach ($_search as $key => $value) {
-        $sql .= " AND $key LIKE {".$key.'}';
+        if (is_int($value))
+          $sql .= " AND $key={".$key.'}';
+        else
+          $sql .= " AND $key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
       $query->set_sql($sql);
@@ -246,11 +252,12 @@
      * $_limit: The maximum number of results.
      */
     function get_newest_users($_limit) {
+      // Ordering by 'created' is slow, so using the primary key instead.
       $sql   = "SELECT *,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
-      $sql  .= " ORDER BY created DESC";
+      $sql  .= " ORDER BY id DESC";
       $query = &new FreechSqlQuery($sql);
       $res = $this->db->SelectLimit($query->sql(), $_limit)
                              or die("UserDB::get_newest_users(): Select");

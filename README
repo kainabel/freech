@@ -57,3 +57,12 @@ Q: The forum does not work, the trees are all broken when they get larger.
 A: Your MySQL server does not support InnoDB tables. You need to delete all
    existing database tables, then configure MySQL to support InnoDB. After
    that, re-install Freech by following the instructions in the INSTALL file.
+
+Q: I am logged out too often, Freech does not remember my session even when
+   setting the flag in the login form.
+A: For long session timeouts to work, your PHP installation has to support
+   it. By default, PHP deletes a session after 1440 seconds.
+   To increase this time you may add the following statement to your php.ini
+   (on Unix/Linux systems usually in /etc/php5/apache2/php.ini):
+
+     session.gc_maxlifetime = 1000000

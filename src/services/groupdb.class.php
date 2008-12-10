@@ -43,7 +43,10 @@
       $sql  .= " LEFT JOIN {t_permission} p ON p.group_id=g.id";
       $sql  .= " WHERE 1";
       foreach ($_search as $key => $value) {
-        $sql .= " AND g.$key LIKE {".$key.'}';
+        if (is_int($value))
+          $sql .= " AND g.$key={".$key.'}';
+        else
+          $sql .= " AND g.$key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
       $sql .= " ORDER BY g.name";

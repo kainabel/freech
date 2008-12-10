@@ -495,7 +495,7 @@
           $sql .= " ,MAX(b.id) threadupdate";
         $sql .= " FROM {t_message} a";
         if ($_updated_threads_first)
-          $sql .= " LEFT JOIN {t_message} b ON a.thread_id=b.thread_id";
+          $sql .= " JOIN {t_message} b ON a.thread_id=b.thread_id";
         $sql .= " WHERE a.forum_id={forum_id} AND a.is_parent=1";
         if ($_updated_threads_first) {
           $sql .= " GROUP BY a.id";
@@ -522,8 +522,8 @@
       $sql .= " UNIX_TIMESTAMP(a.created) created";
       $sql .= " FROM {t_message} a";
       if ($_updated_threads_first)
-        $sql .= " LEFT JOIN {t_message} b ON a.thread_id=b.thread_id";
-      $sql .= " LEFT JOIN {t_message} c ON a.thread_id=c.id";
+        $sql .= " JOIN {t_message} b ON a.thread_id=b.thread_id";
+      $sql .= " JOIN {t_message} c ON a.thread_id=c.id";
       $sql .= " WHERE (";
 
       $first = 1;
@@ -716,7 +716,7 @@
         $sql .= " ,MAX(b.id) threadupdate";
       $sql .= " FROM {t_message} a";
       if ($_updated_threads_first) {
-        $sql .= " LEFT JOIN {t_message} b ON a.thread_id=b.thread_id";
+        $sql .= " JOIN {t_message} b ON a.thread_id=b.thread_id";
         $sql .= " AND b.path LIKE CONCAT(a.path, '%')";
         $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
       }
@@ -745,11 +745,11 @@
       $sql .= " UNIX_TIMESTAMP(b.updated) updated,";
       $sql .= " UNIX_TIMESTAMP(b.created) created";
       $sql .= " FROM {t_message} a";
-      $sql .= " LEFT JOIN {t_message} b ON b.thread_id=a.thread_id";
+      $sql .= " JOIN {t_message} b ON b.thread_id=a.thread_id";
       $sql .= " AND b.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
       $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
       if ($_updated_threads_first) {
-        $sql .= " LEFT JOIN {t_message} c ON c.thread_id=a.thread_id";
+        $sql .= " JOIN {t_message} c ON c.thread_id=a.thread_id";
         $sql .= " AND c.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
         $sql .= " AND LENGTH(c.path)<=LENGTH(a.path)+5";
       }
@@ -844,7 +844,7 @@
       $sql   = "SELECT a.username, count(*) n_postings,";
       $sql  .= " a.user_icon, a.user_icon_name";
       $sql  .= " FROM {t_message} a";
-      $sql  .= " LEFT JOIN {t_message} b ON b.user_id=a.user_id";
+      $sql  .= " JOIN {t_message} b ON b.user_id=a.user_id";
       $sql  .= " WHERE a.user_id != {anonymous}";
       $sql  .= " AND a.id IN (SELECT MAX(id)";
       $sql  .= "              FROM {t_message} WHERE user_id=a.user_id)";

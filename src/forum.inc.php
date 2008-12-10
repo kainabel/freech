@@ -1268,7 +1268,7 @@
         break;
 
       default:
-        die("internal error");
+        break;
       }
     }
 

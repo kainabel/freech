@@ -849,7 +849,7 @@
       $sql  .= " AND a.id IN (SELECT MAX(id)";
       $sql  .= "              FROM {t_message} WHERE user_id=a.user_id)";
       if ($_since > 0)
-        $sql .= " AND a.created>FROM_UNIXTIME({since})";
+        $sql .= " AND b.created>FROM_UNIXTIME({since})";
       $sql  .= " GROUP BY b.user_id";
       $sql  .= " ORDER BY n_postings DESC";
       $query = &new FreechSqlQuery($sql);

@@ -23,18 +23,33 @@ Installation Instructions
 2. Change the permissions of "src/data/" (recursively) so that the webserver
    can write into the directory. This can either be done somewhere in your
    FTP client (consult the documentation of the client in case you use one),
-   or by using the command:
-   chmod -R 777 src/data/
-   on the webserver.
+   or by using the following command on the webserver:
 
-3. Edit the file "config.inc.php" according to your needs. It should be self
-   explaining.
+     chmod -R 777 src/data/
+
+3. Edit the file "config.inc.php" according to your needs. It contains more
+   documentation and should be self explaining.
 
 4. Create your database tables using the file mysql_matpath.sql. If you have a
    rented webspace, you usually do this by loading the file in the phpMyAdmin
    tool provided by your webspace provider.
 
-5. Done. You can now open the webpage.
+5. Open your web page, and click the user registration link to create an
+   account. Make sure that your web server can send mails, because Freech will
+   send an email to you when you register an account.
+
+6. When the confirmation mail arrives, click the confirmation link and
+   assign a new password.
+
+7. Next you will have to grant administrator permissions to your account.
+   You can do this by executing the following statement (using phpMyAdmin
+   or any other SQL console):
+
+     UPDATE freech_user SET group_id=1 WHERE username='Your Username';
+
+  (Of course, replace "Your Username" by the registered username.)
+
+8. Done. You can now log into Freech with administrator permissions.
 
 Do not hesitate to contact me if you run into problems installing the
 software. Also, do not forget to file bugs on the homepage if you find any.

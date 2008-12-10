@@ -6,3 +6,5 @@
 * Let moderators view all postings of one particular user.
 * Implement a flood blocker.
 * Use gettext and .po/-mo-files to replace the home grown thingy.
+* Can the statistics be integrated into one single template?
+* Enable the spamhash plugin for the user registration, too.

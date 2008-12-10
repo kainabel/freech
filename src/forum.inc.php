@@ -1286,9 +1286,11 @@
         return $this->current_user;
       if (session_id() !== '' && $_SESSION['user_id'])
         $this->current_user = $this->_get_user_from_id($_SESSION['user_id']);
+      if ($this->current_user)
+        return $this->current_user;
       elseif (cfg('manage_anonymous_users')) {
         $user_id            = cfg('anonymous_user_id');
-        $this->current_user = $this->_get_user_from_id($user_id);
+        $this->current_user = $this->_get_user_from_id_or_die($user_id);
       }
       else {
         $this->current_user = new User;

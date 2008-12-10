@@ -223,6 +223,7 @@
   // User profile and personal data.
   $lang[profile]            = "Profil von [NAME]";
   $lang[account_data]       = "Persönliche Daten von [NAME]";
+  $lang[account_id]         = "User-ID:";
   $lang[account_status]     = "Account-Status:";
   $lang[account_created]    = "Mitglied seit:";
   $lang[account_messages]   = "Forenbeiträge:";

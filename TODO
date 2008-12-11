@@ -1,6 +1,5 @@
 * Make group profile editable by administrators.
 * Fix: Links pointing to renamed users are broken in message view.
-* Add a "DELETED" user status that preserves only the username.
 * Design a URL scheme that makes sense for URL rewriting.
 * Add a moderation log.
 * Display the moderation log when viewing a locked message.
@@ -10,3 +9,4 @@
 * Use gettext and .po/-mo-files to replace the home grown thingy.
 * Can the statistics be integrated into one single template?
 * Enable the spamhash plugin for the user registration, too.
+* Make the front page prettier and add links to special pages.

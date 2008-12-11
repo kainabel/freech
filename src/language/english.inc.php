@@ -204,8 +204,14 @@
   $lang[register_mail_exists] = "The given email address already exists"
                               . " in our database.";
 
+  // User posting list.
+  $lang[mypostings]          = "My Postings";
+  $lang[postings_of]         = "Postings of [NAME]";
+
   // User profile and personal data.
+  $lang[myprofile]          = "My Profile";
   $lang[profile]            = "Profile of [NAME]";
+  $lang[account_mydata]     = "My Personal Data";
   $lang[account_data]       = "Personal Data of [NAME]";
   $lang[account_id]         = "User ID:";
   $lang[account_status]     = "Account status:";

@@ -3,7 +3,7 @@
   Freech.
   Copyright (C) 2003 Samuel Abels, <http://debain.org>
                      Robert Weidlich, <tefinch xenim de>
-  
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -21,9 +21,11 @@
 ?>
 <?php
   include_once 'forum.inc.php';
-  
+
+  // Must be called before any other output is produced.
   $forum = new FreechForum();
-  
+
+  // Print the page header.
   $forum->print_head();
   print("<table width='100%'>"
       . " <tr>"
@@ -32,15 +34,26 @@
       . "  </td>"
       . " </tr>"
       . "</table><br />\n");
+
+  // Permit only one forum at this time.
   if ($forum->get_current_forum_id() != 1)
     die("If you touch that URL again I will sue you!");
-  if (!$forum->get_current_user()->is_anonymous())
+
+  // Permit only one forum at this time.
+  $user = $forum->get_current_user();
+  if ($user->is_anonymous()) {
+    print("<a href='".$forum->get_login_url(TRUE)."'>".lang("login")."</a>");
+    print(" | <a href='?action=register'>".lang("register")."</a>");
+  }
+  else {
     print("<a href='?action=logout'>".lang("logout")."</a>");
-  else
-    print("<a href='".htmlentities($forum->get_login_url())."'>".lang("login")."</a> <a href='?action=register'>".lang("register")."</a>");
+    print(" | <a href='".$user->get_profile_url()."'>".lang("myprofile")."</a>");
+    print(" | <a href='".$user->get_user_data_url()."'>".lang("account_mydata")."</a>");
+    print(" | <a href='".$user->get_user_postings_url()."'>".lang("mypostings")."</a>");
+  }
   $forum->show();
   $forum->destroy();
-  
+
   print("</body>\n"
       . "</html>\n");
 ?>

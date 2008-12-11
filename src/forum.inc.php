@@ -791,10 +791,7 @@
 
     // Lists all postings of one user.
     function _show_user_postings() {
-      if ($_GET['username'])
-        $user = $this->_get_user_from_name_or_die($_GET['username']);
-      else
-        $user = $this->get_current_user();
+      $user = $this->_get_user_from_name_or_die($_GET['username']);
       $this->_print_profile_breadcrumbs($user);
       $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
                                        $_COOKIE['user_postings_c']);
@@ -814,19 +811,15 @@
 
     // Edit personal data.
     function _show_user_data() {
-      $user     = $this->get_current_user();
-      $username = $_GET['username'] ? $_GET['username'] : $user->get_name();
-
       // Check permissions.
+      $user = $this->get_current_user();
       if ($user->is_anonymous())
         die('Not logged in');
-      if ($username != $user->get_name()) {
-        if (!$this->get_current_group()->may('administer'))
-          die("Permission denied");
-        $user = $this->_get_user_from_name_or_die($_GET['username']);
-      }
+      if ($_GET['username'] != $user->get_name())
+        $this->_assert_may('administer');
 
       // Accepted.
+      $user = $this->_get_user_from_name_or_die($_GET['username']);
       $this->_print_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
       $profile->show_user_data($user);

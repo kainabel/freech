@@ -222,8 +222,14 @@
   $lang[register_mail_exists] = "Die angegebene Email-Adresse gehört bereits"
                               . " einem registrierten User.";
 
+  // User posting list.
+  $lang[mypostings]          = "Meine Postings";
+  $lang[postings_of]         = "Postings von [NAME]";
+
   // User profile and personal data.
+  $lang[myprofile]          = "Mein Profil";
   $lang[profile]            = "Profil von [NAME]";
+  $lang[account_mydata]     = "Meine persönlichen Daten";
   $lang[account_data]       = "Persönliche Daten von [NAME]";
   $lang[account_id]         = "User-ID:";
   $lang[account_status]     = "Account-Status:";

@@ -295,6 +295,14 @@ define("USER_STATUS_BLOCKED",     3);
     }
 
 
+    function get_user_postings_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action',   'user_postings');
+      $url->set_var('username', $this->get_name());
+      return $url->get_string();
+    }
+
+
     function get_user_data_url() {
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'user_data');

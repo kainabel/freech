@@ -350,17 +350,21 @@
 
 
     /* Returns a message from the given forum.
+     * This function is exceptional in that the returned message object
+     * will also have the current_username field set.
      * $_forum: The forum id.
      * $_id:    The id of the message.
      * Returns: The message.
      */
     function get_message_from_id($_id) {
-      $sql  = "SELECT *,";
-      $sql .= "HEX(path) path,";
-      $sql .= "UNIX_TIMESTAMP(updated) updated,";
-      $sql .= "UNIX_TIMESTAMP(created) created";
-      $sql .= " FROM {t_message}";
-      $sql .= " WHERE id={id}";
+      $sql  = "SELECT m.*,";
+      $sql .= "HEX(m.path) path,";
+      $sql .= "UNIX_TIMESTAMP(m.updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(m.created) created,";
+      $sql .= "u.name current_username";
+      $sql .= " FROM {t_message} m";
+      $sql .= " JOIN {t_user} u ON u.id=m.user_id";
+      $sql .= " WHERE m.id={id}";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       if (!$row = $this->db->GetRow($query->sql()))

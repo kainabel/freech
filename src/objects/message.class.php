@@ -57,30 +57,31 @@
       if (!is_array($_db_row))
         die("Message:set_from_db(): Non-array.");
       $this->clear();
-      $this->fields[id]              = $_db_row[id];
-      $this->fields[forum_id]        = $_db_row[forum_id];
-      $this->fields[priority]        = $_db_row[priority];
-      $this->fields[user_id]         = $_db_row[user_id];
-      $this->fields[username]        = $_db_row[username];
-      $this->fields[user_is_special] = $_db_row[user_is_special];
-      $this->fields[user_icon]       = $_db_row[user_icon];
-      $this->fields[user_icon_name]  = $_db_row[user_icon_name];
-      $this->fields[subject]         = $_db_row[subject];
-      $this->fields[body]            = $_db_row[body];
-      $this->fields[updated]         = $_db_row[updated];
-      $this->fields[created]         = $_db_row[created];
-      $this->fields[n_children]      = $_db_row[n_children];
-      $this->fields[ip_hash]         = $_db_row[ip_hash];
+      $this->fields[id]               = $_db_row[id];
+      $this->fields[forum_id]         = $_db_row[forum_id];
+      $this->fields[priority]         = $_db_row[priority];
+      $this->fields[user_id]          = $_db_row[user_id];
+      $this->fields[username]         = $_db_row[username];
+      $this->fields[current_username] = $_db_row[current_username];
+      $this->fields[user_is_special]  = $_db_row[user_is_special];
+      $this->fields[user_icon]        = $_db_row[user_icon];
+      $this->fields[user_icon_name]   = $_db_row[user_icon_name];
+      $this->fields[subject]          = $_db_row[subject];
+      $this->fields[body]             = $_db_row[body];
+      $this->fields[updated]          = $_db_row[updated];
+      $this->fields[created]          = $_db_row[created];
+      $this->fields[n_children]       = $_db_row[n_children];
+      $this->fields[ip_hash]          = $_db_row[ip_hash];
       if (isset($_db_row[relation]))
-        $this->fields[relation]      = $_db_row[relation];
-      $this->fields[is_parent]       = $_db_row[is_parent];
-      $this->fields[is_active]       = $_db_row[is_active];
+        $this->fields[relation]       = $_db_row[relation];
+      $this->fields[is_parent]        = $_db_row[is_parent];
+      $this->fields[is_active]        = $_db_row[is_active];
       if (isset($_db_row[allow_answer]))
-        $this->fields[allow_answer]  = $_db_row[allow_answer];
-      $this->fields[next_message_id] = $_db_row[next_message_id];
-      $this->fields[prev_message_id] = $_db_row[prev_message_id];
-      $this->fields[next_thread_id]  = $_db_row[next_thread_id];
-      $this->fields[prev_thread_id]  = $_db_row[prev_thread_id];
+        $this->fields[allow_answer]   = $_db_row[allow_answer];
+      $this->fields[next_message_id]  = $_db_row[next_message_id];
+      $this->fields[prev_message_id]  = $_db_row[prev_message_id];
+      $this->fields[next_thread_id]   = $_db_row[next_thread_id];
+      $this->fields[prev_thread_id]   = $_db_row[prev_thread_id];
     }
 
 
@@ -190,7 +191,7 @@
     }
 
 
-    function &get_username() {
+    function get_username() {
       return $this->fields[username];
     }
 
@@ -324,9 +325,13 @@
 
 
     function get_user_profile_url() {
+      if (isset($this->fields['current_username']))
+        $username = $this->fields['current_username'];
+      else
+        $username = $this->get_username();
       $profile_url = new URL('?', cfg("urlvars"));
       $profile_url->set_var('action',   'profile');
-      $profile_url->set_var('username', $this->get_username());
+      $profile_url->set_var('username', $username);
       return $profile_url->get_string();
     }
 

@@ -48,7 +48,7 @@
       $query->set_string('password',    $_user->get_password_hash());
       $query->set_string('firstname',   $_user->get_firstname());
       $query->set_string('lastname',    $_user->get_lastname());
-      $query->set_string('mail',        $_user->get_mail());
+      $query->set_var   ('mail',        $_user->get_mail());
       $query->set_string('homepage',    $_user->get_homepage());
       $query->set_string('im',          $_user->get_im());
       $query->set_string('signature',   $_user->get_signature());
@@ -253,12 +253,15 @@
      */
     function get_newest_users($_limit) {
       // Ordering by 'created' is slow, so using the primary key instead.
+      // Status == 0 is USER_STATUS_DELETED.
       $sql   = "SELECT *,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
+      $sql  .= " WHERE status={status}";
       $sql  .= " ORDER BY id DESC";
       $query = &new FreechSqlQuery($sql);
+      $query->set_int('status', USER_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), $_limit)
                              or die("UserDB::get_newest_users(): Select");
       $users = array();

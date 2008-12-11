@@ -853,18 +853,25 @@
 
       $this->_print_profile_breadcrumbs($user);
 
-      // Make sure that the data is complete and valid.
+      // If the user status is now DELETED, remove any related attributes.
       $this->_init_user_from_post_data($user);
-      $ret = $user->check_complete();
-      if ($ret < 0)
-        return $profile->show_user_data($user, $err[$ret]);
+      if ($user->get_status() == USER_STATUS_DELETED)
+        $user->set_deleted();
+      else {
+        // Else make sure that the data is complete and valid.
+        $ret = $user->check_complete();
+        if ($ret < 0)
+          return $profile->show_user_data($user, $err[$ret]);
 
-      // Make sure that the passwords match.
-      if ($_POST['password'] !== $_POST['password2'])
-        return $profile->show_user_data($user,
-                                        $err[ERR_REGISTER_PASSWORDS_DIFFER]);
-      if ($_POST['password'] != '')
-        $user->set_password($_POST['password']);
+        // Make sure that the passwords match.
+        if ($_POST['password'] !== $_POST['password2'])
+          return $profile->show_user_data($user,
+                                          $err[ERR_REGISTER_PASSWORDS_DIFFER]);
+
+        if ($_POST['password'] != '')
+          $user->set_password($_POST['password']);
+      }
+
 
       // Save the user.
       $ret = $this->_get_userdb()->save_user($user);
@@ -964,6 +971,10 @@
       // Make sure that the name is available.
       if (!$this->_username_available($user->get_name()))
         return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
+
+      // Make sure that the email address is available.
+      if ($this->_get_userdb()->get_user_from_mail($user->get_mail()))
+        return $registration->show($user, $err[ERR_REGISTER_MAIL_EXISTS]);
 
       // Create the user.
       $user->set_group_id(cfg('default_group_id'));

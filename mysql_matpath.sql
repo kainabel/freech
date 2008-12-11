@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
-  KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -103,12 +103,12 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `password` varchar(40) collate latin1_general_ci NOT NULL,
   `firstname` varchar(50) collate latin1_general_ci NOT NULL,
   `lastname` varchar(50) collate latin1_general_ci NOT NULL,
-  `mail` varchar(100) collate latin1_general_ci NOT NULL,
+  `mail` varchar(100) collate latin1_general_ci default NULL,
   `public_mail` tinyint(1) NOT NULL default '0',
   `homepage` varchar(100) collate latin1_general_ci default NULL,
   `im` varchar(100) collate latin1_general_ci default NULL,
   `signature` varchar(255) collate latin1_general_ci default NULL,
-  `status` int(11) unsigned default '1',
+  `status` int(11) unsigned default '2',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   `lastlogin` timestamp NOT NULL default '0000-00-00 00:00:00',
@@ -187,8 +187,8 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'moderate', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'delete',   1);
 
 -- Create default users.
-INSERT INTO freech_user (id, group_id, name, password, firstname, lastname, mail, created)
-                  VALUES (2, 2, 'anonymous', '', 'Anonymous', 'George', '', NULL);
+INSERT INTO freech_user (id, group_id, name, password, firstname, lastname, created)
+                  VALUES (2, 2, 'anonymous', '', 'Anonymous', 'George', NULL);
 
 -- Create a default forum.
 INSERT INTO freech_forum (name, description, owner_id, created)

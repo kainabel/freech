@@ -53,6 +53,7 @@
 
   define('ERR_REGISTER_PASSWORDS_DIFFER', -401);
   define('ERR_REGISTER_USER_EXISTS',      -405);
+  define('ERR_REGISTER_MAIL_EXISTS',      -406);
 
   define('ERR_LOGIN_FAILED',       -501);
   define('ERR_LOGIN_UNCONFIRMED',  -502);
@@ -78,6 +79,7 @@
   $err[ERR_USER_SIGNATURE_TOO_MANY_LINES] = lang('signature_lines');
   $err[ERR_REGISTER_PASSWORDS_DIFFER]     = lang('passwordsdonotmatch');
   $err[ERR_REGISTER_USER_EXISTS]          = lang('usernamenotavailable');
+  $err[ERR_REGISTER_MAIL_EXISTS]          = lang('register_mail_exists');
   $err[ERR_LOGIN_FAILED]                  = lang('loginfailed');
   $err[ERR_LOGIN_UNCONFIRMED]             = lang('loginunconfirmed');
   $err[ERR_LOGIN_NO_SUCH_MAIL]            = lang('nosuchmail');
@@ -87,4 +89,5 @@
   $err[ERR_USER_LOGIN_TOO_LONG]           = lang('logintoolong');
   $err[ERR_USER_PASSWORD_TOO_SHORT]       = lang('passwordtooshort');
   $err[ERR_USER_PASSWORD_TOO_LONG]        = lang('passwordtoolong');
+
 ?>

@@ -201,6 +201,8 @@
   $lang[logininvalidchars]    = "Your login name contains invalid characters."
                               . " Please enter letters, digits or spaces only.";
   $lang[usernamenotavailable] = "The entered username is not available.";
+  $lang[register_mail_exists] = "The given email address already exists"
+                              . " in our database.";
 
   // User profile and personal data.
   $lang[profile]            = "Profile of [NAME]";
@@ -227,6 +229,7 @@
   $lang[signature_too_long] = "Please choose a shorter signature.";
   $lang[signature_lines]    = "Too many lines in the signature.";
 
+  $lang[USER_STATUS_DELETED]     = "Deleted";
   $lang[USER_STATUS_ACTIVE]      = "Active";
   $lang[USER_STATUS_UNCONFIRMED] = "Unconfirmed";
   $lang[USER_STATUS_BLOCKED]     = "Locked";

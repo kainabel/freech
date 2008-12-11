@@ -19,9 +19,10 @@
   */
 ?>
 <?php
-define("USER_STATUS_ACTIVE",      0);
-define("USER_STATUS_UNCONFIRMED", 1);
-define("USER_STATUS_BLOCKED",     2);
+define("USER_STATUS_DELETED",     0);
+define("USER_STATUS_ACTIVE",      1);
+define("USER_STATUS_UNCONFIRMED", 2);
+define("USER_STATUS_BLOCKED",     3);
 
   /**
    * Represents a user.
@@ -277,7 +278,7 @@ define("USER_STATUS_BLOCKED",     2);
 
 
     function set_last_login_time($_lastlogin) {
-      $this->fields[lastlogin] = $_lastlogin * 1;
+      $this->fields[lastlogin] = (int)$_lastlogin;
     }
 
 
@@ -320,7 +321,7 @@ define("USER_STATUS_BLOCKED",     2);
 
 
     function set_status($_status) {
-      $this->fields[status] = $_status * 1;
+      $this->fields[status] = (int)$_status;
     }
 
 
@@ -329,8 +330,14 @@ define("USER_STATUS_BLOCKED",     2);
     }
 
 
+    function is_confirmed() {
+      return $this->fields[status] != USER_STATUS_UNCONFIRMED;
+    }
+
+
     function get_status_names($_status = -1) {
       $list = array(
+        USER_STATUS_DELETED     => lang('USER_STATUS_DELETED'),
         USER_STATUS_ACTIVE      => lang('USER_STATUS_ACTIVE'),
         USER_STATUS_UNCONFIRMED => lang('USER_STATUS_UNCONFIRMED'),
         USER_STATUS_BLOCKED     => lang('USER_STATUS_BLOCKED')
@@ -343,6 +350,20 @@ define("USER_STATUS_BLOCKED",     2);
 
     function get_status_name() {
       return $this->get_status_names($this->fields[status]);
+    }
+
+
+    // Convenience function that marks the user deleted and also deletes
+    // all field values except for the name.
+    function set_deleted() {
+      $id       = $this->get_id();
+      $group_id = $this->get_group_id();
+      $name     = $this->get_name();
+      $this->clear();
+      $this->set_id($id);
+      $this->set_group_id($group_id);
+      $this->set_name($name);
+      $this->set_status(USER_STATUS_DELETED);
     }
 
 

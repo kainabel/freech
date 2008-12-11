@@ -219,6 +219,8 @@
                               . " keine Umlaute oder Sonderzeichen eingeben.";
   $lang[usernamenotavailable] = "Der Benutzername gehört bereits einem "
                               . " registrierten User.";
+  $lang[register_mail_exists] = "Die angegebene Email-Adresse gehört bereits"
+                              . " einem registrierten User.";
 
   // User profile and personal data.
   $lang[profile]            = "Profil von [NAME]";
@@ -245,6 +247,7 @@
   $lang[signature_too_long] = "Die Signatur hat zu viele Zeichen.";
   $lang[signature_lines]    = "Die Signatur hat zu viele Zeilen.";
 
+  $lang[USER_STATUS_DELETED]     = "Gelöscht";
   $lang[USER_STATUS_ACTIVE]      = "Aktiv";
   $lang[USER_STATUS_UNCONFIRMED] = "Nicht freigeschaltet";
   $lang[USER_STATUS_BLOCKED]     = "Gesperrt";

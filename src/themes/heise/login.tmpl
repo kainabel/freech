@@ -43,7 +43,7 @@
           <a href="{$forgot_url|escape}">{lang text="passwdforgotten"|escape}</a>
         </td>
       </tr>
-{if $user->get_status() == 1}
+{if !$user->is_confirmed()}
       <tr>
         <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
         <td bgcolor="#CCCCCC">

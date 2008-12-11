@@ -258,10 +258,8 @@
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
-      $sql  .= " WHERE status={status}";
       $sql  .= " ORDER BY id DESC";
       $query = &new FreechSqlQuery($sql);
-      $query->set_int('status', USER_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), $_limit)
                              or die("UserDB::get_newest_users(): Select");
       $users = array();

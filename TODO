@@ -1,8 +1,6 @@
 * Add support for saving permissions in GroupDB->save_group().
 * Make Forum->_init_group_from_post_data() pull permissions.
 * Make smarty_lang escape by default, add smarty_lang_insecure to override.
-* Rename user_data to user_editor.
-* Rename user_data_submit to user_submit.
 * Design a URL scheme that makes sense for URL rewriting.
 * Add a moderation log.
 * Display the moderation log when viewing a locked message.

@@ -101,7 +101,7 @@
     }
 
 
-    function show_user_data($_user, $_hint = '') {
+    function show_user_editor($_user, $_hint = '') {
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action', 'user_submit');
 
@@ -125,7 +125,7 @@
       $this->assign_by_ref('status', $status);
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
-      $this->render('user_data.tmpl');
+      $this->render('user_editor.tmpl');
       $this->parent->_set_title($_user->get_name());
     }
 

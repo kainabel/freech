@@ -48,8 +48,8 @@
   else {
     print("<a href='?action=logout'>".lang("logout")."</a>");
     print(" | <a href='".$user->get_profile_url()."'>".lang("myprofile")."</a>");
-    print(" | <a href='".$user->get_user_data_url()."'>".lang("account_mydata")."</a>");
-    print(" | <a href='".$user->get_user_postings_url()."'>".lang("mypostings")."</a>");
+    print(" | <a href='".$user->get_editor_url()."'>".lang("account_mydata")."</a>");
+    print(" | <a href='".$user->get_postings_url()."'>".lang("mypostings")."</a>");
   }
   $forum->show();
   $forum->destroy();

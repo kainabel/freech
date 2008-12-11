@@ -818,7 +818,7 @@
 
 
     // Display information of one user.
-    function _show_profile() {
+    function _show_user_profile() {
       $user = $this->_get_user_from_name_or_die($_GET['username']);
       $this->_print_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
@@ -827,7 +827,7 @@
 
 
     // Edit personal data.
-    function _show_user_data() {
+    function _show_user_editor() {
       // Check permissions.
       $user = $this->get_current_user();
       if ($user->is_anonymous())
@@ -839,12 +839,12 @@
       $user = $this->_get_user_from_name_or_die($_GET['username']);
       $this->_print_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
-      $profile->show_user_data($user);
+      $profile->show_user_editor($user);
     }
 
 
     // Submit personal data.
-    function _submit_user_data() {
+    function _submit_user() {
       global $err;
       $profile = &new ProfilePrinter($this);
       $user    = $this->get_current_user();
@@ -871,12 +871,13 @@
         // Else make sure that the data is complete and valid.
         $ret = $user->check_complete();
         if ($ret < 0)
-          return $profile->show_user_data($user, $err[$ret]);
+          return $profile->show_user_editor($user, $err[$ret]);
 
         // Make sure that the passwords match.
-        if ($_POST['password'] !== $_POST['password2'])
-          return $profile->show_user_data($user,
-                                          $err[ERR_REGISTER_PASSWORDS_DIFFER]);
+        if ($_POST['password'] !== $_POST['password2']) {
+          $hint = $err[ERR_REGISTER_PASSWORDS_DIFFER];
+          return $profile->show_user_editor($user, $hint);
+        }
 
         if ($_POST['password'] != '')
           $user->set_password($_POST['password']);
@@ -886,10 +887,10 @@
       // Save the user.
       $ret = $this->_get_userdb()->save_user($user);
       if ($ret < 0)
-        return $profile->show_user_data($user, $err[$ret]);
+        return $profile->show_user_editor($user, $err[$ret]);
 
       // Done.
-      $profile->show_user_data($user, lang("account_saved"));
+      $profile->show_user_editor($user, lang("account_saved"));
     }
 
 
@@ -1234,20 +1235,20 @@
         $this->_message_unlock();
         break;
 
-      case 'profile':
-        $this->_show_profile();             // Show a user profile.
+      case 'user_profile':
+        $this->_show_user_profile();        // Show a user profile.
         break;
 
       case 'user_postings':
         $this->_show_user_postings();       // Show the postings of one user.
         break;
 
-      case 'user_data':
-        $this->_show_user_data();           // Form for editing user data.
+      case 'user_editor':
+        $this->_show_user_editor();         // Form for editing user data.
         break;
 
       case 'user_submit':
-        $this->_submit_user_data();
+        $this->_submit_user();
         break;
 
       case 'user_options':

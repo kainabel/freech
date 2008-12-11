@@ -4,18 +4,18 @@
   <td align='left'>
   <font size='-1'>{strip}
   {if $order_by_thread == ""}
-    {lang text="threadview"|escape}
+    {lang text="threadview"}
   {else}
-    <a href='{$order_by_thread|escape}'>{lang text="threadview"|escape}</a>
+    <a href='{$order_by_thread|escape}'>{lang text="threadview"}</a>
   {/if}
   &nbsp;&nbsp;&nbsp;
   {if $order_by_time == ""}
-    {lang text="plainview"|escape}
+    {lang text="plainview"}
   {else}
-    <a href='{$order_by_time|escape}'>{lang text="plainview"|escape}</a>
+    <a href='{$order_by_time|escape}'>{lang text="plainview"}</a>
   {/if}
   &nbsp;&nbsp;&nbsp;
-  <a href='{$search|escape}'>{lang text="search_forum"|escape}</a>
+  <a href='{$search|escape}'>{lang text="search_forum"}</a>
   </font>
 {/strip}
   </td>

@@ -13,7 +13,7 @@
     <td>
       <a href="{$user->get_profile_url()}">{$user->get_name()}</a>
       <img src="{$user->get_icon()|escape}"
-           title="{lang text=$user->get_icon_name()|escape}" />
+           title="{lang text=$user->get_icon_name()}" />
     </td>
     <td align='right'>{$user->n_postings}</td>
   </tr>

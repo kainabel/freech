@@ -1,5 +1,5 @@
 <p>
-<h2>{lang text="search_title"|escape}</h2>
+<h2>{lang text="search_title"}</h2>
 
 {if $error}
 <p>
@@ -13,8 +13,8 @@
 <input type="hidden" name="forum_id" value="{$forum_id}">
 {/if}
 <input type="text"   name="q" size="50" value="{$query|escape}">
-<input type="submit" value="{lang text="msg_search_start"|escape}"> 
-<input type="submit" name="user_search" value="{lang text="user_search_start"|escape}"> 
+<input type="submit" value="{lang text="msg_search_start"}"> 
+<input type="submit" name="user_search" value="{lang text="user_search_start"}"> 
 </form>
 
 {if $message_search}

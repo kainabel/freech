@@ -1,11 +1,11 @@
 <p>
-<h2>{lang text="account_data" name=$user->get_name()|escape}</h2>
+<h2>{lang text="account_data" name=$user->get_name()}</h2>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
 <input type="hidden" name="user_id" value="{$user->get_id()}">
   <table>
     <tr>
-      <td>{lang text="group_name"|escape}</td>
+      <td>{lang text="group_name"}</td>
 {if $__group->may('administer')}
       <td>
       {html_options name="group_id" options=$groups selected=$group->get_id()}
@@ -15,7 +15,7 @@
 {/if}
     </tr>
     <tr>
-      <td>{lang text="account_name"|escape}</td>
+      <td>{lang text="account_name"}</td>
 {if $__group->may('administer')}
       <td><input size="70" type="text" name="username" value="{$user->get_name()|escape}" /></td>
 {else}
@@ -23,7 +23,7 @@
 {/if}
     </tr>
     <tr>
-      <td>{lang text="account_status"|escape}</td>
+      <td>{lang text="account_status"}</td>
 {if $__group->may('administer')}
       <td>
       {html_options name="status" options=$status selected=$user->get_status()}
@@ -33,20 +33,20 @@
 {/if}
     </tr>
     <tr>
-      <td>{lang text="account_firstname"|escape}</td>
+      <td>{lang text="account_firstname"}</td>
       <td><input size="70" type="text" name="firstname" value="{$user->get_firstname()|escape}" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_lastname"|escape}</td>
+      <td>{lang text="account_lastname"}</td>
       <td><input size="70" type="text" name="lastname" value="{$user->get_lastname()|escape}" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_mail"|escape}</td>
+      <td>{lang text="account_mail"}</td>
       <td><input size="70" type="text" name="mail" value="{$user->get_mail()|escape}" /></td>
     </tr>
     <tr>
       <td></td>
-      <td><input type="checkbox" name="publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{lang text="account_publicmail"|escape}</td>
+      <td><input type="checkbox" name="publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{lang text="account_publicmail"}</td>
     </tr>
     <tr>
       <td>{lang text="account_homepage"}</td>
@@ -70,7 +70,7 @@
     </tr>
     <tr>
       <td colspan="2">
-        <input type="submit" name="user_submit" value="{lang text="account_save"|escape}" />
+        <input type="submit" name="user_submit" value="{lang text="account_save"}" />
       </td>
     </tr>
   </table>

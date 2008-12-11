@@ -1,5 +1,5 @@
 <p>
-{lang text="login_text"|escape}
+{lang text="login_text"}
 
 {if $hint}
 <p>
@@ -12,42 +12,42 @@
     <table border="0" cellpadding="2">
       <tr>
         <td bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC"><b>{lang text="enteruserdata"|escape}</b></td>
+        <td bgcolor="#CCCCCC"><b>{lang text="enteruserdata"}</b></td>
       </tr>
       <tr>
-        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="username"|escape}</td>
+        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="username"}</td>
         <td bgcolor="#CCCCCC">
           <input type="text" name="username" size="20" value="{$user->get_name()}">
         </td>
       </tr>
       <tr>
-        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="passwd"|escape}</td>
+        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="passwd"}</td>
         <td bgcolor="#CCCCCC">
           <input type="password" name="password" size="20">
         </td>
       </tr>
       <tr>
-        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="rememberpasswd"|escape}</td>
+        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="rememberpasswd"}</td>
         <td bgcolor="#CCCCCC">
-          <font size="2">{lang text="remembpasswdlong"|escape}<br /></font>
+          <font size="2">{lang text="remembpasswdlong"}<br /></font>
           <input type="checkbox" name="permanent" value="ON"><br>
         </td>
       </tr>
       <tr>
         <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC"><input type="submit" value='{lang text="login"|escape}'></td>
+        <td bgcolor="#CCCCCC"><input type="submit" value='{lang text="login"}'></td>
       </tr>
       <tr>
         <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
         <td bgcolor="#CCCCCC">
-          <a href="{$forgot_url|escape}">{lang text="passwdforgotten"|escape}</a>
+          <a href="{$forgot_url|escape}">{lang text="passwdforgotten"}</a>
         </td>
       </tr>
 {if !$user->is_confirmed()}
       <tr>
         <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
         <td bgcolor="#CCCCCC">
-          <a href="{$resend_url|escape}">{lang text="resendconfirm"|escape}</a>
+          <a href="{$resend_url|escape}">{lang text="resendconfirm"}</a>
         </td>
       </tr>
 {/if}

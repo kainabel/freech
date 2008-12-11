@@ -99,7 +99,7 @@
   // Registration
   $lang[register]            = "Account registrieren";
   $lang[register_title]      = "Benutzer-Registrierung";
-  $lang[register_welcome]    = "Herzlich willkommen!\n"
+  $lang[register_welcome]    = "Herzlich willkommen!\n\n"
                              . "Bitte registrieren Sie sich hier, um aktiv an"
                              . " den Diskussionsforen und an anderen Diensten"
                              . " (wie zum Beispiel Online-Umfragen)"
@@ -187,10 +187,6 @@
   // Login
   $lang[login_text]       = "Hinweis: Um einzuloggen muss Ihr Browser Cookies"
                           . " akzeptieren.";
-  $lang[havetoregister]   = "Um unsere personalisierten Dienste nutzen zu "
-                          . "können, müssen Sie sich zunächst "
-                          . "<a href='registration/'>registrieren</a>. Erst "
-                          . "danach können Sie sich hier einloggen.";
   $lang[resetpasswd_title] = "Zugangsdaten zurücksetzen";
   $lang[resetpasswd]      = "Zurücksetzen";
   $lang[nosuchmail]       = "Die angegebene Email-Adresse ist unbekannt.";

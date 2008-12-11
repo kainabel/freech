@@ -26,7 +26,7 @@
     &nbsp;<font size='-1'{$attr}>{$message->get_username()|escape}</font>
 {if $message->get_user_is_special()}
     <img src="{$message->get_user_icon()|escape}"
-         title="{lang text=$message->get_user_icon_name()|escape}" />
+         title="{lang text=$message->get_user_icon_name()}" />
 {/if}
   </td>
 {if $message->is_selected()}

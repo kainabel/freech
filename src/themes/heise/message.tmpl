@@ -20,7 +20,7 @@
     </td>
     <td>
     <img border='0' src="{$message->get_user_icon()|escape}"
-         title="{lang text=$message->get_user_icon_name()|escape}" />
+         title="{lang text=$message->get_user_icon_name()}" />
     </td>
     <td>
 {if $__group->may('moderate')}
@@ -29,7 +29,7 @@
     </td>
 {if $message->get_user_is_anonymous()}
     <td>
-      {lang text="ip_hash" hash=$message->get_ip_address_hash(10)|escape}
+      {lang text="ip_hash" hash=$message->get_ip_address_hash(10)}
     </td>
 {/if}
   </tr>

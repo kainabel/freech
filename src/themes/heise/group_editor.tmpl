@@ -1,41 +1,41 @@
 <p>
-<h2>{lang text="group_editor" name=$group->get_name()|escape}</h2>
+<h2>{lang text="group_editor" name=$group->get_name()}</h2>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
 <input type="hidden" name="group_id" value="{$group->get_id()}">
 <table>
   <tr>
-    <td>{lang text="group_id"|escape}</td>
+    <td>{lang text="group_id"}</td>
     <td>{$group->get_id()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="group_name"|escape}</td>
+    <td>{lang text="group_name"}</td>
     <td><input size="70" type="text" name="groupname" value="{$group->get_name()|escape}" /></td>
   </tr>
   <tr>
-    <td>{lang text="group_icon"|escape}</td>
+    <td>{lang text="group_icon"}</td>
     <td>
       {$group->get_icon()|escape}
       <img src="{$group->get_icon()}" title="{$group->get_name()}" />
     </td>
   </tr>
   <tr>
-    <td>{lang text="group_created"|escape}</td>
+    <td>{lang text="group_created"}</td>
     <td>{$group->get_created_time()|escape}</td>
   </tr>
 </table>
 
-<h3>{lang text="group_permissions"|escape}</h3>
+<h3>{lang text="group_permissions"}</h3>
 <table>
 {foreach key=action item=permission from=$group->get_permission_list()}
   <tr>
     <td>
       <input type="checkbox" name="may_{$action|escape}" {if $permission}checked="checked"{/if} />
-      {lang text="group_may" action=$action|escape}
+      {lang text="group_may" action=$action}
     </td>
   </tr>
 {/foreach}
 </table>
-<input type="submit" name="group_submit" value="{lang text="group_save"|escape}" />
+<input type="submit" name="group_submit" value="{lang text="group_save"}" />
 </form>
 </p>

@@ -41,6 +41,6 @@
       die("smarty_lang(): No text given.");
     $phrase = $params[text];
     unset($params[text]);
-    return lang($phrase, $params);
+    return str_replace("\n", '<br/>', htmlentities(lang($phrase, $params)));
   }
 ?>

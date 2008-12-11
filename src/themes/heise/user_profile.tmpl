@@ -1,6 +1,6 @@
 <p>
 <h2>
-  {lang text="profile" name=$user->get_name()|escape}
+  {lang text="profile" name=$user->get_name()}
 {if $__user->get_id() == $user->get_id() or $__group->may('administer')}
   <a href="{$user->get_editor_url()|escape}">{lang text="account_edit"}</a>
 {/if}
@@ -8,38 +8,38 @@
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>
-    <td>{lang text="group_name"|escape}</td>
+    <td>{lang text="group_name"}</td>
     <td>
       <a href="{$group->get_profile_url()}">{$group->get_name()|escape}</a>
       <img src="{$group->get_icon()}" title="{$group->get_name()}" />
     </td>
   </tr>
   <tr>
-    <td>{lang text="account_id"|escape}</td>
+    <td>{lang text="account_id"}</td>
     <td>{$user->get_id()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="account_name"|escape}</td>
+    <td>{lang text="account_name"}</td>
     <td>{$user->get_name()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="account_status"|escape}</td>
+    <td>{lang text="account_status"}</td>
     <td>{$user->get_status_name()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="account_created"|escape}</td>
+    <td>{lang text="account_created"}</td>
     <td>{$user->get_created_time()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="account_messages"|escape}</td>
+    <td>{lang text="account_messages"}</td>
     <td>{$n_messages|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="account_mail"|escape}</td>
+    <td>{lang text="account_mail"}</td>
 {if $user->mail_is_public()}
     <td>{$user->get_mail()|escape}</td>
 {else}
-    <td><i>{lang text="account_hiddenmail"|escape}</i></td>
+    <td><i>{lang text="account_hiddenmail"}</i></td>
 {/if}
   </tr>
   <tr>

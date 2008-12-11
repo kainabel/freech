@@ -6,7 +6,7 @@
   <td align='left'>
   <a href="{$user->get_profile_url()}">{$user->get_name()|escape}</a>
 {if $group}
-  <img src="{$group->get_icon()|escape}" title="{lang text=$group->get_name()|escape}" />
+  <img src="{$group->get_icon()|escape}" title="{lang text=$group->get_name()}" />
 {/if}
   </td>
   <td width='12'>&nbsp;</td>
@@ -19,7 +19,7 @@
 {/foreach}
 {else}
 <tr><td height='4'></td></tr>
-<tr><td align='center'><i>{lang text="search_no_users"|escape}</i></td></tr>
+<tr><td align='center'><i>{lang text="search_no_users"}</i></td></tr>
 <tr><td height='4'></td></tr>
 {/if}
 </table>

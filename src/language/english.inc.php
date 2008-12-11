@@ -94,7 +94,7 @@
   // Registration
   $lang[register]            = "Register Account";
   $lang[register_title]      = "User Registration";
-  $lang[register_welcome]    = "Welcome!\n"
+  $lang[register_welcome]    = "Welcome!\n\n"
                              . "By registering you will be able to"
                              . " participate in our discussion forum."
                              . " All you need is a valid email address and a"
@@ -176,9 +176,6 @@
   
   // Login
   $lang[login_text]       = "To log in your browser must support cookies.";
-  $lang[havetoregister]   = "In order to be able to use personalized features"
-                          . " you need to <a href='registration/'>register</a>."
-                          . " After that you can log in.";
   $lang[resetpasswd_title] = "Resetting Your Password";
   $lang[resetpasswd]      = "Reset Password";
   $lang[nosuchmail]       = "The given email address was not found.";
@@ -276,7 +273,7 @@
   $lang[user_search_start] = "Find Users";
   $lang[search_results]    = "[RESULTS] results found.";
   $lang[search_examples]   = "Examples:";
-  $lang[search_hint]       = "apples AND \"peaches\"<br/>"
-                           . "NOT user:\"that guy\" AND (text:banana OR subject:fruit)<br/>"
+  $lang[search_hint]       = "apples AND \"peaches\"\n"
+                           . "NOT user:\"that guy\" AND (text:banana OR subject:fruit)\n"
                            . "ban?na AND NOT subject:wildcard*matching";
 ?>

@@ -1,7 +1,7 @@
 <!-- message_compose -->
 <p>
 <form action='{$action|escape}' id='commentform' method='POST' accept-charset='utf-8'>
-<font size='+1' color='red'>{lang text="writeamessage"|escape}</font>
+<font size='+1' color='red'>{lang text="writeamessage"}</font>
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
 <p>
 <input type='hidden' name='action'    value='message_submit'>
@@ -9,16 +9,16 @@
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
 <input type='hidden' name='may_quote' value='{$may_quote|escape}'>
 {if $__user->is_anonymous()}
-<b>{lang text="name"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
+<b>{lang text="name"}</b>&nbsp;<i>{lang text="required"}</i><br />
 <input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_usernamelength}'>
 {else}
 <input type='hidden' name='username' value='{$__user->get_name()|escape}'>
 {/if}
 <p>
-<b>{lang text="msgtitle"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
+<b>{lang text="msgtitle"}</b>&nbsp;<i>{lang text="required"}</i><br />
 <input type='text' size='80' name='subject' value='{$message->get_subject()|escape}' maxlength='{$max_subjectlength}'>
 <p>
-<b>{lang text="msgbody"|escape}</b>&nbsp;<i>{lang text="required"|escape}</i><br />
+<b>{lang text="msgbody"}</b>&nbsp;<i>{lang text="required"}</i><br />
 {strip}
 <textarea name='body' cols='80' rows='20' wrap='virtual'>
 {$message->get_body()|escape}
@@ -26,9 +26,9 @@
 {/strip}
 <p>
 {if $may_quote}
-<input type='submit' name='quote' value='{lang text="quote"|escape}'>&nbsp;
+<input type='submit' name='quote' value='{lang text="quote"}'>&nbsp;
 {/if}
-<input type='submit' name='preview' value='{lang text="preview"|escape}'>&nbsp;
-<input type='submit' name='send' value='{lang text="send"|escape}'>
+<input type='submit' name='preview' value='{lang text="preview"}'>&nbsp;
+<input type='submit' name='send' value='{lang text="send"}'>
 </form>
 <!-- end message_compose -->

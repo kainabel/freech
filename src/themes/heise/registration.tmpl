@@ -1,9 +1,9 @@
 <p>
-<h2>{lang text="register_title"|escape}</h2>
-{lang text="register_welcome"|escape}
+<h2>{lang text="register_title"}</h2>
+{lang text="register_welcome"}
 
 <p>
-{lang text="register_privacy"|escape}
+{lang text="register_privacy"}
 
 {if $error}
 <p>
@@ -13,31 +13,31 @@
 <p>
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
 <input type='hidden' name='action' value='account_create'>
-<b>{lang text="register_nick"|escape}</b><br/>
+<b>{lang text="register_nick"}</b><br/>
 <input type="text" name="username" size="20" value="{$user->get_name()|escape}"><br/>
-<span class="size80">{lang text="register_nick_l"|escape}</span>
+<span class="size80">{lang text="register_nick_l"}</span>
 
 <p>
-<b>{lang text="register_fullname"|escape}</b><br/>
+<b>{lang text="register_fullname"}</b><br/>
 <input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}">
 <input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}"><br/>
-<span class="size80">{lang text="register_fullname_l"|escape}</span>
+<span class="size80">{lang text="register_fullname_l"}</span>
 
 <p>
-<b>{lang text="register_mail"|escape}</b><br/>
+<b>{lang text="register_mail"}</b><br/>
 <input type="text" name="mail" size="42" value="{$user->get_mail()|escape}"><br/>
 
 <p>
-<b>{lang text="register_publicmail"|escape}</b><br/>
+<b>{lang text="register_publicmail"}</b><br/>
 <input type="checkbox" name="publicmail" >
-{lang text="register_public_l"|escape}
+{lang text="register_public_l"}
 
 <p>
-<b>{lang text="register_term_title"|escape}</b><br/>
-{lang text="register_term"|escape}
+<b>{lang text="register_term_title"}</b><br/>
+{lang text="register_term"}
 
 <p>
-<input type="submit" name="create" value="{lang text="register_agree"|escape}"> 
+<input type="submit" name="create" value="{lang text="register_agree"}"> 
 &nbsp;&nbsp;
-<input type="submit" name="cancel" value="{lang text="register_disagree"|escape}">
+<input type="submit" name="cancel" value="{lang text="register_disagree"}">
 </form>

@@ -1,14 +1,14 @@
 <p>
-	<h2>{lang text="account_options"|escape}</h2>
+	<h2>{lang text="account_options"}</h2>
 	{if $hint != ""}<p style="color:red;">{$hint}</p>{/if}
 	<form action="{$action|escape}" method="post" accept-charset="utf-8">
 		<table>
 			<tr>
-				<td>{lang text="account_login"|escape}</td>
+				<td>{lang text="account_login"}</td>
 			  <td>{$user->get_name()}</td>
 			</tr>
 			<tr>
-				<td>{lang text="updated_threads_first"|escape}</td>
+				<td>{lang text="updated_threads_first"}</td>
 			  <td><input type="text" name="updated_threads_first" value="{$updated_threads_first}" /></td>
 			</tr>
 		</table>

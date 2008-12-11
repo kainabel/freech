@@ -2,7 +2,7 @@
 <h2>
   {lang text="group_profile" name=$group->get_name()|escape}
 {if $__group->may('administer')}
-  <a href="{$group->get_group_data_url()|escape}">{lang text="group_edit"}</a>
+  <a href="{$group->get_editor_url()|escape}">{lang text="group_edit"}</a>
 {/if}
 </h2>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}

@@ -102,7 +102,7 @@
 
 
     function show_user_data($_user, $_hint = '') {
-      $url = new URL('?', cfg("urlvars"));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action', 'user_data_submit');
 
       // Load a list of group names.
@@ -131,7 +131,7 @@
 
 
     function show_user_options($_user, $_hint = '') {
-      $url = new URL('?', cfg("urlvars"));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action', 'user_options_submit');
 
       // Render the template.
@@ -170,6 +170,20 @@
       $this->assign_by_ref('n_rows',   $n_rows);
       $this->assign_by_ref('users',    $this->users);
       $this->render('group_profile.tmpl');
+      $this->parent->_set_title($_group->get_name());
+    }
+
+
+    function show_group_editor($_group, $_hint = '') {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action', 'group_submit');
+
+      // Render the template.
+      $this->clear_all_assign();
+      $this->assign_by_ref('group',  $_group);
+      $this->assign_by_ref('hint',   $_hint);
+      $this->assign_by_ref('action', $url->get_string());
+      $this->render('group_editor.tmpl');
       $this->parent->_set_title($_group->get_name());
     }
   }

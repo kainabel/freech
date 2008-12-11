@@ -292,6 +292,14 @@
     }
 
 
+    function _get_group_from_id_or_die($_id) {
+      $group = $this->_get_group_from_id($_id);
+      if (!$group)
+        die('No such group');
+      return $group;
+    }
+
+
     function _get_group_from_name($_name) {
       $query = array('name' => $_name);
       return $this->_get_groupdb()->get_group_from_query($query);
@@ -331,6 +339,15 @@
       $_user->set_im($_POST['im']);
       $_user->set_signature($_POST['signature']);
       return $_user;
+    }
+
+
+    function _init_group_from_post_data($_group = NULL) {
+      if (!$_group)
+        $_group = new Group;
+      $_group->set_name($_POST['groupname']);
+      //FIXME: Read permissions.
+      return $_group;
     }
 
 
@@ -887,12 +904,45 @@
     /*************************************************************
      * Action controllers for the group profile.
      *************************************************************/
-    // Lists all postings of one user.
+    // Shows group info and lists all users of one group.
     function _show_group_profile() {
       $group = $this->_get_group_from_name_or_die($_GET['groupname']);
       $this->_print_profile_breadcrumbs($group);
       $profile = &new ProfilePrinter($this);
       $profile->show_group_profile($group, (int)$_GET['hs']);
+    }
+
+
+    // Edits the group profile.
+    function _show_group_editor() {
+      $this->_assert_may('administer');
+      $group = $this->_get_group_from_name_or_die($_GET['groupname']);
+      $this->_print_profile_breadcrumbs($group);
+      $profile = &new ProfilePrinter($this);
+      $profile->show_group_editor($group);
+    }
+
+
+    // Saves the group.
+    function _group_submit() {
+      $this->_assert_may('administer');
+      $group = $this->_get_group_from_id_or_die($_POST['group_id']);
+      $this->_init_group_from_post_data($group);
+      $this->_print_profile_breadcrumbs($group);
+      $profile = &new ProfilePrinter($this);
+
+      // Make sure that the data is complete and valid.
+      $ret = $group->check_complete();
+      if ($ret < 0)
+        return $profile->show_group_editor($group, $err[$ret]);
+
+      // Save the group.
+      $ret = $this->_get_groupdb()->save_group($group);
+      if ($ret < 0)
+        return $profile->show_group_editor($group, $err[$ret]);
+
+      // Done.
+      $profile->show_group_editor($group, lang('group_saved'));
     }
 
 
@@ -1210,6 +1260,14 @@
 
       case 'group_profile':
         $this->_show_group_profile();       // Show a group profile.
+        break;
+
+      case 'group_editor':
+        $this->_show_group_editor();        // Edit the group profile.
+        break;
+
+      case 'group_submit':
+        $this->_group_submit();             // Save group changes.
         break;
 
       case 'search':

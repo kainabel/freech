@@ -265,11 +265,19 @@
   $lang[group_special]         = "Spezialfunktionen:";
   $lang[group_is_special]      = "Ja";
   $lang[group_is_not_special]  = "Keine";
+  $lang[group_icon]            = "Icon:";
   $lang[group_status]          = "Status:";
   $lang[group_status_active]   = "Aktiv";
   $lang[group_status_inactive] = "Inaktiv";
   $lang[group_created]         = "Erstellt am:";
   $lang[group_edit]            = "[Bearbeiten]";
+
+  // Group editor.
+  $lang[group_editor]          = "Daten der Gruppe [NAME]";
+  $lang[group_permissions]     = "Berechtigungen";
+  $lang[group_may]             = "[ACTION] gewähren";
+  $lang[group_save]            = "Daten speichern";
+  $lang[group_saved]           = "Die Daten wurden gespeichert.";
 
   // Top user list.
   $lang[top_users]   = "User-Statistik";

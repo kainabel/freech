@@ -247,11 +247,19 @@
   $lang[group_special]         = "Special functionality:";
   $lang[group_is_special]      = "Yes";
   $lang[group_is_not_special]  = "None";
+  $lang[group_icon]            = "Icon:";
   $lang[group_status]          = "Status:";
   $lang[group_status_active]   = "Active";
   $lang[group_status_inactive] = "Inactive";
   $lang[group_created]         = "Created on:";
   $lang[group_edit]            = "[Edit]";
+
+  // Group editor.
+  $lang[group_editor]          = "Permissions of [NAME]";
+  $lang[group_permissions]     = "Permissions";
+  $lang[group_may]             = "Permit '[ACTION]'";
+  $lang[group_save]            = "Save Group";
+  $lang[group_saved]           = "Your changes have been saved.";
 
   // Top user list.
   $lang[top_users]   = "Top Users";

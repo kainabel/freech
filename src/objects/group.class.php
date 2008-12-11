@@ -148,9 +148,9 @@
     }
 
 
-    function get_group_data_url() {
+    function get_editor_url() {
       $url = new URL('?', cfg('urlvars'));
-      $url->set_var('action',    'group_data');
+      $url->set_var('action',    'group_editor');
       $url->set_var('groupname', $this->get_name());
       return $url->get_string();
     }
@@ -168,6 +168,15 @@
 
     function may($_permission) {
       return $this->permissions[$_permission] == TRUE;
+    }
+
+
+    function get_permission_list() {
+      $actions     = array('administer', 'moderate', 'read', 'write');
+      $permissions = array();
+      foreach ($actions as $action)
+        $permissions[$action] = $this->may($action);
+      return $permissions;
     }
 
 

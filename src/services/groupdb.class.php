@@ -99,7 +99,7 @@
         die("GroupDB::save_group(): Invalid arg.");
       $query = &new FreechSqlQuery();
       $query->set_int   ('id',         $_group->get_id());
-      $query->set_string('name',       $_group->get_groupname());
+      $query->set_string('name',       $_group->get_name());
       $query->set_bool  ('is_special', $_group->is_special());
       $query->set_bool  ('is_active',  $_group->is_active());
       if ($_group->get_id() < 1) {
@@ -127,6 +127,8 @@
       $query->set_sql($sql);
       $this->db->Execute($query->sql()) or die("GroupDB::save_group(): Upd");
       $this->groups[$_group->get_id()] = $_group;
+
+      //FIXME: Save permissions.
       return $_group->get_id();
     }
 

@@ -103,7 +103,7 @@
 
     function show_user_data($_user, $_hint = '') {
       $url = new URL('?', cfg('urlvars'));
-      $url->set_var('action', 'user_data_submit');
+      $url->set_var('action', 'user_submit');
 
       // Load a list of group names.
       $groupdb = $this->parent->_get_groupdb();

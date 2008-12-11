@@ -1246,7 +1246,7 @@
         $this->_show_user_data();           // Form for editing user data.
         break;
 
-      case 'user_data_submit':
+      case 'user_submit':
         $this->_submit_user_data();
         break;
 

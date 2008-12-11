@@ -67,6 +67,8 @@ define("USER_STATUS_BLOCKED",     3);
       $this->fields[homepage]     = $_db_row[homepage];
       $this->fields[im]           = $_db_row[im];
       $this->fields[signature]    = $_db_row[signature];
+      $this->fields[icon]         = $_db_row[icon];
+      $this->fields[icon_name]    = $_db_row[icon_name];
       $this->fields[status]       = $_db_row[status];
       $this->fields[created]      = $_db_row[created];
       $this->fields[updated]      = $_db_row[updated];
@@ -248,6 +250,16 @@ define("USER_STATUS_BLOCKED",     3);
 
     function &get_signature() {
       return $this->fields[signature];
+    }
+
+
+    function get_icon() {
+      return 'data/group_icons/'.$this->fields['group_id'].'.png';
+    }
+
+
+    function get_icon_name() {
+      return $this->fields['icon_name'];
     }
 
 

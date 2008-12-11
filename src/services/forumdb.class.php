@@ -841,33 +841,5 @@
       $row = $res->FetchRow();
       return $row[id];
     }
-
-
-    function get_top_posters($_limit, $_since = 0) {
-      $sql   = "SELECT a.username, count(*) n_postings,";
-      $sql  .= " a.user_icon, a.user_icon_name";
-      $sql  .= " FROM {t_message} a";
-      $sql  .= " JOIN {t_message} b ON b.user_id=a.user_id";
-      $sql  .= " WHERE a.user_id != {anonymous}";
-      $sql  .= " AND a.id IN (SELECT MAX(id)";
-      $sql  .= "              FROM {t_message} WHERE user_id=a.user_id)";
-      if ($_since > 0)
-        $sql .= " AND b.created>FROM_UNIXTIME({since})";
-      $sql  .= " GROUP BY b.user_id";
-      $sql  .= " ORDER BY n_postings DESC";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_int('anonymous', cfg('anonymous_user_id'));
-      $query->set_int('since',     $_since);
-      $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
-                    or die("ForumDB::get_top_posters()");
-      $list  = array();
-      while ($row = $res->FetchRow()) {
-        $item = new Message;  // Abuse a message object.
-        $item->set_from_db($row);
-        $item->n_postings = $row[n_postings];
-        array_push($list, $item);
-      }
-      return $list;
-    }
   }
 ?>

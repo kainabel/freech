@@ -1116,7 +1116,7 @@
 
     function _show_top_posters() {
       $printer = new ListPrinter($this);
-      $printer->show_top_posters();
+      $printer->show_top_users();
     }
 
 

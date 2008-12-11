@@ -271,5 +271,38 @@
       }
       return $users;
     }
+
+
+    /**
+     * Returns the users who wrote the highest number of messages.
+     * $_limit: The maximum number of results.
+     */
+    function get_top_users($_limit, $_since = 0) {
+      $sql   = "SELECT u.*, g.name icon_name, COUNT(*) n_postings,";
+      $sql  .= "UNIX_TIMESTAMP(u.updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(u.created) created";
+      $sql  .= " FROM {t_user}    u";
+      $sql  .= " JOIN {t_group}   g ON g.id=u.group_id";
+      $sql  .= " JOIN {t_message} m ON m.user_id=u.id";
+      $sql  .= " WHERE u.id != {anonymous}";
+      if ($_since > 0)
+        $sql .= " AND m.created>FROM_UNIXTIME({since})";
+      $sql  .= " GROUP BY u.id";
+      $sql  .= " ORDER BY n_postings DESC";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('anonymous', cfg('anonymous_user_id'));
+      $query->set_int('since',     $_since);
+      $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
+                    or die("UserDB::get_top_users()");
+      $users = array();
+      while ($row = &$res->FetchRow()) {
+        $user = &new User;
+        $user->set_from_db($row);
+        $this->users[$row[id]] = &$user;
+        $user->n_postings = $row['n_postings'];
+        array_push($users, $user);
+      }
+      return $users;
+    }
   }
 ?>

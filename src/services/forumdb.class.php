@@ -86,7 +86,7 @@
         return 0;
       $sql  = "SELECT id FROM {t_message}";
       $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND is_active=1";
+      $sql .= " AND is_active";
       $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
       $sql .= " ORDER BY HEX(path) DESC";
       $query = &new FreechSqlQuery($sql);
@@ -105,8 +105,8 @@
     function _get_next_entry_id($_forum_id, $_thread_id, $_path) {
       $sql  = "SELECT id FROM {t_message}";
       $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND is_active=1";
-      $sql .= " AND is_parent=0";
+      $sql .= " AND is_active";
+      $sql .= " AND NOT is_parent";
       if ($_path)
         $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
       $sql .= " ORDER BY HEX(path)";
@@ -127,7 +127,7 @@
     function _get_prev_thread_id($_forum_id, $_thread_id) {
       $sql  = "SELECT thread_id FROM {t_message}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
-      $sql .= " AND (is_active=1 OR n_children>0)";
+      $sql .= " AND (is_active OR n_children)";
       $sql .= " ORDER BY thread_id DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $_forum_id);
@@ -146,7 +146,7 @@
     function _get_next_thread_id($_forum_id, $_thread_id) {
       $sql  = "SELECT thread_id FROM {t_message}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
-      $sql .= " AND (is_active=1 OR n_children>0)";
+      $sql .= " AND (is_active OR n_children)";
       $sql .= " ORDER BY thread_id";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $_forum_id);
@@ -496,14 +496,13 @@
         $sql .= " FROM {t_message} a";
         if ($_updated_threads_first)
           $sql .= " JOIN {t_message} b ON a.thread_id=b.thread_id";
-        $sql .= " WHERE a.forum_id={forum_id} AND a.is_parent=1";
+        $sql .= " WHERE a.forum_id={forum_id} AND a.is_parent";
         if ($_updated_threads_first) {
           $sql .= " GROUP BY a.id";
-          $sql .= " ORDER BY a.priority DESC, threadupdate DESC,";
-          $sql .= " a.thread_id DESC,path";
+          $sql .= " ORDER BY a.priority DESC, threadupdate DESC";
         }
         else
-          $sql .= " ORDER BY a.priority DESC, a.thread_id DESC,path";
+          $sql .= " ORDER BY a.priority DESC, a.id DESC";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forum_id', $_forum_id);
         //$this->db->debug=1;
@@ -634,7 +633,7 @@
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_message}";
-      $sql  .= " WHERE is_active=1 AND ";
+      $sql  .= " WHERE is_active AND ";
       $query = &new FreechSqlQuery($sql);
       $_search_query->add_where_expression($query);
       $sql  = $query->sql();
@@ -717,7 +716,7 @@
       $sql .= " FROM {t_message} a";
       if ($_updated_threads_first) {
         $sql .= " JOIN {t_message} b ON a.thread_id=b.thread_id";
-        $sql .= " AND b.path LIKE CONCAT(a.path, '%')";
+        $sql .= " AND b.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
         $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
       }
       $sql .= " WHERE a.user_id={userid}";
@@ -804,7 +803,7 @@
     function get_n_messages_from_query($_search_query) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_message}";
-      $sql .= " WHERE is_active=1 AND ";
+      $sql .= " WHERE is_active AND ";
       $query = &new FreechSqlQuery($sql);
       $_search_query->add_where_expression($query);
       return $this->db->GetOne($query->sql());

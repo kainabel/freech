@@ -29,6 +29,7 @@
     // Constructor.
     function IndexBarUserPostings($_args) {
       $this->IndexBar();
+      $this->user                = $_args[user];
       $this->n_messages          = $_args[n_messages];
       $this->n_messages_per_page = $_args[n_messages_per_page];
       $this->n_offset            = $_args[n_offset];
@@ -58,7 +59,8 @@
 
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action', 'user_postings');
+      $url->set_var('action',   'user_postings');
+      $url->set_var('username', $this->user->get_name());
       $url->set_var('hs',     0);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);

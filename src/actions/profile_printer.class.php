@@ -82,7 +82,8 @@
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->forumdb->get_n_messages($search);
-      $args      = array(n_messages          => $n_entries,
+      $args      = array(user                => $_user,
+                         n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_offset,
                          n_pages_per_index   => cfg("ppi"),

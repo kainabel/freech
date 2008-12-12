@@ -541,8 +541,8 @@
       }
 
       $sql .= ")";
-      $sql .= " GROUP BY a.id";
       if ($_updated_threads_first) {
+        $sql .= " GROUP BY a.id";
         $sql .= " ORDER BY c.priority DESC, threadupdate DESC,";
         $sql .= " a.thread_id DESC,a.path";
       }

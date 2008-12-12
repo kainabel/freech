@@ -159,6 +159,7 @@
 
       // Go.
       $this->_run();
+      $this->render_time = microtime(TRUE) - $this->start_time;
     }
 
 
@@ -1478,6 +1479,11 @@
 
 
     function get_render_time() {
+      return $this->render_time;
+    }
+
+
+    function get_total_time() {
       return microtime(TRUE) - $this->start_time;
     }
 

@@ -276,7 +276,8 @@
       }
       elseif ($_GET['action'] == 'user_postings') {
         $url = new URL('?', cfg('urlvars'));
-        $url->set_var('action', 'user_postings');
+        $url->set_var('action',   'user_postings');
+        $url->set_var('username', $_GET['username']);
         if ($_GET['hs'])
           $url->set_var('hs', (int)$_GET[hs]);
         $url->set_var('forum_id',        $this->get_forum_id());

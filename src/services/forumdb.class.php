@@ -169,7 +169,9 @@
      * Returns:   The id of the newly inserted entry.
      */
     function insert($_forum_id, $_parent_id, &$_msg) {
-      $body = trim($_msg->get_body() . "\n\n" . $_msg->get_signature());
+      $body = $_msg->get_body();
+      if ($_msg->get_signature())
+        $body .= "\n\n--\n" . $_msg->get_signature();
       //$this->db->debug = true;
 
       // Fetch the parent row.

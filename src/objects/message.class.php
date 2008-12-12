@@ -235,8 +235,8 @@
 
     function &get_body_html($_quotecolor = "#990000") {
       $body = $this->get_body();
-      if ($this->get_id() <= 0)
-        $body = trim($body . "\n\n" . $this->get_signature());
+      if ($this->get_id() <= 0 && $this->get_signature())
+        $body .= "\n\n--\n" . $this->get_signature();
       $body = wordwrap_smart($body);
       $body = string_escape($body);
       $body = preg_replace("/ /", "&nbsp;", $body);

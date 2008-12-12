@@ -290,7 +290,7 @@
   $lang[user_search_start] = "Benutzer suchen";
   $lang[search_results]    = "[RESULTS] Suchergebnisse gefunden.";
   $lang[search_examples]   = "Beispiele:";
-  $lang[search_hint]       = "äpfel AND \"birnen\"<br/>"
-                           . "NOT user:\"der da\" AND (text:bananen OR subject:frucht)<br/>"
+  $lang[search_hint]       = "äpfel AND \"birnen\"\n"
+                           . "NOT user:\"der da\" AND (text:bananen OR subject:frucht)\n"
                            . "ban?nen AND NOT subject:wildcard*matching";
 ?>

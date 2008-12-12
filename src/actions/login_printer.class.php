@@ -25,11 +25,11 @@
       $login_url->set_var('action', 'login');
 
       $resend_url = new URL('?', cfg('urlvars'));
-      $resend_url->set_var('action',   'resend_confirm');
+      $resend_url->set_var('action',   'account_reconfirm');
       $resend_url->set_var('username', $_user->get_name());
 
       $forgot_url = new URL('?', cfg('urlvars'));
-      $forgot_url->set_var('action', 'forgot_password');
+      $forgot_url->set_var('action', 'password_forgotten');
 
       $this->clear_all_assign();
       $this->assign_by_ref('user',       $_user);

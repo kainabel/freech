@@ -20,6 +20,8 @@
   */
 ?>
 <?php
+  $time_start = microtime(TRUE);
+
   include_once 'forum.inc.php';
 
   // Must be called before any other output is produced.
@@ -43,7 +45,7 @@
   $user = $forum->get_current_user();
   if ($user->is_anonymous()) {
     print("<a href='".$forum->get_login_url(TRUE)."'>".lang("login")."</a>");
-    print(" | <a href='?action=register'>".lang("register")."</a>");
+    print(" | <a href='?action=account_register'>".lang("register")."</a>");
   }
   else {
     print("<a href='?action=logout'>".lang("logout")."</a>");
@@ -53,6 +55,9 @@
   }
   $forum->show();
   $forum->destroy();
+
+  $render_time = round(microtime(TRUE) - $time_start, 2);
+  //echo "Site rendered in $render_time seconds.";
 
   print("</body>\n"
       . "</html>\n");

@@ -397,7 +397,7 @@
     // user/hash combination was passed in through the GET request.
     function _get_current_or_confirming_user() {
       if ($this->get_current_action() == 'account_confirm'
-        || $this->get_current_action() == 'confirm_password_mail'
+        || $this->get_current_action() == 'password_mail_confirm'
         || $this->get_current_action() == 'reset_password_submit') {
         $userdb = $this->_get_userdb();
         $user   = $userdb->get_user_from_name($_GET['username']);
@@ -450,7 +450,7 @@
 
 
     // Convenience wrapper around _send_confirmation_mail().
-    function _resend_confirmation_mail() {
+    function _account_reconfirm() {
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_name($_GET['username']);
       if ($user->get_status() != USER_STATUS_UNCONFIRMED)
@@ -465,7 +465,7 @@
       $body     = lang("reset_mail_body");
       $username = urlencode($user->get_name());
       $hash     = urlencode($user->get_confirmation_hash());
-      $url      = cfg('site_url') . "?action=confirm_password_mail"
+      $url      = cfg('site_url') . "?action=password_mail_confirm"
                 . "&username=$username&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, array('url' => $url));
     }
@@ -477,14 +477,18 @@
     // In other words, this function returns a URL to which the
     // login form may refer after performing the login.
     function _get_login_refer_url() {
+      $do_refer = array('read',
+                        'write',
+                        'search',
+                        'respond',
+                        'user_profile',
+                        'group_profile',
+                        'list');
       if ($_GET['refer_to'])
         return urldecode($_GET['refer_to']);
       elseif ($_POST['refer_to'])
         return urldecode($_POST['refer_to']);
-      elseif ($_GET['action'] == 'login'
-           or $_GET['action'] == 'logout'
-           or $_POST['action'] == 'login'
-           or $_POST['action'] == 'logout')
+      elseif (!in_array($this->get_current_action(), $do_refer))
         return $this->_get_forum_url()->get_string();
       elseif ($_SERVER['REQUEST_URI'] == '/')
         return '';
@@ -994,7 +998,7 @@
     }
 
 
-    function _register() {
+    function _account_register() {
       $registration = &new RegistrationPrinter($this);
       $registration->show(new User);
     }
@@ -1033,17 +1037,17 @@
 
 
     // Show a form for changing the password.
-    function _change_password() {
+    function _password_change() {
       $user = $this->_get_current_or_confirming_user();
       if (!$user || $user->is_anonymous())
         die("Invalid user");
       $registration = &new RegistrationPrinter($this);
-      $registration->show_change_password($user);
+      $registration->show_password_change($user);
     }
 
 
     // Submit a new password.
-    function _change_password_submit() {
+    function _password_submit() {
       global $err;
       $userdb   = $this->_get_userdb();
       $user     = $this->_init_user_from_post_data();
@@ -1053,19 +1057,19 @@
       // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {
         $error = lang("passwordsdonotmatch");
-        return $register->show_change_password($user, $error);
+        return $register->show_password_change($user, $error);
       }
 
       // Make sure that the password is valid.
       $ret = $user->set_password($_POST['password']);
       if ($ret < 0)
-        return $register->show_change_password($user, $err[$ret]);
+        return $register->show_password_change($user, $err[$ret]);
 
       // Save the password.
       $user->set_status(USER_STATUS_ACTIVE);
       $ret = $userdb->save_user($user);
       if ($ret < 0)
-        return $register->show_change_password($user, $err[$ret]);
+        return $register->show_password_change($user, $err[$ret]);
 
       // Done.
       $register->show_done($user);
@@ -1073,10 +1077,10 @@
 
 
     // Show a form for requesting that the password should be reset.
-    function _forgot_password() {
+    function _password_forgotten() {
       $user         = $this->_init_user_from_post_data();
       $registration = &new RegistrationPrinter($this);
-      $registration->show_forgot_password($user);
+      $registration->show_password_forgotten($user);
     }
 
 
@@ -1089,7 +1093,7 @@
       // Make sure that the email address is valid.
       $ret = $user->check_mail();
       if ($ret != 0)
-        return $registration->show_forgot_password($user, $err[$ret]);
+        return $registration->show_password_forgotten($user, $err[$ret]);
 
       // Find the user with the given mail address.
       $userdb = $this->_get_userdb();
@@ -1097,7 +1101,7 @@
       if (!$user) {
         $user = $this->_init_user_from_post_data();
         $msg  = $err[ERR_LOGIN_NO_SUCH_MAIL];
-        return $registration->show_forgot_password($user, $msg);
+        return $registration->show_password_forgotten($user, $msg);
       }
 
       // Send the mail.
@@ -1107,19 +1111,19 @@
         $this->_send_password_reset_mail($user);
       elseif ($user->get_status() == USER_STATUS_BLOCKED) {
         $msg = $err[ERR_LOGIN_LOCKED];
-        return $registration->show_forgot_password($user, $msg);
+        return $registration->show_password_forgotten($user, $msg);
       }
       else
         die("Invalid user status");
 
       // Done.
       $registration = &new RegistrationPrinter($this);
-      $registration->show_forgot_password_mail_sent($user);
+      $registration->show_password_mail_sent($user);
     }
 
 
     // Called when the user opens the link in the password reset mail.
-    function _confirm_password_mail() {
+    function _password_mail_confirm() {
       $user   = $this->_get_current_or_confirming_user();
       $userdb = $this->_get_userdb();
       $user   = $userdb->get_user_from_name($user->get_name());
@@ -1128,7 +1132,7 @@
       if ($user->get_status() != USER_STATUS_ACTIVE)
         die("Error: User status is not active.");
 
-      $this->_change_password();
+      $this->_password_change();
     }
 
 
@@ -1141,7 +1145,7 @@
 
       // See if the user still needs to set a password.
       if (!$user->get_password_hash())
-        return $this->_change_password();
+        return $this->_password_change();
 
       // Make the user active.
       $user->set_status(USER_STATUS_ACTIVE);
@@ -1248,7 +1252,7 @@
         break;
 
       case 'user_submit':
-        $this->_submit_user();
+        $this->_submit_user();              // Chang user data.
         break;
 
       case 'user_options':
@@ -1282,8 +1286,8 @@
         $this->_show_login();               // Show a login form.
         break;
 
-      case 'register':
-        $this->_register();                 // Show a registration form.
+      case 'account_register':
+        $this->_account_register();         // Show a registration form.
         break;
 
       case 'account_create':
@@ -1294,28 +1298,28 @@
         $this->_account_confirm();          // Confirm a new user.
         break;
 
-      case 'resend_confirm':
-        $this->_resend_confirmation_mail(); // Send a confirmation mail.
+      case 'account_reconfirm':
+        $this->_account_reconfirm();        // Resend a confirmation mail.
         break;
 
-      case 'change_password':
-        $this->_change_password();          // Form for changing the password.
+      case 'password_change':
+        $this->_password_change();          // Form for changing the password.
         break;
 
-      case 'submit_password':
-        $this->_change_password_submit();   // Set the initial password.
+      case 'password_submit':
+        $this->_password_submit();          // Set the initial password.
         break;
 
-      case 'forgot_password':
-        $this->_forgot_password();          // Form for requesting password mail.
+      case 'password_forgotten':
+        $this->_password_forgotten();       // Form for requesting password mail.
         break;
 
       case 'password_mail_submit':
         $this->_password_mail_submit();     // Send password mail request.
         break;
 
-      case 'confirm_password_mail':
-        $this->_confirm_password_mail();    // Form for resetting the password.
+      case 'password_mail_confirm':
+        $this->_password_mail_confirm();    // Form for resetting the password.
         break;
 
       case 'top_posters':

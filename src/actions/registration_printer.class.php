@@ -21,7 +21,7 @@
 <?php
   class RegistrationPrinter extends PrinterBase {
     function show($user, $error = '') {
-      $url = &new URL('?', cfg("urlvars"));
+      $url = &new URL('?', cfg('urlvars'));
       $url->set_var('action', 'account_create');
       
       $this->clear_all_assign();
@@ -49,28 +49,28 @@
       $this->show_tmpl('password_changed.tmpl', $user, $_hint);
     }
 
-    function show_change_password($_user, $_hint = '') {
-      $url = &new URL('?', cfg("urlvars"));
-      $url->set_var('action', 'submit_password');
+    function show_password_change($_user, $_hint = '') {
+      $url = &new URL('?', cfg('urlvars'));
+      $url->set_var('action', 'password_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('action', $url->get_string());
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('hint',   $_hint);
-      $this->render('change_password.tmpl');
+      $this->render('password_change.tmpl');
       $this->parent->_set_title(lang('change_password_title'));
     }
 
-    function show_forgot_password($_user, $_hint = '') {
-      $url = new URL('?', cfg("urlvars"));
+    function show_password_forgotten($_user, $_hint = '') {
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action', 'password_mail_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
-      $this->render('forgot_password.tmpl');
+      $this->render('password_forgotten.tmpl');
     }
 
-    function show_forgot_password_mail_sent($user, $_hint = '') {
+    function show_password_mail_sent($user, $_hint = '') {
       $this->show_tmpl('password_mail_sent.tmpl', $user, $_hint);
     }
   }

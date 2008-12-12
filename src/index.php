@@ -20,8 +20,6 @@
   */
 ?>
 <?php
-  $time_start = microtime(TRUE);
-
   include_once 'forum.inc.php';
 
   // Must be called before any other output is produced.
@@ -56,7 +54,7 @@
   $forum->show();
   $forum->destroy();
 
-  $render_time = round(microtime(TRUE) - $time_start, 2);
+  $render_time = round($forum->get_render_time(), 2);
   //echo "Site rendered in $render_time seconds.";
 
   print("</body>\n"

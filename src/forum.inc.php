@@ -99,6 +99,22 @@
       textdomain($domain);
       bind_textdomain_codeset($domain, 'UTF-8');
 
+      // Start the PHP session.
+      session_set_cookie_params(time() + cfg("login_time"));
+      if ($_COOKIE['permanent_session']) {
+        session_id($_COOKIE['permanent_session']);
+        session_start();
+      }
+      else {
+        session_start();
+        if ($_POST['permanent'] === "ON")
+          setcookie('permanent_session', session_id(), time() + cfg("login_time"));
+      }
+      $this->_handle_cookies();
+
+      // Only now start the timer, as cookie handling may scew the result.
+      $this->start_time = microtime(TRUE);
+
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus = &new Trackable;
 
@@ -130,19 +146,6 @@
       $this->smarty->config_dir    = "data/smarty_configs";
       $this->smarty->compile_check = cfg("check_cache");
       $this->smarty->register_function('lang', 'smarty_lang');
-
-      // Start the PHP session.
-      session_set_cookie_params(time() + cfg("login_time"));
-      if ($_COOKIE['permanent_session']) {
-        session_id($_COOKIE['permanent_session']);
-        session_start();
-      }
-      else {
-        session_start();
-        if ($_POST['permanent'] === "ON")
-          setcookie('permanent_session', session_id(), time() + cfg("login_time"));
-      }
-      $this->_handle_cookies();
 
       // Attempt to login, if requested.
       $this->current_user = FALSE;
@@ -1471,6 +1474,11 @@
        *   Args: none.
        */
       $this->eventbus->emit("on_content_print_after", &$this);
+    }
+
+
+    function get_render_time() {
+      return microtime(TRUE) - $this->start_time;
     }
 
 

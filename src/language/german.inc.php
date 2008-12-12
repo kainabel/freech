@@ -281,6 +281,12 @@
   $lang[weekly_top]  = "Top 20 der letzten 7 Tage";
   $lang[n_postings]  = "Postings";
 
+  // Statistics.
+  $lang[statistics]          = "Foren-Statistik";
+  $lang[statistics_title]    = "Postings und Traffic der letzten [DAYS] Tage";
+  $lang[statistics_postings] = "Postings";
+  $lang[statistics_traffic]  = "Traffic";
+
   // Search.
   $lang[search_no_message] = "(Keine Beiträge)";
   $lang[search_no_users]   = "(Keine Benutzer gefunden)";

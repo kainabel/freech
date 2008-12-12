@@ -43,14 +43,15 @@
   $user = $forum->get_current_user();
   if ($user->is_anonymous()) {
     print("<a href='".$forum->get_login_url(TRUE)."'>".lang("login")."</a>");
-    print(" | <a href='?action=account_register'>".lang("register")."</a>");
+    print(" | <a href='".$forum->get_registration_url()."'>".lang("register")."</a>");
   }
   else {
-    print("<a href='?action=logout'>".lang("logout")."</a>");
+    print("<a href='".$forum->get_logout_url()."'>".lang("logout")."</a>");
     print(" | <a href='".$user->get_profile_url()."'>".lang("myprofile")."</a>");
     print(" | <a href='".$user->get_editor_url()."'>".lang("account_mydata")."</a>");
     print(" | <a href='".$user->get_postings_url()."'>".lang("mypostings")."</a>");
   }
+  print(" | <a href='".$forum->get_statistics_url()."'>".lang("statistics")."</a>");
   $forum->show();
   $forum->destroy();
 

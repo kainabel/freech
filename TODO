@@ -7,6 +7,6 @@
 * Let moderators view all postings of one particular user.
 * Implement a flood blocker.
 * Use gettext and .po/-mo-files to replace the home grown thingy.
-* Can the statistics be integrated into one single template?
 * Enable the spamhash plugin for the user registration, too.
 * Make the front page prettier and add links to special pages.
+* Add a get_name() method to URLs, and use that in index.php.

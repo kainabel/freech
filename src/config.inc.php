@@ -48,7 +48,8 @@
   $cfg[ppi] = 5;
 
   // Show threads with new posts first. Note that setting this to TRUE has
-  // a negative performance impact.
+  // a severe negative performance impact and is only recommended if
+  // your site does not have a lot of traffic.
   $cfg[updated_threads_first] = FALSE;
 
   // Disable the message counter that is shown above the forum. Note that
@@ -145,6 +146,21 @@
   // with the given id.
   $cfg[anonymous_user_id]  = 1;
   $cfg[anonymous_group_id] = 1;
+
+  // To plot traffic data in the forum statistics you may
+  // add a CSV file with data here. The CVS file should contain two
+  // columns in the following format:
+  //  2008-01-22,1234
+  // where "1234" is the traffic on that specific day, in bytes.
+  $cfg[statistics_traffic_data] = '';
+
+  // Similar to the traffic data above, you may also display an additional
+  // posting plot. The CVS file should contain two
+  // columns in the following format:
+  //  2008-01-22,1234
+  // where "1234" is the number of postings on that specific day.
+  $cfg[statistics_extra_data] = '';
+  $cfg[statistics_extra_label] = 'Extra';
 
   // *************************************************************
   // Performance tweaks.

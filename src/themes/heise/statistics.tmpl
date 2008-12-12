@@ -1,0 +1,64 @@
+<h2>{lang text="statistics" days=$days}</h2>
+<h3>{lang text="statistics_title" days=$days}</h3>
+<div id="plot" style="width:600px;height:300px;"></div>
+<script language="javascript" type="text/javascript" src="themes/heise/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="themes/heise/jquery.flot.pack.js"></script>
+<script id="source" language="javascript" type="text/javascript">
+{literal}
+function day_formatter(val, axis) {
+  var now  = Math.round(new Date().getTime()/1000.0);
+{/literal}
+  var time = new Date((now - ({$days} - val) * {$resolution}) * 1000);
+{literal}
+  return time.getDate() + "." + (time.getMonth() + 1) + ".";
+}
+
+function traffic_formatter(val, axis) {
+  return val + " MB";
+}
+
+$(function () {
+  var postings  = [];
+  var postings2 = [];
+  var traffic   = [];
+{/literal}
+{foreach item=point from=$data}
+      postings.push ([{$point.pos}, {$point.postings}]);
+      postings2.push([{$point.pos}, {$point.postings2}]);
+      traffic.push  ([{$point.pos}, {$point.traffic}]);
+{/foreach}
+{literal}
+  $.plot($("#plot"),
+  [
+{/literal}
+    {ldelim} data: postings,  label: "{lang text="statistics_postings"}" {rdelim},
+{if $show_postings2}
+    {ldelim} data: postings2, label: "{$postings2_label|escape}" {rdelim},
+{/if}
+{if $show_traffic}
+    {ldelim} data: traffic, label: "{lang text="statistics_traffic"}", yaxis: 2 {rdelim},
+{/if}
+{literal}
+  ],
+  {
+    xaxis: {
+      tickFormatter: day_formatter,
+      tickSize: 3,
+      tickDecimals: 0
+    },
+    yaxis: {
+      autoscaleMargin: .2,
+      min: 0
+    },
+    y2axis: {
+      tickFormatter: traffic_formatter,
+      autoscaleMargin: .2,
+      min: 0
+    },
+    legend: {
+      noColumns: 3
+    }
+  });
+});
+{/literal}
+</script>

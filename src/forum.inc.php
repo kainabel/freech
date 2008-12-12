@@ -56,6 +56,7 @@
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
   include_once 'actions/search_printer.class.php';
+  include_once 'actions/statistics_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/registration_printer.class.php';
@@ -1179,6 +1180,12 @@
     }
 
 
+    function _show_statistics() {
+      $printer = new StatisticsPrinter($this);
+      $printer->show();
+    }
+
+
     // Prints an RSS feed.
     function print_rss($_forum_id,
                        $_title,
@@ -1330,6 +1337,10 @@
         $this->_show_top_posters();         // List of top posters.
         break;
 
+      case 'statistics':
+        $this->_show_statistics();          // Activity charts.
+        break;
+
       case 'list':
       case '':
         if ($_COOKIE['view'] === 'plain')
@@ -1425,6 +1436,27 @@
       $url      = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'login');
       $url->set_var('refer_to', $refer_to);
+      return $url->get_string();
+    }
+
+
+    function get_logout_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action', 'logout');
+      return $url->get_string();
+    }
+
+
+    function get_statistics_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action', 'statistics');
+      return $url->get_string();
+    }
+
+
+    function get_registration_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action', 'account_register');
       return $url->get_string();
     }
 

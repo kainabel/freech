@@ -268,12 +268,12 @@
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (path, forum_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
-        $sql .= "  thread_id, is_parent, username,";
+        $sql .= "  is_parent, username,";
         $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " '', {forum_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
-        $sql .= " 0, 1,";
+        $sql .= " 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
@@ -484,7 +484,7 @@
       $offset = $_offset * 1;
 
       if ($_id != 0) {
-        $sql  = "SELECT id,HEX(path) path";
+        $sql  = "SELECT id";
         $sql .= " FROM {t_message}";
         $sql .= " WHERE id={id}";
         $query = &new FreechSqlQuery($sql);
@@ -494,7 +494,7 @@
       }
       else {
         // Select all root nodes.
-        $sql  = "SELECT a.id,HEX(a.path) path, a.n_children";
+        $sql  = "SELECT a.id";
         if ($_updated_threads_first)
           $sql .= " ,MAX(b.id) threadupdate";
         $sql .= " FROM {t_message} a";
@@ -544,10 +544,10 @@
       $sql .= " GROUP BY a.id";
       if ($_updated_threads_first) {
         $sql .= " ORDER BY c.priority DESC, threadupdate DESC,";
-        $sql .= " a.thread_id DESC,path";
+        $sql .= " a.thread_id DESC,a.path";
       }
       else
-        $sql .= " ORDER BY c.priority DESC, a.thread_id DESC,path";
+        $sql .= " ORDER BY c.priority DESC, a.thread_id DESC,a.path";
 
       // Walk through those threads.
       $query   = &new FreechSqlQuery($sql);

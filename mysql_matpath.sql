@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
 CREATE TABLE IF NOT EXISTS `freech_message` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forum_id` int(11) unsigned NOT NULL default '0',
-  `thread_id` int(11) unsigned NOT NULL default '0',
+  `thread_id` int(11) unsigned default NULL,
   `priority` int(11) NOT NULL default '0',
   `is_parent` tinyint(1) unsigned default '0',
   `n_children` int(11) unsigned default '0',
   `n_descendants` int(11) unsigned default '0',
-  `path` varchar(255) character set latin1 collate latin1_bin default NULL,
+  `path` varbinary(255) default NULL,
   `user_id` int(11) unsigned default '0',
   `username` varchar(50) collate latin1_general_ci NOT NULL,
   `user_is_special` tinyint(1) unsigned default '0',
@@ -70,7 +70,9 @@ CREATE TABLE IF NOT EXISTS `freech_message` (
   KEY `created` (`created`),
   KEY `forum_id` (`forum_id`),
   KEY `thread_id` (`thread_id`),
-  KEY `user_id` (`user_id`)
+  KEY `user_id` (`user_id`),
+  KEY `forum_id_2` (`forum_id`,`priority`,`id`),
+  KEY `path` (`thread_id`,`path`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -151,7 +153,8 @@ ALTER TABLE `freech_forum`
 --
 ALTER TABLE `freech_message`
   ADD CONSTRAINT `0_778` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_779` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `0_779` FOREIGN KEY (`thread_id`) REFERENCES `freech_message` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_780` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_permission`

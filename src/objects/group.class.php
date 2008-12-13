@@ -172,7 +172,7 @@
 
 
     function get_permission_list() {
-      $actions     = array('administer', 'moderate', 'read', 'write');
+      $actions     = array('administer', 'moderate', 'delete');
       $permissions = array();
       foreach ($actions as $action)
         $permissions[$action] = $this->may($action);

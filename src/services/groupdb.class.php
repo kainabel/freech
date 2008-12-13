@@ -88,6 +88,39 @@
     }
 
 
+    function _set_permission($_group_id, $_action, $_allow = TRUE) {
+      $sql  = "INSERT INTO {t_permission}";
+      $sql .= " (group_id, name, allow)";
+      $sql .= " VALUES";
+      $sql .= " ({group_id}, {name}, {allow})";
+      $sql .= " ON DUPLICATE KEY UPDATE allow={allow}";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int   ('group_id', $_group_id);
+      $query->set_string('name',     $_action);
+      $query->set_bool  ('allow',    $_allow);
+      $this->db->Execute($query->sql()) or die("GroupDB::_set_permission()");
+    }
+
+
+    function _delete_permission($_group_id, $_action) {
+      $sql  = "DELETE FROM {t_permission}";
+      $sql .= " WHERE group_id={group_id} AND name={name}";
+      $query = new FreechSqlQuery($sql);
+      $query->set_var('group_id', $_group_id);
+      $query->set_var('name',     $_action);
+      $this->db->Execute($query->sql()) or die("GroupDB::_delete_permission");
+    }
+
+
+    function _save_permissions($_group) {
+      foreach ($_group->get_permission_list() as $action => $allow)
+        if ($allow)
+          $this->_set_permission($_group->get_id(), $action, TRUE);
+        else
+          $this->_delete_permission($_group->get_id(), $action);
+    }
+
+
     /**
      * Insert a new group or save an existing one.
      *
@@ -111,10 +144,14 @@
         $sql  .= "  {id}, {name}, {is_special}, {is_active}, NULL";
         $sql  .= " )";
         $query->set_sql($sql);
+
+        $this->db->StartTrans();
         $this->db->Execute($query->sql()) or die("GroupDB::save_group: Ins");
         $newid = $this->db->Insert_ID();
         $_group->set_id($newid);
         $this->groups[$newid] = &$_group;
+        $this->_save_permissions($_group);
+        $this->db->CompleteTrans();
         return $newid;
       }
 
@@ -125,10 +162,13 @@
       $sql  .= " is_active={is_active}";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);
+
+      $this->db->StartTrans();
       $this->db->Execute($query->sql()) or die("GroupDB::save_group(): Upd");
       $this->groups[$_group->get_id()] = $_group;
+      $this->_save_permissions($_group);
+      $this->db->CompleteTrans();
 
-      //FIXME: Save permissions.
       return $_group->get_id();
     }
 

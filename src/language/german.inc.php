@@ -271,7 +271,7 @@
   // Group editor.
   $lang[group_editor]          = "Daten der Gruppe [NAME]";
   $lang[group_permissions]     = "Berechtigungen";
-  $lang[group_may]             = "[ACTION] gewähren";
+  $lang[group_may]             = "'[ACTION]' gewähren";
   $lang[group_save]            = "Daten speichern";
   $lang[group_saved]           = "Die Daten wurden gespeichert.";
 

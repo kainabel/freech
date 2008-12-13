@@ -351,7 +351,13 @@
       if (!$_group)
         $_group = new Group;
       $_group->set_name($_POST['groupname']);
-      //FIXME: Read permissions.
+
+      // Read permissions.
+      foreach ($_group->get_permission_list() as $action => $allow)
+        if ($_POST["may_$action"] == 'on')
+          $_group->grant($action);
+        else
+          $_group->deny($action);
       return $_group;
     }
 

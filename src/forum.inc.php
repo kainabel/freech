@@ -492,6 +492,8 @@
                         'write',
                         'search',
                         'respond',
+                        'user_editor',
+                        'user_postings',
                         'user_profile',
                         'group_profile',
                         'list');
@@ -836,8 +838,10 @@
     function _show_user_profile() {
       $user = $this->_get_user_from_name_or_die($_GET['username']);
       $this->_print_profile_breadcrumbs($user);
+      $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
+                                       $_COOKIE['user_postings_c']);
       $profile = &new ProfilePrinter($this);
-      $profile->show_user_profile($user);
+      $profile->show_user_profile($user, $thread_state, (int)$_GET['hs']);
     }
 
 

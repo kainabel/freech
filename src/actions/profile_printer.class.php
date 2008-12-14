@@ -43,46 +43,23 @@
     }
 
 
-    function show_user_profile($_user, $_hint = '') {
-      $search    = array('userid' => $_user->get_id());
-      $n_entries = $this->forumdb->get_n_messages($search);
-      $groupdb   = $this->parent->_get_groupdb();
-      $search    = array('id' => $_user->get_group_id());
-      $group     = $groupdb->get_group_from_query($search);
-
-      // Render the template.
-      $this->assign_by_ref('user',       $_user);
-      $this->assign_by_ref('group',      $group);
-      $this->assign_by_ref('hint',       $_hint);
-      $this->assign_by_ref('n_messages', $n_entries);
-      $this->render('user_profile.tmpl');
-      $this->parent->_set_title($_user->get_name());
-    }
-
-
-    function show_user_postings($_user, $_thread_state, $_offset = 0) {
-      $current  = $this->parent->get_current_user();
-      $showlist = $_user->get_name() == $current->get_name();
-
-      // Load the threads (if they are to be displayed).
-      $this->clear_all_assign();
-      if ($showlist) {
-        $func = array(&$this, '_append_message');
-        $this->forumdb->foreach_message_from_user($_user->get_id(),
-                                                  $_offset,
-                                                  cfg("epp"),
-                                                  cfg("updated_threads_first"),
-                                                  $_thread_state,
-                                                  $func,
-                                                  '');
-        $this->assign_by_ref('n_rows',   count($this->messages));
-        $this->assign_by_ref('messages', $this->messages);
-      }
+    function _assign_user_postings($_user, $_thread_state, $_offset = 0) {
+      // Load the postings.
+      $func = array(&$this, '_append_message');
+      $this->forumdb->foreach_message_from_user($_user->get_id(),
+                                                $_offset,
+                                                cfg("epp"),
+                                                cfg("updated_threads_first"),
+                                                $_thread_state,
+                                                $func,
+                                                '');
 
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->forumdb->get_n_messages($search);
-      $args      = array(user                => $_user,
+      $action    = $this->parent->get_current_action();
+      $args      = array(action              => $action,
+                         user                => $_user,
                          n_messages          => $n_entries,
                          n_messages_per_page => cfg("epp"),
                          n_offset            => $_offset,
@@ -90,14 +67,59 @@
                          thread_state        => $_thread_state);
       $indexbar = &new IndexBarUserPostings($args);
 
-      // Render the template.
-      $this->assign_by_ref('user',     $_user);
-      $this->assign_by_ref('showlist', $showlist);
-      $this->assign_by_ref('indexbar', $indexbar);
+      $this->assign_by_ref('n_rows',     count($this->messages));
+      $this->assign_by_ref('n_messages', $n_entries);
+      $this->assign_by_ref('messages',   $this->messages);
+      $this->assign_by_ref('indexbar',   $indexbar);
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
       $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
-      $this->render('list_by_thread.tmpl');
+    }
+
+
+    function show_user_profile($_user, $_thread_state, $_offset = 0) {
+      $current  = $this->parent->get_current_user();
+      $group    = $this->parent->get_current_group();
+      $showlist = $_user->get_name() == $current->get_name();
+      $showlist = $showlist || $group->may('moderate');
+
+      // Load the threads (if they are to be displayed).
+      $this->clear_all_assign();
+      if ($showlist)
+        $this->_assign_user_postings($_user, $_thread_state, $_offset);
+
+      // Load the group info.
+      $groupdb = $this->parent->_get_groupdb();
+      $search  = array('id' => $_user->get_group_id());
+      $group   = $groupdb->get_group_from_query($search);
+
+      // Render the template.
+      $this->assign_by_ref('user',     $_user);
+      $this->assign_by_ref('group',    $group);
+      $this->assign_by_ref('showinfo', TRUE);
+      $this->assign_by_ref('showlist', $showlist);
+      $this->render('user_profile.tmpl');
       $this->parent->_set_title($_user->get_name());
+    }
+
+
+    function show_user_postings($_user, $_thread_state, $_offset = 0) {
+      $current  = $this->parent->get_current_user();
+      $group    = $this->parent->get_current_group();
+      $showlist = $_user->get_name() == $current->get_name();
+      $showlist = $showlist || $group->may('moderate');
+      $this->parent->_set_title($_user->get_name());
+      if (!$showlist)
+        return;
+
+      // Load the threads.
+      $this->clear_all_assign();
+      $this->_assign_user_postings($_user, $_thread_state, $_offset);
+
+      // Render the template.
+      $this->assign_by_ref('user',     $_user);
+      $this->assign_by_ref('showinfo', FALSE);
+      $this->assign_by_ref('showlist', TRUE);
+      $this->render('user_profile.tmpl');
     }
 
 

@@ -5,6 +5,8 @@
   <a href="{$user->get_editor_url()|escape}">{lang text="account_edit"}</a>
 {/if}
 </h2>
+{if $showinfo}
+<p>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table>
   <tr>
@@ -63,4 +65,10 @@
     </td>
   </tr>
 </table>
+</p>
+{/if}
+{if $showlist}
+<p>
+{include file="list_by_thread.tmpl"}
+{/if}
 </p>

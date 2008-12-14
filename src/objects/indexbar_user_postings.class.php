@@ -29,38 +29,39 @@
     // Constructor.
     function IndexBarUserPostings($_args) {
       $this->IndexBar();
-      $this->user                = $_args[user];
-      $this->n_messages          = $_args[n_messages];
-      $this->n_messages_per_page = $_args[n_messages_per_page];
-      $this->n_offset            = $_args[n_offset];
-      $this->n_pages_per_index   = $_args[n_pages_per_index];
-      $this->thread_state        = $_args[thread_state];
+      $action              = $_args[action];
+      $user                = $_args[user];
+      $n_messages          = $_args[n_messages];
+      $n_messages_per_page = $_args[n_messages_per_page];
+      $n_offset            = $_args[n_offset];
+      $n_pages_per_index   = $_args[n_pages_per_index];
+      $thread_state        = $_args[thread_state];
 
       // Print the "Index" keyword, followed by a separator.
       $additem = array(&$this, 'add_item');
       call_user_func($additem, lang("index"));
 
       // Calculate the total number of pages.
-      $n_pages = ceil($this->n_messages / $this->n_messages_per_page);
+      $n_pages = ceil($n_messages / $n_messages_per_page);
       if ($n_pages <= 0)
         $n_pages = 1;
 
       // Find the selected page's number from the parent with the given offset.
-      $activepage = ceil($this->n_offset / $this->n_messages_per_page) + 1;
+      $activepage = ceil($n_offset / $n_messages_per_page) + 1;
 
       // Find the first number to show in the index.
       $n_indexoffset = 1;
-      if ($activepage > $this->n_pages_per_index / 2)
-        $n_indexoffset = $activepage - ceil($this->n_pages_per_index / 2);
-      if ($n_indexoffset + $this->n_pages_per_index > $n_pages)
-        $n_indexoffset = $n_pages - $this->n_pages_per_index;
+      if ($activepage > $n_pages_per_index / 2)
+        $n_indexoffset = $activepage - ceil($n_pages_per_index / 2);
+      if ($n_indexoffset + $n_pages_per_index > $n_pages)
+        $n_indexoffset = $n_pages - $n_pages_per_index;
       if ($n_indexoffset < 1)
         $n_indexoffset = 1;
 
       // Always show a link to the first page.
       $url = new URL('?', cfg("urlvars"));
-      $url->set_var('action',   'user_postings');
-      $url->set_var('username', $this->user->get_name());
+      $url->set_var('action',   $action);
+      $url->set_var('username', $user->get_name());
       $url->set_var('hs',     0);
       if ($n_indexoffset > 1) {
         $url->set_var('hs', 0);
@@ -71,23 +72,23 @@
 
       // Print the numbers. Print the active number using another color.
       for ($i = $n_indexoffset;
-           $i <= $n_indexoffset + $this->n_pages_per_index && $i <= $n_pages;
+           $i <= $n_indexoffset + $n_pages_per_index && $i <= $n_pages;
            $i++) {
         if ($i == $activepage)
           call_user_func($additem, $i);
         else {
           $url = clone($url);
-          $url->set_var('hs', ($i - 1) * $this->n_messages_per_page);
+          $url->set_var('hs', ($i - 1) * $n_messages_per_page);
           call_user_func($additem, $i, $url);
         }
       }
 
       // Always show a link to the last page.
       $url = clone($url);
-      if ($n_indexoffset + $this->n_pages_per_index < $n_pages - 1)
+      if ($n_indexoffset + $n_pages_per_index < $n_pages - 1)
         call_user_func($additem, '...');
-      if ($n_indexoffset + $this->n_pages_per_index < $n_pages) {
-        $url->set_var('hs', ($n_pages - 1) * $this->n_messages_per_page);
+      if ($n_indexoffset + $n_pages_per_index < $n_pages) {
+        $url->set_var('hs', ($n_pages - 1) * $n_messages_per_page);
         call_user_func($additem, $n_pages, $url);
       }
 
@@ -95,7 +96,7 @@
       $url = clone($url);
       call_user_func($additem);
       if ($activepage > 1) {
-        $url->set_var('hs', ($activepage - 2) * $this->n_messages_per_page);
+        $url->set_var('hs', ($activepage - 2) * $n_messages_per_page);
         call_user_func($additem, lang("next"), $url);
       }
       else
@@ -105,22 +106,22 @@
       $url = clone($url);
       call_user_func($additem);
       if ($activepage < $n_pages) {
-        $url->set_var('hs', $activepage * $this->n_messages_per_page);
+        $url->set_var('hs', $activepage * $n_messages_per_page);
         call_user_func($additem, lang("prev"), $url);
       }
       else
         call_user_func($additem, lang("prev"), $url);
       
-      if (!$this->thread_state)
+      if (!$thread_state)
         die("IndexBarUserPostings:foreach_page(): Thread state.");
       
-      $fold = $this->thread_state->get_default();
-      $swap = $this->thread_state->get_string_swap();
+      $fold = $thread_state->get_default();
+      $swap = $thread_state->get_string_swap();
       
       // "Unfold all" link.
       $url = clone($url);
       call_user_func($additem);
-      $url->set_var('hs', $_this->n_offset);
+      $url->set_var('hs', $n_offset);
       if ($fold != THREAD_STATE_UNFOLDED || $swap != '') {
         $url->set_var('user_postings_fold', THREAD_STATE_UNFOLDED);
         call_user_func($additem, lang("unfoldall"), $url);

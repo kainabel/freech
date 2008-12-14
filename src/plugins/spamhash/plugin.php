@@ -15,22 +15,28 @@ $spamhash = ''; // The spamhash instance.
 
 function spamhash_init(&$forum) {
   $eventbus = &$forum->get_eventbus();
-  $eventbus->signal_connect("on_construct",
-                            "spamhash_on_construct");
-  $eventbus->signal_connect("on_header_print_before",
-                            "spamhash_on_header_print");
+  $eventbus->signal_connect('on_run_before', 'spamhash_on_run');
 }
 
 
-function spamhash_on_construct(&$forum) {
+function spamhash_on_run(&$forum) {
   global $spamhash;
-  $action = $forum->get_current_action();
-  if ($action != 'write'
-    && $action != 'respond'
-    && $action != 'edit'
-    && $action != 'message_submit')
+  if (!CHECK_REGISTERED_ACCOUNTS
+    && !$forum->get_current_user()->is_anonymous())
     return;
-  $spamhash = new SpamHash("commentform");
+  $action = $forum->get_current_action();
+  if ($action == 'write'
+    || $action == 'respond'
+    || $action == 'edit'
+    || $action == 'message_submit')
+    $spamhash = new SpamHash('commentform');
+  elseif ($action == 'account_register' || $action == 'account_create')
+    $spamhash = new SpamHash('registration');
+  else
+    return;
+  $eventbus = &$forum->get_eventbus();
+  $eventbus->signal_connect('on_header_print_before',
+                            'spamhash_on_header_print');
 }
 
 
@@ -38,10 +44,11 @@ function spamhash_on_header_print(&$forum) {
   global $spamhash;
   if (!$spamhash)
     return;
-  if (!CHECK_REGISTERED_ACCOUNTS && $forum->get_current_user())
-    return;
   if ($forum->get_current_action() == 'message_submit'
     && $_POST[send]
+    && !spamhash_check_hash())
+    return;
+  if ($forum->get_current_action() == 'account_create'
     && !spamhash_check_hash())
     return;
   $forum->content = $spamhash->insert_header_code($forum->content);

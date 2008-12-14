@@ -1213,6 +1213,11 @@
      * Main entry point. Called by the constructor.
      *************************************************************/
     function _run() {
+      /* Plugin hook: on_run_before
+       *   Called before the forum is run and the HTML is produced.
+       *   Args: None.
+       */
+      $this->eventbus->emit("on_run_before", &$this);
       $this->title   = "";
       $this->content = "";
 
@@ -1472,11 +1477,13 @@
     }
 
 
-    function print_head() {
+    function print_head($_header = NULL) {
       $oldcontent    = $this->content;
       $this->content = "";
 
-      if (!headers_sent()) {
+      if ($_header)
+        $this->_append_content($_header);
+      elseif (!headers_sent()) {
         header("Content-Type: text/html; charset=utf-8");
         $header = &new HeaderPrinter($this);
         $header->show($this->get_current_title());

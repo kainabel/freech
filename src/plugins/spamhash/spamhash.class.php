@@ -62,7 +62,7 @@ class SpamHash {
 
     // The Javascript that enables all input fields and the form.
     $script  = 'function ' . $this->fn_enable_name . '(){';
-    $script .=   'form = document.getElementById("commentform");';
+    $script .=   'form = document.getElementById("'.$this->form_id.'");';
     $script .=   'inputs = form.getElementsByTagName("input");';
     $script .=   'for (var i = 0; i < inputs.length; i++) {';
     $script .=      'thisinput = inputs[i]; thisinput.disabled = false; }';

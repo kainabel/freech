@@ -51,11 +51,12 @@
       $this->assign('query', $_query);
 
       // Parse the query.
+      $query_string = $_query;
       if ($_forum_id) {
         $this->assign('forum_id', $_forum_id);
-        $_query = "forumid:$forum_id AND (".$_query.")";
+        $query_string = "forumid:$forum_id AND ($_query)";
       }
-      $query = &new SearchQuery($_query);
+      $query = &new SearchQuery($query_string);
 
       // Run the search.
       $func  = array(&$this, '_append_message');

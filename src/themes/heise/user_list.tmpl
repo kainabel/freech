@@ -2,7 +2,7 @@
 {if $n_rows > 0}
 {foreach item=user from=$users}
 <tr>
-  <td align='center' width=8><img src='themes/heise/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
   <td align='left'>
   <a href="{$user->get_profile_url()}">{$user->get_name()|escape}</a>
 {if $group}

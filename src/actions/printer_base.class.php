@@ -46,10 +46,9 @@
     }
 
     function render($_template) {
-      $user  = $this->parent->get_current_user();
-      $group = $this->parent->get_current_group();
-      $this->smarty->assign_by_ref('__user',  $user);
-      $this->smarty->assign_by_ref('__group', $group);
+      $this->assign_by_ref('__user',      $this->parent->get_current_user());
+      $this->assign_by_ref('__group',     $this->parent->get_current_group());
+      $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $this->parent->_append_content($this->smarty->fetch($_template));
     }
   }

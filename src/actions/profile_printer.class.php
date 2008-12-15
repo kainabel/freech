@@ -81,6 +81,8 @@
       $group    = $this->parent->get_current_group();
       $showlist = $_user->get_name() == $current->get_name();
       $showlist = $showlist || $group->may('moderate');
+      $may_edit = $current->get_id() == $_user->get_id()
+               || $group->may('administer');
 
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();
@@ -100,6 +102,7 @@
       // Render the template.
       $this->assign_by_ref('user',     $_user);
       $this->assign_by_ref('group',    $group);
+      $this->assign_by_ref('may_edit', $may_edit);
       $this->assign_by_ref('showinfo', TRUE);
       $this->assign_by_ref('showlist', $showlist);
       $this->render('user_profile.tmpl');
@@ -122,6 +125,7 @@
 
       // Render the template.
       $this->assign_by_ref('user',     $_user);
+      $this->assign_by_ref('may_edit', FALSE);
       $this->assign_by_ref('showinfo', FALSE);
       $this->assign_by_ref('showlist', TRUE);
       $this->render('user_profile.tmpl');

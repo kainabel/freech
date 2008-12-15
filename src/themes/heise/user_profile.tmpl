@@ -2,7 +2,7 @@
 <h2>
   {lang text="profile" name=$user->get_name()}
 {if $may_edit}
-  <a href="{$user->get_editor_url()|escape}">{lang text="account_edit"}</a>
+  <a href="{$user->get_editor_url_string()|escape}">{lang text="account_edit"}</a>
 {/if}
 </h2>
 {if $showinfo}
@@ -12,8 +12,8 @@
   <tr>
     <td>{lang text="group_name"}</td>
     <td>
-      <a href="{$group->get_profile_url()}">{$group->get_name()|escape}</a>
-      <img src="{$group->get_icon()}" title="{$group->get_name()}" />
+      <a href="{$group->get_profile_url_string()|escape}">{$group->get_name()|escape}</a>
+      <img src="{$group->get_icon()}" title="{$group->get_name()|escape}" />
     </td>
   </tr>
   <tr>

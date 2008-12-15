@@ -1202,12 +1202,12 @@
                        $_descr,
                        $_off,
                        $_n_entries) {
-      $this->content = "";
+      $this->content = '';
       $rss = &new RSSPrinter($this);
-      $rss->set_base_url(cfg("site_url"));
+      $rss->set_base_url(cfg('site_url'));
       $rss->set_title($_title);
       $rss->set_description($_descr);
-      $rss->set_language(lang("countrycode"));
+      $rss->set_language(lang('countrycode'));
       $rss->show($_forum_id, $_off, $_n_entries);
       print($this->content);
     }
@@ -1448,31 +1448,31 @@
 
     function get_login_url() {
       $refer_to = $this->_get_login_refer_url();
-      $url      = new URL('?', cfg('urlvars'));
+      $url      = new URL('?', cfg('urlvars'), lang('login'));
       $url->set_var('action',   'login');
       $url->set_var('refer_to', $refer_to);
-      return $url->get_string();
+      return $url;
     }
 
 
     function get_logout_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'), lang('logout'));
       $url->set_var('action', 'logout');
-      return $url->get_string();
+      return $url;
     }
 
 
     function get_statistics_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'), lang('statistics'));
       $url->set_var('action', 'statistics');
-      return $url->get_string();
+      return $url;
     }
 
 
     function get_registration_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'), lang('register'));
       $url->set_var('action', 'account_register');
-      return $url->get_string();
+      return $url;
     }
 
 

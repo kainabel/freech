@@ -15,7 +15,7 @@
 {if $message->get_user_is_anonymous()}
       <i>{$message->get_username()|escape}</i>
 {else}
-      <a href="{$message->get_user_profile_url()|escape}">{$message->get_username()|escape}</a>
+      <a href="{$message->get_user_profile_url_string()|escape}">{$message->get_username()|escape}</a>
 {/if}
     </td>
     <td>

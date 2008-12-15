@@ -23,24 +23,26 @@
    * Represents a URL, including the query variables.
    */
   class URL {
+    var $label;
     var $base;
     var $vars;
-    
-    
+
+
     // Constructor.
-    function URL($_base = '?', $_vars = array()) {
-      $this->base = $_base;
-      $this->vars = array();
+    function URL($_base = '?', $_vars = array(), $_label = '') {
+      $this->label = $_label;
+      $this->base  = $_base;
+      $this->vars  = array();
       $this->set_var_from_array($_vars);
     }
-    
-    
+
+
     // Uses the given string as the URL to which the variables are appended.
     function set_base($_base = '') {
       $this->base = $_base;
     }
-    
-    
+
+
     // Appends the given variable to the URL.
     function set_var($_name, $_value) {
       if ($_value)
@@ -48,34 +50,59 @@
       else
         $this->delete_var($_name);
     }
-    
-    
+
+
     function set_var_from_array($_array) {
       foreach ($_array as $key => $value)
         $this->set_var($key, $value);
     }
-    
-    
+
+
     // Deletes the given variable from the URL.
     function delete_var($_name) {
       unset($this->vars[$_name]);
     }
-    
-    
+
+
     // Removes all variables from the URL that are not listed in the mask.
     function mask($_keep = array()) {
       foreach ($_keep as $var)
         $vars[$var] = $this->vars[$var];
       $this->vars = &$vars;
     }
-    
-    
+
+
     // Returns the URL as a string.
     function get_string($_escape = FALSE) {
       if ($_escape)
         return htmlentities($this->base . http_build_query($this->vars));
       else
         return $this->base . http_build_query($this->vars);
+    }
+
+
+    function set_label($_label = '') {
+      $this->label = $_label;
+    }
+
+
+    function get_label($_escape = FALSE) {
+      if ($_escape)
+        return htmlentities($this->label);
+      else
+        return $this->label;
+    }
+
+
+    // Returns <a href="...">...</a>
+    function get_html($_label = '') {
+      $url   = $this->get_string(TRUE);
+      $label = htmlentities($_label);
+      if (!$label)
+        $label = $this->get_label(TRUE);
+      if (!$label)
+        $label = $url;
+      return "<a href=\"$url\">$label</a>";
     }
   }
 ?>

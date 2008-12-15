@@ -9,8 +9,8 @@
     <item>
       <title>{$message->get_subject()|escape}</title>
       <author>{$message->get_username()|escape}</author>
-      <guid>{$message->get_url()|escape}</guid>
-      <link>{$message->get_url()|escape}</link>
+      <guid>{$message->get_url_string()|escape}</guid>
+      <link>{$message->get_url_string()|escape}</link>
       <description>{$message->get_body_html()|escape}</description>
       <pubDate>{$message->get_created_unixtime()|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
     </item>

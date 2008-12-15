@@ -37,9 +37,9 @@
 {if $message->get_relation() == 1}
      <img src='{$__theme_dir}/img/o.png' width=9 height=21 alt='' />
 {elseif $message->get_relation() == 2}
-     <a href='{$message->get_fold_url()|escape}'><img src='{$__theme_dir}/img/m.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$message->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' border=0 width=9 height=21 alt='0' /></a>
 {elseif $message->get_relation() == 3}
-     <a href='{$message->get_fold_url()|escape}'><img src='{$__theme_dir}/img/p.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$message->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' border=0 width=9 height=21 alt='0' /></a>
 {elseif $message->get_relation() == 4 || $message->get_relation() == 5}
      <img src='{$__theme_dir}/img/e.png' width=20 height=23 alt='`-' />
 {elseif $message->get_relation() == 6 || $message->get_relation() == 7}
@@ -55,7 +55,7 @@
 {elseif !$message->is_active()}
      &nbsp;<font size='-1'>{$message->get_subject()|truncate:$max_subjectlength|escape}</font>
 {else}
-     <font size='-1'>&nbsp;<a href='{$message->get_url()|escape}'>{$message->get_subject()|truncate:$max_subjectlength|escape}</a></font>
+     <font size='-1'>&nbsp;<a href='{$message->get_url_string()|escape}'>{$message->get_subject()|truncate:$max_subjectlength|escape}</a></font>
 {/if}
 {if $message->get_relation() == 3}<font size='-1'>&nbsp;({$message->get_n_children()})</font>{/if}
      </td>

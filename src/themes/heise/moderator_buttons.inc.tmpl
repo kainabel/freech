@@ -4,11 +4,11 @@
 <tr>
 <td>
 {if $message->is_active()}
-<a href="{$message->get_lock_url()|escape}">
+<a href="{$message->get_lock_url_string()|escape}">
 <img border='0' src='{$__theme_dir}/img/unlock.png' title='{lang text="message_lock"}'>
 </a>
 {else}
-<a href="{$message->get_unlock_url()|escape}">
+<a href="{$message->get_unlock_url_string()|escape}">
 <img border='0' src='{$__theme_dir}/img/lock.png' title='{lang text="message_unlock"}'>
 </a>
 {/if}
@@ -16,11 +16,11 @@
 <td>
 {if $message->is_parent()}
   {if $message->get_priority() == 0}
-  <a href="{$message->get_prioritize_url(1)|escape}">
+  <a href="{$message->get_prioritize_url_string(1)|escape}">
   <img border='0' src='{$__theme_dir}/img/sticky.png' title='{lang text="message_stick"}'>
   </a>
   {else}
-  <a href="{$message->get_prioritize_url(0)|escape}">
+  <a href="{$message->get_prioritize_url_string(0)|escape}">
   <img border='0' src='{$__theme_dir}/img/sticky_red.png' title='{lang text="message_unstick"}'>
   </a>
   {/if}

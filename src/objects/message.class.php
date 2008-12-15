@@ -252,7 +252,7 @@
     }
 
 
-    function get_url_obj() {
+    function get_url() {
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $this->get_id());
@@ -263,15 +263,15 @@
     }
 
 
-    function get_url() {
-      return $this->get_url_obj()->get_string();
+    function get_url_string() {
+      return $this->get_url()->get_string();
     }
 
 
     // The url behind the "+/-" toggle button.
     function get_fold_url() {
       if ($_GET['action'] == 'read') {
-        $url = $this->get_url_obj();
+        $url = $this->get_url();
         $url->set_var('showthread', -1);
       }
       elseif ($_GET['action'] == 'user_postings') {
@@ -290,7 +290,12 @@
         $url->set_var('forum_id', $this->get_forum_id());
         $url->set_var('c',        $this->get_id());
       }
-      return $url->get_string();
+      return $url;
+    }
+
+
+    function get_fold_url_string() {
+      return $this->get_fold_url()->get_string();
     }
 
 
@@ -300,7 +305,12 @@
       $url->set_var('action',   'message_lock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-      return $url->get_string();
+      return $url;
+    }
+
+
+    function get_lock_url_string() {
+      return $this->get_lock_url()->get_string();
     }
 
 
@@ -310,7 +320,12 @@
       $url->set_var('action',   'message_unlock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-      return $url->get_string();
+      return $url;
+    }
+
+
+    function get_unlock_url_string() {
+      return $this->get_unlock_url()->get_string();
     }
 
 
@@ -321,7 +336,12 @@
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('priority', (int)$_priority);
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-      return $url->get_string();
+      return $url;
+    }
+
+
+    function get_prioritize_url_string($_priority) {
+      return $this->get_prioritize_url($_priority)->get_string();
     }
 
 
@@ -333,7 +353,12 @@
       $profile_url = new URL('?', cfg('urlvars'));
       $profile_url->set_var('action',   'user_profile');
       $profile_url->set_var('username', $username);
-      return $profile_url->get_string();
+      return $profile_url;
+    }
+
+
+    function get_user_profile_url_string() {
+      return $this->get_user_profile_url()->get_string();
     }
 
 

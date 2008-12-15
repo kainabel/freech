@@ -144,7 +144,12 @@
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',    'group_profile');
       $url->set_var('groupname', $this->get_name());
-      return $url->get_string();
+      return $url;
+    }
+
+
+    function get_profile_url_string() {
+      return $this->get_profile_url()->get_string();
     }
 
 
@@ -152,7 +157,12 @@
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',    'group_editor');
       $url->set_var('groupname', $this->get_name());
-      return $url->get_string();
+      return $url;
+    }
+
+
+    function get_editor_url_string() {
+      return $this->get_editor_url()->get_string();
     }
 
 

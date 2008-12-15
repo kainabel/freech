@@ -42,16 +42,16 @@
   // Permit only one forum at this time.
   $user = $forum->get_current_user();
   if ($user->is_anonymous()) {
-    print("<a href='".$forum->get_login_url(TRUE)."'>".lang("login")."</a>");
-    print(" | <a href='".$forum->get_registration_url()."'>".lang("register")."</a>");
+    print($forum->get_login_url()->get_html());
+    print(' | '.$forum->get_registration_url()->get_html());
   }
   else {
-    print("<a href='".$forum->get_logout_url()."'>".lang("logout")."</a>");
-    print(" | <a href='".$user->get_profile_url()."'>".lang("myprofile")."</a>");
-    print(" | <a href='".$user->get_editor_url()."'>".lang("account_mydata")."</a>");
-    print(" | <a href='".$user->get_postings_url()."'>".lang("mypostings")."</a>");
+    print($forum->get_logout_url()->get_html());
+    print(' | '.$user->get_profile_url()->get_html(lang('myprofile')));
+    print(' | '.$user->get_editor_url()->get_html(lang('account_mydata')));
+    print(' | '.$user->get_postings_url()->get_html(lang('mypostings')));
   }
-  print(" | <a href='".$forum->get_statistics_url()."'>".lang("statistics")."</a>");
+  print(' | '.$forum->get_statistics_url()->get_html());
   $forum->show();
   $forum->destroy();
 

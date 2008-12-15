@@ -86,6 +86,11 @@
       $this->clear_all_assign();
       if ($showlist)
         $this->_assign_user_postings($_user, $_thread_state, $_offset);
+      else {
+        $search    = array('userid' => $_user->get_id());
+        $n_entries = $this->forumdb->get_n_messages($search);
+        $this->assign_by_ref('n_messages', $n_entries);
+      }
 
       // Load the group info.
       $groupdb = $this->parent->_get_groupdb();

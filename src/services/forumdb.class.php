@@ -651,6 +651,41 @@
     }
 
 
+    function get_messages_from_query($_search_values,
+                                     $_offset = 0,
+                                     $_limit  = -1) {
+      $limit  = $_limit  * 1;
+      $offset = $_offset * 1;
+
+      $sql  = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
+      $sql  .= " FROM {t_message}";
+      $sql  .= " WHERE 1";
+      $query = &new FreechSqlQuery($sql);
+      if ($_search_values)
+        $this->_add_where_expression($query, $_search_values);
+      $sql  = $query->sql();
+      $sql .= " ORDER BY created DESC";
+      $query->set_sql($sql);
+      $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
+                            or die("ForumDB::foreach_message_from_query()");
+      $messages = array();
+      while (!$res->EOF) {
+        $message = new Message;
+        $message->set_from_db($res->FetchRow());
+        array_push($messages, $message);
+      }
+      return $messages;
+    }
+
+
+    function get_message_from_query($_search_values, $_offset = 0) {
+      $message = $this->get_messages_from_query($_search_values, $_offset, 1);
+      return $message[0];
+    }
+
+
     /* Returns latest messages from the given forum.
      * $_forum:   The forum id.
      * $_offset:  The offset of the first message.
@@ -827,6 +862,32 @@
       $query->set_int('forum_id', $_forum_id);
       $n = $this->db->GetOne($query->sql());
       return $n;
+    }
+
+
+    function get_n_messages_from_user_id($_user_id, $_since = 0) {
+      $sql  = "SELECT COUNT(*)";
+      $sql .= " FROM {t_message}";
+      $sql .= " WHERE user_id={user_id}";
+      if ($_since)
+        $sql .= " AND created > FROM_UNIXTIME({since})";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('user_id', $_user_id);
+      $query->set_int('since',   $_since);
+      return $this->db->GetOne($query->sql());
+    }
+
+
+    function get_n_messages_from_ip_hash($_ip_hash, $_since = 0) {
+      $sql  = "SELECT COUNT(*)";
+      $sql .= " FROM {t_message}";
+      $sql .= " WHERE ip_hash={ip_hash}";
+      if ($_since)
+        $sql .= " AND created > FROM_UNIXTIME({since})";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('ip_hash', $_ip_hash);
+      $query->set_int('since',   $_since);
+      return $this->db->GetOne($query->sql());
     }
 
 

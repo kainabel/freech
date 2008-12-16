@@ -446,6 +446,41 @@
     }
 
 
+    function _flood_blocked_until($_message) {
+      $forumdb = $this->forumdb;
+      $user    = $this->get_current_user();
+      $since   = time() - cfg('max_postings_time');
+      $offset  = cfg('max_postings') * -1;
+
+      // Find out how many postings were sent from the given user lately.
+      if (!$user->is_anonymous()) {
+        $uid        = $user->get_id();
+        $n_postings = $forumdb->get_n_messages_from_user_id($uid, $since);
+        if ($n_postings < cfg('max_postings'))
+          return;
+        $search       = array('user_id' => $user_id);
+        $last_message = $forumdb->get_message_from_query($search, $offset);
+      }
+
+      // Find out how many postings were sent from the given IP lately.
+      if (!$last_message) {
+        $ip_hash    = $_message->get_ip_address_hash();
+        $n_postings = $forumdb->get_n_messages_from_ip_hash($ip_hash, $since);
+        if ($n_postings < cfg('max_postings'))
+          return;
+        $search       = array('ip_hash' => $ip_hash);
+        $last_message = $forumdb->get_message_from_query($search, $offset);
+      }
+
+      if (!$last_message)
+        return;
+
+      // If the too many messages were posted, block this.
+      $post_time = $last_message->get_created_unixtime();
+      return $post_time + cfg('max_postings_time');
+    }
+
+
     // Sends an email to the given user.
     function _send_account_mail(&$user, $subject, $body, $vars) {
       $head  = "From: ".cfg("mail_from")."\r\n";
@@ -734,6 +769,7 @@
       $msgprinter = &new MessagePrinter($this);
       $user       = $this->get_current_user();
       $forum_id   = $this->get_current_forum_id();
+      $forumdb    = $this->forumdb;
 
       // Check whether editing is allowed per configuration.
       if ($_POST['msg_id'] && !cfg("postings_editable"))
@@ -742,7 +778,7 @@
       // Fetch the message from the database (when editing an existing one) or
       // create a new one from the POST data.
       if ($_POST['msg_id']) {
-        $message = $this->forumdb->get_message_from_id($_POST['msg_id']);
+        $message = $forumdb->get_message_from_id($_POST['msg_id']);
         $message->set_subject($_POST['subject']);
         $message->set_body($_POST['body']);
         $message->set_updated_unixtime(time());
@@ -768,16 +804,26 @@
       // Make sure that the username is not in use.
       if ($user->is_anonymous()
         && !$this->_username_available($message->get_username()))
-         return $msgprinter->show_compose($message,
-                                          lang("usernamenotavailable"),
-                                          $parent_id,
-                                          $may_quote);
+        return $msgprinter->show_compose($message,
+                                         lang("usernamenotavailable"),
+                                         $parent_id,
+                                         $may_quote);
 
-      // If the message a new one (not an edited one), check for duplicates.
       if ($message->get_id() <= 0) {
-        $duplicate_id = $this->forumdb->get_duplicate_id_from_message($message);
+        // If the message a new one (not an edited one), check for duplicates.
+        $duplicate_id = $forumdb->get_duplicate_id_from_message($message);
         if ($duplicate_id)
           $this->_refer_to_message_id($duplicate_id);
+
+        $blocked_until = $this->_flood_blocked_until($message);
+        if ($blocked_until) {
+          $blocked = date(lang('dateformat'), $blocked_until);
+          $args    = array('until' => $blocked);
+          return $msgprinter->show_compose($message,
+                                           lang('too_many_postings', $args),
+                                           $parent_id,
+                                           $may_quote);
+        }
       }
 
       // Save the message.

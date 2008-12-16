@@ -162,6 +162,11 @@
   $cfg[statistics_extra_data] = '';
   $cfg[statistics_extra_label] = 'Extra';
 
+  // This is a flood blocker: You may specify the maximum number of
+  // postings per n seconds.
+  $cfg[max_postings] = 5;
+  $cfg[max_postings_time] = 60*3;
+
   // *************************************************************
   // Performance tweaks.
   // *************************************************************

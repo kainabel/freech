@@ -70,17 +70,19 @@
                            ." Forum nicht";
   
   // Compose
-  $lang[writeamessage]    = "Neuen Beitrag für das Forum schreiben";
-  $lang[writeananswer]    = "Antwort für das Forum schreiben";
-  $lang[required]         = "(bitte unbedingt ausfüllen)";
-  $lang[name]             = "Name";
-  $lang[msgtitle]         = "Überschrift";
-  $lang[msgbody]          = "Beitrag";
-  $lang[msgimage]         = "Bild";
-  $lang[preview]          = "Vorschau";
-  $lang[quote]            = "Zitat einfügen";
-  $lang[answer]           = "Re: ";
-  $lang[wrote]            = "[USER] schrieb am [TIME]";
+  $lang[writeamessage]     = "Neuen Beitrag für das Forum schreiben";
+  $lang[writeananswer]     = "Antwort für das Forum schreiben";
+  $lang[required]          = "(bitte unbedingt ausfüllen)";
+  $lang[name]              = "Name";
+  $lang[msgtitle]          = "Überschrift";
+  $lang[msgbody]           = "Beitrag";
+  $lang[msgimage]          = "Bild";
+  $lang[preview]           = "Vorschau";
+  $lang[quote]             = "Zitat einfügen";
+  $lang[answer]            = "Re: ";
+  $lang[wrote]             = "[USER] schrieb am [TIME]";
+  $lang[too_many_postings] = "Sie haben zu viele Nachrichten abgeschickt."
+                           . " Nächstes Posting ist wieder möglich: [UNTIL].";
   
   // Preview
   $lang[reallysend]       = "Vorschau";

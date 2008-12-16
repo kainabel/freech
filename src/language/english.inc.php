@@ -65,17 +65,19 @@
   $lang[noentrybody]      = "A message with the given ID does not exist.";
   
   // Compose
-  $lang[writeamessage]    = "Write a New Message";
-  $lang[writeananswer]    = "Write a Reply";
-  $lang[required]         = "(required)";
-  $lang[name]             = "Name";
-  $lang[msgtitle]         = "Subject";
-  $lang[msgbody]          = "Message";
-  $lang[msgimage]         = "Image";
-  $lang[preview]          = "Preview";
-  $lang[quote]            = "Quote Message";
-  $lang[answer]           = "Re: ";
-  $lang[wrote]            = "[USER] wrote on [TIME]:";
+  $lang[writeamessage]     = "Write a New Message";
+  $lang[writeananswer]     = "Write a Reply";
+  $lang[required]          = "(required)";
+  $lang[name]              = "Name";
+  $lang[msgtitle]          = "Subject";
+  $lang[msgbody]           = "Message";
+  $lang[msgimage]          = "Image";
+  $lang[preview]           = "Preview";
+  $lang[quote]             = "Quote Message";
+  $lang[answer]            = "Re: ";
+  $lang[wrote]             = "[USER] wrote on [TIME]:";
+  $lang[too_many_postings] = "You have sent too many messages."
+                           . " Submission is locked until [UNTIL].";
   
   // Preview
   $lang[reallysend]       = "Preview";

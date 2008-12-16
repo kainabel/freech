@@ -12,7 +12,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -60,10 +60,10 @@
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
                           . "our terms of usage.";
-  
+
   $lang[noentrytitle]     = "No Such Message";
   $lang[noentrybody]      = "A message with the given ID does not exist.";
-  
+
   // Compose
   $lang[writeamessage]     = "Write a New Message";
   $lang[writeananswer]     = "Write a Reply";
@@ -77,8 +77,9 @@
   $lang[answer]            = "Re: ";
   $lang[wrote]             = "[USER] wrote on [TIME]:";
   $lang[too_many_postings] = "You have sent too many messages."
-                           . " Submission is locked until [UNTIL].";
-  
+                           . " [SECONDS] seconds until your message may"
+                           . " be sent.";
+
   // Preview
   $lang[reallysend]       = "Preview";
   $lang[somethingmissing] = "Warning! Your message is incomplete.";
@@ -92,7 +93,7 @@
   $lang[forgottext]       = "No text was entered."; // Not used
   $lang[change]           = "Edit Message";
   $lang[send]             = "Send Message";
-  
+
   // Registration
   $lang[register]            = "Register Account";
   $lang[register_title]      = "User Registration";
@@ -144,7 +145,7 @@
                                    . " clicking the registration link below."
                                    . "\n"
                                    . "[URL]\n";
-  
+
   // Change password.
   $lang[change_password_title] = "Password Change";
   $lang[change_password_text]  = "Please assign your personal login password.";
@@ -175,7 +176,7 @@
                             . " this message.\n"
                             . "\n"
                             . "[URL]\n";
-  
+
   // Login
   $lang[login_text]       = "To log in your browser must support cookies.";
   $lang[resetpasswd_title] = "Resetting Your Password";

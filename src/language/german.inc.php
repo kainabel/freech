@@ -13,7 +13,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -64,11 +64,11 @@
                            ."eine rechtswidrige Äußerung oder verletzte "
                            ."grob die Nutzungsbedingungen für unsere "
                            . "Diskussionsforen. Er ist daher gelöscht worden.";
-  
+
   $lang[noentrytitle]     = "Dieser Beitrag ist nicht vorhanden";
   $lang[noentrybody]      = "Der von ihnen angeforderte Eintrag existiert in diesem"
                            ." Forum nicht";
-  
+
   // Compose
   $lang[writeamessage]     = "Neuen Beitrag für das Forum schreiben";
   $lang[writeananswer]     = "Antwort für das Forum schreiben";
@@ -82,8 +82,9 @@
   $lang[answer]            = "Re: ";
   $lang[wrote]             = "[USER] schrieb am [TIME]";
   $lang[too_many_postings] = "Sie haben zu viele Nachrichten abgeschickt."
-                           . " Nächstes Posting ist wieder möglich: [UNTIL].";
-  
+                           . " Nächstes Posting ist erst in [SECONDS]"
+                           . " Sekunden wieder möglich.";
+
   // Preview
   $lang[reallysend]       = "Vorschau";
   $lang[somethingmissing] = "Achtung! Ihr Beitrag ist nicht vollständig.";
@@ -97,7 +98,7 @@
   $lang[forgottext]       = "Sie haben keinen Text eingegeben."; // Not used
   $lang[change]           = "Bearbeiten";
   $lang[send]             = "Abschicken";
-  
+
   // Registration
   $lang[register]            = "Account registrieren";
   $lang[register_title]      = "Benutzer-Registrierung";
@@ -141,7 +142,7 @@
   $lang[invalidfirstname]    = "Bitte geben Sie einen gueltigen Vornamen ein.";
   $lang[invalidlastname]     = "Bitte geben Sie einen gueltigen Nachnamen ein.";
   $lang[invalidhomepage]     = "Bitte geben Sie eine gültige Homepage ein.";
-  
+
   // Registration mail.
   $lang[registration_mail_subject] = "Deine Registrierung bei $cfg[site_title]";
   $lang[registration_mail_body]    = "Hallo [FIRSTNAME] [LASTNAME]!\n"
@@ -154,7 +155,7 @@
                                    . " Klick auf den folgenden Link:"
                                    . "\n"
                                    . "[URL]\n";
-  
+
   // Change password.
   $lang[change_password_title] = "Passwort ändern";
   $lang[change_password_text]  = "Bitte vergeben sie ihr persönliches Login-Passwort.";
@@ -178,14 +179,14 @@
                             . "Wir haben eine Anfrage zur Zurücksetzung des"
                             . " Passwortes für deinen Account \"[LOGIN]\""
                             . " erhalten.\n"
-                            . "Um das Passwort jetzt zurückzusetzen klicke" 
+                            . "Um das Passwort jetzt zurückzusetzen klicke"
                             . " bitte den Link unten an."
                             . " Falls du keine Anfrage zur Zurücksetzung"
                             . " gestellt hast, ignoriere bitte diese Mail."
                             . "\n"
                             . "\n"
                             . "[URL]\n";
-  
+
   // Login
   $lang[login_text]       = "Hinweis: Um einzuloggen muss Ihr Browser Cookies"
                           . " akzeptieren.";

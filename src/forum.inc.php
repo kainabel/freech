@@ -817,8 +817,7 @@
 
         $blocked_until = $this->_flood_blocked_until($message);
         if ($blocked_until) {
-          $blocked = date(lang('dateformat'), $blocked_until);
-          $args    = array('until' => $blocked);
+          $args = array('seconds' => $blocked_until - time());
           return $msgprinter->show_compose($message,
                                            lang('too_many_postings', $args),
                                            $parent_id,

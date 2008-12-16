@@ -458,7 +458,7 @@
         $n_postings = $forumdb->get_n_messages_from_user_id($uid, $since);
         if ($n_postings < cfg('max_postings'))
           return;
-        $search       = array('user_id' => $user_id);
+        $search       = array('user_id' => $uid);
         $last_message = $forumdb->get_message_from_query($search, $offset);
       }
 

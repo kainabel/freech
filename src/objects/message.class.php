@@ -290,6 +290,7 @@
         $url->set_var('forum_id', $this->get_forum_id());
         $url->set_var('c',        $this->get_id());
       }
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       return $url;
     }
 

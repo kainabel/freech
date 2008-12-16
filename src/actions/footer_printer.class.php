@@ -29,6 +29,7 @@
       // Create the URLs for changing the message ordering.
       $order_url = new URL('?', cfg("urlvars"));
       $order_url->set_var('forum_id', (int)$_forum_id);
+      $order_url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       if ($_COOKIE[view] === 'plain') {
         $order_url->set_var('changeview', 't');
         $order_by_thread_url = $order_url->get_string();

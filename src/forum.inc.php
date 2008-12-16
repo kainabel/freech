@@ -212,38 +212,52 @@
       if ($_GET['c']) {
         $thread_state->swap($_GET['c']);
         $this->_set_cookie('c', $thread_state->get_string());
+        $this->_refer_to($_GET['refer_to']);
       }
 
       if ($_GET['user_postings_c']) {
         $user_postings_state->swap($_GET['user_postings_c']);
         $this->_set_cookie('user_postings_c',
                            $user_postings_state->get_string());
+        $this->_refer_to($_GET['refer_to']);
       }
 
-      if ($_GET['changeview'] === 't')
+      if ($_GET['changeview'] === 't') {
         $this->_set_cookie('view', 'thread');
-      elseif ($_GET['changeview'] === 'c')
+        $this->_refer_to($_GET['refer_to']);
+      }
+      elseif ($_GET['changeview'] === 'c') {
         $this->_set_cookie('view', 'plain');
+        $this->_refer_to($_GET['refer_to']);
+      }
 
-      if ($_GET['showthread'] === '-1')
+      if ($_GET['showthread'] === '-1') {
         $this->_set_cookie('thread', 'hide');
-      elseif ($_GET['showthread'] === '1')
+        $this->_refer_to($_GET['refer_to']);
+      }
+      elseif ($_GET['showthread'] === '1') {
         $this->_set_cookie('thread', 'show');
+        $this->_refer_to($_GET['refer_to']);
+      }
 
       if ($_GET['fold'] === '1') {
         $this->_set_cookie('fold', '1');
         $this->_set_cookie('c', '');
+        $this->_refer_to($_GET['refer_to']);
       } elseif ($_GET['fold'] === '2') {
         $this->_set_cookie('fold', '2');
         $this->_set_cookie('c', '');
+        $this->_refer_to($_GET['refer_to']);
       }
 
       if ($_GET['user_postings_fold'] === '1') {
         $this->_set_cookie('user_postings_fold', '1');
         $this->_set_cookie('user_postings_c', '');
+        $this->_refer_to($_GET['refer_to']);
       } elseif ($_GET['user_postings_fold'] === '2') {
         $this->_set_cookie('user_postings_fold', '2');
         $this->_set_cookie('user_postings_c', '');
+        $this->_refer_to($_GET['refer_to']);
       }
     }
 

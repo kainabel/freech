@@ -121,7 +121,8 @@
       // "Unfold all" link.
       $url = clone($url);
       call_user_func($additem);
-      $url->set_var('hs', $n_offset);
+      $url->set_var('hs',       $n_offset);
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       if ($fold != THREAD_STATE_UNFOLDED || $swap != '') {
         $url->set_var('user_postings_fold', THREAD_STATE_UNFOLDED);
         call_user_func($additem, lang("unfoldall"), $url);

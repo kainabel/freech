@@ -141,6 +141,7 @@
       // "New message" link.
       $url = clone($url);
       $url->delete_var('fold');
+      $url->delete_var('refer_to');
       $url->delete_var('hs');
       $url->set_var('action', 'write');
       call_user_func($additem);

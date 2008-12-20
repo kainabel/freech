@@ -1,7 +1,7 @@
 NAME=freech
 VERSION=`grep _VERSION src/forum.inc.php | cut -d"'" -f4`
 PACKAGE=$(NAME)-$(VERSION)-1
-DISTDIR=/pub/code/www/releases/$(NAME)
+DISTDIR=/pub/code/releases/$(NAME)
 
 publish:
 	rsync -avzr src/ root@91.184.35.4:/home/sab/backups/code/www/$$NAME.debain.org/ \

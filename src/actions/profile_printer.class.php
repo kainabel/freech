@@ -136,26 +136,46 @@
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action', 'user_submit');
 
-      // Load a list of group names.
+      // Find permissions.
+      $current    = $this->parent->get_current_user();
+      $group      = $this->parent->get_current_group();
+      $is_self    = $current->get_id() == $_user->get_id();
+      $may_edit   = $is_self || $group->may('administer');
+      $may_admin  = $group->may('administer');
+      $may_delete = $may_edit;
+
+      // Fetch the corresponding group.
       $groupdb = $this->parent->_get_groupdb();
-      $list    = $groupdb->get_groups_from_query(array());
-      $groups  = array();
+      $query   = array('id' => $_user->get_group_id());
+      $group   = $groupdb->get_group_from_query($query);
+
+      // Load a list of group names.
+      $list   = $groupdb->get_groups_from_query(array());
+      $groups = array();
       foreach ($list as $group)
         $groups[$group->get_id()] = $group->get_name();
 
-      // Fetch some variables.
-      $query  = array('id' => $_user->get_group_id());
-      $group  = $groupdb->get_group_from_query($query);
-      $status = $_user->get_status_names();
+      // Get a list of user status names.
+      if ($may_admin)
+        $status = $_user->get_status_names();
+      elseif ($is_self) {
+        $status = array(
+          USER_STATUS_ACTIVE  => $_user->get_status_names(USER_STATUS_ACTIVE),
+          USER_STATUS_DELETED => $_user->get_status_names(USER_STATUS_DELETED)
+        );
+      }
 
       // Render the template.
       $this->clear_all_assign();
-      $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('group',  $group);
-      $this->assign_by_ref('groups', $groups);
-      $this->assign_by_ref('status', $status);
-      $this->assign_by_ref('hint',   $_hint);
-      $this->assign_by_ref('action', $url->get_string());
+      $this->assign_by_ref('may_edit',   $may_edit);
+      $this->assign_by_ref('may_admin',  $may_admin);
+      $this->assign_by_ref('may_delete', $may_delete);
+      $this->assign_by_ref('user',       $_user);
+      $this->assign_by_ref('group',      $group);
+      $this->assign_by_ref('groups',     $groups);
+      $this->assign_by_ref('status',     $status);
+      $this->assign_by_ref('hint',       $_hint);
+      $this->assign_by_ref('action',     $url->get_string());
       $this->render('user_editor.tmpl');
       $this->parent->_set_title($_user->get_name());
     }

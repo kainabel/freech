@@ -926,18 +926,27 @@
       global $err;
       $profile = &new ProfilePrinter($this);
       $user    = $this->get_current_user();
+      $group   = $this->get_current_group();
+      $is_self = $_POST['user_id'] == $user->get_id();
 
       // Check permissions.
       if ($user->is_anonymous())
         die('Not logged in');
-      if ($_POST['user_id'] != $user->get_id()) {
-        if (!$this->get_current_group()->may('administer'))
-          die("Permission denied");
+      elseif ($group->may('administer')) {
         $user = $this->_get_user_from_id_or_die($_POST['user_id']);
         $user->set_name($_POST['username']);
         $user->set_group_id($_POST['group_id']);
         $user->set_status($_POST['status']);
       }
+      elseif ($is_self) {
+        if ($_POST['status'] == USER_STATUS_DELETED
+         || $_POST['status'] == USER_STATUS_ACTIVE)
+          $user->set_status($_POST['status']);
+        else
+          die("Invalid status");
+      }
+      else
+        die("Permission denied");
 
       $this->_print_profile_breadcrumbs($user);
 

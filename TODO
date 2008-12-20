@@ -4,4 +4,3 @@
 * Display the moderation log in the moderator's profile.
 * Use gettext and .po/-mo-files to replace the home grown thingy.
 * Make the front page prettier and add links to special pages.
-* Allow users to delete their own account.

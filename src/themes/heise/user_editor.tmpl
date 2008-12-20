@@ -6,7 +6,7 @@
   <table>
     <tr>
       <td>{lang text="group_name"}</td>
-{if $__group->may('administer')}
+{if $may_admin}
       <td>
       {html_options name="group_id" options=$groups selected=$group->get_id()}
       </td>
@@ -16,7 +16,7 @@
     </tr>
     <tr>
       <td>{lang text="account_name"}</td>
-{if $__group->may('administer')}
+{if $may_admin}
       <td><input size="70" type="text" name="username" value="{$user->get_name()|escape}" /></td>
 {else}
       <td>{$user->get_name()|escape}</td>
@@ -24,7 +24,7 @@
     </tr>
     <tr>
       <td>{lang text="account_status"}</td>
-{if $__group->may('administer')}
+{if $may_delete}
       <td>
       {html_options name="status" options=$status selected=$user->get_status()}
       </td>

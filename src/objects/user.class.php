@@ -365,6 +365,11 @@ define("USER_STATUS_BLOCKED",     3);
     }
 
 
+    function is_deleted() {
+      return $this->get_status() == USER_STATUS_DELETED;
+    }
+
+
     function is_confirmed() {
       return $this->fields[status] != USER_STATUS_UNCONFIRMED;
     }

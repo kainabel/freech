@@ -19,6 +19,8 @@
   */
 ?>
 <?php
+  define('FREECH_VERSION', '0.9.12');
+
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';
   include_once 'libuseful/SqlQuery.class.php5';

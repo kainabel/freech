@@ -43,7 +43,7 @@
 
       // Render the resulting template.
       $version[url]  = "http://debain.org/software/freech/";
-      $version[text] = "Freech Forum v0.9.10";
+      $version[text] = "Freech Forum ".FREECH_VERSION;
       $this->clear_all_assign();
       $this->assign_by_ref('order_by_thread', $order_by_thread_url);
       $this->assign_by_ref('order_by_time',   $order_by_time_url);

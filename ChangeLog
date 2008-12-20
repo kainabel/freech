@@ -1,3 +1,10 @@
+2008-12-20  Samuel Abels  <http://debain.org>
+
+	* Unfortunately the changelog is very incomplete. There have been a huge
+	amount of changes since the last release, most of which are not listed here.
+	If you need a decent history, please look at our SVN changelog.
+	* Release 0.9.12
+
 2008-11-22  Samuel Abels  <http://debain.org>
 
 	* Add a search function.
@@ -8,7 +15,7 @@
 
 2008-11-11  Samuel Abels  <http://debain.org>
 
-	* Fix: It is no longer possible to use a registered user name anonymously by 
+	* Fix: It is no longer possible to use a registered user name anonymously by
 	prefixing it with whitespace.
 
 2008-11-10  Samuel Abels  <http://debain.org>
@@ -27,9 +34,9 @@
 	* Fix: Make the SpamHash plugin initialize the session when first ticked.
 	* Fix: SpamHash plugin now works on non-gecko based browsers.
 	* Minor code cleanups.
-	
+
 2005-11-10  Samuel Abels  <http://debain.org>
-	
+
 	* Release 0.9.8
 	* Fix: Correct URL variable order in the RSS.
 	* Fix: Truncate subject if prepending "Re:" makes it too long.
@@ -43,7 +50,7 @@
 	* Release 0.9.6
 	* Immense code cleanups (almost rewrite).
 	* Database abstraction through AdoDB, so databases other than MySQL *should*
-	  work. I have no way to test this though.
+	work. I have no way to test this though.
 	* Performance should have increased significantly.
 	* Templates are easier to understand.
 
@@ -51,16 +58,14 @@
 	
 	* Release 0.9.4
 	* Fix: No real security problem was known, but with register_globals=on
-	  you might run into problems I can't think of in older versions.
+	you might run into problems I can't think of in older versions.
 
 2005-07-18  Samuel Abels  <http://debain.org>
 	
 	* Release 0.9.2
-	* Theme support through smarty was added and a
-	  second theme was created.
+	* Theme support through smarty was added and a second theme was created.
 	* RSS2.0 support was added.
-	* A bug where empty forums did not show an index
-	  was fixed.
+	* A bug where empty forums did not show an index was fixed.
 
 2005-07-10  Samuel Abels  <http://debain.org>
 

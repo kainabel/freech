@@ -87,7 +87,7 @@
       $sql .= " WHERE visit < {end}";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('end', time() - 60 * 60 * 24 * 30);
-      $this->db->Execute($query->sql()) or die("VisitorDB::_flush()");
+      $this->db->Execute($query->sql());
     }
 
 

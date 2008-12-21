@@ -25,7 +25,7 @@ Installation Instructions
    FTP client (consult the documentation of the client in case you use one),
    or by using the following command on the webserver:
 
-     chmod -R 777 src/data/
+     chmod -R a+rwX src/data/
 
 3. Edit the file "config.inc.php" according to your needs. It contains more
    documentation and should be self explaining.

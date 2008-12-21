@@ -2,4 +2,10 @@ Upgrade Instructions
 - - - - - - - - - - -
 
 - Follow the installation instructions in the INSTALL file, but
-  leave out step 4.
+  instead of step 4, do the following:
+
+    1. Take all files from the upgrade/ directory that have a version number
+    greater than your OLD installation package AFTER the "_to_" in the file
+    name.
+
+    2. Execute each of them in your database, lowest version number first.

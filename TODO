@@ -1,3 +1,4 @@
+* Add read/write permissions to the permission list.
 * Design a URL scheme that makes sense for URL rewriting.
 * Add a moderation log.
 * Display the moderation log when viewing a locked message.

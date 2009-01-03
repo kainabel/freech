@@ -24,6 +24,7 @@
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';
   include_once 'libuseful/SqlQuery.class.php5';
+  include_once 'services/trackable.class.php';
 
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
@@ -69,7 +70,6 @@
   include_once 'services/forumdb.class.php';
   include_once 'services/userdb.class.php';
   include_once 'services/visitordb.class.php';
-  include_once 'services/trackable.class.php';
   include_once 'services/plugin_registry.class.php';
 
   class FreechForum {
@@ -671,6 +671,12 @@
       $msg        = $this->forumdb->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
       $this->_print_message_breadcrumbs($msg);
+
+      /* Plugin hook: on_message_read_print
+       *   Called before the HTML for the message is produced.
+       *   Args: message: The message that is about to be shown.
+       */
+      $this->eventbus->emit('on_message_read_print', &$this, &$msg);
       $msgprinter->show($msg);
     }
 
@@ -759,6 +765,11 @@
                                           $may_quote);
 
       // Success.
+      /* Plugin hook: on_message_preview_print
+       *   Called before the HTML for the message preview is produced.
+       *   Args: message: The message that is about to be previewed.
+       */
+      $this->eventbus->emit('on_message_preview_print', &$this, &$message);
       $msgprinter->show_preview($message, $parent_id, $may_quote);
     }
 

@@ -31,9 +31,10 @@
   /**
    * Represents a message in the forum and all associated data.
    */
-  class Message {
+  class Message extends Trackable {
     // Constructor.
     function Message() {
+      $this->Trackable();
       $this->clear();
     }
 
@@ -226,29 +227,40 @@
     }
 
 
-    function _url2link($match) {
-      return '<a href="'.$match[0].'">'
-           . $match[0]
-           . '</a>';
-    }
-
-
-    function &get_body_html($_quotecolor = "#990000") {
+    function _update_body_html($_quotecolor = '#990000') {
+      // Perform non HTML generating formattings.
       $body = $this->get_body();
       if ($this->get_id() <= 0 && $this->get_signature())
         $body .= "\n\n--\n" . $this->get_signature();
       $body = wordwrap_smart($body);
       $body = string_escape($body);
+
+      // Let plugins perform formattings.
+      $this->set_body_html($body);
+      $this->emit('on_format_before_html', $this);
+
+      // Perform HTML generating formattings.
+      $body = $this->get_body_html();
       $body = preg_replace("/ /", "&nbsp;", $body);
       $body = nl2br($body);
       $body = preg_replace("/^(&gt;&nbsp;.*)/m",
                            "<font color='$_quotecolor'>$1</font>",
                            $body);
-      if (cfg("autolink_urls"))
-        $body = preg_replace_callback('~' . cfg("autolink_pattern") . '~',
-                                      array($this, '_url2link'),
-                                      $body);
-      return $body;
+      $this->set_body_html($body);
+
+      $this->emit('on_format_after_html', $this);
+    }
+
+
+    function set_body_html($_html) {
+      $this->body_html = $_html;
+    }
+
+
+    function get_body_html($_quotecolor = "#990000") {
+      if (!$this->body_html)
+        $this->_update_body_html($_quotecolor);
+      return $this->body_html;
     }
 
 

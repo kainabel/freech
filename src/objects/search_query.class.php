@@ -19,16 +19,11 @@
   */
 ?>
 <?php
-class Token {
-  function Token() {
-  }
-}
-
-class SearchQuery {
+class SearchQuery extends Parser {
   // Constructor.
   function SearchQuery($_query = '')
   {
-    $this->token_list = array(
+    $this->Parser(array(
       array('and',          '/^and\b/i'),
       array('or',           '/^or\b/i'),
       array('not',          '/^not\b/i'),
@@ -39,7 +34,7 @@ class SearchQuery {
       array('word',         '/^"([^"]*)"/'),
       array('word',         '/^([^"\:\s\(\)\\\']+)/'),
       array('unknown',      '/^./')
-    );
+    ));
     $this->field_names = array('name'     => 'username',
                                'user'     => 'username',
                                'username' => 'username',
@@ -55,30 +50,8 @@ class SearchQuery {
 
 
   function set_query($_query) {
-    $this->query = trim($_query);
+    $this->input = trim($_query);
     $this->_parse();
-  }
-
-
-  function _get_next_token() {
-    if (strlen($this->query) <= $this->offset)
-      return array('EOF', NULL);
-
-    // Walk through the list of tokens, trying to find a match.
-    foreach ($this->token_list as $pair) {
-      list($token_name, $token_regex) = $pair;
-      $n_matches = preg_match($token_regex,
-                              substr($this->query, $this->offset),
-                              $matches,
-                              0);
-      if ($n_matches == 0)
-        continue;
-      $this->offset += strlen($matches[0]);
-      return array($token_name, $matches);
-    }
-
-    // Ending up here no matching token was found.
-    return array(NULL, NULL);
   }
 
 
@@ -109,7 +82,7 @@ class SearchQuery {
 
 
   function _parse() {
-    $this->offset  = 0;
+    $this->_reset();
     $sql           = '1';
     $next_op       = "AND";
     $next_like     = "LIKE";
@@ -118,12 +91,12 @@ class SearchQuery {
     $open_brackets = 0;
     $field_number  = 1;
     list($token, $match) = $this->_get_next_token();
-    //echo "QUERY: ".$this->query."<br>";
+    //echo "QUERY: ".$this->input."<br>";
     while ($token != 'EOF') {
       //echo "TOKEN: $token<br>";
       switch ($token) {
         case 'field':
-          // If the given attribute does not exists, treat it like any 
+          // If the given attribute does not exists, treat it like any
           // other search term.
           $field_name = $this->field_names[$match[1]];
           if (!$field_name) {

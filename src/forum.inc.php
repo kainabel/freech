@@ -48,6 +48,8 @@
   include_once 'objects/indexbar_user_postings.class.php';
   include_once 'objects/indexbar_search_result.class.php';
   include_once 'objects/indexbar_search_users.class.php';
+  include_once 'objects/parser.class.php';
+  include_once 'objects/search_query.class.php';
 
   include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
@@ -65,7 +67,6 @@
   include_once 'actions/registration_printer.class.php';
 
   include_once 'services/groupdb.class.php';
-  include_once 'services/search_query.class.php';
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
   include_once 'services/userdb.class.php';

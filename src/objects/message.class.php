@@ -233,7 +233,6 @@
       if ($this->get_id() <= 0 && $this->get_signature())
         $body .= "\n\n--\n" . $this->get_signature();
       $body = wordwrap_smart($body);
-      $body = string_escape($body);
 
       // Let plugins perform formattings.
       $this->set_body_html($body);
@@ -241,11 +240,12 @@
 
       // Perform HTML generating formattings.
       $body = $this->get_body_html();
-      $body = preg_replace("/ /", "&nbsp;", $body);
-      $body = nl2br($body);
-      $body = preg_replace("/^(&gt;&nbsp;.*)/m",
+      $body = string_escape($body);
+      $body = preg_replace('/^(&gt; .*)/m',
                            "<font color='$_quotecolor'>$1</font>",
                            $body);
+      $body = preg_replace('/  /', '&nbsp;&nbsp;', $body);
+      $body = nl2br($body);
       $this->set_body_html($body);
 
       $this->emit('on_format_after_html', $this);

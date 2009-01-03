@@ -25,7 +25,9 @@ function linkify_on_preview($forum, $message) {
 }
 
 
-function linkify_try_youtube_url($url) {
+function linkify_try_youtube_url($url, $in_quotes) {
+  if ($in_quotes)
+    return '';
   if (!preg_match('~http://(?:\w+\.)?youtube.com/watch\?v=([\w\_\-]+)~i',
                   $url,
                   $matches))
@@ -53,17 +55,24 @@ function linkify_try_youtube_url($url) {
 
 
 function linkify_url2link($match) {
-  $url = $match[0];
-  if ($newurl = linkify_try_youtube_url($url))
-    return $newurl;
-  return "<a href=\"$url\">$url</a>";
+  $prefix    = $match[1].$match[2];
+  $url       = $match[3];
+  $quote_pfx = '<font color';
+  $in_quotes = substr($match[2], 0, strlen($quote_pfx)) == $quote_pfx;
+  if ($newurl = linkify_try_youtube_url($url, $in_quotes))
+    return $prefix.$newurl;
+  return $prefix."<a href=\"$url\">$url</a>";
 }
 
 
 function linkify_on_format($message) {
   if (!cfg('autolink_urls'))
     return;
-  $body = preg_replace_callback('~' . cfg('autolink_pattern') . '~',
+  $body = preg_replace_callback('~'
+                              . '(^|[\r\n])'     // Line start.
+                              . '([^\r\n]*?)'  // Line start to URL start.
+                              . '('.cfg('autolink_pattern').')'
+                              . '~',
                                 'linkify_url2link',
                                 $message->get_body_html());
   $message->set_body_html($body);

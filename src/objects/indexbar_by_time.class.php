@@ -27,7 +27,9 @@
 
 
     // Constructor.
-    function IndexBarByTime($_args, $_may_write = FALSE) {
+    function IndexBarByTime($_args,
+                            $_may_write  = FALSE,
+                            $_extra_urls = array()) {
       $this->IndexBar();
       $this->forum_id            = $_args[forum_id];
       $this->n_messages          = $_args[n_messages];
@@ -116,6 +118,11 @@
         $url->set_var('action', 'write');
         call_user_func($additem);
         call_user_func($additem, lang("writemessage"), $url);
+      }
+
+      foreach ($_extra_urls as $url) {
+        call_user_func($additem);
+        call_user_func($additem, $url->get_label(), $url);
       }
     }
   }

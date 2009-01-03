@@ -302,4 +302,14 @@
   $lang[search_hint]       = "äpfel AND \"birnen\"\n"
                            . "NOT user:\"der da\" AND (text:bananen OR subject:frucht)\n"
                            . "ban?nen AND NOT subject:wildcard*matching";
+
+  // Polls.
+  $lang[poll]                 = "Umfrage starten";
+  $lang[poll_title]           = "Umfragetitel";
+  $lang[poll_submit]          = "Umfrage abschicken";
+  $lang[poll_allow_multiple]  = "Mehrfachauswahl erlauben.";
+  $lang[poll_option]          = "Option [NUMBER]:";
+  $lang[poll_add_row]         = "Weitere Option hinzufügen";
+  $lang[poll_title_missing]   = "Bitte einen Titel angeben.";
+  $lang[poll_too_few_options] = "Bitte weitere Optionen ausfüllen.";
 ?>

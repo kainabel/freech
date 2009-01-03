@@ -1,0 +1,31 @@
+<!-- poll form -->
+<p>
+<form action='{$action|escape}' id='commentform' method='POST' accept-charset='utf-8'>
+<font size='+1' color='red'>{lang text="poll"}</font>
+{if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
+
+<p>
+<input type='hidden' name='action'    value='poll_submit'>
+<input type='hidden' name='n_options' value='{$poll->n_options()}'>
+
+<b>{lang text="poll_title"}</b>&nbsp;<i>{lang text="required"}</i><br />
+<input type='text' size='80' name='poll_title' value='{$poll->get_title()|escape}'>
+<br/>
+<input type="checkbox"
+       name="allow_multiple" {if $poll->get_allow_multiple()}checked="checked"{/if} />
+{lang text="poll_allow_multiple"}
+
+<p>
+{foreach name=options item=option from=$poll->get_options()}
+  {lang text="poll_option" number=$smarty.foreach.options.iteration}<br/>
+  <input type='text'
+         size='80'
+         name='poll_option{$smarty.foreach.options.index}'
+         value='{$option|escape}'><br/>
+{/foreach}
+
+<p>
+<input type='submit' name='add_row' value='{lang text="poll_add_row"}'>
+<input type='submit' name='send' value='{lang text="poll_submit"}'>
+</form>
+<!-- end poll form -->

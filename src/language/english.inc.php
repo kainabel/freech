@@ -285,4 +285,14 @@
   $lang[search_hint]       = "apples AND \"peaches\"\n"
                            . "NOT user:\"that guy\" AND (text:banana OR subject:fruit)\n"
                            . "ban?na AND NOT subject:wildcard*matching";
+
+  // Polls.
+  $lang[poll]                 = "Start a Poll";
+  $lang[poll_title]           = "Poll title";
+  $lang[poll_submit]          = "Submit Poll";
+  $lang[poll_allow_multiple]  = "Allow for checking multiple boxes.";
+  $lang[poll_option]          = "Option [NUMBER]:";
+  $lang[poll_add_row]         = "Add Another Row";
+  $lang[poll_title_missing]   = "Please enter a title.";
+  $lang[poll_too_few_options] = "Please add more options.";
 ?>

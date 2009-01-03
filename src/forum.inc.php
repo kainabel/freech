@@ -120,7 +120,9 @@
       $this->start_time = microtime(TRUE);
 
       // (Ab)use a Trackable as an eventbus.
-      $this->eventbus = &new Trackable;
+      $this->eventbus             = &new Trackable;
+      $this->actions              = array();
+      $this->extra_indexbar_links = array();
 
       // Connect to the DB.
       $this->db    = &ADONewConnection(cfg('db_dbn'))
@@ -144,11 +146,11 @@
 
       // Init Smarty.
       $this->smarty = &new Smarty();
-      $this->smarty->template_dir  = "themes/" . cfg("theme");
-      $this->smarty->compile_dir   = "data/smarty_templates_c";
-      $this->smarty->cache_dir     = "data/smarty_cache";
-      $this->smarty->config_dir    = "data/smarty_configs";
-      $this->smarty->compile_check = cfg("check_cache");
+      $this->smarty->template_dir  = 'themes/' . cfg('theme');
+      $this->smarty->compile_dir   = 'data/smarty_templates_c';
+      $this->smarty->cache_dir     = 'data/smarty_cache';
+      $this->smarty->config_dir    = 'data/smarty_configs';
+      $this->smarty->compile_check = cfg('check_cache');
       $this->smarty->register_function('lang', 'smarty_lang');
 
       // Attempt to login, if requested.
@@ -1307,8 +1309,14 @@
       $this->eventbus->emit("on_run_before", &$this);
       $this->title   = "";
       $this->content = "";
+      $action        = $this->get_current_action();
 
-      switch ($this->get_current_action()) {
+      // Check whether a plugin registered the given action. This is done
+      // first to allow plugins for overriding the default handler.
+      if ($this->actions[$action])
+        return call_user_func($this->actions[$action], $this);
+
+      switch ($action) {
       case 'read':
         $this->_message_read();             // Read a message.
         break;
@@ -1526,6 +1534,21 @@
 
     function get_current_message_id() {
       return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
+    }
+
+
+    function register_action($_action, $_func) {
+      $this->actions[$_action] = $_func;
+    }
+
+
+    function add_extra_indexbar_link($_url) {
+      array_push($this->extra_indexbar_links, $_url);
+    }
+
+
+    function get_extra_indexbar_links() {
+      return $this->extra_indexbar_links;
     }
 
 

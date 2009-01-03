@@ -195,12 +195,13 @@
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
-        $sql .= "  username, subject, body,";
+        $sql .= "  renderer, username, subject, body,";
         $sql .= "  hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
-        $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
+        $sql .= " {renderer}, {username}, {subject}, {body},";
+        $sql .= " {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $parentrow[forum_id]);
@@ -210,6 +211,7 @@
         $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
         $query->set_string('user_icon',       $_msg->get_user_icon());
         $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
+        $query->set_string('renderer',        $_msg->get_renderer());
         $query->set_string('username',        $_msg->get_username());
         $query->set_string('subject',         $_msg->get_subject());
         $query->set_string('body',            $body);
@@ -270,12 +272,12 @@
         $sql  = "INSERT INTO {t_message}";
         $sql .= " (path, forum_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
-        $sql .= "  is_parent, username,";
+        $sql .= "  renderer, is_parent, username,";
         $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
         $sql .= " '', {forum_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
-        $sql .= " 1,";
+        $sql .= " renderer, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
@@ -285,6 +287,7 @@
         $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
         $query->set_string('user_icon',       $_msg->get_user_icon());
         $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
+        $query->set_string('renderer',        $_msg->get_renderer());
         $query->set_string('username',        $_msg->get_username());
         $query->set_string('subject',         $_msg->get_subject());
         $query->set_string('body',            $body);
@@ -322,6 +325,7 @@
       $sql .= " user_is_special={user_is_special},";
       $sql .= " user_icon={user_icon},";
       $sql .= " user_icon_name={user_icon_name},";
+      $sql .= " renderer={renderer},";
       $sql .= " username={username},";
       $sql .= " subject={subject},";
       $sql .= " body={body},";
@@ -339,6 +343,7 @@
       $query->set_bool  ('user_is_special', $_message->get_user_is_special());
       $query->set_string('user_icon',       $_message->get_user_icon());
       $query->set_string('user_icon_name',  $_message->get_user_icon_name());
+      $query->set_string('renderer',        $_message->get_renderer());
       $query->set_string('username',        $_message->get_username());
       $query->set_string('subject',         $_message->get_subject());
       $query->set_string('body',            $_message->get_body());

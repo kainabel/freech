@@ -45,6 +45,7 @@
       $this->fields[created]      = time();
       $this->fields[updated]      = $this->fields[created];
       $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
+      $this->fields[renderer]     = 'default';
       $this->fields[is_active]    = TRUE;
       $this->fields[user_id]      = 2; // Anonymous user.
       $this->fields[allow_answer] = TRUE;
@@ -67,6 +68,7 @@
       $this->fields[user_is_special]  = $_db_row[user_is_special];
       $this->fields[user_icon]        = $_db_row[user_icon];
       $this->fields[user_icon_name]   = $_db_row[user_icon_name];
+      $this->fields[renderer]         = $_db_row[renderer];
       $this->fields[subject]          = $_db_row[subject];
       $this->fields[body]             = $_db_row[body];
       $this->fields[updated]          = $_db_row[updated];
@@ -148,6 +150,7 @@
 
     function set_from_user($_user) {
       $this->set_user_id($_user->get_id());
+      $this->set_username($_user->get_name());
       $this->set_signature($_user->get_signature());
     }
 
@@ -224,6 +227,16 @@
 
     function &get_signature() {
       return $this->fields[signature];
+    }
+
+
+    function set_renderer($_renderer) {
+      $this->fields[renderer] = trim($_renderer);
+    }
+
+
+    function &get_renderer() {
+      return $this->fields[renderer];
     }
 
 

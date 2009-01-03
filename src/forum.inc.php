@@ -772,6 +772,7 @@
       $user       = $this->get_current_user();
       $forum_id   = $this->get_current_forum_id();
       $forumdb    = $this->forumdb;
+      $this->_assert_may('write');
 
       // Check whether editing is allowed per configuration.
       if ($_POST['msg_id'] && !cfg("postings_editable"))

@@ -22,10 +22,14 @@
   class MessagePrinter extends ThreadPrinter {
     function show(&$_msg) {
       $user       = $this->parent->get_current_user();
+      $group      = $this->parent->get_current_group();
       $msg_uid    = $_msg ? $_msg->get_user_id() : -1;
-      $may_edit   = cfg("postings_editable") && !$user->is_anonymous()
+      $may_write  = $group->may('write');
+      $may_edit   = $may_write
+                 && cfg("postings_editable")
+                 && !$user->is_anonymous()
                  && $user->get_id() === $msg_uid;
-      $indexbar   = &new IndexBarReadMessage($_msg, $may_edit);
+      $indexbar   = &new IndexBarReadMessage($_msg, $may_write, $may_edit);
       $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 
       if ($_msg)

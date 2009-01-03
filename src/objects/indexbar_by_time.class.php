@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function IndexBarByTime($_args) {
+    function IndexBarByTime($_args, $_may_write = FALSE) {
       $this->IndexBar();
       $this->forum_id            = $_args[forum_id];
       $this->n_messages          = $_args[n_messages];
@@ -110,11 +110,13 @@
         call_user_func($additem, lang("prev"), $url);
 
       // "New message" link.
-      $url = clone($url);
-      $url->delete_var('hs');
-      $url->set_var('action', 'write');
-      call_user_func($additem);
-      call_user_func($additem, lang("writemessage"), $url);
+      if ($_may_write) {
+        $url = clone($url);
+        $url->delete_var('hs');
+        $url->set_var('action', 'write');
+        call_user_func($additem);
+        call_user_func($additem, lang("writemessage"), $url);
+      }
     }
   }
 ?>

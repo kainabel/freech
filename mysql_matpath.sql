@@ -172,6 +172,8 @@ ALTER TABLE `freech_user`
 -- Create admin group.
 INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (1, 'admin', 1, 1, NULL);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'read',       1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'write',      1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'administer', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'moderate',   1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'delete',     1);
@@ -179,14 +181,20 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'delete',     1
 -- Create anonymous group.
 INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (2, 'anonymous',  1, 1, NULL);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (2, 'read', 1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (2, 'write', 1);
 
 -- Create group for normal users.
 INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (3, 'users', 0, 1, NULL);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (3, 'read',  1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (3, 'write', 1);
 
 -- Create group for moderators.
 INSERT INTO freech_group (id, name, is_special, is_active, created)
                   VALUES (4, 'moderators', 1, 1, NULL);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'read',     1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'write',    1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'moderate', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'delete',   1);
 

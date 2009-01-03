@@ -58,7 +58,9 @@
                                                 '');
 
       // Create the index bar.
-      $n_threads = $this->forumdb->get_n_threads($_forum_id);
+      $group     = $this->parent->get_current_group();
+      $may_write = $group->may('write');
+      $n_threads = $this->forumdb->get_n_threads($_forum_id, $may_write);
       $args      = array(forum_id           => (int)$_forum_id,
                          n_threads          => $n_threads,
                          n_threads_per_page => cfg("tpp"),
@@ -66,7 +68,7 @@
                          n_pages_per_index  => cfg("ppi"),
                          thread_state       => $_thread_state);
       $n_rows   = count($this->messages);
-      $indexbar = &new IndexBarByThread($args);
+      $indexbar = &new IndexBarByThread($args, $may_write);
 
       // Render the template.
       $this->clear_all_assign();

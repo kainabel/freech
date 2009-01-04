@@ -26,6 +26,8 @@ function linkify_on_preview($forum, $message) {
 
 
 function linkify_try_youtube_url($url, $in_quotes) {
+  if (!cfg('autoembed_media_urls'))
+    return '';
   if ($in_quotes)
     return '';
   if (!preg_match('~http://(?:\w+\.)?youtube.com/watch\?v=([\w\_\-]+)~i',
@@ -66,8 +68,6 @@ function linkify_url2link($match) {
 
 
 function linkify_on_format($message) {
-  if (!cfg('autolink_urls'))
-    return;
   // Split body and signature.
   $body      = $message->get_body_html();
   $signature = '';

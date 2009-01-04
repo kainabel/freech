@@ -69,9 +69,13 @@
   // a message. This comes at the cost of less stable URLs.
   $cfg[remember_page] = FALSE;
 
-  // Whether to convert URL into links, and which pattern these URLs must
+  // These are options for the "linkify" plugin. When TRUE, media URLs
+  // such as links to YouTube are automatically converted such that the
+  // video is shown directly in the posting.
   // match.
-  $cfg[autolink_urls] = TRUE;
+  $cfg[autoembed_media_urls] = TRUE;
+
+  // Specifies which URLs the linkify plugin converts to links.
   $cfg[autolink_pattern] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+';
 
   // The time a posting is considered new (and highlighted). In seconds.

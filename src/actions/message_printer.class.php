@@ -26,9 +26,10 @@
       $msg_uid    = $_msg ? $_msg->get_user_id() : -1;
       $may_write  = $group->may('write');
       $may_edit   = $may_write
-                 && cfg("postings_editable")
+                 && cfg('postings_editable')
                  && !$user->is_anonymous()
-                 && $user->get_id() === $msg_uid;
+                 && $user->get_id() === $msg_uid
+                 && $_msg->is_editable();
       $indexbar   = &new IndexBarReadMessage($_msg, $may_write, $may_edit);
       $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 

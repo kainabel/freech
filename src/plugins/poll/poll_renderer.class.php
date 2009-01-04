@@ -41,5 +41,10 @@ class PollRenderer extends MessageRenderer {
       return $printer->get_poll_result($poll, $hint);
     return $printer->get_poll($poll);
   }
+
+
+  function is_editable($_message) {
+    return FALSE;
+  }
 }
 ?>

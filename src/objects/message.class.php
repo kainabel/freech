@@ -36,6 +36,7 @@
     function Message() {
       $this->Trackable();
       $this->clear();
+      $this->is_editable = TRUE;
     }
 
 
@@ -527,6 +528,18 @@
 
     function is_active() {
       return $this->fields[is_active];
+    }
+
+
+    function set_editable($_editable = TRUE) {
+      $this->is_editable = $_editable;
+    }
+
+
+    function is_editable() {
+      if ($this->renderer)
+        return $this->renderer->is_editable($this);
+      return $this->is_editable;
     }
 
 

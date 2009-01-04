@@ -161,7 +161,7 @@ class Poll extends Message {
   function check() {
     if ($this->get_title() == '')
       return lang('poll_title_missing');
-    if (strlen($this->get_title()) > 50)
+    if (strlen($this->get_title()) > cfg('max_subjectlength'))
       return lang('poll_title_too_long');
     $options = $this->get_filled_options();
     if (count($options) < 2)

@@ -43,5 +43,10 @@ class MessageRenderer {
   function get_url($_message) {
     return $_message->get_url();
   }
+
+
+  function is_editable($_message) {
+    return $_message->is_editable;
+  }
 }
 ?>

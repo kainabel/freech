@@ -567,8 +567,7 @@
 
 
     function _refer_to($_url) {
-      header('HTTP/1.1 301 Moved Permanently');
-      header('Location: '.$_url);
+      header('Location: '.$_url, TRUE, 301);
       die();
     }
 

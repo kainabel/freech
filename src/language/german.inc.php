@@ -320,6 +320,5 @@
   $lang[poll_vote]             = "Stimme abgeben";
   $lang[poll_vote_accepted]    = "Ihre Stimmabgabe wurde gewertet.";
   $lang[poll_limit_reached]    = "Sie haben zu viele Umfragen gestartet.";
-  $lang[poll_not_logged_in]    = "Umfragen sind leider nur für eingeloggte"
-                               . " User sichtbar.";
+  $lang[poll_to_result]        = "Zum Umfrageergebnis";
 ?>

@@ -74,7 +74,7 @@ function poll_on_submit($forum) {
       return $printer->show_form($poll, lang('poll_save_failed'));
 
     // Refer to the poll.
-    $forum->_refer_to($poll->get_url_string());
+    $forum->_refer_to(cfg('site_url').$poll->get_url_string());
   }
 }
 

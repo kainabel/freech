@@ -53,10 +53,14 @@ class PollPrinter extends PrinterBase {
     $url = new URL('?', cfg('urlvars'));
     $url->set_var('action', 'poll_vote');
 
+    $result_url = $_poll->get_url();
+    $result_url->set_var('result', 1);
+
     $this->clear_all_assign();
-    $this->assign_by_ref('action', $url->get_string());
-    $this->assign_by_ref('poll',   $_poll);
-    $this->assign_by_ref('hint',   $_hint);
+    $this->assign_by_ref('action',     $url->get_string());
+    $this->assign_by_ref('poll',       $_poll);
+    $this->assign_by_ref('result_url', $result_url->get_string());
+    $this->assign_by_ref('hint',       $_hint);
     return $this->smarty->fetch(dirname(__FILE__).'/poll.tmpl');
   }
 

@@ -49,8 +49,8 @@ function poll_on_add($forum) {
 
 
 function poll_on_submit($forum) {
-  $printer     = new PollPrinter($forum);
-  $poll        = _poll_get_from_post();
+  $printer = new PollPrinter($forum);
+  $poll    = _poll_get_from_post();
 
   // Add a new option to the poll form.
   if ($_POST['add_row']) {
@@ -86,6 +86,9 @@ function poll_on_vote($forum) {
   $db      = $forum->_get_db();
   $printer = new PollPrinter($forum);
 
+  if (!$_POST['options'])
+    $forum->_refer_to(cfg('site_url').$poll->get_url_string());
+
   // Make sure that a user does not vote twice.
   if (_poll_did_vote($db, $user, $poll_id))
     return $printer->show_poll_result($poll);
@@ -117,9 +120,9 @@ function poll_on_vote($forum) {
   }
 
   // Reload the poll (to include results) and show the result.
-  $url = $poll->get_url();
-  $url->set_var('accept', 1);
-  $forum->_refer_to($url->get_string());
+  $accept_url = $poll->get_url();
+  $accept_url->set_var('accept', 1);
+  $forum->_refer_to(cfg('site_url').$accept_url->get_string());
 }
 
 

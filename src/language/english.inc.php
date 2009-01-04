@@ -303,4 +303,6 @@
   $lang[poll_vote]             = "Vote";
   $lang[poll_vote_accepted]    = "Thank You for your vote.";
   $lang[poll_limit_reached]    = "You have opened too many polls. Sorry.";
+  $lang[poll_not_logged_in]    = "Sorry, polls are hidden from anonymous"
+                               . " users.";
 ?>

@@ -34,6 +34,9 @@ class PollRenderer extends MessageRenderer {
     $db      = $this->forum->_get_db();
     $printer = new PollPrinter($this->forum);
 
+    if ($user->is_anonymous())
+      return $printer->get_error(lang('poll_not_logged_in'));
+
     if ($_GET['accept'])
       $hint = lang('poll_vote_accepted');
 

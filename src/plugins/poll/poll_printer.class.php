@@ -20,6 +20,13 @@
 ?>
 <?php
 class PollPrinter extends PrinterBase {
+  function get_error($_error) {
+    $this->clear_all_assign();
+    $this->assign_by_ref('error', $_error);
+    return $this->smarty->fetch(dirname(__FILE__).'/error.tmpl');
+  }
+
+
   function show_error($_error) {
     $this->clear_all_assign();
     $this->assign_by_ref('error', $_error);

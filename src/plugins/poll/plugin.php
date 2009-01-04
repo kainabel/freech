@@ -12,6 +12,13 @@ include_once dirname(__FILE__).'/poll_renderer.class.php';
 include_once dirname(__FILE__).'/poll_printer.class.php';
 
 function poll_init($forum) {
+  // Register a class that is responsible for formatting the message object
+  // into which the poll is mapped.
+  $renderer = new PollRenderer($forum);
+  $forum->register_renderer('multipoll', $renderer);
+  $forum->register_renderer('poll',      $renderer);
+
+  // For anonymous users we don't need to do anything else.
   $user = $forum->get_current_user();
   if ($user->is_anonymous())
     return;
@@ -25,12 +32,6 @@ function poll_init($forum) {
   $forum->register_action('poll_add',    'poll_on_add');
   $forum->register_action('poll_submit', 'poll_on_submit');
   $forum->register_action('poll_vote',   'poll_on_vote');
-
-  // Register a class that is responsible for formatting the message object
-  // into which the poll is mapped.
-  $renderer = new PollRenderer($forum);
-  $forum->register_renderer('multipoll', $renderer);
-  $forum->register_renderer('poll',      $renderer);
 }
 
 

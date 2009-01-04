@@ -151,6 +151,9 @@
   $cfg[anonymous_user_id]  = 1;
   $cfg[anonymous_group_id] = 1;
 
+  // The number of days back to show in the forum statistics.
+  $cfg[statistics_timespan] = 30;
+
   // To plot traffic data in the forum statistics you may
   // add a CSV file with data here. The CVS file should contain two
   // columns in the following format:

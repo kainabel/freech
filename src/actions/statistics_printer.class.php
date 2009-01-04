@@ -40,7 +40,7 @@
 
 
     function show() {
-      $days       = 30;
+      $days       = cfg('statistics_timespan');
       $resolution = 60*60*24;
       $end        = strtotime(strftime('%Y-%m-%d')) + 60*60*24;
       $start      = $end - 60*60*24*$days;

@@ -43,7 +43,9 @@ $(function () {
   {
     xaxis: {
       tickFormatter: day_formatter,
-      tickSize: 3,
+{/literal}
+      tickSize: {$days/10},
+{literal}
       tickDecimals: 0
     },
     yaxis: {

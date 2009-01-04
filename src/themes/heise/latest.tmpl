@@ -13,9 +13,9 @@
   &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
 {if $message->is_active()}
-  <font size='-1'>&nbsp;<a href='{$message->get_url_string()|escape}'>{$message->get_subject()|escape}</a></font>
+  <font size='-1'>&nbsp;<a href='{$message->get_url_string_fmt()|escape}'>{$message->get_subject_fmt()|escape}</a></font>
 {else}
-  <font size='-1'>&nbsp;{$message->get_subject()|escape}</font>
+  <font size='-1'>&nbsp;{$message->get_subject_fmt()|escape}</font>
 {/if}
   </td>
 {/strip}

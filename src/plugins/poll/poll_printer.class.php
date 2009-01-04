@@ -20,28 +20,45 @@
 ?>
 <?php
 class PollPrinter extends PrinterBase {
-  function show_form($_poll, $_hint = '') {
-    $url = new URL('?', cfg('urlvars'), lang('poll'));
-    $url->set_var('action', 'poll_submit');
-
+  function show_error($_error) {
     $this->clear_all_assign();
-    $this->assign_by_ref('action', $url->get_string());
-    $this->assign_by_ref('poll',   $_poll);
-    $this->assign_by_ref('hint',   $_hint);
-    $this->render('../../plugins/poll/form.tmpl'); //FIXME: path hardcoded.
+    $this->assign_by_ref('error', $_error);
+    $this->render(dirname(__FILE__).'/error.tmpl');
   }
 
 
-  function show_poll($_poll, $_hint = '') {
-    $poll_id = $_GET['id'];
-    $url = new URL('?', cfg('urlvars'), lang('poll'));
-    $url->set_var('action', 'vote');
+  function show_form($_poll, $_hint = '') {
+    $url = new URL('?', cfg('urlvars'));
+    $url->set_var('action', 'poll_submit');
+
+    while ($_poll->n_options() < 2)
+      $_poll->add_option('');
 
     $this->clear_all_assign();
     $this->assign_by_ref('action', $url->get_string());
     $this->assign_by_ref('poll',   $_poll);
     $this->assign_by_ref('hint',   $_hint);
-    $this->render('../../plugins/poll/poll.tmpl'); //FIXME: path hardcoded.
+    $this->render(dirname(__FILE__).'/form.tmpl');
+  }
+
+
+  function get_poll($_poll, $_hint = '') {
+    $url = new URL('?', cfg('urlvars'));
+    $url->set_var('action', 'poll_vote');
+
+    $this->clear_all_assign();
+    $this->assign_by_ref('action', $url->get_string());
+    $this->assign_by_ref('poll',   $_poll);
+    $this->assign_by_ref('hint',   $_hint);
+    return $this->smarty->fetch(dirname(__FILE__).'/poll.tmpl');
+  }
+
+
+  function get_poll_result($_poll, $_hint = '') {
+    $this->clear_all_assign();
+    $this->assign_by_ref('poll', $_poll);
+    $this->assign_by_ref('hint', $_hint);
+    return $this->smarty->fetch(dirname(__FILE__).'/poll_result.tmpl');
   }
 }
 ?>

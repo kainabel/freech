@@ -138,7 +138,36 @@ CREATE TABLE IF NOT EXISTS `freech_visitor` (
   KEY `counter` (`counter`),
   KEY `visit` (`visit`),
   KEY `ip_hash` (`ip_hash`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `freech_poll_option`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_poll_option` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `poll_id` int(11) unsigned NOT NULL,
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `poll_id` (`poll_id`),
+  UNIQUE KEY `poll_id_2` (`poll_id`,`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `freech_poll_vote`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_poll_vote` (
+  `option_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY  (`option_id`, `user_id`),
+  KEY `option_id` (`option_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Constraints for dumped tables
@@ -169,6 +198,19 @@ ALTER TABLE `freech_permission`
 --
 ALTER TABLE `freech_user`
   ADD CONSTRAINT `freech_user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `freech_poll_option`
+--
+ALTER TABLE `freech_poll_option`
+  ADD CONSTRAINT `freech_poll_option_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `freech_message` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `freech_poll_vote`
+--
+ALTER TABLE `freech_poll_vote`
+  ADD CONSTRAINT `freech_poll_vote_ibfk_1` FOREIGN KEY (`option_id`) REFERENCES `freech_poll_option` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_poll_vote_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE CASCADE;
 
 -- Create admin group.
 INSERT INTO freech_group (id, name, is_special, is_active, created)

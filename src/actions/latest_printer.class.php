@@ -34,6 +34,10 @@
       $_message->set_selected($_message->get_id() == $msg_id);
       $_message->apply_block();
 
+      $renderer_name = $_message->get_renderer_name();
+      $renderer      = $this->parent->get_renderer($renderer_name);
+      $_message->set_renderer($renderer);
+
       // Append everything to a list.
       array_push($this->messages, $_message);
     }

@@ -19,35 +19,80 @@
   */
 ?>
 <?php
-class Poll {
+class PollOption {
+  function PollOption($_name = '', $_id = NULL) {
+    $this->id   = $_id;
+    $this->name = trim($_name);
+  }
+}
+
+class Poll extends Message {
   function Poll($_title = '', $_allow_multiple = FALSE) {
-    $this->title          = $_title;
-    $this->allow_multiple = $_allow_multiple;
-    $this->options        = array();
+    $this->Message();
+    $this->set_title($_title);
+    $this->set_allow_multiple($_allow_multiple);
+    $this->options     = array();
+    $this->results     = array();
+    $this->max_options = 20;
+  }
+
+
+  function set_title($_title) {
+    $this->set_body(lang('poll', array('title' => $_title)));
+    return $this->set_subject($_title);
   }
 
 
   function get_title() {
-    return trim($this->title);
+    return $this->get_subject();
+  }
+
+
+  function get_option($_id) {
+    foreach ($this->options as $option)
+      if ($option->id == $_id)
+        return $option->name;
+    die('no such option');
   }
 
 
   function get_options() {
-    return $this->options;
+    $options = array();
+    foreach ($this->options as $option)
+      array_push($options, $option->name);
+    return $options;
   }
 
 
   function get_filled_options() {
     $options = array();
     foreach ($this->options as $option)
-      if (trim($option) != '')
-        array_push($options, $option);
+      if (trim($option->name) != '')
+        array_push($options, $option->name);
     return $options;
   }
 
 
-  function add_option($_caption) {
-    array_push($this->options, $_caption);
+  function get_option_map() {
+    $options = array();
+    foreach ($this->options as $option)
+      if (trim($option->name) != '')
+        $options[$option->id] = $option->name;
+    ksort($options);
+    return $options;
+  }
+
+
+  function has_option_id($_id) {
+    foreach ($this->options as $option)
+      if ($option->id == $_id)
+        return TRUE;
+    return FALSE;
+  }
+
+
+  function add_option($_option) {
+    array_push($this->options, $_option);
   }
 
 
@@ -56,22 +101,78 @@ class Poll {
   }
 
 
+  function get_max_options() {
+    return $this->max_options;
+  }
+
+
+  function has_duplicate_options() {
+    $options = array();
+    foreach ($this->options as $option)
+      if ($option->name != '' && $options[$option->name])
+        return TRUE;
+      else
+        $options[$option->name] = TRUE;
+    return FALSE;
+  }
+
+
+  function add_result($_option_id, $_votes) {
+    $this->results[(int)$_option_id] = (int)$_votes;
+  }
+
+
+  function get_results() {
+    return $this->results;
+  }
+
+
+  function get_top_votes() {
+    $top_votes = 0;
+    foreach ($this->get_results() as $id => $votes)
+      if ($votes > $best_result)
+        $top_votes = $votes;
+    return $top_votes;
+  }
+
+
   function get_allow_multiple() {
-    return $this->allow_multiple;
+    if ($this->get_renderer_name() == 'multipoll')
+      return TRUE;
+    elseif ($this->get_renderer_name() == 'poll')
+      return FALSE;
+    die('Item is not a poll.');
   }
 
 
   function set_allow_multiple($_allow) {
-    $this->allow_multiple = $_allow;
+    if ($_allow)
+      $this->set_renderer_name('multipoll');
+    else
+      $this->set_renderer_name('poll');
+  }
+
+
+  function set_signature() {
+    // Prevent a signature from being added.
   }
 
 
   function check() {
     if ($this->get_title() == '')
       return lang('poll_title_missing');
+    if (strlen($this->get_title()) > 50)
+      return lang('poll_title_too_long');
     $options = $this->get_filled_options();
     if (count($options) < 2)
       return lang('poll_too_few_options');
+    if (count($options) > $this->get_max_options())
+      return lang('poll_too_many_options');
+    foreach ($options as $option)
+      if (strlen($option->name) > 50)
+        return lang('poll_option_too_long');
+    if ($this->has_duplicate_options())
+      return lang('poll_duplicate_option');
     return NULL;
   }
 }

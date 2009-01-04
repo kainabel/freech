@@ -5,11 +5,11 @@ Version:     0.1
 Author:      Samuel Abels
 Description: Adds support for pollings.
 Constructor: poll_init
-Active:      0
+Active:      1
 */
-include_once 'plugins/poll/poll.class.php'; //FIXME: hardcoded path.
-include_once 'plugins/poll/poll_printer.class.php'; //FIXME: hardcoded path.
-
+include_once dirname(__FILE__).'/poll.class.php';
+include_once dirname(__FILE__).'/poll_renderer.class.php';
+include_once dirname(__FILE__).'/poll_printer.class.php';
 
 function poll_init($forum) {
   $user = $forum->get_current_user();
@@ -17,38 +17,46 @@ function poll_init($forum) {
     return;
 
   // Add a link to the poll button in the index bar.
-  $poll_url = new URL('?', cfg('urlvars'), lang('poll'));
+  $poll_url = new URL('?', cfg('urlvars'), lang('poll_create'));
   $poll_url->set_var('action', 'poll_add');
   $forum->add_extra_indexbar_link($poll_url);
 
   // Register our extra actions.
   $forum->register_action('poll_add',    'poll_on_add');
   $forum->register_action('poll_submit', 'poll_on_submit');
-  $forum->register_action('poll_show',   'poll_on_show');
+  $forum->register_action('poll_vote',   'poll_on_vote');
+
+  // Register a class that is responsible for formatting the message object
+  // into which the poll is mapped.
+  $renderer = new PollRenderer($forum);
+  $forum->register_renderer('multipoll', $renderer);
+  $forum->register_renderer('poll',      $renderer);
 }
 
 
 function poll_on_add($forum) {
   $printer = new PollPrinter($forum);
-  $printer->show_form(new Poll());
-}
+  $poll    = new Poll;
+  $poll->set_forum_id($forum->get_current_forum_id());
 
-
-function poll_on_show($forum) {
-  echo "poll_on_show() called.";
-  //FIXME: fetch the poll from the database.
-  $printer = new PollPrinter($forum);
-  $printer->show_poll($poll);
+  if (_n_polls_since($forum->_get_db(),
+                     $forum->get_current_user(),
+                     time() - 60 * 60 * 24) >= 2)
+    return $printer->show_error(lang('poll_limit_reached'));
+  $printer->show_form($poll);
 }
 
 
 function poll_on_submit($forum) {
-  $printer = new PollPrinter($forum);
-  $poll    = _poll_get_from_post();
+  $printer     = new PollPrinter($forum);
+  $poll        = _poll_get_from_post();
 
   // Add a new option to the poll form.
   if ($_POST['add_row']) {
-    $poll->add_option('');
+    $option = new PollOption();
+    if ($poll->n_options() >= $poll->get_max_options())
+      return $printer->show_form($poll, lang('poll_too_many_options'));
+    $poll->add_option($option);
     return $printer->show_form($poll);
   }
 
@@ -65,11 +73,52 @@ function poll_on_submit($forum) {
       return $printer->show_form($poll, lang('poll_save_failed'));
 
     // Refer to the poll.
-    $poll_url = new URL('?', cfg('urlvars'), lang('poll'));
-    $poll_url->set_var('action', 'poll_show');
-    $poll_url->set_var('id',     $poll_id);
-    $forum->_refer_to($poll_url->get_string());
+    $forum->_refer_to($poll->get_url_string());
   }
+}
+
+
+function poll_on_vote($forum) {
+  $poll_id = (int)$_POST['poll_id'];
+  $poll    = _get_poll_from_id($forum, $poll_id);
+  $user    = $forum->get_current_user();
+  $db      = $forum->_get_db();
+  $printer = new PollPrinter($forum);
+
+  // Make sure that a user does not vote twice.
+  if (_poll_did_vote($db, $user, $poll_id))
+    return $printer->show_poll_result($poll);
+
+  // Depending on whether it is allowed to check multiple values, we get
+  // either a single value or an array of values. If a single value is
+  // received, wrap it in an array for uniform access.
+  $option_ids = array();
+  if (!$poll->get_allow_multiple()) {
+    // Make sure that we have at most one vote if the poll does not allow
+    // for multiple boxes to be checked.
+    if (is_array($_POST['options']))
+      die('Multiple votes where only one is allowed.');
+    array_push($option_ids, (int)$_POST['options']);
+  }
+  else {
+    if (!is_array($_POST['options']))
+      die('Type error; poll expected a list of votes but got only one value.');
+    foreach ($_POST['options'] as $option_id)
+      array_push($option_ids, (int)$option_id);
+  }
+
+  foreach ($option_ids as $option_id) {
+    // Make sure that the casted votes belong to the given poll.
+    if (!$poll->has_option_id($option_id))
+      die('Invalid cast!');
+    // Cast the vote.
+    _poll_cast($db, $user, $option_id);
+  }
+
+  // Reload the poll (to include results) and show the result.
+  $url = $poll->get_url();
+  $url->set_var('accept', 1);
+  $forum->_refer_to($url->get_string());
 }
 
 
@@ -80,8 +129,11 @@ function _poll_get_from_post() {
   $n_options = (int)$_POST['n_options'];
   $poll      = new Poll($_POST['poll_title']);
   $poll->set_allow_multiple($_POST['allow_multiple'] == 'on');
-  for ($i = 0; $i < $n_options; $i++)
-    $poll->add_option($_POST["poll_option$i"]);
+  $poll->set_forum_id((int)$_POST['forum_id']);
+  for ($i = 0; $i < $n_options; $i++) {
+    $option = new PollOption($_POST["poll_option$i"]);
+    $poll->add_option($option);
+  }
   return $poll;
 }
 
@@ -90,18 +142,126 @@ function _save_poll($forum, $poll) {
   $forum_id = $forum->get_current_forum_id();
   $user     = $forum->get_current_user();
   $group    = $forum->get_current_group();
+  $poll->set_from_user($user);
+  $poll->set_from_group($group);
 
-  // Map the poll into a message.
-  $message = new Message;
-  $message->set_renderer('poll');
-  $message->set_from_user($user);
-  $message->set_from_group($group);
-  $message->set_subject($poll->get_title());
-  $message->set_body('generated by the poll plugin');
+  // Save the poll.
+  $db = $forum->_get_db();
+  $db->StartTrans();
+  $forum->_get_forumdb()->insert($forum_id, NULL, $poll);
 
-  //FIXME: save a poll that references the message.
+  // Now save the corresponding poll options.
+  foreach ($poll->get_filled_options() as $option)
+    _save_poll_option($db, $poll->get_id(), $option);
+  $db->CompleteTrans();
 
-  $forum->_get_forumdb()->insert($forum_id, NULL, $message);
-  return $message->get_id();
+  return $poll->get_id();
+}
+
+
+function _n_polls_since($db, $user, $_since = 0) {
+  $sql  = 'SELECT COUNT(*) n_polls';
+  $sql .= ' FROM {t_message}';
+  $sql .= ' WHERE user_id={user_id}';
+  $sql .= " AND (renderer='poll' or renderer='multipoll')";
+  if ($_since)
+    $sql .= ' AND created > FROM_UNIXTIME({since})';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int('user_id', $user->get_id());
+  if ($_since)
+    $query->set_int('since', $_since);
+  return $db->GetOne($query->sql());
+}
+
+
+function _save_poll_option($db, $poll_id, $option) {
+  $sql  = 'INSERT INTO {t_poll_option}';
+  $sql .= ' (poll_id, name)';
+  $sql .= ' VALUES (';
+  $sql .= ' {poll_id}, {name}';
+  $sql .= ')';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int   ('poll_id', $poll_id);
+  $query->set_string('name',    $option);
+  $db->Execute($query->sql()) or die('_save_poll_option(): Insert');
+  return $db->Insert_Id();
+}
+
+
+function _get_poll_from_id($forum, $poll_id) {
+  // Load the message first, and map it back into a poll.
+  $message = $forum->_get_message_from_id_or_die($poll_id);
+  $poll    = new Poll($message->get_subject());
+  $poll->set_id($poll_id);
+  $poll->set_renderer_name($message->get_renderer_name());
+
+  // Load the options of the poll.
+  $sql  = 'SELECT * FROM {t_poll_option}';
+  $sql .= ' WHERE poll_id={poll_id}';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int('poll_id', $poll_id);
+  $db  = $forum->_get_db();
+  $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
+
+  while ($row = $res->FetchRow($res)) {
+    $option = new PollOption($row[name], $row[id]);
+    $poll->add_option($option);
+  }
+
+  // Now load the results.
+  $sql  = 'SELECT o.id,COUNT(v.option_id) votes';
+  $sql .= ' FROM {t_poll_option} o';
+  $sql .= ' LEFT JOIN {t_poll_vote} v ON o.id=v.option_id';
+  $sql .= ' WHERE o.poll_id={poll_id}';
+  $sql .= ' GROUP BY o.id';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int('poll_id', $poll_id);
+  $db  = $forum->_get_db();
+  $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
+  while ($row = $res->FetchRow())
+    $poll->add_result($row[id], $row[votes]);
+  return $poll;
+}
+
+
+function _poll_did_vote($db, $user, $poll_id) {
+  $sql  = 'SELECT o.id';
+  $sql .= ' FROM {t_poll_option} o';
+  $sql .= ' LEFT JOIN {t_poll_vote} v ON o.id=v.option_id';
+  $sql .= ' WHERE o.poll_id={poll_id} and v.user_id={user_id}';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int('user_id', $user->get_id());
+  $query->set_int('poll_id', $poll_id);
+  $res = $db->Execute($query->sql()) or die('_poll_did_vote()');
+  if ($res->EOF)
+    return FALSE;
+  return TRUE;
+}
+
+
+function _poll_has_option($db, $poll_id, $option_id) {
+  $sql  = 'SELECT id';
+  $sql .= ' FROM {t_poll_option}';
+  $sql .= ' WHERE id={option_id} and poll_id={poll_id}';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int('poll_id',   $poll_id);
+  $query->set_int('option_id', $option_id);
+  $res = $db->Execute($query->sql()) or die('_poll_did_vote()');
+  if ($res->EOF)
+    return FALSE;
+  return TRUE;
+}
+
+
+function _poll_cast($db, $user, $option_id) {
+  $sql  = 'INSERT INTO {t_poll_vote}';
+  $sql .= ' (option_id, user_id)';
+  $sql .= ' VALUES (';
+  $sql .= ' {option_id}, {user_id}';
+  $sql .= ')';
+  $query = &new FreechSqlQuery($sql);
+  $query->set_int('option_id', $option_id);
+  $query->set_int('user_id',   $user->get_id());
+  $db->Execute($query->sql()) or die('_poll_cast(): Insert');
 }
 ?>

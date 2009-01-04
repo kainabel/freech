@@ -304,12 +304,20 @@
                            . "ban?nen AND NOT subject:wildcard*matching";
 
   // Polls.
-  $lang[poll]                 = "Umfrage starten";
-  $lang[poll_title]           = "Umfragetitel";
-  $lang[poll_submit]          = "Umfrage abschicken";
-  $lang[poll_allow_multiple]  = "Mehrfachauswahl erlauben.";
-  $lang[poll_option]          = "Option [NUMBER]:";
-  $lang[poll_add_row]         = "Weitere Option hinzufügen";
-  $lang[poll_title_missing]   = "Bitte einen Titel angeben.";
-  $lang[poll_too_few_options] = "Bitte weitere Optionen ausfüllen.";
+  $lang[poll]                  = "Umfrage: [TITLE]";
+  $lang[poll_create]           = "Umfrage starten";
+  $lang[poll_title]            = "Umfragetitel";
+  $lang[poll_submit]           = "Umfrage abschicken";
+  $lang[poll_allow_multiple]   = "Mehrfachauswahl erlauben.";
+  $lang[poll_option]           = "Option [NUMBER]:";
+  $lang[poll_add_row]          = "Weitere Option hinzufügen";
+  $lang[poll_title_missing]    = "Bitte einen Titel angeben.";
+  $lang[poll_title_too_long]   = "Bitte einen kürzeren Titel wählen.";
+  $lang[poll_too_few_options]  = "Bitte weitere Optionen ausfüllen.";
+  $lang[poll_too_many_options] = "Zu viele Optionen.";
+  $lang[poll_option_too_long]  = "Eine der Optionen ist zu lang.";
+  $lang[poll_duplicate_option] = "Die Umfrage hat doppelte Optionen.";
+  $lang[poll_vote]             = "Stimme abgeben";
+  $lang[poll_vote_accepted]    = "Ihre Stimmabgabe wurde gewertet.";
+  $lang[poll_limit_reached]    = "Sie haben zu viele Umfragen gestartet.";
 ?>

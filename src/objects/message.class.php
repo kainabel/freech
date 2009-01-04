@@ -210,6 +210,13 @@
     }
 
 
+    function &get_subject_fmt() {
+      if ($this->renderer)
+        return $this->renderer->get_subject($this);
+      return $this->get_subject();
+    }
+
+
     function set_body($_body) {
       $this->fields[body] = trim($_body);
     }
@@ -230,13 +237,23 @@
     }
 
 
-    function set_renderer($_renderer) {
-      $this->fields[renderer] = trim($_renderer);
+    function set_renderer_name($_name) {
+      $this->fields[renderer] = trim($_name);
     }
 
 
-    function &get_renderer() {
+    function &get_renderer_name() {
       return $this->fields[renderer];
+    }
+
+
+    function set_renderer($_renderer) {
+      $this->renderer = $_renderer;
+    }
+
+
+    function get_renderer() {
+      return $this->renderer;
     }
 
 
@@ -271,6 +288,8 @@
 
 
     function get_body_html($_quotecolor = "#990000") {
+      if ($this->renderer)
+        return $this->renderer->get_body_html($this);
       if (!$this->body_html)
         $this->_update_body_html($_quotecolor);
       return $this->body_html;
@@ -288,8 +307,20 @@
     }
 
 
+    function &get_url_fmt() {
+      if ($this->renderer)
+        return $this->renderer->get_url($this);
+      return $this->get_url();
+    }
+
+
     function get_url_string() {
       return $this->get_url()->get_string();
+    }
+
+
+    function &get_url_string_fmt() {
+      return $this->get_url_fmt()->get_string();
     }
 
 

@@ -287,12 +287,20 @@
                            . "ban?na AND NOT subject:wildcard*matching";
 
   // Polls.
-  $lang[poll]                 = "Start a Poll";
-  $lang[poll_title]           = "Poll title";
-  $lang[poll_submit]          = "Submit Poll";
-  $lang[poll_allow_multiple]  = "Allow for checking multiple boxes.";
-  $lang[poll_option]          = "Option [NUMBER]:";
-  $lang[poll_add_row]         = "Add Another Row";
-  $lang[poll_title_missing]   = "Please enter a title.";
-  $lang[poll_too_few_options] = "Please add more options.";
+  $lang[poll]                  = "Poll: [TITLE]";
+  $lang[poll_create]           = "Start a Poll";
+  $lang[poll_title]            = "Poll title";
+  $lang[poll_submit]           = "Submit Poll";
+  $lang[poll_allow_multiple]   = "Allow for checking multiple boxes.";
+  $lang[poll_option]           = "Option [NUMBER]:";
+  $lang[poll_add_row]          = "Add Another Option";
+  $lang[poll_title_missing]    = "Please enter a title.";
+  $lang[poll_title_too_long]   = "The poll title is too long.";
+  $lang[poll_too_few_options]  = "Please add more options.";
+  $lang[poll_too_many_options] = "Too many options.";
+  $lang[poll_option_too_long]  = "An option is too long.";
+  $lang[poll_duplicate_option] = "The poll has duplicate options.";
+  $lang[poll_vote]             = "Vote";
+  $lang[poll_vote_accepted]    = "Thank You for your vote.";
+  $lang[poll_limit_reached]    = "You have opened too many polls. Sorry.";
 ?>

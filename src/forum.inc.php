@@ -38,6 +38,7 @@
   include_once 'objects/message.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
+  include_once 'objects/message_renderer.class.php';
   include_once 'objects/thread_state.class.php';
   include_once 'objects/indexbar_item.class.php';
   include_once 'objects/indexbar.class.php';
@@ -122,6 +123,7 @@
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus             = &new Trackable;
       $this->actions              = array();
+      $this->renderers            = array();
       $this->extra_indexbar_links = array();
 
       // Connect to the DB.
@@ -590,6 +592,11 @@
     }
 
 
+    function &_get_db() {
+      return $this->db;
+    }
+
+
     function &_get_forumdb() {
       return $this->forumdb;
     }
@@ -674,6 +681,12 @@
       $msg        = $this->forumdb->get_message_from_id($_GET['msg_id']);
       $msgprinter = &new MessagePrinter($this);
       $this->_print_message_breadcrumbs($msg);
+
+      if ($msg) {
+        $renderer_name = $msg->get_renderer_name();
+        $renderer      = $this->get_renderer($renderer_name);
+        $msg->set_renderer($renderer);
+      }
 
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the message is produced.
@@ -1539,6 +1552,16 @@
 
     function register_action($_action, $_func) {
       $this->actions[$_action] = $_func;
+    }
+
+
+    function register_renderer($_name, $_obj) {
+      $this->renderers[$_name] = $_obj;
+    }
+
+
+    function get_renderer($_name) {
+      return $this->renderers[$_name];
     }
 
 

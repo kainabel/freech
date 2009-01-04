@@ -211,7 +211,7 @@
         $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
         $query->set_string('user_icon',       $_msg->get_user_icon());
         $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
-        $query->set_string('renderer',        $_msg->get_renderer());
+        $query->set_string('renderer',        $_msg->get_renderer_name());
         $query->set_string('username',        $_msg->get_username());
         $query->set_string('subject',         $_msg->get_subject());
         $query->set_string('body',            $body);
@@ -277,7 +277,7 @@
         $sql .= " VALUES (";
         $sql .= " '', {forum_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
-        $sql .= " renderer, 1,";
+        $sql .= " {renderer}, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
@@ -287,7 +287,7 @@
         $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
         $query->set_string('user_icon',       $_msg->get_user_icon());
         $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
-        $query->set_string('renderer',        $_msg->get_renderer());
+        $query->set_string('renderer',        $_msg->get_renderer_name());
         $query->set_string('username',        $_msg->get_username());
         $query->set_string('subject',         $_msg->get_subject());
         $query->set_string('body',            $body);
@@ -343,7 +343,7 @@
       $query->set_bool  ('user_is_special', $_message->get_user_is_special());
       $query->set_string('user_icon',       $_message->get_user_icon());
       $query->set_string('user_icon_name',  $_message->get_user_icon_name());
-      $query->set_string('renderer',        $_message->get_renderer());
+      $query->set_string('renderer',        $_message->get_renderer_name());
       $query->set_string('username',        $_message->get_username());
       $query->set_string('subject',         $_message->get_subject());
       $query->set_string('body',            $_message->get_body());

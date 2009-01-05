@@ -29,7 +29,9 @@ class PollOption {
 class Poll extends PostingDecorator {
   function Poll($_posting, $_forum) {
     $this->PostingDecorator($_posting, $_forum);
-    $this->set_allow_multiple(FALSE);
+    if ($_posting->get_renderer() != 'poll'
+      && $_posting->get_renderer() != 'multipoll')
+      $this->set_allow_multiple(FALSE);
     $this->options     = array();
     $this->results     = array();
     $this->max_options = 20;
@@ -166,9 +168,9 @@ class Poll extends PostingDecorator {
 
 
   function get_allow_multiple() {
-    if ($this->posting->get_renderer_name() == 'multipoll')
+    if ($this->posting->get_renderer() == 'multipoll')
       return TRUE;
-    elseif ($this->posting->get_renderer_name() == 'poll')
+    elseif ($this->posting->get_renderer() == 'poll')
       return FALSE;
     die('Item is not a poll.');
   }
@@ -176,9 +178,9 @@ class Poll extends PostingDecorator {
 
   function set_allow_multiple($_allow) {
     if ($_allow)
-      $this->posting->set_renderer_name('multipoll');
+      $this->posting->set_renderer('multipoll');
     else
-      $this->posting->set_renderer_name('poll');
+      $this->posting->set_renderer('poll');
   }
 
 

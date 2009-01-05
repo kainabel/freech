@@ -229,12 +229,12 @@
     }
 
 
-    function set_renderer_name($_name) {
+    function set_renderer($_name) {
       $this->fields[renderer] = trim($_name);
     }
 
 
-    function get_renderer_name() {
+    function get_renderer() {
       return $this->fields[renderer];
     }
 

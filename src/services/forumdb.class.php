@@ -211,7 +211,7 @@
         $query->set_bool  ('user_is_special', $_posting->get_user_is_special());
         $query->set_string('user_icon',       $_posting->get_user_icon());
         $query->set_string('user_icon_name',  $_posting->get_user_icon_name());
-        $query->set_string('renderer',        $_posting->get_renderer_name());
+        $query->set_string('renderer',        $_posting->get_renderer());
         $query->set_string('username',        $_posting->get_username());
         $query->set_string('subject',         $_posting->get_subject());
         $query->set_string('body',            $body);
@@ -287,7 +287,7 @@
         $query->set_bool  ('user_is_special', $_posting->get_user_is_special());
         $query->set_string('user_icon',       $_posting->get_user_icon());
         $query->set_string('user_icon_name',  $_posting->get_user_icon_name());
-        $query->set_string('renderer',        $_posting->get_renderer_name());
+        $query->set_string('renderer',        $_posting->get_renderer());
         $query->set_string('username',        $_posting->get_username());
         $query->set_string('subject',         $_posting->get_subject());
         $query->set_string('body',            $body);
@@ -343,7 +343,7 @@
       $query->set_bool  ('user_is_special', $_posting->get_user_is_special());
       $query->set_string('user_icon',       $_posting->get_user_icon());
       $query->set_string('user_icon_name',  $_posting->get_user_icon_name());
-      $query->set_string('renderer',        $_posting->get_renderer_name());
+      $query->set_string('renderer',        $_posting->get_renderer());
       $query->set_string('username',        $_posting->get_username());
       $query->set_string('subject',         $_posting->get_subject());
       $query->set_string('body',            $_posting->get_body());

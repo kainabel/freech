@@ -133,8 +133,8 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function get_renderer_name() {
-    return $this->posting->get_renderer_name();
+  function get_renderer() {
+    return $this->posting->get_renderer();
   }
 
 

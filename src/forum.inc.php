@@ -407,7 +407,7 @@
 
 
     function _decorate_posting($_posting) {
-      $renderer = $this->renderers[$_posting->get_renderer_name()];
+      $renderer = $this->renderers[$_posting->get_renderer()];
       if ($renderer)
         return new $renderer($_posting, $this);
       return new UnknownPosting($_posting, $this);

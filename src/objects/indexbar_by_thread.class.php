@@ -27,9 +27,7 @@
     
     
     // Constructor.
-    function IndexBarByThread($_args,
-                              $_may_write  = FALSE,
-                              $_extra_urls = array()) {
+    function IndexBarByThread($_args, $_extra_urls = array()) {
       $this->IndexBar();
       $this->forum_id           = $_args[forum_id];
       $this->n_threads          = $_args[n_threads];
@@ -140,17 +138,7 @@
       else
         call_user_func($additem, lang("foldall"));
       
-      // "New posting" link.
-      if ($_may_write) {
-        $url = clone($url);
-        $url->delete_var('fold');
-        $url->delete_var('refer_to');
-        $url->delete_var('hs');
-        $url->set_var('action', 'write');
-        call_user_func($additem);
-        call_user_func($additem, lang('writemessage'), $url);
-      }
-
+      // Links added by plugins.
       foreach ($_extra_urls as $url) {
         call_user_func($additem);
         call_user_func($additem, $url->get_label(), $url);

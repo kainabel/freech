@@ -49,7 +49,6 @@
                                                   '');
 
       $group      = $this->parent->get_current_group();
-      $may_write  = $group->may('write');
       $extra_urls = $this->parent->get_extra_indexbar_links();
       $search     = array('forum_id' => (int)$_forum_id);
       $n_entries  = $this->forumdb->get_n_postings($search);
@@ -58,7 +57,7 @@
                           n_postings_per_page => cfg("epp"),
                           n_offset            => (int)$_offset,
                           n_pages_per_index   => cfg("ppi"));
-      $indexbar = &new IndexBarByTime($args, $may_write, $extra_urls);
+      $indexbar = &new IndexBarByTime($args, $extra_urls);
 
       $this->clear_all_assign();
       $this->assign_by_ref('indexbar', $indexbar);

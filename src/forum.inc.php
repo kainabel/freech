@@ -39,7 +39,6 @@
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
   include_once 'objects/posting_decorator.class.php';
-  include_once 'objects/message.class.php';
   include_once 'objects/unknown_posting.class.php';
   include_once 'objects/thread_state.class.php';
   include_once 'objects/indexbar_item.class.php';
@@ -125,7 +124,7 @@
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus             = &new Trackable;
       $this->actions              = array();
-      $this->renderers            = array('message' => 'Message');
+      $this->renderers            = array();
       $this->extra_indexbar_links = array();
 
       // Connect to the DB.
@@ -137,7 +136,7 @@
       $this->visitordb->count();
 
       $this->registry = &new PluginRegistry();
-      $this->registry->read_plugins("plugins");
+      $this->registry->read_plugins('plugins');
       $this->registry->activate_plugins($this); //FIXME: Make activation configurable.
 
       /* Plugin hook: on_construct
@@ -146,7 +145,7 @@
        *   The return value of the callback is ignored.
        *   Args: None.
        */
-      $this->eventbus->emit("on_construct", &$this);
+      $this->eventbus->emit('on_construct', $this);
 
       // Init Smarty.
       $this->smarty = &new Smarty();
@@ -385,27 +384,6 @@
     }
 
 
-    function _init_posting_from_post_data($_posting = NULL) {
-      if (!$_posting)
-        $_posting = new Posting;
-      $_posting->set_id($_POST['msg_id']);
-      $_posting->set_username($_POST['username']);
-      $_posting->set_subject($_POST['subject']);
-      $_posting->set_body($_POST['body']);
-      return $_posting;
-    }
-
-
-    // Returns a new Posting object that is initialized for the current
-    // user/group.
-    function _get_new_posting() {
-      $posting = new Posting;
-      $posting->set_from_group($this->get_current_group());
-      $posting->set_from_user($this->get_current_user());
-      return $posting;
-    }
-
-
     function _decorate_posting($_posting) {
       $renderer = $this->renderers[$_posting->get_renderer()];
       if ($renderer)
@@ -606,11 +584,6 @@
     }
 
 
-    function &_get_forumdb() {
-      return $this->forumdb;
-    }
-
-
     function _set_title(&$_title) {
       $this->title = $_title;
     }
@@ -674,11 +647,11 @@
     // Prints the breadcrumbs pointing to the given posting.
     function _print_posting_breadcrumbs($_posting) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
+      $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
       if (!$_posting)
-        $breadcrumbs->add_item(lang("noentrytitle"));
+        $breadcrumbs->add_item(lang('noentrytitle'));
       elseif (!$_posting->is_active())
-        $breadcrumbs->add_item(lang("blockedtitle"));
+        $breadcrumbs->add_item(lang('blockedtitle'));
       else
         $breadcrumbs->add_item($_posting->get_subject());
       $breadcrumbs->show();
@@ -698,180 +671,6 @@
        */
       $this->eventbus->emit('on_message_read_print', $this, $posting);
       $msgprinter->show($posting);
-    }
-
-
-    // Write a new message.
-    function _message_compose() {
-      $parent_id  = (int)$_POST['parent_id'];
-      $message    = &new Posting;
-      $msgprinter = &new PostingPrinter($this);
-      $msgprinter->show_compose($message, '', $parent_id, FALSE);
-    }
-
-
-    // Write a response to a message.
-    function _message_answer() {
-      $parent_id  = (int)$_GET['parent_id'];
-      $posting    = $this->forumdb->get_posting_from_id($parent_id);
-      $msgprinter = &new PostingPrinter($this);
-      $msgprinter->show_compose_reply($posting, '');
-    }
-
-
-    // Edit a saved message.
-    function _message_edit_saved() {
-      $user       = $this->get_current_user();
-      $posting    = $this->forumdb->get_posting_from_id($_GET['msg_id']);
-      $msgprinter = &new PostingPrinter($this);
-
-      if (!cfg('postings_editable'))
-        die('Postings may not be changed as per configuration.');
-      if ($posting->get_user_is_anonymous())
-        die('Anonymous postings may not be changed.');
-      elseif ($user->is_anonymous())
-        die('You are not logged in.');
-      elseif ($user->get_id() != $posting->get_user_id())
-        die('You are not the owner.');
-
-      $msgprinter->show_compose($posting, '', 0, FALSE);
-    }
-
-
-    // Edit an unsaved message.
-    function _message_edit_unsaved() {
-      $parent_id  = (int)$_POST['parent_id'];
-      $may_quote  = (int)$_POST['may_quote'];
-      $posting    = $this->_init_posting_from_post_data();
-      $msgprinter = &new PostingPrinter($this);
-      $msgprinter->show_compose($posting, '', $parent_id, $may_quote);
-    }
-
-
-    // Insert a quote from the parent message.
-    function _message_quote() {
-      $parent_id  = (int)$_POST['parent_id'];
-      $quoted_msg = $this->forumdb->get_posting_from_id($parent_id);
-      $posting    = $this->_init_posting_from_post_data();
-      $msgprinter = &new PostingPrinter($this);
-      $msgprinter->show_compose_quoted($posting, $quoted_msg, '');
-    }
-
-
-    // Print a preview of a message.
-    function _message_preview() {
-      global $err;
-      $parent_id  = (int)$_POST['parent_id'];
-      $may_quote  = (int)$_POST['may_quote'];
-      $msgprinter = &new PostingPrinter($this);
-      $user       = $this->get_current_user();
-      $posting    = new Message($this->_get_new_posting(), $this);
-      $this->_init_posting_from_post_data($posting);
-
-      // Check the posting for completeness.
-      $ret = $posting->check_complete();
-      if ($ret < 0)
-        return $msgprinter->show_compose($posting,
-                                         $err[$ret],
-                                         $parent_id,
-                                         $may_quote);
-
-      // Make sure that the username is not in use.
-      if ($user->is_anonymous()
-        && !$this->_username_available($posting->get_username()))
-         return $msgprinter->show_compose($posting,
-                                          lang('usernamenotavailable'),
-                                          $parent_id,
-                                          $may_quote);
-
-      // Success.
-      /* Plugin hook: on_message_preview_print
-       *   Called before the HTML for the posting preview is produced.
-       *   Args: posting: The posting that is about to be previewed.
-       */
-      $this->eventbus->emit('on_message_preview_print', &$this, &$posting);
-      $msgprinter->show_preview($posting, $parent_id, $may_quote);
-    }
-
-
-    // Saves the posted message.
-    function _message_send() {
-      global $err;
-      $parent_id  = (int)$_POST['parent_id'];
-      $may_quote  = (int)$_POST['may_quote'];
-      $msgprinter = &new PostingPrinter($this);
-      $user       = $this->get_current_user();
-      $forum_id   = $this->get_current_forum_id();
-      $forumdb    = $this->forumdb;
-      $this->_assert_may('write');
-
-      // Check whether editing is allowed per configuration.
-      if ($_POST['msg_id'] && !cfg('postings_editable'))
-        die("Postings may not be changed as per configuration.");
-
-      // Fetch the posting from the database (when editing an existing one) or
-      // create a new one from the POST data.
-      if ($_POST['msg_id']) {
-        $posting = $forumdb->get_posting_from_id($_POST['msg_id']);
-        $posting->set_subject($_POST['subject']);
-        $posting->set_body($_POST['body']);
-        $posting->set_updated_unixtime(time());
-      }
-      else {
-        $posting = $this->_get_new_posting();
-        $this->_init_posting_from_post_data($posting);
-      }
-
-      // Make sure that the user is not trying to spoof a name.
-      if (!$user->is_anonymous()
-        && $user->get_name() !== $posting->get_username())
-        die('Username does not match currently logged in user');
-
-      // Check the posting for completeness.
-      $ret = $posting->check_complete();
-      if ($ret < 0)
-        return $msgprinter->show_compose($posting,
-                                         $err[$ret],
-                                         $parent_id,
-                                         $may_quote);
-
-      // Make sure that the username is not in use.
-      if ($user->is_anonymous()
-        && !$this->_username_available($posting->get_username()))
-        return $msgprinter->show_compose($posting,
-                                         lang('usernamenotavailable'),
-                                         $parent_id,
-                                         $may_quote);
-
-      if ($posting->get_id() <= 0) {
-        // If the posting a new one (not an edited one), check for duplicates.
-        $duplicate_id = $forumdb->get_duplicate_id_from_posting($posting);
-        if ($duplicate_id)
-          $this->_refer_to_posting_id($duplicate_id);
-
-        $blocked_until = $this->_flood_blocked_until($posting);
-        if ($blocked_until) {
-          $args = array('seconds' => $blocked_until - time());
-          return $msgprinter->show_compose($posting,
-                                           lang('too_many_postings', $args),
-                                           $parent_id,
-                                           $may_quote);
-        }
-      }
-
-      // Save the posting.
-      if ($posting->get_id())
-        $this->forumdb->save($forum_id, $parent_id, $posting);
-      else
-        $this->forumdb->insert($forum_id, $parent_id, $posting);
-      if (!$posting->get_id())
-        return $msgprinter->show_compose($posting,
-                                         lang('posting_save_failed'),
-                                         $parent_id,
-                                         $may_quote);
-
-      // Success! Refer to the new item.
-      $this->_refer_to_posting_id($posting->get_id());
     }
 
 
@@ -1323,7 +1122,7 @@
        *   Called before the forum is run and the HTML is produced.
        *   Args: None.
        */
-      $this->eventbus->emit("on_run_before", &$this);
+      $this->eventbus->emit('on_run_before', $this);
       $this->title   = "";
       $this->content = "";
       $action        = $this->get_current_action();
@@ -1336,29 +1135,6 @@
       switch ($action) {
       case 'read':
         $this->_posting_read();             // Read a posting.
-        break;
-
-      case 'write':
-        $this->_message_compose();          // Write a new message.
-        break;
-
-      case 'respond':
-        $this->_message_answer();           // Write a response.
-        break;
-
-      case 'edit':
-        $this->_message_edit_saved();       // Edit a saved message.
-        break;
-
-      case 'message_submit':
-        if ($_POST['quote'])
-          $this->_message_quote();          // Quote the parent message.
-        elseif ($_POST['preview'])
-          $this->_message_preview();        // A message preview.
-        elseif ($_POST['send'])
-          $this->_message_send();           // Save posted message.
-        elseif ($_POST['edit'])
-          $this->_message_edit_unsaved();   // Edit the unsaved message.
         break;
 
       case 'posting_prioritize':
@@ -1481,7 +1257,12 @@
     /*************************************************************
      * Public.
      *************************************************************/
-    function &get_eventbus() {
+    function get_forumdb() {
+      return $this->forumdb;
+    }
+
+
+    function get_eventbus() {
       return $this->eventbus;
     }
 

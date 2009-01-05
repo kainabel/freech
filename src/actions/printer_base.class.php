@@ -29,7 +29,7 @@
       $this->parent   = &$_parent;
       $this->registry = $_parent->_get_registry();
       $this->smarty   = $_parent->_get_smarty();
-      $this->forumdb  = $_parent->_get_forumdb();
+      $this->forumdb  = $_parent->get_forumdb();
       $this->eventbus = $_parent->get_eventbus();
     }
 

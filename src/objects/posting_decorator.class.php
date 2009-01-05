@@ -243,8 +243,8 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function get_ip_address_hash() {
-    return $this->posting->get_ip_address_hash();
+  function get_ip_address_hash($_maxlen = NULL) {
+    return $this->posting->get_ip_address_hash($_maxlen);
   }
 
 

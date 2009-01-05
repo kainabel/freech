@@ -690,7 +690,7 @@
       $posting    = $this->forumdb->get_posting_from_id($_GET['msg_id']);
       $posting    = $this->_decorate_posting($posting);
       $msgprinter = &new PostingPrinter($this);
-      $this->_print_posting_breadcrumbs($msg);
+      $this->_print_posting_breadcrumbs($posting);
 
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the posting is produced.

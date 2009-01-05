@@ -40,7 +40,7 @@
   // Maximum number of threads shown per page. (when shown in thread order)
   $cfg[tpp] = 16;
 
-  // Maximum number of messages shown per page. (when shown in time order)
+  // Maximum number of postings shown per page. (when shown in time order)
   $cfg[epp] = 30;
 
   // Maximum number of pages shown in the index before the [...] button
@@ -52,9 +52,9 @@
   // your site does not have a lot of traffic.
   $cfg[updated_threads_first] = FALSE;
 
-  // Disable the message counter that is shown above the forum. Note that
+  // Disable the posting counter that is shown above the forum. Note that
   // disabling the search provides a significant performance gain.
-  $cfg[disable_message_counter] = FALSE;
+  $cfg[disable_posting_counter] = FALSE;
 
   // Disable the forum search.
   $cfg[disable_search] = FALSE;
@@ -66,7 +66,7 @@
   $cfg[thread_arrow_rev] = TRUE;
 
   // If TRUE, the current page in the index is remembered even when reading
-  // a message. This comes at the cost of less stable URLs.
+  // a posting. This comes at the cost of less stable URLs.
   $cfg[remember_page] = FALSE;
 
   // These are options for the "linkify" plugin. When TRUE, media URLs

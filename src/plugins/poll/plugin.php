@@ -12,7 +12,7 @@ include_once dirname(__FILE__).'/poll_renderer.class.php';
 include_once dirname(__FILE__).'/poll_printer.class.php';
 
 function poll_init($forum) {
-  // Register a class that is responsible for formatting the message object
+  // Register a class that is responsible for formatting the posting object
   // into which the poll is mapped.
   $renderer = new PollRenderer($forum);
   $forum->register_renderer('multipoll', $renderer);
@@ -165,7 +165,7 @@ function _save_poll($forum, $poll) {
 
 function _n_polls_since($db, $user, $_since = 0) {
   $sql  = 'SELECT COUNT(*) n_polls';
-  $sql .= ' FROM {t_message}';
+  $sql .= ' FROM {t_posting}';
   $sql .= ' WHERE user_id={user_id}';
   $sql .= " AND (renderer='poll' or renderer='multipoll')";
   if ($_since)
@@ -193,11 +193,11 @@ function _save_poll_option($db, $poll_id, $option) {
 
 
 function _get_poll_from_id($forum, $poll_id) {
-  // Load the message first, and map it back into a poll.
-  $message = $forum->_get_message_from_id_or_die($poll_id);
-  $poll    = new Poll($message->get_subject());
+  // Load the posting first, and map it back into a poll.
+  $posting = $forum->_get_posting_from_id_or_die($poll_id);
+  $poll    = new Poll($posting->get_subject());
   $poll->set_id($poll_id);
-  $poll->set_renderer_name($message->get_renderer_name());
+  $poll->set_renderer_name($posting->get_renderer_name());
 
   // Load the options of the poll.
   $sql  = 'SELECT * FROM {t_poll_option}';

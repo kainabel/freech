@@ -22,19 +22,19 @@
   class ProfilePrinter extends PrinterBase {
     function ProfilePrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
-      $this->messages = array();
+      $this->postings = array();
       $this->users    = array();
     }
 
 
-    function _append_message(&$_message, $_data) {
-      // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_current_message_id();
-      $_message->set_selected($_message->get_id() == $msg_id);
-      $_message->apply_block();
+    function _append_posting(&$_posting, $_data) {
+      // Required to enable correct formatting of the posting.
+      $msg_id = $this->parent->get_current_posting_id();
+      $_posting->set_selected($_posting->get_id() == $msg_id);
+      $_posting->apply_block();
 
       // Append everything to a list.
-      array_push($this->messages, $_message);
+      array_push($this->postings, $_posting);
     }
 
 
@@ -45,8 +45,8 @@
 
     function _assign_user_postings($_user, $_thread_state, $_offset = 0) {
       // Load the postings.
-      $func = array(&$this, '_append_message');
-      $this->forumdb->foreach_message_from_user($_user->get_id(),
+      $func = array(&$this, '_append_posting');
+      $this->forumdb->foreach_posting_from_user($_user->get_id(),
                                                 $_offset,
                                                 cfg("epp"),
                                                 cfg("updated_threads_first"),
@@ -56,20 +56,20 @@
 
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
-      $n_entries = $this->forumdb->get_n_messages($search);
+      $n_entries = $this->forumdb->get_n_postings($search);
       $action    = $this->parent->get_current_action();
       $args      = array(action              => $action,
                          user                => $_user,
-                         n_messages          => $n_entries,
-                         n_messages_per_page => cfg("epp"),
+                         n_postings          => $n_entries,
+                         n_postings_per_page => cfg("epp"),
                          n_offset            => $_offset,
                          n_pages_per_index   => cfg("ppi"),
                          thread_state        => $_thread_state);
       $indexbar = &new IndexBarUserPostings($args);
 
-      $this->assign_by_ref('n_rows',     count($this->messages));
-      $this->assign_by_ref('n_messages', $n_entries);
-      $this->assign_by_ref('messages',   $this->messages);
+      $this->assign_by_ref('n_rows',     count($this->postings));
+      $this->assign_by_ref('n_postings', $n_entries);
+      $this->assign_by_ref('postings',   $this->postings);
       $this->assign_by_ref('indexbar',   $indexbar);
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
       $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
@@ -90,8 +90,8 @@
         $this->_assign_user_postings($_user, $_thread_state, $_offset);
       else {
         $search    = array('userid' => $_user->get_id());
-        $n_entries = $this->forumdb->get_n_messages($search);
-        $this->assign_by_ref('n_messages', $n_entries);
+        $n_entries = $this->forumdb->get_n_postings($search);
+        $this->assign_by_ref('n_postings', $n_entries);
       }
 
       // Load the group info.

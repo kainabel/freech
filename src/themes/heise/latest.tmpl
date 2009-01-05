@@ -1,6 +1,6 @@
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 {if $n_rows > 0}
-{foreach item=message from=$messages}
+{foreach item=posting from=$postings}
 <!-- latest_row -->
 <tr class='posting' valign='middle' bgcolor='#ffffff'>
   <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
@@ -9,35 +9,35 @@
   <td align='center' width=4><img src='{$__theme_dir}/img/null.png' width=4 height=23 alt='' /></td>
 {/if}
   <td align='left'>{strip}
-{if $message->get_priority() > 0}
+{if $posting->get_priority() > 0}
   &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
-{if $message->is_active()}
-  <font size='-1'>&nbsp;<a href='{$message->get_url_string_fmt()|escape}'>{$message->get_subject_fmt()|escape}</a></font>
+{if $posting->is_active()}
+  <font size='-1'>&nbsp;<a href='{$posting->get_url_string_fmt()|escape}'>{$posting->get_subject_fmt()|escape}</a></font>
 {else}
-  <font size='-1'>&nbsp;{$message->get_subject_fmt()|escape}</font>
+  <font size='-1'>&nbsp;{$posting->get_subject_fmt()|escape}</font>
 {/if}
   </td>
 {/strip}
   <td><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
-{if $message->is_selected()}
+{if $posting->is_selected()}
   {assign var="attr" value=" color='green'"}
 {else}
   {assign var="attr" value=""}
 {/if}
   <td align='left'>
-    &nbsp;<font size='-1'{$attr}>{$message->get_username()|escape}</font>
-{if $message->get_user_is_special()}
-    <img src="{$message->get_user_icon()|escape}"
-         title="{lang text=$message->get_user_icon_name()}" />
+    &nbsp;<font size='-1'{$attr}>{$posting->get_username()|escape}</font>
+{if $posting->get_user_is_special()}
+    <img src="{$posting->get_user_icon()|escape}"
+         title="{lang text=$posting->get_user_icon_name()}" />
 {/if}
   </td>
-{if $message->is_selected()}
-  <td align='right' nowrap><font size='-1' color='green'>{$message->get_created_time()}</font></td>
-{elseif $message->is_new()}
-  <td align='right' nowrap><font size='-1' color='red'>{$message->get_created_time()}</font></td>
+{if $posting->is_selected()}
+  <td align='right' nowrap><font size='-1' color='green'>{$posting->get_created_time()}</font></td>
+{elseif $posting->is_new()}
+  <td align='right' nowrap><font size='-1' color='red'>{$posting->get_created_time()}</font></td>
 {else}
-  <td align='right' nowrap><font size='-1'>{$message->get_created_time()}</font></td>
+  <td align='right' nowrap><font size='-1'>{$posting->get_created_time()}</font></td>
 {/if}
   <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
  </tr>
@@ -45,7 +45,7 @@
 {/foreach}
 {else}
 <tr><td height='4'></td></tr>
-<tr><td align='center'><i>{lang text="search_no_message"}</i></td></tr>
+<tr><td align='center'><i>{lang text="search_no_posting"}</i></td></tr>
 <tr><td height='4'></td></tr>
 {/if}
 </table>

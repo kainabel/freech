@@ -27,8 +27,8 @@
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Seite";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum (bisher [MESSAGES] Beiträge,"
-                          . " [NEWMESSAGES] neu, zur Zeit [ONLINEUSERS]"
+  $lang[forum_long]       = "Forum (bisher [POSTINGS] Beiträge,"
+                          . " [NEWPOSTINGS] neu, zur Zeit [ONLINEUSERS]"
                           . " User online)";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
@@ -40,7 +40,7 @@
   $lang[thread]           = "Thread";
   $lang[threadview]       = "In Thread-Darstellung anzeigen";
   $lang[plainview]        = "In Eingangsreihenfolge anzeigen";
-  $lang[editmessage]      = "Bearbeiten";
+  $lang[editposting]      = "Bearbeiten";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
   $lang[entryindex]       = "Beitragsübersicht";
@@ -55,10 +55,10 @@
   $lang[ip_hash]          = "(Salziger IP-Hash: [HASH])";
 
   // Message administration.
-  $lang[message_lock]     = "Beitrag sperren";
-  $lang[message_unlock]   = "Beitrag freigeben";
-  $lang[message_stick]    = "Pin setzen";
-  $lang[message_unstick]  = "Pin entfernen";
+  $lang[posting_lock]     = "Beitrag sperren";
+  $lang[posting_unlock]   = "Beitrag freigeben";
+  $lang[posting_stick]    = "Pin setzen";
+  $lang[posting_unstick]  = "Pin entfernen";
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
                            ."eine rechtswidrige Äußerung oder verletzte "
@@ -233,7 +233,7 @@
   $lang[account_id]         = "User-ID:";
   $lang[account_status]     = "Account-Status:";
   $lang[account_created]    = "Mitglied seit:";
-  $lang[account_messages]   = "Forenbeiträge:";
+  $lang[account_postings]   = "Forenbeiträge:";
   $lang[account_name]       = "Username:";
   $lang[account_firstname]  = "Vorname:";
   $lang[account_lastname]   = "Nachname:";
@@ -291,7 +291,7 @@
   $lang[statistics_traffic]  = "Traffic";
 
   // Search.
-  $lang[search_no_message] = "(Keine Beiträge)";
+  $lang[search_no_posting] = "(Keine Beiträge)";
   $lang[search_no_users]   = "(Keine Benutzer gefunden)";
   $lang[search_forum]      = "Suchen";
   $lang[search_title]      = "Forensuche";

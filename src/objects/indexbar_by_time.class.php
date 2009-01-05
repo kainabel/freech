@@ -32,22 +32,22 @@
                             $_extra_urls = array()) {
       $this->IndexBar();
       $this->forum_id            = $_args[forum_id];
-      $this->n_messages          = $_args[n_messages];
-      $this->n_messages_per_page = $_args[n_messages_per_page];
+      $this->n_postings          = $_args[n_postings];
+      $this->n_postings_per_page = $_args[n_postings_per_page];
       $this->n_offset            = $_args[n_offset];
       $this->n_pages_per_index   = $_args[n_pages_per_index];
 
       // Print the "Index" keyword, followed by a separator.
       $additem = array(&$this, 'add_item');
-      call_user_func($additem, lang("index"));
+      call_user_func($additem, lang('index'));
 
       // Calculate the total number of pages.
-      $n_pages = ceil($this->n_messages / $this->n_messages_per_page);
+      $n_pages = ceil($this->n_postings / $this->n_postings_per_page);
       if ($n_pages <= 0)
         $n_pages = 1;
 
       // Find the selected page's number from the parent with the given offset.
-      $activepage = ceil($this->n_offset / $this->n_messages_per_page) + 1;
+      $activepage = ceil($this->n_offset / $this->n_postings_per_page) + 1;
 
       // Find the first number to show in the index.
       $n_indexoffset = 1;
@@ -77,7 +77,7 @@
           call_user_func($additem, $i);
         else {
           $url = clone($url);
-          $url->set_var('hs', ($i - 1) * $this->n_messages_per_page);
+          $url->set_var('hs', ($i - 1) * $this->n_postings_per_page);
           call_user_func($additem, $i, $url);
         }
       }
@@ -87,7 +87,7 @@
       if ($n_indexoffset + $this->n_pages_per_index < $n_pages - 1)
         call_user_func($additem, '...');
       if ($n_indexoffset + $this->n_pages_per_index < $n_pages) {
-        $url->set_var('hs', ($n_pages - 1) * $this->n_messages_per_page);
+        $url->set_var('hs', ($n_pages - 1) * $this->n_postings_per_page);
         call_user_func($additem, $n_pages, $url);
       }
 
@@ -95,29 +95,29 @@
       $url = clone($url);
       call_user_func($additem);
       if ($activepage > 1) {
-        $url->set_var('hs', ($activepage - 2) * $this->n_messages_per_page);
-        call_user_func($additem, lang("next"), $url);
+        $url->set_var('hs', ($activepage - 2) * $this->n_postings_per_page);
+        call_user_func($additem, lang('next'), $url);
       }
       else
-        call_user_func($additem, lang("next"));
+        call_user_func($additem, lang('next'));
 
       // "Older threads" link.
       $url = clone($url);
       call_user_func($additem);
       if ($activepage < $n_pages) {
-        $url->set_var('hs', $activepage * $this->n_messages_per_page);
-        call_user_func($additem, lang("prev"), $url);
+        $url->set_var('hs', $activepage * $this->n_postings_per_page);
+        call_user_func($additem, lang('prev'), $url);
       }
       else
-        call_user_func($additem, lang("prev"), $url);
+        call_user_func($additem, lang('prev'), $url);
 
-      // "New message" link.
+      // "New posting" link.
       if ($_may_write) {
         $url = clone($url);
         $url->delete_var('hs');
         $url->set_var('action', 'write');
         call_user_func($additem);
-        call_user_func($additem, lang("writemessage"), $url);
+        call_user_func($additem, lang('writemessage'), $url);
       }
 
       foreach ($_extra_urls as $url) {

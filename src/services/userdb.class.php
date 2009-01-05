@@ -274,7 +274,7 @@
 
 
     /**
-     * Returns the users who wrote the highest number of messages.
+     * Returns the users who wrote the highest number of postings.
      * $_limit: The maximum number of results.
      */
     function get_top_users($_limit, $_since = 0) {
@@ -283,7 +283,7 @@
       $sql  .= "UNIX_TIMESTAMP(u.created) created";
       $sql  .= " FROM {t_user}    u";
       $sql  .= " JOIN {t_group}   g ON g.id=u.group_id";
-      $sql  .= " JOIN {t_message} m ON m.user_id=u.id";
+      $sql  .= " JOIN {t_posting} m ON m.user_id=u.id";
       $sql  .= " WHERE u.id != {anonymous}";
       if ($_since > 0)
         $sql .= " AND m.created>FROM_UNIXTIME({since})";

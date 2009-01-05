@@ -21,12 +21,12 @@
 <?php
   class FooterPrinter extends PrinterBase {
     function show($_forum_id) {
-      // Create the URL pointing to the message search.
+      // Create the URL pointing to the posting search.
       $search_url = new URL('?', cfg("urlvars"));
       $search_url->set_var('action',   'search');
       $search_url->set_var('forum_id', (int)$_forum_id);
 
-      // Create the URLs for changing the message ordering.
+      // Create the URLs for changing the posting ordering.
       $order_url = new URL('?', cfg("urlvars"));
       $order_url->set_var('forum_id', (int)$_forum_id);
       $order_url->set_var('refer_to', $_SERVER['REQUEST_URI']);

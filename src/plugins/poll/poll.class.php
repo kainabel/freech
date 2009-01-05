@@ -26,9 +26,9 @@ class PollOption {
   }
 }
 
-class Poll extends Message {
+class Poll extends Posting {
   function Poll($_title = '', $_allow_multiple = FALSE) {
-    $this->Message();
+    $this->Posting();
     $this->set_title($_title);
     $this->set_allow_multiple($_allow_multiple);
     $this->options     = array();

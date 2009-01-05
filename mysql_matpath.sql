@@ -40,10 +40,10 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `freech_message`
+-- Table structure for table `freech_posting`
 --
 
-CREATE TABLE IF NOT EXISTS `freech_message` (
+CREATE TABLE IF NOT EXISTS `freech_posting` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forum_id` int(11) unsigned NOT NULL default '0',
   `thread_id` int(11) unsigned default NULL,
@@ -180,11 +180,11 @@ ALTER TABLE `freech_forum`
   ADD CONSTRAINT `0_776` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `freech_message`
+-- Constraints for table `freech_posting`
 --
-ALTER TABLE `freech_message`
+ALTER TABLE `freech_posting`
   ADD CONSTRAINT `0_778` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_779` FOREIGN KEY (`thread_id`) REFERENCES `freech_message` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `0_779` FOREIGN KEY (`thread_id`) REFERENCES `freech_posting` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `0_780` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
@@ -203,7 +203,7 @@ ALTER TABLE `freech_user`
 -- Constraints for table `freech_poll_option`
 --
 ALTER TABLE `freech_poll_option`
-  ADD CONSTRAINT `freech_poll_option_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `freech_message` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_poll_option_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `freech_posting` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_poll_vote`

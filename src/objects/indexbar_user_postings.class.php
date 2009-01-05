@@ -31,8 +31,8 @@
       $this->IndexBar();
       $action              = $_args[action];
       $user                = $_args[user];
-      $n_messages          = $_args[n_messages];
-      $n_messages_per_page = $_args[n_messages_per_page];
+      $n_postings          = $_args[n_postings];
+      $n_postings_per_page = $_args[n_postings_per_page];
       $n_offset            = $_args[n_offset];
       $n_pages_per_index   = $_args[n_pages_per_index];
       $thread_state        = $_args[thread_state];
@@ -42,12 +42,12 @@
       call_user_func($additem, lang("index"));
 
       // Calculate the total number of pages.
-      $n_pages = ceil($n_messages / $n_messages_per_page);
+      $n_pages = ceil($n_postings / $n_postings_per_page);
       if ($n_pages <= 0)
         $n_pages = 1;
 
       // Find the selected page's number from the parent with the given offset.
-      $activepage = ceil($n_offset / $n_messages_per_page) + 1;
+      $activepage = ceil($n_offset / $n_postings_per_page) + 1;
 
       // Find the first number to show in the index.
       $n_indexoffset = 1;
@@ -78,7 +78,7 @@
           call_user_func($additem, $i);
         else {
           $url = clone($url);
-          $url->set_var('hs', ($i - 1) * $n_messages_per_page);
+          $url->set_var('hs', ($i - 1) * $n_postings_per_page);
           call_user_func($additem, $i, $url);
         }
       }
@@ -88,7 +88,7 @@
       if ($n_indexoffset + $n_pages_per_index < $n_pages - 1)
         call_user_func($additem, '...');
       if ($n_indexoffset + $n_pages_per_index < $n_pages) {
-        $url->set_var('hs', ($n_pages - 1) * $n_messages_per_page);
+        $url->set_var('hs', ($n_pages - 1) * $n_postings_per_page);
         call_user_func($additem, $n_pages, $url);
       }
 
@@ -96,7 +96,7 @@
       $url = clone($url);
       call_user_func($additem);
       if ($activepage > 1) {
-        $url->set_var('hs', ($activepage - 2) * $n_messages_per_page);
+        $url->set_var('hs', ($activepage - 2) * $n_postings_per_page);
         call_user_func($additem, lang("next"), $url);
       }
       else
@@ -106,7 +106,7 @@
       $url = clone($url);
       call_user_func($additem);
       if ($activepage < $n_pages) {
-        $url->set_var('hs', $activepage * $n_messages_per_page);
+        $url->set_var('hs', $activepage * $n_postings_per_page);
         call_user_func($additem, lang("prev"), $url);
       }
       else

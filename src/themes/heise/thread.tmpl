@@ -1,6 +1,6 @@
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
 {if $n_rows > 0}
-{foreach item=message from=$messages}
+{foreach item=posting from=$postings}
 <!-- thread_row -->
 <tr class='posting' valign='middle' bgcolor='#ffffff'>
   <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
@@ -17,7 +17,7 @@
   1: INDENT_DRAW_DASH
   2: INDENT_DRAW_SPACE
 *}
-{foreach item=indent from=$message->get_indent()}
+{foreach item=indent from=$posting->get_indent()}
   {if $indent == 1}
      <img src='{$__theme_dir}/img/l.png' width=20 height=23 alt='|' />
   {else}
@@ -25,7 +25,7 @@
   {/if}
 {/foreach}
 {*
-  $message->get_relation():
+  $posting->get_relation():
   1: PARENT_WITHOUT_CHILDREN
   2: PARENT_WITH_CHILDREN_UNFOLDED
   3: PARENT_WITH_CHILDREN_FOLDED
@@ -34,54 +34,54 @@
   6: CHILD_WITHOUT_CHILDREN
   7: CHILD_WITH_CHILDREN
 *}
-{if $message->get_relation() == 1}
+{if $posting->get_relation() == 1}
      <img src='{$__theme_dir}/img/o.png' width=9 height=21 alt='' />
-{elseif $message->get_relation() == 2}
-     <a href='{$message->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' border=0 width=9 height=21 alt='0' /></a>
-{elseif $message->get_relation() == 3}
-     <a href='{$message->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' border=0 width=9 height=21 alt='0' /></a>
-{elseif $message->get_relation() == 4 || $message->get_relation() == 5}
+{elseif $posting->get_relation() == 2}
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' border=0 width=9 height=21 alt='0' /></a>
+{elseif $posting->get_relation() == 3}
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' border=0 width=9 height=21 alt='0' /></a>
+{elseif $posting->get_relation() == 4 || $posting->get_relation() == 5}
      <img src='{$__theme_dir}/img/e.png' width=20 height=23 alt='`-' />
-{elseif $message->get_relation() == 6 || $message->get_relation() == 7}
+{elseif $posting->get_relation() == 6 || $posting->get_relation() == 7}
      <img src='{$__theme_dir}/img/x.png' width=20 height=23 alt='|-' />
 {/if}
      </td>
      <td align='left'>
-{if $message->get_priority() > 0}
+{if $posting->get_priority() > 0}
      &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
-{if $message->is_selected()}
-     &nbsp;<font size='-1' color='green'>{$message->get_subject_fmt()|truncate:$max_subjectlength|escape}</font>
-{elseif !$message->is_active()}
-     &nbsp;<font size='-1'>{$message->get_subject_fmt()|truncate:$max_subjectlength|escape}</font>
+{if $posting->is_selected()}
+     &nbsp;<font size='-1' color='green'>{$posting->get_subject_fmt()|truncate:$max_subjectlength|escape}</font>
+{elseif !$posting->is_active()}
+     &nbsp;<font size='-1'>{$posting->get_subject_fmt()|truncate:$max_subjectlength|escape}</font>
 {else}
-     <font size='-1'>&nbsp;<a href='{$message->get_url_string_fmt()|escape}'>{$message->get_subject_fmt()|truncate:$max_subjectlength|escape}</a></font>
+     <font size='-1'>&nbsp;<a href='{$posting->get_url_string_fmt()|escape}'>{$posting->get_subject_fmt()|truncate:$max_subjectlength|escape}</a></font>
 {/if}
-{if $message->get_relation() == 3}<font size='-1'>&nbsp;({$message->get_n_children()})</font>{/if}
+{if $posting->get_relation() == 3}<font size='-1'>&nbsp;({$posting->get_n_children()})</font>{/if}
      </td>
     </tr>
    </table>
   </td>
 {/strip}
   <td><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
-{if $message->is_selected()}
+{if $posting->is_selected()}
   {assign var="attr" value=" color='green'"}
 {else}
   {assign var="attr" value=""}
 {/if}
   <td align='left'>
-    &nbsp;<font size='-1'{$attr}>{$message->get_username()|escape}</font>
-{if $message->get_user_is_special()}
-    <img src="{$message->get_user_icon()|escape}"
-         title="{lang text=$message->get_user_icon_name()}" />
+    &nbsp;<font size='-1'{$attr}>{$posting->get_username()|escape}</font>
+{if $posting->get_user_is_special()}
+    <img src="{$posting->get_user_icon()|escape}"
+         title="{lang text=$posting->get_user_icon_name()}" />
 {/if}
   </td>
-{if $message->is_selected()}
-  <td align='right' nowrap><font size='-1' color='green'>{$message->get_created_time()}</font></td>
-{elseif $message->is_new()}
-  <td align='right' nowrap><font size='-1' color='#{$message->get_newness_hex()}0000'>{$message->get_created_time()}</font></td>
+{if $posting->is_selected()}
+  <td align='right' nowrap><font size='-1' color='green'>{$posting->get_created_time()}</font></td>
+{elseif $posting->is_new()}
+  <td align='right' nowrap><font size='-1' color='#{$posting->get_newness_hex()}0000'>{$posting->get_created_time()}</font></td>
 {else}
-  <td align='right' nowrap><font size='-1'>{$message->get_created_time()}</font></td>
+  <td align='right' nowrap><font size='-1'>{$posting->get_created_time()}</font></td>
 {/if}
   <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
  </tr>
@@ -89,7 +89,7 @@
 {/foreach}
 {else}
 <tr><td height='4'></td></tr>
-<tr><td align='center'><i>{lang text="search_no_message"}</i></td></tr>
+<tr><td align='center'><i>{lang text="search_no_posting"}</i></td></tr>
 <tr><td height='4'></td></tr>
 {/if}
 </table>

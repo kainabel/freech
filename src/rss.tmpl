@@ -5,14 +5,14 @@
     <link>{$link|escape}</link>
     <language>{$language|escape}</language>
     <description>{$description|escape}</description>
-{foreach from=$messages item=message}
+{foreach from=$postings item=posting}
     <item>
-      <title>{$message->get_subject()|escape}</title>
-      <author>{$message->get_username()|escape}</author>
-      <guid>{$message->get_url_string()|escape}</guid>
-      <link>{$message->get_url_string()|escape}</link>
-      <description>{$message->get_body_html()|escape}</description>
-      <pubDate>{$message->get_created_unixtime()|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
+      <title>{$posting->get_subject()|escape}</title>
+      <author>{$posting->get_username()|escape}</author>
+      <guid>{$posting->get_url_string()|escape}</guid>
+      <link>{$posting->get_url_string()|escape}</link>
+      <description>{$posting->get_body_html()|escape}</description>
+      <pubDate>{$posting->get_created_unixtime()|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
     </item>
 {/foreach}
   </channel>

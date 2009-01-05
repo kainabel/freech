@@ -140,7 +140,7 @@
       else
         call_user_func($additem, lang("foldall"));
       
-      // "New message" link.
+      // "New posting" link.
       if ($_may_write) {
         $url = clone($url);
         $url->delete_var('fold');
@@ -148,7 +148,7 @@
         $url->delete_var('hs');
         $url->set_var('action', 'write');
         call_user_func($additem);
-        call_user_func($additem, lang("writemessage"), $url);
+        call_user_func($additem, lang('writemessage'), $url);
       }
 
       foreach ($_extra_urls as $url) {

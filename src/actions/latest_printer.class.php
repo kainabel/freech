@@ -20,31 +20,31 @@
 ?>
 <?php
   class LatestPrinter extends PrinterBase {
-    var $messages;
+    var $postings;
 
     function LatestPrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
-      $this->messages = array();
+      $this->postings = array();
     }
 
 
-    function _append_row(&$_message, $_data) {
-      // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_current_message_id();
-      $_message->set_selected($_message->get_id() == $msg_id);
-      $_message->apply_block();
+    function _append_row(&$_posting, $_data) {
+      // Required to enable correct formatting of the posting.
+      $msg_id = $this->parent->get_current_posting_id();
+      $_posting->set_selected($_posting->get_id() == $msg_id);
+      $_posting->apply_block();
 
-      $renderer_name = $_message->get_renderer_name();
+      $renderer_name = $_posting->get_renderer_name();
       $renderer      = $this->parent->get_renderer($renderer_name);
-      $_message->set_renderer($renderer);
+      $_posting->set_renderer($renderer);
 
       // Append everything to a list.
-      array_push($this->messages, $_message);
+      array_push($this->postings, $_posting);
     }
 
 
     function show($_forum_id, $_offset) {
-      $n = $this->forumdb->foreach_latest_message((int)$_forum_id,
+      $n = $this->forumdb->foreach_latest_posting((int)$_forum_id,
                                                   (int)$_offset,
                                                   cfg("epp"),
                                                   FALSE,
@@ -55,10 +55,10 @@
       $may_write  = $group->may('write');
       $extra_urls = $this->parent->get_extra_indexbar_links();
       $search     = array('forum_id' => (int)$_forum_id);
-      $n_entries  = $this->forumdb->get_n_messages($search);
+      $n_entries  = $this->forumdb->get_n_postings($search);
       $args       = array(forum_id            => (int)$_forum_id,
-                          n_messages          => (int)$n_entries,
-                          n_messages_per_page => cfg("epp"),
+                          n_postings          => (int)$n_entries,
+                          n_postings_per_page => cfg("epp"),
                           n_offset            => (int)$_offset,
                           n_pages_per_index   => cfg("ppi"));
       $indexbar = &new IndexBarByTime($args, $may_write, $extra_urls);
@@ -66,7 +66,7 @@
       $this->clear_all_assign();
       $this->assign_by_ref('indexbar', $indexbar);
       $this->assign_by_ref('n_rows',   $n);
-      $this->assign_by_ref('messages', $this->messages);
+      $this->assign_by_ref('postings', $this->postings);
       $this->render('list_by_time.tmpl');
     }
   }

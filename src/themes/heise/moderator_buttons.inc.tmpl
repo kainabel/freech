@@ -3,25 +3,25 @@
 <table border="0" cellpadding="0" cellspacing="0">
 <tr>
 <td>
-{if $message->is_active()}
-<a href="{$message->get_lock_url_string()|escape}">
-<img border='0' src='{$__theme_dir}/img/unlock.png' title='{lang text="message_lock"}'>
+{if $posting->is_active()}
+<a href="{$posting->get_lock_url_string()|escape}">
+<img border='0' src='{$__theme_dir}/img/unlock.png' title='{lang text="posting_lock"}'>
 </a>
 {else}
-<a href="{$message->get_unlock_url_string()|escape}">
-<img border='0' src='{$__theme_dir}/img/lock.png' title='{lang text="message_unlock"}'>
+<a href="{$posting->get_unlock_url_string()|escape}">
+<img border='0' src='{$__theme_dir}/img/lock.png' title='{lang text="posting_unlock"}'>
 </a>
 {/if}
 </td>
 <td>
-{if $message->is_parent()}
-  {if $message->get_priority() == 0}
-  <a href="{$message->get_prioritize_url_string(1)|escape}">
-  <img border='0' src='{$__theme_dir}/img/sticky.png' title='{lang text="message_stick"}'>
+{if $posting->is_parent()}
+  {if $posting->get_priority() == 0}
+  <a href="{$posting->get_prioritize_url_string(1)|escape}">
+  <img border='0' src='{$__theme_dir}/img/sticky.png' title='{lang text="posting_stick"}'>
   </a>
   {else}
-  <a href="{$message->get_prioritize_url_string(0)|escape}">
-  <img border='0' src='{$__theme_dir}/img/sticky_red.png' title='{lang text="message_unstick"}'>
+  <a href="{$posting->get_prioritize_url_string(0)|escape}">
+  <img border='0' src='{$__theme_dir}/img/sticky_red.png' title='{lang text="posting_unstick"}'>
   </a>
   {/if}
 {/if}

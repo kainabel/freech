@@ -22,28 +22,28 @@
   class ThreadPrinter extends PrinterBase {
     function ThreadPrinter(&$_parent) {
       $this->PrinterBase(&$_parent);
-      $this->messages = array();
+      $this->postings = array();
     }
 
 
-    function _append_message(&$_message, $_data) {
-      // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_current_message_id();
-      $_message->set_selected($_message->get_id() == $msg_id);
-      $_message->apply_block();
+    function _append_posting(&$_posting, $_data) {
+      // Required to enable correct formatting of the posting.
+      $msg_id = $this->parent->get_current_posting_id();
+      $_posting->set_selected($_posting->get_id() == $msg_id);
+      $_posting->apply_block();
 
-      $renderer_name = $_message->get_renderer_name();
+      $renderer_name = $_posting->get_renderer_name();
       $renderer      = $this->parent->get_renderer($renderer_name);
-      $_message->set_renderer($renderer);
+      $_posting->set_renderer($renderer);
 
       // Append everything to a list.
-      array_push($this->messages, $_message);
+      array_push($this->postings, $_posting);
     }
 
 
     function show($_forum_id, $_msg_id, $_offset, $_thread_state) {
-      // Load messages from the database.
-      $func = array(&$this, '_append_message');
+      // Load postings from the database.
+      $func = array(&$this, '_append_posting');
       if ($_msg_id == 0)
         $this->forumdb->foreach_child($_forum_id,
                                       0,
@@ -72,14 +72,14 @@
                           n_offset           => $_offset,
                           n_pages_per_index  => cfg("ppi"),
                           thread_state       => $_thread_state);
-      $n_rows    = count($this->messages);
+      $n_rows    = count($this->postings);
       $indexbar  = &new IndexBarByThread($args, $may_write, $extra_urls);
 
       // Render the template.
       $this->clear_all_assign();
       $this->assign_by_ref('indexbar',           $indexbar);
       $this->assign_by_ref('n_rows',             $n_rows);
-      $this->assign_by_ref('messages',           $this->messages);
+      $this->assign_by_ref('postings',           $this->postings);
       $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
       $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
       $this->render('list_by_thread.tmpl');

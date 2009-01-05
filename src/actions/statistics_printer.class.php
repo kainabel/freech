@@ -57,7 +57,7 @@
         $day_start         = $day_end - $resolution;
         $date              = strftime('%Y-%m-%d', $day_start);
         $result[pos]       = (int)($day_end - $start) / $resolution;
-        $result[postings]  = $this->forumdb->get_n_messages(NULL,
+        $result[postings]  = $this->forumdb->get_n_postings(NULL,
                                                             $day_start,
                                                             $day_end);
         $result[postings2] = (int)$postings2[$date];

@@ -20,7 +20,7 @@
 ?>
 <?php
   class RSSPrinter extends PrinterBase {
-    var $messages;
+    var $postings;
     var $title;
     var $descr;
     var $url;
@@ -28,7 +28,7 @@
     
     function RSSPrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
-      $this->messages = array();
+      $this->postings = array();
     }
     
     
@@ -52,27 +52,27 @@
     }
     
     
-    function _append_row(&$_message, $_forum_id) {
-      if (!$_message->is_active())
+    function _append_row(&$_posting, $_forum_id) {
+      if (!$_posting->is_active())
         return;
       
-      // Required to enable correct formatting of the message.
-      $_message->set_body(preg_replace("/&nbsp;/", " ", $_message->get_body()));
+      // Required to enable correct formatting of the posting.
+      $_posting->set_body(preg_replace("/&nbsp;/", " ", $_posting->get_body()));
       
       // Append everything to a list.
-      array_push($this->messages, $_message);
+      array_push($this->postings, $_posting);
     }
     
     
     function show($_forum_id, $_off, $_n_entries) {
-      $this->messages = array();
+      $this->postings = array();
       
       if ($_n_entries < 1)
         $_n_entries = cfg("rss_items");
       if ($_n_entries > cfg("rss_maxitems"))
         $n_entries = cfg("rss_maxitems");
       
-      $this->forumdb->foreach_latest_message($_forum_id,
+      $this->forumdb->foreach_latest_posting($_forum_id,
                                              $_off,
                                              $_n_entries,
                                              FALSE,
@@ -84,7 +84,7 @@
       $this->assign_by_ref('link',        $this->url);
       $this->assign_by_ref('language',    $this->countrycode);
       $this->assign_by_ref('description', $this->descr);
-      $this->assign_by_ref('messages',    $this->messages);
+      $this->assign_by_ref('postings',    $this->postings);
       $this->render('../../rss.tmpl');
     }
   }

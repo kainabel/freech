@@ -26,18 +26,18 @@
     }
 
 
-    function _append_message(&$_message, $_data) {
-      // Required to enable correct formatting of the message.
-      $msg_id = $this->parent->get_current_message_id();
-      $_message->set_selected($_message->get_id() == $msg_id);
-      $_message->apply_block();
+    function _append_posting(&$_posting, $_data) {
+      // Required to enable correct formatting of the posting.
+      $msg_id = $this->parent->get_current_posting_id();
+      $_posting->set_selected($_posting->get_id() == $msg_id);
+      $_posting->apply_block();
 
-      $renderer_name = $_message->get_renderer_name();
+      $renderer_name = $_posting->get_renderer_name();
       $renderer      = $this->parent->get_renderer($renderer_name);
-      $_message->set_renderer($renderer);
+      $_posting->set_renderer($renderer);
 
       // Append everything to a list.
-      array_push($this->results, $_message);
+      array_push($this->results, $_posting);
     }
 
 
@@ -50,7 +50,7 @@
     }
 
 
-    function show_messages($_forum_id = NULL, $_query = NULL, $_offset = 0) {
+    function show_postings($_forum_id = NULL, $_query = NULL, $_offset = 0) {
       $this->clear_all_assign();
       $this->assign('query', $_query);
 
@@ -63,9 +63,9 @@
       $query = &new SearchQuery($query_string);
 
       // Run the search.
-      $func  = array(&$this, '_append_message');
-      $total = $this->forumdb->get_n_messages_from_query($query);
-      $rows  = $this->forumdb->foreach_message_from_query($query,
+      $func  = array(&$this, '_append_posting');
+      $total = $this->forumdb->get_n_postings_from_query($query);
+      $rows  = $this->forumdb->foreach_posting_from_query($query,
                                                           (int)$_offset,
                                                           cfg("epp"),
                                                           $func,
@@ -74,18 +74,18 @@
       // Create the index bar.
       $args  = array(forum_id            => $_forum_id,
                      query               => $_query,
-                     n_messages          => $total,
-                     n_messages_per_page => cfg("epp"),
+                     n_postings          => $total,
+                     n_postings_per_page => cfg("epp"),
                      n_offset            => $_offset,
                      n_pages_per_index   => cfg("ppi"));
       $indexbar = &new IndexBarSearchResult($args);
 
       // Render the result.
-      $this->assign_by_ref('message_search', 1);
+      $this->assign_by_ref('posting_search', 1);
       $this->assign_by_ref('indexbar',       $indexbar);
       $this->assign_by_ref('n_results',      $total);
       $this->assign_by_ref('n_rows',         $rows);
-      $this->assign_by_ref('messages',       $this->results);
+      $this->assign_by_ref('postings',       $this->results);
       $this->render('search.tmpl');
       $this->parent->_set_title(lang('search_title'));
     }

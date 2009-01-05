@@ -26,7 +26,7 @@
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Page";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum ([MESSAGES] messages, [NEWMESSAGES] new,"
+  $lang[forum_long]       = "Forum ([POSTINGS] postings, [NEWPOSTINGS] new,"
                           . " currently [ONLINEUSERS] users online)";
   $lang[unfoldall]        = "Unfold All";
   $lang[foldall]          = "Fold All";
@@ -38,7 +38,7 @@
   $lang[thread]           = "Thread";
   $lang[threadview]       = "Order by Thread";
   $lang[plainview]        = "Order by Date";
-  $lang[editmessage]      = "Edit";
+  $lang[editposting]      = "Edit";
   $lang[writeanswer]      = "Reply";
   $lang[writemessage]     = "New Message";
   $lang[entryindex]       = "Message Overview";
@@ -53,10 +53,10 @@
   $lang[ip_hash]          = "(IP hash: [HASH])";
 
   // Message administration.
-  $lang[message_lock]     = "Lock message";
-  $lang[message_unlock]   = "Unlock message";
-  $lang[message_stick]    = "Make sticky";
-  $lang[message_unstick]  = "Remove sticky";
+  $lang[posting_lock]     = "Lock message";
+  $lang[posting_unlock]   = "Unlock message";
+  $lang[posting_stick]    = "Make sticky";
+  $lang[posting_unstick]  = "Remove sticky";
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
                           . "our terms of usage.";
@@ -216,7 +216,7 @@
   $lang[account_id]         = "User ID:";
   $lang[account_status]     = "Account status:";
   $lang[account_created]    = "Member since:";
-  $lang[account_messages]   = "Forum postings:";
+  $lang[account_postings]   = "Forum postings:";
   $lang[account_name]       = "Username:";
   $lang[account_firstname]  = "Firstname:";
   $lang[account_lastname]   = "Lastname:";
@@ -274,7 +274,7 @@
   $lang[statistics_traffic]  = "Traffic";
 
   // Search.
-  $lang[search_no_message] = "(No messages found)";
+  $lang[search_no_posting] = "(No postings found)";
   $lang[search_no_users]   = "(No users found)";
   $lang[search_forum]      = "Search this forum";
   $lang[search_title]      = "Search";

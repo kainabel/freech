@@ -29,11 +29,11 @@
   define("MESSAGE_RELATION_CHILD",           7);
 
   /**
-   * Represents a message in the forum and all associated data.
+   * Represents a posting in the forum and all associated data.
    */
-  class Message extends Trackable {
+  class Posting extends Trackable {
     // Constructor.
-    function Message() {
+    function Posting() {
       $this->Trackable();
       $this->clear();
       $this->is_editable = TRUE;
@@ -58,7 +58,7 @@
     // Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("Message:set_from_db(): Non-array.");
+        die("Posting:set_from_db(): Non-array.");
       $this->clear();
       $this->fields[id]               = $_db_row[id];
       $this->fields[forum_id]         = $_db_row[forum_id];
@@ -82,8 +82,8 @@
       $this->fields[is_active]        = $_db_row[is_active];
       if (isset($_db_row[allow_answer]))
         $this->fields[allow_answer]   = $_db_row[allow_answer];
-      $this->fields[next_message_id]  = $_db_row[next_message_id];
-      $this->fields[prev_message_id]  = $_db_row[prev_message_id];
+      $this->fields[next_posting_id]  = $_db_row[next_posting_id];
+      $this->fields[prev_posting_id]  = $_db_row[prev_posting_id];
       $this->fields[next_thread_id]   = $_db_row[next_thread_id];
       $this->fields[prev_thread_id]   = $_db_row[prev_thread_id];
     }
@@ -96,7 +96,7 @@
     }
 
 
-    // Set a unique id for the message.
+    // Set a unique id for the posting.
     function set_id($_id) {
       $this->fields[id] = $_id * 1;
     }
@@ -357,10 +357,10 @@
     }
 
 
-    // The url for locking the message.
+    // The url for locking the posting.
     function get_lock_url() {
       $url      = new URL('?', cfg('urlvars'));
-      $url->set_var('action',   'message_lock');
+      $url->set_var('action',   'posting_lock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       return $url;
@@ -372,10 +372,10 @@
     }
 
 
-    // The url for unlocking the message.
+    // The url for unlocking the posting.
     function get_unlock_url() {
       $url      = new URL('?', cfg('urlvars'));
-      $url->set_var('action',   'message_unlock');
+      $url->set_var('action',   'posting_unlock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       return $url;
@@ -387,10 +387,10 @@
     }
 
 
-    // The url for changing the message priority.
+    // The url for changing the posting priority.
     function get_prioritize_url($_priority) {
       $url      = new URL('?', cfg('urlvars'));
-      $url->set_var('action',   'message_prioritize');
+      $url->set_var('action',   'posting_prioritize');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('priority', (int)$_priority);
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
@@ -447,7 +447,7 @@
 
 
     // Returns a number between 0 (old) and 100 (new) depending on the
-    // time since the messages was posted.
+    // time since the postings was posted.
     function get_newness() {
       if (!$this->is_new())
         return 0;
@@ -497,7 +497,7 @@
       if ($this->fields[relation] != MESSAGE_RELATION_PARENT_STUB
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
-        die("Message:get_n_children(): This function must not be called on"
+        die("Posting:get_n_children(): This function must not be called on"
           . " non-parent rows.");
       return $this->fields[n_children] * 1;
     }
@@ -571,23 +571,23 @@
     }
 
 
-    function set_next_message_id($_next_message_id) {
-      $this->fields[next_message_id] = $_next_message_id * 1;
+    function set_next_posting_id($_next_posting_id) {
+      $this->fields[next_posting_id] = $_next_posting_id * 1;
     }
 
 
-    function get_next_message_id() {
-      return $this->fields[next_message_id];
+    function get_next_posting_id() {
+      return $this->fields[next_posting_id];
     }
 
 
-    function set_prev_message_id($_prev_message_id) {
-      $this->fields[prev_message_id] = $_prev_message_id * 1;
+    function set_prev_posting_id($_prev_posting_id) {
+      $this->fields[prev_posting_id] = $_prev_posting_id * 1;
     }
 
 
-    function get_prev_message_id() {
-      return $this->fields[prev_message_id];
+    function get_prev_posting_id() {
+      return $this->fields[prev_posting_id];
     }
 
 

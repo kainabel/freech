@@ -20,15 +20,15 @@
 ?>
 <?php
 class PollRenderer extends MessageRenderer {
-  function get_subject($_message) {
-    $subject = $_message->get_subject();
+  function get_subject($_posting) {
+    $subject = $_posting->get_subject();
     return lang('poll', array('title' => $subject));
   }
 
 
-  function get_body_html($_message) {
+  function get_body_html($_posting) {
     // Fetch the poll from the database.
-    $poll_id = $_message->get_id();
+    $poll_id = $_posting->get_id();
     $poll    = _get_poll_from_id($this->forum, $poll_id);
     $user    = $this->forum->get_current_user();
     $db      = $this->forum->_get_db();
@@ -46,7 +46,7 @@ class PollRenderer extends MessageRenderer {
   }
 
 
-  function is_editable($_message) {
+  function is_editable($_posting) {
     return FALSE;
   }
 }

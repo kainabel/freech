@@ -35,7 +35,7 @@
   include_once 'error.inc.php';
 
   include_once 'objects/url.class.php';
-  include_once 'objects/message.class.php';
+  include_once 'objects/posting.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
   include_once 'objects/message_renderer.class.php';
@@ -45,7 +45,7 @@
   include_once 'objects/indexbar_by_time.class.php';
   include_once 'objects/indexbar_by_thread.class.php';
   include_once 'objects/indexbar_group_profile.class.php';
-  include_once 'objects/indexbar_read_message.class.php';
+  include_once 'objects/indexbar_read_posting.class.php';
   include_once 'objects/indexbar_user_postings.class.php';
   include_once 'objects/indexbar_search_result.class.php';
   include_once 'objects/indexbar_search_users.class.php';
@@ -56,7 +56,7 @@
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
   include_once 'actions/rss_printer.class.php';
-  include_once 'actions/message_printer.class.php';
+  include_once 'actions/posting_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
   include_once 'actions/list_printer.class.php';
   include_once 'actions/login_printer.class.php';
@@ -340,11 +340,11 @@
     }
 
 
-    function _get_message_from_id_or_die($_id) {
-      $message = $this->forumdb->get_message_from_id((int)$_id);
-      if (!$message)
-        die('No such message.');
-      return $message;
+    function _get_posting_from_id_or_die($_id) {
+      $posting = $this->forumdb->get_posting_from_id((int)$_id);
+      if (!$posting)
+        die('No such posting.');
+      return $posting;
     }
 
 
@@ -383,24 +383,24 @@
     }
 
 
-    function _init_message_from_post_data($_message = NULL) {
-      if (!$_message)
-        $_message = new Message;
-      $_message->set_id($_POST['msg_id']);
-      $_message->set_username($_POST['username']);
-      $_message->set_subject($_POST['subject']);
-      $_message->set_body($_POST['body']);
-      return $_message;
+    function _init_posting_from_post_data($_posting = NULL) {
+      if (!$_posting)
+        $_posting = new Posting;
+      $_posting->set_id($_POST['msg_id']);
+      $_posting->set_username($_POST['username']);
+      $_posting->set_subject($_POST['subject']);
+      $_posting->set_body($_POST['body']);
+      return $_posting;
     }
 
 
-    // Returns a new Message object that is initialized for the current
+    // Returns a new Posting object that is initialized for the current
     // user/group.
-    function _get_new_message() {
-      $message = new Message;
-      $message->set_from_group($this->get_current_group());
-      $message->set_from_user($this->get_current_user());
-      return $message;
+    function _get_new_posting() {
+      $posting = new Posting;
+      $posting->set_from_group($this->get_current_group());
+      $posting->set_from_user($this->get_current_user());
+      return $posting;
     }
 
 
@@ -453,7 +453,7 @@
     }
 
 
-    function _flood_blocked_until($_message) {
+    function _flood_blocked_until($_posting) {
       $forumdb = $this->forumdb;
       $user    = $this->get_current_user();
       $since   = time() - cfg('max_postings_time');
@@ -462,28 +462,28 @@
       // Find out how many postings were sent from the given user lately.
       if (!$user->is_anonymous()) {
         $uid        = $user->get_id();
-        $n_postings = $forumdb->get_n_messages_from_user_id($uid, $since);
+        $n_postings = $forumdb->get_n_postings_from_user_id($uid, $since);
         if ($n_postings < cfg('max_postings'))
           return;
         $search       = array('user_id' => $uid);
-        $last_message = $forumdb->get_message_from_query($search, $offset);
+        $last_posting = $forumdb->get_posting_from_query($search, $offset);
       }
 
       // Find out how many postings were sent from the given IP lately.
-      if (!$last_message) {
-        $ip_hash    = $_message->get_ip_address_hash();
-        $n_postings = $forumdb->get_n_messages_from_ip_hash($ip_hash, $since);
+      if (!$last_posting) {
+        $ip_hash    = $_posting->get_ip_address_hash();
+        $n_postings = $forumdb->get_n_postings_from_ip_hash($ip_hash, $since);
         if ($n_postings < cfg('max_postings'))
           return;
         $search       = array('ip_hash' => $ip_hash);
-        $last_message = $forumdb->get_message_from_query($search, $offset);
+        $last_posting = $forumdb->get_posting_from_query($search, $offset);
       }
 
-      if (!$last_message)
+      if (!$last_posting)
         return;
 
-      // If the too many messages were posted, block this.
-      $post_time = $last_message->get_created_unixtime();
+      // If the too many postings were posted, block this.
+      $post_time = $last_posting->get_created_unixtime();
       return $post_time + cfg('max_postings_time');
     }
 
@@ -572,10 +572,10 @@
     }
 
 
-    function _refer_to_message_id($_message_id) {
+    function _refer_to_posting_id($_posting_id) {
       $url = &new URL(cfg('site_url').'?', cfg('urlvars'));
       $url->set_var('action',   'read');
-      $url->set_var('msg_id',   $_message_id);
+      $url->set_var('msg_id',   $_posting_id);
       $url->set_var('forum_id', $this->get_current_forum_id());
       $this->_refer_to($url->get_string());
     }
@@ -618,18 +618,18 @@
     function _print_list_breadcrumbs() {
       $forum_id    = $this->get_current_forum_id();
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      if (cfg('disable_message_counter')) {
+      if (cfg('disable_posting_counter')) {
         $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
         $breadcrumbs->show();
         return;
       }
       $search      = array('forum_id' => $forum_id);
-      $n_messages  = $this->forumdb->get_n_messages($search);
+      $n_postings  = $this->forumdb->get_n_postings($search);
       $start       = time() - cfg("new_post_time");
-      $n_new       = $this->forumdb->get_n_messages($search, $start);
+      $n_new       = $this->forumdb->get_n_postings($search, $start);
       $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
-      $vars        = array('messages'    => $n_messages,
-                           'newmessages' => $n_new,
+      $vars        = array('postings'    => $n_postings,
+                           'newpostings' => $n_new,
                            'onlineusers' => $n_online);
       $text        = lang('forum_long', $vars);
       $breadcrumbs->add_item($text, $this->_get_forum_url());
@@ -659,27 +659,27 @@
 
 
     /*************************************************************
-     * Action controllers for reading and editing messages.
+     * Action controllers for reading and editing postings.
      *************************************************************/
-    // Prints the breadcrumbs pointing to the given message.
-    function _print_message_breadcrumbs($_message) {
+    // Prints the breadcrumbs pointing to the given posting.
+    function _print_posting_breadcrumbs($_posting) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
-      if (!$_message)
+      if (!$_posting)
         $breadcrumbs->add_item(lang("noentrytitle"));
-      elseif (!$_message->is_active())
+      elseif (!$_posting->is_active())
         $breadcrumbs->add_item(lang("blockedtitle"));
       else
-        $breadcrumbs->add_item($_message->get_subject());
+        $breadcrumbs->add_item($_posting->get_subject());
       $breadcrumbs->show();
     }
 
 
-    // Read a message.
-    function _message_read() {
-      $msg        = $this->forumdb->get_message_from_id($_GET['msg_id']);
-      $msgprinter = &new MessagePrinter($this);
-      $this->_print_message_breadcrumbs($msg);
+    // Read a posting.
+    function _posting_read() {
+      $msg        = $this->forumdb->get_posting_from_id($_GET['msg_id']);
+      $msgprinter = &new PostingPrinter($this);
+      $this->_print_posting_breadcrumbs($msg);
 
       if ($msg) {
         $renderer_name = $msg->get_renderer_name();
@@ -688,8 +688,8 @@
       }
 
       /* Plugin hook: on_message_read_print
-       *   Called before the HTML for the message is produced.
-       *   Args: message: The message that is about to be shown.
+       *   Called before the HTML for the posting is produced.
+       *   Args: posting: The posting that is about to be shown.
        */
       $this->eventbus->emit('on_message_read_print', &$this, &$msg);
       $msgprinter->show($msg);
@@ -699,8 +699,8 @@
     // Write a new message.
     function _message_compose() {
       $parent_id  = (int)$_POST['parent_id'];
-      $message    = &new Message;
-      $msgprinter = &new MessagePrinter($this);
+      $message    = &new Posting;
+      $msgprinter = &new PostingPrinter($this);
       $msgprinter->show_compose($message, '', $parent_id, FALSE);
     }
 
@@ -708,28 +708,28 @@
     // Write a response to a message.
     function _message_answer() {
       $parent_id  = (int)$_GET['parent_id'];
-      $message    = $this->forumdb->get_message_from_id($parent_id);
-      $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show_compose_reply($message, '');
+      $posting    = $this->forumdb->get_posting_from_id($parent_id);
+      $msgprinter = &new PostingPrinter($this);
+      $msgprinter->show_compose_reply($posting, '');
     }
 
 
     // Edit a saved message.
     function _message_edit_saved() {
       $user       = $this->get_current_user();
-      $message    = $this->forumdb->get_message_from_id($_GET['msg_id']);
-      $msgprinter = &new MessagePrinter($this);
+      $posting    = $this->forumdb->get_posting_from_id($_GET['msg_id']);
+      $msgprinter = &new PostingPrinter($this);
 
-      if (!cfg("postings_editable"))
-        die("Postings may not be changed as per configuration.");
-      if ($message->get_user_is_anonymous())
-        die("Anonymous postings may not be changed.");
+      if (!cfg('postings_editable'))
+        die('Postings may not be changed as per configuration.');
+      if ($posting->get_user_is_anonymous())
+        die('Anonymous postings may not be changed.');
       elseif ($user->is_anonymous())
-        die("You are not logged in.");
-      elseif ($user->get_id() != $message->get_user_id())
-        die("You are not the owner.");
+        die('You are not logged in.');
+      elseif ($user->get_id() != $posting->get_user_id())
+        die('You are not the owner.');
 
-      $msgprinter->show_compose($message, '', 0, FALSE);
+      $msgprinter->show_compose($posting, '', 0, FALSE);
     }
 
 
@@ -737,19 +737,19 @@
     function _message_edit_unsaved() {
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
-      $message    = $this->_init_message_from_post_data();
-      $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show_compose($message, '', $parent_id, $may_quote);
+      $posting    = $this->_init_posting_from_post_data();
+      $msgprinter = &new PostingPrinter($this);
+      $msgprinter->show_compose($posting, '', $parent_id, $may_quote);
     }
 
 
     // Insert a quote from the parent message.
     function _message_quote() {
       $parent_id  = (int)$_POST['parent_id'];
-      $quoted_msg = $this->forumdb->get_message_from_id($parent_id);
-      $message    = $this->_init_message_from_post_data();
-      $msgprinter = &new MessagePrinter($this);
-      $msgprinter->show_compose_quoted($message, $quoted_msg, '');
+      $quoted_msg = $this->forumdb->get_posting_from_id($parent_id);
+      $posting    = $this->_init_posting_from_post_data();
+      $msgprinter = &new PostingPrinter($this);
+      $msgprinter->show_compose_quoted($posting, $quoted_msg, '');
     }
 
 
@@ -758,34 +758,34 @@
       global $err;
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
-      $msgprinter = &new MessagePrinter($this);
+      $msgprinter = &new PostingPrinter($this);
       $user       = $this->get_current_user();
-      $message    = $this->_get_new_message();
-      $this->_init_message_from_post_data($message);
+      $posting    = $this->_get_new_posting();
+      $this->_init_posting_from_post_data($posting);
 
-      // Check the message for completeness.
-      $ret = $message->check_complete();
+      // Check the posting for completeness.
+      $ret = $posting->check_complete();
       if ($ret < 0)
-        return $msgprinter->show_compose($message,
+        return $msgprinter->show_compose($posting,
                                          $err[$ret],
                                          $parent_id,
                                          $may_quote);
 
       // Make sure that the username is not in use.
       if ($user->is_anonymous()
-        && !$this->_username_available($message->get_username()))
-         return $msgprinter->show_compose($message,
-                                          lang("usernamenotavailable"),
+        && !$this->_username_available($posting->get_username()))
+         return $msgprinter->show_compose($posting,
+                                          lang('usernamenotavailable'),
                                           $parent_id,
                                           $may_quote);
 
       // Success.
       /* Plugin hook: on_message_preview_print
-       *   Called before the HTML for the message preview is produced.
-       *   Args: message: The message that is about to be previewed.
+       *   Called before the HTML for the posting preview is produced.
+       *   Args: posting: The posting that is about to be previewed.
        */
-      $this->eventbus->emit('on_message_preview_print', &$this, &$message);
-      $msgprinter->show_preview($message, $parent_id, $may_quote);
+      $this->eventbus->emit('on_message_preview_print', &$this, &$posting);
+      $msgprinter->show_preview($posting, $parent_id, $may_quote);
     }
 
 
@@ -794,108 +794,108 @@
       global $err;
       $parent_id  = (int)$_POST['parent_id'];
       $may_quote  = (int)$_POST['may_quote'];
-      $msgprinter = &new MessagePrinter($this);
+      $msgprinter = &new PostingPrinter($this);
       $user       = $this->get_current_user();
       $forum_id   = $this->get_current_forum_id();
       $forumdb    = $this->forumdb;
       $this->_assert_may('write');
 
       // Check whether editing is allowed per configuration.
-      if ($_POST['msg_id'] && !cfg("postings_editable"))
+      if ($_POST['msg_id'] && !cfg('postings_editable'))
         die("Postings may not be changed as per configuration.");
 
-      // Fetch the message from the database (when editing an existing one) or
+      // Fetch the posting from the database (when editing an existing one) or
       // create a new one from the POST data.
       if ($_POST['msg_id']) {
-        $message = $forumdb->get_message_from_id($_POST['msg_id']);
-        $message->set_subject($_POST['subject']);
-        $message->set_body($_POST['body']);
-        $message->set_updated_unixtime(time());
+        $posting = $forumdb->get_posting_from_id($_POST['msg_id']);
+        $posting->set_subject($_POST['subject']);
+        $posting->set_body($_POST['body']);
+        $posting->set_updated_unixtime(time());
       }
       else {
-        $message = $this->_get_new_message();
-        $this->_init_message_from_post_data($message);
+        $posting = $this->_get_new_posting();
+        $this->_init_posting_from_post_data($posting);
       }
 
       // Make sure that the user is not trying to spoof a name.
       if (!$user->is_anonymous()
-        && $user->get_name() !== $message->get_username())
-        die("Username does not match currently logged in user");
+        && $user->get_name() !== $posting->get_username())
+        die('Username does not match currently logged in user');
 
-      // Check the message for completeness.
-      $ret = $message->check_complete();
+      // Check the posting for completeness.
+      $ret = $posting->check_complete();
       if ($ret < 0)
-        return $msgprinter->show_compose($message,
+        return $msgprinter->show_compose($posting,
                                          $err[$ret],
                                          $parent_id,
                                          $may_quote);
 
       // Make sure that the username is not in use.
       if ($user->is_anonymous()
-        && !$this->_username_available($message->get_username()))
-        return $msgprinter->show_compose($message,
-                                         lang("usernamenotavailable"),
+        && !$this->_username_available($posting->get_username()))
+        return $msgprinter->show_compose($posting,
+                                         lang('usernamenotavailable'),
                                          $parent_id,
                                          $may_quote);
 
-      if ($message->get_id() <= 0) {
-        // If the message a new one (not an edited one), check for duplicates.
-        $duplicate_id = $forumdb->get_duplicate_id_from_message($message);
+      if ($posting->get_id() <= 0) {
+        // If the posting a new one (not an edited one), check for duplicates.
+        $duplicate_id = $forumdb->get_duplicate_id_from_posting($posting);
         if ($duplicate_id)
-          $this->_refer_to_message_id($duplicate_id);
+          $this->_refer_to_posting_id($duplicate_id);
 
-        $blocked_until = $this->_flood_blocked_until($message);
+        $blocked_until = $this->_flood_blocked_until($posting);
         if ($blocked_until) {
           $args = array('seconds' => $blocked_until - time());
-          return $msgprinter->show_compose($message,
+          return $msgprinter->show_compose($posting,
                                            lang('too_many_postings', $args),
                                            $parent_id,
                                            $may_quote);
         }
       }
 
-      // Save the message.
-      if ($message->get_id())
-        $this->forumdb->save($forum_id, $parent_id, $message);
+      // Save the posting.
+      if ($posting->get_id())
+        $this->forumdb->save($forum_id, $parent_id, $posting);
       else
-        $this->forumdb->insert($forum_id, $parent_id, $message);
-      if (!$message->get_id())
-        return $msgprinter->show_compose($message,
-                                         lang("message_save_failed"),
+        $this->forumdb->insert($forum_id, $parent_id, $posting);
+      if (!$posting->get_id())
+        return $msgprinter->show_compose($posting,
+                                         lang('posting_save_failed'),
                                          $parent_id,
                                          $may_quote);
 
       // Success! Refer to the new item.
-      $this->_refer_to_message_id($message->get_id());
+      $this->_refer_to_posting_id($posting->get_id());
     }
 
 
-    // Changes the priority of an existing message.
-    function _message_prioritize() {
+    // Changes the priority of an existing posting.
+    function _posting_prioritize() {
       $this->_assert_may('moderate');
-      $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
-      $message->set_priority((int)$_GET['priority']);
-      $this->forumdb->save($this->get_current_forum_id(), -1, $message);
+      $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $posting->set_priority((int)$_GET['priority']);
+      $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
 
-    // Locks an existing message.
-    function _message_lock() {
+    // Locks an existing posting.
+    function _posting_lock() {
       $this->_assert_may('moderate');
-      $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
-      $message->set_active(FALSE);
-      $this->forumdb->save($this->get_current_forum_id(), -1, $message);
+      $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $posting->set_active(FALSE);
+      $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
 
-    // Unlocks an existing message.
-    function _message_unlock() {
+    // Unlocks an existing posting.
+    function _posting_unlock() {
       $this->_assert_may('moderate');
-      $message = $this->_get_message_from_id_or_die((int)$_GET['msg_id']);
-      $message->set_active();
-      $this->forumdb->save($this->get_current_forum_id(), -1, $message);
+      $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $posting->set_active();
+      $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
@@ -1080,13 +1080,13 @@
       if (!$_GET['q'] || trim($_GET['q']) == '')
         return $this->_show_search_form();
 
-      // Search for messages or users.
+      // Search for postings or users.
       $printer  = &new SearchPrinter($this);
       $forum_id = (int)$_GET['forum_id'];
       if ($_GET['user_search'])
         $printer->show_users($_GET['q'], $_GET['hs']);
       else
-        $printer->show_messages($forum_id, $_GET['q'], $_GET['hs']);
+        $printer->show_postings($forum_id, $_GET['q'], $_GET['hs']);
     }
 
 
@@ -1330,7 +1330,7 @@
 
       switch ($action) {
       case 'read':
-        $this->_message_read();             // Read a message.
+        $this->_posting_read();             // Read a posting.
         break;
 
       case 'write':
@@ -1338,7 +1338,7 @@
         break;
 
       case 'respond':
-        $this->_message_answer();           // Write an answer.
+        $this->_message_answer();           // Write a response.
         break;
 
       case 'edit':
@@ -1356,16 +1356,16 @@
           $this->_message_edit_unsaved();   // Edit the unsaved message.
         break;
 
-      case 'message_prioritize':
-        $this->_message_prioritize();
+      case 'posting_prioritize':
+        $this->_posting_prioritize();
         break;
 
-      case 'message_lock':
-        $this->_message_lock();
+      case 'posting_lock':
+        $this->_posting_lock();
         break;
 
-      case 'message_unlock':
-        $this->_message_unlock();
+      case 'posting_unlock':
+        $this->_posting_unlock();
         break;
 
       case 'user_profile':
@@ -1544,7 +1544,7 @@
     }
 
 
-    function get_current_message_id() {
+    function get_current_posting_id() {
       return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
     }
 

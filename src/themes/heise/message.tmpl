@@ -24,7 +24,7 @@
     </td>
     <td>
 {if $__group->may('moderate')}
-    {include file="moderator_buttons.inc.tmpl"}
+    {include file="moderator_buttons.inc.tmpl" posting=$message}
 {/if}
     </td>
 {if $message->get_user_is_anonymous()}

@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  class MessagePrinter extends ThreadPrinter {
+  class PostingPrinter extends ThreadPrinter {
     function show(&$_msg) {
       $user       = $this->parent->get_current_user();
       $group      = $this->parent->get_current_group();
@@ -30,13 +30,13 @@
                  && !$user->is_anonymous()
                  && $user->get_id() === $msg_uid
                  && $_msg->is_editable();
-      $indexbar   = &new IndexBarReadMessage($_msg, $may_write, $may_edit);
+      $indexbar   = &new IndexBarReadPosting($_msg, $may_write, $may_edit);
       $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
 
       if ($_msg)
         $_msg->apply_block();
       else {
-        $_msg = new Message;
+        $_msg = new Posting;
         $_msg->set_subject(lang("noentrytitle"));
         $_msg->set_body(lang("noentrybody"));
       }
@@ -45,15 +45,15 @@
       $this->assign_by_ref('showthread', $showthread);
       if ($showthread) {
         $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
-        $func  = array(&$this, '_append_message');
+        $func  = array(&$this, '_append_posting');
         $this->forumdb->foreach_child_in_thread($_msg->get_id(),
                                                 0,
                                                 cfg("tpp"),
                                                 $state,
                                                 $func,
                                                 '');
-        $this->assign_by_ref('n_rows',   count($this->messages));
-        $this->assign_by_ref('messages', $this->messages);
+        $this->assign_by_ref('n_rows',   count($this->postings));
+        $this->assign_by_ref('postings', $this->postings);
       }
 
       $this->assign_by_ref('indexbar', $indexbar);
@@ -100,7 +100,7 @@
     function show_compose_quoted(&$_message,
                                  &$_parent_msg,
                                  $_hint) {
-      // Add "Message written by ... on ..." before the quoted stuff.
+      // Add "Posting written by ... on ..." before the quoted stuff.
       if ($_parent_msg->is_active()) {
         $text  = preg_replace("/\[USER\]/",
                               $_parent_msg->get_username(),
@@ -127,7 +127,7 @@
      * Shows a form for editing a reply to the given message.
      */
     function show_compose_reply(&$_parent_msg, $_hint) {
-      $message = new Message;
+      $message = new Posting;
 
       // Prepend 'Re: ' if necessary
       if (strpos($_parent_msg->get_subject(), lang("answer")) !== 0) {

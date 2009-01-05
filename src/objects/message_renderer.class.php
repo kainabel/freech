@@ -25,28 +25,28 @@ class MessageRenderer {
   }
 
 
-  function get_subject($_message) {
-    return $_message->get_subject();
+  function get_subject($_posting) {
+    return $_posting->get_subject();
   }
 
 
-  function get_body($_message) {
-    return $_message->get_body();
+  function get_body($_posting) {
+    return $_posting->get_body();
   }
 
 
-  function get_body_html($_message) {
-    return $_message->get_body_html();
+  function get_body_html($_posting) {
+    return $_posting->get_body_html();
   }
 
 
-  function get_url($_message) {
-    return $_message->get_url();
+  function get_url($_posting) {
+    return $_posting->get_url();
   }
 
 
-  function is_editable($_message) {
-    return $_message->is_editable;
+  function is_editable($_posting) {
+    return $_posting->is_editable;
   }
 }
 ?>

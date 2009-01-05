@@ -32,5 +32,15 @@ class UnknownPosting extends PostingDecorator {
   function get_body_html() {
     return '<font color="red" size="+1">'.$this->get_body().'</font>';
   }
+
+
+  function is_editable() {
+    return FALSE;
+  }
+
+
+  function get_allow_answer() {
+    return FALSE;
+  }
 }
 ?>

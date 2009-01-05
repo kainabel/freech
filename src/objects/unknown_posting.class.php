@@ -24,12 +24,13 @@
  */
 class UnknownPosting extends PostingDecorator {
   function get_body() {
-    return 'Unknown posting type '.$this->posting->get_renderer();
+    $renderer = $this->posting->get_renderer();
+    return "Plugin for posting type \"$renderer\" not found.";
   }
 
 
   function get_body_html() {
-    return $this->get_body();
+    return '<font color="red" size="+1">'.$this->get_body().'</font>';
   }
 }
 ?>

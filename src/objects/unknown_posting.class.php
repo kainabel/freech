@@ -19,35 +19,17 @@
   */
 ?>
 <?php
-class Poll extends PostingDecorator {
-  function get_subject() {
-    $subject = $this->posting->get_subject();
-    return lang('poll', array('title' => $subject));
+/**
+ * Decorates postings that are messages.
+ */
+class UnknownPosting extends PostingDecorator {
+  function get_body() {
+    return 'Unknown posting type '.$this->posting->get_renderer();
   }
 
 
   function get_body_html() {
-    // Fetch the poll from the database.
-    $poll_id = $this->posting->get_id();
-    $poll    = _get_poll_from_id($this->forum, $poll_id);
-    $user    = $this->forum->get_current_user();
-    $db      = $this->forum->_get_db();
-    $printer = new PollPrinter($this->forum);
-
-    if ($user->is_anonymous() || $_GET['result'])
-      return $printer->get_poll_result($poll);
-
-    if ($_GET['accept'])
-      $hint = lang('poll_vote_accepted');
-
-    if (_poll_did_vote($db, $user, $poll_id))
-      return $printer->get_poll_result($poll, $hint);
-    return $printer->get_poll($poll);
-  }
-
-
-  function is_editable() {
-    return FALSE;
+    return $this->get_body();
   }
 }
 ?>

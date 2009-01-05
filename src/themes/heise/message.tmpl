@@ -8,7 +8,7 @@
   <font color='red' size='-1'>{lang text="lastupdated" time=$message->get_updated_time()}</font>
 {/if}
   <br />
-  <b>{$message->get_subject_fmt()|escape}</b>
+  <b>{$message->get_subject()|escape}</b>
 <table>
   <tr>
     <td>

@@ -38,7 +38,9 @@
   include_once 'objects/posting.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
-  include_once 'objects/message_renderer.class.php';
+  include_once 'objects/posting_decorator.class.php';
+  include_once 'objects/message.class.php';
+  include_once 'objects/unknown_posting.class.php';
   include_once 'objects/thread_state.class.php';
   include_once 'objects/indexbar_item.class.php';
   include_once 'objects/indexbar.class.php';
@@ -88,31 +90,31 @@
       // Select a language.
       $l = cfg("lang");
       if ($l == 'auto')
-        $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg("lang_default"));
+        $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg('lang_default'));
       //putenv("LANG=$l");
       setlocale(LC_MESSAGES, $l);
 
       if (cfg_is('salt', ''))
-        die("Error: Please define the salt variable in config.inc.php!");
+        die('Error: Please define the salt variable in config.inc.php!');
 
       // Setup gettext.
       if (!function_exists('gettext'))
-        die("This webserver does not have gettext installed.<br/>"
-          . "Please contact your webspace provider.");
+        die('This webserver does not have gettext installed.<br/>'
+          . 'Please contact your webspace provider.');
       $domain = 'freech';
-      bindtextdomain($domain, "./language");
+      bindtextdomain($domain, './language');
       textdomain($domain);
       bind_textdomain_codeset($domain, 'UTF-8');
 
       // Start the PHP session.
-      session_set_cookie_params(time() + cfg("login_time"));
+      session_set_cookie_params(time() + cfg('login_time'));
       if ($_COOKIE['permanent_session']) {
         session_id($_COOKIE['permanent_session']);
         session_start();
       }
       else {
         session_start();
-        if ($_POST['permanent'] === "ON")
+        if ($_POST['permanent'] === 'ON')
           setcookie('permanent_session', session_id(), time() + cfg("login_time"));
       }
       $this->_handle_cookies();
@@ -123,7 +125,7 @@
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus             = &new Trackable;
       $this->actions              = array();
-      $this->renderers            = array();
+      $this->renderers            = array('message' => 'Message');
       $this->extra_indexbar_links = array();
 
       // Connect to the DB.
@@ -404,6 +406,14 @@
     }
 
 
+    function _decorate_posting($_posting) {
+      $renderer = $this->renderers[$_posting->get_renderer_name()];
+      if ($renderer)
+        return new $renderer($_posting, $this);
+      return new UnknownPosting($_posting, $this);
+    }
+
+
     // Returns an URL that points to the current forum.
     function _get_forum_url() {
       $forum_id = $this->get_current_forum_id();
@@ -677,22 +687,17 @@
 
     // Read a posting.
     function _posting_read() {
-      $msg        = $this->forumdb->get_posting_from_id($_GET['msg_id']);
+      $posting    = $this->forumdb->get_posting_from_id($_GET['msg_id']);
+      $posting    = $this->_decorate_posting($posting);
       $msgprinter = &new PostingPrinter($this);
       $this->_print_posting_breadcrumbs($msg);
-
-      if ($msg) {
-        $renderer_name = $msg->get_renderer_name();
-        $renderer      = $this->get_renderer($renderer_name);
-        $msg->set_renderer($renderer);
-      }
 
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the posting is produced.
        *   Args: posting: The posting that is about to be shown.
        */
-      $this->eventbus->emit('on_message_read_print', &$this, &$msg);
-      $msgprinter->show($msg);
+      $this->eventbus->emit('on_message_read_print', $this, $posting);
+      $msgprinter->show($posting);
     }
 
 
@@ -760,7 +765,7 @@
       $may_quote  = (int)$_POST['may_quote'];
       $msgprinter = &new PostingPrinter($this);
       $user       = $this->get_current_user();
-      $posting    = $this->_get_new_posting();
+      $posting    = new Message($this->_get_new_posting(), $this);
       $this->_init_posting_from_post_data($posting);
 
       // Check the posting for completeness.
@@ -1554,13 +1559,8 @@
     }
 
 
-    function register_renderer($_name, $_obj) {
-      $this->renderers[$_name] = $_obj;
-    }
-
-
-    function get_renderer($_name) {
-      return $this->renderers[$_name];
+    function register_renderer($_name, $_decorator_name) {
+      $this->renderers[$_name] = $_decorator_name;
     }
 
 

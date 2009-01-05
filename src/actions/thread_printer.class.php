@@ -28,16 +28,13 @@
 
     function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $msg_id = $this->parent->get_current_posting_id();
-      $_posting->set_selected($_posting->get_id() == $msg_id);
-      $_posting->apply_block();
-
-      $renderer_name = $_posting->get_renderer_name();
-      $renderer      = $this->parent->get_renderer($renderer_name);
-      $_posting->set_renderer($renderer);
+      $posting    = $this->parent->_decorate_posting($_posting);
+      $current_id = $this->parent->get_current_posting_id();
+      $posting->set_selected($posting->get_id() == $current_id);
+      $posting->apply_block();
 
       // Append everything to a list.
-      array_push($this->postings, $_posting);
+      array_push($this->postings, $posting);
     }
 
 

@@ -168,10 +168,10 @@
      * $_posting: The posting to be inserted.
      * Returns:   The id of the newly inserted entry.
      */
-    function insert($_forum_id, $_parent_id, &$_msg) {
-      $body = $_msg->get_body();
-      if ($_msg->get_signature())
-        $body .= "\n\n--\n" . $_msg->get_signature();
+    function insert($_forum_id, $_parent_id, &$_posting) {
+      $body = $_posting->get_body();
+      if ($_posting->get_signature())
+        $body .= "\n\n--\n" . $_posting->get_signature();
       //$this->db->debug = true;
 
       // Fetch the parent row.
@@ -206,19 +206,19 @@
         $query = &new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $parentrow[forum_id]);
         $query->set_int   ('thread_id',       $parentrow[thread_id]);
-        $query->set_int   ('priority',        $_msg->get_priority());
-        $query->set_int   ('user_id',         $_msg->get_user_id());
-        $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
-        $query->set_string('user_icon',       $_msg->get_user_icon());
-        $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
-        $query->set_string('renderer',        $_msg->get_renderer_name());
-        $query->set_string('username',        $_msg->get_username());
-        $query->set_string('subject',         $_msg->get_subject());
+        $query->set_int   ('priority',        $_posting->get_priority());
+        $query->set_int   ('user_id',         $_posting->get_user_id());
+        $query->set_bool  ('user_is_special', $_posting->get_user_is_special());
+        $query->set_string('user_icon',       $_posting->get_user_icon());
+        $query->set_string('user_icon_name',  $_posting->get_user_icon_name());
+        $query->set_string('renderer',        $_posting->get_renderer_name());
+        $query->set_string('username',        $_posting->get_username());
+        $query->set_string('subject',         $_posting->get_subject());
         $query->set_string('body',            $body);
-        $query->set_string('hash',            $_msg->get_hash());
-        $query->set_string('ip_hash',         $_msg->get_ip_address_hash());
+        $query->set_string('hash',            $_posting->get_hash());
+        $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $this->db->Execute($query->sql()) or die("ForumDB::insert(): Ins1");
-        $_msg->set_id($this->db->Insert_Id());
+        $_posting->set_id($this->db->Insert_Id());
 
         // Update the child's path.
         $sql  = "UPDATE {t_posting} SET path=";
@@ -226,14 +226,14 @@
           $len = strlen($parentrow[path]);
           $parentrow[path] = substr($parentrow[path], 0, $len - 2);
           $sql .= " CONCAT(0x$parentrow[path],";
-          $sql .= "        0x" . $this->_int2hex($_msg->get_id()) . "00)";
+          $sql .= "        0x" . $this->_int2hex($_posting->get_id()) . "00)";
         }
         else {
-          $sql .= " 0x" . $this->_int2hex($_msg->get_id()) . "00";
+          $sql .= " 0x" . $this->_int2hex($_posting->get_id()) . "00";
         }
         $sql .= " WHERE id={newid}";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('newid', $_msg->get_id());
+        $query->set_int('newid', $_posting->get_id());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Path.");
 
@@ -282,33 +282,33 @@
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $_forum_id);
-        $query->set_int   ('priority',        $_msg->get_priority());
-        $query->set_int   ('user_id',         $_msg->get_user_id());
-        $query->set_bool  ('user_is_special', $_msg->get_user_is_special());
-        $query->set_string('user_icon',       $_msg->get_user_icon());
-        $query->set_string('user_icon_name',  $_msg->get_user_icon_name());
-        $query->set_string('renderer',        $_msg->get_renderer_name());
-        $query->set_string('username',        $_msg->get_username());
-        $query->set_string('subject',         $_msg->get_subject());
+        $query->set_int   ('priority',        $_posting->get_priority());
+        $query->set_int   ('user_id',         $_posting->get_user_id());
+        $query->set_bool  ('user_is_special', $_posting->get_user_is_special());
+        $query->set_string('user_icon',       $_posting->get_user_icon());
+        $query->set_string('user_icon_name',  $_posting->get_user_icon_name());
+        $query->set_string('renderer',        $_posting->get_renderer_name());
+        $query->set_string('username',        $_posting->get_username());
+        $query->set_string('subject',         $_posting->get_subject());
         $query->set_string('body',            $body);
-        $query->set_string('hash',            $_msg->get_hash());
-        $query->set_string('ip_hash',         $_msg->get_ip_address_hash());
+        $query->set_string('hash',            $_posting->get_hash());
+        $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Insert2.".$query->sql());
-        $_msg->set_id($this->db->Insert_Id());
+        $_posting->set_id($this->db->Insert_Id());
 
         // Set the thread id.
         // FIXME: Is there a better way to do this?
         $sql  = "UPDATE {t_posting} SET thread_id={newid}";
         $sql .= " WHERE id={newid}";
         $query = &new FreechSqlQuery($sql);
-        $query->set_int('newid', $_msg->get_id());
+        $query->set_int('newid', $_posting->get_id());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): thread_id");
       }
 
       $this->db->CompleteTrans();
-      return $_msg->get_id();
+      return $_posting->get_id();
     }
 
 

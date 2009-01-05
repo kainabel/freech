@@ -31,12 +31,10 @@
   /**
    * Represents a posting in the forum and all associated data.
    */
-  class Posting extends Trackable {
+  class Posting {
     // Constructor.
     function Posting() {
-      $this->Trackable();
       $this->clear();
-      $this->is_editable = TRUE;
     }
 
 
@@ -46,7 +44,7 @@
       $this->fields[created]      = time();
       $this->fields[updated]      = $this->fields[created];
       $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
-      $this->fields[renderer]     = 'default';
+      $this->fields[renderer]     = 'message';
       $this->fields[is_active]    = TRUE;
       $this->fields[user_id]      = 2; // Anonymous user.
       $this->fields[allow_answer] = TRUE;
@@ -211,13 +209,6 @@
     }
 
 
-    function &get_subject_fmt() {
-      if ($this->renderer)
-        return $this->renderer->get_subject($this);
-      return $this->get_subject();
-    }
-
-
     function set_body($_body) {
       $this->fields[body] = trim($_body);
     }
@@ -243,57 +234,8 @@
     }
 
 
-    function &get_renderer_name() {
+    function get_renderer_name() {
       return $this->fields[renderer];
-    }
-
-
-    function set_renderer($_renderer) {
-      $this->renderer = $_renderer;
-    }
-
-
-    function get_renderer() {
-      return $this->renderer;
-    }
-
-
-    function _update_body_html($_quotecolor = '#990000') {
-      // Perform non HTML generating formattings.
-      $body = $this->get_body();
-      if ($this->get_id() <= 0 && $this->get_signature())
-        $body .= "\n\n--\n" . $this->get_signature();
-      $body = wordwrap_smart($body);
-
-      // Let plugins perform formattings.
-      $this->set_body_html($body);
-      $this->emit('on_format_before_html', $this);
-
-      // Perform HTML generating formattings.
-      $body = $this->get_body_html();
-      $body = string_escape($body);
-      $body = preg_replace('/^(&gt; .*)/m',
-                           "<font color='$_quotecolor'>$1</font>",
-                           $body);
-      $body = preg_replace('/  /', '&nbsp;&nbsp;', $body);
-      $body = nl2br($body);
-      $this->set_body_html($body);
-
-      $this->emit('on_format_after_html', $this);
-    }
-
-
-    function set_body_html($_html) {
-      $this->body_html = $_html;
-    }
-
-
-    function get_body_html($_quotecolor = "#990000") {
-      if ($this->renderer)
-        return $this->renderer->get_body_html($this);
-      if (!$this->body_html)
-        $this->_update_body_html($_quotecolor);
-      return $this->body_html;
     }
 
 
@@ -308,20 +250,8 @@
     }
 
 
-    function &get_url_fmt() {
-      if ($this->renderer)
-        return $this->renderer->get_url($this);
-      return $this->get_url();
-    }
-
-
     function get_url_string() {
       return $this->get_url()->get_string();
-    }
-
-
-    function &get_url_string_fmt() {
-      return $this->get_url_fmt()->get_string();
     }
 
 
@@ -531,15 +461,8 @@
     }
 
 
-    function set_editable($_editable = TRUE) {
-      $this->is_editable = $_editable;
-    }
-
-
     function is_editable() {
-      if ($this->renderer)
-        return $this->renderer->is_editable($this);
-      return $this->is_editable;
+      return TRUE;
     }
 
 

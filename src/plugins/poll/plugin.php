@@ -8,15 +8,13 @@ Constructor: poll_init
 Active:      1
 */
 include_once dirname(__FILE__).'/poll.class.php';
-include_once dirname(__FILE__).'/poll_renderer.class.php';
 include_once dirname(__FILE__).'/poll_printer.class.php';
 
 function poll_init($forum) {
   // Register a class that is responsible for formatting the posting object
-  // into which the poll is mapped.
-  $renderer = new PollRenderer($forum);
-  $forum->register_renderer('multipoll', $renderer);
-  $forum->register_renderer('poll',      $renderer);
+  // that holds the poll.
+  $forum->register_renderer('multipoll', 'Poll');
+  $forum->register_renderer('poll',      'Poll');
 
   // For anonymous users we don't need to do anything else.
   $user = $forum->get_current_user();
@@ -37,7 +35,8 @@ function poll_init($forum) {
 
 function poll_on_add($forum) {
   $printer = new PollPrinter($forum);
-  $poll    = new Poll;
+  $posting = new Posting;
+  $poll    = new Poll($posting, $forum);
   $poll->set_forum_id($forum->get_current_forum_id());
 
   if (_n_polls_since($forum->_get_db(),
@@ -131,7 +130,9 @@ function poll_on_vote($forum) {
  ***********************************************/
 function _poll_get_from_post() {
   $n_options = (int)$_POST['n_options'];
-  $poll      = new Poll($_POST['poll_title']);
+  $posting   = new Posting;
+  $poll      = new Poll($posting, NULL);
+  $poll->set_title($_POST['poll_title']);
   $poll->set_allow_multiple($_POST['allow_multiple'] == 'on');
   $poll->set_forum_id((int)$_POST['forum_id']);
   for ($i = 0; $i < $n_options; $i++) {
@@ -146,6 +147,9 @@ function _save_poll($forum, $poll) {
   $forum_id = $forum->get_current_forum_id();
   $user     = $forum->get_current_user();
   $group    = $forum->get_current_group();
+  $subject  = $poll->get_subject();
+  $subject  = lang('poll', array('title' => $subject));
+  $poll->set_subject($subject);
   $poll->set_from_user($user);
   $poll->set_from_group($group);
 
@@ -195,9 +199,7 @@ function _save_poll_option($db, $poll_id, $option) {
 function _get_poll_from_id($forum, $poll_id) {
   // Load the posting first, and map it back into a poll.
   $posting = $forum->_get_posting_from_id_or_die($poll_id);
-  $poll    = new Poll($posting->get_subject());
-  $poll->set_id($poll_id);
-  $poll->set_renderer_name($posting->get_renderer_name());
+  $poll    = new Poll($posting, $forum);
 
   // Load the options of the poll.
   $sql  = 'SELECT * FROM {t_poll_option}';

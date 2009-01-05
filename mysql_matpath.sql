@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   `user_is_special` tinyint(1) unsigned default '0',
   `user_icon` varchar(50) collate latin1_general_ci default NULL,
   `user_icon_name` varchar(50) collate latin1_general_ci default NULL,
-  `renderer` varchar(10) collate latin1_general_ci NOT NULL default 'default',
+  `renderer` varchar(10) collate latin1_general_ci NOT NULL,
   `subject` varchar(100) collate latin1_general_ci NOT NULL,
   `body` text collate latin1_general_ci NOT NULL,
   `hash` varchar(40) collate latin1_general_ci NOT NULL,

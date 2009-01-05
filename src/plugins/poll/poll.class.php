@@ -26,11 +26,10 @@ class PollOption {
   }
 }
 
-class Poll extends Posting {
-  function Poll($_title = '', $_allow_multiple = FALSE) {
-    $this->Posting();
-    $this->set_title($_title);
-    $this->set_allow_multiple($_allow_multiple);
+class Poll extends PostingDecorator {
+  function Poll($_posting, $_forum) {
+    $this->PostingDecorator($_posting, $_forum);
+    $this->set_allow_multiple(FALSE);
     $this->options     = array();
     $this->results     = array();
     $this->max_options = 20;
@@ -38,13 +37,43 @@ class Poll extends Posting {
 
 
   function set_title($_title) {
-    $this->set_body(lang('poll', array('title' => $_title)));
-    return $this->set_subject($_title);
+    $this->posting->set_body(lang('poll', array('title' => $_title)));
+    return $this->posting->set_subject($_title);
   }
 
 
   function get_title() {
-    return $this->get_subject();
+    return $this->posting->get_subject();
+  }
+
+
+  function set_subject($_subject) {
+    return $this->posting->set_subject($_subject);
+  }
+
+
+  function get_subject() {
+    return $this->posting->get_subject();
+  }
+
+
+  function get_body_html() {
+    // Fetch the poll from the database.
+    $poll_id = $this->posting->get_id();
+    $poll    = _get_poll_from_id($this->forum, $poll_id);
+    $user    = $this->forum->get_current_user();
+    $db      = $this->forum->_get_db();
+    $printer = new PollPrinter($this->forum);
+
+    if ($user->is_anonymous() || $_GET['result'])
+      return $printer->get_poll_result($poll);
+
+    if ($_GET['accept'])
+      $hint = lang('poll_vote_accepted');
+
+    if (_poll_did_vote($db, $user, $poll_id))
+      return $printer->get_poll_result($poll, $hint);
+    return $printer->get_poll($poll);
   }
 
 
@@ -137,9 +166,9 @@ class Poll extends Posting {
 
 
   function get_allow_multiple() {
-    if ($this->get_renderer_name() == 'multipoll')
+    if ($this->posting->get_renderer_name() == 'multipoll')
       return TRUE;
-    elseif ($this->get_renderer_name() == 'poll')
+    elseif ($this->posting->get_renderer_name() == 'poll')
       return FALSE;
     die('Item is not a poll.');
   }
@@ -147,14 +176,24 @@ class Poll extends Posting {
 
   function set_allow_multiple($_allow) {
     if ($_allow)
-      $this->set_renderer_name('multipoll');
+      $this->posting->set_renderer_name('multipoll');
     else
-      $this->set_renderer_name('poll');
+      $this->posting->set_renderer_name('poll');
   }
 
 
   function set_signature() {
     // Prevent a signature from being added.
+  }
+
+
+  function get_signature() {
+    return '';
+  }
+
+
+  function is_editable() {
+    return FALSE;
   }
 
 

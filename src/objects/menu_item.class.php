@@ -20,15 +20,15 @@
 ?>
 <?php
   /**
-   * Represents a IndexBar, including the query variables.
+   * Represents a Menu, including the query variables.
    */
-  class IndexBarItem {
+  class MenuItem {
     var $text;
     var $url;
 
 
     // Constructor.
-    function IndexBarItem($_url = '', $_text = '') {
+    function MenuItem($_url = '', $_text = '') {
       if ($_url)
         $this->set_url($_url);
       if ($_text) {

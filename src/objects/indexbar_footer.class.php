@@ -19,6 +19,6 @@
   */
 ?>
 <?php
-  class IndexBarFooter extends IndexBar {
+  class IndexBarFooter extends Menu {
   }
 ?>

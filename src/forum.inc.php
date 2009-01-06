@@ -41,8 +41,8 @@
   include_once 'objects/posting_decorator.class.php';
   include_once 'objects/unknown_posting.class.php';
   include_once 'objects/thread_state.class.php';
-  include_once 'objects/indexbar_item.class.php';
-  include_once 'objects/indexbar.class.php';
+  include_once 'objects/menu_item.class.php';
+  include_once 'objects/menu.class.php';
   include_once 'objects/indexbar_by_time.class.php';
   include_once 'objects/indexbar_by_thread.class.php';
   include_once 'objects/indexbar_group_profile.class.php';

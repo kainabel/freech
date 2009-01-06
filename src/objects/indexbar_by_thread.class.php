@@ -22,13 +22,13 @@
   /**
    * Represents the index bar that is shown when listing all threads.
    */
-  class IndexBarByThread extends IndexBar {
+  class IndexBarByThread extends Menu {
     var $items;
 
 
     // Constructor.
     function IndexBarByThread($_args) {
-      $this->IndexBar();
+      $this->Menu();
 
       // Prints the index (pagination).
       $this->add_text(lang('index'));

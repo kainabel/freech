@@ -20,15 +20,15 @@
 ?>
 <?php
   /**
-   * Represents a IndexBar, including the query variables.
+   * Represents a Menu, including the query variables.
    */
-  class IndexBarSearchResult extends IndexBar {
+  class IndexBarSearchResult extends Menu {
     var $items;
 
 
     // Constructor.
     function IndexBarSearchResult($_args) {
-      $this->IndexBar();
+      $this->Menu();
       $this->forum_id            = $_args[forum_id];
       $this->query               = $_args[query];
       $this->n_postings          = $_args[n_postings];

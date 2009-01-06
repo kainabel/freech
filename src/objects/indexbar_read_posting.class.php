@@ -20,9 +20,9 @@
 ?>
 <?php
   /**
-   * Represents the IndexBar that is shown when reading a posting.
+   * Represents the Menu that is shown when reading a posting.
    */
-  class IndexBarReadPosting extends IndexBar {
+  class IndexBarReadPosting extends Menu {
     var $items;
 
 
@@ -30,7 +30,7 @@
     function IndexBarReadPosting($_posting,
                                  $_may_write = FALSE,
                                  $_may_edit  = FALSE) {
-      $this->IndexBar();
+      $this->Menu();
 
       if (!$_posting) {
         $this->add_separator();

@@ -20,14 +20,14 @@
 ?>
 <?php
   /**
-   * Represents a IndexBar, including the query variables.
+   * Represents a Menu, including the query variables.
    */
-  class IndexBar {
+  class Menu {
     var $items;
 
 
     // Constructor.
-    function IndexBar() {
+    function Menu() {
       $this->items = array();
     }
 
@@ -91,7 +91,7 @@
 
 
     function add_link($_url) {
-      array_push($this->items, new IndexBarItem($_url));
+      array_push($this->items, new MenuItem($_url));
     }
 
 
@@ -104,12 +104,12 @@
 
 
     function add_text($_text = '') {
-      array_push($this->items, new IndexBarItem(NULL, $_text));
+      array_push($this->items, new MenuItem(NULL, $_text));
     }
 
 
     function add_separator() {
-      array_push($this->items, new IndexBarItem());
+      array_push($this->items, new MenuItem());
     }
 
 

@@ -20,15 +20,15 @@
 ?>
 <?php
   /**
-   * Represents a IndexBar, including the query variables.
+   * Represents a Menu, including the query variables.
    */
-  class IndexBarUserPostings extends IndexBar {
+  class IndexBarUserPostings extends Menu {
     var $items;
 
 
     // Constructor.
     function IndexBarUserPostings($_args) {
-      $this->IndexBar();
+      $this->Menu();
 
       // Prints the index (pagination).
       $this->add_text(lang('index'));

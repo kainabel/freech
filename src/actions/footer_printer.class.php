@@ -21,13 +21,8 @@
 <?php
   class FooterPrinter extends PrinterBase {
     function show($_forum_id) {
-      // Create the URL pointing to the posting search.
-      $search_url = new URL('?', cfg("urlvars"));
-      $search_url->set_var('action',   'search');
-      $search_url->set_var('forum_id', (int)$_forum_id);
-
       // Create the URLs for changing the posting ordering.
-      $order_url = new URL('?', cfg("urlvars"));
+      $order_url = new URL('?', cfg('urlvars'));
       $order_url->set_var('forum_id', (int)$_forum_id);
       $order_url->set_var('refer_to', $_SERVER['REQUEST_URI']);
       if ($_COOKIE[view] === 'plain') {
@@ -41,13 +36,17 @@
         $order_by_time_url   = $order_url->get_string();
       }
 
+      // Create the indexbar.
+      $extra_urls = $this->parent->get_extra_footer_links();
+      $indexbar   = new IndexBarFooter($extra_urls);
+
       // Render the resulting template.
-      $version[url]  = "http://debain.org/software/freech/";
-      $version[text] = "Freech Forum ".FREECH_VERSION;
+      $version[url]  = 'http://debain.org/software/freech/';
+      $version[text] = 'Freech Forum '.FREECH_VERSION;
       $this->clear_all_assign();
       $this->assign_by_ref('order_by_thread', $order_by_thread_url);
       $this->assign_by_ref('order_by_time',   $order_by_time_url);
-      $this->assign_by_ref('search',          $search_url->get_string());
+      $this->assign_by_ref('indexbar',        $indexbar);
       $this->assign_by_ref('version',         $version);
       $this->render('footer.tmpl');
     }

@@ -53,11 +53,8 @@
   $cfg[updated_threads_first] = FALSE;
 
   // Disable the posting counter that is shown above the forum. Note that
-  // disabling the search provides a significant performance gain.
+  // disabling the counter provides a significant performance gain.
   $cfg[disable_posting_counter] = FALSE;
-
-  // Disable the forum search.
-  $cfg[disable_search] = FALSE;
 
   // May users edit their postings?
   $cfg[postings_editable] = TRUE;
@@ -76,7 +73,7 @@
   $cfg[autoembed_media_urls] = TRUE;
 
   // Specifies which URLs the linkify plugin converts to links.
-  $cfg[autolink_pattern] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+';
+  $cfg[autolink_pattern] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
 
   // The time a posting is considered new (and highlighted). In seconds.
   $cfg[new_post_time] = 60*60*24;

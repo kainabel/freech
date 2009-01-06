@@ -1,6 +1,5 @@
 Maintenance
 ------------
-* Move the forum search into a plugin.
 * Move the user statistics into a plugin.
 * Move the forum statistics into a plugin.
 * Move the login procedures into a plugin.

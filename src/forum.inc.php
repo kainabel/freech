@@ -48,10 +48,8 @@
   include_once 'objects/indexbar_group_profile.class.php';
   include_once 'objects/indexbar_read_posting.class.php';
   include_once 'objects/indexbar_user_postings.class.php';
-  include_once 'objects/indexbar_search_result.class.php';
-  include_once 'objects/indexbar_search_users.class.php';
+  include_once 'objects/indexbar_footer.class.php';
   include_once 'objects/parser.class.php';
-  include_once 'objects/search_query.class.php';
 
   include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
@@ -62,7 +60,6 @@
   include_once 'actions/list_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
-  include_once 'actions/search_printer.class.php';
   include_once 'actions/statistics_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
@@ -86,7 +83,7 @@
     // was sent.
     function FreechForum() {
       // Select a language.
-      $l = cfg("lang");
+      $l = cfg('lang');
       if ($l == 'auto')
         $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg('lang_default'));
       //putenv("LANG=$l");
@@ -113,7 +110,7 @@
       else {
         session_start();
         if ($_POST['permanent'] === 'ON')
-          setcookie('permanent_session', session_id(), time() + cfg("login_time"));
+          setcookie('permanent_session', session_id(), time() + cfg('login_time'));
       }
       $this->_handle_cookies();
 
@@ -125,11 +122,12 @@
       $this->actions              = array();
       $this->renderers            = array();
       $this->extra_indexbar_links = array();
+      $this->extra_footer_links   = array();
 
       // Connect to the DB.
       $this->db    = &ADONewConnection(cfg('db_dbn'))
-        or die("FreechForum::FreechForum(): Error: Can't connect."
-             . " Please check username, password and hostname.");
+        or die('FreechForum::FreechForum(): Error: Can\'t connect.'
+             . ' Please check username, password and hostname.');
       $this->forumdb   = &new ForumDB($this->db);
       $this->visitordb = &new VisitorDB($this->db);
       $this->visitordb->count();
@@ -431,12 +429,12 @@
     // Dies if the confirmation hash passed in through GET is not valid.
     function _assert_confirmation_hash_is_valid(&$user) {
       if (!$user)
-        die("Invalid user");
+        die('Invalid user');
       $hash = $user->get_confirmation_hash();
       if ($user->get_confirmation_hash() !== $_GET['hash'])
-        die("Invalid confirmation hash");
+        die('Invalid confirmation hash');
       if ($user->get_status() == USER_STATUS_BLOCKED)
-        die("User is blocked");
+        die('User is blocked');
     }
 
 
@@ -477,7 +475,7 @@
 
     // Sends an email to the given user.
     function _send_account_mail(&$user, $subject, $body, $vars) {
-      $head  = "From: ".cfg("mail_from")."\r\n";
+      $head  = 'From: '.cfg('mail_from').'\r\n';
       $vars['login']     = $user->get_name();
       $vars['firstname'] = $user->get_firstname();
       $vars['lastname']  = $user->get_lastname();
@@ -491,11 +489,11 @@
 
     // Convenience wrapper around _send_account_mail().
     function _send_password_reset_mail($user) {
-      $subject  = lang("reset_mail_subject");
-      $body     = lang("reset_mail_body");
+      $subject  = lang('reset_mail_subject');
+      $body     = lang('reset_mail_body');
       $username = urlencode($user->get_name());
       $hash     = urlencode($user->get_confirmation_hash());
-      $url      = cfg('site_url') . "?action=password_mail_confirm"
+      $url      = cfg('site_url') . '?action=password_mail_confirm'
                 . "&username=$username&hash=$hash";
       $this->_send_account_mail($user, $subject, $body, array('url' => $url));
     }
@@ -583,7 +581,7 @@
       }
       $search      = array('forum_id' => $forum_id);
       $n_postings  = $this->forumdb->get_n_postings($search);
-      $start       = time() - cfg("new_post_time");
+      $start       = time() - cfg('new_post_time');
       $n_new       = $this->forumdb->get_n_postings($search, $start);
       $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
       $vars        = array('postings'    => $n_postings,
@@ -684,7 +682,7 @@
      *************************************************************/
     function _print_profile_breadcrumbs($_named_item) {
       $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang("forum"), $this->_get_forum_url());
+      $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
       $breadcrumbs->add_item($_named_item->get_name());
       $breadcrumbs->show();
     }
@@ -751,10 +749,10 @@
          || $_POST['status'] == USER_STATUS_ACTIVE)
           $user->set_status($_POST['status']);
         else
-          die("Invalid status");
+          die('Invalid status');
       }
       else
-        die("Permission denied");
+        die('Permission denied');
 
       $this->_print_profile_breadcrumbs($user);
 
@@ -785,7 +783,7 @@
         return $profile->show_user_editor($user, $err[$ret]);
 
       // Done.
-      $profile->show_user_editor($user, lang("account_saved"));
+      $profile->show_user_editor($user, lang('account_saved'));
     }
 
 
@@ -839,33 +837,6 @@
 
       // Done.
       $profile->show_group_editor($group, lang('group_saved'));
-    }
-
-
-    /*************************************************************
-     * Action controllers for the search.
-     *************************************************************/
-    function _show_search_form() {
-      if (cfg('disable_search'))
-        die("Search is currently disabled.");
-      $printer = &new SearchPrinter($this);
-      $printer->show((int)$_GET['forum_id'], $_GET['q']);
-    }
-
-
-    function _show_search_result() {
-      if (cfg('disable_search'))
-        die("Search is currently disabled.");
-      if (!$_GET['q'] || trim($_GET['q']) == '')
-        return $this->_show_search_form();
-
-      // Search for postings or users.
-      $printer  = &new SearchPrinter($this);
-      $forum_id = (int)$_GET['forum_id'];
-      if ($_GET['user_search'])
-        $printer->show_users($_GET['q'], $_GET['hs']);
-      else
-        $printer->show_postings($forum_id, $_GET['q'], $_GET['hs']);
     }
 
 
@@ -971,7 +942,7 @@
         return $printer->show_password_forgotten($user, $msg);
       }
       else
-        die("Invalid user status");
+        die('Invalid user status');
 
       // Done.
       $printer->show_password_mail_sent($user);
@@ -986,7 +957,7 @@
       $this->_assert_confirmation_hash_is_valid($user);
 
       if ($user->get_status() != USER_STATUS_ACTIVE)
-        die("Error: User status is not active.");
+        die('Error: User status is not active.');
 
       $this->_password_change();
     }
@@ -1040,8 +1011,8 @@
        *   Args: None.
        */
       $this->eventbus->emit('on_run_before', $this);
-      $this->title   = "";
-      $this->content = "";
+      $this->title   = '';
+      $this->content = '';
       $action        = $this->get_current_action();
 
       // Check whether a plugin registered the given action. This is done
@@ -1100,13 +1071,6 @@
 
       case 'group_submit':
         $this->_group_submit();             // Save group changes.
-        break;
-
-      case 'search':
-        if ($_GET['q'])
-          $this->_show_search_result();     // Run a search.
-        else
-          $this->_show_search_form();       // Show the search form.
         break;
 
       case 'login':
@@ -1247,12 +1211,26 @@
 
 
     function add_extra_indexbar_link($_url) {
+      //FIXME: Create a indexbar object and handle this there instead.
       array_push($this->extra_indexbar_links, $_url);
     }
 
 
     function get_extra_indexbar_links() {
+      //FIXME: Create a indexbar object and handle this there instead.
       return $this->extra_indexbar_links;
+    }
+
+
+    function add_extra_footer_link($_url) {
+      //FIXME: Create a Footer object and handle this there instead.
+      array_push($this->extra_footer_links, $_url);
+    }
+
+
+    function get_extra_footer_links() {
+      //FIXME: Create a Footer object and handle this there instead.
+      return $this->extra_footer_links;
     }
 
 
@@ -1293,12 +1271,12 @@
 
     function print_head($_header = NULL) {
       $oldcontent    = $this->content;
-      $this->content = "";
+      $this->content = '';
 
       if ($_header)
         $this->_append_content($_header);
       elseif (!headers_sent()) {
-        header("Content-Type: text/html; charset=utf-8");
+        header('Content-Type: text/html; charset=utf-8');
         $header = &new HeaderPrinter($this);
         $header->show($this->get_current_title());
       }
@@ -1307,7 +1285,7 @@
        *   Called before the HTML header is sent.
        *   Args: $html: A reference to the HTML header.
        */
-      $this->eventbus->emit("on_header_print_before", &$this);
+      $this->eventbus->emit('on_header_print_before', $this);
 
       print($this->content);
 
@@ -1315,7 +1293,7 @@
        *   Called after the HTML header was sent.
        *   Args: none
        */
-      $this->eventbus->emit("on_header_print_after", &$this);
+      $this->eventbus->emit('on_header_print_after', $this);
       $this->content = $oldcontent;
     }
 
@@ -1325,7 +1303,7 @@
        *   Called before the HTML content is sent.
        *   Args: $html: A reference to the content.
        */
-      $this->eventbus->emit("on_content_print_before", &$this);
+      $this->eventbus->emit('on_content_print_before', $this);
 
       print($this->content);
 
@@ -1333,7 +1311,7 @@
        *   Called after the HTML content was sent.
        *   Args: none.
        */
-      $this->eventbus->emit("on_content_print_after", &$this);
+      $this->eventbus->emit('on_content_print_after', $this);
     }
 
 
@@ -1355,7 +1333,7 @@
        *   The return value of the callback is ignored.
        *   Args: None.
        */
-      $this->eventbus->emit("on_destroy", &$this);
+      $this->eventbus->emit('on_destroy', $this);
     }
   }
 ?>

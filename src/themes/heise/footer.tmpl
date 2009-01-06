@@ -14,9 +14,15 @@
   {else}
     <a href='{$order_by_time|escape}'>{lang text="plainview"}</a>
   {/if}
-  &nbsp;&nbsp;&nbsp;
-  <a href='{$search|escape}'>{lang text="search_forum"}</a>
-  </font>
+{foreach item=item from=$indexbar->get_items()}
+  {if !$item->get_text()}
+    &nbsp;&nbsp;
+  {elseif !$item->get_url_string()}
+    &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
+  {else}
+    &nbsp;<a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
+  {/if}
+{/foreach}
 {/strip}
   </td>
   <td align='right'>

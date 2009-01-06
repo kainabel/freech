@@ -24,9 +24,9 @@ function search_init($forum) {
 
 function search_on_search($forum) {
   if ($_GET['q'])
-    search_on_search_form($forum);
-  else
     search_on_search_result($forum);
+  else
+    search_on_search_form($forum);
 }
 
 
@@ -41,7 +41,7 @@ function search_on_search_result($forum) {
     return search_on_search_form($forum);
 
   // Search for postings or users.
-  $printer  = new SearchPrinter($this);
+  $printer  = new SearchPrinter($forum);
   $forum_id = (int)$_GET['forum_id'];
   if ($_GET['user_search'])
     $printer->show_users($_GET['q'], $_GET['hs']);

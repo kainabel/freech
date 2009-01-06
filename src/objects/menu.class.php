@@ -22,13 +22,18 @@
   /**
    * Represents a Menu, including the query variables.
    */
-  class Menu {
+  class Menu extends MenuItem {
     var $items;
-
 
     // Constructor.
     function Menu() {
+      $this->MenuItem();
       $this->items = array();
+    }
+
+
+    function is_submenu() {
+      return TRUE;
     }
 
 
@@ -90,8 +95,13 @@
     }
 
 
+    function add_item($_item) {
+      array_push($this->items, $_item);
+    }
+
+
     function add_link($_url) {
-      array_push($this->items, new MenuItem($_url));
+      $this->add_item(new MenuItem($_url));
     }
 
 

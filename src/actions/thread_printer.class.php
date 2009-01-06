@@ -45,15 +45,15 @@
         $this->forumdb->foreach_child($_forum_id,
                                       0,
                                       $_offset,
-                                      cfg("tpp"),
-                                      cfg("updated_threads_first"),
+                                      cfg('tpp'),
+                                      cfg('updated_threads_first'),
                                       $_thread_state,
                                       $func,
                                       '');
       else
         $this->forumdb->foreach_child_in_thread($_msg_id,
                                                 $_offset,
-                                                cfg("tpp"),
+                                                cfg('tpp'),
                                                 $_thread_state,
                                                 $func,
                                                 '');
@@ -64,9 +64,9 @@
       $n_threads  = $this->forumdb->get_n_threads($_forum_id, $may_write);
       $args       = array(forum_id           => (int)$_forum_id,
                           n_threads          => $n_threads,
-                          n_threads_per_page => cfg("tpp"),
+                          n_threads_per_page => cfg('tpp'),
                           n_offset           => $_offset,
-                          n_pages_per_index  => cfg("ppi"),
+                          n_pages_per_index  => cfg('ppi'),
                           thread_state       => $_thread_state);
       $n_rows    = count($this->postings);
       $indexbar  = &new IndexBarByThread($args);

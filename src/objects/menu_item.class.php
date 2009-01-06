@@ -48,6 +48,11 @@
     }
 
 
+    function is_submenu() {
+      return FALSE;
+    }
+
+
     function set_text($_text) {
       $this->text = $_text;
     }

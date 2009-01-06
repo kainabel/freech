@@ -38,7 +38,8 @@
 
       // Create the indexbar.
       $extra_urls = $this->parent->get_extra_footer_links();
-      $indexbar   = new IndexBarFooter($extra_urls);
+      $indexbar   = new IndexBarFooter();
+      $indexbar->add_links($extra_urls);
 
       // Render the resulting template.
       $version[url]  = 'http://debain.org/software/freech/';

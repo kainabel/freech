@@ -5,9 +5,9 @@
   <font color='white' size='-1'>
   {strip}
 {foreach item=item from=$indexbar->get_items()}
-  {if !$item->get_text()}
+  {if $item->is_separator()}
     &nbsp;&nbsp;
-  {elseif !$item->get_url_string()}
+  {elseif !$item->is_link()}
     &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
   {else}
     &nbsp;<a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>

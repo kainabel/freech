@@ -57,7 +57,8 @@
                           n_postings_per_page => cfg("epp"),
                           n_offset            => (int)$_offset,
                           n_pages_per_index   => cfg("ppi"));
-      $indexbar = &new IndexBarByTime($args, $extra_urls);
+      $indexbar = &new IndexBarByTime($args);
+      $indexbar->add_links($extra_urls);
 
       $this->clear_all_assign();
       $this->assign_by_ref('indexbar', $indexbar);

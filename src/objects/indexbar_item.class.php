@@ -28,9 +28,23 @@
 
 
     // Constructor.
-    function IndexBarItem($_text, $_url = '') {
-      $this->text = $_text;
-      $this->url  = $_url;
+    function IndexBarItem($_url = '', $_text = '') {
+      if ($_url)
+        $this->set_url($_url);
+      if ($_text) {
+        $this->url  = $_url;
+        $this->text = $_text;
+      }
+    }
+
+
+    function is_separator() {
+      return $this->text == '';
+    }
+
+
+    function is_link() {
+      return $this->url ? TRUE : FALSE;
     }
 
 
@@ -45,7 +59,8 @@
 
 
     function set_url($_url) {
-      $this->url = $_url;
+      $this->url  = $_url;
+      $this->text = $_url->get_label();
     }
 
 

@@ -31,106 +31,117 @@
                                  $_may_write = FALSE,
                                  $_may_edit  = FALSE) {
       $this->IndexBar();
-      $this->posting = $_posting;
 
-      $additem = array(&$this, 'add_item');
-      if (!$this->posting) {
-        call_user_func($additem);
+      if (!$_posting) {
+        $this->add_separator();
         return;
       }
 
-      $url = new URL('?', cfg("urlvars"));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   1);
       $url->set_var('forum_id', $_posting->get_forum_id());
 
       // "Previous/Next Entry" buttons.
-      if ($this->posting->get_prev_posting_id() > 0) {
-        $url->set_var('msg_id', $this->posting->get_prev_posting_id());
-        call_user_func($additem, lang("prev_symbol"), $url);
+      if ($_posting->get_prev_posting_id() > 0) {
+        $url->set_var('msg_id', $_posting->get_prev_posting_id());
+        $url->set_label(lang('prev_symbol'));
+        $this->add_link($url);
       }
       else
-        call_user_func($additem, lang("prev_symbol"));
-      call_user_func($additem, lang("entry"));
-      if ($this->posting->get_next_posting_id() > 0) {
-        $url = clone($url);
-        $url->set_var('msg_id', $this->posting->get_next_posting_id());
-        call_user_func($additem, lang("next_symbol"), $url);
-      }
-      else
-        call_user_func($additem, lang("next_symbol"));
+        $this->add_text(lang('prev_symbol'));
 
-      // "Previous/Next Thread" buttons.
-      call_user_func($additem);
-      $prev_url = clone($url);
-      $next_url = clone($url);
-      if (cfg("thread_arrow_rev") == TRUE) {
-        // Heise style (reversed) thread buttons
-        $prev_url->set_var('msg_id', $this->posting->get_next_thread_id());
-        $next_url->set_var('msg_id', $this->posting->get_prev_thread_id());
-        if ($this->posting->get_prev_thread_id() <= 0)
-          $next_url = NULL;
-        if ($this->posting->get_next_thread_id() <= 0)
-          $prev_url = NULL;
-      } else {
-        // Freech style thread buttons
-        $prev_url->set_var('msg_id', $this->posting->get_prev_thread_id());
-        $next_url->set_var('msg_id', $this->posting->get_next_thread_id());
-        if ($this->posting->get_prev_thread_id() <= 0)
-          $prev_url = NULL;
-        if ($this->posting->get_next_thread_id() <= 0)
-          $next_url = NULL;
+      $this->add_text(lang('entry'));
+      if ($_posting->get_next_posting_id() > 0) {
+        $url = clone($url);
+        $url->set_var('msg_id', $_posting->get_next_posting_id());
+        $url->set_label(lang('next_symbol'));
+        $this->add_link($url);
       }
-      call_user_func($additem, lang("prev_symbol"), $prev_url);
-      call_user_func($additem, lang("thread"));
-      call_user_func($additem, lang("next_symbol"), $next_url);
+      else
+        $this->add_text(lang('next_symbol'));
+
+      // "Previous Thread" button.
+      $this->add_separator();
+      if (cfg('thread_arrow_rev'))
+        $prev_id = $_posting->get_next_thread_id();
+      else
+        $prev_id = $_posting->get_prev_thread_id();
+      if ($prev_id) {
+        $url = clone($url);
+        $url->set_var('msg_id', $prev_id);
+        $url->set_label(lang('prev_symbol'));
+        $this->add_link($url);
+      }
+      else
+        $this->add_text(lang('prev_symbol'));
+
+      // "Next Thread" button.
+      $this->add_text(lang('thread'));
+      $url = clone($url);
+      if (cfg('thread_arrow_rev'))
+        $next_id = $_posting->get_prev_thread_id();
+      else
+        $next_id = $_posting->get_next_thread_id();
+      if ($next_id) {
+        $url = clone($url);
+        $url->set_var('msg_id', $next_id);
+        $url->set_label(lang('next_symbol'));
+        $this->add_link($url);
+      }
+      else
+        $this->add_text(lang('next_symbol'));
 
       // "Edit" button.
       if ($_may_edit) {
+        $this->add_separator();
         $url = clone($url);
-        $url->set_var('msg_id', $this->posting->get_id());
-        call_user_func($additem);
+        $url->set_var('msg_id', $_posting->get_id());
         $url->set_var('action', 'edit');
-        call_user_func($additem, lang('editposting'), $url);
+        $url->set_label(lang('editposting'));
+        $this->add_link($url);
       }
 
       // "Reply" button.
       if ($_may_write) {
+        $this->add_separator();
         $url = clone($url);
-        call_user_func($additem);
         $url->delete_var('msg_id');
-        $url->set_var('action', 'respond');
-        if ($this->posting->is_active() && $this->posting->get_allow_answer()) {
-          $url->set_var('parent_id', $this->posting->get_id());
-          call_user_func($additem, lang('writeanswer'), $url);
+        if ($_posting->is_active() && $_posting->get_allow_answer()) {
+          $url->set_var('action',    'respond');
+          $url->set_var('parent_id', $_posting->get_id());
+          $url->set_label(lang('writeanswer'));
+          $this->add_link($url);
         }
         else
-          call_user_func($additem, lang('writeanswer'));
+          $this->add_text(lang('writeanswer'));
 
         // "New Thread" button.
+        $this->add_separator();
         $url = clone($url);
-        call_user_func($additem);
         $url->delete_var('parent_id');
         $url->set_var('action', 'write');
-        call_user_func($additem, lang('writemessage'), $url);
+        $url->set_label(lang('writemessage'));
+        $this->add_link($url);
       }
 
       // "Show/Hide Thread" button.
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'read');
-      $url->set_var('msg_id',   0);
       $url->set_var('forum_id', $_posting->get_forum_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-      if ($this->posting->has_thread()) {
-        call_user_func($additem);
-        $url->set_var('msg_id', $this->posting->get_id());
+      if ($_posting->has_thread()) {
+        $this->add_separator();
+        $url->set_var('msg_id', $_posting->get_id());
         if ($_COOKIE[thread] === 'hide') {
           $url->set_var('showthread', 1);
-          call_user_func($additem, lang('showthread'), $url);
+          $url->set_label(lang('showthread'));
+          $this->add_link($url);
         }
         else {
           $url->set_var('showthread', -1);
-          call_user_func($additem, lang('hidethread'), $url);
+          $url->set_label(lang('hidethread'));
+          $this->add_link($url);
         }
       }
     }

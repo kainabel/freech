@@ -19,21 +19,6 @@
   */
 ?>
 <?php
-  /**
-   * Represents a IndexBar, including the query variables.
-   */
   class IndexBarFooter extends IndexBar {
-    var $items;
-
-    // Constructor.
-    function IndexBarFooter($_urls = array()) {
-      $this->IndexBar();
-
-      $additem = array(&$this, 'add_item');
-      foreach ($_urls as $url) {
-        call_user_func($additem);
-        call_user_func($additem, $url->get_label(), $url);
-      }
-    }
   }
 ?>

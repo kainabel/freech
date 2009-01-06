@@ -69,7 +69,8 @@
                           n_pages_per_index  => cfg("ppi"),
                           thread_state       => $_thread_state);
       $n_rows    = count($this->postings);
-      $indexbar  = &new IndexBarByThread($args, $extra_urls);
+      $indexbar  = &new IndexBarByThread($args);
+      $indexbar->add_links($extra_urls);
 
       // Render the template.
       $this->clear_all_assign();

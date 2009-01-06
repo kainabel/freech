@@ -66,6 +66,7 @@
       }
 
       $this->clear_all_assign();
+      $this->assign_by_ref('plugin_dir',      dirname(__FILE__));
       $this->assign_by_ref('days',            $days);
       $this->assign_by_ref('resolution',      $resolution);
       $this->assign_by_ref('data',            $results);

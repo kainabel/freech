@@ -60,7 +60,6 @@
   include_once 'actions/list_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
-  include_once 'actions/statistics_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
 
@@ -979,12 +978,6 @@
     }
 
 
-    function _show_statistics() {
-      $printer = new StatisticsPrinter($this);
-      $printer->show();
-    }
-
-
     // Prints an RSS feed.
     function print_rss($_forum_id,
                        $_title,
@@ -1099,10 +1092,6 @@
 
       case 'top_posters':
         $this->_show_top_posters();         // List of top posters.
-        break;
-
-      case 'statistics':
-        $this->_show_statistics();          // Activity charts.
         break;
 
       case 'list':
@@ -1250,14 +1239,8 @@
     }
 
 
-    function get_statistics_url() {
-      $url = new URL('?', cfg('urlvars'), lang('statistics'));
-      $url->set_var('action', 'statistics');
-      return $url;
-    }
-
-
     function get_registration_url() {
+      //FIXME: should not be here.
       $url = new URL('?', cfg('urlvars'), lang('register'));
       $url->set_var('action', 'account_register');
       return $url;

@@ -51,7 +51,6 @@
     print(' | '.$user->get_editor_url()->get_html(lang('account_mydata')));
     print(' | '.$user->get_postings_url()->get_html(lang('mypostings')));
   }
-  print(' | '.$forum->get_statistics_url()->get_html());
   $forum->show();
   $forum->destroy();
 

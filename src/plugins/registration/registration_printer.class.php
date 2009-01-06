@@ -30,48 +30,26 @@
       $this->assign_by_ref('password',  $_POST['password']);
       $this->assign_by_ref('password2', $_POST['password2']);
       $this->assign_by_ref('error',     $error);
-      $this->render('registration.tmpl');
+      $this->render(dirname(__FILE__).'/registration.tmpl');
       $this->parent->_set_title(lang('register_title'));
     }
+
 
     function show_tmpl($_tmpl, $_user, $_hint = '') {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
       $this->assign_by_ref('hint', $_hint);
-      $this->render($_tmpl);
+      $this->render(dirname(__FILE__).'/'.$_tmpl);
     }
+
 
     function show_mail_sent($user, $_hint = '') {
-      $this->show_tmpl('registration_mail_sent.tmpl', $user, $_hint);
+      $this->show_tmpl('mail_sent.tmpl', $user, $_hint);
     }
+
 
     function show_done($user, $_hint = '') {
-      $this->show_tmpl('password_changed.tmpl', $user, $_hint);
-    }
-
-    function show_password_change($_user, $_hint = '') {
-      $url = &new URL('?', cfg('urlvars'));
-      $url->set_var('action', 'password_submit');
-      $this->clear_all_assign();
-      $this->assign_by_ref('action', $url->get_string());
-      $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('hint',   $_hint);
-      $this->render('password_change.tmpl');
-      $this->parent->_set_title(lang('change_password_title'));
-    }
-
-    function show_password_forgotten($_user, $_hint = '') {
-      $url = new URL('?', cfg('urlvars'));
-      $url->set_var('action', 'password_mail_submit');
-      $this->clear_all_assign();
-      $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('hint',   $_hint);
-      $this->assign_by_ref('action', $url->get_string());
-      $this->render('password_forgotten.tmpl');
-    }
-
-    function show_password_mail_sent($user, $_hint = '') {
-      $this->show_tmpl('password_mail_sent.tmpl', $user, $_hint);
+      $this->show_tmpl('done.tmpl', $user, $_hint);
     }
   }
 ?>

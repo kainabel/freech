@@ -21,7 +21,7 @@
 <?php
   class ListPrinter extends PrinterBase {
     function show_top_users() {
-      $userdb   = $this->parent->_get_userdb();
+      $userdb   = $this->parent->get_userdb();
       $all_time = $userdb->get_top_users(20);
       $week     = $userdb->get_top_users(20, time() - 60*60*24*7);
       $this->clear_all_assign();

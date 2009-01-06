@@ -198,7 +198,7 @@
     function show_group_profile($_group, $_offset = 0) {
       // Load a list of users.
       $search = array('group_id' => $_group->get_id());
-      $userdb = $this->parent->_get_userdb();
+      $userdb = $this->parent->get_userdb();
       $n_rows = $userdb->foreach_user_from_query($search,
                                                  cfg("epp"),
                                                  $_offset,

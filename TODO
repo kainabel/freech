@@ -1,7 +1,22 @@
-* Add read/write permissions to the permission list.
+Maintenance
+------------
+* Move the forum search into a plugin.
+* Move the user statistics into a plugin.
+* Move the forum statistics into a plugin.
+* Move the login procedures into a plugin.
+* Possibly move user management into a plugin.
+* Create a dedicated PluginAPI object and pass that to plugins instead
+  of the Forum instance.
+* Find a clean way for adding plugin preferences.
+* Possibly add a way to prevent plugins from loading that does not
+  include modifying a plugin header. (Read: add an option to
+  config.inc.php.)
 * Design a URL scheme that makes sense for URL rewriting.
+* Use gettext and .po/-mo-files to replace the home grown thingy.
+
+Features
+---------
 * Add a moderation log.
 * Display the moderation log when viewing a locked message.
 * Display the moderation log in the moderator's profile.
-* Use gettext and .po/-mo-files to replace the home grown thingy.
 * Make the front page prettier and add links to special pages.

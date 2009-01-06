@@ -66,7 +66,6 @@
   include_once 'actions/statistics_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
-  include_once 'actions/registration_printer.class.php';
 
   include_once 'services/groupdb.class.php';
   include_once 'services/sql_query.class.php';
@@ -176,7 +175,7 @@
      * Login and cookie handling.
      *************************************************************/
     function _try_login() {
-      $userdb = $this->_get_userdb();
+      $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_name($_POST['username']);
       if (!$user)
         return ERR_LOGIN_FAILED;
@@ -273,7 +272,7 @@
     /*************************************************************
      * Private utilities.
      *************************************************************/
-    function _get_userdb() {
+    function get_userdb() {
       if (!$this->userdb)
         $this->userdb = &new UserDB($this->db);
       return $this->userdb;
@@ -281,7 +280,7 @@
 
 
     function _get_user_from_id($_id) {
-      return $this->_get_userdb()->get_user_from_id((int)$_id);
+      return $this->get_userdb()->get_user_from_id((int)$_id);
     }
 
 
@@ -294,7 +293,7 @@
 
 
     function _get_user_from_name($_name) {
-      return $this->_get_userdb()->get_user_from_name($_name);
+      return $this->get_userdb()->get_user_from_name($_name);
     }
 
 
@@ -403,7 +402,7 @@
 
     // Returns TRUE if the username is available, FALSE otherwise.
     function _username_available(&$_username) {
-      $userdb = $this->_get_userdb();
+      $userdb = $this->get_userdb();
       $needle = new User($_username);
       $users  = $userdb->get_similar_users_from_name($_username);
       foreach ($users as $user)
@@ -419,7 +418,7 @@
       if ($this->get_current_action() == 'account_confirm'
         || $this->get_current_action() == 'password_mail_confirm'
         || $this->get_current_action() == 'reset_password_submit') {
-        $userdb = $this->_get_userdb();
+        $userdb = $this->get_userdb();
         $user   = $userdb->get_user_from_name($_GET['username']);
         $this->_assert_confirmation_hash_is_valid($user);
         return $user;
@@ -487,30 +486,6 @@
         $body    = str_replace('['.strtoupper($key).']', $value, $body);
       }
       mail($user->get_mail(), $subject, $body, $head);
-    }
-
-
-    // Convenience wrapper around _send_account_mail().
-    function _send_confirmation_mail(&$user) {
-      $subject  = lang("registration_mail_subject");
-      $body     = lang("registration_mail_body");
-      $username = urlencode($user->get_name());
-      $hash     = urlencode($user->get_confirmation_hash());
-      $url      = cfg('site_url') . "?action=account_confirm"
-                . "&username=$username&hash=$hash";
-      $this->_send_account_mail($user, $subject, $body, array('url' => $url));
-      $registration = &new RegistrationPrinter($this);
-      $registration->show_mail_sent($user);
-    }
-
-
-    // Convenience wrapper around _send_confirmation_mail().
-    function _account_reconfirm() {
-      $userdb = $this->_get_userdb();
-      $user   = $userdb->get_user_from_name($_GET['username']);
-      if ($user->get_status() != USER_STATUS_UNCONFIRMED)
-        die("User is already confirmed.");
-      $this->_send_confirmation_mail($user);
     }
 
 
@@ -660,9 +635,9 @@
 
     // Read a posting.
     function _posting_read() {
-      $posting    = $this->forumdb->get_posting_from_id($_GET['msg_id']);
-      $posting    = $this->_decorate_posting($posting);
-      $msgprinter = &new PostingPrinter($this);
+      $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
+      $posting = $this->_decorate_posting($posting);
+      $printer = &new PostingPrinter($this);
       $this->_print_posting_breadcrumbs($posting);
 
       /* Plugin hook: on_message_read_print
@@ -670,7 +645,7 @@
        *   Args: posting: The posting that is about to be shown.
        */
       $this->eventbus->emit('on_message_read_print', $this, $posting);
-      $msgprinter->show($posting);
+      $printer->show($posting);
     }
 
 
@@ -805,7 +780,7 @@
 
 
       // Save the user.
-      $ret = $this->_get_userdb()->save_user($user);
+      $ret = $this->get_userdb()->save_user($user);
       if ($ret < 0)
         return $profile->show_user_editor($user, $err[$ret]);
 
@@ -895,7 +870,7 @@
 
 
     /*************************************************************
-     * Action controllers for login and user registration.
+     * Action controllers for login and password forms.
      *************************************************************/
     function _show_login() {
       global $err;
@@ -914,50 +889,12 @@
     }
 
 
-    function _account_register() {
-      $registration = &new RegistrationPrinter($this);
-      $registration->show(new User);
-    }
-
-
-    function _account_create() {
-      global $err;
-      $registration = &new RegistrationPrinter($this);
-      $user         = $this->_init_user_from_post_data();
-
-      // Check the data for completeness.
-      $ret = $user->check_complete();
-      if ($ret < 0)
-        return $registration->show($user, $err[$ret]);
-      if ($_POST['password'] !== $_POST['password2'])
-        return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
-
-      // Make sure that the name is available.
-      if (!$this->_username_available($user->get_name()))
-        return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
-
-      // Make sure that the email address is available.
-      if ($this->_get_userdb()->get_user_from_mail($user->get_mail()))
-        return $registration->show($user, $err[ERR_REGISTER_MAIL_EXISTS]);
-
-      // Create the user.
-      $user->set_group_id(cfg('default_group_id'));
-      $userdb = $this->_get_userdb();
-      $ret    = $userdb->save_user($user);
-      if ($ret < 0)
-        return $registration->show($user, $err[$ret]);
-
-      // Done.
-      $this->_send_confirmation_mail($user);
-    }
-
-
     // Show a form for changing the password.
     function _password_change() {
       $user = $this->_get_current_or_confirming_user();
       if (!$user || $user->is_anonymous())
-        die("Invalid user");
-      $registration = &new RegistrationPrinter($this);
+        die('Invalid user');
+      $registration = new LoginPrinter($this);
       $registration->show_password_change($user);
     }
 
@@ -965,83 +902,86 @@
     // Submit a new password.
     function _password_submit() {
       global $err;
-      $userdb   = $this->_get_userdb();
-      $user     = $this->_init_user_from_post_data();
-      $user     = $userdb->get_user_from_name($user->get_name());
-      $register = &new RegistrationPrinter($this);
+      $userdb  = $this->get_userdb();
+      $user    = $this->_init_user_from_post_data();
+      $user    = $userdb->get_user_from_name($user->get_name());
+      $printer = new LoginPrinter($this);
 
       // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {
-        $error = lang("passwordsdonotmatch");
-        return $register->show_password_change($user, $error);
+        $error = lang('passwordsdonotmatch');
+        return $printer->show_password_change($user, $error);
       }
 
       // Make sure that the password is valid.
       $ret = $user->set_password($_POST['password']);
       if ($ret < 0)
-        return $register->show_password_change($user, $err[$ret]);
+        return $printer->show_password_change($user, $err[$ret]);
 
       // Save the password.
       $user->set_status(USER_STATUS_ACTIVE);
       $ret = $userdb->save_user($user);
       if ($ret < 0)
-        return $register->show_password_change($user, $err[$ret]);
+        return $printer->show_password_change($user, $err[$ret]);
 
       // Done.
-      $register->show_done($user);
+      $printer->show_password_changed($user);
     }
 
 
     // Show a form for requesting that the password should be reset.
     function _password_forgotten() {
-      $user         = $this->_init_user_from_post_data();
-      $registration = &new RegistrationPrinter($this);
-      $registration->show_password_forgotten($user);
+      $user    = $this->_init_user_from_post_data();
+      $printer = new LoginPrinter($this);
+      $printer->show_password_forgotten($user);
     }
 
 
     // Send an email with the URL for resetting the password.
     function _password_mail_submit() {
       global $err;
-      $registration = &new RegistrationPrinter($this);
-      $user         = $this->_init_user_from_post_data();
+      $printer = new LoginPrinter($this);
+      $user    = $this->_init_user_from_post_data();
 
       // Make sure that the email address is valid.
       $ret = $user->check_mail();
       if ($ret != 0)
-        return $registration->show_password_forgotten($user, $err[$ret]);
+        return $printer->show_password_forgotten($user, $err[$ret]);
 
       // Find the user with the given mail address.
-      $userdb = $this->_get_userdb();
+      $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_mail($user->get_mail());
       if (!$user) {
         $user = $this->_init_user_from_post_data();
         $msg  = $err[ERR_LOGIN_NO_SUCH_MAIL];
-        return $registration->show_password_forgotten($user, $msg);
+        return $printer->show_password_forgotten($user, $msg);
       }
 
       // Send the mail.
-      if ($user->get_status() == USER_STATUS_UNCONFIRMED)
-        return $this->_send_confirmation_mail($user);
+      if ($user->get_status() == USER_STATUS_UNCONFIRMED) {
+        $url = new URL(cfg('site_url').'?', cfg('urlvars'));
+        $url->set_var('action',   'account_reconfirm');
+        $url->set_var('username', $user->get_name());
+        $this->_refer_to($url->get_string());
+      }
       elseif ($user->get_status() == USER_STATUS_ACTIVE)
         $this->_send_password_reset_mail($user);
       elseif ($user->get_status() == USER_STATUS_BLOCKED) {
         $msg = $err[ERR_LOGIN_LOCKED];
-        return $registration->show_password_forgotten($user, $msg);
+        return $printer->show_password_forgotten($user, $msg);
       }
       else
         die("Invalid user status");
 
       // Done.
-      $registration = &new RegistrationPrinter($this);
-      $registration->show_password_mail_sent($user);
+      $printer->show_password_mail_sent($user);
     }
 
 
     // Called when the user opens the link in the password reset mail.
     function _password_mail_confirm() {
       $user   = $this->_get_current_or_confirming_user();
-      $userdb = $this->_get_userdb();
+      $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_name($user->get_name());
       $this->_assert_confirmation_hash_is_valid($user);
 
@@ -1049,29 +989,6 @@
         die("Error: User status is not active.");
 
       $this->_password_change();
-    }
-
-
-    // Called when the user opens the link in the initial account confirmation
-    // mail.
-    function _account_confirm() {
-      $userdb = $this->_get_userdb();
-      $user   = $userdb->get_user_from_name($_GET['username']);
-      $this->_assert_confirmation_hash_is_valid($user);
-
-      // See if the user still needs to set a password.
-      if (!$user->get_password_hash())
-        return $this->_password_change();
-
-      // Make the user active.
-      $user->set_status(USER_STATUS_ACTIVE);
-      $ret = $userdb->save_user($user);
-      if ($ret < 0)
-        die("User activation failed");
-
-      // Done.
-      $registration = &new RegistrationPrinter($this);
-      $registration->show_done($user);
     }
 
 
@@ -1194,22 +1111,6 @@
 
       case 'login':
         $this->_show_login();               // Show a login form.
-        break;
-
-      case 'account_register':
-        $this->_account_register();         // Show a registration form.
-        break;
-
-      case 'account_create':
-        $this->_account_create();           // Register a new user.
-        break;
-
-      case 'account_confirm':
-        $this->_account_confirm();          // Confirm a new user.
-        break;
-
-      case 'account_reconfirm':
-        $this->_account_reconfirm();        // Resend a confirmation mail.
         break;
 
       case 'password_change':
@@ -1386,7 +1287,7 @@
 
 
     function get_newest_users($_limit) {
-      return $this->_get_userdb()->get_newest_users($_limit);
+      return $this->get_userdb()->get_newest_users($_limit);
     }
 
 

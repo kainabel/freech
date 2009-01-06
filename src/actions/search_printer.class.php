@@ -100,7 +100,7 @@
 
       // Run the search.
       $search    = array('name' => '%'.trim($_query).'%');
-      $userdb    = $this->parent->_get_userdb();
+      $userdb    = $this->parent->get_userdb();
       $n_entries = $userdb->get_n_users_from_query($search);
       $n_rows    = 0;
       if ($n_entries > 0) {

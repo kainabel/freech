@@ -242,8 +242,8 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'moderate', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'delete',   1);
 
 -- Create default users.
-INSERT INTO freech_user (id, group_id, name, password, firstname, lastname, created)
-                  VALUES (2, 2, 'anonymous', '', 'Anonymous', 'George', NULL);
+INSERT INTO freech_user (id, group_id, status, name, password, firstname, lastname, created)
+                  VALUES (2, 2, 1, 'anonymous', '', 'Anonymous', 'George', NULL);
 
 -- Create a default forum.
 INSERT INTO freech_forum (name, description, owner_id, created)

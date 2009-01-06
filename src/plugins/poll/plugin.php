@@ -156,7 +156,7 @@ function _save_poll($forum, $poll) {
   // Save the poll.
   $db = $forum->_get_db();
   $db->StartTrans();
-  $forum->_get_forumdb()->insert($forum_id, NULL, $poll);
+  $forum->get_forumdb()->insert($forum_id, NULL, $poll);
 
   // Now save the corresponding poll options.
   foreach ($poll->get_filled_options() as $option)

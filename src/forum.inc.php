@@ -57,7 +57,6 @@
   include_once 'actions/rss_printer.class.php';
   include_once 'actions/posting_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
-  include_once 'actions/list_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
   include_once 'actions/header_printer.class.php';
@@ -972,12 +971,6 @@
     }
 
 
-    function _show_top_posters() {
-      $printer = new ListPrinter($this);
-      $printer->show_top_users();
-    }
-
-
     // Prints an RSS feed.
     function print_rss($_forum_id,
                        $_title,
@@ -1088,10 +1081,6 @@
 
       case 'password_mail_confirm':
         $this->_password_mail_confirm();    // Form for resetting the password.
-        break;
-
-      case 'top_posters':
-        $this->_show_top_posters();         // List of top posters.
         break;
 
       case 'list':

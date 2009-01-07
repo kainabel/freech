@@ -197,21 +197,5 @@
         array_push($list, $group);
       return $list;
     }
-
-
-    /**
-     * Passes all groups that match the given criteria to the given function.
-     * $_search: The search values.
-     */
-    function foreach_group_from_query($_search,
-                                      $_func,
-                                      $_data   = NULL,
-                                      $_limit  = -1,
-                                      $_offset = 0) {
-      $sql  = $this->_get_sql_from_query($_search);
-      $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
-      while ($group = $this->_pop_group_from_result($res))
-        call_group_func($_func, $group, $_data);
-    }
   }
 ?>

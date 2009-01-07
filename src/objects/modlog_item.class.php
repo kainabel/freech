@@ -57,6 +57,8 @@
     function set_attribute_from_db($_db_row) {
       if (!is_object($_db_row))
         die('ModLogItem:set_attribute_from_db(): Non-object.');
+      if (!$_db_row->attribute_name)
+        return;
       $name  = $_db_row->attribute_name;
       $type  = $_db_row->attribute_type;
       $value = $_db_row->attribute_value;
@@ -142,6 +144,11 @@
     }
 
 
+    function has_reason() {
+      return $this->fields[reason] != '';
+    }
+
+
     function get_created_unixtime() {
       return $this->fields[created];
     }
@@ -171,10 +178,35 @@
 
 
     function get_html() {
-      $args = array('moderator'       => $this->get_moderator_name(),
-                    'moderator_id'    => $this->get_moderator_id(),
-                    'moderator_icon'  => $this->get_moderator_icon(),
-                    'moderator_group' => $this->get_moderator_group());
+      // This entire method is an evil hack.
+      $post_url = new URL('?', cfg('urlvars'), $this->get_attribute('subject'));
+      $post_url->set_var('action',   'read');
+      $post_url->set_var('msg_id',   $this->get_attribute('id'));
+      $post_url->set_var('forum_id', $this->get_attribute('forum_id'));
+
+      $moderator_url = new URL('?', cfg('urlvars'), $this->get_moderator_name());
+      $moderator_url->set_var('action',   'user_profile');
+      $moderator_url->set_var('username', $this->get_moderator_name());
+      $mod_icon      = htmlentities($this->get_moderator_icon());
+      $mod_groupname = htmlentities($this->get_moderator_group_name());
+      $mod_icon_html = "<img src='$mod_icon' title='$mod_groupname' />";
+      $mod_html      = $moderator_url->get_html().$mod_icon_html;
+
+      $user_url = new URL('?', cfg('urlvars'), $this->get_attribute('username'));
+      $user_url->set_var('action',   'user_profile');
+      $user_url->set_var('username', $this->get_attribute('username'));
+      $user_name      = htmlentities($this->get_attribute('username'));
+      $user_icon      = htmlentities($this->get_attribute('user_icon'));
+      $user_groupname = htmlentities($this->get_attribute('user_groupname'));
+      $user_icon_html = "<img src='$user_icon' title='$user_groupname' />";
+      if ($this->get_attribute('user_groupname') == 'anonymous')
+        $user_html = $user_name.$user_icon_html;
+      else
+        $user_html = $user_url->get_html().$user_icon_html;
+
+      $args = array('moderator_link' => $mod_html,
+                    'posting_link'   => $post_url->get_html(),
+                    'user_link'      => $user_html);
       $args = array_merge($args, $this->attributes);
       return lang('modlog_'.$this->get_action(), $args);
     }

@@ -37,8 +37,8 @@
         $_msg->apply_block();
       else {
         $_msg = new Posting;
-        $_msg->set_subject(lang("noentrytitle"));
-        $_msg->set_body(lang("noentrybody"));
+        $_msg->set_subject(lang('noentrytitle'));
+        $_msg->set_body(lang('noentrybody'));
       }
 
       $this->clear_all_assign();
@@ -48,7 +48,7 @@
         $func  = array(&$this, '_append_posting');
         $this->forumdb->foreach_child_in_thread($_msg->get_id(),
                                                 0,
-                                                cfg("tpp"),
+                                                cfg('tpp'),
                                                 $state,
                                                 $func,
                                                 '');
@@ -57,9 +57,9 @@
       }
 
       $this->assign_by_ref('indexbar', $indexbar);
-      $this->assign_by_ref('message',  $_msg);
-      $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
-      $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
+      $this->assign_by_ref('posting',  $_msg);
+      $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
+      $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
       $this->render('read.tmpl');
       $this->parent->_set_title($_msg->get_subject());
     }

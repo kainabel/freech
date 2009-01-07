@@ -469,7 +469,7 @@
     function apply_block() {
       if ($this->is_active())
         return;
-      $this->set_subject(lang("blockedtitle"));
+      $this->set_subject(lang('blockedtitle'));
       $this->set_username('------');
       $this->set_body('');
     }

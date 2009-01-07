@@ -54,7 +54,7 @@ class Message extends PostingDecorator {
 
 
     function get_body_html($_quotecolor = "#990000") {
-      if (!$this->body_html)
+      if ($this->body_html === NULL)
         $this->_update_body_html($_quotecolor);
       return $this->body_html;
     }

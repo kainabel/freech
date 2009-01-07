@@ -1,35 +1,35 @@
-<!-- message -->
+<!-- posting -->
 <p>
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
  <tr valign='middle'>
   <td>
-  <font color='#555555' size='-1'>{$message->get_created_time()}</font>
-{if $message->is_updated()}
-  <font color='red' size='-1'>{lang text="lastupdated" time=$message->get_updated_time()}</font>
+  <font color='#555555' size='-1'>{$posting->get_created_time()}</font>
+{if $posting->is_updated()}
+  <font color='red' size='-1'>{lang text="lastupdated" time=$posting->get_updated_time()}</font>
 {/if}
   <br />
-  <b>{$message->get_subject()|escape}</b>
+  <b>{$posting->get_subject()|escape}</b>
 <table>
   <tr>
     <td>
-{if $message->get_user_is_anonymous()}
-      <i>{$message->get_username()|escape}</i>
+{if $posting->get_user_is_anonymous()}
+      <i>{$posting->get_username()|escape}</i>
 {else}
-      <a href="{$message->get_user_profile_url_string()|escape}">{$message->get_username()|escape}</a>
+      <a href="{$posting->get_user_profile_url_string()|escape}">{$posting->get_username()|escape}</a>
 {/if}
     </td>
     <td>
-    <img border='0' src="{$message->get_user_icon()|escape}"
-         title="{lang text=$message->get_user_icon_name()}" />
+    <img border='0' src="{$posting->get_user_icon()|escape}"
+         title="{lang text=$posting->get_user_icon_name()}" />
     </td>
     <td>
 {if $__group->may('moderate')}
-    {include file="moderator_buttons.inc.tmpl" posting=$message}
+    {include file="moderator_buttons.inc.tmpl" posting=$posting}
 {/if}
     </td>
-{if $message->get_user_is_anonymous()}
+{if $posting->get_user_is_anonymous()}
     <td>
-      {lang text="ip_hash" hash=$message->get_ip_address_hash(10)}
+      {lang text="ip_hash" hash=$posting->get_ip_address_hash(10)}
     </td>
 {/if}
   </tr>
@@ -38,12 +38,12 @@
  </tr>
  <tr>
   <td><br />
-<!-- message body -->
-{$message->get_body_html()}
-<!-- end message body -->
+<!-- posting body -->
+{$posting->get_body_html()}
+<!-- end posting body -->
   <br />
   <br />
   </td>
  </tr>
 </table>
-<!-- end message -->
+<!-- end posting -->

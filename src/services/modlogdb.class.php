@@ -32,19 +32,20 @@
         $_search = array();
 
       $query = new FreechSqlQuery();
-      $sql   = 'SELECT *,';
-      $sql  .= ' UNIX_TIMESTAMP(m.created) created,';
+      $sql   = 'SELECT m.*,';
+      $sql  .= ' a.attribute_name,a.attribute_type,a.attribute_value,';
+      $sql  .= ' UNIX_TIMESTAMP(m.created) created';
       $sql  .= ' FROM {t_modlog} m';
       $sql  .= ' LEFT JOIN {t_modlog_attribute} a ON a.modlog_id=m.id';
       $sql  .= ' WHERE 1';
       foreach ($_search as $key => $value) {
         if (is_int($value))
-          $sql .= " AND g.$key={".$key.'}';
+          $sql .= " AND m.$key={".$key.'}';
         else
-          $sql .= " AND g.$key LIKE {".$key.'}';
+          $sql .= " AND m.$key LIKE {".$key.'}';
         $query->set_var($key, $value);
       }
-      $sql .= ' ORDER BY g.name';
+      $sql .= ' ORDER BY m.id DESC';
       $query->set_sql($sql);
       return $query->sql();
     }

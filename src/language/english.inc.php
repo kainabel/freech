@@ -304,4 +304,16 @@
   $lang[poll_vote_accepted]    = "Thank You for your vote.";
   $lang[poll_limit_reached]    = "You have opened too many polls. Sorry.";
   $lang[poll_to_result]        = "View results";
+
+  // Moderation log.
+  $lang[modlog]                = 'Moderation Log';
+  $lang[modlog_reason]         = 'Reason: [REASON]';
+  $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked the posting'
+                               . ' "[POSTING_LINK]" by [USER_LINK].';
+  $lang[modlog_unlock_posting] = '[MODERATOR_LINK] has unlocked the posting'
+                               . ' "[POSTING_LINK]" by [USER_LINK].';
+  $lang[modlog_set_sticky]     = '[MODERATOR_LINK] has made the posting'
+                               . ' "[POSTING_LINK]" by [USER_LINK] sticky.';
+  $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] has removed the sticky'
+                               . ' from "[POSTING_LINK]" by [USER_LINK].';
 ?>

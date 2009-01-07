@@ -1,0 +1,22 @@
+<!-- indexbar -->
+<p/>
+<h2>{lang text="modlog"}</h2>
+<p/>
+<table width='100%' cellspacing='0' cellpadding='3' border='0'>
+{foreach item=item from=$items}
+ <tr>
+  <td nowrap='nowrap' align='left'>{$item->get_created_time()|escape}</td>
+  <td>&nbsp;</td>
+  <td align='left' width='100%'>{$item->get_html()}</td>
+ </tr>
+ {if $item->has_reason()}
+ <tr>
+  <td colspan='2'></td>
+  <td align='left' width='100%'>
+    <i>{lang text="modlog_reason" reason=$item->get_reason()}</i>
+  </td>
+ </tr>
+ {/if}
+{/foreach}
+</table>
+<!-- end indexbar -->

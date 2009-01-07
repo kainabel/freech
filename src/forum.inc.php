@@ -164,6 +164,11 @@
         $this->_refer_to($this->_get_forum_url()->get_string());
       }
 
+      // Register modlog URL in the footer indexbar.
+      $url = new URL('?', cfg('urlvars'), lang('modlog'));
+      $url->set_var('action', 'moderation_log');
+      $this->add_extra_footer_link($url);
+
       // Go.
       $this->_run();
       $this->render_time = microtime(TRUE) - $this->start_time;
@@ -631,8 +636,12 @@
       $change->set_reason($_reason);
       $change->set_from_user($this->get_current_user());
       $change->set_from_moderator_group($this->get_current_group());
-      $change->set_attribute('id',      $_posting->get_id());
-      $change->set_attribute('subject', $_posting->get_subject());
+      $change->set_attribute('forum_id',       $_posting->get_forum_id());
+      $change->set_attribute('id',             $_posting->get_id());
+      $change->set_attribute('subject',        $_posting->get_subject());
+      $change->set_attribute('username',       $_posting->get_username());
+      $change->set_attribute('user_icon',      $_posting->get_user_icon());
+      $change->set_attribute('user_groupname', $_posting->get_user_icon_name());
       $this->get_modlogdb()->log($change);
     }
 
@@ -641,7 +650,7 @@
     function _posting_read() {
       $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
       $posting = $this->_decorate_posting($posting);
-      $printer = &new PostingPrinter($this);
+      $printer = new PostingPrinter($this);
       $this->_print_posting_breadcrumbs($posting);
 
       /* Plugin hook: on_message_read_print
@@ -673,7 +682,7 @@
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
       $posting->set_active(FALSE);
       $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
-      $this->_log_posting_moderation('lock_posting', $posting, 'quick lock');
+      $this->_log_posting_moderation('lock_posting', $posting, '');
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
@@ -978,6 +987,12 @@
     /*************************************************************
      * Other action controllers.
      *************************************************************/
+    function _show_moderation_log() {
+      $footer = &new ModLogPrinter($this);
+      $footer->show((int)$_GET['hs']);
+    }
+
+
     // Prints the footer of the page.
     function _print_footer() {
       $footer = &new FooterPrinter($this);
@@ -1095,6 +1110,10 @@
 
       case 'password_mail_confirm':
         $this->_password_mail_confirm();    // Form for resetting the password.
+        break;
+
+      case 'moderation_log':
+        $this->_show_moderation_log();      // Moderation log.
         break;
 
       case 'list':

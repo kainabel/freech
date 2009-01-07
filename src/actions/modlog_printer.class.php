@@ -20,8 +20,14 @@
 ?>
 <?php
   class ModLogPrinter extends PrinterBase {
-    function show() {
+    function show($_offset = 0) {
+      $modlogdb = $this->parent->get_modlogdb();
+      $items    = $modlogdb->get_items_from_query($query,
+                                                  cfg('modlog_epp'),
+                                                  (int)$_offset);
       $this->clear_all_assign();
+      //$this->assign_by_ref('indexbar', $indexbar);
+      $this->assign_by_ref('items', $items);
       $this->render('modlog.tmpl');
     }
   }

@@ -321,4 +321,19 @@
   $lang[poll_vote_accepted]    = "Ihre Stimmabgabe wurde gewertet.";
   $lang[poll_limit_reached]    = "Sie haben zu viele Umfragen gestartet.";
   $lang[poll_to_result]        = "Zum Umfrageergebnis";
+
+  // Moderation log.
+  $lang[modlog]                = 'Moderations-Log';
+  $lang[modlog_reason]         = 'Grund: [REASON]';
+  $lang[modlog_lock_posting]   = '[MODERATOR_LINK] hat das Posting'
+                               . ' "[POSTING_LINK]" von [USER_LINK] gesperrt.';
+  $lang[modlog_unlock_posting] = '[MODERATOR_LINK] hat das Posting'
+                               . ' "[POSTING_LINK]" von [USER_LINK] wieder'
+                               . ' freigegeben.';
+  $lang[modlog_set_sticky]     = '[MODERATOR_LINK] hat das Posting'
+                               . ' "[POSTING_LINK]" von [USER_LINK]'
+                               . ' festgepinnt.';
+  $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] hat den Pin vom'
+                               . ' Posting "[POSTING_LINK]" von [USER_LINK]'
+                               . ' wieder entfernt.';
 ?>

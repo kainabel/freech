@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   `is_active` tinyint(1) unsigned default '1',
+  `force_stub` tinyint(1) unsigned default '0',
   `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `is_parent` (`is_parent`),
@@ -143,6 +144,44 @@ CREATE TABLE IF NOT EXISTS `freech_visitor` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `freech_modlog`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_modlog` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `moderator_id` int(11) unsigned,
+  `moderator_name` varchar(50) collate latin1_general_ci NOT NULL,
+  `moderator_group_name` varchar(50) collate latin1_general_ci default NULL,
+  `moderator_icon` varchar(50) collate latin1_general_ci default NULL,
+  `action` varchar(30) collate latin1_general_ci NOT NULL,
+  `reason` text collate latin1_general_ci NOT NULL,
+  `created` timestamp NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `moderator_id` (`moderator_id`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `freech_modlog_attribute`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_modlog_attribute` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `modlog_id` int(11) unsigned NOT NULL,
+  `attribute_name` varchar(30) collate latin1_general_ci NOT NULL,
+  `attribute_type` varchar(10) collate latin1_general_ci NOT NULL,
+  `attribute_value` text collate latin1_general_ci NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `modlog_id` (`modlog_id`),
+  UNIQUE KEY `attribute_name` (`modlog_id`, `attribute_name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `freech_poll_option`
 --
 
@@ -198,6 +237,18 @@ ALTER TABLE `freech_permission`
 --
 ALTER TABLE `freech_user`
   ADD CONSTRAINT `freech_user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `freech_modlog`
+--
+ALTER TABLE `freech_modlog`
+  ADD CONSTRAINT `freech_modlog_ibfk_1` FOREIGN KEY (`moderator_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `freech_modlog_attribute`
+--
+ALTER TABLE `freech_modlog_attribute`
+  ADD CONSTRAINT `freech_modlog_attribute_ibfk_1` FOREIGN KEY (`modlog_id`) REFERENCES `freech_modlog` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_poll_option`

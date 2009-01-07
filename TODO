@@ -14,6 +14,7 @@ Maintenance
 
 Features
 ---------
+* Respect freech_posting.force_stub.
 * Add a moderation log.
 * Display the moderation log when viewing a locked message.
 * Display the moderation log in the moderator's profile.

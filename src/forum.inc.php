@@ -38,6 +38,7 @@
   include_once 'objects/posting.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
+  include_once 'objects/modlog_item.class.php';
   include_once 'objects/posting_decorator.class.php';
   include_once 'objects/unknown_posting.class.php';
   include_once 'objects/thread_state.class.php';
@@ -54,6 +55,7 @@
   include_once 'actions/printer_base.class.php';
   include_once 'actions/thread_printer.class.php';
   include_once 'actions/latest_printer.class.php';
+  include_once 'actions/modlog_printer.class.php';
   include_once 'actions/rss_printer.class.php';
   include_once 'actions/posting_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
@@ -66,6 +68,7 @@
   include_once 'services/sql_query.class.php';
   include_once 'services/forumdb.class.php';
   include_once 'services/userdb.class.php';
+  include_once 'services/modlogdb.class.php';
   include_once 'services/visitordb.class.php';
   include_once 'services/plugin_registry.class.php';
 
@@ -268,13 +271,6 @@
     /*************************************************************
      * Private utilities.
      *************************************************************/
-    function get_userdb() {
-      if (!$this->userdb)
-        $this->userdb = &new UserDB($this->db);
-      return $this->userdb;
-    }
-
-
     function _get_user_from_id($_id) {
       return $this->get_userdb()->get_user_from_id((int)$_id);
     }
@@ -629,6 +625,18 @@
     }
 
 
+    // Logs a change to the moderation log.
+    function _log_posting_moderation($_action, $_posting, $_reason) {
+      $change = new ModLogItem($_action);
+      $change->set_reason($_reason);
+      $change->set_from_user($this->get_current_user());
+      $change->set_from_moderator_group($this->get_current_group());
+      $change->set_attribute('id',      $_posting->get_id());
+      $change->set_attribute('subject', $_posting->get_subject());
+      $this->get_modlogdb()->log($change);
+    }
+
+
     // Read a posting.
     function _posting_read() {
       $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
@@ -651,6 +659,10 @@
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
       $posting->set_priority((int)$_GET['priority']);
       $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
+      if ($posting->get_priority() == 0)
+        $this->_log_posting_moderation('remove_sticky', $posting, '');
+      else
+        $this->_log_posting_moderation('set_sticky', $posting, '');
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
@@ -661,6 +673,7 @@
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
       $posting->set_active(FALSE);
       $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
+      $this->_log_posting_moderation('lock_posting', $posting, 'quick lock');
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
@@ -671,6 +684,7 @@
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
       $posting->set_active();
       $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
+      $this->_log_posting_moderation('unlock_posting', $posting, '');
       $this->_refer_to(urldecode($_GET['refer_to']));
     }
 
@@ -1105,8 +1119,22 @@
     }
 
 
+    function get_userdb() {
+      if (!$this->userdb)
+        $this->userdb = &new UserDB($this->db);
+      return $this->userdb;
+    }
+
+
     function get_eventbus() {
       return $this->eventbus;
+    }
+
+
+    function get_modlogdb() {
+      if (!$this->modlogdb)
+        $this->modlogdb = &new ModLogDB($this->db);
+      return $this->modlogdb;
     }
 
 

@@ -33,6 +33,16 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function _get_thread_id() {
+    return $this->posting->_get_thread_id();
+  }
+
+
+  function _get_path() {
+    return $this->posting->_get_path();
+  }
+
+
   function set_id($_id) {
     return $this->posting->set_id($_id);
   }
@@ -275,26 +285,6 @@ class PostingDecorator extends Trackable {
 
   function has_thread() {
     return $this->posting->has_thread();
-  }
-
-
-  function get_next_posting_id() {
-    return $this->posting->get_next_posting_id();
-  }
-
-
-  function get_prev_posting_id() {
-    return $this->posting->get_prev_posting_id();
-  }
-
-
-  function get_next_thread_id() {
-    return $this->posting->get_next_thread_id();
-  }
-
-
-  function get_prev_thread_id() {
-    return $this->posting->get_prev_thread_id();
   }
 
 

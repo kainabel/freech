@@ -60,6 +60,8 @@
       $this->clear();
       $this->fields[id]               = $_db_row[id];
       $this->fields[forum_id]         = $_db_row[forum_id];
+      $this->fields[thread_id]        = $_db_row[thread_id];
+      $this->fields[path]             = $_db_row[path];
       $this->fields[priority]         = $_db_row[priority];
       $this->fields[user_id]          = $_db_row[user_id];
       $this->fields[username]         = $_db_row[username];
@@ -80,10 +82,6 @@
       $this->fields[is_active]        = $_db_row[is_active];
       if (isset($_db_row[allow_answer]))
         $this->fields[allow_answer]   = $_db_row[allow_answer];
-      $this->fields[next_posting_id]  = $_db_row[next_posting_id];
-      $this->fields[prev_posting_id]  = $_db_row[prev_posting_id];
-      $this->fields[next_thread_id]   = $_db_row[next_thread_id];
-      $this->fields[prev_thread_id]   = $_db_row[prev_thread_id];
     }
 
 
@@ -91,6 +89,16 @@
       // Note that this needs to work with both, IPv4 and IPv6.
       $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
       return md5($ip_net . cfg("salt"));
+    }
+
+
+    function _get_thread_id() {
+      return $this->fields[thread_id];
+    }
+
+
+    function _get_path() {
+      return $this->fields[path];
     }
 
 
@@ -491,46 +499,6 @@
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
         return TRUE;
       return $this->fields[n_children] != 0;
-    }
-
-
-    function set_next_posting_id($_next_posting_id) {
-      $this->fields[next_posting_id] = $_next_posting_id * 1;
-    }
-
-
-    function get_next_posting_id() {
-      return $this->fields[next_posting_id];
-    }
-
-
-    function set_prev_posting_id($_prev_posting_id) {
-      $this->fields[prev_posting_id] = $_prev_posting_id * 1;
-    }
-
-
-    function get_prev_posting_id() {
-      return $this->fields[prev_posting_id];
-    }
-
-
-    function set_next_thread_id($_next_thread_id) {
-      $this->fields[next_thread_id] = $_next_thread_id * 1;
-    }
-
-
-    function get_next_thread_id() {
-      return $this->fields[next_thread_id];
-    }
-
-
-    function set_prev_thread_id($_prev_thread_id) {
-      $this->fields[prev_thread_id] = $_prev_thread_id * 1;
-    }
-
-
-    function get_prev_thread_id() {
-      return $this->fields[prev_thread_id];
     }
 
 

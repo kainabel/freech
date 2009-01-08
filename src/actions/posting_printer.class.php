@@ -21,17 +21,29 @@
 <?php
   class PostingPrinter extends ThreadPrinter {
     function show(&$_msg) {
-      $user       = $this->parent->get_current_user();
-      $group      = $this->parent->get_current_group();
-      $msg_uid    = $_msg ? $_msg->get_user_id() : -1;
-      $may_write  = $group->may('write');
-      $may_edit   = $may_write
-                 && cfg('postings_editable')
-                 && !$user->is_anonymous()
-                 && $user->get_id() === $msg_uid
-                 && $_msg->is_editable();
-      $indexbar   = &new IndexBarReadPosting($_msg, $may_write, $may_edit);
-      $showthread = $_msg && $_msg->has_thread() && $_COOKIE[thread] != 'hide';
+      $user            = $this->parent->get_current_user();
+      $group           = $this->parent->get_current_group();
+      $prev_posting_id = $this->forumdb->get_prev_posting_id($_msg);
+      $next_posting_id = $this->forumdb->get_next_posting_id($_msg);
+      $prev_thread_id  = $this->forumdb->get_prev_thread_id($_msg);
+      $next_thread_id  = $this->forumdb->get_next_thread_id($_msg);
+      $msg_uid         = $_msg ? $_msg->get_user_id() : -1;
+      $may_write       = $group->may('write');
+      $may_edit        = $may_write
+                      && cfg('postings_editable')
+                      && !$user->is_anonymous()
+                      && $user->get_id() === $msg_uid
+                      && $_msg->is_editable();
+      $showthread      = $_msg
+                      && $_msg->has_thread()
+                      && $_COOKIE[thread] != 'hide';
+      $indexbar   = &new IndexBarReadPosting($_msg,
+                                             $prev_posting_id,
+                                             $next_posting_id,
+                                             $prev_thread_id,
+                                             $next_thread_id,
+                                             $may_write,
+                                             $may_edit);
 
       if ($_msg)
         $_msg->apply_block();

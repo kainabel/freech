@@ -78,86 +78,6 @@
     }
 
 
-    /* Given the id of any node, this function returns the id of the previous
-     * entry in the same thread, or 0 if there is no previous entry.
-     */
-    function _get_prev_entry_id($_forum_id, $_thread_id, $_path) {
-      if (!$_path)
-        return 0;
-      $sql  = "SELECT id FROM {t_posting}";
-      $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND is_active";
-      $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
-      $sql .= " ORDER BY HEX(path) DESC";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_int('thread_id', $_thread_id);
-      $query->set_hex('path',     $_path);
-      $res = $this->db->SelectLimit($query->sql(), 1)
-                          or die("ForumDB::_get_prev_entry_id()");
-      $row = $res->FetchRow($res);
-      return $row[id];
-    }
-
-
-    /* Given the path of any node, this function returns the id of the next
-     * entry in the same thread, or 0 if there is no next entry.
-     */
-    function _get_next_entry_id($_forum_id, $_thread_id, $_path) {
-      $sql  = "SELECT id FROM {t_posting}";
-      $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND is_active";
-      $sql .= " AND NOT is_parent";
-      if ($_path)
-        $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
-      $sql .= " ORDER BY HEX(path)";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_int('thread_id', $_thread_id);
-      $query->set_hex('path',     $_path);
-      $res = $this->db->SelectLimit($query->sql(), 1)
-                          or die("ForumDB::_get_next_entry_id()");
-      $row = $res->FetchRow($res);
-      return $row[id];
-    }
-
-
-    /* Given a thread_id, this function returns the id of the previous
-     * thread in the given forum, or 0 if there is no previous thread.
-     * The thread_id equals the id of the toplevel node in a thread.
-     */
-    function _get_prev_thread_id($_forum_id, $_thread_id) {
-      $sql  = "SELECT thread_id FROM {t_posting}";
-      $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
-      $sql .= " AND (is_active OR n_children)";
-      $sql .= " ORDER BY thread_id DESC";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_int('forum_id',  $_forum_id);
-      $query->set_int('thread_id', $_thread_id);
-      $res = $this->db->SelectLimit($query->sql(), 1)
-                          or die("ForumDB::_get_prev_thread_id()");
-      $row = $res->FetchRow($res);
-      return $row[thread_id];
-    }
-
-
-    /* Given a thread_id, this function returns the id of the next
-     * thread in the given forum, or 0 if there is no next thread.
-     * The thread_id equals the id of the toplevel node in a thread.
-     */
-    function _get_next_thread_id($_forum_id, $_thread_id) {
-      $sql  = "SELECT thread_id FROM {t_posting}";
-      $sql .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
-      $sql .= " AND (is_active OR n_children)";
-      $sql .= " ORDER BY thread_id";
-      $query = &new FreechSqlQuery($sql);
-      $query->set_int('forum_id',  $_forum_id);
-      $query->set_int('thread_id', $_thread_id);
-      $res = $this->db->SelectLimit($query->sql(), 1)
-                          or die("ForumDB::_get_next_thread_id()");
-      $row = $res->FetchRow($res);
-      return $row[thread_id];
-    }
-
-
     /***********************************************************************
      * Public API.
      ***********************************************************************/
@@ -376,22 +296,12 @@
       $query->set_int('id', $_id);
       if (!$row = $this->db->GetRow($query->sql()))
         return;
-      $row[prev_thread_id]  = $this->_get_prev_thread_id($row[forum_id],
-                                                         $row[thread_id]);
-      $row[next_thread_id]  = $this->_get_next_thread_id($row[forum_id],
-                                                         $row[thread_id]);
-      $row[prev_posting_id] = $this->_get_prev_entry_id($row[forum_id],
-                                                        $row[thread_id],
-                                                        $row[path]);
-      $row[next_posting_id] = $this->_get_next_entry_id($row[forum_id],
-                                                        $row[thread_id],
-                                                        $row[path]);
       if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
         $row[allow_answer] = FALSE;
       if ($row[id] == $row[thread_id])
         $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
 
-      $posting = &new Posting;
+      $posting = new Posting;
       $posting->set_from_db($row);
       return $posting;
     }
@@ -893,6 +803,94 @@
       $query->set_int('ip_hash', $_ip_hash);
       $query->set_int('since',   $_since);
       return $this->db->GetOne($query->sql());
+    }
+
+
+    /* Given a posting, this function returns the id of the previous
+     * entry in the same thread, or 0 if there is no previous entry.
+     */
+    function get_prev_posting_id($_posting) {
+      $thread_id = $_posting->_get_thread_id();
+      $path      = $_posting->_get_path();
+      if (!$path)
+        return 0;
+      $sql  = "SELECT id FROM {t_posting}";
+      $sql .= " WHERE thread_id={thread_id}";
+      $sql .= " AND is_active";
+      $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
+      $sql .= " ORDER BY HEX(path) DESC";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('thread_id', $thread_id);
+      $query->set_hex('path',      $path);
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die('ForumDB::get_prev_posting_id()');
+      $row = $res->FetchRow($res);
+      return $row[id];
+    }
+
+
+    /* Given a posting, this function returns the id of the next
+     * posting in the same thread, or 0 if there is no next entry.
+     */
+    function get_next_posting_id($_posting) {
+      $thread_id = $_posting->_get_thread_id();
+      $path      = $_posting->_get_path();
+      $sql  = "SELECT id FROM {t_posting}";
+      $sql .= " WHERE thread_id={thread_id}";
+      $sql .= " AND is_active";
+      $sql .= " AND NOT is_parent";
+      if ($path)
+        $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
+      $sql .= " ORDER BY HEX(path)";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('thread_id', $thread_id);
+      $query->set_hex('path',      $path);
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die('ForumDB::get_next_posting_id()');
+      $row = $res->FetchRow($res);
+      return $row[id];
+    }
+
+
+    /* Given a posting, this function returns the id of the previous
+     * thread in the given forum, or 0 if there is no previous thread.
+     * The thread_id equals the id of the toplevel node in a thread.
+     */
+    function get_prev_thread_id($_posting) {
+      $forum_id  = $_posting->get_forum_id();
+      $thread_id = $_posting->_get_thread_id();
+      $sql  = "SELECT thread_id FROM {t_posting}";
+      $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
+      $sql .= " AND (is_active OR n_children)";
+      $sql .= " ORDER BY thread_id DESC";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('forum_id',  $forum_id);
+      $query->set_int('thread_id', $thread_id);
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die("ForumDB::get_prev_thread_id()");
+      $row = $res->FetchRow($res);
+      return $row[thread_id];
+    }
+
+
+    /* Given a posting, this function returns the id of the next
+     * thread in the given forum, or 0 if there is no next thread.
+     * The thread_id equals the id of the toplevel node in a thread.
+     */
+    function get_next_thread_id($_posting) {
+      $forum_id  = $_posting->get_forum_id();
+      $thread_id = $_posting->_get_thread_id();
+      $sql  = "SELECT thread_id FROM {t_posting}";
+      $sql .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
+      $sql .= " AND (is_active OR n_children)";
+      $sql .= " ORDER BY thread_id";
+      $query = &new FreechSqlQuery($sql);
+      $query->set_int('forum_id',  $forum_id);
+      $query->set_int('thread_id', $thread_id);
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die("ForumDB::get_next_thread_id()");
+      $row = $res->FetchRow($res);
+      return $row[thread_id];
     }
 
 

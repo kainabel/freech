@@ -42,7 +42,7 @@
       $indexbar->add_links($extra_urls);
 
       // Render the resulting template.
-      $version[url]  = 'http://debain.org/software/freech/';
+      $version[url]  = 'http://code.google.com/p/freech/';
       $version[text] = 'Freech Forum '.FREECH_VERSION;
       $this->clear_all_assign();
       $this->assign_by_ref('order_by_thread', $order_by_thread_url);

@@ -563,7 +563,7 @@
 
     function _get_current_view_name() {
       $name = $_COOKIE['view'];
-      if ($name)
+      if ($name && $this->views[$name])
         return $name;
       return 'thread'; //FIXME: make configurable
     }

@@ -12,6 +12,6 @@ include_once dirname(__FILE__).'/indexbar.class.php';
 include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
 
 function threadview_init($forum) {
-  $forum->register_view('thread', 'ThreadView', lang('threadview'));
+  $forum->register_view('thread', 'ThreadView', lang('threadview'), 100);
 }
 ?>

@@ -28,7 +28,8 @@
     // Constructor.
     function Menu() {
       $this->MenuItem();
-      $this->items = array();
+      $this->items        = array();
+      $this->max_priority = 0;
     }
 
 
@@ -95,13 +96,19 @@
     }
 
 
-    function add_item($_item) {
-      array_push($this->items, $_item);
+    function add_item($_item, $_priority = NULL) {
+      if ($_priority === NULL)
+        $_priority = $this->max_priority + 1000;
+      $this->items[$_priority] = $_item;
+      $this->max_priority = max($this->max_priority, $_priority);
     }
 
 
     function add_link($_url) {
-      $this->add_item(new MenuItem($_url));
+      if ($_url->get_base())
+        $this->add_item(new MenuItem($_url));
+      else
+        $this->add_text($_url->get_label());
     }
 
 
@@ -113,18 +120,19 @@
     }
 
 
-    function add_text($_text = '') {
-      array_push($this->items, new MenuItem(NULL, $_text));
+    function add_text($_text = '', $_priority = NULL) {
+      $this->add_item(new MenuItem(NULL, $_text), $_priority);
     }
 
 
     function add_separator() {
-      array_push($this->items, new MenuItem());
+      $this->add_item(new MenuItem(), $_priority);
     }
 
 
     function get_items() {
-      return $this->items;
+      ksort($this->items);
+      return array_values($this->items);
     }
   }
 ?>

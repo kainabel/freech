@@ -25,7 +25,10 @@
       $view_urls  = $this->parent->get_view_links();
       $extra_urls = $this->parent->get_extra_footer_links();
       $indexbar   = new IndexBarFooter();
-      $indexbar->add_links($view_urls);
+      foreach ($view_urls as $prio => $url) {
+        $indexbar->add_separator();
+        $indexbar->add_link($url, $prio);
+      }
       $indexbar->add_links($extra_urls);
 
       // Render the resulting template.

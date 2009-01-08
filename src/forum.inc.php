@@ -561,10 +561,25 @@
     }
 
 
-    function _get_view() {
-      $view_class = $this->views[$_COOKIE['view']];
+    function _get_current_view_name() {
+      $name = $_COOKIE['view'];
+      if ($name)
+        return $name;
+      return 'thread'; //FIXME: make configurable
+    }
+
+
+    function _get_current_view_class() {
+      $view_name  = $this->_get_current_view_name();
+      $view_class = $this->views[$view_name];
       if (!$view_class)
-        $view_class = 'ThreadView'; //FIXME: make configurable
+        die('Plugin for current view is not installed (or active).');
+      return $view_class;
+    }
+
+
+    function _get_current_view() {
+      $view_class = $this->_get_current_view_class();
       return new $view_class($this);
     }
 
@@ -573,7 +588,7 @@
      * Action controllers for the forum overview.
      *************************************************************/
     // Shows the breadcrumbs for the forum in thread or time order.
-    function _print_list_breadcrumbs() {
+    function _print_forum_breadcrumbs() {
       $forum_id    = $this->get_current_forum_id();
       $breadcrumbs = &new BreadCrumbsPrinter($this);
       if (cfg('disable_posting_counter')) {
@@ -595,11 +610,11 @@
     }
 
 
-    // Shows the forum, time order.
+    // Shows the forum.
     function _show() {
-      $this->_print_list_breadcrumbs('');  //FIXME: name
+      $this->_print_forum_breadcrumbs();
       $forum_id = $this->get_current_forum_id();
-      $view     = $this->_get_view();
+      $view     = $this->_get_current_view();
       $view->show($forum_id, (int)$_GET['hs']);
       $this->_print_footer();
     }
@@ -659,7 +674,7 @@
         $posting->set_body(lang('noentrybody'));
       }
 
-      $view = $this->_get_view();
+      $view = $this->_get_current_view();
       $view->show_posting($posting);
       $this->_print_footer();
     }
@@ -1230,9 +1245,9 @@
     }
 
 
-    function register_view($_name, $_view, $_caption) {
+    function register_view($_name, $_view, $_caption, $_priority) {
       $this->views[$_name]         = $_view;
-      $this->view_captions[$_name] = $_caption;
+      $this->view_captions[$_name] = array($_caption, $_priority);
     }
 
 
@@ -1256,13 +1271,18 @@
     function get_view_links() {
       //FIXME: Create a indexbar object and handle this there instead.
       $urls = array();
-      foreach ($this->view_captions as $name => $caption) {
-        $url = new URL('?', cfg('urlvars'), $caption);
+      $current = $this->_get_current_view_name();
+      foreach ($this->view_captions as $name => $value) {
+        list($caption, $prio) = $value;
+        $url                  = new URL('?', cfg('urlvars'), $caption);
         $url->set_var('forum_id',   $this->get_current_forum_id());
         $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
         $url->set_var('changeview', $name);
-        array_push($urls, $url);
+        if ($name == $current)
+          $url->set_base('');
+        $urls[$prio] = $url;
       }
+      ksort($urls);
       return $urls;
     }
 

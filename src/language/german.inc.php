@@ -39,7 +39,7 @@
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
   $lang[threadview]       = "Thread-Darstellung";
-  $lang[plainview]        = "Flache Darstellung";
+  $lang[listview]         = "Flache Darstellung";
   $lang[editposting]      = "Bearbeiten";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";

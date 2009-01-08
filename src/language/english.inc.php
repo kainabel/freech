@@ -37,7 +37,7 @@
   $lang[entry]            = "Message";
   $lang[thread]           = "Thread";
   $lang[threadview]       = "Order by Thread";
-  $lang[plainview]        = "Order by Date";
+  $lang[listview]         = "Order by Date";
   $lang[editposting]      = "Edit";
   $lang[writeanswer]      = "Reply";
   $lang[writemessage]     = "New Message";

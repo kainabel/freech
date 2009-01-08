@@ -43,6 +43,11 @@
     }
 
 
+    function get_base() {
+      return $this->base;
+    }
+
+
     // Appends the given variable to the URL.
     function set_var($_name, $_value) {
       if ($_value)

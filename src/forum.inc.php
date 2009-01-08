@@ -659,6 +659,7 @@
        */
       $this->eventbus->emit('on_message_read_print', $this, $posting);
       $printer->show($posting);
+      $this->_print_footer();
     }
 
 

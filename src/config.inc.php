@@ -59,8 +59,11 @@
   // May users edit their postings?
   $cfg[postings_editable] = TRUE;
 
-  // If TRUE, ">>" points to the previous thread.
-  $cfg[thread_arrow_rev] = TRUE;
+  // If TRUE, "Posting >>" points to the previous thread.
+  $cfg[posting_arrow_reverse] = FALSE;
+
+  // If TRUE, "Thread >>" points to the previous thread.
+  $cfg[thread_arrow_reverse] = FALSE;
 
   // If TRUE, the current page in the index is remembered even when reading
   // a posting. This comes at the cost of less stable URLs.

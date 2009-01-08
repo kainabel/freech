@@ -38,8 +38,8 @@
   $lang[next_symbol]      = ">>";
   $lang[entry]            = "Beitrag";
   $lang[thread]           = "Thread";
-  $lang[threadview]       = "In Thread-Darstellung anzeigen";
-  $lang[plainview]        = "In Eingangsreihenfolge anzeigen";
+  $lang[threadview]       = "Thread-Darstellung";
+  $lang[plainview]        = "Flache Darstellung";
   $lang[editposting]      = "Bearbeiten";
   $lang[writeanswer]      = "Beantworten";
   $lang[writemessage]     = "Neues Thema";
@@ -279,13 +279,13 @@
   $lang[group_saved]           = "Die Daten wurden gespeichert.";
 
   // Top user list.
-  $lang[top_users]   = "User-Statistik";
+  $lang[top_users]   = "Top 20";
   $lang[alltime_top] = "Top 20";
   $lang[weekly_top]  = "Top 20 der letzten 7 Tage";
   $lang[n_postings]  = "Postings";
 
   // Statistics.
-  $lang[statistics]          = "Foren-Statistik";
+  $lang[statistics]          = "Statistik";
   $lang[statistics_title]    = "Postings und Traffic der letzten [DAYS] Tage";
   $lang[statistics_postings] = "Postings";
   $lang[statistics_traffic]  = "Traffic";

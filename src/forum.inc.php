@@ -44,25 +44,20 @@
   include_once 'objects/thread_state.class.php';
   include_once 'objects/menu_item.class.php';
   include_once 'objects/menu.class.php';
-  include_once 'objects/indexbar_by_time.class.php';
-  include_once 'objects/indexbar_by_thread.class.php';
   include_once 'objects/indexbar_group_profile.class.php';
-  include_once 'objects/indexbar_read_posting.class.php';
   include_once 'objects/indexbar_user_postings.class.php';
   include_once 'objects/indexbar_footer.class.php';
   include_once 'objects/parser.class.php';
 
   include_once 'actions/printer_base.class.php';
-  include_once 'actions/thread_printer.class.php';
-  include_once 'actions/latest_printer.class.php';
   include_once 'actions/modlog_printer.class.php';
   include_once 'actions/rss_printer.class.php';
-  include_once 'actions/posting_printer.class.php';
   include_once 'actions/breadcrumbs_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
+  include_once 'actions/view.class.php';
 
   include_once 'services/groupdb.class.php';
   include_once 'services/sql_query.class.php';
@@ -113,14 +108,15 @@
         if ($_POST['permanent'] === 'ON')
           setcookie('permanent_session', session_id(), time() + cfg('login_time'));
       }
-      $this->_handle_cookies();
 
       // Only now start the timer, as cookie handling may scew the result.
       $this->start_time = microtime(TRUE);
 
       // (Ab)use a Trackable as an eventbus.
-      $this->eventbus             = &new Trackable;
+      $this->eventbus             = new Trackable;
       $this->actions              = array();
+      $this->views                = array();
+      $this->view_captions        = array();
       $this->renderers            = array();
       $this->extra_indexbar_links = array();
       $this->extra_footer_links   = array();
@@ -136,6 +132,8 @@
       $this->registry = &new PluginRegistry();
       $this->registry->read_plugins('plugins');
       $this->registry->activate_plugins($this); //FIXME: Make activation configurable.
+
+      $this->_handle_cookies();
 
       /* Plugin hook: on_construct
        *   Called from within the FreechForum() constructor before any
@@ -233,12 +231,9 @@
         $this->_refer_to($_GET['refer_to']);
       }
 
-      if ($_GET['changeview'] === 't') {
-        $this->_set_cookie('view', 'thread');
-        $this->_refer_to($_GET['refer_to']);
-      }
-      elseif ($_GET['changeview'] === 'c') {
-        $this->_set_cookie('view', 'plain');
+      if ($_GET['changeview']) {
+        if ($this->views[$_GET['changeview']])
+          $this->_set_cookie('view', $_GET['changeview']);
         $this->_refer_to($_GET['refer_to']);
       }
 
@@ -566,6 +561,14 @@
     }
 
 
+    function _get_view() {
+      $view_class = $this->views[$_COOKIE['view']];
+      if (!$view_class)
+        $view_class = 'ThreadView'; //FIXME: make configurable
+      return new $view_class($this);
+    }
+
+
     /*************************************************************
      * Action controllers for the forum overview.
      *************************************************************/
@@ -593,22 +596,11 @@
 
 
     // Shows the forum, time order.
-    function _list_by_time() {
-      $this->_print_list_breadcrumbs('');
+    function _show() {
+      $this->_print_list_breadcrumbs('');  //FIXME: name
       $forum_id = $this->get_current_forum_id();
-      $latest   = &new LatestPrinter($this);
-      $latest->show($forum_id, (int)$_GET['hs']);
-      $this->_print_footer();
-    }
-
-
-    // Shows the forum, thread order.
-    function _list_by_thread() {
-      $this->_print_list_breadcrumbs('');
-      $thread_state = &new ThreadState($_COOKIE['fold'], $_COOKIE['c']);
-      $forum_id     = $this->get_current_forum_id();
-      $thread       = &new ThreadPrinter($this);
-      $thread->show($forum_id, 0, (int)$_GET['hs'], $thread_state);
+      $view     = $this->_get_view();
+      $view->show($forum_id, (int)$_GET['hs']);
       $this->_print_footer();
     }
 
@@ -650,7 +642,6 @@
     function _posting_read() {
       $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
       $posting = $this->_decorate_posting($posting);
-      $printer = new PostingPrinter($this);
       $this->_print_posting_breadcrumbs($posting);
 
       /* Plugin hook: on_message_read_print
@@ -658,7 +649,18 @@
        *   Args: posting: The posting that is about to be shown.
        */
       $this->eventbus->emit('on_message_read_print', $this, $posting);
-      $printer->show($posting);
+
+      // Hide subject and body if the message is locked.
+      if ($posting)
+        $posting->apply_block();
+      else {
+        $posting = new Posting;
+        $posting->set_subject(lang('noentrytitle'));
+        $posting->set_body(lang('noentrybody'));
+      }
+
+      $view = $this->_get_view();
+      $view->show_posting($posting);
       $this->_print_footer();
     }
 
@@ -1119,10 +1121,7 @@
 
       case 'list':
       case '':
-        if ($_COOKIE['view'] === 'plain')
-          $this->_list_by_time();           // Show the forum, time order.
-        else
-          $this->_list_by_thread();         // Show the forum, thread order.
+        $this->_show();
         break;
 
       default:
@@ -1231,6 +1230,12 @@
     }
 
 
+    function register_view($_name, $_view, $_caption) {
+      $this->views[$_name]         = $_view;
+      $this->view_captions[$_name] = $_caption;
+    }
+
+
     function register_renderer($_name, $_decorator_name) {
       $this->renderers[$_name] = $_decorator_name;
     }
@@ -1245,6 +1250,20 @@
     function get_extra_indexbar_links() {
       //FIXME: Create a indexbar object and handle this there instead.
       return $this->extra_indexbar_links;
+    }
+
+
+    function get_view_links() {
+      //FIXME: Create a indexbar object and handle this there instead.
+      $urls = array();
+      foreach ($this->view_captions as $name => $caption) {
+        $url = new URL('?', cfg('urlvars'), $caption);
+        $url->set_var('forum_id',   $this->get_current_forum_id());
+        $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
+        $url->set_var('changeview', $name);
+        array_push($urls, $url);
+      }
+      return $urls;
     }
 
 

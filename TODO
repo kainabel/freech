@@ -1,5 +1,6 @@
 Maintenance
 ------------
+* Move the search template to the search plugin.
 * Move the login procedures into a plugin.
 * Create a Menu object into which plugins may register new items.
 * Possibly move user management into a plugin.
@@ -17,4 +18,4 @@ Features
 * Respect freech_posting.force_stub.
 * Display the moderation log when viewing a locked message.
 * Display the moderation log in the moderator's profile.
-* Make the front page prettier and add links to special pages.
+* Make the front page prettier.

@@ -22,18 +22,16 @@
   /**
    * Represents the Menu that is shown when reading a posting.
    */
-  class IndexBarReadPosting extends Menu {
+  class ListViewIndexBarReadPosting extends Menu {
     var $items;
 
 
     // Constructor.
-    function IndexBarReadPosting($_posting,
-                                 $_prev_posting_id,
-                                 $_next_posting_id,
-                                 $_prev_thread_id,
-                                 $_next_thread_id,
-                                 $_may_write = FALSE,
-                                 $_may_edit  = FALSE) {
+    function ListViewIndexBarReadPosting($_posting,
+                                         $_prev_posting_id,
+                                         $_next_posting_id,
+                                         $_may_write = FALSE,
+                                         $_may_edit  = FALSE) {
       $this->Menu();
 
       if (!$_posting) {
@@ -59,37 +57,6 @@
       if ($_next_posting_id) {
         $url = clone($url);
         $url->set_var('msg_id', $_next_posting_id);
-        $url->set_label(lang('next_symbol'));
-        $this->add_link($url);
-      }
-      else
-        $this->add_text(lang('next_symbol'));
-
-      // "Previous Thread" button.
-      $this->add_separator();
-      if (cfg('thread_arrow_reverse'))
-        $prev_id = $_next_thread_id;
-      else
-        $prev_id = $_prev_thread_id;
-      if ($prev_id) {
-        $url = clone($url);
-        $url->set_var('msg_id', $prev_id);
-        $url->set_label(lang('prev_symbol'));
-        $this->add_link($url);
-      }
-      else
-        $this->add_text(lang('prev_symbol'));
-
-      // "Next Thread" button.
-      $this->add_text(lang('thread'));
-      $url = clone($url);
-      if (cfg('thread_arrow_reverse'))
-        $next_id = $_prev_thread_id;
-      else
-        $next_id = $_next_thread_id;
-      if ($next_id) {
-        $url = clone($url);
-        $url->set_var('msg_id', $next_id);
         $url->set_label(lang('next_symbol'));
         $this->add_link($url);
       }

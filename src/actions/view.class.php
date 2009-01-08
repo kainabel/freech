@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2008 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,22 +19,23 @@
   */
 ?>
 <?php
-  class FooterPrinter extends PrinterBase {
-    function show($_forum_id) {
-      // Create the indexbar.
-      $view_urls  = $this->parent->get_view_links();
-      $extra_urls = $this->parent->get_extra_footer_links();
-      $indexbar   = new IndexBarFooter();
-      $indexbar->add_links($view_urls);
-      $indexbar->add_links($extra_urls);
-
-      // Render the resulting template.
-      $version[url]  = 'http://code.google.com/p/freech/';
-      $version[text] = 'Freech Forum '.FREECH_VERSION;
-      $this->clear_all_assign();
-      $this->assign_by_ref('indexbar', $indexbar);
-      $this->assign_by_ref('version',  $version);
-      $this->render('footer.tmpl');
-    }
+/**
+ * A base class for all views. Views render the forum overview as well
+ * as the page on which a posting is shown.
+ */
+class View extends PrinterBase {
+  function View($_forum) {
+    $this->PrinterBase($_forum);
   }
+
+
+  function show($_forum_id, $_offset) {
+    die('show() not implemented.');
+  }
+
+
+  function show_posting($_posting) {
+    die('show_posting() not implemented.');
+  }
+}
 ?>

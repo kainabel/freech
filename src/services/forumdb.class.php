@@ -807,9 +807,47 @@
 
 
     /* Given a posting, this function returns the id of the previous
+     * entry in the same forum, or 0 if there is no previous entry.
+     */
+    function get_prev_posting_id_in_forum($_posting) {
+      $sql  = "SELECT id FROM {t_posting}";
+      $sql .= " WHERE forum_id={forum_id}";
+      $sql .= " AND is_active";
+      $sql .= " AND id<{id}";
+      $sql .= " ORDER BY id DESC";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('id',       $_posting->get_id());
+      $query->set_int('forum_id', $_posting->get_forum_id());
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die('ForumDB::get_prev_posting_id_in_forum()');
+      $row = $res->FetchRow($res);
+      return $row[id];
+    }
+
+
+    /* Given a posting, this function returns the id of the next
+     * entry in the same forum, or 0 if there is no next entry.
+     */
+    function get_next_posting_id_in_forum($_posting) {
+      $sql  = "SELECT id FROM {t_posting}";
+      $sql .= " WHERE forum_id={forum_id}";
+      $sql .= " AND is_active";
+      $sql .= " AND id>{id}";
+      $sql .= " ORDER BY id";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('id',       $_posting->get_id());
+      $query->set_int('forum_id', $_posting->get_forum_id());
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                          or die('ForumDB::get_next_posting_id_in_forum()');
+      $row = $res->FetchRow($res);
+      return $row[id];
+    }
+
+
+    /* Given a posting, this function returns the id of the previous
      * entry in the same thread, or 0 if there is no previous entry.
      */
-    function get_prev_posting_id($_posting) {
+    function get_prev_posting_id_in_thread($_posting) {
       $thread_id = $_posting->_get_thread_id();
       $path      = $_posting->_get_path();
       if (!$path)
@@ -823,7 +861,7 @@
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
       $res = $this->db->SelectLimit($query->sql(), 1)
-                          or die('ForumDB::get_prev_posting_id()');
+                          or die('ForumDB::get_prev_posting_id_in_thread()');
       $row = $res->FetchRow($res);
       return $row[id];
     }
@@ -832,7 +870,7 @@
     /* Given a posting, this function returns the id of the next
      * posting in the same thread, or 0 if there is no next entry.
      */
-    function get_next_posting_id($_posting) {
+    function get_next_posting_id_in_thread($_posting) {
       $thread_id = $_posting->_get_thread_id();
       $path      = $_posting->_get_path();
       $sql  = "SELECT id FROM {t_posting}";
@@ -846,7 +884,7 @@
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
       $res = $this->db->SelectLimit($query->sql(), 1)
-                          or die('ForumDB::get_next_posting_id()');
+                          or die('ForumDB::get_next_posting_id_in_thread()');
       $row = $res->FetchRow($res);
       return $row[id];
     }

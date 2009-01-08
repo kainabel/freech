@@ -50,15 +50,12 @@ tests:
 ###################################################################
 targz: dist-prepare
 	tar czf $(PACKAGE).tar.gz $(PACKAGE)
-	make clean
 
 tarbz: dist-prepare
 	tar cjf $(PACKAGE).tar.bz2 $(PACKAGE)
-	make clean
 
 deb: dist-prepare
 	# No debian package yet.
-	make clean
 
 dist: targz tarbz deb
 
@@ -67,6 +64,6 @@ dist: targz tarbz deb
 ###################################################################
 dist-publish: dist
 	mkdir -p $(DISTDIR)/
-	mv $(PACKAGE)* $(DISTDIR)
+	mv $(PACKAGE).tar* $(DISTDIR)
 
 doc-publish: doc

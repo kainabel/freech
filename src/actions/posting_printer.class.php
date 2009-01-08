@@ -23,7 +23,11 @@
     function show(&$_msg) {
       $user            = $this->parent->get_current_user();
       $group           = $this->parent->get_current_group();
-      if ($_COOKIE['view'] === 'plain') {
+      if ($_COOKIE['view'] === 'plain' and cfg('posting_arrow_reverse')) {
+        $prev_posting_id = $this->forumdb->get_next_posting_id_in_forum($_msg);
+        $next_posting_id = $this->forumdb->get_prev_posting_id_in_forum($_msg);
+      }
+      elseif ($_COOKIE['view'] === 'plain') {
         $prev_posting_id = $this->forumdb->get_prev_posting_id_in_forum($_msg);
         $next_posting_id = $this->forumdb->get_next_posting_id_in_forum($_msg);
       }

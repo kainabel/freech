@@ -47,12 +47,8 @@
       $url->set_var('forum_id', $_posting->get_forum_id());
 
       // "Previous/Next Posting" buttons.
-      if (cfg('posting_arrow_reverse'))
-        $prev_id = $_next_posting_id;
-      else
-        $prev_id = $_prev_posting_id;
-      if ($prev_id) {
-        $url->set_var('msg_id', $prev_id);
+      if ($_prev_posting_id) {
+        $url->set_var('msg_id', $_prev_posting_id);
         $url->set_label(lang('prev_symbol'));
         $this->add_link($url);
       }
@@ -60,13 +56,9 @@
         $this->add_text(lang('prev_symbol'));
 
       $this->add_text(lang('entry'));
-      if (cfg('posting_arrow_reverse'))
-        $next_id = $_prev_posting_id;
-      else
-        $next_id = $_next_posting_id;
-      if ($next_id) {
+      if ($_next_posting_id) {
         $url = clone($url);
-        $url->set_var('msg_id', $next_id);
+        $url->set_var('msg_id', $_next_posting_id);
         $url->set_label(lang('next_symbol'));
         $this->add_link($url);
       }

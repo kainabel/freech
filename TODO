@@ -1,6 +1,5 @@
 Maintenance
 ------------
-* Move the search template to the search plugin.
 * Move the login procedures into a plugin.
 * Create a Menu object into which plugins may register new items.
 * Possibly move user management into a plugin.

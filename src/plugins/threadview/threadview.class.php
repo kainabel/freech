@@ -76,7 +76,7 @@ class ThreadView extends View {
     $this->assign_by_ref('postings',           $this->postings);
     $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
     $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
-    $this->render(dirname(__FILE__).'/threadview.tmpl');
+    $this->render('thread_with_indexbar.tmpl');
   }
 
 

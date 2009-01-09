@@ -20,22 +20,12 @@
 ?>
 <?php
   class BreadCrumbsPrinter extends PrinterBase {
-    var $breadcrumbs;
-    
-    function BreadCrumbsPrinter(&$_forum) {
-      $this->PrinterBase(&$_forum);
-      $this->breadcrumbs = array();
-    }
-    
-    
-    function add_item($_text, $_url = '') {
-      $this->breadcrumbs[$_text] = $_url;
-    }
-    
-    
-    function show() {
+    function show($_breadcrumbs) {
+      $forum_links = $this->parent->get_forum_links();
+
       $this->clear_all_assign();
-      $this->assign_by_ref('breadcrumbs', $this->breadcrumbs);
+      $this->assign_by_ref('breadcrumbs', $_breadcrumbs);
+      $this->assign_by_ref('forum_links', $forum_links);
       $this->render('breadcrumbs.tmpl');
     }
   }

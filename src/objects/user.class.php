@@ -334,7 +334,8 @@ define("USER_STATUS_BLOCKED",     3);
 
 
     function get_profile_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $caption = lang('profile', array('name' => $this->get_name()));
+      $url     = new URL('?', cfg('urlvars'), $caption);
       $url->set_var('action',   'user_profile');
       $url->set_var('username', $this->get_name());
       return $url;

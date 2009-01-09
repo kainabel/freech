@@ -3,9 +3,9 @@
 <table border='0' cellpadding='0' cellspacing='0' width='100%'>
  <tr valign='middle'>
   <td>
-  <font color='#555555' size='-1'>{$posting->get_created_time()}</font>
+  <font color='#555555'>{$posting->get_created_time()}</font>
 {if $posting->is_updated()}
-  <font color='red' size='-1'>{lang text="lastupdated" time=$posting->get_updated_time()}</font>
+  <font color='red'>{lang text="lastupdated" time=$posting->get_updated_time()}</font>
 {/if}
   <br />
   <b>{$posting->get_subject()|escape}</b>

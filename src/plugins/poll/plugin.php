@@ -21,15 +21,23 @@ function poll_init($forum) {
   if ($user->is_anonymous())
     return;
 
-  // Add a link to the poll button in the index bar.
-  $poll_url = new URL('?', cfg('urlvars'), lang('poll_create'));
-  $poll_url->set_var('action', 'poll_add');
-  $forum->add_extra_indexbar_link($poll_url);
+  $forum->get_eventbus()->signal_connect('on_run_before', 'poll_on_run');
 
   // Register our extra actions.
   $forum->register_action('poll_add',    'poll_on_add');
   $forum->register_action('poll_submit', 'poll_on_submit');
   $forum->register_action('poll_vote',   'poll_on_vote');
+}
+
+
+function poll_on_run($forum) {
+  if (!$forum->get_current_group()->may('write'))
+    return;
+
+  // Add a link to the poll button in the index bar.
+  $url = new URL('?', cfg('urlvars'), lang('poll_create'));
+  $url->set_var('action', 'poll_add');
+  $forum->get_forum_links()->add_link($url, 400);
 }
 
 

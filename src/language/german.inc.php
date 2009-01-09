@@ -1,8 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
-                     Robert Weidlich, <tefinch xenim de>
+  Copyright (C) 2008 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,16 +19,15 @@
   */
 ?>
 <?php
-// German language file, 2003 by Samuel Abels
-
   // Forum
   $lang[countrycode]      = "de";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Seite";
   $lang[forum]            = "Forum";
   $lang[forum_long]       = "Forum (bisher [POSTINGS] Beiträge,"
-                          . " [NEWPOSTINGS] neu, zur Zeit [ONLINEUSERS]"
-                          . " User online)";
+                          . " [NEWPOSTINGS] neu)";
+  $lang[forum_n_online]   = "[USERS] User online";
+  $lang[breadcrumbs]      = "Sie sind hier:";
   $lang[unfoldall]        = "Alles aufklappen";
   $lang[foldall]          = "Alles zuklappen";
   $lang[prev]             = "Ältere";

@@ -1,8 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
-                     Robert Weidlich, <tefinch xenim de>
+  Copyright (C) 2008 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -27,36 +26,16 @@
 
   // Print the page header.
   $forum->print_head();
-  print("<table width='100%'>"
-      . " <tr>"
-      . "  <td align='center'>"
-      . "  <a href='.'><img src='themes/" . cfg("theme") . "/img/logo.png' alt='' border=0 width=254 height=107 /></a>"
-      . "  </td>"
-      . " </tr>"
-      . "</table><br />\n");
 
   // Permit only one forum at this time.
   if ($forum->get_current_forum_id() != 1)
-    die("If you touch that URL again I will sue you!");
+    die('Other forums are currently not enabled.');
 
-  // Permit only one forum at this time.
-  $user = $forum->get_current_user();
-  if ($user->is_anonymous()) {
-    print($forum->get_login_url()->get_html());
-    print(' | '.$forum->get_registration_url()->get_html());
-  }
-  else {
-    print($forum->get_logout_url()->get_html());
-    print(' | '.$user->get_profile_url()->get_html(lang('myprofile')));
-    print(' | '.$user->get_editor_url()->get_html(lang('account_mydata')));
-    print(' | '.$user->get_postings_url()->get_html(lang('mypostings')));
-  }
   $forum->show();
   $forum->destroy();
 
   $render_time = round($forum->get_render_time(), 2);
   //echo "Site rendered in $render_time seconds.";
-
-  print("</body>\n"
-      . "</html>\n");
 ?>
+</body>
+</html>

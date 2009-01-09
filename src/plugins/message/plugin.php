@@ -33,7 +33,7 @@ function message_on_run($forum) {
   $url = new URL('?', cfg('urlvars'), lang('writemessage'));
   $url->set_var('forum_id', $forum->get_current_forum_id());
   $url->set_var('action',   'write');
-  $forum->add_extra_indexbar_link($url);
+  $forum->get_forum_links()->add_link($url, 200);
 }
 
 

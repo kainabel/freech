@@ -56,18 +56,16 @@ class ThreadView extends View {
                                   '');
 
     // Create the index bar.
-    $group      = $this->parent->get_current_group();
-    $extra_urls = $this->parent->get_extra_indexbar_links();
-    $n_threads  = $this->forumdb->get_n_threads($_forum_id, $may_write);
-    $args       = array(forum_id           => (int)$_forum_id,
-                        n_threads          => $n_threads,
-                        n_threads_per_page => cfg('tpp'),
-                        n_offset           => $_offset,
-                        n_pages_per_index  => cfg('ppi'),
-                        thread_state       => $thread_state);
-    $n_rows    = count($this->postings);
-    $indexbar  = &new IndexBarByThread($args);
-    $indexbar->add_links($extra_urls);
+    $group     = $this->parent->get_current_group();
+    $n_threads = $this->forumdb->get_n_threads($_forum_id, $may_write);
+    $args      = array(forum_id           => (int)$_forum_id,
+                       n_threads          => $n_threads,
+                       n_threads_per_page => cfg('tpp'),
+                       n_offset           => $_offset,
+                       n_pages_per_index  => cfg('ppi'),
+                       thread_state       => $thread_state);
+    $n_rows   = count($this->postings);
+    $indexbar = new IndexBarByThread($args);
 
     // Render the template.
     $this->clear_all_assign();
@@ -98,13 +96,13 @@ class ThreadView extends View {
     $showthread      = $_posting
                     && $_posting->has_thread()
                     && $_COOKIE[thread] != 'hide';
-    $indexbar   = new ThreadViewIndexBarReadPosting($_posting,
-                                                    $prev_posting_id,
-                                                    $next_posting_id,
-                                                    $prev_thread_id,
-                                                    $next_thread_id,
-                                                    $may_write,
-                                                    $may_edit);
+    $indexbar = new ThreadViewIndexBarReadPosting($_posting,
+                                                  $prev_posting_id,
+                                                  $next_posting_id,
+                                                  $prev_thread_id,
+                                                  $next_thread_id,
+                                                  $may_write,
+                                                  $may_edit);
 
     $this->clear_all_assign();
     $this->assign_by_ref('showthread', $showthread);

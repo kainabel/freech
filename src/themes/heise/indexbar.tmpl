@@ -1,8 +1,13 @@
 <!-- indexbar -->
-<table class='index' width='100%' cellspacing='0' cellpadding='3' border='0' bgcolor='#003399'>
+<table class='index'
+       width='100%'
+       cellspacing='0'
+       cellpadding='5'
+       border='0'
+       bgcolor='#2b43ca'>
  <tr>
-  <td align='left'>
-  <font color='white' size='-1'>
+  <td align='center'>
+  <span>
   {strip}
 {foreach item=item from=$indexbar->get_items()}
   {if $item->is_separator()}
@@ -14,7 +19,7 @@
   {/if}
 {/foreach}
 {/strip}
-  </font>
+  </span>
   </td>
  </tr>
 </table>

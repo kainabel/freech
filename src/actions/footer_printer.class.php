@@ -22,14 +22,10 @@
   class FooterPrinter extends PrinterBase {
     function show($_forum_id) {
       // Create the indexbar.
-      $view_urls  = $this->parent->get_view_links();
-      $extra_urls = $this->parent->get_extra_footer_links();
-      $indexbar   = new IndexBarFooter();
-      foreach ($view_urls as $prio => $url) {
-        $indexbar->add_separator();
+      $view_urls = $this->parent->get_view_links();
+      $indexbar  = new IndexBarFooter();
+      foreach ($view_urls as $prio => $url)
         $indexbar->add_link($url, $prio);
-      }
-      $indexbar->add_links($extra_urls);
 
       // Render the resulting template.
       $version[url]  = 'http://code.google.com/p/freech/';

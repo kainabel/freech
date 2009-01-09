@@ -1,15 +1,16 @@
 <!-- footer -->
 <table width='100%' cellspacing='0' cellpadding='5' border='0'>
  <tr>
-  <td align='left'>
-  <font size='-1'>{strip}
-{foreach item=item from=$indexbar->get_items()}
+  <td align='center'>
+  {strip}
+{foreach name=loop item=item from=$indexbar->get_items()}
+  {if $smarty.foreach.loop.index > 0}&nbsp;&nbsp;&nbsp;{/if}
   {if !$item->get_text()}
-    &nbsp;&nbsp;
+    |&nbsp;&nbsp;&nbsp;
   {elseif !$item->get_url_string()}
-    &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
+    {$item->get_text()|escape|replace:" ":"&nbsp;"}
   {else}
-    &nbsp;<a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
+    <a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
   {/if}
 {/foreach}
 {/strip}
@@ -20,7 +21,9 @@
  <tr>
   <td align='center'>
   <hr>
-  <font size='-2'>Powered by <a href='{$version.url}'>{$version.text}</a>.</font>
+  <span id="powered_by">
+  Powered by <a href='{$version.url}'>{$version.text}</a>.
+  </span>
   </td>
  </tr>
 </table>

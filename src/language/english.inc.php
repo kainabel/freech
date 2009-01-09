@@ -19,15 +19,14 @@
   */
 ?>
 <?php
-// German language file, 2003 by Samuel Abels
-
   // Forum
   $lang[countrycode]      = "en";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[index]            = "Page";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum ([POSTINGS] postings, [NEWPOSTINGS] new,"
-                          . " currently [ONLINEUSERS] users online)";
+  $lang[forum_long]       = "Forum ([POSTINGS] postings, [NEWPOSTINGS] new)";
+  $lang[forum_n_online]   = "[USERS] users online";
+  $lang[breadcrumbs]      = "You are here:";
   $lang[unfoldall]        = "Unfold All";
   $lang[foldall]          = "Fold All";
   $lang[prev]             = "Older Threads";
@@ -268,7 +267,7 @@
   $lang[n_postings]  = "Postings";
 
   // Statistics.
-  $lang[statistics]          = "Forum Statistics";
+  $lang[statistics]          = "Statistics";
   $lang[statistics_title]    = "Postings and traffic of the last [DAYS] days";
   $lang[statistics_postings] = "Postings";
   $lang[statistics_traffic]  = "Traffic";
@@ -276,7 +275,7 @@
   // Search.
   $lang[search_no_posting] = "(No postings found)";
   $lang[search_no_users]   = "(No users found)";
-  $lang[search_forum]      = "Search this forum";
+  $lang[search_forum]      = "Find";
   $lang[search_title]      = "Search";
   $lang[msg_search_start]  = "Find Postings";
   $lang[user_search_start] = "Find Users";

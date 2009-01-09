@@ -6,6 +6,41 @@
   <link rel="stylesheet" type="text/css" href="{$__theme_dir}/style.css">
   <title>{$title|escape}</title>
 </head>
-<!-- body bgcolor='#FFFFFF' text='#000000' link='#003399' vlink='#666666' alink='#5566DD' -->
-<body bgcolor="#FFFFFF" text="#000000" link="#003399" vlink="#666666" alink="#3366cc" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body bgcolor="#FFFFFF"
+      text="#000000"
+      link="#003399"
+      vlink="#666666"
+      alink="#3366cc"
+      marginwidth="0"
+      marginheight="0">
+<table width='100%' height='50' cellpadding='2' cellspacing='0'>
+ <tr bgcolor='#2b43ca'>
+  <td>&nbsp;</td>
+  <td>
+    <a href='.'><img src='{$__theme_dir}/img/logo.png'
+                     alt=''
+                     border=0
+                     width=38
+                     height=40 /></a>
+  </td>
+  <td>&nbsp;</td>
+  <td width='100%' align='left' valign='center'>
+    <a href='.'><span id='title'>{$site_title|escape}</span></a>
+  </td>
+  <td>&nbsp;</td>
+  <td nowrap="nowrap" align="right">
+    <span id='account_links'>
+{foreach name=loop item=url from=$account_urls} 
+      {if $smarty.foreach.loop.index > 0}|{/if}
+      {$url->get_html()}
+{/foreach}
+    </span>
+    <br/>
+{if $n_online}
+    <span id='status'>{lang text="forum_n_online" users=$n_online}</span>
+{/if}
+  </td>
+  <td>&nbsp;</td>
+ </tr>
+</table>
 <!-- end header -->

@@ -51,17 +51,15 @@ class ListView extends View {
                                       array(&$this, '_append_posting'),
                                       '');
 
-    $group      = $this->parent->get_current_group();
-    $extra_urls = $this->parent->get_extra_indexbar_links();
-    $search     = array('forum_id' => (int)$_forum_id);
-    $n_entries  = $this->forumdb->get_n_postings($search);
-    $args       = array(forum_id            => (int)$_forum_id,
-                        n_postings          => (int)$n_entries,
-                        n_postings_per_page => cfg('epp'),
-                        n_offset            => (int)$_offset,
-                        n_pages_per_index   => cfg('ppi'));
+    $group     = $this->parent->get_current_group();
+    $search    = array('forum_id' => (int)$_forum_id);
+    $n_entries = $this->forumdb->get_n_postings($search);
+    $args      = array(forum_id            => (int)$_forum_id,
+                       n_postings          => (int)$n_entries,
+                       n_postings_per_page => cfg('epp'),
+                       n_offset            => (int)$_offset,
+                       n_pages_per_index   => cfg('ppi'));
     $indexbar = new IndexBarByTime($args);
-    $indexbar->add_links($extra_urls);
 
     krsort($this->postings);
     $this->clear_all_assign();
@@ -92,11 +90,11 @@ class ListView extends View {
       $prev_posting_id = $db->get_prev_posting_id_in_forum($_posting);
       $next_posting_id = $db->get_next_posting_id_in_forum($_posting);
     }
-    $indexbar = &new ListViewIndexBarReadPosting($_posting,
-                                                 $prev_posting_id,
-                                                 $next_posting_id,
-                                                 $may_write,
-                                                 $may_edit);
+    $indexbar = new ListViewIndexBarReadPosting($_posting,
+                                                $prev_posting_id,
+                                                $next_posting_id,
+                                                $may_write,
+                                                $may_edit);
 
     $this->clear_all_assign();
     $this->assign_by_ref('showlist', $showlist);

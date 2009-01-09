@@ -115,22 +115,21 @@
 
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus             = new Trackable;
+      $this->forum_links          = new Menu;
       $this->actions              = array();
       $this->views                = array();
       $this->view_captions        = array();
       $this->renderers            = array();
-      $this->extra_indexbar_links = array();
-      $this->extra_footer_links   = array();
 
       // Connect to the DB.
-      $this->db    = &ADONewConnection(cfg('db_dbn'))
+      $this->db = ADONewConnection(cfg('db_dbn'))
         or die('FreechForum::FreechForum(): Error: Can\'t connect.'
              . ' Please check username, password and hostname.');
-      $this->forumdb   = &new ForumDB($this->db);
-      $this->visitordb = &new VisitorDB($this->db);
+      $this->forumdb   = new ForumDB($this->db);
+      $this->visitordb = new VisitorDB($this->db);
       $this->visitordb->count();
 
-      $this->registry = &new PluginRegistry();
+      $this->registry = new PluginRegistry();
       $this->registry->read_plugins('plugins');
       $this->registry->activate_plugins($this); //FIXME: Make activation configurable.
 
@@ -145,7 +144,7 @@
       $this->eventbus->emit('on_construct', $this);
 
       // Init Smarty.
-      $this->smarty = &new Smarty();
+      $this->smarty = new Smarty();
       $this->smarty->template_dir  = 'themes/' . cfg('theme');
       $this->smarty->compile_dir   = 'data/smarty_templates_c';
       $this->smarty->cache_dir     = 'data/smarty_cache';
@@ -163,10 +162,23 @@
         $this->_refer_to($this->_get_forum_url()->get_string());
       }
 
-      // Register modlog URL in the footer indexbar.
+      // Add the modlog URL to the forum links.
       $url = new URL('?', cfg('urlvars'), lang('modlog'));
       $url->set_var('action', 'moderation_log');
-      $this->add_extra_footer_link($url);
+      $this->forum_links->add_link($url);
+
+      // Add user-specific links.
+      //FIXME: this probably should not be here.
+      $user = $this->get_current_user();
+      if (!$user->is_anonymous()) {
+        $url = $user->get_editor_url();
+        $url->set_label(lang('account_mydata'));
+        $this->forum_links->add_link($url);
+
+        $url = $user->get_postings_url();
+        $url->set_label(lang('mypostings'));
+        $this->forum_links->add_link($url);
+      }
 
       // Go.
       $this->_run();
@@ -387,7 +399,7 @@
     // Returns an URL that points to the current forum.
     function _get_forum_url() {
       $forum_id = $this->get_current_forum_id();
-      $forum_url = &new URL('?', cfg('urlvars'));
+      $forum_url = &new URL('?', cfg('urlvars'), lang('forum'));
       $forum_url->set_var('forum_id', $forum_id);
       return $forum_url;
     }
@@ -593,23 +605,23 @@
     // Shows the breadcrumbs for the forum in thread or time order.
     function _print_forum_breadcrumbs() {
       $forum_id    = $this->get_current_forum_id();
-      $breadcrumbs = &new BreadCrumbsPrinter($this);
+      $breadcrumbs = new Menu();
+      $printer     = new BreadCrumbsPrinter($this);
+      $forum_url   = $this->_get_forum_url();
       if (cfg('disable_posting_counter')) {
-        $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
-        $breadcrumbs->show();
+        $breadcrumbs->add_link($forum_url);
+        $printer->show($breadcrumbs);
         return;
       }
       $search      = array('forum_id' => $forum_id);
       $n_postings  = $this->forumdb->get_n_postings($search);
       $start       = time() - cfg('new_post_time');
       $n_new       = $this->forumdb->get_n_postings($search, $start);
-      $n_online    = $this->visitordb->get_n_visitors(time() - 60 * 5);
       $vars        = array('postings'    => $n_postings,
-                           'newpostings' => $n_new,
-                           'onlineusers' => $n_online);
-      $text        = lang('forum_long', $vars);
-      $breadcrumbs->add_item($text, $this->_get_forum_url());
-      $breadcrumbs->show();
+                           'newpostings' => $n_new);
+      $forum_url->set_label(lang('forum_long', $vars));
+      $breadcrumbs->add_link($forum_url);
+      $printer->show($breadcrumbs);
     }
 
 
@@ -628,15 +640,17 @@
      *************************************************************/
     // Prints the breadcrumbs pointing to the given posting.
     function _print_posting_breadcrumbs($_posting) {
-      $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
+      $breadcrumbs = new Menu();
+      $printer     = new BreadCrumbsPrinter($this);
+      $breadcrumbs->add_link($this->_get_forum_url());
+      $breadcrumbs->add_separator();
       if (!$_posting)
-        $breadcrumbs->add_item(lang('noentrytitle'));
+        $breadcrumbs->add_text(lang('noentrytitle'));
       elseif (!$_posting->is_active())
-        $breadcrumbs->add_item(lang('blockedtitle'));
+        $breadcrumbs->add_text(lang('blockedtitle'));
       else
-        $breadcrumbs->add_item($_posting->get_subject());
-      $breadcrumbs->show();
+        $breadcrumbs->add_text($_posting->get_subject());
+      $printer->show($breadcrumbs);
     }
 
 
@@ -723,9 +737,11 @@
      * Action controllers for the user profile.
      *************************************************************/
     function _print_profile_breadcrumbs($_named_item) {
-      $breadcrumbs = &new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_item(lang('forum'), $this->_get_forum_url());
-      $breadcrumbs->add_item($_named_item->get_name());
+      $breadcrumbs = new Menu();
+      $printer     = new BreadCrumbsPrinter($this);
+      $breadcrumbs->add_link($this->_get_forum_url());
+      $breadcrumbs->add_separator();
+      $breadcrumbs->add_text($_named_item->get_name());
       $breadcrumbs->show();
     }
 
@@ -1265,18 +1281,6 @@
     }
 
 
-    function add_extra_indexbar_link($_url) {
-      //FIXME: Create a indexbar object and handle this there instead.
-      array_push($this->extra_indexbar_links, $_url);
-    }
-
-
-    function get_extra_indexbar_links() {
-      //FIXME: Create a indexbar object and handle this there instead.
-      return $this->extra_indexbar_links;
-    }
-
-
     function get_view_links() {
       //FIXME: Create a indexbar object and handle this there instead.
       $urls = array();
@@ -1296,15 +1300,8 @@
     }
 
 
-    function add_extra_footer_link($_url) {
-      //FIXME: Create a Footer object and handle this there instead.
-      array_push($this->extra_footer_links, $_url);
-    }
-
-
-    function get_extra_footer_links() {
-      //FIXME: Create a Footer object and handle this there instead.
-      return $this->extra_footer_links;
+    function get_forum_links() {
+      return $this->forum_links;
     }
 
 
@@ -1329,6 +1326,23 @@
       $url = new URL('?', cfg('urlvars'), lang('register'));
       $url->set_var('action', 'account_register');
       return $url;
+    }
+
+
+    function get_account_links() {
+      $user = $this->get_current_user();
+      if ($user->is_anonymous())
+        return array($this->get_registration_url(),
+                     $this->get_login_url());
+      $profile_url = $user->get_profile_url();
+      $profile_url->set_label(lang('myprofile'));
+      return array($profile_url,
+                   $this->get_logout_url());
+    }
+
+
+    function get_online_users() {
+      return $this->visitordb->get_n_visitors(time() - 60 * 5);
     }
 
 

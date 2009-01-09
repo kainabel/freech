@@ -49,7 +49,7 @@ function linkify_try_youtube_url($url, $in_quotes) {
                        width='615' height='494'></embed>
               </object>
               <br/>
-              <a href='$url'><font size='-1'>$url</font></a>
+              <a href='$url'>$url</a>
             </td>
             </tr>
           </table>";

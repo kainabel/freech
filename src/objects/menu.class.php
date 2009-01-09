@@ -104,19 +104,17 @@
     }
 
 
-    function add_link($_url) {
+    function add_link($_url, $_priority = NULL) {
       if ($_url->get_base())
-        $this->add_item(new MenuItem($_url));
+        $this->add_item(new MenuItem($_url), $_priority);
       else
-        $this->add_text($_url->get_label());
+        $this->add_text($_url->get_label(), $_priority);
     }
 
 
     function add_links($_url_list) {
-      foreach ($_url_list as $url) {
-        $this->add_separator();
+      foreach ($_url_list as $url)
         $this->add_link($url);
-      }
     }
 
 

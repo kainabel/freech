@@ -1,3 +1,51 @@
+body {
+  font: .9em arial,helvetica;
+}
+
+#title {
+  color: white;
+  font-size: 1.9em;
+}
+
+#account_links {
+  display: block;
+  vertical-align: top;
+  font-size: .9em;
+  color: white;
+}
+
+#account_links a {
+  font-size: .9em;
+  color: white;
+}
+
+#status {
+  display: block;
+  vertical-align: bottom;
+  font-size: .9em;
+  color: white;
+}
+
+#breadcrumbs {
+  color: black;
+}
+
+#breadcrumbs a {
+  color: #2b43ca;
+}
+
+#forum_links {
+  color: #2b43ca;
+}
+
+#forum_links a {
+  color: #2b43ca;
+}
+
+#powered_by {
+  font-size: .9em;
+}
+
 a {
   text-decoration: none;
 }
@@ -7,7 +55,7 @@ a:hover {
 }
 
 .index {
-  background-color: #003399;
+  background-color: #2b43ca;
   color: #FFFFFF;
   font-weight: bold;
 }

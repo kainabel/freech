@@ -13,11 +13,11 @@
   &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
 {if $posting->is_selected()}
-  <font size='-1' color='green'>&nbsp;{$posting->get_subject()|escape}</font>
+  <font color='green'>&nbsp;{$posting->get_subject()|escape}</font>
 {elseif $posting->is_active()}
-  <font size='-1'>&nbsp;<a href='{$posting->get_url_string()|escape}'>{$posting->get_subject()|escape}</a></font>
+  &nbsp;<a href='{$posting->get_url_string()|escape}'>{$posting->get_subject()|escape}</a>
 {else}
-  <font size='-1'>&nbsp;{$posting->get_subject()|escape}</font>
+  &nbsp;{$posting->get_subject()|escape}
 {/if}
   </td>
 {/strip}
@@ -28,18 +28,18 @@
   {assign var="attr" value=""}
 {/if}
   <td align='left'>
-    &nbsp;<font size='-1'{$attr}>{$posting->get_username()|escape}</font>
+    &nbsp;<font{$attr}>{$posting->get_username()|escape}</font>
 {if $posting->get_user_is_special()}
     <img src="{$posting->get_user_icon()|escape}"
          title="{lang text=$posting->get_user_icon_name()}" />
 {/if}
   </td>
 {if $posting->is_selected()}
-  <td align='right' nowrap><font size='-1' color='green'>{$posting->get_created_time()}</font></td>
+  <td align='right' nowrap><font color='green'>{$posting->get_created_time()}</font></td>
 {elseif $posting->is_new()}
-  <td align='right' nowrap><font size='-1' color='red'>{$posting->get_created_time()}</font></td>
+  <td align='right' nowrap><font color='red'>{$posting->get_created_time()}</font></td>
 {else}
-  <td align='right' nowrap><font size='-1'>{$posting->get_created_time()}</font></td>
+  <td align='right' nowrap>{$posting->get_created_time()}</td>
 {/if}
   <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
  </tr>

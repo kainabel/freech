@@ -825,6 +825,29 @@
     }
 
 
+    /* Given a posting, this function returns walks through the preceeding
+     * postings, passing each to the given function.
+     */
+    function foreach_prev_posting($_posting,
+                                  $_limit,
+                                  $_func,
+                                  $_data = NULL) {
+      $sql  = "SELECT *,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
+      $sql .= " FROM {t_posting}";
+      $sql .= " WHERE forum_id={forum_id}";
+      $sql .= " AND id<{id}";
+      $sql .= " ORDER BY id DESC";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('id',       $_posting->get_id());
+      $query->set_int('forum_id', $_posting->get_forum_id());
+      $res = $this->db->SelectLimit($query->sql(), $_limit)
+                          or die('ForumDB::foreach_prev_posting()');
+      return $this->_walk_list($res, $_func, $_data);
+    }
+
+
     /* Given a posting, this function returns the id of the next
      * entry in the same forum, or 0 if there is no next entry.
      */
@@ -841,6 +864,29 @@
                           or die('ForumDB::get_next_posting_id_in_forum()');
       $row = $res->FetchRow($res);
       return $row[id];
+    }
+
+
+    /* Given a posting, this function returns walks through the following
+     * postings, passing each to the given function.
+     */
+    function foreach_next_posting($_posting,
+                                  $_limit,
+                                  $_func,
+                                  $_data = NULL) {
+      $sql  = "SELECT *,";
+      $sql .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(created) created";
+      $sql .= " FROM {t_posting}";
+      $sql .= " WHERE forum_id={forum_id}";
+      $sql .= " AND id>{id}";
+      $sql .= " ORDER BY id";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('id',       $_posting->get_id());
+      $query->set_int('forum_id', $_posting->get_forum_id());
+      $res = $this->db->SelectLimit($query->sql(), $_limit)
+                          or die('ForumDB::foreach_next_posting()');
+      return $this->_walk_list($res, $_func, $_data);
     }
 
 

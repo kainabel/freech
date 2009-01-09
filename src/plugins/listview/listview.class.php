@@ -38,7 +38,7 @@ class ListView extends View {
     $posting->apply_block();
 
     // Append everything to a list.
-    array_push($this->postings, $posting);
+    $this->postings[$_posting->get_id()] = $posting;
   }
 
 
@@ -60,13 +60,14 @@ class ListView extends View {
                         n_postings_per_page => cfg('epp'),
                         n_offset            => (int)$_offset,
                         n_pages_per_index   => cfg('ppi'));
-    $indexbar = &new IndexBarByTime($args);
+    $indexbar = new IndexBarByTime($args);
     $indexbar->add_links($extra_urls);
 
+    krsort($this->postings);
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar', $indexbar);
     $this->assign_by_ref('n_rows',   $n);
-    $this->assign_by_ref('postings', $this->postings);
+    $this->assign_by_ref('postings', array_values($this->postings));
     $this->render(dirname(__FILE__).'/listview.tmpl');
   }
 
@@ -100,17 +101,16 @@ class ListView extends View {
     $this->clear_all_assign();
     $this->assign_by_ref('showlist', $showlist);
     if ($showlist) {
-      //FIXME: Show a list, not a thread.
-      $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
-      $func  = array(&$this, '_append_posting');
-      $db->foreach_child_in_thread($_posting->get_id(),
-                                              0,
-                                              cfg('tpp'),
-                                              $state,
-                                              $func,
-                                              '');
+      $posting    = $this->parent->_decorate_posting($_posting);
+      $current_id = $this->parent->get_current_posting_id();
+      $func       = array(&$this, '_append_posting');
+      $posting->set_selected($posting->get_id() == $current_id);
+      $this->postings[$_posting->get_id()] = $posting;
+      $db->foreach_prev_posting($_posting, cfg('epp') / 2, $func);
+      $db->foreach_next_posting($_posting, cfg('epp') / 2, $func);
+      krsort($this->postings);
       $this->assign_by_ref('n_rows',   count($this->postings));
-      $this->assign_by_ref('postings', $this->postings);
+      $this->assign_by_ref('postings', array_values($this->postings));
     }
 
     $this->assign_by_ref('indexbar', $indexbar);

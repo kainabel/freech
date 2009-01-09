@@ -12,7 +12,9 @@
 {if $posting->get_priority() > 0}
   &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
-{if $posting->is_active()}
+{if $posting->is_selected()}
+  <font size='-1' color='green'>&nbsp;{$posting->get_subject()|escape}</font>
+{elseif $posting->is_active()}
   <font size='-1'>&nbsp;<a href='{$posting->get_url_string()|escape}'>{$posting->get_subject()|escape}</a></font>
 {else}
   <font size='-1'>&nbsp;{$posting->get_subject()|escape}</font>

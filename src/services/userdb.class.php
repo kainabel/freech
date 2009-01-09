@@ -36,7 +36,7 @@
      */
     function save_user(&$_user) {
       if (!is_object($_user))
-        die("UserDB::save_user(): Invalid arg.");
+        die('UserDB::save_user(): Invalid arg.');
       $query = &new FreechSqlQuery();
       $query->set_int   ('id',          $_user->get_id());
       $query->set_int   ('group_id',    $_user->get_group_id());

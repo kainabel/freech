@@ -68,7 +68,7 @@ function registration_on_confirm($forum) {
     $url->set_var('action',   'password_change');
     $url->set_var('username', $user->get_name());
     $url->set_var('hash',     $_GET['hash']);
-    $this->_refer_to($url->get_string());
+    $forum->_refer_to($url->get_string());
   }
 
   // Make the user active.

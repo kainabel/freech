@@ -83,7 +83,7 @@
       if ($l == 'auto')
         $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg('lang_default'));
       //putenv("LANG=$l");
-      setlocale(LC_MESSAGES, $l);
+      @setlocale(LC_MESSAGES, $l);
 
       if (cfg_is('salt', ''))
         die('Error: Please define the salt variable in config.inc.php!');
@@ -407,16 +407,17 @@
     // Wrapper around get_current_user() that also works if a matching
     // user/hash combination was passed in through the GET request.
     function _get_current_or_confirming_user() {
-      if ($this->get_current_action() == 'account_confirm'
-        || $this->get_current_action() == 'password_mail_confirm'
-        || $this->get_current_action() == 'reset_password_submit') {
-        $userdb = $this->get_userdb();
-        $user   = $userdb->get_user_from_name($_GET['username']);
-        $this->_assert_confirmation_hash_is_valid($user);
-        return $user;
-      }
+      $userdb   = $this->get_userdb();
+      $username = $_GET['username'] ? $_GET['username'] : $_POST['username'];
+      if (!$username)
+        return $this->get_current_user();
 
-      return $this->get_current_user();
+      $user = $userdb->get_user_from_name($username);
+      if (!$user|| $user->is_anonymous())
+        return $this->get_current_user();
+
+      $this->_assert_confirmation_hash_is_valid($user);
+      return $user;
     }
 
 
@@ -424,8 +425,9 @@
     function _assert_confirmation_hash_is_valid(&$user) {
       if (!$user)
         die('Invalid user');
-      $hash = $user->get_confirmation_hash();
-      if ($user->get_confirmation_hash() !== $_GET['hash'])
+      $given_hash = $_GET['hash'] ? $_GET['hash'] : $_POST['hash'];
+      $hash       = $user->get_confirmation_hash();
+      if ($user->get_confirmation_hash() !== $given_hash)
         die('Invalid confirmation hash');
       if ($user->get_status() == USER_STATUS_BLOCKED)
         die('User is blocked');
@@ -902,7 +904,7 @@
     // Show a form for changing the password.
     function _password_change() {
       $user = $this->_get_current_or_confirming_user();
-      if (!$user || $user->is_anonymous())
+      if ($user->is_anonymous())
         die('Invalid user');
       $registration = new LoginPrinter($this);
       $registration->show_password_change($user);
@@ -915,7 +917,13 @@
       $userdb  = $this->get_userdb();
       $user    = $this->_init_user_from_post_data();
       $user    = $userdb->get_user_from_name($user->get_name());
+      $current = $this->_get_current_or_confirming_user();
       $printer = new LoginPrinter($this);
+
+      if ($user->is_anonymous())
+        die('Invalid user');
+      elseif ($user->get_id() != $current->get_id())
+        $this->_assert_may('administer');
 
       // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {

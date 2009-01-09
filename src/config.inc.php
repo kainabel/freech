@@ -152,7 +152,7 @@
   // Anonymous users are automatically logged into the forum as the user/group
   // with the given id.
   $cfg[anonymous_user_id]  = 1;
-  $cfg[anonymous_group_id] = 1;
+  $cfg[anonymous_group_id] = 2;
 
   // The number of days back to show in the forum statistics.
   $cfg[statistics_timespan] = 30;

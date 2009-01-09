@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `freech_permission` (
   `allow` tinyint(1) unsigned default '0',
   `created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `group_id` (`group_id`, `allow`),
+  KEY `group_id` (`group_id`, `allow`),
   KEY `allow` (`allow`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 

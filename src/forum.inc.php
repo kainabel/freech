@@ -66,6 +66,7 @@
   include_once 'services/modlogdb.class.php';
   include_once 'services/visitordb.class.php';
   include_once 'services/plugin_registry.class.php';
+  ini_set('arg_separator.output', '&');
 
   class FreechForum {
     var $db;

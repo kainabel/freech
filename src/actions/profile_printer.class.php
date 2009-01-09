@@ -152,8 +152,8 @@
       // Load a list of group names.
       $list   = $groupdb->get_groups_from_query(array());
       $groups = array();
-      foreach ($list as $group)
-        $groups[$group->get_id()] = $group->get_name();
+      foreach ($list as $current_group)
+        $groups[$current_group->get_id()] = $current_group->get_name();
 
       // Get a list of user status names.
       if ($may_admin)

@@ -3,7 +3,7 @@
  <tr>
   <td align='center'>
   {strip}
-{foreach name=loop item=item from=$indexbar->get_items()}
+{foreach name=loop item=item from=$footer_links->get_items()}
   {if $smarty.foreach.loop.index > 0}&nbsp;&nbsp;&nbsp;{/if}
   {if !$item->get_text()}
     |&nbsp;&nbsp;&nbsp;

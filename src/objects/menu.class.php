@@ -123,7 +123,7 @@
     }
 
 
-    function add_separator() {
+    function add_separator($_priority = NULL) {
       $this->add_item(new MenuItem(), $_priority);
     }
 

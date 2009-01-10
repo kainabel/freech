@@ -21,18 +21,14 @@
 <?php
   class FooterPrinter extends PrinterBase {
     function show($_forum_id) {
-      // Create the indexbar.
-      $view_urls = $this->parent->get_view_links();
-      $indexbar  = new IndexBarFooter();
-      foreach ($view_urls as $prio => $url)
-        $indexbar->add_link($url, $prio);
-
-      // Render the resulting template.
+      $footer_links  = $this->parent->get_footer_links();
       $version[url]  = 'http://code.google.com/p/freech/';
       $version[text] = 'Freech Forum '.FREECH_VERSION;
+
+      // Render the resulting template.
       $this->clear_all_assign();
-      $this->assign_by_ref('indexbar', $indexbar);
-      $this->assign_by_ref('version',  $version);
+      $this->assign_by_ref('footer_links', $footer_links);
+      $this->assign_by_ref('version',      $version);
       $this->render('footer.tmpl');
     }
   }

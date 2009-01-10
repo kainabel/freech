@@ -100,10 +100,49 @@ class ThreadView extends View {
                                                   $prev_posting_id,
                                                   $next_posting_id,
                                                   $prev_thread_id,
-                                                  $next_thread_id,
-                                                  $may_write,
-                                                  $may_edit);
+                                                  $next_thread_id);
 
+    // Add the 'respond' button.
+    if ($may_write) {
+      if ($_posting->is_active() && $_posting->get_allow_answer()) {
+        $url = new URL('?', cfg('urlvars'), lang('writeanswer'));
+        $url->set_var('action',    'respond');
+        $url->set_var('forum_id',  $_posting->get_forum_id());
+        $url->set_var('parent_id', $_posting->get_id());
+        $this->parent->get_forum_links()->add_link($url, 250);
+      }
+      else
+        $this->parent->get_forum_links()->add_text(lang('writeanswer'), 200);
+    }
+
+    // Add the 'edit' button.
+    if ($may_edit) {
+      $url = new URL('?', cfg('urlvars'), lang('editposting'));
+      $url->set_var('action', 'edit');
+      $url->set_var('forum_id',  $_posting->get_forum_id());
+      $url->set_var('msg_id', $_posting->get_id());
+      $this->parent->get_forum_links()->add_link($url, 300);
+    }
+
+    // Add 'show/hide thread' buttons.
+    $url = new URL('?', cfg('urlvars'));
+    $url->set_var('action',   'read');
+    $url->set_var('forum_id', $_posting->get_forum_id());
+    $url->set_var('msg_id',   $_posting->get_id());
+    $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
+    if ($_posting->has_thread()) {
+      if ($_COOKIE[thread] === 'hide') {
+        $url->set_var('showthread', 1);
+        $url->set_label(lang('showthread'));
+      }
+      else {
+        $url->set_var('showthread', -1);
+        $url->set_label(lang('hidethread'));
+      }
+      $this->parent->get_footer_links()->add_link($url);
+    }
+
+    // Load the thread.
     $this->clear_all_assign();
     $this->assign_by_ref('showthread', $showthread);
     if ($showthread) {
@@ -119,6 +158,7 @@ class ThreadView extends View {
       $this->assign_by_ref('postings', $this->postings);
     }
 
+    // Render.
     $this->assign_by_ref('indexbar', $indexbar);
     $this->assign_by_ref('posting',  $_posting);
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));

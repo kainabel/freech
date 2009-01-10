@@ -114,14 +114,14 @@
       $this->start_time = microtime(TRUE);
 
       // (Ab)use a Trackable as an eventbus.
-      $this->eventbus             = new Trackable;
-      $this->forum_links          = new Menu;
-      $this->account_links        = new Menu;
-      $this->breadcrumbs          = new Menu;
-      $this->actions              = array();
-      $this->views                = array();
-      $this->view_captions        = array();
-      $this->renderers            = array();
+      $this->eventbus      = new Trackable;
+      $this->forum_links   = new Menu;
+      $this->footer_links  = new Menu;
+      $this->account_links = new Menu;
+      $this->breadcrumbs   = new Menu;
+      $this->actions       = array();
+      $this->views         = array();
+      $this->renderers     = array();
 
       // Connect to the DB.
       $this->db = ADONewConnection(cfg('db_dbn'))
@@ -1279,8 +1279,16 @@
 
 
     function register_view($_name, $_view, $_caption, $_priority) {
-      $this->views[$_name]         = $_view;
-      $this->view_captions[$_name] = array($_caption, $_priority);
+      $this->views[$_name] = $_view;
+
+      if ($this->_get_current_view_name() == $_name)
+        return $this->footer_links->add_text($_caption, $_priority);
+
+      $url = new URL('?', cfg('urlvars'), $_caption);
+      $url->set_var('forum_id',   $this->get_current_forum_id());
+      $url->set_var('changeview', $_name);
+      $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
+      $this->footer_links->add_link($url, $_priority);
     }
 
 
@@ -1289,22 +1297,8 @@
     }
 
 
-    function get_view_links() {
-      //FIXME: Create a indexbar object and handle this there instead.
-      $urls = array();
-      $current = $this->_get_current_view_name();
-      foreach ($this->view_captions as $name => $value) {
-        list($caption, $prio) = $value;
-        $url                  = new URL('?', cfg('urlvars'), $caption);
-        $url->set_var('forum_id',   $this->get_current_forum_id());
-        $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
-        $url->set_var('changeview', $name);
-        if ($name == $current)
-          $url->set_base('');
-        $urls[$prio] = $url;
-      }
-      ksort($urls);
-      return $urls;
+    function get_footer_links() {
+      return $this->footer_links;
     }
 
 

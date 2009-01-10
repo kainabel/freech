@@ -29,9 +29,7 @@
     // Constructor.
     function ListViewIndexBarReadPosting($_posting,
                                          $_prev_posting_id,
-                                         $_next_posting_id,
-                                         $_may_write = FALSE,
-                                         $_may_edit  = FALSE) {
+                                         $_next_posting_id) {
       $this->Menu();
 
       if (!$_posting) {
@@ -62,59 +60,6 @@
       }
       else
         $this->add_text(lang('next_symbol'));
-
-      // "Edit" button.
-      if ($_may_edit) {
-        $this->add_separator();
-        $url = clone($url);
-        $url->set_var('msg_id', $_posting->get_id());
-        $url->set_var('action', 'edit');
-        $url->set_label(lang('editposting'));
-        $this->add_link($url);
-      }
-
-      // "Reply" button.
-      if ($_may_write) {
-        $this->add_separator();
-        $url = clone($url);
-        $url->delete_var('msg_id');
-        if ($_posting->is_active() && $_posting->get_allow_answer()) {
-          $url->set_var('action',    'respond');
-          $url->set_var('parent_id', $_posting->get_id());
-          $url->set_label(lang('writeanswer'));
-          $this->add_link($url);
-        }
-        else
-          $this->add_text(lang('writeanswer'));
-
-        // "New Thread" button.
-        $this->add_separator();
-        $url = clone($url);
-        $url->delete_var('parent_id');
-        $url->set_var('action', 'write');
-        $url->set_label(lang('writemessage'));
-        $this->add_link($url);
-      }
-
-      // "Show/Hide Thread" button.
-      $url = new URL('?', cfg('urlvars'));
-      $url->set_var('action',   'read');
-      $url->set_var('forum_id', $_posting->get_forum_id());
-      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-      if ($_posting->has_thread()) {
-        $this->add_separator();
-        $url->set_var('msg_id', $_posting->get_id());
-        if ($_COOKIE[thread] === 'hide') {
-          $url->set_var('showthread', 1);
-          $url->set_label(lang('showthread'));
-          $this->add_link($url);
-        }
-        else {
-          $url->set_var('showthread', -1);
-          $url->set_label(lang('hidethread'));
-          $this->add_link($url);
-        }
-      }
     }
   }
 ?>

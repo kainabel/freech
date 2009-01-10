@@ -1,7 +1,7 @@
 <!-- breadcrumbs -->
 <table id='breadcrumbs' width='100%' cellpadding='6' cellspacing='0'>
  <tr>
-  <td width='50%' align='left' valign='middle'>
+  <td align='left' valign='middle'>
   &nbsp;{lang text="breadcrumbs"}{strip}
 {foreach item=item from=$breadcrumbs->get_items()}
   {if $item->is_separator()}
@@ -14,7 +14,7 @@
 {/foreach}
 {/strip}
   </td>
-  <td width='50%' align='right' valign='middle'>
+  <td align='right' valign='middle'>
   </td>
  </tr>
 </table>

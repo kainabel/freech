@@ -1367,7 +1367,7 @@
         header('Content-Type: text/html; charset=utf-8');
         header('Pragma: no-cache');
         header('Cache-control: no-cache');
-        $header = &new HeaderPrinter($this);
+        $header = new HeaderPrinter($this);
         $header->show($this->get_current_title());
       }
 

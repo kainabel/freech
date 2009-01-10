@@ -3,13 +3,13 @@
 {foreach item=posting from=$postings}
 <!-- thread_row -->
 <tr class='posting' valign='middle' bgcolor='#ffffff'>
-  <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width="8"><img src='{$__theme_dir}/img/null.png' width="8" height="23" alt='' /></td>
 {if $__group->may('moderate')}
   <td width='1' align='left'>{include file="moderator_buttons.inc.tmpl"}</td>
-  <td align='center' width=4><img src='{$__theme_dir}/img/null.png' width=4 height=23 alt='' /></td>
+  <td align='center' width="4"><img src='{$__theme_dir}/img/null.png' width="4" height="23" alt='' /></td>
 {/if}
   <td align='left'>{strip}
-  <table border=0 cellspacing=0 cellpadding=0>
+  <table border="0" cellspacing="0" cellpadding="0">
     <tr>
      <td align='left'>
 {*
@@ -19,9 +19,9 @@
 *}
 {foreach item=indent from=$posting->get_indent()}
   {if $indent == 1}
-     <img src='{$__theme_dir}/img/l.png' width=20 height=23 alt='|' />
+     <img src='{$__theme_dir}/img/l.png' width="20" height="23" alt='|' />
   {else}
-     <img src='{$__theme_dir}/img/null.png' width=20 height=23 alt='&nbsp;' />
+     <img src='{$__theme_dir}/img/null.png' width="20" height="23" alt='&nbsp;' />
   {/if}
 {/foreach}
 {*
@@ -35,15 +35,15 @@
   7: CHILD_WITH_CHILDREN
 *}
 {if $posting->get_relation() == 1}
-     <img src='{$__theme_dir}/img/o.png' width=9 height=21 alt='' />
+     <img src='{$__theme_dir}/img/o.png' width="9" height="21" alt='' />
 {elseif $posting->get_relation() == 2}
-     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' border="0" width="9" height="21" alt="0" /></a>
 {elseif $posting->get_relation() == 3}
-     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' border=0 width=9 height=21 alt='0' /></a>
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' border="0" width="9" height="21" alt='0' /></a>
 {elseif $posting->get_relation() == 4 || $posting->get_relation() == 5}
-     <img src='{$__theme_dir}/img/e.png' width=20 height=23 alt='`-' />
+     <img src='{$__theme_dir}/img/e.png' width="20" height="23" alt='`-' />
 {elseif $posting->get_relation() == 6 || $posting->get_relation() == 7}
-     <img src='{$__theme_dir}/img/x.png' width=20 height=23 alt='|-' />
+     <img src='{$__theme_dir}/img/x.png' width="20" height="23" alt='|-' />
 {/if}
      </td>
      <td align='left'>
@@ -63,7 +63,7 @@
    </table>
   </td>
 {/strip}
-  <td><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
+  <td><img src='{$__theme_dir}/img/null.png' width="8" height="23" alt='' /></td>
 {if $posting->is_selected()}
   {assign var="attr" value=" color='green'"}
 {else}
@@ -84,7 +84,7 @@
 {else}
   <td align='right' nowrap>{$posting->get_created_time()}</td>
 {/if}
-  <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width="8"><img src='{$__theme_dir}/img/null.png' width="8" height="23" alt='' /></td>
  </tr>
 <!-- end thread_row -->
 {/foreach}

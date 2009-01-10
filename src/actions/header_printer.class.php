@@ -21,14 +21,14 @@
 <?php
   class HeaderPrinter extends PrinterBase {
     function show($_title) {
-      $account_urls = $this->parent->get_account_links();
-      $n_online     = $this->parent->get_online_users();
+      $account_links = $this->parent->get_account_links();
+      $n_online      = $this->parent->get_online_users();
 
       $this->clear_all_assign();
-      $this->assign('title',        $_title);
-      $this->assign('site_title',   cfg('site_title'));
-      $this->assign('account_urls', $account_urls);
-      $this->assign('n_online',     $n_online);
+      $this->assign('title',         $_title);
+      $this->assign('site_title',    cfg('site_title'));
+      $this->assign('account_links', $account_links);
+      $this->assign('n_online',      $n_online);
       $this->render('header.tmpl');
     }
   }

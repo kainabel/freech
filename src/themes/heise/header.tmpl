@@ -28,9 +28,13 @@
   <td>&nbsp;</td>
   <td nowrap="nowrap" align="right">
     <span id='account_links'>
-{foreach name=loop item=url from=$account_urls} 
-      {if $smarty.foreach.loop.index > 0}|{/if}
-      {$url->get_html()}
+{foreach name=loop item=item from=$account_links->get_items()} 
+  {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
+  {if $item->is_link()}
+    <a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
+  {else}
+    {$item->get_text()|escape|replace:" ":"&nbsp;"}
+  {/if}
 {/foreach}
     </span>
     <br/>

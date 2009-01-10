@@ -38,6 +38,8 @@ function message_on_run($forum) {
 
 
 function message_on_write($forum) {
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('writemessage'));
   $parent_id = (int)$_POST['parent_id'];
   $posting   = new Posting;
   $printer   = new MessagePrinter($forum);
@@ -49,6 +51,12 @@ function message_on_respond($forum) {
   $parent_id = (int)$_GET['parent_id'];
   $posting   = $forum->get_forumdb()->get_posting_from_id($parent_id);
   $printer   = new MessagePrinter($forum);
+
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_link($posting->get_url());
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('writeanswer'));
+
   $printer->show_compose_reply($posting, '');
 }
 
@@ -66,6 +74,11 @@ function message_on_edit_saved($forum) {
     die('You are not logged in.');
   elseif ($user->get_id() != $posting->get_user_id())
     die('You are not the owner.');
+
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_link($posting->get_url());
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('editposting'));
 
   $printer->show_compose($posting, '', 0, FALSE);
 }
@@ -91,6 +104,7 @@ function message_on_edit_unsaved($forum) {
   $may_quote = (int)$_POST['may_quote'];
   $posting   = message_init_posting_from_post_data();
   $printer   = &new MessagePrinter($forum);
+
   $printer->show_compose($posting, '', $parent_id, $may_quote);
 }
 
@@ -137,6 +151,10 @@ function message_on_preview($forum) {
    *   Args: posting: The posting that is about to be previewed.
    */
   $forum->eventbus->emit('on_message_preview_print', $forum, $message);
+
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('preview'));
+
   $printer->show_preview($message, $parent_id, $may_quote);
 }
 

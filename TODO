@@ -12,7 +12,6 @@ Maintenance
 
 Features
 ---------
-* Show the breadcrumbs on every page.
 * Add a search field to the breadcrumbs bar.
 * Respect freech_posting.force_stub.
 * Display the moderation log when viewing a locked message.

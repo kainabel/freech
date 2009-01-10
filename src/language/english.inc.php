@@ -39,7 +39,7 @@
   $lang[listview]         = "Order by Date";
   $lang[editposting]      = "Edit";
   $lang[writeanswer]      = "Reply";
-  $lang[writemessage]     = "New Message";
+  $lang[writemessage]     = "Start a new Topic";
   $lang[entryindex]       = "Message Overview";
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";

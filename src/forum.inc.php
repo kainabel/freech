@@ -116,6 +116,8 @@
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus             = new Trackable;
       $this->forum_links          = new Menu;
+      $this->account_links        = new Menu;
+      $this->breadcrumbs          = new Menu;
       $this->actions              = array();
       $this->views                = array();
       $this->view_captions        = array();
@@ -170,24 +172,35 @@
       // Add user-specific links.
       //FIXME: this probably should not be here.
       $user = $this->get_current_user();
-      if (!$user->is_anonymous()) {
+      if ($user->is_anonymous()) {
+        $this->account_links->add_link($this->get_registration_url());
+        $this->account_links->add_link($this->get_login_url());
+      }
+      else {
         $url = $user->get_editor_url();
         $url->set_label(lang('account_mydata'));
-        $this->forum_links->add_link($url);
+        $this->account_links->add_link($url);
 
         $url = $user->get_postings_url();
         $url->set_label(lang('mypostings'));
-        $this->forum_links->add_link($url);
+        $this->account_links->add_link($url);
+
+        $url = $user->get_profile_url();
+        $url->set_label(lang('myprofile'));
+        $this->account_links->add_link($url);
+
+        $this->account_links->add_link($this->get_logout_url());
       }
 
       // Go.
+      $this->_init_breadcrumbs();
       $this->_run();
       $this->render_time = microtime(TRUE) - $this->start_time;
     }
 
 
     /*************************************************************
-     * Login and cookie handling.
+     * Initialization and login/cookie handling.
      *************************************************************/
     function _try_login() {
       $userdb = $this->get_userdb();
@@ -278,6 +291,24 @@
         $this->_set_cookie('user_postings_c', '');
         $this->_refer_to($_GET['refer_to']);
       }
+    }
+
+
+    function _init_breadcrumbs() {
+      $forum_url = $this->_get_forum_url();
+      if (cfg('disable_posting_counter')) {
+        $this->breadcrumbs->add_link($forum_url);
+        return;
+      }
+      $forum_id   = $this->get_current_forum_id();
+      $search     = array('forum_id' => $forum_id);
+      $n_postings = $this->forumdb->get_n_postings($search);
+      $start      = time() - cfg('new_post_time');
+      $n_new      = $this->forumdb->get_n_postings($search, $start);
+      $vars       = array('postings'    => $n_postings,
+                          'newpostings' => $n_new);
+      $forum_url->set_label(lang('forum_long', $vars));
+      $this->breadcrumbs->add_link($forum_url);
     }
 
 
@@ -602,32 +633,8 @@
     /*************************************************************
      * Action controllers for the forum overview.
      *************************************************************/
-    // Shows the breadcrumbs for the forum in thread or time order.
-    function _print_forum_breadcrumbs() {
-      $forum_id    = $this->get_current_forum_id();
-      $breadcrumbs = new Menu();
-      $printer     = new BreadCrumbsPrinter($this);
-      $forum_url   = $this->_get_forum_url();
-      if (cfg('disable_posting_counter')) {
-        $breadcrumbs->add_link($forum_url);
-        $printer->show($breadcrumbs);
-        return;
-      }
-      $search      = array('forum_id' => $forum_id);
-      $n_postings  = $this->forumdb->get_n_postings($search);
-      $start       = time() - cfg('new_post_time');
-      $n_new       = $this->forumdb->get_n_postings($search, $start);
-      $vars        = array('postings'    => $n_postings,
-                           'newpostings' => $n_new);
-      $forum_url->set_label(lang('forum_long', $vars));
-      $breadcrumbs->add_link($forum_url);
-      $printer->show($breadcrumbs);
-    }
-
-
     // Shows the forum.
     function _show() {
-      $this->_print_forum_breadcrumbs();
       $forum_id = $this->get_current_forum_id();
       $view     = $this->_get_current_view();
       $view->show($forum_id, (int)$_GET['hs']);
@@ -639,18 +646,14 @@
      * Action controllers for reading and editing postings.
      *************************************************************/
     // Prints the breadcrumbs pointing to the given posting.
-    function _print_posting_breadcrumbs($_posting) {
-      $breadcrumbs = new Menu();
-      $printer     = new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_link($this->_get_forum_url());
-      $breadcrumbs->add_separator();
+    function _add_posting_breadcrumbs($_posting) {
+      $this->breadcrumbs->add_separator();
       if (!$_posting)
-        $breadcrumbs->add_text(lang('noentrytitle'));
+        $this->breadcrumbs->add_text(lang('noentrytitle'));
       elseif (!$_posting->is_active())
-        $breadcrumbs->add_text(lang('blockedtitle'));
+        $this->breadcrumbs->add_text(lang('blockedtitle'));
       else
-        $breadcrumbs->add_text($_posting->get_subject());
-      $printer->show($breadcrumbs);
+        $this->breadcrumbs->add_text($_posting->get_subject());
     }
 
 
@@ -674,7 +677,7 @@
     function _posting_read() {
       $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
       $posting = $this->_decorate_posting($posting);
-      $this->_print_posting_breadcrumbs($posting);
+      $this->_add_posting_breadcrumbs($posting);
 
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the posting is produced.
@@ -736,20 +739,16 @@
     /*************************************************************
      * Action controllers for the user profile.
      *************************************************************/
-    function _print_profile_breadcrumbs($_named_item) {
-      $breadcrumbs = new Menu();
-      $printer     = new BreadCrumbsPrinter($this);
-      $breadcrumbs->add_link($this->_get_forum_url());
-      $breadcrumbs->add_separator();
-      $breadcrumbs->add_text($_named_item->get_name());
-      $printer->show($breadcrumbs);
+    function _add_profile_breadcrumbs($_named_item) {
+      $this->breadcrumbs->add_separator();
+      $this->breadcrumbs->add_text($_named_item->get_name());
     }
 
 
     // Lists all postings of one user.
     function _show_user_postings() {
       $user = $this->_get_user_from_name_or_die($_GET['username']);
-      $this->_print_profile_breadcrumbs($user);
+      $this->_add_profile_breadcrumbs($user);
       $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
                                        $_COOKIE['user_postings_c']);
       $profile = &new ProfilePrinter($this);
@@ -760,7 +759,7 @@
     // Display information of one user.
     function _show_user_profile() {
       $user = $this->_get_user_from_name_or_die($_GET['username']);
-      $this->_print_profile_breadcrumbs($user);
+      $this->_add_profile_breadcrumbs($user);
       $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
                                        $_COOKIE['user_postings_c']);
       $profile = &new ProfilePrinter($this);
@@ -779,7 +778,7 @@
 
       // Accepted.
       $user = $this->_get_user_from_name_or_die($_GET['username']);
-      $this->_print_profile_breadcrumbs($user);
+      $this->_add_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
       $profile->show_user_editor($user);
     }
@@ -812,7 +811,7 @@
       else
         die('Permission denied');
 
-      $this->_print_profile_breadcrumbs($user);
+      $this->_add_profile_breadcrumbs($user);
 
       // If the user status is now DELETED, remove any related attributes.
       $this->_init_user_from_post_data($user);
@@ -847,7 +846,7 @@
 
     function _show_user_options() {
       $user = $this->get_current_user();
-      $this->_print_profile_breadcrumbs($user);
+      $this->_add_profile_breadcrumbs($user);
       $profile = &new ProfilePrinter($this);
       $profile->show_user_options($user);
     }
@@ -859,7 +858,7 @@
     // Shows group info and lists all users of one group.
     function _show_group_profile() {
       $group = $this->_get_group_from_name_or_die($_GET['groupname']);
-      $this->_print_profile_breadcrumbs($group);
+      $this->_add_profile_breadcrumbs($group);
       $profile = &new ProfilePrinter($this);
       $profile->show_group_profile($group, (int)$_GET['hs']);
     }
@@ -869,7 +868,7 @@
     function _show_group_editor() {
       $this->_assert_may('administer');
       $group = $this->_get_group_from_name_or_die($_GET['groupname']);
-      $this->_print_profile_breadcrumbs($group);
+      $this->_add_profile_breadcrumbs($group);
       $profile = &new ProfilePrinter($this);
       $profile->show_group_editor($group);
     }
@@ -880,7 +879,7 @@
       $this->_assert_may('administer');
       $group = $this->_get_group_from_id_or_die($_POST['group_id']);
       $this->_init_group_from_post_data($group);
-      $this->_print_profile_breadcrumbs($group);
+      $this->_add_profile_breadcrumbs($group);
       $profile = &new ProfilePrinter($this);
 
       // Make sure that the data is complete and valid.
@@ -1031,14 +1030,23 @@
      * Other action controllers.
      *************************************************************/
     function _show_moderation_log() {
-      $footer = &new ModLogPrinter($this);
+      $this->breadcrumbs()->add_separator();
+      $this->breadcrumbs()->add_text(lang('modlog'));
+      $footer = new ModLogPrinter($this);
       $footer->show((int)$_GET['hs']);
     }
 
 
     // Prints the footer of the page.
+    function _print_breadcrumbs() {
+      $printer = new BreadCrumbsPrinter($this);
+      $printer->show($this->breadcrumbs);
+    }
+
+
+    // Prints the footer of the page.
     function _print_footer() {
-      $footer = &new FooterPrinter($this);
+      $footer = new FooterPrinter($this);
       $footer->show($this->get_current_forum_id());
     }
 
@@ -1329,15 +1337,13 @@
     }
 
 
+    function breadcrumbs() {
+      return $this->breadcrumbs;
+    }
+
+
     function get_account_links() {
-      $user = $this->get_current_user();
-      if ($user->is_anonymous())
-        return array($this->get_registration_url(),
-                     $this->get_login_url());
-      $profile_url = $user->get_profile_url();
-      $profile_url->set_label(lang('myprofile'));
-      return array($profile_url,
-                   $this->get_logout_url());
+      return $this->account_links;
     }
 
 
@@ -1387,7 +1393,11 @@
        */
       $this->eventbus->emit('on_content_print_before', $this);
 
+      $body          = $this->content;
+      $this->content = '';
+      $this->_print_breadcrumbs();
       print($this->content);
+      print($body);
 
       /* Plugin hook: on_content_print_after
        *   Called after the HTML content was sent.

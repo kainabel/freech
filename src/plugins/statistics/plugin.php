@@ -19,6 +19,8 @@ function statistics_init($forum) {
 
 
 function statistics_on_show($forum) {
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('statistics'));
   $printer = new StatisticsPrinter($forum);
   $printer->show();
 }

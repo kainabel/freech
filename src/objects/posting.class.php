@@ -248,11 +248,11 @@
 
 
     function get_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'), $this->get_subject());
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('forum_id', $this->get_forum_id());
-      if (cfg("remember_page"))
+      if (cfg('remember_page'))
         $url->set_var('hs', (int)$_GET[hs]);
       return $url;
     }

@@ -19,6 +19,9 @@ function top_users_init($forum) {
 
 
 function top_users_on_show($forum) {
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('top_users'));
+
   $printer = new TopUsersPrinter($forum);
   $printer->show();
 }

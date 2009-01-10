@@ -47,6 +47,9 @@ function poll_on_add($forum) {
   $poll    = new Poll($posting, $forum);
   $poll->set_forum_id($forum->get_current_forum_id());
 
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('poll_create'));
+
   if (_n_polls_since($forum->_get_db(),
                      $forum->get_current_user(),
                      time() - 60 * 60 * 24) >= 2)

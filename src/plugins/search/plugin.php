@@ -31,6 +31,8 @@ function search_on_search($forum) {
 
 
 function search_on_search_form($forum) {
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text(lang('search_forum'));
   $printer = &new SearchPrinter($forum);
   $printer->show((int)$_GET['forum_id'], $_GET['q']);
 }
@@ -39,6 +41,14 @@ function search_on_search_form($forum) {
 function search_on_search_result($forum) {
   if (!$_GET['q'] || trim($_GET['q']) == '')
     return search_on_search_form($forum);
+
+  $url = new URL('?', cfg('urlvars'), lang('search_forum'));
+  $url->set_var('action',   'search');
+  $url->set_var('forum_id', $forum->get_current_forum_id());
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_link($url);
+  $forum->breadcrumbs()->add_separator();
+  $forum->breadcrumbs()->add_text($_GET['q']);
 
   // Search for postings or users.
   $printer  = new SearchPrinter($forum);

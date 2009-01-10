@@ -21,7 +21,7 @@
 <?php
   class HeaderPrinter extends PrinterBase {
     function show($_title) {
-      $account_links = $this->parent->get_account_links();
+      $account_links = $this->parent->account_links();
       $n_online      = $this->parent->get_online_users();
 
       $this->clear_all_assign();

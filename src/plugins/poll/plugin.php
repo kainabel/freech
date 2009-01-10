@@ -37,7 +37,7 @@ function poll_on_run($forum) {
   // Add a link to the poll button in the index bar.
   $url = new URL('?', cfg('urlvars'), lang('poll_create'));
   $url->set_var('action', 'poll_add');
-  $forum->get_forum_links()->add_link($url, 400);
+  $forum->forum_links()->add_link($url, 400);
 }
 
 

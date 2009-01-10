@@ -1297,13 +1297,18 @@
     }
 
 
-    function get_footer_links() {
-      return $this->footer_links;
+    function forum_links() {
+      return $this->forum_links;
     }
 
 
-    function get_forum_links() {
-      return $this->forum_links;
+    function account_links() {
+      return $this->account_links;
+    }
+
+
+    function footer_links() {
+      return $this->footer_links;
     }
 
 
@@ -1333,11 +1338,6 @@
 
     function breadcrumbs() {
       return $this->breadcrumbs;
-    }
-
-
-    function get_account_links() {
-      return $this->account_links;
     }
 
 

@@ -38,3 +38,4 @@
   //echo "Site rendered in $render_time seconds.";
 ?>
 </body>
+</html>

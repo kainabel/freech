@@ -1,9 +1,9 @@
 <!-- message_compose -->
-<p>
+<br />
 <form action='{$action|escape}' id='commentform' method='POST' accept-charset='utf-8'>
 <font size='+1' color='red'>{lang text="writeamessage"}</font>
 {if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
-<p>
+<br />
 <input type='hidden' name='action'    value='message_submit'>
 <input type='hidden' name='parent_id' value='{$parent_id}'>
 <input type='hidden' name='msg_id'    value='{$message->get_id()}'>
@@ -14,17 +14,17 @@
 {else}
 <input type='hidden' name='username' value='{$__user->get_name()|escape}'>
 {/if}
-<p>
+<br />
 <b>{lang text="msgtitle"}</b>&nbsp;<i>{lang text="required"}</i><br />
 <input type='text' size='80' name='subject' value='{$message->get_subject()|escape}' maxlength='{$max_subjectlength}'>
-<p>
+<br />
 <b>{lang text="msgbody"}</b>&nbsp;<i>{lang text="required"}</i><br />
 {strip}
 <textarea name='body' cols='80' rows='20' wrap='virtual'>
 {$message->get_body()|escape}
 </textarea>
 {/strip}
-<p>
+<br />
 {if $may_quote}
 <input type='submit' name='quote' value='{lang text="quote"}'>&nbsp;
 {/if}

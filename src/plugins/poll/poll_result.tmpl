@@ -1,10 +1,10 @@
 <!-- poll result -->
 {if $hint != ""}
 <font size='+1' color='red'>{$hint}</font>
-<p>
+<br />
 {/if}
 
-<table>
+<table summary=''>
 {foreach key=option_id item=votes from=$poll->get_results()}
   <tr>
     <td>{$poll->get_option($option_id)}:</td>

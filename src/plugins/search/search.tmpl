@@ -1,4 +1,4 @@
-<p>
+<br />
 <h2>{lang text="search_title"}</h2>
 
 {if $error}
@@ -6,31 +6,31 @@
 <font color='red' size='+1'>{$error|escape}</font>
 {/if}
 
-<p>
+<br />
 <form action='.' method='get' accept-charset='utf-8'>
-<input type="hidden" name="action"   value="search">
+<input type="hidden" name="action"   value="search" />
 {if $forum_id}
-<input type="hidden" name="forum_id" value="{$forum_id}">
+<input type="hidden" name="forum_id" value="{$forum_id}" />
 {/if}
-<input type="text"   name="q" size="50" value="{$query|escape}">
-<input type="submit" value="{lang text="msg_search_start"}"> 
-<input type="submit" name="user_search" value="{lang text="user_search_start"}"> 
+<input type="text"   name="q" size="50" value="{$query|escape}" />
+<input type="submit" value="{lang text="msg_search_start"}" />
+<input type="submit" name="user_search" value="{lang text="user_search_start"}" />
 </form>
 
 {if $posting_search}
-<p>
-{lang text="search_results" results=$n_results}<br/>
+<br />
+{lang text="search_results" results=$n_results}<br />
 {include file="indexbar.tmpl"}
 {include file="latest.tmpl"}
 {include file="indexbar.tmpl"}
 {elseif $user_search}
-<p>
-{lang text="search_results" results=$n_results}<br/>
+<br />
+{lang text="search_results" results=$n_results}<br />
 {include file="indexbar.tmpl"}
 {include file="user_list.tmpl"}
 {include file="indexbar.tmpl"}
 {else}
-<table>
+<table summary=''>
   <tr>
     <td valign='top'>
       <b>{lang text="search_examples"}</b>

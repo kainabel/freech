@@ -1,7 +1,7 @@
 <!-- poll -->
 {if $hint != ""}
 <font size='+1' color='red'>{$hint}</font>
-<p>
+<br />
 {/if}
 
 <form action='{$action|escape}' id='voteform' method='POST' accept-charset='utf-8'>
@@ -9,9 +9,9 @@
 <input type='hidden' name='poll_id' value='{$poll->get_id()}'>
 
 {if $poll->get_allow_multiple()}
-  {html_checkboxes name=options options=$poll->get_option_map() separator='<br/>'}
+  {html_checkboxes name=options options=$poll->get_option_map() separator='<br />'}
 {else}
-  {html_radios name=options options=$poll->get_option_map() separator='<br/>'}
+  {html_radios name=options options=$poll->get_option_map() separator='<br />'}
 {/if}
 
 <p>

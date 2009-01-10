@@ -1,5 +1,11 @@
 body {
+  margin: 0em;
   font: .9em arial,helvetica;
+}
+
+#header {
+  height: 50px;
+  background-color: #353fa8;
 }
 
 #title {
@@ -27,19 +33,21 @@ body {
 }
 
 #breadcrumbs {
+  height: 20px;
   color: black;
+  background-color: #f4f4f4;
 }
 
 #breadcrumbs a {
-  color: #2b43ca;
+  color: #353fa8;
 }
 
 #forum_links {
-  color: #2b43ca;
+  color: #353fa8;
 }
 
 #forum_links a {
-  color: #2b43ca;
+  color: #353fa8;
 }
 
 #powered_by {
@@ -55,7 +63,7 @@ a:hover {
 }
 
 .index {
-  background-color: #2b43ca;
+  background-color: #353fa8;
   color: #FFFFFF;
   font-weight: bold;
 }

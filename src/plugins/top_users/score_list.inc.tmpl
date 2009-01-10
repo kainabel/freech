@@ -11,8 +11,9 @@
   <tr>
     <td align='right'>{$smarty.foreach.user.iteration}.</td>
     <td>
-      <a href="{$user->get_profile_url_string()}">{$user->get_name()}</a>
+      <a href="{$user->get_profile_url_string()|escape}">{$user->get_name()|escape}</a>
       <img src="{$user->get_icon()|escape}"
+           alt=""
            title="{lang text=$user->get_icon_name()}" />
     </td>
     <td align='right'>{$user->n_postings}</td>

@@ -742,7 +742,7 @@
       $breadcrumbs->add_link($this->_get_forum_url());
       $breadcrumbs->add_separator();
       $breadcrumbs->add_text($_named_item->get_name());
-      $breadcrumbs->show();
+      $printer->show($breadcrumbs);
     }
 
 

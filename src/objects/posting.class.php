@@ -173,7 +173,7 @@
 
 
     function get_user_is_anonymous() {
-      return $this->fields[user_id] == 2; // FIXME: Hardcoding sucks
+      return $this->fields[user_id] == cfg('anonymous_user_id');
     }
 
 

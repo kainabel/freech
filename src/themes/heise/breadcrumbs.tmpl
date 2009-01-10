@@ -1,8 +1,7 @@
 <!-- breadcrumbs -->
-<table width='100%' height='20' cellpadding='6' cellspacing='0'>
- <tr bgcolor='#f4f4f4'>
-  <td width='50%' align='left' valign='center'>
-  <span id='breadcrumbs'>
+<table id='breadcrumbs' width='100%' cellpadding='6' cellspacing='0'>
+ <tr>
+  <td width='50%' align='left' valign='middle'>
   &nbsp;{lang text="breadcrumbs"}{strip}
 {foreach item=item from=$breadcrumbs->get_items()}
   {if $item->is_separator()}
@@ -14,9 +13,8 @@
   {/if}
 {/foreach}
 {/strip}
-  </span>
   </td>
-  <td width='50%' align='right' valign='center'>
+  <td width='50%' align='right' valign='middle'>
   </td>
  </tr>
 </table>

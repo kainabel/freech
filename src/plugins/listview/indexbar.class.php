@@ -31,7 +31,6 @@
       $this->Menu();
 
       // Prints the index (pagination).
-      $this->add_text(lang('index'));
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('forum_id', $_args[forum_id]);
       $this->add_index($url,

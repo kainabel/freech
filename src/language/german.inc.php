@@ -22,7 +22,6 @@
   // Forum
   $lang[countrycode]      = "de";
   $lang[dateformat]       = "y-m-d H:i";
-  $lang[index]            = "Seite";
   $lang[forum]            = "Forum";
   $lang[forum_long]       = "Forum (bisher [POSTINGS] Beiträge,"
                           . " [NEWPOSTINGS] neu)";

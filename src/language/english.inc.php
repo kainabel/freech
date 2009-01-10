@@ -22,7 +22,6 @@
   // Forum
   $lang[countrycode]      = "en";
   $lang[dateformat]       = "y-m-d H:i";
-  $lang[index]            = "Page";
   $lang[forum]            = "Forum";
   $lang[forum_long]       = "Forum ([POSTINGS] postings, [NEWPOSTINGS] new)";
   $lang[forum_n_online]   = "[USERS] users online";

@@ -60,6 +60,16 @@
       if ($n_indexoffset < 1)
         $n_indexoffset = 1;
 
+      // Show the << link to the previous page.
+      if ($activepage == 1)
+        $this->add_text(lang('prev_symbol'));
+      else {
+        $url = clone($_url);
+        $url->set_var('hs', $_per_page * ($activepage - 2));
+        $url->set_label(lang('prev_symbol'));
+        $this->add_link($url);
+      }
+
       // Always show a link to the first page.
       $url = clone($_url);
       $url->set_var('hs', 0);
@@ -91,6 +101,16 @@
       if ($n_indexoffset + $_size < $n_pages) {
         $url->set_var('hs', ($n_pages - 1) * $_per_page);
         $url->set_label($n_pages);
+        $this->add_link($url);
+      }
+
+      // Show the >> link to the next page.
+      if ($activepage >= $n_pages)
+        $this->add_text(lang('next_symbol'));
+      else {
+        $url = clone($_url);
+        $url->set_var('hs', $_per_page * $activepage);
+        $url->set_label(lang('next_symbol'));
         $this->add_link($url);
       }
     }

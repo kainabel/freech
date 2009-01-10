@@ -1,3 +1,4 @@
+<!-- user profile -->
 <p>
 <h2>
   {lang text="profile" name=$user->get_name()}
@@ -8,7 +9,7 @@
 {if $showinfo}
 <p>
 {if $hint}<p style="color:red;">{$hint}</p>{/if}
-<table>
+<table summary=''>
   <tr>
     <td>{lang text="group_name"}</td>
     <td>
@@ -72,3 +73,4 @@
 {include file="thread_with_indexbar.tmpl"}
 {/if}
 </p>
+<!-- end user profile -->

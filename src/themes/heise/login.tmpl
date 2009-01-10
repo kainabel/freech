@@ -1,15 +1,18 @@
+<!-- login -->
 <p>
 {lang text="login_text"}
+</p>
 
 {if $hint}
-<p>
-<font color='red' size='+1'>{$hint|escape}</font>
+<span class='hint'>{$hint|escape}</span>
+<br />
 {/if}
+
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
-  <input type='hidden' name='action'   value='login'>
-  <input type='hidden' name='refer_to' value='{$refer_to|escape}'>
+  <input type='hidden' name='action'   value='login' />
+  <input type='hidden' name='refer_to' value='{$refer_to|escape}' />
   <div align="left">
-    <table border="0" cellpadding="2">
+    <table border="0" cellpadding="2" summary=''>
       <tr>
         <td bgcolor="#CCCCCC">&nbsp;</td>
         <td bgcolor="#CCCCCC"><b>{lang text="enteruserdata"}</b></td>
@@ -17,20 +20,20 @@
       <tr>
         <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="username"}</td>
         <td bgcolor="#CCCCCC">
-          <input type="text" name="username" size="20" value="{$user->get_name()}">
+          <input type="text" name="username" size="20" value="{$user->get_name()}" />
         </td>
       </tr>
       <tr>
         <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="passwd"}</td>
         <td bgcolor="#CCCCCC">
-          <input type="password" name="password" size="20">
+          <input type="password" name="password" size="20" />
         </td>
       </tr>
       <tr>
         <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="rememberpasswd"}</td>
         <td bgcolor="#CCCCCC">
           <font size="2">{lang text="remembpasswdlong"}<br /></font>
-          <input type="checkbox" name="permanent" value="ON"><br>
+          <input type="checkbox" name="permanent" value="ON" /><br>
         </td>
       </tr>
       <tr>
@@ -54,3 +57,4 @@
     </table>
   </div>
 </form>
+<!-- end login -->

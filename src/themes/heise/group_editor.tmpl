@@ -1,9 +1,13 @@
 <p>
 <h2>{lang text="group_editor" name=$group->get_name()}</h2>
-{if $hint}<p style="color:red;">{$hint}</p>{/if}
+{if $hint}
+<span class='hint'>{$hint|escape}</span>
+<br />
+{/if}
+
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
-<input type="hidden" name="group_id" value="{$group->get_id()}">
-<table>
+<input type="hidden" name="group_id" value="{$group->get_id()}" />
+<table summary=''>
   <tr>
     <td>{lang text="group_id"}</td>
     <td>{$group->get_id()|escape}</td>
@@ -26,7 +30,7 @@
 </table>
 
 <h3>{lang text="group_permissions"}</h3>
-<table>
+<table summary=''>
 {foreach key=action item=permission from=$group->get_permission_list()}
   <tr>
     <td>

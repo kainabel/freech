@@ -1,9 +1,10 @@
+<!-- search -->
 <br />
 <h2>{lang text="search_title"}</h2>
 
 {if $error}
-<p>
-<font color='red' size='+1'>{$error|escape}</font>
+<br />
+<span class='hint'>{$error|escape}</span>
 {/if}
 
 <br />
@@ -39,3 +40,4 @@
   </tr>
 </table>
 {/if}
+<!-- end search -->

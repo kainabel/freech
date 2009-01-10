@@ -1,3 +1,4 @@
+<!-- registration -->
 <br />
 <h2>{lang text="register_title"}</h2>
 {lang text="register_welcome"}
@@ -7,29 +8,29 @@
 
 {if $error}
 <br />
-<font color='red' size='+1'>{$error|escape}</font>
+<span class='hint'>{$error|escape}</span>
 {/if}
 
 <br />
 <form action='{$action|escape}' id='registration' method='post' accept-charset='utf-8'>
-<input type='hidden' name='action' value='account_create'>
+<input type='hidden' name='action' value='account_create' />
 <b>{lang text="register_nick"}</b><br/>
-<input type="text" name="username" size="20" value="{$user->get_name()|escape}"><br />
+<input type="text" name="username" size="20" value="{$user->get_name()|escape}" /><br />
 <span class="size80">{lang text="register_nick_l"}</span>
 
 <br />
 <b>{lang text="register_fullname"}</b><br/>
-<input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}">
-<input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}"><br />
+<input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}" />
+<input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}" /><br />
 <span class="size80">{lang text="register_fullname_l"}</span>
 
 <br />
 <b>{lang text="register_mail"}</b><br/>
-<input type="text" name="mail" size="42" value="{$user->get_mail()|escape}"><br />
+<input type="text" name="mail" size="42" value="{$user->get_mail()|escape}" /><br />
 
 <br />
 <b>{lang text="register_publicmail"}</b><br />
-<input type="checkbox" name="publicmail" >
+<input type="checkbox" name="publicmail" />
 {lang text="register_public_l"}
 
 <br />
@@ -37,7 +38,8 @@
 {lang text="register_term"}
 
 <br />
-<input type="submit" name="create" value="{lang text="register_agree"}"> 
+<input type="submit" name="create" value="{lang text="register_agree"}" />
 &nbsp;&nbsp;
-<input type="submit" name="cancel" value="{lang text="register_disagree"}">
+<input type="submit" name="cancel" value="{lang text="register_disagree"}" />
 </form>
+<!-- end registration -->

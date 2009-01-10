@@ -5,8 +5,12 @@
   <a href="{$group->get_editor_url_string()|escape}">{lang text="group_edit"}</a>
 {/if}
 </h2>
-{if $hint}<p style="color:red;">{$hint}</p>{/if}
-<table>
+{if $hint}
+<span class='hint'>{$hint|escape}</span>
+<br />
+{/if}
+
+<table summary=''>
   <tr>
     <td>{lang text="group_id"}</td>
     <td>{$group->get_id()|escape}</td>
@@ -36,7 +40,7 @@
   </tr>
 </table>
 </p>
-<p>
+<br />
 {include file="indexbar.tmpl"}
 {include file="user_list.tmpl"}
 {include file="indexbar.tmpl"}

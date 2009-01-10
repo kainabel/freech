@@ -1,16 +1,19 @@
 <!-- poll form -->
 <br />
-<form action='{$action|escape}' method='POST' accept-charset='utf-8'>
 <font size='+1' color='red'>{lang text="poll_create"}</font>
-{if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
+{if $hint}
+<br />
+<span class='hint'>{$hint|escape}</span>
+{/if}
 
 <br />
-<input type='hidden' name='action'    value='poll_submit'>
-<input type='hidden' name='forum_id'  value='{$poll->get_forum_id()}'>
-<input type='hidden' name='n_options' value='{$poll->n_options()}'>
+<form action='{$action|escape}' method='POST' accept-charset='utf-8'>
+<input type='hidden' name='action'    value='poll_submit' />
+<input type='hidden' name='forum_id'  value='{$poll->get_forum_id()}' />
+<input type='hidden' name='n_options' value='{$poll->n_options()}' />
 
 <b>{lang text="poll_title"}</b>&nbsp;<i>{lang text="required"}</i><br />
-<input type='text' size='50' name='poll_title' value='{$poll->get_title()|escape}'>
+<input type='text' size='50' name='poll_title' value='{$poll->get_title()|escape}' />
 <br />
 <input type="checkbox"
        name="allow_multiple" {if $poll->get_allow_multiple()}checked="checked"{/if} />
@@ -22,11 +25,11 @@
   <input type='text'
          size='50'
          name='poll_option{$smarty.foreach.options.index}'
-         value='{$option|escape}'><br />
+         value='{$option|escape}' /><br />
 {/foreach}
 
 <br />
-<input type='submit' name='add_row' value='{lang text="poll_add_row"}'>
-<input type='submit' name='send' value='{lang text="poll_submit"}'>
+<input type='submit' name='add_row' value='{lang text="poll_add_row"}' />
+<input type='submit' name='send' value='{lang text="poll_submit"}' />
 </form>
 <!-- end poll form -->

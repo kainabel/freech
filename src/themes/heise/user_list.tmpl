@@ -1,8 +1,9 @@
-<table border='0' cellpadding='0' cellspacing='0'>
+<!-- user list -->
+<table border='0' cellpadding='0' cellspacing='0' summary=''>
 {if $n_rows > 0}
 {foreach item=user from=$users}
 <tr>
-  <td align='center' width=8><img src='{$__theme_dir}/img/null.png' width=8 height=23 alt='' /></td>
+  <td align='center' width='8'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>
   <a href="{$user->get_profile_url_string()}">{$user->get_name()|escape}</a>
 {if $group}
@@ -10,9 +11,9 @@
 {/if}
   </td>
   <td width='12'>&nbsp;</td>
-  <td align='left' nowrap>{$user->get_status_name()}</td>
+  <td align='left' nowrap='nowrap'>{$user->get_status_name()}</td>
   <td width='12'>&nbsp;</td>
-  <td align='right' nowrap>
+  <td align='right' nowrap='nowrap'>
   {lang text="account_created"} {$user->get_created_time()}
   </td>
 </tr>
@@ -23,3 +24,4 @@
 <tr><td height='4'></td></tr>
 {/if}
 </table>
+<!-- end user list -->

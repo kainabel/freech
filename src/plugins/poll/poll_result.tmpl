@@ -1,6 +1,6 @@
 <!-- poll result -->
 {if $hint != ""}
-<font size='+1' color='red'>{$hint}</font>
+<span class='hint'>{$hint|escape}</span>
 <br />
 {/if}
 
@@ -13,5 +13,3 @@
 {/foreach}
 </table>
 <!-- end poll result -->
-
-

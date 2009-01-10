@@ -1,9 +1,14 @@
+<!-- user editor -->
 <p>
 <h2>{lang text="account_data" name=$user->get_name()}</h2>
-{if $hint}<p style="color:red;">{$hint}</p>{/if}
+{if $hint}
+<br />
+<span class='hint'>{$hint|escape}</span>
+{/if}
+
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
-<input type="hidden" name="user_id" value="{$user->get_id()}">
-  <table>
+<input type="hidden" name="user_id" value="{$user->get_id()}" />
+  <table summary=''>
     <tr>
       <td>{lang text="group_name"}</td>
 {if $may_admin}
@@ -76,3 +81,4 @@
   </table>
 </form>
 </p>
+<!-- end user editor -->

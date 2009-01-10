@@ -54,6 +54,11 @@ body {
   font-size: .9em;
 }
 
+.hint {
+  color: red;
+  font-size: 1.2em;
+}
+
 a {
   text-decoration: none;
 }

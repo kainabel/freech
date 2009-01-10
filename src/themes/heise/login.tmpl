@@ -1,12 +1,7 @@
 <!-- login -->
-<p>
-{lang text="login_text"}
-</p>
-
-{if $hint}
-<span class='hint'>{$hint|escape}</span>
-<br />
-{/if}
+<h2>{lang text="login"}</h2>
+<span class="intro">{lang text="login_text"}</span>
+{include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
   <input type='hidden' name='action'   value='login' />

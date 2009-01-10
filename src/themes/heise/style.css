@@ -54,9 +54,20 @@ body {
   font-size: .9em;
 }
 
+.error {
+  background: #ff8484;
+  border: 1px solid #ff4848;
+  padding: 5px;
+  margin: 5px;
+  font-size: 1.3em;
+}
+
 .hint {
-  color: red;
-  font-size: 1.2em;
+  background: #feec57;
+  border: 1px solid #ffd605;
+  padding: 5px;
+  margin: 5px;
+  font-size: 1.3em;
 }
 
 a {

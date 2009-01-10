@@ -1,13 +1,7 @@
 <!-- search -->
-<br />
 <h2>{lang text="search_title"}</h2>
+{include file="error.inc.tmpl"}
 
-{if $error}
-<br />
-<span class='hint'>{$error|escape}</span>
-{/if}
-
-<br />
 <form action='.' method='get' accept-charset='utf-8'>
 <input type="hidden" name="action"   value="search" />
 {if $forum_id}

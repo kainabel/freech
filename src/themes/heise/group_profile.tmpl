@@ -1,14 +1,13 @@
-<p>
+<!-- group profile -->
 <h2>
   {lang text="group_profile" name=$group->get_name()}
 {if $__group->may('administer')}
-  <a href="{$group->get_editor_url_string()|escape}">{lang text="group_edit"}</a>
+  <a href="{$group->get_editor_url_string()|escape}">
+    {lang text="group_edit"}
+  </a>
 {/if}
 </h2>
-{if $hint}
-<span class='hint'>{$hint|escape}</span>
-<br />
-{/if}
+{include file="error.inc.tmpl"}
 
 <table summary=''>
   <tr>
@@ -39,8 +38,8 @@
     <td>{$group->get_created_time()|escape}</td>
   </tr>
 </table>
-</p>
 <br />
 {include file="indexbar.tmpl"}
 {include file="user_list.tmpl"}
 {include file="indexbar.tmpl"}
+<!-- end group profile -->

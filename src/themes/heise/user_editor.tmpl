@@ -1,10 +1,6 @@
 <!-- user editor -->
-<p>
 <h2>{lang text="account_data" name=$user->get_name()}</h2>
-{if $hint}
-<br />
-<span class='hint'>{$hint|escape}</span>
-{/if}
+{include file="error.inc.tmpl"}
 
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
 <input type="hidden" name="user_id" value="{$user->get_id()}" />
@@ -80,5 +76,4 @@
     </tr>
   </table>
 </form>
-</p>
 <!-- end user editor -->

@@ -1,14 +1,16 @@
 <!-- user profile -->
-<p>
 <h2>
   {lang text="profile" name=$user->get_name()}
 {if $may_edit}
-  <a href="{$user->get_editor_url_string()|escape}">{lang text="account_edit"}</a>
+  <a href="{$user->get_editor_url_string()|escape}">
+    {lang text="account_edit"}
+  </a>
 {/if}
 </h2>
+{include file="error.inc.tmpl"}
+
 {if $showinfo}
 <p>
-{if $hint}<p style="color:red;">{$hint}</p>{/if}
 <table summary=''>
   <tr>
     <td>{lang text="group_name"}</td>
@@ -72,5 +74,4 @@
 <p>
 {include file="thread_with_indexbar.tmpl"}
 {/if}
-</p>
 <!-- end user profile -->

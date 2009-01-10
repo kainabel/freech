@@ -1,45 +1,48 @@
 <!-- registration -->
-<br />
 <h2>{lang text="register_title"}</h2>
-{lang text="register_welcome"}
+<span class="intro">
+  {lang text="register_welcome"}
+  <br />
+  {lang text="register_privacy"}
+</span>
+{include file="error.inc.tmpl"}
 
-<br />
-{lang text="register_privacy"}
-
-{if $error}
-<br />
-<span class='hint'>{$error|escape}</span>
-{/if}
-
-<br />
 <form action='{$action|escape}' id='registration' method='post' accept-charset='utf-8'>
 <input type='hidden' name='action' value='account_create' />
-<b>{lang text="register_nick"}</b><br/>
-<input type="text" name="username" size="20" value="{$user->get_name()|escape}" /><br />
-<span class="size80">{lang text="register_nick_l"}</span>
 
-<br />
-<b>{lang text="register_fullname"}</b><br/>
-<input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}" />
-<input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}" /><br />
-<span class="size80">{lang text="register_fullname_l"}</span>
+<p>
+  <b>{lang text="register_nick"}</b><br/>
+  <input type="text" name="username" size="20" value="{$user->get_name()|escape}" /><br />
+  <span class="size80">{lang text="register_nick_l"}</span>
+</p>
 
-<br />
-<b>{lang text="register_mail"}</b><br/>
-<input type="text" name="mail" size="42" value="{$user->get_mail()|escape}" /><br />
+<p>
+  <b>{lang text="register_fullname"}</b><br/>
+  <input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}" />
+  <input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}" /><br />
+  <span class="size80">{lang text="register_fullname_l"}</span>
+</p>
 
-<br />
-<b>{lang text="register_publicmail"}</b><br />
-<input type="checkbox" name="publicmail" />
-{lang text="register_public_l"}
+<p>
+  <b>{lang text="register_mail"}</b><br/>
+  <input type="text" name="mail" size="42" value="{$user->get_mail()|escape}" />
+</p>
 
-<br />
-<b>{lang text="register_term_title"}</b><br />
-{lang text="register_term"}
+<p>
+  <b>{lang text="register_publicmail"}</b><br />
+  <input type="checkbox" name="publicmail" />
+  {lang text="register_public_l"}
+</p>
 
-<br />
-<input type="submit" name="create" value="{lang text="register_agree"}" />
-&nbsp;&nbsp;
-<input type="submit" name="cancel" value="{lang text="register_disagree"}" />
+<p>
+  <b>{lang text="register_term_title"}</b><br />
+  {lang text="register_term"}
+</p>
+
+<p>
+  <input type="submit" name="create" value="{lang text="register_agree"}" />
+  &nbsp;&nbsp;
+  <input type="submit" name="cancel" value="{lang text="register_disagree"}" />
+</p>
 </form>
 <!-- end registration -->

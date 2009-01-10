@@ -1,34 +1,49 @@
 <!-- message_compose -->
-<br />
+<h2>{lang text="writeamessage"}</h2>
+{include file="error.inc.tmpl"}
+
 <form action='{$action|escape}' id='commentform' method='POST' accept-charset='utf-8'>
-<font size='+1' color='red'>{lang text="writeamessage"}</font>
-{if $hint != ""}<br /><font size='+1' color='red'>{$hint}</font>{/if}
-<br />
 <input type='hidden' name='action'    value='message_submit' />
 <input type='hidden' name='parent_id' value='{$parent_id}' />
 <input type='hidden' name='msg_id'    value='{$message->get_id()}' />
 <input type='hidden' name='may_quote' value='{$may_quote|escape}' />
+<p>
 {if $__user->is_anonymous()}
-<b>{lang text="name"}</b>&nbsp;<i>{lang text="required"}</i><br />
-<input type='text' size='80' name='username' value='{$message->get_username()|escape}' maxlength='{$max_usernamelength}' />
+  <b>{lang text="name"}</b>&nbsp;<i>{lang text="required"}</i><br />
+  <input type='text'
+         size='80'
+         name='username'
+         value='{$message->get_username()|escape}'
+         maxlength='{$max_usernamelength}' />
 {else}
-<input type='hidden' name='username' value='{$__user->get_name()|escape}' />
+  <input type='hidden' name='username' value='{$__user->get_name()|escape}' />
 {/if}
-<br />
-<b>{lang text="msgtitle"}</b>&nbsp;<i>{lang text="required"}</i><br />
-<input type='text' size='80' name='subject' value='{$message->get_subject()|escape}' maxlength='{$max_subjectlength}' />
-<br />
-<b>{lang text="msgbody"}</b>&nbsp;<i>{lang text="required"}</i><br />
-{strip}
-<textarea name='body' cols='80' rows='20' wrap='virtual'>
-{$message->get_body()|escape}
-</textarea>
-{/strip}
-<br />
+</p>
+
+<p>
+  <b>{lang text="msgtitle"}</b>&nbsp;<i>{lang text="required"}</i><br />
+  <input type='text'
+         size='80'
+         name='subject'
+         value='{$message->get_subject()|escape}'
+         maxlength='{$max_subjectlength}' />
+</p>
+
+<p>
+  <b>{lang text="msgbody"}</b>&nbsp;<i>{lang text="required"}</i><br />
+  {strip}
+  <textarea name='body' cols='80' rows='20' wrap='virtual'>
+  {$message->get_body()|escape}
+  </textarea>
+  {/strip}
+</p>
+
+<p>
 {if $may_quote}
-<input type='submit' name='quote' value='{lang text="quote"}' />&nbsp;
+  <input type='submit' name='quote' value='{lang text="quote"}' />&nbsp;
 {/if}
-<input type='submit' name='preview' value='{lang text="preview"}' />&nbsp;
-<input type='submit' name='send' value='{lang text="send"}' />
+  <input type='submit' name='preview' value='{lang text="preview"}' />&nbsp;
+  <input type='submit' name='send' value='{lang text="send"}' />
+</p>
 </form>
 <!-- end message_compose -->

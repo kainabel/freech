@@ -1,5 +1,7 @@
 Maintenance
 ------------
+* Replace get_*_url_string() methods in templates by get_url()->get_html()
+  where possible.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
 * Expose menu objects to the plugins to let them register new items.

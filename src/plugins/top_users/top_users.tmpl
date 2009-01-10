@@ -1,10 +1,16 @@
-<table cellpadding="40" summary=''>
+<!-- top users -->
+<h2>{lang text="top_users"}</h2>
+{include file="error.inc.tmpl"}
+
+<table summary=''>
   <tr>
     <td valign='top'>
     {include file="$plugin_dir/score_list.inc.tmpl" title="weekly_top" users=$weekly}
     </td>
+    <td>&nbsp;</td>
     <td valign='top'>
     {include file="$plugin_dir/score_list.inc.tmpl" title="alltime_top" users=$all_time}
     </td>
   </tr>
 </table>
+<!-- end top users -->

@@ -1,8 +1,5 @@
 <!-- poll result -->
-{if $hint != ""}
-<span class='hint'>{$hint|escape}</span>
-<br />
-{/if}
+{include file="error.inc.tmpl"}
 
 <table summary=''>
 {foreach key=option_id item=votes from=$poll->get_results()}

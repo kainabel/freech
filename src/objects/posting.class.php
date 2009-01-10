@@ -258,6 +258,11 @@
     }
 
 
+    function get_url_html() {
+      return $this->get_url()->get_html();
+    }
+
+
     function get_url_string() {
       return $this->get_url()->get_string();
     }

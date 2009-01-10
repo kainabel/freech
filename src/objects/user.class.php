@@ -321,15 +321,15 @@ define("USER_STATUS_BLOCKED",     3);
 
 
     function get_editor_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'), lang('account_edit'));
       $url->set_var('action',   'user_editor');
       $url->set_var('username', $this->get_name());
       return $url;
     }
 
 
-    function get_editor_url_string() {
-      return $this->get_editor_url()->get_string();
+    function get_editor_url_html() {
+      return $this->get_editor_url()->get_html();
     }
 
 

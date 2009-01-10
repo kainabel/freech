@@ -2,9 +2,7 @@
 <h2>
   {lang text="profile" name=$user->get_name()}
 {if $may_edit}
-  <a href="{$user->get_editor_url_string()|escape}">
-    {lang text="account_edit"}
-  </a>
+  {$user->get_editor_url_html()}
 {/if}
 </h2>
 {include file="error.inc.tmpl"}

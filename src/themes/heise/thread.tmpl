@@ -51,7 +51,7 @@
 {elseif !$posting->is_active()}
      &nbsp;{$posting->get_subject()|escape}
 {else}
-     &nbsp;<a href='{$posting->get_url_string()|escape}'>{$posting->get_subject()|truncate:$max_subjectlength|escape}</a>
+     &nbsp;{$posting->get_url_html()}
 {/if}
 {if $posting->get_relation() == 3}&nbsp;({$posting->get_n_children()}){/if}
      </td>

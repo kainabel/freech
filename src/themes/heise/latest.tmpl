@@ -11,7 +11,7 @@
 {if $posting->is_selected()}
   <font color='green'>&nbsp;{$posting->get_subject()|escape}</font>
 {elseif $posting->is_active()}
-  &nbsp;<a href='{$posting->get_url_string()|escape}'>{$posting->get_subject()|escape}</a>
+  &nbsp;{$posting->get_url_html()}
 {else}
   &nbsp;{$posting->get_subject()|escape}
 {/if}

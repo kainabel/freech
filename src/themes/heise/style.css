@@ -80,7 +80,7 @@ a:hover {
 
 .index {
   background-color: #353fa8;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: bold;
 }
 
@@ -90,12 +90,12 @@ a:hover {
 }
 
 .index a:visited {
-  color: #CCCCCC;
+  color: #cccccc;
 }
 
 tr.posting:hover
 {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 tr.posting:hover a

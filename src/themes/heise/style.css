@@ -103,6 +103,16 @@ tr.posting:hover a {
   border: 1px solid #4eee00;
 }
 
+#content {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#posting {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 a {
   text-decoration: none;
 }

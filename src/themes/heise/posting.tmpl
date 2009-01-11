@@ -1,5 +1,5 @@
 <!-- posting -->
-<table border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
+<table id='posting' border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
  <tr valign='middle'>
   <td>
   <font color='#555555'>{$posting->get_created_time()}</font>
@@ -40,7 +40,9 @@
  <tr>
   <td><br />
 <!-- posting body -->
+<div id='posting_body'>
 {$posting->get_body_html()}
+</div>
 <!-- end posting body -->
   <br />
   <br />

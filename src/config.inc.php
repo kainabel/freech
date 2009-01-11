@@ -146,6 +146,13 @@
   // allow long session timeouts for this to work.
   $cfg[login_time] = 60*60*24*120;
 
+  // Defines the time at which cookies set by the forum expire.
+  // For example, setting this to
+  //   $cfg[cookie_expire_time] = time() + 60*60*24*30;
+  // will cause cookies to expire in 30 days.
+  // If this value is 0, cookies are deleted at the end of the session.
+  $cfg[cookie_expire_time] = 0;
+
   // Newly registered users are added into the group with the given ID.
   $cfg[default_group_id] = 3;
 

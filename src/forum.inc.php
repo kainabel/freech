@@ -228,7 +228,7 @@
     // Changes a cookie only if necessary.
     function _set_cookie($_name, $_value) {
       if ($_COOKIE[$_name] != $_value) {
-        setcookie($_name, $_value);
+        setcookie($_name, $_value, cfg('cookie_expire_time'));
         $_COOKIE[$_name] = $_value;
       }
     }

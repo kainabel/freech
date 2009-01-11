@@ -23,9 +23,9 @@
 <table width='100%' cellpadding='5' cellspacing='0' summary=''>
  <tr>
   <td align='center'>
-  <span id='forum_links'>
+  <span id='page_links'>
   {strip}
-{foreach name=loop item=item from=$forum_links->get_items()}
+{foreach name=loop item=item from=$page_links->get_items()}
   {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
   {if $item->is_link()}
     {$item->get_url_html()}

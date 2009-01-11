@@ -115,7 +115,7 @@
 
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus      = new Trackable;
-      $this->forum_links   = new Menu;
+      $this->page_links    = new Menu;
       $this->footer_links  = new Menu;
       $this->account_links = new Menu;
       $this->breadcrumbs   = new Menu;
@@ -167,7 +167,7 @@
       // Add the modlog URL to the forum links.
       $url = new URL('?', cfg('urlvars'), lang('modlog'));
       $url->set_var('action', 'moderation_log');
-      $this->forum_links->add_link($url);
+      $this->page_links->add_link($url);
 
       // Add user-specific links.
       //FIXME: this probably should not be here.
@@ -1299,8 +1299,8 @@
     }
 
 
-    function forum_links() {
-      return $this->forum_links;
+    function page_links() {
+      return $this->page_links;
     }
 
 

@@ -21,11 +21,11 @@
 <?php
   class BreadCrumbsPrinter extends PrinterBase {
     function show($_breadcrumbs) {
-      $forum_links = $this->parent->forum_links();
+      $page_links = $this->parent->page_links();
 
       $this->clear_all_assign();
       $this->assign_by_ref('breadcrumbs', $_breadcrumbs);
-      $this->assign_by_ref('forum_links', $forum_links);
+      $this->assign_by_ref('page_links',  $page_links);
       $this->render('breadcrumbs.tmpl');
     }
   }

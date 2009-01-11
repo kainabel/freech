@@ -43,6 +43,8 @@
   $lang[entryindex]       = "Beitragsübersicht";
   $lang[hidethread]       = "Thread-Anzeige ausblenden";
   $lang[showthread]       = "Thread-Anzeige einblenden";
+  $lang[hidelist]         = "Posting-Liste ausblenden";
+  $lang[showlist]         = "Posting-Liste einblenden";
   $lang[postedby]         = "Beitrag von [USER]";
   $lang[lastupdated]      = "(Editiert am [TIME])";
   $lang[moderator]        = "Moderator";

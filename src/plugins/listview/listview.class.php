@@ -114,11 +114,11 @@ class ListView extends View {
     if ($_posting->has_thread()) {
       if ($_COOKIE[thread] === 'hide') {
         $url->set_var('showthread', 1);
-        $url->set_label(lang('showthread'));
+        $url->set_label(lang('showlist'));
       }
       else {
         $url->set_var('showthread', -1);
-        $url->set_label(lang('hidethread'));
+        $url->set_label(lang('hidelist'));
       }
       $this->parent->footer_links()->add_link($url);
     }

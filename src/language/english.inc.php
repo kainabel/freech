@@ -42,6 +42,8 @@
   $lang[entryindex]       = "Message Overview";
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
+  $lang[hidelist]         = "Hide Posting List";
+  $lang[showlist]         = "Show Posting List";
   $lang[postedby]         = "Written by [USER]";
   $lang[lastupdated]      = "(last edited [TIME])";
   $lang[moderator]        = "Moderator";

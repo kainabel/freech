@@ -93,7 +93,7 @@
 
     function get_label($_escape = FALSE) {
       if ($_escape)
-        return htmlentities($this->label);
+        return htmlentities($this->label, ENT_QUOTES, 'UTF-8');
       else
         return $this->label;
     }

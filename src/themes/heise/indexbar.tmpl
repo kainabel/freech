@@ -12,10 +12,10 @@
 {foreach item=item from=$indexbar->get_items()}
   {if $item->is_separator()}
     &nbsp;&nbsp;
-  {elseif !$item->is_link()}
-    &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
+  {elseif $item->is_link()}
+    &nbsp;{$item->get_url_html()}
   {else}
-    &nbsp;<a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
+    &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
   {/if}
 {/foreach}
 {/strip}

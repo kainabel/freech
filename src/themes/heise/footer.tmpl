@@ -5,12 +5,12 @@
   {strip}
 {foreach name=loop item=item from=$footer_links->get_items()}
   {if $smarty.foreach.loop.index > 0}&nbsp;&nbsp;&nbsp;{/if}
-  {if !$item->get_text()}
+  {if $item->is_separator()}
     |&nbsp;&nbsp;&nbsp;
-  {elseif !$item->get_url_string()}
+  {elseif !$item->is_link()}
     {$item->get_text()|escape|replace:" ":"&nbsp;"}
   {else}
-    <a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
+    {$item->get_url_html()}
   {/if}
 {/foreach}
 {/strip}

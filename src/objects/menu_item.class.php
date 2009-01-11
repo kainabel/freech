@@ -31,20 +31,20 @@
     function MenuItem($_url = '', $_text = '') {
       if ($_url)
         $this->set_url($_url);
-      if ($_text) {
-        $this->url  = $_url;
-        $this->text = $_text;
-      }
+      else
+        $this->url = new URL('', cfg('urlvars'));
+      if ($_text)
+        $this->url->set_label($_text);
     }
 
 
     function is_separator() {
-      return $this->text == '';
+      return $this->url->get_label() == '';
     }
 
 
     function is_link() {
-      return $this->url ? TRUE : FALSE;
+      return $this->url->get_base() ? TRUE : FALSE;
     }
 
 
@@ -54,18 +54,17 @@
 
 
     function set_text($_text) {
-      $this->text = $_text;
+      $this->url->set_label($_text);
     }
 
 
     function get_text() {
-      return $this->text;
+      return $this->url->get_label();
     }
 
 
     function set_url($_url) {
-      $this->url  = $_url;
-      $this->text = $_url->get_label();
+      $this->url = clone($_url);
     }
 
 
@@ -74,8 +73,15 @@
     }
 
 
+    function get_url_html() {
+      if (!$this->is_link())
+        return '';
+      return $this->url->get_html();
+    }
+
+
     function get_url_string() {
-      if (!$this->url)
+      if (!$this->is_link())
         return '';
       return $this->url->get_string();
     }

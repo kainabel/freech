@@ -125,10 +125,7 @@
 
 
     function add_link($_url, $_priority = NULL) {
-      if ($_url->get_base())
-        $this->add_item(new MenuItem($_url), $_priority);
-      else
-        $this->add_text($_url->get_label(), $_priority);
+      $this->add_item(new MenuItem($_url), $_priority);
     }
 
 

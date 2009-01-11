@@ -31,7 +31,7 @@
 {foreach name=loop item=item from=$account_links->get_items()} 
   {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
   {if $item->is_link()}
-    <a href='{$item->get_url_string()|escape}'>{$item->get_text()|escape|replace:" ":"&nbsp;"}</a>
+    {$item->get_url_html()}
   {else}
     {$item->get_text()|escape|replace:" ":"&nbsp;"}
   {/if}

@@ -16,6 +16,17 @@ tr.posting:hover a {
   text-decoration: underline;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input {
+}
+
 #header {
   height: 50px;
   background-color: #353fa8;
@@ -111,14 +122,6 @@ tr.posting:hover a {
 #posting {
   margin-left: 10px;
   margin-right: 10px;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }
 
 .index {

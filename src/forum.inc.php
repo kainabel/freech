@@ -1402,6 +1402,10 @@
       $this->_print_breadcrumbs();
       print($this->content);
       print($body);
+      if (cfg('show_total_render_time')) {
+        $render_time = round($this->get_render_time(), 2);
+        print("Site rendered in $render_time seconds.");
+      }
 
       /* Plugin hook: on_content_print_after
        *   Called after the HTML content was sent.

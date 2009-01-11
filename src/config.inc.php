@@ -161,6 +161,9 @@
   $cfg[anonymous_user_id]  = 1;
   $cfg[anonymous_group_id] = 2;
 
+  // When TRUE, the total rendering time is shown below the footer.
+  $cfg[show_total_render_time] = FALSE;
+
   // The number of days back to show in the forum statistics.
   $cfg[statistics_timespan] = 30;
 

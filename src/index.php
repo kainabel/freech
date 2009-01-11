@@ -33,9 +33,6 @@
 
   $forum->show();
   $forum->destroy();
-
-  $render_time = round($forum->get_render_time(), 2);
-  //echo "Site rendered in $render_time seconds.";
 ?>
 </body>
 </html>

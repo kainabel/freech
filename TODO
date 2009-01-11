@@ -4,13 +4,12 @@ Maintenance
   where possible.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
-* Expose menu objects to the plugins to let them register new items.
 * Find a clean way for adding plugin preferences.
 * Possibly add a way to prevent plugins from loading that does not
   include modifying a plugin header. (Read: add an option to
   config.inc.php.)
 * Design a URL scheme that makes sense for URL rewriting.
-* Use gettext and .po/-mo-files to replace the home grown thingy.
+* Use gettext and .po/.mo-files to replace the home grown thingy.
 
 Features
 ---------

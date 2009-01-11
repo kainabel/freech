@@ -60,13 +60,12 @@
   </td>
 {/strip}
   <td><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
-{if $posting->is_selected()}
-  {assign var="attr" value=" color='green'"}
-{else}
-  {assign var="attr" value=""}
-{/if}
   <td align='left'>
-    &nbsp;<font{$attr}>{$posting->get_username()|escape}</font>
+{if $posting->is_selected()}
+    &nbsp;<font color='green'>{$posting->get_username()|escape}</font>
+{else}
+    &nbsp;{$posting->get_username()|escape}
+{/if}
 {if $posting->get_user_is_special()}
     <img src="{$posting->get_user_icon()|escape}"
          alt=""
@@ -75,18 +74,16 @@
   </td>
 {if $posting->is_selected()}
    <td align='right' nowrap='nowrap'>
-     <font color='green'>{$posting->get_created_time()}</font>
+    <font color='green'>{$posting->get_created_time()}</font>
    </td>
 {elseif $posting->is_new()}
    <td align='right' nowrap='nowrap'>
-     <font color='#{$posting->get_newness_hex()}0000'>{$posting->get_created_time()}</font>
+    <font color='#{$posting->get_newness_hex()}0000'>{$posting->get_created_time()}</font>
    </td>
 {else}
    <td align='right' nowrap='nowrap'>{$posting->get_created_time()}</td>
 {/if}
-   <td align='center' width='8'>
-     <img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' />
-   </td>
+   <td align='center' width='8'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
  </tr>
 <!-- end thread_row -->
 {/foreach}

@@ -3,6 +3,19 @@ body {
   font: .8em arial,helvetica;
 }
 
+table {
+  /* Force IE to inherit the font size in tables. */
+  font-size: 1em;
+}
+
+tr.posting:hover {
+  background-color: #eeeeee;
+}
+
+tr.posting:hover a {
+  text-decoration: underline;
+}
+
 #header {
   height: 50px;
   background-color: #353fa8;
@@ -91,14 +104,4 @@ a:hover {
 
 .index a:visited {
   color: #cccccc;
-}
-
-tr.posting:hover
-{
-  background-color: #eeeeee;
-}
-
-tr.posting:hover a
-{
-  text-decoration: underline;
 }

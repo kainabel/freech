@@ -420,6 +420,8 @@
 
 
     function _decorate_posting($_posting) {
+      if (!$_posting)
+        return $_posting;
       $renderer = $this->renderers[$_posting->get_renderer()];
       if ($renderer)
         return new $renderer($_posting, $this);

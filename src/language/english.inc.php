@@ -275,6 +275,7 @@
   $lang[search_no_posting] = "(No postings found)";
   $lang[search_no_users]   = "(No users found)";
   $lang[search_forum]      = "Find";
+  $lang[search_quick]      = "Find in this forum:";
   $lang[search_title]      = "Search";
   $lang[msg_search_start]  = "Find Postings";
   $lang[user_search_start] = "Find Users";

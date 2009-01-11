@@ -29,6 +29,7 @@
 
     // Constructor.
     function MenuItem($_url = '', $_text = '') {
+      $this->html = '';
       if ($_url)
         $this->set_url($_url);
       else
@@ -39,7 +40,12 @@
 
 
     function is_separator() {
-      return $this->url->get_label() == '';
+      return !$this->get_text() && !$this->is_link() && !$this->is_html();
+    }
+
+
+    function is_html() {
+      return $this->html != '';
     }
 
 
@@ -60,6 +66,16 @@
 
     function get_text() {
       return $this->url->get_label();
+    }
+
+
+    function set_html($_html) {
+      $this->html = $_html;
+    }
+
+
+    function get_html() {
+      return $this->html;
     }
 
 

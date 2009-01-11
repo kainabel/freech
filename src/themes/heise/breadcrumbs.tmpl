@@ -15,6 +15,17 @@
 {/strip}
   </td>
   <td align='right' valign='middle'>
+{foreach item=item from=$search_links->get_items()}{strip}
+  {if $item->is_separator()}
+    &nbsp;&nbsp;
+  {elseif $item->is_link()}
+    {$item->get_url_html()}
+  {elseif $item->is_html()}
+    {$item->get_html()}
+  {else}
+    {$item->get_text()|escape|replace:" ":"&nbsp;"}
+  {/if}
+{/strip}{/foreach}
   </td>
  </tr>
 </table>

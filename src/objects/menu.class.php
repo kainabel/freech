@@ -129,6 +129,13 @@
     }
 
 
+    function add_html($_html, $_priority = NULL) {
+      $item = new MenuItem;
+      $item->set_html($_html);
+      $this->add_item($item, $_priority);
+    }
+
+
     function add_links($_url_list) {
       foreach ($_url_list as $url)
         $this->add_link($url);

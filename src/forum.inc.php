@@ -116,6 +116,7 @@
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus      = new Trackable;
       $this->page_links    = new Menu;
+      $this->search_links  = new Menu;
       $this->footer_links  = new Menu;
       $this->account_links = new Menu;
       $this->breadcrumbs   = new Menu;
@@ -1301,6 +1302,11 @@
 
     function page_links() {
       return $this->page_links;
+    }
+
+
+    function search_links() {
+      return $this->search_links;
     }
 
 

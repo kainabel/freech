@@ -291,6 +291,7 @@
   $lang[search_no_posting] = "(Keine Beiträge)";
   $lang[search_no_users]   = "(Keine Benutzer gefunden)";
   $lang[search_forum]      = "Suchen";
+  $lang[search_quick]      = "Suche:";
   $lang[search_title]      = "Forensuche";
   $lang[msg_search_start]  = "Beiträge suchen";
   $lang[user_search_start] = "Benutzer suchen";

@@ -29,6 +29,7 @@ class FreechSqlQuery extends SqlQuery {
       t_user             => cfg('db_tablebase') . 'user',
       t_permission       => cfg('db_tablebase') . 'permission',
       t_forum            => cfg('db_tablebase') . 'forum',
+      t_thread           => cfg('db_tablebase') . 'thread',
       t_posting          => cfg('db_tablebase') . 'posting',
       t_visitor          => cfg('db_tablebase') . 'visitor',
       t_modlog           => cfg('db_tablebase') . 'modlog',

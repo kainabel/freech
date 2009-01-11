@@ -19,8 +19,8 @@
   */
 ?>
 <?php
-  define("INDENT_DRAW_DASH",  1);
-  define("INDENT_DRAW_SPACE", 2);
+  define('INDENT_DRAW_DASH',  1);
+  define('INDENT_DRAW_SPACE', 2);
 
   class ForumDB {
     var $db;
@@ -137,7 +137,7 @@
         $query->set_string('body',            $body);
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
-        $this->db->Execute($query->sql()) or die("ForumDB::insert(): Ins1");
+        $this->db->Execute($query->sql()) or die('ForumDB::insert(): Ins1');
         $_posting->set_id($this->db->Insert_Id());
 
         // Update the child's path.
@@ -157,51 +157,51 @@
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Path.");
 
-        // Update n_descendants and n_children in one run...
-        if ($_parent_id == $parentrow[thread_id]) {
-          $sql  = "UPDATE {t_posting}";
-          $sql .= " SET n_children=n_children+1,";
-          $sql .= " n_descendants=n_descendants+1";
-          $sql .= " WHERE id={parent_id}";
-          $query = &new FreechSqlQuery($sql);
-          $query->set_int('parent_id', $_parent_id);
-          $this->db->Execute($query->sql())
-                  or die("ForumDB::insert(): n++");
-        }
+        // Update the child counter of the thread.
+        $sql  = 'UPDATE {t_thread}';
+        $sql .= ' SET n_children=n_children+1,';
+        $sql .= ' updated=NULL';
+        $sql .= ' WHERE id={thread_id}';
+        $query = &new FreechSqlQuery($sql);
+        $query->set_int('thread_id', $parentrow[thread_id]);
+        $this->db->Execute($query->sql()) or die('ForumDB::insert(): n++');
 
-        // ...unless it is necessary to update two database sets.
-        else {
-          $sql  = "UPDATE {t_posting} SET n_children=n_children+1";
-          $sql .= " WHERE id={thread_id}";
-          $query = &new FreechSqlQuery($sql);
-          $query->set_int('thread_id', $parentrow[thread_id]);
-          $this->db->Execute($query->sql())
-                  or die("ForumDB::insert(): n_child fail");
-
-          $sql  = "UPDATE {t_posting} SET n_descendants=n_descendants+1";
-          $sql .= " WHERE id={parent_id}";
-          $query = &new FreechSqlQuery($sql);
-          $query->set_int('parent_id', $_parent_id);
-          $this->db->Execute($query->sql())
-                  or die("ForumDB::insert(): n_desc");
-        }
+        // Update n_descendants of the parent.
+        $sql  = "UPDATE {t_posting} SET n_descendants=n_descendants+1";
+        $sql .= " WHERE id={parent_id}";
+        $query = &new FreechSqlQuery($sql);
+        $query->set_int('parent_id', $_parent_id);
+        $this->db->Execute($query->sql()) or die('ForumDB::insert(): n_desc');
       }
 
       // Insert a new thread.
       else {
+        // Create the thread in the thread table.
+        $sql  = "INSERT INTO {t_thread}";
+        $sql .= " (forum_id, created)";
+        $sql .= " VALUES";
+        $sql .= " ({forum_id}, NULL)";
+        $query = &new FreechSqlQuery($sql);
+        $query->set_int('forum_id', $_forum_id);
+        $this->db->Execute($query->sql())
+                or die("ForumDB::insert(): Insert2.".$query->sql());
+        $thread_id = $this->db->Insert_Id();
+
+        // Insert the posting.
         $sql  = "INSERT INTO {t_posting}";
-        $sql .= " (path, forum_id, priority,";
+        $sql .= " (path, forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= "  renderer, is_parent, username,";
         $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
-        $sql .= " '', {forum_id}, {priority},";
+        $sql .= " '', {forum_id}, {thread_id}, {priority}";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
         $sql .= ")";
         $query = &new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $_forum_id);
+        $query->set_int   ('thread_id',       $thread_id);
         $query->set_int   ('priority',        $_posting->get_priority());
         $query->set_int   ('user_id',         $_posting->get_user_id());
         $query->set_bool  ('user_is_special', $_posting->get_user_is_special());
@@ -216,15 +216,6 @@
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Insert2.".$query->sql());
         $_posting->set_id($this->db->Insert_Id());
-
-        // Set the thread id.
-        // FIXME: Is there a better way to do this?
-        $sql  = "UPDATE {t_posting} SET thread_id={newid}";
-        $sql .= " WHERE id={newid}";
-        $query = &new FreechSqlQuery($sql);
-        $query->set_int('newid', $_posting->get_id());
-        $this->db->Execute($query->sql())
-                or die("ForumDB::insert(): thread_id");
       }
 
       $this->db->CompleteTrans();
@@ -240,6 +231,7 @@
       $this->db->StartTrans();
       $sql  = "UPDATE {t_posting} SET";
       $sql .= " forum_id={forum_id},";
+      //$sql .= " thread_id={thread_id},";
       $sql .= " priority={priority},";
       $sql .= " user_id={user_id},";
       $sql .= " user_is_special={user_is_special},";
@@ -257,6 +249,7 @@
       $query = &new FreechSqlQuery($sql);
       $query->set_int   ('id',              $_posting->get_id());
       $query->set_int   ('forum_id',        $_forum_id);
+      //$query->set_int   ('thread_id',       $_posting->_get_thread_id());
       $query->set_int   ('priority',        $_posting->get_priority());
       $query->set_int   ('updated',         $_posting->get_updated_unixtime());
       $query->set_int   ('user_id',         $_posting->get_user_id());
@@ -270,7 +263,7 @@
       $query->set_string('hash',            $_posting->get_hash());
       $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
       $query->set_string('is_active',       $_posting->is_active());
-      $this->db->Execute($query->sql()) or die("ForumDB::save(): 1");
+      $this->db->Execute($query->sql()) or die('ForumDB::save(): 2');
 
       $this->db->CompleteTrans();
     }
@@ -284,21 +277,21 @@
      * Returns: The posting.
      */
     function get_posting_from_id($_id) {
-      $sql  = "SELECT m.*,";
-      $sql .= "HEX(m.path) path,";
-      $sql .= "UNIX_TIMESTAMP(m.updated) updated,";
-      $sql .= "UNIX_TIMESTAMP(m.created) created,";
-      $sql .= "u.name current_username";
-      $sql .= " FROM {t_posting} m";
-      $sql .= " JOIN {t_user} u ON u.id=m.user_id";
-      $sql .= " WHERE m.id={id}";
+      $sql   = "SELECT p.*,";
+      $sql  .= "HEX(p.path) path,";
+      $sql  .= "UNIX_TIMESTAMP(p.updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(p.created) created,";
+      $sql  .= "u.name current_username";
+      $sql  .= " FROM {t_posting} p";
+      $sql  .= " JOIN {t_user} u ON u.id=p.user_id";
+      $sql  .= " WHERE p.id={id}";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       if (!$row = $this->db->GetRow($query->sql()))
         return;
       if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
         $row[allow_answer] = FALSE;
-      if ($row[id] == $row[thread_id])
+      if ($row[is_parent])
         $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
 
       $posting = new Posting;
@@ -343,7 +336,7 @@
         }
         //echo "$row[subject] ($row[id], $row[path]): $row[relation]<br>\n";
 
-        $posting = &new Posting();
+        $posting = new Posting;
         $posting->set_from_db($row);
         $posting->set_indent($indents);
         call_user_func($_func, $posting, $_data);
@@ -378,19 +371,19 @@
     /* Walks through the tree starting from $id, passing each posting to the
      * function given in $func.
      *
-     * Args: $_forum   The forum id.
-     *       $_id      The node whose children we want to print.
-     *       $_offset  The offset.
-     *       $_limit   The maximum number of threads to walk.
+     * Args: $_forum     The forum id.
+     *       $_thread_id The thread whose children we want to print.
+     *       $_offset    The offset.
+     *       $_limit     The maximum number of threads to walk.
      *       $_thread_state An object identifying folded nodes.
-     *       $_func    A reference to the function to which each row will be
-     *                 passed.
-     *       $_data    Passed through to $_func as an argument.
+     *       $_func      A reference to the function to which each row will be
+     *                   passed.
+     *       $_data      Passed through to $_func as an argument.
      *
      * Returns: The number of rows processed.
      */
     function foreach_child($_forum_id,
-                           $_id,
+                           $_thread_id,
                            $_offset,
                            $_limit,
                            $_updated_threads_first,
@@ -400,76 +393,63 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
-      if ($_id != 0) {
-        $sql  = "SELECT id";
-        $sql .= " FROM {t_posting}";
-        $sql .= " WHERE id={id}";
-        $query = &new FreechSqlQuery($sql);
-        $query->set_int('id', $_id);
-        $res = $this->db->Execute($query->sql())
-                                    or die("ForumDB::foreach_child(): 1");
-      }
-      else {
+      if ($_thread_id == 0) {
         // Select all root nodes.
-        $sql  = "SELECT a.id";
+        $sql  = "SELECT t.id thread_id,p.id";
+        $sql .= " FROM {t_thread} t";
+        $sql .= " JOIN {t_posting} p ON t.id=p.thread_id";
+        $sql .= " WHERE p.forum_id={forum_id} AND p.is_parent";
         if ($_updated_threads_first)
-          $sql .= " ,MAX(b.id) threadupdate";
-        $sql .= " FROM {t_posting} a";
-        if ($_updated_threads_first)
-          $sql .= " JOIN {t_posting} b ON a.thread_id=b.thread_id";
-        $sql .= " WHERE a.forum_id={forum_id} AND a.is_parent";
-        if ($_updated_threads_first) {
-          $sql .= " GROUP BY a.id";
-          $sql .= " ORDER BY a.priority DESC, threadupdate DESC";
-        }
+          $sql .= " ORDER BY p.priority DESC, t.updated DESC";
         else
-          $sql .= " ORDER BY a.priority DESC, a.id DESC";
+          $sql .= " ORDER BY p.priority DESC, t.created DESC";
         $query = &new FreechSqlQuery($sql);
         $query->set_int('forum_id', $_forum_id);
         //$this->db->debug=1;
         $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                        or die("ForumDB::foreach_child(): 2");
+        if ($res->RecordCount() <= 0)
+          return;
       }
 
       // Build the SQL request to grab the complete threads.
-      if ($res->RecordCount() <= 0)
-        return;
-      $sql  = "SELECT a.*,";
-      $sql .= " HEX(a.path) path,";
+      $sql  = "SELECT t.n_children,p2.*,";
+      $sql .= " HEX(p2.path) path,";
       if ($_updated_threads_first)
-        $sql .= " MAX(b.id) threadupdate,";
-      $sql .= " UNIX_TIMESTAMP(a.updated) updated,";
-      $sql .= " UNIX_TIMESTAMP(a.created) created";
-      $sql .= " FROM {t_posting} a";
-      if ($_updated_threads_first)
-        $sql .= " JOIN {t_posting} b ON a.thread_id=b.thread_id";
-      $sql .= " JOIN {t_posting} c ON a.thread_id=c.id";
-      $sql .= " WHERE (";
+        $sql .= " UNIX_TIMESTAMP(t.updated) threadupdate,";
+      $sql .= " UNIX_TIMESTAMP(p2.updated) updated,";
+      $sql .= " UNIX_TIMESTAMP(p2.created) created";
+      $sql .= " FROM {t_thread} t";
+      $sql .= " JOIN {t_posting} p1 ON p1.thread_id=t.id";
+      $sql .= " JOIN {t_posting} p2 ON p2.thread_id=t.id";
+      $sql .= " WHERE p1.is_parent AND (";
 
-      $first = 1;
-      while ($row = &$res->FetchRow()) {
-        if (!$first)
-          $sql .= " OR ";
-        if ($_thread_state->is_folded($row[id]))
-          $sql .= "a.id=$row[id]";
-        else
-          $sql .= "a.thread_id=$row[id]";
-        $first = 0;
+      if ($_thread_id)
+        $sql .= 't.id='.(int)$_thread_id;
+      else {
+        //FIXME: is it really faster to avoid pulling folded threads?
+        $first = 1;
+        while ($row = $res->FetchRow()) {
+          if (!$first)
+            $sql .= " OR ";
+          if ($_thread_state->is_folded($row[id]))
+            $sql .= "p2.id=$row[id]";
+          else
+            $sql .= "t.id=$row[thread_id]";
+          $first = 0;
+        }
       }
 
       $sql .= ")";
-      if ($_updated_threads_first) {
-        $sql .= " GROUP BY a.id";
-        $sql .= " ORDER BY c.priority DESC, threadupdate DESC,";
-        $sql .= " a.thread_id DESC,a.path";
-      }
+      if ($_updated_threads_first)
+        $sql .= " ORDER BY p1.priority DESC, t.updated DESC, p2.path";
       else
-        $sql .= " ORDER BY c.priority DESC, a.thread_id DESC,a.path";
+        $sql .= " ORDER BY p1.priority DESC, t.id DESC, p2.path";
 
       // Walk through those threads.
-      $query   = &new FreechSqlQuery($sql);
+      $query   = new FreechSqlQuery($sql);
       $res     = $this->db->Execute($query->sql())
-                              or die("ForumDB::foreach_child: 3");
+                              or die('ForumDB::foreach_child: 3');
       $numrows = $res->RecordCount();
       $this->_walk_tree($res, $_thread_state, $_func, $_data);
       return $numrows;
@@ -477,8 +457,8 @@
 
 
     /* This function performs exactly as foreach_child(), except that given a
-     * an id, it first looks up the top-level parent of that node and walks
-     * through all children of the top level node. */
+     * an id, it first looks up the thread id of that node and walks
+     * through all children of the thread. */
     function foreach_child_in_thread($_id,
                                      $_offset,
                                      $_limit,
@@ -623,20 +603,21 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
-      $sql  = "SELECT a.*,";
-      $sql .= "UNIX_TIMESTAMP(a.updated) updated,";
-      $sql .= "UNIX_TIMESTAMP(a.created) created";
-      $sql .= " FROM {t_posting} a";
+      $sql  = "SELECT p.*,";
+      $sql .= "UNIX_TIMESTAMP(p.updated) updated,";
+      $sql .= "UNIX_TIMESTAMP(p.created) created";
+      $sql .= " FROM {t_posting} p";
+      $sql .= " JOIN {t_thread} t ON t.id=p.thread_id";
       if ($_forum_id)
-        $sql .= " WHERE a.forum_id={forum_id}";
+        $sql .= " WHERE p.forum_id={forum_id}";
       if ($_updates)
-        $sql .= " ORDER BY a.priority DESC,a.updated DESC";
+        $sql .= " ORDER BY p.priority DESC,p.updated DESC";
       else
-        $sql .= " ORDER BY a.priority DESC,a.created DESC";
-      $query = &new FreechSqlQuery($sql);
+        $sql .= " ORDER BY p.priority DESC,p.created DESC";
+      $query = new FreechSqlQuery($sql);
       $query->set_int('forum_id', $_forum_id);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
-                          or die("ForumDB::foreach_latest_posting()");
+                          or die('ForumDB::foreach_latest_posting()');
       return $this->_walk_list($res, $_func, $_data);
     }
 
@@ -664,9 +645,12 @@
                                        $_data) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
+      //FIXME: this method can be dramatically simplified now by using the
+      // 'updated' field of the thread table instead of generating that using
+      // a JOIN.
 
       // Select the postings of the user.
-      $sql  = "SELECT a.id,HEX(a.path) path, a.n_children";
+      $sql  = "SELECT a.id,HEX(a.path) path";
       if ($_updated_threads_first)
         $sql .= " ,MAX(b.id) threadupdate";
       $sql .= " FROM {t_posting} a";
@@ -769,8 +753,8 @@
 
      /* Returns the total number of threads in the given forum. */
     function get_n_threads($_forum_id) {
-      $sql  = "SELECT COUNT(DISTINCT thread_id)";
-      $sql .= " FROM {t_posting}";
+      $sql  = "SELECT COUNT(*)";
+      $sql .= " FROM {t_thread}";
       if ($_forum_id)
         $sql .= " WHERE forum_id={forum_id}";
       $query = &new FreechSqlQuery($sql);
@@ -936,45 +920,45 @@
     }
 
 
-    /* Given a posting, this function returns the id of the previous
-     * thread in the given forum, or 0 if there is no previous thread.
-     * The thread_id equals the id of the toplevel node in a thread.
+    /* Given a posting, this function returns the id of the last
+     * active posting in the previous thread of the same forum, or 0
+     * if there is no previous thread.
      */
     function get_prev_thread_id($_posting) {
       $forum_id  = $_posting->get_forum_id();
       $thread_id = $_posting->_get_thread_id();
-      $sql  = "SELECT thread_id FROM {t_posting}";
+      $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
-      $sql .= " AND (is_active OR n_children)";
-      $sql .= " ORDER BY thread_id DESC";
+      $sql .= " AND is_active";
+      $sql .= " ORDER BY thread_id DESC, path";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $forum_id);
       $query->set_int('thread_id', $thread_id);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_prev_thread_id()");
       $row = $res->FetchRow($res);
-      return $row[thread_id];
+      return $row[id];
     }
 
 
-    /* Given a posting, this function returns the id of the next
-     * thread in the given forum, or 0 if there is no next thread.
-     * The thread_id equals the id of the toplevel node in a thread.
+    /* Given a posting, this function returns the id of the first
+     * active posting in the next thread of the same forum, or 0
+     * if there is no next thread.
      */
     function get_next_thread_id($_posting) {
       $forum_id  = $_posting->get_forum_id();
       $thread_id = $_posting->_get_thread_id();
-      $sql  = "SELECT thread_id FROM {t_posting}";
+      $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
-      $sql .= " AND (is_active OR n_children)";
-      $sql .= " ORDER BY thread_id";
+      $sql .= " AND is_active";
+      $sql .= " ORDER BY thread_id, path";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $forum_id);
       $query->set_int('thread_id', $thread_id);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_next_thread_id()");
       $row = $res->FetchRow($res);
-      return $row[thread_id];
+      return $row[id];
     }
 
 

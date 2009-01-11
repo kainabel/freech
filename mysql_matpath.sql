@@ -40,6 +40,24 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `freech_thread`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_thread` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `forum_id` int(11) unsigned NOT NULL,
+  `n_children` int(11) unsigned default '0',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  KEY `forum_id` (`forum_id`),
+  KEY `updated` (`updated`),
+  KEY `created` (`created`),
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `freech_posting`
 --
 
@@ -49,7 +67,6 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   `thread_id` int(11) unsigned default NULL,
   `priority` int(11) unsigned NOT NULL default '0',
   `is_parent` tinyint(1) unsigned default '0',
-  `n_children` int(11) unsigned default '0',
   `n_descendants` int(11) unsigned default '0',
   `path` varbinary(255) default NULL,
   `user_id` int(11) unsigned default '0',
@@ -73,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   KEY `forum_id` (`forum_id`),
   KEY `thread_id` (`thread_id`),
   KEY `user_id` (`user_id`),
-  KEY `forum_id_2` (`forum_id`,`priority`,`id`),
+  UNIQUE KEY `forum_id_2` (`forum_id`,`priority`,`id`),
   KEY `path` (`thread_id`,`path`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
@@ -216,15 +233,21 @@ CREATE TABLE IF NOT EXISTS `freech_poll_vote` (
 -- Constraints for table `freech_forum`
 --
 ALTER TABLE `freech_forum`
-  ADD CONSTRAINT `0_776` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `freech_posting_ibfk1` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `freech_thread`
+--
+ALTER TABLE `freech_thread`
+  ADD CONSTRAINT `freech_thread_ibfk1` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_posting`
 --
 ALTER TABLE `freech_posting`
-  ADD CONSTRAINT `0_778` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_779` FOREIGN KEY (`thread_id`) REFERENCES `freech_posting` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `0_780` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `freech_posting_ibfk1` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_ibfk2` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_ibfk3` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_permission`

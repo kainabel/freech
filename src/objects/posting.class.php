@@ -75,6 +75,7 @@
       $this->fields[updated]          = $_db_row[updated];
       $this->fields[created]          = $_db_row[created];
       $this->fields[n_children]       = $_db_row[n_children];
+      $this->fields[n_descendants]    = $_db_row[n_descendants];
       $this->fields[ip_hash]          = $_db_row[ip_hash];
       if (isset($_db_row[relation]))
         $this->fields[relation]       = $_db_row[relation];
@@ -302,7 +303,7 @@
 
     // The url for locking the posting.
     function get_lock_url() {
-      $url      = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'posting_lock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
@@ -317,7 +318,7 @@
 
     // The url for unlocking the posting.
     function get_unlock_url() {
-      $url      = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'posting_unlock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
@@ -332,7 +333,7 @@
 
     // The url for changing the posting priority.
     function get_prioritize_url($_priority) {
-      $url      = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'posting_prioritize');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('priority', (int)$_priority);
@@ -503,7 +504,7 @@
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
         return TRUE;
-      return $this->fields[n_children] != 0;
+      return $this->fields[n_descendants] != 0;
     }
 
 

@@ -34,7 +34,7 @@ class PollPrinter extends PrinterBase {
   }
 
 
-  function show_form($_poll, $_hint = '') {
+  function show_form($_poll, $_error = '') {
     $url = new URL('?', cfg('urlvars'));
     $url->set_var('action', 'poll_submit');
 
@@ -44,12 +44,12 @@ class PollPrinter extends PrinterBase {
     $this->clear_all_assign();
     $this->assign_by_ref('action', $url->get_string());
     $this->assign_by_ref('poll',   $_poll);
-    $this->assign_by_ref('hint',   $_hint);
+    $this->assign_by_ref('error',  $_error);
     $this->render(dirname(__FILE__).'/form.tmpl');
   }
 
 
-  function get_poll($_poll, $_hint = '') {
+  function get_poll($_poll, $_ack = '') {
     $url = new URL('?', cfg('urlvars'));
     $url->set_var('action', 'poll_vote');
 
@@ -60,15 +60,15 @@ class PollPrinter extends PrinterBase {
     $this->assign_by_ref('action',     $url->get_string());
     $this->assign_by_ref('poll',       $_poll);
     $this->assign_by_ref('result_url', $result_url->get_string());
-    $this->assign_by_ref('hint',       $_hint);
+    $this->assign_by_ref('ack',        $_ack);
     return $this->smarty->fetch(dirname(__FILE__).'/poll.tmpl');
   }
 
 
-  function get_poll_result($_poll, $_hint = '') {
+  function get_poll_result($_poll, $_ack = '') {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
-    $this->assign_by_ref('hint', $_hint);
+    $this->assign_by_ref('ack',  $_ack);
     return $this->smarty->fetch(dirname(__FILE__).'/poll_result.tmpl');
   }
 }

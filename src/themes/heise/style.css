@@ -80,19 +80,27 @@ tr.posting:hover a {
 }
 
 .error {
-  background: #ff8484;
-  border: 1px solid #ff4848;
   padding: 5px;
   margin: 5px;
   font-size: 1.3em;
+  background: #ff8484;
+  border: 1px solid #ff4848;
 }
 
 .hint {
-  background: #feec57;
-  border: 1px solid #ffd605;
   padding: 5px;
   margin: 5px;
   font-size: 1.3em;
+  background: #feec57;
+  border: 1px solid #ffd605;
+}
+
+.ack {
+  padding: 5px;
+  margin: 5px;
+  font-size: 1.3em;
+  background: #84ff86;
+  border: 1px solid #4eee00;
 }
 
 a {

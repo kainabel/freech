@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `freech_thread` (
   PRIMARY KEY  (`id`),
   KEY `forum_id` (`forum_id`),
   KEY `updated` (`updated`),
-  KEY `created` (`created`),
+  KEY `created` (`created`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `freech_thread` (
 CREATE TABLE IF NOT EXISTS `freech_posting` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forum_id` int(11) unsigned NOT NULL default '0',
-  `thread_id` int(11) unsigned default NULL,
+  `thread_id` int(11) unsigned NOT NULL,
   `priority` int(11) unsigned NOT NULL default '0',
   `is_parent` tinyint(1) unsigned default '0',
   `n_descendants` int(11) unsigned default '0',
@@ -233,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `freech_poll_vote` (
 -- Constraints for table `freech_forum`
 --
 ALTER TABLE `freech_forum`
-  ADD CONSTRAINT `freech_posting_ibfk1` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `freech_forum_ibfk1` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_thread`

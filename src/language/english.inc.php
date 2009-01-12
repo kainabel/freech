@@ -52,9 +52,7 @@
   $lang[deleted]          = "Deleted User";
   $lang[ip_hash]          = "(IP hash: [HASH])";
 
-  // Message administration.
-  $lang[posting_lock]     = "Lock message";
-  $lang[posting_unlock]   = "Unlock message";
+  // Other posting administration.
   $lang[posting_stick]    = "Make sticky";
   $lang[posting_unstick]  = "Remove sticky";
   $lang[blockedtitle]     = "Blocked Message";
@@ -183,9 +181,8 @@
   $lang[resetpasswd]      = "Reset Password";
   $lang[nosuchmail]       = "The given email address was not found.";
   $lang[passwdforgotten]  = "Forgot your password?";
-  $lang[enteruserdata]    = "Enter User Data";
-  $lang[username]         = "Username";
-  $lang[passwd]           = "Password";
+  $lang[username]         = "Username:";
+  $lang[passwd]           = "Password:";
   $lang[rememberpasswd]   = "Remember password";
   $lang[remembpasswdlong] = "Click here if you want do set a persistent cookie.";
   $lang[login]            = "Log in";
@@ -307,8 +304,6 @@
   $lang[poll_to_result]        = "View results";
 
   // Moderation log.
-  $lang[lock_reason]           = 'Reason:';
-  $lang[moderate_no_reason]    = 'Please enter a reason.';
   $lang[modlog]                = 'Moderation Log';
   $lang[modlog_reason]         = 'Reason: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked a'
@@ -320,4 +315,13 @@
                                . ' "[POSTING_LINK]" by [USER_LINK] sticky.';
   $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] has removed the sticky'
                                . ' from "[POSTING_LINK]" by [USER_LINK].';
+
+  // Locking postings.
+  $lang[posting_lock_title]     = 'Lock a Posting';
+  $lang[posting_lock]           = 'Lock posting';
+  $lang[posting_unlock]         = 'Unlock posting';
+  $lang[posting_lock_username]  = 'Username:';
+  $lang[posting_lock_subject]   = 'Subject:';
+  $lang[posting_lock_reason]    = 'Reason:';
+  $lang[posting_lock_no_reason] = 'Please enter a reason.';
 ?>

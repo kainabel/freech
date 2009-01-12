@@ -1,5 +1,5 @@
 <!-- posting lock -->
-<h2>{lang text="posting_lock"}</h2>
+<h2>{lang text="posting_lock_title"}</h2>
 {include file="error.inc.tmpl"}
 
 <form action="{$action|escape}"
@@ -10,27 +10,30 @@
 <input type="hidden" name="refer_to" value="{$refer_to|escape}" />
 <table summary=''>
   <tr>
-    <td>{lang text="name"}</td>
+    <td>
+      <span class="label">{lang text="posting_lock_username"}</span>
+    </td>
     <td>{$posting->get_username()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="msgtitle"}</td>
+    <td>
+      <span class="label">{lang text="posting_lock_subject"}</span>
+    </td>
     <td>{$posting->get_subject()|escape}</td>
   </tr>
   <tr>
-    <td colspan="2">{lang text="lock_reason"}</td>
-  </tr>
-  <tr>
     <td colspan="2">
-    {strip}
-    <textarea name='reason' cols='80' rows='10' wrap='virtual'>
-    </textarea>
-    {/strip}
+      <span class="label">{lang text="posting_lock_reason"}</span>
     </td>
   </tr>
 </table>
-<input type="submit"
-       name="posting_lock_submit"
-       value="{lang text="posting_lock"}" />
+<textarea name='reason' cols='80' rows='10' wrap='virtual'>
+</textarea>
+
+<p>
+  <input type="submit"
+         name="posting_lock_submit"
+         value="{lang text="posting_lock"}" />
+</p>
 </form>
 <!-- end posting lock -->

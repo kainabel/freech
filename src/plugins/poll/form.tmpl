@@ -8,7 +8,8 @@
 <input type='hidden' name='n_options' value='{$poll->n_options()}' />
 
 <p>
-  <b>{lang text="poll_title"}</b>&nbsp;<i>{lang text="required"}</i><br />
+  <span class="label">{lang text="poll_title"}</span>
+  <i>{lang text="required"}</i><br />
   <input type='text'
          size='50'
          name='poll_title'
@@ -20,7 +21,7 @@
 
 {foreach name=options item=option from=$poll->get_options()}
 <p>
-  {lang text="poll_option" number=$smarty.foreach.options.iteration}<br />
+  <span class="label">{lang text="poll_option" number=$smarty.foreach.options.iteration}</span><br />
   <input type='text'
          size='50'
          name='poll_option{$smarty.foreach.options.index}'

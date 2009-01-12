@@ -54,8 +54,6 @@
   $lang[ip_hash]          = "(Salziger IP-Hash: [HASH])";
 
   // Message administration.
-  $lang[posting_lock]     = "Beitrag sperren";
-  $lang[posting_unlock]   = "Beitrag freigeben";
   $lang[posting_stick]    = "Pin setzen";
   $lang[posting_unstick]  = "Pin entfernen";
   $lang[blockedtitle]     = "Gesperrter Beitrag";
@@ -193,9 +191,8 @@
   $lang[resetpasswd]      = "Zurücksetzen";
   $lang[nosuchmail]       = "Die angegebene Email-Adresse ist unbekannt.";
   $lang[passwdforgotten]  = "Zugangsdaten vergessen";
-  $lang[enteruserdata]    = "User-Daten eingeben";
-  $lang[username]         = "User-Name";
-  $lang[passwd]           = "Passwort";
+  $lang[username]         = "User-Name:";
+  $lang[passwd]           = "Passwort:";
   $lang[rememberpasswd]   = "Passwort merken";
   $lang[remembpasswdlong] = "Klicken Sie hier, wenn wir ein dauerhaftes Cookie "
                           . "setzen sollen.";
@@ -323,8 +320,6 @@
   $lang[poll_to_result]        = "Zum Umfrageergebnis";
 
   // Moderation log.
-  $lang[lock_reason]           = 'Grund:';
-  $lang[moderate_no_reason]    = 'Bitte eine Begründung angeben.';
   $lang[modlog]                = 'Moderations-Log';
   $lang[modlog_reason]         = 'Grund: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] hat ein'
@@ -339,4 +334,13 @@
   $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] hat den Pin vom'
                                . ' Posting "[POSTING_LINK]" von [USER_LINK]'
                                . ' wieder entfernt.';
+
+  // Locking postings.
+  $lang[posting_lock_title]     = 'Beitrag sperren';
+  $lang[posting_lock]           = 'Beitrag sperren';
+  $lang[posting_unlock]         = 'Beitrag freigeben';
+  $lang[posting_lock_username]  = 'Username:';
+  $lang[posting_lock_subject]   = 'Betreff:';
+  $lang[posting_lock_reason]    = 'Begründung:';
+  $lang[posting_lock_no_reason] = 'Bitte eine Begründung angeben.';
 ?>

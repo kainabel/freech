@@ -7,21 +7,23 @@
 <input type='hidden' name='parent_id' value='{$parent_id}' />
 <input type='hidden' name='msg_id'    value='{$message->get_id()}' />
 <input type='hidden' name='may_quote' value='{$may_quote|escape}' />
-<p>
 {if $__user->is_anonymous()}
-  <b>{lang text="name"}</b>&nbsp;<i>{lang text="required"}</i><br />
+<p>
+  <span class="label">{lang text="name"}</span>
+  <i>{lang text="required"}</i><br />
   <input type='text'
          size='80'
          name='username'
          value='{$message->get_username()|escape}'
          maxlength='{$max_usernamelength}' />
+</p>
 {else}
   <input type='hidden' name='username' value='{$__user->get_name()|escape}' />
 {/if}
-</p>
 
 <p>
-  <b>{lang text="msgtitle"}</b>&nbsp;<i>{lang text="required"}</i><br />
+  <span class="label">{lang text="msgtitle"}</span>
+  <i>{lang text="required"}</i><br />
   <input type='text'
          size='80'
          name='subject'
@@ -30,7 +32,8 @@
 </p>
 
 <p>
-  <b>{lang text="msgbody"}</b>&nbsp;<i>{lang text="required"}</i><br />
+  <span class="label">{lang text="msgbody"}</span>
+  <i>{lang text="required"}</i><br />
   {strip}
   <textarea name='body' cols='80' rows='20' wrap='virtual'>
   {$message->get_body()|escape}

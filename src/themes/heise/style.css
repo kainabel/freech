@@ -1,6 +1,6 @@
 body {
   margin: 0em;
-  font: .8em arial,helvetica;
+  font: .95em arial,tahoma,verdana,helvetica;
 }
 
 table {
@@ -137,4 +137,12 @@ input {
 
 .index a:visited {
   color: #cccccc;
+}
+
+.intro {
+  padding-bottom: 15px;
+}
+
+.label {
+  font-weight: bold;
 }

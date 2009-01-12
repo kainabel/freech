@@ -4,52 +4,34 @@
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
-  <input type='hidden' name='action'   value='login' />
-  <input type='hidden' name='refer_to' value='{$refer_to|escape}' />
-  <div align="left">
-    <table border="0" cellpadding="2" summary=''>
-      <tr>
-        <td bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC"><b>{lang text="enteruserdata"}</b></td>
-      </tr>
-      <tr>
-        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="username"}</td>
-        <td bgcolor="#CCCCCC">
-          <input type="text" name="username" size="20" value="{$user->get_name()}" />
-        </td>
-      </tr>
-      <tr>
-        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="passwd"}</td>
-        <td bgcolor="#CCCCCC">
-          <input type="password" name="password" size="20" />
-        </td>
-      </tr>
-      <tr>
-        <td align="right" valign="middle" bgcolor="#CCCCCC">{lang text="rememberpasswd"}</td>
-        <td bgcolor="#CCCCCC">
-          <font size="2">{lang text="remembpasswdlong"}<br /></font>
-          <input type="checkbox" name="permanent" value="ON" /><br>
-        </td>
-      </tr>
-      <tr>
-        <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC"><input type="submit" value='{lang text="login"}'></td>
-      </tr>
-      <tr>
-        <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC">
-          <a href="{$forgot_url|escape}">{lang text="passwdforgotten"}</a>
-        </td>
-      </tr>
-{if !$user->is_confirmed()}
-      <tr>
-        <td align="right" valign="top" bgcolor="#CCCCCC">&nbsp;</td>
-        <td bgcolor="#CCCCCC">
-          <a href="{$resend_url|escape}">{lang text="resendconfirm"}</a>
-        </td>
-      </tr>
-{/if}
-    </table>
-  </div>
+<input type='hidden' name='action'   value='login' />
+<input type='hidden' name='refer_to' value='{$refer_to|escape}' />
+
+<p>
+  <span class="label">{lang text="username"}</span><br/>
+  <input type="text"
+         name="username"
+         size="20"
+         value="{$user->get_name()|escape}" />
+</p>
+
+<p>
+  <span class="label">{lang text="passwd"}</span><br/>
+  <input type="password" name="password" size="20" /><br/>
+  <input type="checkbox" name="permanent" value="ON" />
+  {lang text="rememberpasswd"}
+</p>
+
+<p>
+  <input type="submit" value='{lang text="login"}'>
+</p>
 </form>
+
+<p>
+  <a href="{$forgot_url|escape}">{lang text="passwdforgotten"}</a>
+{if !$user->is_confirmed()}
+  <br/>
+  <a href="{$resend_url|escape}">{lang text="resendconfirm"}</a>
+{/if}
+</p>
 <!-- end login -->

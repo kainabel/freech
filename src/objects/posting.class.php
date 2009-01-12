@@ -46,6 +46,7 @@
       $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->fields[renderer]     = 'message';
       $this->fields[is_active]    = TRUE;
+      $this->fields[priority]     = 0;
       $this->fields[user_id]      = 2; // Anonymous user.
       $this->fields[allow_answer] = TRUE;
       $this->fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);

@@ -1,5 +1,6 @@
 Maintenance
 ------------
+* Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
 * Find a clean way for adding plugin preferences.
@@ -11,6 +12,7 @@ Maintenance
 
 Features
 ---------
+* Fix the modlog.
 * Create a front page.
 * Move page links to the front page.
 * Respect freech_posting.force_stub.

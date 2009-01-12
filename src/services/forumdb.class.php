@@ -194,7 +194,7 @@
         $sql .= "  renderer, is_parent, username,";
         $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
-        $sql .= " '', {forum_id}, {thread_id}, {priority}";
+        $sql .= " '', {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";

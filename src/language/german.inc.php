@@ -23,8 +23,7 @@
   $lang[countrycode]      = "de";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum (bisher [POSTINGS] Beiträge,"
-                          . " [NEWPOSTINGS] neu)";
+  $lang[forum_long]       = "Forum ([POSTINGS] Beiträge, [NEWPOSTINGS] neu)";
   $lang[forum_n_online]   = "[USERS] User online";
   $lang[breadcrumbs]      = "Sie sind hier:";
   $lang[unfoldall]        = "Alles aufklappen";

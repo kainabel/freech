@@ -151,9 +151,40 @@
      * $_search: The search values.
      */
     function get_items_from_query($_search, $_limit = -1, $_offset = 0) {
-      $sql  = $this->_get_sql_from_query($_search);
-      $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
-      $list = array();
+      // Get a list of item ids.
+      $query = new FreechSqlQuery;
+      $sql   = 'SELECT m.id';
+      $sql  .= ' FROM {t_modlog} m';
+      $sql  .= ' WHERE 1';
+      foreach ($_search as $key => $value) {
+        if (is_int($value))
+          $sql .= " AND m.$key={".$key.'}';
+        else
+          $sql .= " AND m.$key LIKE {".$key.'}';
+        $query->set_var($key, $value);
+      }
+      $sql .= ' ORDER BY m.id DESC';
+      $query->set_sql($sql);
+      $res  = $this->db->SelectLimit($query->sql(),
+                                     (int)$_limit,
+                                     (int)$_offset);
+
+      // Now fetch the items, including attributes.
+      $sql   = 'SELECT m.*,';
+      $sql  .= ' a.attribute_name,a.attribute_type,a.attribute_value,';
+      $sql  .= ' UNIX_TIMESTAMP(m.created) created';
+      $sql  .= ' FROM {t_modlog} m';
+      $sql  .= ' LEFT JOIN {t_modlog_attribute} a ON a.modlog_id=m.id';
+      $sql  .= ' WHERE 0';
+      while (!$res->EOF) {
+        $row = $res->FetchObj();
+        $sql .= ' OR m.id='.$row->id;
+        $res->MoveNext();
+      }
+      $sql  .= ' ORDER BY m.id DESC';
+      $query = new FreechSqlQuery($sql);
+      $res   = $this->db->Execute($query->sql());
+      $list  = array();
       while ($item = $this->_pop_item_from_result($res))
         array_push($list, $item);
       return $list;

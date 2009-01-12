@@ -65,10 +65,11 @@ class PollPrinter extends PrinterBase {
   }
 
 
-  function get_poll_result($_poll, $_ack = '') {
+  function get_poll_result($_poll, $_ack = '', $_hint = '') {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
     $this->assign_by_ref('ack',  $_ack);
+    $this->assign_by_ref('hint', $_hint);
     return $this->smarty->fetch(dirname(__FILE__).'/poll_result.tmpl');
   }
 }

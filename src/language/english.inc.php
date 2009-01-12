@@ -298,6 +298,7 @@
   $lang[poll_too_many_options] = "Too many options.";
   $lang[poll_option_too_long]  = "An option is too long.";
   $lang[poll_duplicate_option] = "The poll has duplicate options.";
+  $lang[poll_anonymous]        = "Please log in to cast your vote.";
   $lang[poll_vote]             = "Vote";
   $lang[poll_vote_accepted]    = "Thank You for your vote.";
   $lang[poll_limit_reached]    = "You have opened too many polls. Sorry.";

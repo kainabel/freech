@@ -313,6 +313,7 @@
   $lang[poll_too_many_options] = "Zu viele Optionen.";
   $lang[poll_option_too_long]  = "Eine der Optionen ist zu lang.";
   $lang[poll_duplicate_option] = "Die Umfrage hat doppelte Optionen.";
+  $lang[poll_anonymous]        = "Um Abstimmen zu können bitte einloggen.";
   $lang[poll_vote]             = "Stimme abgeben";
   $lang[poll_vote_accepted]    = "Ihre Stimmabgabe wurde gewertet.";
   $lang[poll_limit_reached]    = "Sie haben zu viele Umfragen gestartet.";

@@ -327,9 +327,9 @@
   $lang[modlog_reason]         = 'Grund: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] hat das Posting'
                                . ' "[POSTING_LINK]" von [USER_LINK] gesperrt.';
-  $lang[modlog_unlock_posting] = '[MODERATOR_LINK] hat das Posting'
-                               . ' "[POSTING_LINK]" von [USER_LINK] wieder'
-                               . ' freigegeben.';
+  $lang[modlog_unlock_posting] = '[MODERATOR_LINK] hat ein'
+                               . ' <a href="[POSTING_URL]">Posting</a>'
+                               . ' von [USER_LINK] wieder freigegeben.';
   $lang[modlog_set_sticky]     = '[MODERATOR_LINK] hat das Posting'
                                . ' "[POSTING_LINK]" von [USER_LINK]'
                                . ' festgepinnt.';

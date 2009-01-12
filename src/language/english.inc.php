@@ -309,8 +309,9 @@
   // Moderation log.
   $lang[modlog]                = 'Moderation Log';
   $lang[modlog_reason]         = 'Reason: [REASON]';
-  $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked the posting'
-                               . ' "[POSTING_LINK]" by [USER_LINK].';
+  $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked a'
+                               . ' <a href="[POSTING_URL]">posting</a>'
+                               . ' by [USER_LINK].';
   $lang[modlog_unlock_posting] = '[MODERATOR_LINK] has unlocked the posting'
                                . ' "[POSTING_LINK]" by [USER_LINK].';
   $lang[modlog_set_sticky]     = '[MODERATOR_LINK] has made the posting'

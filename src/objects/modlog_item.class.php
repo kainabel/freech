@@ -206,6 +206,7 @@
 
       $args = array('moderator_link' => $mod_html,
                     'posting_link'   => $post_url->get_html(),
+                    'posting_url'    => $post_url->get_string(TRUE),
                     'user_link'      => $user_html);
       $args = array_merge($args, $this->attributes);
       return lang('modlog_'.$this->get_action(), $args);

@@ -67,8 +67,11 @@ class Poll extends PostingDecorator {
     $db      = $this->forum->_get_db();
     $printer = new PollPrinter($this->forum);
 
-    if ($user->is_anonymous() || $_GET['result'])
+    if ($user->is_anonymous())
       return $printer->get_poll_result($poll, '', lang('poll_anonymous'));
+
+    if ($_GET['result'])
+      return $printer->get_poll_result($poll);
 
     if ($_GET['accept'])
       $hint = lang('poll_vote_accepted');

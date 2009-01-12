@@ -30,5 +30,19 @@
       $this->assign_by_ref('items', $items);
       $this->render('modlog.tmpl');
     }
+
+
+    function show_lock_posting($_posting, $_error = '') {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action', 'posting_lock_submit');
+      $url->set_var('msg_id', $_posting->get_id());
+
+      $this->clear_all_assign();
+      $this->assign_by_ref('action',   $url->get_string());
+      $this->assign_by_ref('refer_to', $_posting->get_url_string());
+      $this->assign_by_ref('posting',  $_posting);
+      $this->assign_by_ref('error',    $_error);
+      $this->render('posting_lock.tmpl');
+    }
   }
 ?>

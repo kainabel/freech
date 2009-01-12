@@ -1,0 +1,36 @@
+<!-- posting lock -->
+<h2>{lang text="posting_lock"}</h2>
+{include file="error.inc.tmpl"}
+
+<form action="{$action|escape}"
+      method="post"
+      accept-charset="utf-8">
+<input type="hidden" name="action"   value="posting_lock_submit" />
+<input type="hidden" name="msg_id"   value="{$posting->get_id()}" />
+<input type="hidden" name="refer_to" value="{$refer_to|escape}" />
+<table summary=''>
+  <tr>
+    <td>{lang text="name"}</td>
+    <td>{$posting->get_username()|escape}</td>
+  </tr>
+  <tr>
+    <td>{lang text="msgtitle"}</td>
+    <td>{$posting->get_subject()|escape}</td>
+  </tr>
+  <tr>
+    <td colspan="2">{lang text="lock_reason"}</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+    {strip}
+    <textarea name='reason' cols='80' rows='10' wrap='virtual'>
+    </textarea>
+    {/strip}
+    </td>
+  </tr>
+</table>
+<input type="submit"
+       name="posting_lock_submit"
+       value="{lang text="posting_lock"}" />
+</form>
+<!-- end posting lock -->

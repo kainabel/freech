@@ -323,6 +323,8 @@
   $lang[poll_to_result]        = "Zum Umfrageergebnis";
 
   // Moderation log.
+  $lang[lock_reason]           = 'Grund:';
+  $lang[moderate_no_reason]    = 'Bitte eine Begründung angeben.';
   $lang[modlog]                = 'Moderations-Log';
   $lang[modlog_reason]         = 'Grund: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] hat ein'

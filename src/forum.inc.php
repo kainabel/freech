@@ -721,10 +721,29 @@
     function _posting_lock() {
       $this->_assert_may('moderate');
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $printer = new ModLogPrinter($this);
+      $printer->show_lock_posting($posting);
+    }
+
+
+    // Locks an existing posting.
+    function _posting_lock_submit() {
+      $this->_assert_may('moderate');
+      $posting = $this->_get_posting_from_id_or_die((int)$_POST['msg_id']);
+
+      // Check for completeness.
+      $reason = $_POST['reason'];
+      if (!$reason) {
+        $printer = new ModLogPrinter($this);
+        return $printer->show_lock_posting($posting,
+                                           lang('moderate_no_reason'));
+      }
+
+      // Lock the posting and log the action.
       $posting->set_active(FALSE);
       $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
-      $this->_log_posting_moderation('lock_posting', $posting, '');
-      $this->_refer_to(urldecode($_GET['refer_to']));
+      $this->_log_posting_moderation('lock_posting', $posting, $reason);
+      $this->_refer_to(urldecode($_POST['refer_to']));
     }
 
 
@@ -1100,6 +1119,10 @@
 
       case 'posting_lock':
         $this->_posting_lock();
+        break;
+
+      case 'posting_lock_submit':
+        $this->_posting_lock_submit();
         break;
 
       case 'posting_unlock':

@@ -306,9 +306,8 @@
     // The url for locking the posting.
     function get_lock_url() {
       $url = new URL('?', cfg('urlvars'));
-      $url->set_var('action',   'posting_lock');
-      $url->set_var('msg_id',   $this->get_id());
-      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
+      $url->set_var('action', 'posting_lock');
+      $url->set_var('msg_id', $this->get_id());
       return $url;
     }
 

@@ -253,7 +253,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function get_updated_time($_format) {
+  function get_updated_time($_format = '') {
     return $this->posting->get_updated_time($_format);
   }
 

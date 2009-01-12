@@ -307,6 +307,8 @@
   $lang[poll_to_result]        = "View results";
 
   // Moderation log.
+  $lang[lock_reason]           = 'Reason:';
+  $lang[moderate_no_reason]    = 'Please enter a reason.';
   $lang[modlog]                = 'Moderation Log';
   $lang[modlog_reason]         = 'Reason: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked a'

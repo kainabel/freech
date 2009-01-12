@@ -218,6 +218,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function set_created_unixtime($_time) {
+    return $this->posting->set_created_unixtime($_time);
+  }
+
+
   function get_created_time() {
     return $this->posting->get_created_time();
   }
@@ -238,18 +243,33 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function set_updated_unixtime($_time) {
+    return $this->posting->set_updated_unixtime($_time);
+  }
+
+
   function get_updated_unixtime() {
     return $this->posting->get_updated_unixtime();
   }
 
 
-  function get_updated_time() {
-    return $this->posting->get_updated_time();
+  function get_updated_time($_format) {
+    return $this->posting->get_updated_time($_format);
   }
 
 
   function is_updated() {
     return $this->posting->is_updated();
+  }
+
+
+  function get_thread_updated_unixtime() {
+    return $this->posting->get_thread_updated_unixtime();
+  }
+
+
+  function get_thread_updated_time($_format = '') {
+    return $this->posting->get_thread_updated_time($_format);
   }
 
 
@@ -265,6 +285,11 @@ class PostingDecorator extends Trackable {
 
   function get_relation() {
     return $this->posting->get_relation();
+  }
+
+
+  function is_folded() {
+    return $this->posting->is_folded();
   }
 
 

@@ -12,7 +12,6 @@ Maintenance
 
 Features
 ---------
-* Fix the modlog.
 * Create a front page.
 * Move page links to the front page.
 * Respect freech_posting.force_stub.

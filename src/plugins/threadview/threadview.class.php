@@ -37,6 +37,9 @@ class ThreadView extends View {
     $posting->set_selected($posting->get_id() == $current_id);
     $posting->apply_block();
 
+    if ($posting->is_folded())
+      $posting->set_created_unixtime($posting->get_thread_updated_unixtime());
+
     // Append everything to a list.
     array_push($this->postings, $posting);
   }

@@ -78,6 +78,7 @@
       $this->fields[n_children]       = $_db_row[n_children];
       $this->fields[n_descendants]    = $_db_row[n_descendants];
       $this->fields[ip_hash]          = $_db_row[ip_hash];
+      $this->fields[threadupdate]     = $_db_row[threadupdate];
       if (isset($_db_row[relation]))
         $this->fields[relation]       = $_db_row[relation];
       $this->fields[is_parent]        = $_db_row[is_parent];
@@ -372,6 +373,11 @@
     }
 
 
+    function set_created_unixtime($_time) {
+      $this->fields[created] = (int)$_time;
+    }
+
+
     function get_created_unixtime() {
       return $this->fields[created];
     }
@@ -427,6 +433,19 @@
     }
 
 
+    function get_thread_updated_unixtime() {
+      return $this->fields[threadupdate];
+    }
+
+
+    // Returns the formatted time.
+    function get_thread_updated_time($_format = '') {
+      if (!$_format)
+        $_format = lang('dateformat');
+      return date($_format, $this->fields[threadupdate]);
+    }
+
+
     function is_updated() {
       return $this->get_created_unixtime() != $this->get_updated_unixtime();
     }
@@ -463,6 +482,11 @@
 
     function get_relation() {
       return $this->fields[relation];
+    }
+
+
+    function is_folded() {
+      return $this->get_relation() == MESSAGE_RELATION_PARENT_FOLDED;
     }
 
 

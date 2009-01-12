@@ -415,8 +415,7 @@
       // Build the SQL request to grab the complete threads.
       $sql  = "SELECT t.n_children,p2.*,";
       $sql .= " HEX(p2.path) path,";
-      if ($_updated_threads_first)
-        $sql .= " UNIX_TIMESTAMP(t.updated) threadupdate,";
+      $sql .= " UNIX_TIMESTAMP(t.updated) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(p2.updated) updated,";
       $sql .= " UNIX_TIMESTAMP(p2.created) created";
       $sql .= " FROM {t_thread} t";

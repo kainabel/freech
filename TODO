@@ -3,12 +3,10 @@ Maintenance
 * Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
-* Find a clean way for adding plugin preferences.
 * Design a URL scheme that makes sense for URL rewriting.
 * Use gettext and .po/.mo-files to replace the home grown thingy.
 
 Features
 ---------
-* Create a front page.
 * Move page links to the front page.
 * Respect freech_posting.force_stub.

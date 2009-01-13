@@ -982,5 +982,27 @@
       $row = $res->FetchRow();
       return $row[id];
     }
+
+
+    /* Returns a list of all forums.
+     */
+    function get_forums($_limit = -1, $_offset = 0) {
+      $sql   = "SELECT * FROM {t_forum}";
+      $sql  .= " ORDER BY id";
+      $query = new FreechSqlQuery($sql);
+      $res = $this->db->SelectLimit($query->sql(),
+                                    (int)$_limit,
+                                    (int)$_offset)
+                          or die("ForumDB::get_forums()");
+      $forums = array();
+      while (!$res->EOF) {
+        $obj   = $res->FetchObj($res);
+        $forum = new Forum;
+        $forum->set_from_db($obj);
+        array_push($forums, $forum);
+        $res->MoveNext();
+      }
+      return $forums;
+    }
   }
 ?>

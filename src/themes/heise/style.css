@@ -145,3 +145,64 @@ input {
 .label {
   font-weight: bold;
 }
+
+/* Homepage specific styles. */
+#forum_home {
+  margin-left: 15px;
+}
+
+.forum_link a {
+  font-size: 1.3em;
+  color: #353fa8;
+}
+
+.forum_status {
+  font-style: italic;
+  color: grey;
+}
+
+.forum_description {
+}
+
+.section {
+  margin: 0;
+  padding: 0;
+  width: 33.33%;
+  text-align: left;
+}
+
+.section h3 {
+  text-align: center;
+  padding: 5px;
+  margin: 0px;
+  font-size: 1.1em;
+  background: #353fa8;
+  border: 1px solid black;
+  color: white;
+  font-weight: normal;
+}
+
+#home_forum_links {
+  float: left;
+}
+
+#home_forum_links h3 {
+  margin-right: 5px;
+}
+
+#home_activity {
+  float: left;
+}
+
+#home_activity h3 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#home_new_users {
+  float: right;
+}
+
+#home_new_users h3 {
+  margin-left: 5px;
+}

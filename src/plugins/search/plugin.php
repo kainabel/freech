@@ -18,7 +18,7 @@ function search_init($forum) {
   $url = new URL('?', cfg('urlvars'), lang('search_forum'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum->get_current_forum_id());
-  $forum->page_links()->add_link($url);
+  $forum->forum_links()->add_link($url);
   $forum_id = $forum->get_current_forum_id();
 
   // Add a small search field to the forum.

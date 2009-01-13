@@ -36,6 +36,7 @@
 
   include_once 'objects/url.class.php';
   include_once 'objects/posting.class.php';
+  include_once 'objects/forum.class.php';
   include_once 'objects/user.class.php';
   include_once 'objects/group.class.php';
   include_once 'objects/modlog_item.class.php';
@@ -55,6 +56,7 @@
   include_once 'actions/breadcrumbs_printer.class.php';
   include_once 'actions/login_printer.class.php';
   include_once 'actions/profile_printer.class.php';
+  include_once 'actions/homepage_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
   include_once 'actions/view.class.php';
@@ -114,6 +116,7 @@
 
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus      = new Trackable;
+      $this->forum_links   = new Menu;
       $this->page_links    = new Menu;
       $this->search_links  = new Menu;
       $this->footer_links  = new Menu;
@@ -171,7 +174,7 @@
       // Add the modlog URL to the forum links.
       $url = new URL('?', cfg('urlvars'), lang('modlog'));
       $url->set_var('action', 'moderation_log');
-      $this->page_links->add_link($url);
+      $this->forum_links->add_link($url);
 
       // Add user-specific links.
       //FIXME: this probably should not be here.
@@ -299,20 +302,14 @@
 
 
     function _init_breadcrumbs() {
-      $forum_url = $this->_get_forum_url();
-      if (cfg('disable_posting_counter')) {
-        $this->breadcrumbs->add_link($forum_url);
+      $url = $this->_get_homepage_url();
+      $this->breadcrumbs->add_link($url);
+
+      if (!$_GET['forum_id'])
         return;
-      }
-      $forum_id   = $this->get_current_forum_id();
-      $search     = array('forum_id' => $forum_id);
-      $n_postings = $this->forumdb->get_n_postings($search);
-      $start      = time() - cfg('new_post_time');
-      $n_new      = $this->forumdb->get_n_postings($search, $start);
-      $vars       = array('postings'    => $n_postings,
-                          'newpostings' => $n_new);
-      $forum_url->set_label(lang('forum_long', $vars));
-      $this->breadcrumbs->add_link($forum_url);
+      $url = $this->_get_forum_url();
+      $this->breadcrumbs->add_separator();
+      $this->breadcrumbs->add_link($url);
     }
 
 
@@ -433,10 +430,21 @@
     }
 
 
+    // Returns an URL that points to the homepage.
+    function _get_homepage_url() {
+      if (!cfg('default_forum_id', NULL))
+        return new URL('.', cfg('urlvars'), lang('home'));
+
+      $url = new URL('?', cfg('urlvars'), lang('home'));
+      $url->set_var('action', 'homepage');
+      return $url;
+    }
+
+
     // Returns an URL that points to the current forum.
     function _get_forum_url() {
-      $forum_id = $this->get_current_forum_id();
-      $forum_url = &new URL('?', cfg('urlvars'), lang('forum'));
+      $forum_id  = $this->get_current_forum_id();
+      $forum_url = new URL('?', cfg('urlvars'), lang('forum'));
       $forum_url->set_var('forum_id', $forum_id);
       return $forum_url;
     }
@@ -634,8 +642,16 @@
     /*************************************************************
      * Action controllers for the forum overview.
      *************************************************************/
+    // Shows the homepage.
+    function _show_homepage() {
+      $printer = new HomepagePrinter($this);
+      $printer->show();
+      $this->_print_footer();
+    }
+
+
     // Shows the forum.
-    function _show() {
+    function _show_list() {
       $forum_id = $this->get_current_forum_id();
       $view     = $this->_get_current_view();
       $view->show($forum_id, (int)$_GET['hs']);
@@ -1059,8 +1075,9 @@
 
     // Prints the footer of the page.
     function _print_breadcrumbs() {
-      $printer = new BreadCrumbsPrinter($this);
-      $printer->show($this->breadcrumbs);
+      $show_page_links = $this->get_current_action() != 'homepage';
+      $printer         = new BreadCrumbsPrinter($this);
+      $printer->show($this->breadcrumbs, $show_page_links);
     }
 
 
@@ -1192,8 +1209,11 @@
         break;
 
       case 'list':
-      case '':
-        $this->_show();
+        $this->_show_list();
+        break;
+
+      case 'homepage':
+        $this->_show_homepage();
         break;
 
       default:
@@ -1275,7 +1295,9 @@
         return $_GET['action'];
       if ($_POST['action'])
         return $_POST['action'];
-      return 'list';
+      if ($_GET['forum_id'] || cfg('default_forum_id', NULL))
+        return 'list';
+      return 'homepage';
     }
 
 
@@ -1318,6 +1340,11 @@
 
     function register_renderer($_name, $_decorator_name) {
       $this->renderers[$_name] = $_decorator_name;
+    }
+
+
+    function forum_links() {
+      return $this->forum_links;
     }
 
 

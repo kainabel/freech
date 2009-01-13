@@ -14,7 +14,7 @@ function top_users_init($forum) {
 
   $url = new URL('?', cfg('urlvars'), lang('top_users'));
   $url->set_var('action', 'top_posters');
-  $forum->page_links()->add_link($url);
+  $forum->forum_links()->add_link($url);
 }
 
 

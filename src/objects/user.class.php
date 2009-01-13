@@ -347,6 +347,11 @@ define("USER_STATUS_BLOCKED",     3);
     }
 
 
+    function get_profile_url_html($_label) {
+      return $this->get_profile_url()->get_html($_label);
+    }
+
+
     function get_confirmation_hash() {
       $hash = md5($this->get_id()
                 . $this->get_firstname()

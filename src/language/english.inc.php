@@ -19,11 +19,18 @@
   */
 ?>
 <?php
+  // Home page.
+  $lang[home]             = "Home";
+  $lang[home_intro]       = "Please select a forum from the list below.";
+  $lang[home_forum_links] = "Forum Information";
+  $lang[home_activity]    = "Recent Forum Activity";
+  $lang[home_new_users]   = "Recently Registered Users";
+
   // Forum
   $lang[countrycode]      = "en";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[forum]            = "Forum";
-  $lang[forum_long]       = "Forum ([POSTINGS] postings, [NEWPOSTINGS] new)";
+  $lang[forum_status]     = "[POSTINGS] postings, [NEWPOSTINGS] new";
   $lang[forum_n_online]   = "[USERS] users online";
   $lang[breadcrumbs]      = "You are here:";
   $lang[unfoldall]        = "Unfold All";

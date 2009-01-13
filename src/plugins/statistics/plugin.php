@@ -14,7 +14,7 @@ function statistics_init($forum) {
 
   $url = new URL('?', cfg('urlvars'), lang('statistics'));
   $url->set_var('action', 'statistics');
-  $forum->page_links()->add_link($url);
+  $forum->forum_links()->add_link($url);
 }
 
 

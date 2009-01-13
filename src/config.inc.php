@@ -37,6 +37,10 @@
   // subdirectory.
   $cfg[theme] = 'heise';
 
+  // If a default forum id is given then the corresponding forum is shown
+  // in place of the homepage.
+  //$cfg[default_forum_id] = 1;
+
   // Maximum number of threads shown per page. (when shown in thread order)
   $cfg[tpp] = 16;
 

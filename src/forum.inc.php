@@ -71,7 +71,6 @@
   class FreechForum {
     var $db;
     var $forum;
-    var $registry;
     var $eventbus;
     var $smarty;
     var $thread_state;
@@ -132,9 +131,10 @@
       $this->visitordb = new VisitorDB($this->db);
       $this->visitordb->count();
 
-      $this->registry = new PluginRegistry();
-      $this->registry->read_plugins('plugins');
-      $this->registry->activate_plugins($this); //FIXME: Make activation configurable.
+      $registry = new PluginRegistry;
+      foreach (cfg('plugins') as $plugin => $active)
+        if ($active)
+          $registry->activate_plugin_from_dirname('plugins/'.$plugin, $this);
 
       $this->_handle_cookies();
 
@@ -582,11 +582,6 @@
       $url->set_var('msg_id',   $_posting_id);
       $url->set_var('forum_id', $this->get_current_forum_id());
       $this->_refer_to($url->get_string());
-    }
-
-
-    function &_get_registry() {
-      return $this->registry;
     }
 
 

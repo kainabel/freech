@@ -124,6 +124,18 @@
   // *************************************************************
   // Advanced settings.
   // *************************************************************
+  // Active plugins.
+  $cfg[plugins] = array('linkify'      => TRUE,
+                        'listview'     => TRUE,
+                        'message'      => TRUE,
+                        'poll'         => TRUE,
+                        'registration' => TRUE,
+                        'search'       => TRUE,
+                        'spamhash'     => TRUE,
+                        'statistics'   => TRUE,
+                        'threadview'   => TRUE,
+                        'top_users'    => TRUE);
+
   // If unsure leave unchanged. Currently only MySQL is supported.
   $cfg[db_dbn]  = "mysqlt://$cfg[db_usr]:"
                 . urlencode($cfg[db_pass])

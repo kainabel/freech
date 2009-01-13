@@ -86,18 +86,22 @@ class PluginRegistry {
     }
   }
 
+
   /**
    * Activates all known plugins.
    * Args: $args: Arguments passed to the plugin constructor.
    */
   function activate_plugins($args = '') {
-    foreach ($this->plugins as $path => $plugin) {
-      if (!$plugin->active)
-        continue;
-      include "$path/plugin.php";
-      $init = $plugin->constructor;
-      $init($args);
-    }
+    foreach ($this->plugins as $path => $plugin)
+      if ($plugin->active)
+        $this->activate_plugin_from_dirname($path, $args);
+  }
+
+
+  function activate_plugin_from_dirname($dirname, $args = '') {
+    include "$dirname/plugin.php";
+    $init = basename($dirname).'_init';
+    $init($args);
   }
 }
 ?>

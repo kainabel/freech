@@ -393,17 +393,24 @@
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
+      // Select all root nodes.
       if ($_thread_id == 0) {
-        // Select all root nodes.
-        $sql  = "SELECT t.id thread_id,p.id";
-        $sql .= " FROM {t_thread} t";
-        $sql .= " JOIN {t_posting} p ON t.id=p.thread_id";
-        $sql .= " WHERE p.forum_id={forum_id} AND p.is_parent";
-        if ($_updated_threads_first)
+        if ($_updated_threads_first) {
+          //FIXME: this may be optimized by duplicating the priority
+          // of top-level postings into the thread table.
+          $sql  = "SELECT t.id thread_id,p.id";
+          $sql .= " FROM {t_thread} t";
+          $sql .= " JOIN {t_posting} p ON t.id=p.thread_id";
+          $sql .= " WHERE p.forum_id={forum_id} AND p.is_parent=1";
           $sql .= " ORDER BY p.priority DESC, t.updated DESC";
-        else
-          $sql .= " ORDER BY p.priority DESC, t.created DESC";
-        $query = &new FreechSqlQuery($sql);
+        }
+        else {
+          $sql .= "SELECT p.thread_id, p.id";
+          $sql .= " FROM freech_posting p";
+          $sql .= " WHERE p.forum_id=1 AND p.is_parent=1";
+          $sql .= " ORDER BY p.priority DESC, p.created DESC";
+        }
+        $query = new FreechSqlQuery($sql);
         $query->set_int('forum_id', $_forum_id);
         //$this->db->debug=1;
         $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
@@ -885,7 +892,7 @@
       $sql .= " WHERE thread_id={thread_id}";
       $sql .= " AND is_active";
       $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
-      $sql .= " ORDER BY HEX(path) DESC";
+      $sql .= " ORDER BY path DESC";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
@@ -908,7 +915,7 @@
       $sql .= " AND NOT is_parent";
       if ($path)
         $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
-      $sql .= " ORDER BY HEX(path)";
+      $sql .= " ORDER BY path";
       $query = &new FreechSqlQuery($sql);
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);

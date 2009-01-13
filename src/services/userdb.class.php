@@ -94,7 +94,7 @@
       if (!$_search)
         $_search = array();
 
-      $query = &new FreechSqlQuery();
+      $query = new FreechSqlQuery;
       $sql   = "SELECT *,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
@@ -116,7 +116,7 @@
     function _get_user_from_row($row) {
       if (!$row)
         return;
-      $user = &new User;
+      $user = new User;
       $user->set_from_db($row);
       $this->users[$row[id]] = $user;
       return $user;

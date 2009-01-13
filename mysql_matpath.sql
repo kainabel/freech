@@ -91,6 +91,8 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   KEY `thread_id` (`thread_id`),
   KEY `user_id` (`user_id`),
   UNIQUE KEY `forum_id_2` (`forum_id`,`priority`,`id`),
+  KEY `forum_special1` (`forum_id`,`is_parent`,`priority`,`created`),
+  UNIQUE KEY `forum_special2` (`forum_id`,`is_active`,`id`),
   KEY `path` (`thread_id`,`path`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 

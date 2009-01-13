@@ -122,14 +122,13 @@
       $this->actions       = array();
       $this->views         = array();
       $this->renderers     = array();
+      $this->current_user  = NULL;
 
       // Connect to the DB.
       $this->db = ADONewConnection(cfg('db_dbn'))
         or die('FreechForum::FreechForum(): Error: Can\'t connect.'
              . ' Please check username, password and hostname.');
       $this->forumdb   = new ForumDB($this->db);
-      $this->visitordb = new VisitorDB($this->db);
-      $this->visitordb->count();
 
       $registry = new PluginRegistry;
       foreach (cfg('plugins') as $plugin => $active)
@@ -137,6 +136,11 @@
           $registry->activate_plugin_from_dirname('plugins/'.$plugin, $this);
 
       $this->_handle_cookies();
+
+      // Initialize the visitordb after cookie handling to prevent useless
+      // updates.
+      $this->visitordb = new VisitorDB($this->db);
+      $this->visitordb->count();
 
       /* Plugin hook: on_construct
        *   Called from within the FreechForum() constructor before any
@@ -156,8 +160,7 @@
       $this->smarty->register_function('lang', 'smarty_lang');
 
       // Attempt to login, if requested.
-      $this->current_user = FALSE;
-      $this->login_error  = 0;
+      $this->login_error = 0;
       if ($this->get_current_action() == 'login' && $_POST['username'])
         $this->login_error = $this->_try_login();
       if ($this->get_current_action() == 'logout') {

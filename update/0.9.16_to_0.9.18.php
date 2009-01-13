@@ -63,6 +63,10 @@ ALTER TABLE `freech_posting`
   ADD CONSTRAINT `freech_posting_ibfk2` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `freech_posting_ibfk3` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
 
+  // Update poll table definition.
+  $db->Execute("
+ALTER TABLE `freech_poll_option` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL");
+
   // Drop useless columns.
   $db->Execute("
 ALTER TABLE `freech_thread` DROP `thread_id`");

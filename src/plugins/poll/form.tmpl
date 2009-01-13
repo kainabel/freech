@@ -11,7 +11,7 @@
   <span class="label">{lang text="poll_title"}</span>
   <i>{lang text="required"}</i><br />
   <input type='text'
-         size='50'
+         size='80'
          name='poll_title'
          value='{$poll->get_title()|escape}' /><br/>
   <input type="checkbox"
@@ -23,7 +23,7 @@
 <p>
   <span class="label">{lang text="poll_option" number=$smarty.foreach.options.iteration}</span><br />
   <input type='text'
-         size='50'
+         size='80'
          name='poll_option{$smarty.foreach.options.index}'
          value='{$option|escape}' /><br />
 </p>

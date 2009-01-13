@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `freech_modlog_attribute` (
 CREATE TABLE IF NOT EXISTS `freech_poll_option` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `poll_id` int(11) unsigned NOT NULL,
-  `name` varchar(50) collate latin1_general_ci NOT NULL,
+  `name` varchar(100) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `poll_id` (`poll_id`),
   UNIQUE KEY `poll_id_2` (`poll_id`,`name`)

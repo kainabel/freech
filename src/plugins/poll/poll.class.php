@@ -213,7 +213,7 @@ class Poll extends PostingDecorator {
     if (count($options) > $this->get_max_options())
       return lang('poll_too_many_options');
     foreach ($options as $option)
-      if (strlen($option) > 50)
+      if (strlen($option) > cfg('max_subjectlength'))
         return lang('poll_option_too_long');
     if ($this->has_duplicate_options())
       return lang('poll_duplicate_option');

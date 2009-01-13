@@ -1083,8 +1083,9 @@
 
     // Prints the footer of the page.
     function _print_footer() {
-      $footer = new FooterPrinter($this);
-      $footer->show($this->get_current_forum_id());
+      $show_page_links = $this->get_current_action() != 'homepage';
+      $footer          = new FooterPrinter($this);
+      $footer->show($this->get_current_forum_id(), $show_page_links);
     }
 
 

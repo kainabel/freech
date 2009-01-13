@@ -24,9 +24,11 @@
   
   function &cfg($_key, $_default = NULL) {
     global $cfg;
-    if ($_key && isset($cfg[$_key]))
+    if (!$_key)
+      die("cfg(): Invalid configuration key '$_key'.\n");
+    if (isset($cfg[$_key]))
       return $cfg[$_key];
-    die("cfg(): Invalid configuration key '$_key'.\n");
+    return $_default;
   }
 
 

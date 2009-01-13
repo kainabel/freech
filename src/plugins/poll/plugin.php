@@ -50,9 +50,11 @@ function poll_on_add($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(lang('poll_create'));
 
+  $max_polls      = cfg('max_polls', 2);
+  $max_polls_time = time() - cfg('max_polls_time', 60 * 60 * 24);
   if (_n_polls_since($forum->_get_db(),
                      $forum->get_current_user(),
-                     time() - 60 * 60 * 24) >= 2)
+                     $max_polls_time) >= $max_polls)
     return $printer->show_error(lang('poll_limit_reached'));
   $printer->show_form($poll);
 }

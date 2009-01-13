@@ -301,7 +301,7 @@
   $lang[poll_anonymous]        = "Please log in to cast your vote.";
   $lang[poll_vote]             = "Vote";
   $lang[poll_vote_accepted]    = "Thank You for your vote.";
-  $lang[poll_limit_reached]    = "You have opened too many polls. Sorry.";
+  $lang[poll_limit_reached]    = "You have reached your poll limit. Sorry.";
   $lang[poll_to_result]        = "View results";
 
   // Moderation log.

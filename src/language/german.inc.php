@@ -316,7 +316,7 @@
   $lang[poll_anonymous]        = "Um Abstimmen zu können bitte einloggen.";
   $lang[poll_vote]             = "Stimme abgeben";
   $lang[poll_vote_accepted]    = "Ihre Stimmabgabe wurde gewertet.";
-  $lang[poll_limit_reached]    = "Sie haben zu viele Umfragen gestartet.";
+  $lang[poll_limit_reached]    = "Sie haben ihre Umfragen bereits verbraucht.";
   $lang[poll_to_result]        = "Zum Umfrageergebnis";
 
   // Moderation log.

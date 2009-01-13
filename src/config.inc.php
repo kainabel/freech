@@ -199,6 +199,10 @@
   $cfg[max_postings] = 5;
   $cfg[max_postings_time] = 60*3;
 
+  // Maximum number of polls per n seconds.
+  $cfg[max_polls] = 3;
+  $cfg[max_polls_time] = 60*60*24;
+
   // *************************************************************
   // Performance tweaks.
   // *************************************************************

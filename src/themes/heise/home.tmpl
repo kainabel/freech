@@ -33,7 +33,11 @@
   <h3>{lang text="home_activity"}</h3>
   <ul>
   {foreach item=posting from=$postings}
-    <li>{$posting->get_url_html()}</li>
+    {if $posting->is_active()}
+      <li>{$posting->get_url_html()}</li>
+    {else}
+      <li>{$posting->get_subject()|escape}</li>
+    {/if}
   {/foreach}
   </ul>
 </div>

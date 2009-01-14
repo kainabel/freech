@@ -333,4 +333,8 @@
   $lang[posting_lock_subject]   = 'Subject:';
   $lang[posting_lock_reason]    = 'Reason:';
   $lang[posting_lock_no_reason] = 'Please enter a reason.';
+
+  // Linkify plugin.
+  $lang[show_videos] = 'Show Videos';
+  $lang[hide_videos] = 'Hide Videos';
 ?>

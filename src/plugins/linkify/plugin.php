@@ -12,11 +12,26 @@ function linkify_init($forum) {
   $eventbus = $forum->get_eventbus();
   $eventbus->signal_connect('on_message_read_print',    'linkify_on_read');
   $eventbus->signal_connect('on_message_preview_print', 'linkify_on_preview');
+
+  // Register our extra actions.
+  $forum->register_action('linkify_hide_videos', 'linkify_on_hide_videos');
+  $forum->register_action('linkify_show_videos', 'linkify_on_show_videos');
 }
 
 
 function linkify_on_read($forum, $message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
+
+  if ($_COOKIE['linkify_show_videos']) {
+    $url = new URL('?', cfg('urlvars'), lang('hide_videos'));
+    $url->set_var('action', 'linkify_hide_videos');
+  }
+  else {
+    $url = new URL('?', cfg('urlvars'), lang('show_videos'));
+    $url->set_var('action', 'linkify_show_videos');
+  }
+  $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
+  $forum->footer_links()->add_link($url);
 }
 
 
@@ -25,8 +40,22 @@ function linkify_on_preview($forum, $message) {
 }
 
 
+function linkify_on_show_videos($forum) {
+  $forum->set_cookie('linkify_show_videos', TRUE);
+  $forum->_refer_to($_GET['refer_to']);
+}
+
+
+function linkify_on_hide_videos($forum) {
+  $forum->set_cookie('linkify_show_videos', FALSE);
+  $forum->_refer_to($_GET['refer_to']);
+}
+
+
 function linkify_try_youtube_url($url, $in_quotes) {
-  if (!cfg('autoembed_media_urls'))
+  if ($_GET['preview'] or $_POST['preview'])
+    return '';
+  if (!$_COOKIE['linkify_show_videos'])
     return '';
   if ($in_quotes)
     return '';

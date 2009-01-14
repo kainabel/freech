@@ -73,12 +73,6 @@
   // a posting. This comes at the cost of less stable URLs.
   $cfg[remember_page] = FALSE;
 
-  // These are options for the "linkify" plugin. When TRUE, media URLs
-  // such as links to YouTube are automatically converted such that the
-  // video is shown directly in the posting.
-  // match.
-  $cfg[autoembed_media_urls] = TRUE;
-
   // Specifies which URLs the linkify plugin converts to links.
   $cfg[autolink_pattern] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
 

@@ -351,4 +351,8 @@
   $lang[posting_lock_subject]   = 'Betreff:';
   $lang[posting_lock_reason]    = 'Begründung:';
   $lang[posting_lock_no_reason] = 'Bitte eine Begründung angeben.';
+
+  // Linkify plugin.
+  $lang[show_videos] = 'Videos einblenden';
+  $lang[hide_videos] = 'Videos ausblenden';
 ?>

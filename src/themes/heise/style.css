@@ -1,6 +1,11 @@
+/**
+ * General styles.
+ **/
 body {
   margin: 0em;
-  font: .95em arial,tahoma,verdana,helvetica;
+  font: .95em Arial, Tahoma, Verdana, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 table {
@@ -8,12 +13,8 @@ table {
   font-size: 1em;
 }
 
-tr.posting:hover {
-  background-color: #eeeeee;
-}
-
-tr.posting:hover a {
-  text-decoration: underline;
+label {
+  font-weight: bold;
 }
 
 a {
@@ -24,36 +25,81 @@ a:hover {
   text-decoration: underline;
 }
 
+a:link {
+  color:#003399;
+}
+
+a:visited {
+  color:#666666;
+}
+
+a:active {
+  color:#3366cc;
+}
+
 input {
 }
 
-#header {
-  height: 50px;
-  background-color: #353fa8;
+.icon {
+  border: none;
 }
 
-#title {
-  color: white;
-  font-size: 1.9em;
+.nowrap {
+  white-space: nowrap;
+}
+
+
+/* Information boxes. */
+.error, .hint, .ack {
+  padding: 5px;
+  margin: 5px;
+  font-size: 1.3em;
+}
+
+.error {
+  background: #ff8484;
+  border: 1px solid #ff4848;
+}
+
+.hint {
+  background: #feec57;
+  border: 1px solid #ffd605;
+}
+
+.ack {
+  background: #84ff86;
+  border: 1px solid #4eee00;
+}
+
+
+/**
+ * Series of links provided by the forum.
+ **/
+.index {
+  background-color: #353fa8;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.index a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.index a:visited {
+  color: #cccccc;
 }
 
 #account_links {
   display: block;
   vertical-align: top;
   font-size: .9em;
-  color: white;
+  color: #ffffff;
 }
 
 #account_links a {
   font-size: .9em;
-  color: white;
-}
-
-#status {
-  display: block;
-  vertical-align: bottom;
-  font-size: .9em;
-  color: white;
+  color: #ffffff;
 }
 
 #breadcrumbs {
@@ -74,43 +120,96 @@ input {
   color: #353fa8;
 }
 
+
+/**
+ * Header related styles.
+ **/
+#header {
+  height: 50px;
+  background-color: #353fa8;
+}
+
+#header_middle {
+  width: 100%;
+}
+
+#logo {
+  border: none;
+  width: 38;
+  height: 40;
+}
+
+#title {
+  color: #ffffff;
+  font-size: 1.9em;
+}
+
+#status {
+  display: block;
+  vertical-align: bottom;
+  font-size: .9em;
+  color: #ffffff;
+}
+
+
+/**
+ * Footer.
+ **/
 #powered_by {
   font-size: .9em;
 }
 
-#quicksearch {
-  padding: 0px;
-  margin: 0px;
+
+/**
+ * Posting list and posting tree related styles.
+ **/
+/* Row in the posting list/tree. */
+tr.posting:hover {
+  background-color: #eeeeee;
 }
 
-#quicksearch input {
-  width: 10em;
-  border: 1px solid black;
-  background-color: white;
+tr.posting:hover a {
+  text-decoration: underline;
 }
 
-.error {
-  padding: 5px;
+.selected {
+  color: #008000;
+}
+
+td.null {
+  width: 8px;
+}
+
+#empty_forum_message {
   margin: 5px;
-  font-size: 1.3em;
-  background: #ff8484;
-  border: 1px solid #ff4848;
+  font-style: italic;
 }
 
-.hint {
-  padding: 5px;
-  margin: 5px;
-  font-size: 1.3em;
-  background: #feec57;
-  border: 1px solid #ffd605;
+/* Images that make up the tree of a thread. */
+.thread_img {
+  border: none;
 }
 
-.ack {
-  padding: 5px;
-  margin: 5px;
-  font-size: 1.3em;
-  background: #84ff86;
-  border: 1px solid #4eee00;
+
+/**
+ * Formatting of postings.
+ **/
+.intro {
+  padding-bottom: 15px;
+}
+
+.quote {
+  color: #990000;
+}
+
+/* The date field in a posting. */
+.date {
+  color: #555555;
+}
+
+/* The "last edit" field in a posting. */
+.edited {
+  color: red;
 }
 
 #content {
@@ -123,34 +222,10 @@ input {
   margin-right: 10px;
 }
 
-.index {
-  background-color: #353fa8;
-  color: #ffffff;
-  font-weight: bold;
-}
 
-.index a {
-  color: #ffffff;
-  text-decoration: underline;
-}
-
-.index a:visited {
-  color: #cccccc;
-}
-
-.intro {
-  padding-bottom: 15px;
-}
-
-.label {
-  font-weight: bold;
-}
-
-/* Homepage specific styles. */
-#forum_home {
-  margin-left: 15px;
-}
-
+/**
+ * Homepage specific styles.
+ **/
 .forum_link a {
   font-size: 1.3em;
   color: #353fa8;
@@ -182,6 +257,10 @@ input {
   font-weight: normal;
 }
 
+#forum_home {
+  margin-left: 15px;
+}
+
 #home_forum_links {
   float: left;
 }
@@ -205,4 +284,49 @@ input {
 
 #home_new_users h3 {
   margin-left: 5px;
+}
+
+
+/**
+ * Search related styles.
+ **/
+#quicksearch {
+  padding: 0px;
+  margin: 0px;
+}
+
+#quicksearch input {
+  width: 10em;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+}
+
+
+/**
+ * The moderation log.
+ **/
+.modlog_entry {
+  width: 100%;
+}
+
+.modlog_reason {
+  font-style: italic;
+}
+
+#empty_modlog_message {
+  font-size: 1.1em;
+  font-style: italic;
+}
+
+
+/**
+ * User lists.
+ **/
+.user_list {
+  width: 100%;
+}
+
+#empty_user_list_message {
+  margin: 5px;
+  font-style: italic;
 }

@@ -26,11 +26,13 @@ function search_init($forum) {
         . "      action='.'\n"
         . "      method='get'\n"
         . "      accept-charset='utf-8'>\n"
-        . "<input type='hidden' name='action' value='search' />\n";
+        . "<input type='hidden' name='action' value='search' />\n"
+        . "<div>";
   if ($forum_id)
     $html .= "<input type='hidden' name='forum_id' value='$forum_id' />\n";
   $html .= htmlentities(lang('search_quick'), ENT_QUOTES, 'UTF-8');
   $html .= "&nbsp;<input type='text' name='q' value='' />\n";
+  $html .= "</div>\n";
   $html .= "</form>\n";
   $forum->search_links()->add_html($html);
 }

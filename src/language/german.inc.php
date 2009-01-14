@@ -329,6 +329,7 @@
 
   // Moderation log.
   $lang[modlog]                = 'Moderations-Log';
+  $lang[modlog_no_entry]       = 'Kein Eintrag vorhanden.';
   $lang[modlog_reason]         = 'Grund: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] hat ein'
                                . ' <a href="[POSTING_URL]">Posting</a>'

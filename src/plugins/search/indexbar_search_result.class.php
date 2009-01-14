@@ -31,7 +31,6 @@
       $this->Menu();
 
       // Prints the index (pagination).
-      $this->add_text(lang('index'));
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'search');
       $url->set_var('q',        $_args[query]);

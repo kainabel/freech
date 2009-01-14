@@ -3,20 +3,28 @@
 {include file="error.inc.tmpl"}
 
 <table width='100%' cellspacing='0' cellpadding='3' border='0' summary=''>
+{if $n_rows > 0}
 {foreach item=item from=$items}
  <tr>
-  <td nowrap='nowrap' align='left'>{$item->get_created_time()|escape}</td>
+  <td align='left' class='nowrap'>{$item->get_created_time()|escape}</td>
   <td>&nbsp;</td>
-  <td align='left' width='100%'>{$item->get_html()}</td>
+  <td align='left' class='modlog_entry'>{$item->get_html()}</td>
  </tr>
  {if $item->has_reason()}
  <tr>
   <td colspan='2'></td>
-  <td align='left' width='100%'>
-    <i>{lang text="modlog_reason" reason=$item->get_reason()}</i>
+  <td align='left' class='modlog_reason'>
+    {lang text="modlog_reason" reason=$item->get_reason()}
   </td>
  </tr>
  {/if}
 {/foreach}
+{else}
+<tr>
+  <td>
+    <span id='empty_modlog_message'>{lang text="modlog_no_entry"}</span>
+  </td>
+</tr>
+{/if}
 </table>
 <!-- end modlog -->

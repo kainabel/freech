@@ -1,34 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!-- header -->
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="stylesheet" type="text/css" href="{$__theme_dir}/style.css" />
   <title>{$title|escape}</title>
 </head>
-<body bgcolor="#FFFFFF"
-      text="#000000"
-      link="#003399"
-      vlink="#666666"
-      alink="#3366cc">
+<body>
 <table id='header' width='100%' cellpadding='2' cellspacing='0' summary=''>
  <tr>
   <td>&nbsp;</td>
   <td>
-    <a href='.'><img src='{$__theme_dir}/img/logo.png'
-                     alt=''
-                     border='0'
-                     width='38'
-                     height='40' /></a>
+    <a href='.'><img id='logo' src='{$__theme_dir}/img/logo.png' alt='' /></a>
   </td>
   <td>&nbsp;</td>
-  <td width='100%' align='left' valign='middle'>
+  <td id='header_middle' align='left' valign='middle'>
     <a href='.'><span id='title'>{$site_title|escape}</span></a>
   </td>
   <td>&nbsp;</td>
-  <td nowrap="nowrap" align="right">
+  <td class="nowrap" align="right">
     <span id='account_links'>
-{foreach name=loop item=item from=$account_links->get_items()} 
+{foreach name=loop item=item from=$account_links->get_items()}
   {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
   {if $item->is_link()}
     {$item->get_url_html()}

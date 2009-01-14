@@ -3,14 +3,16 @@
 <span class="intro">{lang text="home_intro"}</span>
 {include file="error.inc.tmpl"}
 
+<div id="forum_home">
 {foreach item=forum from=$forums}
-<p id="forum_home">
-  <span class="forum_link">{$forum->get_url_html()}</span>
-  <span class="forum_status">{$forum->get_status_text()|escape}</span>
-  <br/>
-  <span class="forum_description">{$forum->get_description()|escape}</span>
-</p>
+  <p>
+    <span class="forum_link">{$forum->get_url_html()}</span>
+    <span class="forum_status">{$forum->get_status_text()|escape}</span>
+    <br/>
+    <span class="forum_description">{$forum->get_description()|escape}</span>
+  </p>
 {/foreach}
+</div>
 
 <div class="section" id="home_forum_links">
   <h3>{lang text="home_forum_links"}</h3>

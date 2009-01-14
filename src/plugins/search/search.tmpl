@@ -3,6 +3,7 @@
 {include file="error.inc.tmpl"}
 
 <form action='.' method='get' accept-charset='utf-8'>
+<div>
 <input type="hidden" name="action"   value="search" />
 {if $forum_id}
 <input type="hidden" name="forum_id" value="{$forum_id}" />
@@ -10,6 +11,7 @@
 <input type="text"   name="q" size="50" value="{$query|escape}" />
 <input type="submit" value="{lang text="msg_search_start"}" />
 <input type="submit" name="user_search" value="{lang text="user_search_start"}" />
+</div>
 </form>
 
 {if $posting_search}

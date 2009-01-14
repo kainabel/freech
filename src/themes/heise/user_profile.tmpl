@@ -8,13 +8,12 @@
 {include file="error.inc.tmpl"}
 
 {if $showinfo}
-<p>
 <table summary=''>
   <tr>
     <td>{lang text="group_name"}</td>
     <td>
       <a href="{$group->get_profile_url_string()|escape}">{$group->get_name()|escape}</a>
-      <img src="{$group->get_icon()}" title="{$group->get_name()|escape}" />
+      <img src="{$group->get_icon()}" title="{$group->get_name()|escape}" alt="" />
     </td>
   </tr>
   <tr>
@@ -66,7 +65,6 @@
     </td>
   </tr>
 </table>
-</p>
 {/if}
 {if $showlist}
 <p>

@@ -2,9 +2,9 @@
 <table id='posting' border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
  <tr valign='middle'>
   <td>
-  <font color='#555555'>{$posting->get_created_time()}</font>
+  <span class='date'>{$posting->get_created_time()}</span>
 {if $posting->is_updated()}
-  <font color='red'>{lang text="lastupdated" time=$posting->get_updated_time()}</font>
+  <span class='edited'>{lang text="lastupdated" time=$posting->get_updated_time()}</span>
 {/if}
   <br />
   <b>{$posting->get_subject()|escape}</b>
@@ -18,7 +18,7 @@
 {/if}
     </td>
     <td>
-    <img border="0"
+    <img class='icon'
          src="{$posting->get_user_icon()|escape}"
          alt=""
          title="{lang text=$posting->get_user_icon_name()}" />

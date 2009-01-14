@@ -5,11 +5,11 @@
 <td>
 {if $posting->is_active()}
 <a href="{$posting->get_lock_url_string()|escape}">
-<img border='0' src='{$__theme_dir}/img/unlock.png' title='{lang text="posting_lock"}' />
+<img class='icon' src='{$__theme_dir}/img/unlock.png' title='{lang text="posting_lock"}' alt='' />
 </a>
 {else}
 <a href="{$posting->get_unlock_url_string()|escape}">
-<img border='0' src='{$__theme_dir}/img/lock.png' title='{lang text="posting_unlock"}' />
+<img class='icon' src='{$__theme_dir}/img/lock.png' title='{lang text="posting_unlock"}' alt='' />
 </a>
 {/if}
 </td>
@@ -17,11 +17,11 @@
 {if $posting->is_parent()}
   {if $posting->get_priority() == 0}
   <a href="{$posting->get_prioritize_url_string(1)|escape}">
-  <img border='0' src='{$__theme_dir}/img/sticky.png' title='{lang text="posting_stick"}' />
+  <img class='icon' src='{$__theme_dir}/img/sticky.png' title='{lang text="posting_stick"}' alt='' />
   </a>
   {else}
   <a href="{$posting->get_prioritize_url_string(0)|escape}">
-  <img border='0' src='{$__theme_dir}/img/sticky_red.png' title='{lang text="posting_unstick"}' />
+  <img class='icon' src='{$__theme_dir}/img/sticky_red.png' title='{lang text="posting_unstick"}' alt='' />
   </a>
   {/if}
 {/if}

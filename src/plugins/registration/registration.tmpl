@@ -8,34 +8,35 @@
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' id='registration' method='post' accept-charset='utf-8'>
+<div>
 <input type='hidden' name='action' value='account_create' />
 
 <p>
-  <b>{lang text="register_nick"}</b><br/>
+  <label>{lang text="register_nick"}</label><br />
   <input type="text" name="username" size="20" value="{$user->get_name()|escape}" /><br />
   <span class="size80">{lang text="register_nick_l"}</span>
 </p>
 
 <p>
-  <b>{lang text="register_fullname"}</b><br/>
+  <label>{lang text="register_fullname"}</label><br />
   <input type="text" name="firstname" size="20" value="{$user->get_firstname()|escape}" />
   <input type="text" name="lastname" size="20" value="{$user->get_lastname()|escape}" /><br />
   <span class="size80">{lang text="register_fullname_l"}</span>
 </p>
 
 <p>
-  <b>{lang text="register_mail"}</b><br/>
+  <label>{lang text="register_mail"}</label><br />
   <input type="text" name="mail" size="42" value="{$user->get_mail()|escape}" />
 </p>
 
 <p>
-  <b>{lang text="register_publicmail"}</b><br />
+  <label>{lang text="register_publicmail"}</label><br />
   <input type="checkbox" name="publicmail" />
   {lang text="register_public_l"}
 </p>
 
 <p>
-  <b>{lang text="register_term_title"}</b><br />
+  <label>{lang text="register_term_title"}</label><br />
   {lang text="register_term"}
 </p>
 
@@ -44,5 +45,6 @@
   &nbsp;&nbsp;
   <input type="submit" name="cancel" value="{lang text="register_disagree"}" />
 </p>
+</div>
 </form>
 <!-- end registration -->

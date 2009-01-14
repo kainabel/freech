@@ -3,6 +3,7 @@
 {include file="error.inc.tmpl"}
 
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
+<div>
 <input type="hidden" name="user_id" value="{$user->get_id()}" />
   <table summary=''>
     <tr>
@@ -59,7 +60,7 @@
     </tr>
     <tr>
       <td>{lang text="account_signature"}</td>
-      <td><textarea cols="80" name="signature">{$user->get_signature()|escape}</textarea></td>
+      <td><textarea cols="80" rows="2" name="signature">{$user->get_signature()|escape}</textarea></td>
     </tr>
     <tr>
       <td>{lang text="account_password"}</td>
@@ -75,5 +76,6 @@
       </td>
     </tr>
   </table>
+</div>
 </form>
 <!-- end user editor -->

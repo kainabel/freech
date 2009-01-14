@@ -1,9 +1,10 @@
+<!-- thread -->
 <table border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
 {if $n_rows > 0}
 {foreach item=posting from=$postings}
 <!-- thread_row -->
-<tr class='posting' valign='middle' bgcolor='#ffffff'>
-  <td align='center' width='8'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
+<tr class='posting' valign='middle'>
+  <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>{strip}
   <table border='0' cellspacing='0' cellpadding='0' summary=''>
     <tr>
@@ -33,9 +34,9 @@
 {if $posting->get_relation() == 1}
      <img src='{$__theme_dir}/img/o.png' width='9' height='21' alt='' />
 {elseif $posting->get_relation() == 2}
-     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' border='0' width='9' height='21' alt='0' /></a>
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' class='thread_img' width='9' height='21' alt='0' /></a>
 {elseif $posting->get_relation() == 3}
-     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' border='0' width='9' height='21' alt='0' /></a>
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' class='thread_img' width='9' height='21' alt='0' /></a>
 {elseif $posting->get_relation() == 4 || $posting->get_relation() == 5}
      <img src='{$__theme_dir}/img/e.png' width='20' height='23' alt='`-' />
 {elseif $posting->get_relation() == 6 || $posting->get_relation() == 7}
@@ -47,7 +48,7 @@
      &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
 {if $posting->is_selected()}
-     &nbsp;<font color='green'>{$posting->get_subject()|escape}</font>
+     &nbsp;<span class='selected'>{$posting->get_subject()|escape}</span>
 {elseif !$posting->is_active()}
      &nbsp;{$posting->get_subject()|escape}
 {else}
@@ -62,7 +63,7 @@
   <td><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>
 {if $posting->is_selected()}
-    &nbsp;<font color='green'>{$posting->get_username()|escape}</font>
+    &nbsp;<span class='selected'>{$posting->get_username()|escape}</span>
 {else}
     &nbsp;{$posting->get_username()|escape}
 {/if}
@@ -73,23 +74,26 @@
 {/if}
   </td>
 {if $posting->is_selected()}
-   <td align='right' nowrap='nowrap'>
-    <font color='green'>{$posting->get_created_time()}</font>
+   <td align='right' class='nowrap'>
+    <span class='selected'>{$posting->get_created_time()}</span>
    </td>
 {elseif $posting->is_new()}
-   <td align='right' nowrap='nowrap'>
-    <font color='#{$posting->get_newness_hex()}0000'>{$posting->get_created_time()}</font>
+   <td align='right' class='nowrap'>
+    <span style='color:#{$posting->get_newness_hex()}0000'>{$posting->get_created_time()}</span>
    </td>
 {else}
-   <td align='right' nowrap='nowrap'>{$posting->get_created_time()}</td>
+   <td align='right' class='nowrap'>{$posting->get_created_time()}</td>
 {/if}
-   <td align='center' width='8'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
+   <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
  </tr>
 <!-- end thread_row -->
 {/foreach}
 {else}
-<tr><td height='4'></td></tr>
-<tr><td align='center'><i>{lang text="search_no_posting"}</i></td></tr>
-<tr><td height='4'></td></tr>
+<tr>
+  <td align='center'>
+    <div id='empty_forum_message'>{lang text="search_no_posting"}</div>
+  </td>
+</tr>
 {/if}
 </table>
+<!-- end thread -->

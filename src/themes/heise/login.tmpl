@@ -4,11 +4,12 @@
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
+<div>
 <input type='hidden' name='action'   value='login' />
 <input type='hidden' name='refer_to' value='{$refer_to|escape}' />
 
 <p>
-  <span class="label">{lang text="username"}</span><br/>
+  <label>{lang text="username"}</label><br />
   <input type="text"
          name="username"
          size="20"
@@ -16,21 +17,22 @@
 </p>
 
 <p>
-  <span class="label">{lang text="passwd"}</span><br/>
-  <input type="password" name="password" size="20" /><br/>
+  <label>{lang text="passwd"}</label><br />
+  <input type="password" name="password" size="20" /><br />
   <input type="checkbox" name="permanent" value="ON" />
   {lang text="rememberpasswd"}
 </p>
 
 <p>
-  <input type="submit" value='{lang text="login"}'>
+  <input type="submit" value='{lang text="login"}' />
 </p>
+</div>
 </form>
 
 <p>
   <a href="{$forgot_url|escape}">{lang text="passwdforgotten"}</a>
 {if !$user->is_confirmed()}
-  <br/>
+  <br />
   <a href="{$resend_url|escape}">{lang text="resendconfirm"}</a>
 {/if}
 </p>

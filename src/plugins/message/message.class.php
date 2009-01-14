@@ -23,7 +23,7 @@
  * Decorates postings that are messages.
  */
 class Message extends PostingDecorator {
-    function _update_body_html($_quotecolor = '#990000') {
+    function _update_body_html() {
       // Perform non HTML generating formattings.
       $body = $this->get_body();
       if ($this->get_id() <= 0 && $this->get_signature())
@@ -38,7 +38,7 @@ class Message extends PostingDecorator {
       $body = $this->get_body_html();
       $body = string_escape($body);
       $body = preg_replace('/^(&gt; .*)/m',
-                           "<font color='$_quotecolor'>$1</font>",
+                           '<span class="quote">$1</span>',
                            $body);
       $body = preg_replace('/  /', '&nbsp;&nbsp;', $body);
       $body = nl2br($body);
@@ -53,9 +53,9 @@ class Message extends PostingDecorator {
     }
 
 
-    function get_body_html($_quotecolor = "#990000") {
+    function get_body_html() {
       if ($this->body_html === NULL)
-        $this->_update_body_html($_quotecolor);
+        $this->_update_body_html();
       return $this->body_html;
     }
 }

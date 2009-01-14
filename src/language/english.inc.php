@@ -46,7 +46,7 @@
   $lang[listview]         = "Order by Date";
   $lang[editposting]      = "Edit";
   $lang[writeanswer]      = "Reply";
-  $lang[writemessage]     = "Start a new Topic";
+  $lang[writemessage]     = "Start a New Topic";
   $lang[entryindex]       = "Message Overview";
   $lang[hidethread]       = "Hide Thread";
   $lang[showthread]       = "Show Thread";
@@ -118,7 +118,7 @@
   $lang[register_nick_l]     = "Please select a username (letters, digits,"
                              . " and spaces only). The username is used to log"
                              . " into your account later.";
-  $lang[register_fullname]   = "Firstname And Lastname:";
+  $lang[register_fullname]   = "Firstname and Lastname:";
   $lang[register_fullname_l] = "Please enter valid information, "
                              . " your registration is invalid otherwise"
                              . " and may be deleted.";
@@ -314,6 +314,7 @@
 
   // Moderation log.
   $lang[modlog]                = 'Moderation Log';
+  $lang[modlog_no_entry]       = 'No entries yet.';
   $lang[modlog_reason]         = 'Reason: [REASON]';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked a'
                                . ' <a href="[POSTING_URL]">posting</a>'

@@ -27,7 +27,8 @@
                                                   (int)$_offset);
       $this->clear_all_assign();
       //$this->assign_by_ref('indexbar', $indexbar);
-      $this->assign_by_ref('items', $items);
+      $this->assign_by_ref('n_rows', count($items));
+      $this->assign_by_ref('items',  $items);
       $this->render('modlog.tmpl');
     }
 

@@ -1116,16 +1116,16 @@
       $this->content = '';
       $action        = $this->get_current_action();
 
-      // Check whether a plugin registered the given action. This is done
-      // first to allow plugins for overriding the default handler.
-      if ($this->actions[$action])
-        return call_user_func($this->actions[$action], $this);
-
       // Prevent from accessing non-existent forums.
       if ($this->get_current_forum_id() && !$this->get_current_forum())
         die('No such forum.');
 
       $this->_init_breadcrumbs();
+
+      // Check whether a plugin registered the given action. This is done
+      // first to allow plugins for overriding the default handler.
+      if ($this->actions[$action])
+        return call_user_func($this->actions[$action], $this);
 
       switch ($action) {
       case 'read':

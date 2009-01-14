@@ -126,6 +126,7 @@
       $this->views         = array();
       $this->renderers     = array();
       $this->current_user  = NULL;
+      $this->current_forum = NULL;
 
       // Connect to the DB.
       $this->db = ADONewConnection(cfg('db_dbn'))
@@ -168,7 +169,8 @@
         $this->login_error = $this->_try_login();
       if ($this->get_current_action() == 'logout') {
         session_unset();
-        $this->_refer_to($this->_get_forum_url()->get_string());
+        $url = new URL('.', cfg('urlvars'));
+        $this->_refer_to($url->get_string());
       }
 
       // Add the modlog URL to the forum links.
@@ -200,7 +202,6 @@
       }
 
       // Go.
-      $this->_init_breadcrumbs();
       $this->_run();
       $this->render_time = microtime(TRUE) - $this->start_time;
     }
@@ -305,9 +306,9 @@
       $url = $this->_get_homepage_url();
       $this->breadcrumbs->add_link($url);
 
-      if (!$_GET['forum_id'])
+      if ($this->get_current_forum_id() == NULL)
         return;
-      $url = $this->_get_forum_url();
+      $url = $this->get_current_forum()->get_url();
       $this->breadcrumbs->add_separator();
       $this->breadcrumbs->add_link($url);
     }
@@ -441,15 +442,6 @@
     }
 
 
-    // Returns an URL that points to the current forum.
-    function _get_forum_url() {
-      $forum_id  = $this->get_current_forum_id();
-      $forum_url = new URL('?', cfg('urlvars'), lang('forum'));
-      $forum_url->set_var('forum_id', $forum_id);
-      return $forum_url;
-    }
-
-
     // Returns TRUE if the username is available, FALSE otherwise.
     function _username_available(&$_username) {
       $userdb = $this->get_userdb();
@@ -572,8 +564,13 @@
         return urldecode($_GET['refer_to']);
       elseif ($_POST['refer_to'])
         return urldecode($_POST['refer_to']);
-      elseif (!in_array($this->get_current_action(), $do_refer))
-        return $this->_get_forum_url()->get_string();
+      elseif (!in_array($this->get_current_action(), $do_refer)) {
+        $forum = $this->get_current_forum();
+        if ($forum)
+          return $forum->get_url()->get_string();
+        $url = new URL('.', cfg('urlvars'));
+        return $url->get_string();
+      }
       elseif ($_SERVER['REQUEST_URI'] == '/')
         return '';
       else
@@ -1124,6 +1121,12 @@
       if ($this->actions[$action])
         return call_user_func($this->actions[$action], $this);
 
+      // Prevent from accessing non-existent forums.
+      if ($this->get_current_forum_id() && !$this->get_current_forum())
+        die('No such forum.');
+
+      $this->_init_breadcrumbs();
+
       switch ($action) {
       case 'read':
         $this->_posting_read();             // Read a posting.
@@ -1311,7 +1314,25 @@
 
 
     function get_current_forum_id() {
-      return $_GET['forum_id'] ? (int)$_GET['forum_id'] : 1;
+      if ($this->get_current_action() == 'homepage')
+        return NULL;
+      if ($_GET['forum_id'])
+        return (int)$_GET['forum_id'];
+      $default = cfg('default_forum_id', FALSE);
+      if (!$default)
+        return NULL;
+      return $default;
+    }
+
+
+    function get_current_forum() {
+      if ($this->current_forum)
+        return $this->current_forum;
+      $id = $this->get_current_forum_id();
+      if (!$id)
+        return NULL;
+      $this->current_forum = $this->forumdb->get_forum_from_id($id);
+      return $this->current_forum;
     }
 
 

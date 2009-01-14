@@ -27,10 +27,6 @@
   // Print the page header.
   $forum->print_head();
 
-  // Permit only one forum at this time.
-  if ($forum->get_current_forum_id() != 1)
-    die('Other forums are currently not enabled.');
-
   $forum->show();
   $forum->destroy();
 ?>

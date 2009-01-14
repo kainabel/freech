@@ -984,6 +984,24 @@
     }
 
 
+    /* Returns the forum with the given id.
+     */
+    function get_forum_from_id($_id) {
+      $sql   = "SELECT * FROM {t_forum}";
+      $sql  .= " WHERE id={id}";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('id', $_id);
+      $res = $this->db->Execute($query->sql())
+                           or die('ForumDB::get_forum_from_id()');
+      if ($res->EOF)
+        return NULL;
+      $obj   = $res->FetchObj($res);
+      $forum = new Forum;
+      $forum->set_from_db($obj);
+      return $forum;
+    }
+
+
     /* Returns a list of all forums.
      */
     function get_forums($_limit = -1, $_offset = 0) {
@@ -993,7 +1011,7 @@
       $res = $this->db->SelectLimit($query->sql(),
                                     (int)$_limit,
                                     (int)$_offset)
-                          or die("ForumDB::get_forums()");
+                          or die('ForumDB::get_forums()');
       $forums = array();
       while (!$res->EOF) {
         $obj   = $res->FetchObj($res);

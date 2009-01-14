@@ -21,6 +21,7 @@
 <?php
   // Home page.
   $lang[home]             = "Home";
+  $lang[home_welcome]     = "Welcome!";
   $lang[home_intro]       = "Please select a forum from the list below.";
   $lang[home_forum_links] = "Forum Information";
   $lang[home_activity]    = "Recent Forum Activity";

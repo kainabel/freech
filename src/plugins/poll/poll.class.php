@@ -60,6 +60,8 @@ class Poll extends PostingDecorator {
 
 
   function get_body_html() {
+    if (!$this->is_active())
+      return '';
     // Fetch the poll from the database.
     $poll_id = $this->posting->get_id();
     $poll    = _get_poll_from_id($this->forum, $poll_id);
@@ -79,6 +81,11 @@ class Poll extends PostingDecorator {
     if (_poll_did_vote($db, $user, $poll_id))
       return $printer->get_poll_result($poll, $hint);
     return $printer->get_poll($poll);
+  }
+
+
+  function apply_block() {
+    return $this->posting->apply_block();
   }
 
 

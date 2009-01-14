@@ -719,7 +719,7 @@
       $this->_assert_may('moderate');
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
       $posting->set_priority((int)$_GET['priority']);
-      $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
+      $this->forumdb->save($posting->get_forum_id(), -1, $posting);
       if ($posting->get_priority() == 0)
         $this->_log_posting_moderation('remove_sticky', $posting, '');
       else
@@ -752,7 +752,7 @@
 
       // Lock the posting and log the action.
       $posting->set_active(FALSE);
-      $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
+      $this->forumdb->save($posting->get_forum_id(), -1, $posting);
       $this->_log_posting_moderation('lock_posting', $posting, $reason);
       $this->_refer_to(urldecode($_POST['refer_to']));
     }
@@ -763,7 +763,7 @@
       $this->_assert_may('moderate');
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
       $posting->set_active();
-      $this->forumdb->save($this->get_current_forum_id(), -1, $posting);
+      $this->forumdb->save($posting->get_forum_id(), -1, $posting);
       $this->_log_posting_moderation('unlock_posting', $posting, '');
       $this->_refer_to(urldecode($_GET['refer_to']));
     }

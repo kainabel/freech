@@ -407,7 +407,7 @@
         else {
           $sql .= "SELECT p.thread_id, p.id";
           $sql .= " FROM freech_posting p";
-          $sql .= " WHERE p.forum_id=1 AND p.is_parent=1";
+          $sql .= " WHERE p.forum_id={forum_id} AND p.is_parent=1";
           $sql .= " ORDER BY p.priority DESC, p.created DESC";
         }
         $query = new FreechSqlQuery($sql);

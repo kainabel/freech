@@ -1318,6 +1318,8 @@
         return NULL;
       if ($_GET['forum_id'])
         return (int)$_GET['forum_id'];
+      if ($_POST['forum_id'])
+        return (int)$_POST['forum_id'];
       $default = cfg('default_forum_id', FALSE);
       if (!$default)
         return NULL;

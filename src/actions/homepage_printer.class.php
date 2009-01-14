@@ -59,14 +59,14 @@ class HomepagePrinter extends PrinterBase {
     $db = $this->forumdb;
     $n  = $db->foreach_latest_posting(NULL,
                                       0,
-                                      8,
+                                      cfg('homepage_n_entries'),
                                       FALSE,
                                       array($this, '_append_posting'),
                                       '');
 
     // Get other page info.
     $forum_links = $this->parent->forum_links();
-    $new_users   = $this->parent->get_newest_users(5);
+    $new_users   = $this->parent->get_newest_users(cfg('homepage_n_entries'));
 
     // Render the template.
     $this->clear_all_assign();

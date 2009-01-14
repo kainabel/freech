@@ -28,7 +28,9 @@
       die("cfg(): Invalid configuration key '$_key'.\n");
     if (isset($cfg[$_key]))
       return $cfg[$_key];
-    return $_default;
+    if ($_default !== NULL)
+      return $_default;
+    die("cfg(): No such configuration key: '$_key'.\n");
   }
 
 

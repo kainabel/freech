@@ -125,6 +125,9 @@
   // Maximum number of moderation log entries per page.
   $cfg[modlog_epp] = 50;
 
+  // Number of items shown in the recent activity lists on the homepage.
+  $cfg[homepage_n_entries] = 8;
+
   // *************************************************************
   // Advanced settings.
   // *************************************************************

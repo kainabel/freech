@@ -432,7 +432,7 @@
 
     // Returns an URL that points to the homepage.
     function _get_homepage_url() {
-      if (!cfg('default_forum_id', NULL))
+      if (!cfg('default_forum_id', FALSE))
         return new URL('.', cfg('urlvars'), lang('home'));
 
       $url = new URL('?', cfg('urlvars'), lang('home'));
@@ -1296,7 +1296,7 @@
         return $_GET['action'];
       if ($_POST['action'])
         return $_POST['action'];
-      if ($_GET['forum_id'] || cfg('default_forum_id', NULL))
+      if ($_GET['forum_id'] || cfg('default_forum_id', FALSE))
         return 'list';
       return 'homepage';
     }

@@ -55,16 +55,16 @@
       $query_string = $_query;
       if ($_forum_id) {
         $this->assign('forum_id', $_forum_id);
-        $query_string = "forumid:$forum_id AND ($_query)";
+        $query_string = "forumid:$_forum_id AND ($_query)";
       }
-      $query = &new SearchQuery($query_string);
+      $query = new SearchQuery($query_string);
 
       // Run the search.
       $func  = array(&$this, '_append_posting');
       $total = $this->forumdb->get_n_postings_from_query($query);
       $rows  = $this->forumdb->foreach_posting_from_query($query,
                                                           (int)$_offset,
-                                                          cfg("epp"),
+                                                          cfg('epp'),
                                                           $func,
                                                           '');
 
@@ -72,9 +72,9 @@
       $args  = array(forum_id            => $_forum_id,
                      query               => $_query,
                      n_postings          => $total,
-                     n_postings_per_page => cfg("epp"),
+                     n_postings_per_page => cfg('epp'),
                      n_offset            => $_offset,
-                     n_pages_per_index   => cfg("ppi"));
+                     n_pages_per_index   => cfg('ppi'));
       $indexbar = &new IndexBarSearchResult($args);
 
       // Render the result.

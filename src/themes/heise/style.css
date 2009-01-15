@@ -303,6 +303,14 @@ td.null {
 
 
 /**
+ * Polls.
+ **/
+#poll label {
+  font-weight: normal;
+}
+
+
+/**
  * The moderation log.
  **/
 .modlog_entry {

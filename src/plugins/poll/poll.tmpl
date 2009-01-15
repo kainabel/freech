@@ -5,6 +5,7 @@
 <input type='hidden' name='action'  value='poll_vote' />
 <input type='hidden' name='poll_id' value='{$poll->get_id()}' />
 
+<div id="poll">
 {if $poll->get_allow_multiple()}
   {html_checkboxes name=options options=$poll->get_option_map() separator='<br />'}
 {else}
@@ -15,5 +16,7 @@
   <input type='submit' name='send' value='{lang text="poll_vote"}' />
   &nbsp;<a href="{$result_url}">{lang text="poll_to_result"}</a>
 </p>
+</div>
+
 </form>
 <!-- end poll -->

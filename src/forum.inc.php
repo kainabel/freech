@@ -643,7 +643,6 @@
     function _show_homepage() {
       $printer = new HomepagePrinter($this);
       $printer->show();
-      $this->_print_footer();
     }
 
 
@@ -652,7 +651,6 @@
       $forum_id = $this->get_current_forum_id();
       $view     = $this->_get_current_view();
       $view->show($forum_id, (int)$_GET['hs']);
-      $this->_print_footer();
     }
 
 
@@ -710,7 +708,6 @@
 
       $view = $this->_get_current_view();
       $view->show_posting($posting);
-      $this->_print_footer();
     }
 
 
@@ -1080,9 +1077,9 @@
 
     // Prints the footer of the page.
     function _print_footer() {
-      $show_page_links = $this->get_current_action() != 'homepage';
-      $footer          = new FooterPrinter($this);
-      $footer->show($this->get_current_forum_id(), $show_page_links);
+      $show_footer_links = $this->get_current_action() == 'list';
+      $footer            = new FooterPrinter($this);
+      $footer->show($this->get_current_forum_id(), $show_footer_links);
     }
 
 
@@ -1124,8 +1121,10 @@
 
       // Check whether a plugin registered the given action. This is done
       // first to allow plugins for overriding the default handler.
-      if ($this->actions[$action])
-        return call_user_func($this->actions[$action], $this);
+      if ($this->actions[$action]) {
+        call_user_func($this->actions[$action], $this);
+        return $this->_print_footer();
+      }
 
       switch ($action) {
       case 'read':
@@ -1223,6 +1222,8 @@
       default:
         break;
       }
+
+      $this->_print_footer();
     }
 
 

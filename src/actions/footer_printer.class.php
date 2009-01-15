@@ -20,16 +20,15 @@
 ?>
 <?php
   class FooterPrinter extends PrinterBase {
-    function show($_forum_id, $_show_page_links) {
+    function show($_forum_id) {
       $footer_links  = $this->parent->footer_links();
       $version[url]  = 'http://code.google.com/p/freech/';
       $version[text] = 'Freech Forum '.FREECH_VERSION;
 
       // Render the resulting template.
       $this->clear_all_assign();
-      $this->assign_by_ref('footer_links',    $footer_links);
-      $this->assign_by_ref('show_page_links', $_show_page_links);
-      $this->assign_by_ref('version',         $version);
+      $this->assign_by_ref('footer_links', $footer_links);
+      $this->assign_by_ref('version',      $version);
       $this->render('footer.tmpl');
     }
   }

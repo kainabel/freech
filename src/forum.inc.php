@@ -1077,9 +1077,8 @@
 
     // Prints the footer of the page.
     function _print_footer() {
-      $show_footer_links = $this->get_current_action() == 'list';
-      $footer            = new FooterPrinter($this);
-      $footer->show($this->get_current_forum_id(), $show_footer_links);
+      $footer = new FooterPrinter($this);
+      $footer->show($this->get_current_forum_id());
     }
 
 
@@ -1356,6 +1355,10 @@
 
     function register_view($_name, $_view, $_caption, $_priority) {
       $this->views[$_name] = $_view;
+
+      if ($this->get_current_action() != 'list'
+        && $this->get_current_action() != 'read')
+        return;
 
       if ($this->_get_current_view_name() == $_name)
         return $this->footer_links->add_text($_caption, $_priority);

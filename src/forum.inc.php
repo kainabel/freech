@@ -1307,9 +1307,14 @@
 
     // Returns a title for the current site.
     function get_current_title() {
-      if (!$this->title)
+      if ($this->title)
+        return $this->title.' - '.cfg('site_title');
+      $forum = $this->get_current_forum();
+      if (!$forum)
         return cfg('site_title');
-      return $this->title.' - '.cfg('site_title');
+      if ($forum->get_name() == cfg('site_title'))
+        return cfg('site_title');
+      return $forum->get_name().' - '.cfg('site_title');
     }
 
 

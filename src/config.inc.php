@@ -91,10 +91,7 @@
   $cfg[max_msglength] = 10000;
 
   // Number of characters before a line in a message wraps.
-  $cfg[max_linelength_soft] = 80;
-
-  // Number of characters before a quoted line in a message wraps.
-  $cfg[max_linelength_hard] = 120;
+  $cfg[max_linelength] = 120;
 
   // The default number of entries in your RSS file (if the 'len' attribute
   // is not passed as a GET variable).

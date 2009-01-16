@@ -41,11 +41,16 @@ class IndentedBlock {
 
 
   function append($_line) {
-    // Lines ending with a space have been auto-wrapped, so they may be joined
-    // together. Other lines are explicitely wrapped by the user, so they are
+    // Lines ending with a space have been auto-wrapped and may be joined
+    // together using a space.
+    // Lines ending with a tab character have been auto-wrapped and may be 
+    // joined without a space.
+    // Other lines are explicitely wrapped by the user, so they are
     // not joined.
     if (preg_match('/(.*) $/', $_line, $matches))
       $this->text .= $matches[1].' ';
+    elseif (preg_match('/(.*)\t$/', $_line, $matches))
+      $this->text .= $matches[1];
     else
       $this->text .= $_line."\n";
   }
@@ -61,32 +66,23 @@ class IndentedBlock {
   }
 
 
-  function _get_wrapped_lines($paragraph) {
-    $soft = max(40, cfg('max_linelength_soft') - $this->depth);
-    $hard = max(50, cfg('max_linelength_hard') - $this->depth);
-    if (strlen($paragraph) <= $soft)
-      return $paragraph;
-
-    // Wrap the paragraph at word boundaries.
-    $wrapped = wordwrap($paragraph, $soft);
-
-    // Some lines may still exceed the line length if there was no
-    // word boundary available. So we break these as well.
-    return wordwrap($wrapped, $hard, "\n", TRUE);
-  }
-
-
   function get_quoted_text($_depth = 1) {
     if ($this->depth + $_depth == 0)
       return trim($this->text);
-    $text = '';
+    $text    = '';
+    $prefix .= str_repeat('> ', $this->depth + $_depth);
+    $maxlen  = max(45, cfg('max_linelength') - strlen($prefix));
     foreach (explode("\n", $this->text) as $paragraph) {
-      $lines = explode("\n", $this->_get_wrapped_lines($paragraph));
-      foreach ($lines as $line) {
+      $paragraph = wordwrap($paragraph, $maxlen, " \n");
+      foreach (explode("\n", $paragraph) as $line) {
         if (!$line)
           continue;
-        $text .= str_repeat('> ', $this->depth + $_depth);
-        $text .= $line." \n";
+        if (strlen($line) > $maxlen + 2) {
+          $line  = wordwrap($line, $maxlen, "\t\n", TRUE);
+          $lines = explode("\n", trim($line));
+          $line  = implode("\n".$prefix, $lines);
+        }
+        $text .= $prefix.$line."\n";
       }
       $text = trim($text)."\n";
     }

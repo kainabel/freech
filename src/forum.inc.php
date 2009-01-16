@@ -1074,7 +1074,7 @@
 
     // Prints the footer of the page.
     function _print_breadcrumbs() {
-      $show_page_links = $this->get_current_action() != 'homepage';
+      $show_page_links = (bool)$this->get_current_forum_id();
       $printer         = new BreadCrumbsPrinter($this);
       $printer->show($this->breadcrumbs, $show_page_links);
     }

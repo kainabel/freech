@@ -51,6 +51,10 @@
   // appears.
   $cfg[ppi] = 5;
 
+  // Defines whether threads in thread view are folded by default.
+  // Possible values are THREAD_STATE_FOLDED or THREAD_STATE_UNFOLDED.
+  $cfg[default_thread_state] = THREAD_STATE_UNFOLDED;
+
   // Show threads with new posts first. Note that setting this to TRUE has
   // a severe negative performance impact and is only recommended if
   // your site does not have a lot of traffic.

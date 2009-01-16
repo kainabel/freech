@@ -19,19 +19,17 @@
   */
 ?>
 <?php
-  define("THREAD_STATE_FOLDED",   1);
-  define("THREAD_STATE_UNFOLDED", 2);
-  
+  define('THREAD_STATE_FOLDED',   1);
+  define('THREAD_STATE_UNFOLDED', 2);
+
   class ThreadState {
     var $default = THREAD_STATE_UNFOLDED;
     var $swapped = array();
-    
-    function ThreadState($_default_state, $_swapped) {
-      if ($_default_state == THREAD_STATE_FOLDED)
-        $this->default = THREAD_STATE_FOLDED;
-      else
-        $this->default = THREAD_STATE_UNFOLDED;
-      
+
+    function ThreadState($_state, $_swapped) {
+      if ($_state)
+        $this->default = (int)$_state;
+
       $_swapped = explode('.', $_swapped, 1000);
       $i = 0;
       while ($_swapped[$i] != '') {
@@ -39,26 +37,26 @@
         $i++;
       }
     }
-    
-    
+
+
     function get_default() {
       return $this->default;
     }
-    
-    
+
+
     function swap($_id) {
       if ($this->swapped[$_id] == $_id)
         unset($this->swapped[$_id]);
       else
         $this->swapped[$_id] = $_id;
     }
-    
-    
+
+
     function get_string() {
       return implode('.', $this->swapped);
     }
-    
-    
+
+
     function is_folded($_id) {
       $id = $_id * 1;
       $swapped = $this->swapped;
@@ -66,8 +64,8 @@
         return $swapped[$id] != $id;
       return $swapped[$id] == $id;
     }
-    
-    
+
+
     function get_string_swap($_id = '') {
       if (!$_id)
         return implode('.', $this->swapped);

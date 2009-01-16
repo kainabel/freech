@@ -25,6 +25,7 @@
   require_once 'adodb/adodb.inc.php';
   include_once 'libuseful/SqlQuery.class.php5';
   include_once 'services/trackable.class.php';
+  include_once 'objects/thread_state.class.php';
 
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
@@ -42,7 +43,6 @@
   include_once 'objects/modlog_item.class.php';
   include_once 'objects/posting_decorator.class.php';
   include_once 'objects/unknown_posting.class.php';
-  include_once 'objects/thread_state.class.php';
   include_once 'objects/menu_item.class.php';
   include_once 'objects/menu.class.php';
   include_once 'objects/indexbar_group_profile.class.php';
@@ -241,6 +241,14 @@
     }
 
 
+    function get_thread_state($_section) {
+      $default = cfg('default_thread_state', THREAD_STATE_UNFOLDED);
+      $fold    = (int)$_COOKIE[$_section.'fold'];
+      return new ThreadState($fold ? $fold : $default,
+                             $_COOKIE[$_section.'c']);
+    }
+
+
     function _handle_cookies() {
       if (get_magic_quotes_gpc()) {
         $_GET    = array_map('stripslashes_deep', $_GET);
@@ -248,10 +256,9 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
       }
 
-      $thread_state        = &new ThreadState($_COOKIE['fold'],
-                                              $_COOKIE['c']);
-      $user_postings_state = &new ThreadState($_COOKIE['user_postings_fold'],
-                                              $_COOKIE['user_postings_c']);
+      $thread_state        = $this->get_thread_state('');
+      $user_postings_state = $this->get_thread_state('user_postings_');
+
       if ($_GET['c']) {
         $thread_state->swap($_GET['c']);
         $this->set_cookie('c', $thread_state->get_string());
@@ -777,22 +784,20 @@
 
     // Lists all postings of one user.
     function _show_user_postings() {
-      $user = $this->_get_user_from_name_or_die($_GET['username']);
+      $user         = $this->_get_user_from_name_or_die($_GET['username']);
+      $thread_state = $this->get_thread_state('user_postings_');
+      $profile      = new ProfilePrinter($this);
       $this->_add_profile_breadcrumbs($user);
-      $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
-                                       $_COOKIE['user_postings_c']);
-      $profile = &new ProfilePrinter($this);
       $profile->show_user_postings($user, $thread_state, (int)$_GET['hs']);
     }
 
 
     // Display information of one user.
     function _show_user_profile() {
-      $user = $this->_get_user_from_name_or_die($_GET['username']);
+      $user         = $this->_get_user_from_name_or_die($_GET['username']);
+      $thread_state = $this->get_thread_state('user_postings_');
+      $profile      = new ProfilePrinter($this);
       $this->_add_profile_breadcrumbs($user);
-      $thread_state = &new ThreadState($_COOKIE['user_postings_fold'],
-                                       $_COOKIE['user_postings_c']);
-      $profile = &new ProfilePrinter($this);
       $profile->show_user_profile($user, $thread_state, (int)$_GET['hs']);
     }
 

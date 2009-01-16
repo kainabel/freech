@@ -47,7 +47,7 @@ class ThreadView extends View {
 
   function show($_forum_id, $_offset) {
     // Load postings from the database.
-    $thread_state = new ThreadState($_COOKIE['fold'], $_COOKIE['c']);
+    $thread_state = $this->parent->get_thread_state('');
     $func         = array(&$this, '_append_posting');
     $this->forumdb->foreach_child($_forum_id,
                                   0,

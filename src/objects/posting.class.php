@@ -28,6 +28,73 @@
   define("MESSAGE_RELATION_CHILD_STUB",      6);
   define("MESSAGE_RELATION_CHILD",           7);
 
+class IndentedBlock {
+  function IndentedBlock($_depth) {
+    $this->depth = $_depth;
+    $this->text  = '';
+  }
+
+
+  function get_depth() {
+    return $this->depth;
+  }
+
+
+  function append($_line) {
+    // Lines ending with a space have been auto-wrapped, so they may be joined
+    // together. Other lines are explicitely wrapped by the user, so they are
+    // not joined.
+    if (preg_match('/(.*) $/', $_line, $matches))
+      $this->text .= $matches[1].' ';
+    else
+      $this->text .= $_line."\n";
+  }
+
+
+  function get_text() {
+    return $this->text;
+  }
+
+
+  function is_empty() {
+    return trim($this->text) == '';
+  }
+
+
+  function _get_wrapped_lines($paragraph) {
+    $soft = max(40, cfg('max_linelength_soft') - $this->depth);
+    $hard = max(50, cfg('max_linelength_hard') - $this->depth);
+    if (strlen($paragraph) <= $soft)
+      return $paragraph;
+
+    // Wrap the paragraph at word boundaries.
+    $wrapped = wordwrap($paragraph, $soft);
+
+    // Some lines may still exceed the line length if there was no
+    // word boundary available. So we break these as well.
+    return wordwrap($wrapped, $hard, "\n", TRUE);
+  }
+
+
+  function get_quoted_text($_depth = 1) {
+    if ($this->depth + $_depth == 0)
+      return trim($this->text);
+    $text = '';
+    foreach (explode("\n", $this->text) as $paragraph) {
+      $lines = explode("\n", $this->_get_wrapped_lines($paragraph));
+      foreach ($lines as $line) {
+        if (!$line)
+          continue;
+        $text .= str_repeat('> ', $this->depth + $_depth);
+        $text .= $line." \n";
+      }
+      $text = trim($text)."\n";
+    }
+    return trim($text);
+  }
+}
+
+
   /**
    * Represents a posting in the forum and all associated data.
    */
@@ -57,7 +124,7 @@
     // Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("Posting:set_from_db(): Non-array.");
+        die('Posting:set_from_db(): Non-array.');
       $this->clear();
       $this->fields[id]               = $_db_row[id];
       $this->fields[forum_id]         = $_db_row[forum_id];
@@ -215,18 +282,50 @@
     }
 
 
-    function &get_subject() {
+    function get_subject() {
       return $this->fields[subject];
     }
 
 
     function set_body($_body) {
-      $this->fields[body] = trim($_body);
+      $this->fields[body] = $_body;
     }
 
 
-    function &get_body() {
+    function get_body() {
       return $this->fields[body];
+    }
+
+
+    function _get_indented_blocks($_text) {
+      $text   = preg_replace('/\r/', '', $_text);
+      $lines  = explode("\n", $text);
+      $blocks = array();
+
+      foreach ($lines as $line) {
+        preg_match('/^([> ]*)(.*)$/', $line, $matches);
+        $depth = substr_count($matches[1], ">");
+        if (!$block || $block->get_depth() != $depth) {
+          $block = new IndentedBlock($depth);
+          array_push($blocks, $block);
+        }
+        $block->append($matches[2]);
+      }
+
+      $result = array();
+      foreach ($blocks as $block)
+        if (!$block->is_empty())
+          array_push($result, $block);
+      return $result;
+    }
+
+
+    function get_quoted_body($_depth = 1) {
+      $body   = $this->get_body();
+      $quoted = '';
+      foreach ($this->_get_indented_blocks($body) as $block)
+        $quoted .= $block->get_quoted_text($_depth) . "\n\n";
+      return trim($quoted);
     }
 
 

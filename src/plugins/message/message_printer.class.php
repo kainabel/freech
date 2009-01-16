@@ -64,9 +64,7 @@
                               $_parent_msg->get_created_time(),
                               $text);
         $text .= "\n\n";
-        $text .= preg_replace('/^/m',
-                              '> ',
-                              wordwrap_smart($_parent_msg->get_body()));
+        $text .= $_parent_msg->get_quoted_body();
         $text .= "\n\n";
       }
       $_message->set_body($text . $_message->get_body());

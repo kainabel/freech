@@ -103,7 +103,7 @@ function message_on_edit_unsaved($forum) {
   $parent_id = (int)$_POST['parent_id'];
   $may_quote = (int)$_POST['may_quote'];
   $posting   = message_init_posting_from_post_data();
-  $printer   = &new MessagePrinter($forum);
+  $printer   = new MessagePrinter($forum);
 
   $printer->show_compose($posting, '', $parent_id, $may_quote);
 }
@@ -114,7 +114,7 @@ function message_on_quote($forum) {
   $parent_id  = (int)$_POST['parent_id'];
   $quoted_msg = $forum->get_forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
-  $printer    = &new MessagePrinter($forum);
+  $printer    = new MessagePrinter($forum);
   $printer->show_compose_quoted($posting, $quoted_msg, '');
 }
 

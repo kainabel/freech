@@ -138,6 +138,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_quoted_body($_depth = 1) {
+    return $this->posting->get_quoted_body($_depth);
+  }
+
+
   function get_signature() {
     return $this->posting->get_signature();
   }

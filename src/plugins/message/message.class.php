@@ -25,10 +25,9 @@
 class Message extends PostingDecorator {
     function _update_body_html() {
       // Perform non HTML generating formattings.
-      $body = $this->get_body();
+      $body = $this->get_quoted_body(0);
       if ($this->get_id() <= 0 && $this->get_signature())
         $body .= "\n\n--\n" . $this->get_signature();
-      $body = wordwrap_smart($body);
 
       // Let plugins perform formattings.
       $this->set_body_html($body);
@@ -37,7 +36,7 @@ class Message extends PostingDecorator {
       // Perform HTML generating formattings.
       $body = $this->get_body_html();
       $body = string_escape($body);
-      $body = preg_replace('/^(&gt; .*)/m',
+      $body = preg_replace('/^(&gt; [^\r\n]*)/m',
                            '<span class="quote">$1</span>',
                            $body);
       $body = preg_replace('/  /', '&nbsp;&nbsp;', $body);

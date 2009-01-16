@@ -23,7 +23,7 @@
     function show($_forum_id) {
       $footer_links  = $this->parent->footer_links();
       $version[url]  = 'http://code.google.com/p/freech/';
-      $version[text] = 'Freech Forum '.FREECH_VERSION;
+      $version[text] = 'Freech '.FREECH_VERSION;
 
       // Render the resulting template.
       $this->clear_all_assign();

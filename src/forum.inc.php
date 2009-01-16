@@ -186,10 +186,6 @@
         $this->account_links->add_link($this->get_login_url());
       }
       else {
-        $url = $user->get_editor_url();
-        $url->set_label(lang('account_mydata'));
-        $this->account_links->add_link($url);
-
         $url = $user->get_postings_url();
         $url->set_label(lang('mypostings'));
         $this->account_links->add_link($url);

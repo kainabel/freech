@@ -48,6 +48,11 @@ input {
   white-space: nowrap;
 }
 
+#content {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 
 /* Information boxes. */
 .error, .hint, .ack {
@@ -216,14 +221,9 @@ td.null {
   color: red;
 }
 
-#content {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 #posting {
   margin-left: 10px;
-  margin-right: 10px;
+  width: 80%;
 }
 
 

@@ -159,6 +159,10 @@ input {
   font-size: .9em;
 }
 
+#rendered {
+  text-align: center;
+}
+
 
 /**
  * Posting list and posting tree related styles.
@@ -257,6 +261,14 @@ td.null {
   font-weight: normal;
 }
 
+.section ul {
+  list-style-type: none;
+  margin: 0;
+  margin-top: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 #forum_home {
   margin-left: 15px;
 }
@@ -284,6 +296,11 @@ td.null {
 
 #home_new_users h3 {
   margin-left: 5px;
+}
+
+#home_new_users ul {
+  list-style-position: inside;
+  list-style-image: url("img/person.png");
 }
 
 
@@ -337,8 +354,4 @@ td.null {
 #empty_user_list_message {
   margin: 5px;
   font-style: italic;
-}
-
-#rendered {
-  text-align: center;
 }

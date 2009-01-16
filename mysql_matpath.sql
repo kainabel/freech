@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `freech_thread` (
 CREATE TABLE IF NOT EXISTS `freech_posting` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forum_id` int(11) unsigned NOT NULL default '0',
+  `origin_forum_id` int(11) unsigned NOT NULL default '0',
   `thread_id` int(11) unsigned NOT NULL,
   `priority` int(11) unsigned NOT NULL default '0',
   `is_parent` tinyint(1) unsigned default '0',
@@ -88,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   KEY `hash` (`hash`),
   KEY `created` (`created`),
   KEY `forum_id` (`forum_id`),
+  KEY `origin_forum_id` (`origin_forum_id`),
   KEY `thread_id` (`thread_id`),
   KEY `user_id` (`user_id`),
   UNIQUE KEY `forum_id_2` (`forum_id`,`priority`,`id`),
@@ -235,58 +237,59 @@ CREATE TABLE IF NOT EXISTS `freech_poll_vote` (
 -- Constraints for table `freech_forum`
 --
 ALTER TABLE `freech_forum`
-  ADD CONSTRAINT `freech_forum_ibfk1` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `freech_forum_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_thread`
 --
 ALTER TABLE `freech_thread`
-  ADD CONSTRAINT `freech_thread_ibfk1` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_thread_forum_id` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_posting`
 --
 ALTER TABLE `freech_posting`
-  ADD CONSTRAINT `freech_posting_ibfk1` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_posting_ibfk2` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_posting_ibfk3` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `freech_posting_forum_id` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_origin_forum_id` FOREIGN KEY (`origin_forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_thread_id` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_user_id` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_permission`
 --
 ALTER TABLE `freech_permission`
-  ADD CONSTRAINT `freech_permission_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_permission_group_id` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_user`
 --
 ALTER TABLE `freech_user`
-  ADD CONSTRAINT `freech_user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_user_group_id` FOREIGN KEY (`group_id`) REFERENCES `freech_group` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_modlog`
 --
 ALTER TABLE `freech_modlog`
-  ADD CONSTRAINT `freech_modlog_ibfk_1` FOREIGN KEY (`moderator_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `freech_modlog_moderator_id` FOREIGN KEY (`moderator_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `freech_modlog_attribute`
 --
 ALTER TABLE `freech_modlog_attribute`
-  ADD CONSTRAINT `freech_modlog_attribute_ibfk_1` FOREIGN KEY (`modlog_id`) REFERENCES `freech_modlog` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_modlog_attribute_modlog_id` FOREIGN KEY (`modlog_id`) REFERENCES `freech_modlog` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_poll_option`
 --
 ALTER TABLE `freech_poll_option`
-  ADD CONSTRAINT `freech_poll_option_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `freech_posting` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_poll_option_poll_id` FOREIGN KEY (`poll_id`) REFERENCES `freech_posting` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `freech_poll_vote`
 --
 ALTER TABLE `freech_poll_vote`
-  ADD CONSTRAINT `freech_poll_vote_ibfk_1` FOREIGN KEY (`option_id`) REFERENCES `freech_poll_option` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_poll_vote_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `freech_poll_vote_option_id` FOREIGN KEY (`option_id`) REFERENCES `freech_poll_option` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_poll_vote_user_id` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE CASCADE;
 
 -- Create admin group.
 INSERT INTO freech_group (id, name, is_special, is_active, created)

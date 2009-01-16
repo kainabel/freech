@@ -46,22 +46,24 @@ INSERT INTO `freech_thread` SELECT NULL, forum_id, thread_id, n_children, update
     $res = $db->Execute("UPDATE freech_posting SET thread_id=$id WHERE thread_id=$thread_id") or die();
 
   // Create constraints.
-  $db->execute("ALTER TABLE `freech_posting` CHANGE `thread_id` `thread_id` INT( 11 ) UNSIGNED NOT NULL");
+  $db->execute("
+ALTER TABLE `freech_posting` CHANGE `thread_id` `thread_id` INT( 11 ) UNSIGNED NOT NULL,
+  ADD `origin_forum_id` int(11) unsigned NOT NULL default '0'") or die();
 
   $db->Execute("
 ALTER TABLE `freech_forum`
-  ADD CONSTRAINT `freech_forum_ibfk1` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
+  ADD CONSTRAINT `freech_forum_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
 
   $db->Execute("
 ALTER TABLE `freech_thread`
-  ADD CONSTRAINT `freech_thread_ibfk1` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE") or die();
+  ADD CONSTRAINT `freech_thread_forum_id` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE") or die();
   $db->CompleteTrans();
 
   $db->Execute("
 ALTER TABLE `freech_posting`
-  ADD CONSTRAINT `freech_posting_ibfk1` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_posting_ibfk2` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_posting_ibfk3` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
+  ADD CONSTRAINT `freech_posting_forum_id` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_thread_id` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_user_id` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
 
   // Update poll table definition.
   $db->Execute("

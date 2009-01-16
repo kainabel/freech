@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   `force_stub` tinyint(1) unsigned default '0',
   `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`id`),
+  UNIQUE KEY `forum_id_2` (`forum_id`,`priority`,`id`),
+  UNIQUE KEY `forum_special2` (`forum_id`,`is_active`,`id`),
   KEY `is_parent` (`is_parent`),
   KEY `hash` (`hash`),
   KEY `created` (`created`),
@@ -92,9 +94,7 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   KEY `origin_forum_id` (`origin_forum_id`),
   KEY `thread_id` (`thread_id`),
   KEY `user_id` (`user_id`),
-  UNIQUE KEY `forum_id_2` (`forum_id`,`priority`,`id`),
   KEY `forum_special1` (`forum_id`,`is_parent`,`priority`,`created`),
-  UNIQUE KEY `forum_special2` (`forum_id`,`is_active`,`id`),
   KEY `path` (`thread_id`,`path`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 

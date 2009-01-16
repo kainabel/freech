@@ -2,13 +2,14 @@
 <h2>{lang text="poll_create"}</h2>
 {include file="error.inc.tmpl"}
 
-<form action='{$action|escape}' method='POST' accept-charset='utf-8'>
+<form action='{$action|escape}' method='post' accept-charset='utf-8'>
+<div>
 <input type='hidden' name='action'    value='poll_submit' />
 <input type='hidden' name='forum_id'  value='{$poll->get_forum_id()}' />
 <input type='hidden' name='n_options' value='{$poll->n_options()}' />
 
 <p>
-  <span class="label">{lang text="poll_title"}</span>
+  <label>{lang text="poll_title"}</label>
   <i>{lang text="required"}</i><br />
   <input type='text'
          size='80'
@@ -21,7 +22,7 @@
 
 {foreach name=options item=option from=$poll->get_options()}
 <p>
-  <span class="label">{lang text="poll_option" number=$smarty.foreach.options.iteration}</span><br />
+  <label>{lang text="poll_option" number=$smarty.foreach.options.iteration}</label><br />
   <input type='text'
          size='80'
          name='poll_option{$smarty.foreach.options.index}'
@@ -33,5 +34,6 @@
   <input type='submit' name='add_row' value='{lang text="poll_add_row"}' />
   <input type='submit' name='send' value='{lang text="poll_submit"}' />
 </p>
+</div>
 </form>
 <!-- end poll form -->

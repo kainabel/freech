@@ -338,3 +338,7 @@ td.null {
   margin: 5px;
   font-style: italic;
 }
+
+#rendered {
+  text-align: center;
+}

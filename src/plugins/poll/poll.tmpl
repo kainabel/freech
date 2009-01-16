@@ -1,7 +1,8 @@
 <!-- poll -->
 {include file="error.inc.tmpl"}
 
-<form action='{$action|escape}' id='voteform' method='POST' accept-charset='utf-8'>
+<form action='{$action|escape}' id='voteform' method='post' accept-charset='utf-8'>
+<div>
 <input type='hidden' name='action'  value='poll_vote' />
 <input type='hidden' name='poll_id' value='{$poll->get_id()}' />
 
@@ -17,6 +18,6 @@
   &nbsp;<a href="{$result_url}">{lang text="poll_to_result"}</a>
 </p>
 </div>
-
+</div>
 </form>
 <!-- end poll -->

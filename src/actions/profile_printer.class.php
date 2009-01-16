@@ -71,8 +71,8 @@
       $this->assign_by_ref('n_postings', $n_entries);
       $this->assign_by_ref('postings',   $this->postings);
       $this->assign_by_ref('indexbar',   $indexbar);
-      $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
-      $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
+      $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
+      $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     }
 
 
@@ -176,6 +176,7 @@
       $this->assign_by_ref('status',     $status);
       $this->assign_by_ref('hint',       $_hint);
       $this->assign_by_ref('action',     $url->get_string());
+      $this->assign_by_ref('max_signature_lines', cfg('max_signature_lines'));
       $this->render('user_editor.tmpl');
       $this->parent->_set_title($_user->get_name());
     }

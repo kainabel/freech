@@ -4,6 +4,7 @@
 
 Maintenance
 ------------
+* Remove templates from the theme directory.
 * Rename freech_posting.is_active to freech_posting.status.
 * Rename freech_group.is_active to freech_group.status.
 * Profile the new db model.

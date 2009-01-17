@@ -7,11 +7,19 @@
 {foreach item=forum from=$forums}
   <p>
     <span class="forum_link">{$forum->get_url_html()}</span>
+{if $may_edit}
+    <span class="forum_edit">{$forum->get_editor_url_html()}</span>
+{/if}
     <span class="forum_status">{$forum->get_status_text()|escape}</span>
     <br/>
     <span class="forum_description">{$forum->get_description()|escape}</span>
   </p>
 {/foreach}
+{if $may_edit}
+  <p>
+    <span id="forum_add">{$add_forum_url->get_html()}</span>
+  </p>
+{/if}
 </div>
 
 <div class="section" id="home_forum_links">

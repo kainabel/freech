@@ -281,6 +281,17 @@
   $lang[group_save]            = "Daten speichern";
   $lang[group_saved]           = "Die Daten wurden gespeichert.";
 
+  // Forum editor.
+  $lang[forum_edit]                = "[Bearbeiten]";
+  $lang[forum_editor]              = "Forum bearbeiten";
+  $lang[forum_add]                 = "Neues Forum hinzufügen";
+  $lang[forum_name]                = "Name:";
+  $lang[forum_description]         = "Beschreibung:";
+  $lang[forum_save]                = "Forum speichern";
+  $lang[forum_saved]               = "Die Änderungen wurden gespeichert.";
+  $lang[forum_invalid_name]        = "Bitte einen Namen eingeben.";
+  $lang[forum_invalid_description] = "Bitte eine Beschreibung eingeben.";
+
   // Top user list.
   $lang[top_users]   = "Top 20";
   $lang[alltime_top] = "Top 20";

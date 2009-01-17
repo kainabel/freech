@@ -266,6 +266,17 @@
   $lang[group_save]            = "Save Group";
   $lang[group_saved]           = "Your changes have been saved.";
 
+  // Forum editor.
+  $lang[forum_edit]                = "[Edit]";
+  $lang[forum_editor]              = "Edit a Forum";
+  $lang[forum_add]                 = "Add a New Forum";
+  $lang[forum_name]                = "Name:";
+  $lang[forum_description]         = "Summary:";
+  $lang[forum_save]                = "Save the Forum";
+  $lang[forum_saved]               = "The changes have been saved.";
+  $lang[forum_invalid_name]        = "Please enter a valid name.";
+  $lang[forum_invalid_description] = "Please enter a summary.";
+
   // Top user list.
   $lang[top_users]   = "Top Users";
   $lang[alltime_top] = "All Time Top 20";

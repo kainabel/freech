@@ -40,7 +40,11 @@ class HomepagePrinter extends PrinterBase {
 
   function show() {
     // Get a list of forums.
-    $forums = $this->forumdb->get_forums();
+    $forums        = $this->forumdb->get_forums();
+    $group         = $this->parent->get_current_group();
+    $may_edit      = $group->may('administer');
+    $add_forum_url = new URL('?', cfg('urlvars'), lang('forum_add'));
+    $add_forum_url->set_var('action', 'forum_add');
 
     // Collect status information regarding each posting.
     if (!cfg('disable_posting_counter')) {
@@ -70,11 +74,13 @@ class HomepagePrinter extends PrinterBase {
 
     // Render the template.
     $this->clear_all_assign();
-    $this->assign('title',       cfg('site_title'));
-    $this->assign('forums',      $forums);
-    $this->assign('forum_links', $forum_links);
-    $this->assign('postings',    $this->postings);
-    $this->assign('new_users',   $new_users);
+    $this->assign('title',         cfg('site_title'));
+    $this->assign('may_edit',      $may_edit);
+    $this->assign('add_forum_url', $add_forum_url);
+    $this->assign('forums',        $forums);
+    $this->assign('forum_links',   $forum_links);
+    $this->assign('postings',      $this->postings);
+    $this->assign('new_users',     $new_users);
     $this->render('home.tmpl');
   }
 }

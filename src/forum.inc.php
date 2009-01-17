@@ -59,6 +59,7 @@
   include_once 'actions/homepage_printer.class.php';
   include_once 'actions/header_printer.class.php';
   include_once 'actions/footer_printer.class.php';
+  include_once 'actions/forum_editor_printer.class.php';
   include_once 'actions/view.class.php';
 
   include_once 'services/groupdb.class.php';
@@ -1058,6 +1059,54 @@
 
 
     /*************************************************************
+     * Forum editor.
+     *************************************************************/
+    function _forum_add() {
+      $this->_assert_may('administer');
+      $this->breadcrumbs()->add_separator();
+      $this->breadcrumbs()->add_text(lang('forum_add'));
+      $printer = new ForumEditorPrinter($this);
+      $printer->show(new Forum);
+    }
+
+
+    function _forum_edit() {
+      $this->_assert_may('administer');
+      $forum = $this->forumdb->get_forum_from_id((int)$_GET['forum_id']);
+      $this->breadcrumbs()->add_separator();
+      $this->breadcrumbs()->add_text(lang('forum_editor'));
+      $printer = new ForumEditorPrinter($this);
+      $printer->show($forum);
+    }
+
+
+    function _forum_submit() {
+      $this->_assert_may('administer');
+      $printer  = new ForumEditorPrinter($this);
+      $forum_id = (int)$_POST['forum_id'];
+
+      // Fetch the forum and merge POST data.
+      if ($forum_id)
+        $forum = $this->forumdb->get_forum_from_id($forum_id);
+      else {
+        $user  = $this->get_current_user();
+        $forum = new Forum;
+        $forum->set_owner_id($user->get_id());
+      }
+      $forum->set_name($_POST['name']);
+      $forum->set_description($_POST['description']);
+
+      // Check syntax.
+      if ($err = $forum->check())
+        return $printer->show($forum, '', $err);
+
+      // Save the data.
+      $this->forumdb->save_forum($forum);
+      $printer->show($forum, lang('forum_saved'));
+    }
+
+
+    /*************************************************************
      * Other action controllers.
      *************************************************************/
     function _show_moderation_log() {
@@ -1205,6 +1254,18 @@
 
       case 'password_mail_confirm':
         $this->_password_mail_confirm();    // Form for resetting the password.
+        break;
+
+      case 'forum_add':
+        $this->_forum_add();
+        break;
+
+      case 'forum_edit':
+        $this->_forum_edit();
+        break;
+
+      case 'forum_submit':
+        $this->_forum_submit();
         break;
 
       case 'moderation_log':

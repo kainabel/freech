@@ -8,5 +8,6 @@ Maintenance
 
 Features
 ---------
-* Move page links to the front page.
+* Allow for editing the forum status.
+* Allow moderators to lock other users.
 * Respect freech_posting.force_stub.

@@ -22,6 +22,7 @@
   class Forum {
     function Forum($_title = '', $_description = '') {
       $this->id          = NULL;
+      $this->owner_id    = NULL;
       $this->name        = $_name;
       $this->description = $_description;
       $this->status_text = '';
@@ -30,13 +31,29 @@
 
     function set_from_db($_obj) {
       $this->id          = $_obj->id;
+      $this->owner_id    = $_obj->owner_id;
       $this->name        = $_obj->name;
       $this->description = $_obj->description;
     }
 
 
+    function set_id($_id) {
+      $this->id = (int)$_id;
+    }
+
+
     function get_id() {
       return $this->id;
+    }
+
+
+    function set_owner_id($_id) {
+      $this->owner_id = (int)$_id;
+    }
+
+
+    function get_owner_id() {
+      return $this->owner_id;
     }
 
 
@@ -72,6 +89,19 @@
     }
 
 
+    function get_editor_url() {
+      $url = new URL('?', cfg('urlvars'), lang('forum_edit'));
+      $url->set_var('action',   'forum_edit');
+      $url->set_var('forum_id', $this->get_id());
+      return $url;
+    }
+
+
+    function get_editor_url_html() {
+      return $this->get_editor_url()->get_html();
+    }
+
+
     function set_status_text($_status_text) {
       $this->status_text = $_status_text;
     }
@@ -79,6 +109,18 @@
 
     function get_status_text() {
       return $this->status_text;
+    }
+
+
+    // Returns an error if any of the required fields is not filled.
+    // Returns NULL otherwise.
+    function check() {
+      if (!$this->name || ctype_space($this->name))
+        return lang('forum_invalid_name');
+      if (!$this->description || ctype_space($this->description))
+        return lang('forum_invalid_description');
+
+      return NULL;
     }
   }
 ?>

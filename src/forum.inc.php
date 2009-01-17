@@ -182,7 +182,9 @@
       // Add user-specific links.
       //FIXME: this probably should not be here.
       $user = $this->get_current_user();
-      if ($user->is_anonymous()) {
+      if (!$user->is_active())
+        return $this->_refer_to($this->get_logout_url()->get_string());
+      elseif ($user->is_anonymous()) {
         $this->account_links->add_link($this->get_registration_url());
         $this->account_links->add_link($this->get_login_url());
       }
@@ -212,9 +214,9 @@
       $user   = $userdb->get_user_from_name($_POST['username']);
       if (!$user)
         return ERR_LOGIN_FAILED;
-      if ($user->get_status() == USER_STATUS_UNCONFIRMED)
+      if (!$user->is_confirmed())
         return ERR_LOGIN_UNCONFIRMED;
-      if ($user->get_status() != USER_STATUS_ACTIVE)
+      if (!$user->is_active())
         return ERR_LOGIN_FAILED;
       if (!$user->is_valid_password($_POST['password']))
         return ERR_LOGIN_FAILED;
@@ -483,8 +485,8 @@
       $hash       = $user->get_confirmation_hash();
       if ($user->get_confirmation_hash() !== $given_hash)
         die('Invalid confirmation hash');
-      if ($user->get_status() == USER_STATUS_BLOCKED)
-        die('User is blocked');
+      if ($user->is_locked())
+        die('User is locked');
     }
 
 
@@ -773,6 +775,17 @@
     /*************************************************************
      * Action controllers for the user profile.
      *************************************************************/
+    // Logs a change to the moderation log.
+    function _log_user_moderation($_action, $_user, $_reason) {
+      $change = new ModLogItem($_action);
+      $change->set_reason($_reason);
+      $change->set_from_user($this->get_current_user());
+      $change->set_from_moderator_group($this->get_current_group());
+      $change->set_attribute('username', $_user->get_name());
+      $this->get_modlogdb()->log($change);
+    }
+
+
     function _add_profile_breadcrumbs($_named_item) {
       $this->breadcrumbs->add_separator();
       $this->breadcrumbs->add_text($_named_item->get_name());
@@ -802,16 +815,25 @@
     // Edit personal data.
     function _show_user_editor() {
       // Check permissions.
-      $user = $this->get_current_user();
-      if ($user->is_anonymous())
+      $current = $this->get_current_user();
+      $user    = $this->_get_user_from_name_or_die($_GET['username']);
+      if ($current->is_anonymous())
         die('Not logged in');
-      if ($_GET['username'] != $user->get_name())
-        $this->_assert_may('administer');
+      elseif ($_GET['username'] == $current->get_name()) {
+        //accept
+      }
+      elseif ($this->get_current_group()->may('administer')) {
+        //accept
+      }
+      elseif ($this->get_current_group()->may('moderate')) {
+        //accept
+      }
+      else
+        die('Permission denied.');
 
       // Accepted.
-      $user = $this->_get_user_from_name_or_die($_GET['username']);
       $this->_add_profile_breadcrumbs($user);
-      $profile = &new ProfilePrinter($this);
+      $profile = new ProfilePrinter($this);
       $profile->show_user_editor($user);
     }
 
@@ -832,21 +854,37 @@
         $user->set_name($_POST['username']);
         $user->set_group_id($_POST['group_id']);
         $user->set_status($_POST['status']);
+        $this->_init_user_from_post_data($user);
       }
       elseif ($is_self) {
-        if ($_POST['status'] == USER_STATUS_DELETED
-         || $_POST['status'] == USER_STATUS_ACTIVE)
-          $user->set_status($_POST['status']);
-        else
+        if ($_POST['status'] != USER_STATUS_DELETED
+         && $_POST['status'] != USER_STATUS_ACTIVE)
           die('Invalid status');
+        $this->_init_user_from_post_data($user);
+        $user->set_status($_POST['status']);
+      }
+      elseif ($group->may('moderate')) {
+        if ($_POST['status'] != USER_STATUS_ACTIVE
+         && $_POST['status'] != USER_STATUS_BLOCKED)
+          die('Invalid status');
+        $user = $this->_get_user_from_id_or_die($_POST['user_id']);
+        if (!$user->is_locked() && !$user->is_active())
+          die('No permission to change the user status.');
+        $group2 = $this->_get_group_from_id_or_die($user->get_group_id());
+        if ($user->is_anonymous() || $group2->may('administer'))
+          die('No permission to change that user.');
+        $user->set_status($_POST['status']);
+        if ($user->is_active())
+          $this->_log_user_moderation('unlock_user', $user, '');
+        else
+          $this->_log_user_moderation('lock_user', $user, '');
       }
       else
-        die('Permission denied');
+        die('Permission to edit user denied.');
 
       $this->_add_profile_breadcrumbs($user);
 
       // If the user status is now DELETED, remove any related attributes.
-      $this->_init_user_from_post_data($user);
       if ($user->get_status() == USER_STATUS_DELETED)
         $user->set_deleted();
       else {
@@ -865,13 +903,14 @@
           $user->set_password($_POST['password']);
       }
 
-
       // Save the user.
       $ret = $this->get_userdb()->save_user($user);
       if ($ret < 0)
         return $profile->show_user_editor($user, $err[$ret]);
 
       // Done.
+      if ($user->is_deleted() && $is_self)
+        return $this->_refer_to($this->get_logout_url()->get_string());
       $profile->show_user_editor($user, lang('account_saved'));
     }
 
@@ -1024,15 +1063,15 @@
       }
 
       // Send the mail.
-      if ($user->get_status() == USER_STATUS_UNCONFIRMED) {
+      if (!$user->is_confirmed()) {
         $url = new URL(cfg('site_url').'?', cfg('urlvars'));
         $url->set_var('action',   'account_reconfirm');
         $url->set_var('username', $user->get_name());
         $this->_refer_to($url->get_string());
       }
-      elseif ($user->get_status() == USER_STATUS_ACTIVE)
+      elseif ($user->is_active())
         $this->_send_password_reset_mail($user);
-      elseif ($user->get_status() == USER_STATUS_BLOCKED) {
+      elseif ($user->is_locked()) {
         $msg = $err[ERR_LOGIN_LOCKED];
         return $printer->show_password_forgotten($user, $msg);
       }
@@ -1051,7 +1090,7 @@
       $user   = $userdb->get_user_from_name($user->get_name());
       $this->_assert_confirmation_hash_is_valid($user);
 
-      if ($user->get_status() != USER_STATUS_ACTIVE)
+      if (!$user->is_active())
         die('Error: User status is not active.');
 
       $this->_password_change();

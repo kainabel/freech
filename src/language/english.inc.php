@@ -233,7 +233,7 @@
   $lang[account_signature]  = "Signature:";
   $lang[account_password]   = "Password:";
   $lang[account_password2]  = "Repeat:";
-  $lang[account_save]       = "Save Personal Data";
+  $lang[account_save]       = "Save Changes";
   $lang[account_saved]      = "Your data has been saved.";
   $lang[account_emptyfield] = "None";
   $lang[account_edit]       = "[Edit]";
@@ -327,6 +327,10 @@
   $lang[modlog]                = 'Moderation Log';
   $lang[modlog_no_entry]       = 'No entries yet.';
   $lang[modlog_reason]         = 'Reason: [REASON]';
+  $lang[modlog_lock_user]      = '[MODERATOR_LINK] has locked the account'
+                               . ' of "[USERNAME]".';
+  $lang[modlog_unlock_user]    = '[MODERATOR_LINK] has unlocked the account'
+                               . ' of "[USERNAME]".';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked a'
                                . ' <a href="[POSTING_URL]">posting</a>'
                                . ' by [USER_LINK].';

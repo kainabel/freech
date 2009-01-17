@@ -8,7 +8,7 @@
   <table summary=''>
     <tr>
       <td>{lang text="group_name"}</td>
-{if $may_admin}
+{if $may_edit_group}
       <td>
       {html_options name="group_id" options=$groups selected=$group->get_id()}
       </td>
@@ -18,7 +18,7 @@
     </tr>
     <tr>
       <td>{lang text="account_name"}</td>
-{if $may_admin}
+{if $may_edit_name}
       <td><input size="70" type="text" name="username" value="{$user->get_name()|escape}" /></td>
 {else}
       <td>{$user->get_name()|escape}</td>
@@ -26,7 +26,7 @@
     </tr>
     <tr>
       <td>{lang text="account_status"}</td>
-{if $may_delete}
+{if $may_change_status}
       <td>
       {html_options name="status" options=$status selected=$user->get_status()}
       </td>
@@ -34,6 +34,7 @@
       <td>{$user->get_status_name()|escape}</td>
 {/if}
     </tr>
+{if $may_edit_data}
     <tr>
       <td>{lang text="account_firstname"}</td>
       <td><input size="70" type="text" name="firstname" value="{$user->get_firstname()|escape}" /></td>
@@ -70,6 +71,7 @@
       <td>{lang text="account_password2"}</td>
       <td><input size="70" type="password" name="password2" /></td>
     </tr>
+{/if}
     <tr>
       <td colspan="2">
         <input type="submit" name="user_submit" value="{lang text="account_save"}" />

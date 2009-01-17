@@ -342,6 +342,10 @@
   $lang[modlog]                = 'Moderations-Log';
   $lang[modlog_no_entry]       = 'Kein Eintrag vorhanden.';
   $lang[modlog_reason]         = 'Grund: [REASON]';
+  $lang[modlog_lock_user]      = '[MODERATOR_LINK] hat den Account von'
+                               . ' "[USERNAME]" gesperrt.';
+  $lang[modlog_unlock_user]    = '[MODERATOR_LINK] hat den Account von'
+                               . ' "[USERNAME]" wieder aktiviert.';
   $lang[modlog_lock_posting]   = '[MODERATOR_LINK] hat ein'
                                . ' <a href="[POSTING_URL]">Posting</a>'
                                . ' von [USER_LINK] gesperrt.';

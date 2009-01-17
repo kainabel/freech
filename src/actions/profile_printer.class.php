@@ -77,12 +77,23 @@
 
 
     function show_user_profile($_user, $_thread_state, $_offset = 0) {
-      $current  = $this->parent->get_current_user();
-      $group    = $this->parent->get_current_group();
-      $showlist = $_user->get_name() == $current->get_name();
-      $showlist = $showlist || $group->may('moderate');
-      $may_edit = $current->get_id() == $_user->get_id()
-               || $group->may('administer');
+      // Load the group info.
+      $groupdb = $this->parent->_get_groupdb();
+      $search  = array('id' => $_user->get_group_id());
+      $group   = $groupdb->get_group_from_query($search);
+
+      // Check permissions.
+      $current   = $this->parent->get_current_user();
+      $curgroup  = $this->parent->get_current_group();
+      $is_self   = $current->get_id() == $_user->get_id();
+      $may_admin = $curgroup->may('administer');
+      $may_mod   = $curgroup->may('moderate') && !$group->may('administer');
+      $edit_sane = !$_user->is_anonymous();
+      $mod_sane  = $edit_sane && ($_user->is_active() || $_user->is_locked());
+      $may_edit  = $may_admin || ($mod_sane && ($is_self || $may_mod));
+      $showlist  = $is_self
+                || $curgroup->may('moderate')
+                || $curgroup->may('administer');
 
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();
@@ -93,11 +104,6 @@
         $n_entries = $this->forumdb->get_n_postings($search);
         $this->assign_by_ref('n_postings', $n_entries);
       }
-
-      // Load the group info.
-      $groupdb = $this->parent->_get_groupdb();
-      $search  = array('id' => $_user->get_group_id());
-      $group   = $groupdb->get_group_from_query($search);
 
       // Render the template.
       $this->assign_by_ref('user',     $_user);
@@ -136,18 +142,34 @@
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action', 'user_submit');
 
-      // Find permissions.
-      $current    = $this->parent->get_current_user();
-      $group      = $this->parent->get_current_group();
-      $is_self    = $current->get_id() == $_user->get_id();
-      $may_edit   = $is_self || $group->may('administer');
-      $may_admin  = $group->may('administer');
-      $may_delete = $may_edit;
-
       // Fetch the corresponding group.
       $groupdb = $this->parent->_get_groupdb();
       $query   = array('id' => $_user->get_group_id());
       $group   = $groupdb->get_group_from_query($query);
+
+      // Find permissions.
+      $current      = $this->parent->get_current_user();
+      $curgroup     = $this->parent->get_current_group();
+      $is_self      = $current->get_id() == $_user->get_id();
+      $edit_sane    = !$_user->is_anonymous();
+      $lock_sane    = $edit_sane && $_user->is_active();
+      $unlock_sane  = $edit_sane && $_user->is_locked();
+      $may_admin    = $curgroup->may('administer');
+      $may_mod      = $curgroup->may('moderate') && !$group->may('administer');
+      $may_lock     = $may_mod && ($lock_sane || $unlock_sane);
+      $may_delete   = $may_admin || $is_self;
+
+      // Permissions passed to the template.
+      $may_edit_group    = $may_admin;
+      $may_edit_name     = $may_admin;
+      $may_edit_data     = $may_admin || ($edit_sane && $is_self);
+      $may_change_status = $may_admin || $may_lock || $may_delete;
+
+      if (!$may_edit_group
+        && !$may_edit_name
+        && !$may_edit_data
+        && !$may_change_status)
+        die('Nothing for you to do here.');
 
       // Load a list of group names.
       $list   = $groupdb->get_groups_from_query(array());
@@ -164,18 +186,25 @@
           USER_STATUS_DELETED => $_user->get_status_names(USER_STATUS_DELETED)
         );
       }
+      elseif ($may_lock || $may_unlock) {
+        $status = array(
+          USER_STATUS_ACTIVE  => $_user->get_status_names(USER_STATUS_ACTIVE),
+          USER_STATUS_BLOCKED => $_user->get_status_names(USER_STATUS_BLOCKED)
+        );
+      }
 
       // Render the template.
       $this->clear_all_assign();
-      $this->assign_by_ref('may_edit',   $may_edit);
-      $this->assign_by_ref('may_admin',  $may_admin);
-      $this->assign_by_ref('may_delete', $may_delete);
-      $this->assign_by_ref('user',       $_user);
-      $this->assign_by_ref('group',      $group);
-      $this->assign_by_ref('groups',     $groups);
-      $this->assign_by_ref('status',     $status);
-      $this->assign_by_ref('hint',       $_hint);
-      $this->assign_by_ref('action',     $url->get_string());
+      $this->assign_by_ref('may_edit_group',      $may_edit_group);
+      $this->assign_by_ref('may_edit_name',       $may_edit_name);
+      $this->assign_by_ref('may_edit_data',       $may_edit_data);
+      $this->assign_by_ref('may_change_status',   $may_change_status);
+      $this->assign_by_ref('user',                $_user);
+      $this->assign_by_ref('group',               $group);
+      $this->assign_by_ref('groups',              $groups);
+      $this->assign_by_ref('status',              $status);
+      $this->assign_by_ref('hint',                $_hint);
+      $this->assign_by_ref('action',              $url->get_string());
       $this->assign_by_ref('max_signature_lines', cfg('max_signature_lines'));
       $this->render('user_editor.tmpl');
       $this->parent->_set_title($_user->get_name());

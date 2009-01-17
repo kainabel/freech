@@ -9,5 +9,5 @@ Maintenance
 Features
 ---------
 * Allow for editing the forum status.
-* Allow moderators to lock other users.
+* Allow for moving threads between forums.
 * Respect freech_posting.force_stub.

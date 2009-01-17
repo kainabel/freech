@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `freech_forum` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate latin1_general_ci NOT NULL,
   `description` varchar(255) collate latin1_general_ci NOT NULL default '',
-  `is_active` tinyint(1) unsigned default '1',
+  `status` int(11) unsigned default NULL,
   `owner_id` int(11) unsigned default NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',

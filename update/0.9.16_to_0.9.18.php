@@ -52,6 +52,7 @@ ALTER TABLE `freech_posting` CHANGE `thread_id` `thread_id` INT( 11 ) UNSIGNED N
 
   $db->Execute("
 ALTER TABLE `freech_forum`
+  CHANGE `is_active` `status` INT( 11 ) UNSIGNED NOT NULL,
   ADD CONSTRAINT `freech_forum_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
 
   $db->Execute("

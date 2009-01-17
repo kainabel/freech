@@ -1,6 +1,6 @@
 <?php
 /*
- V5.06 16 Oct 2008   (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
+ V5.07 18 Dec 2008   (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -95,9 +95,9 @@ class ADODB_postgres7 extends ADODB_postgres64 {
 	  $a = array();
 	  while (!$rs->EOF) {
 	    if ($upper) {
-	      $a[strtoupper($rs->Fields('lookup_table'))][] = strtoupper(ereg_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field')));
+	      $a[strtoupper($rs->Fields('lookup_table'))][] = strtoupper(str_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field')));
 	    } else {
-	      $a[$rs->Fields('lookup_table')][] = ereg_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field'));
+	      $a[$rs->Fields('lookup_table')][] = str_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field'));
 	    }
 	    adodb_movenext($rs);
 	  }

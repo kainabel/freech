@@ -168,15 +168,6 @@ class Poll extends PostingDecorator {
   }
 
 
-  function get_top_votes() {
-    $top_votes = 0;
-    foreach ($this->get_results() as $id => $votes)
-      if ($votes > $best_result)
-        $top_votes = $votes;
-    return $top_votes;
-  }
-
-
   function get_allow_multiple() {
     if ($this->posting->get_renderer() == 'multipoll')
       return TRUE;

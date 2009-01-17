@@ -24,12 +24,12 @@
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';
   include_once 'libuseful/SqlQuery.class.php5';
+  include_once 'libuseful/string.inc.php';
   include_once 'services/trackable.class.php';
   include_once 'objects/thread_state.class.php';
 
   include_once 'functions/config.inc.php';
   include_once 'functions/language.inc.php';
-  include_once 'functions/string.inc.php';
   include_once 'functions/httpquery.inc.php';
   include_once 'functions/files.inc.php';
 
@@ -1599,11 +1599,6 @@
 
     function get_render_time() {
       return $this->render_time;
-    }
-
-
-    function get_total_time() {
-      return microtime(TRUE) - $this->start_time;
     }
 
 

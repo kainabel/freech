@@ -260,20 +260,6 @@ function _poll_did_vote($db, $user, $poll_id) {
 }
 
 
-function _poll_has_option($db, $poll_id, $option_id) {
-  $sql  = 'SELECT id';
-  $sql .= ' FROM {t_poll_option}';
-  $sql .= ' WHERE id={option_id} and poll_id={poll_id}';
-  $query = &new FreechSqlQuery($sql);
-  $query->set_int('poll_id',   $poll_id);
-  $query->set_int('option_id', $option_id);
-  $res = $db->Execute($query->sql()) or die('_poll_did_vote()');
-  if ($res->EOF)
-    return FALSE;
-  return TRUE;
-}
-
-
 function _poll_cast($db, $user, $option_id) {
   $sql  = 'INSERT INTO {t_poll_vote}';
   $sql .= ' (option_id, user_id)';

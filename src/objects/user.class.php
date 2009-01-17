@@ -156,13 +156,8 @@ define("USER_STATUS_BLOCKED",     3);
     }
 
 
-    function &get_password_hash() {
+    function get_password_hash() {
       return $this->fields[passwordhash];
-    }
-
-
-    function flush_password() {
-      unset($this->fields[passwordhash]);
     }
 
 
@@ -299,24 +294,11 @@ define("USER_STATUS_BLOCKED",     3);
     }
 
 
-    /// Returns the formatted time.
-    function get_last_login_time($_format = '') {
-      if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[lastlogin]);
-    }
-
-
     function get_postings_url() {
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('action',   'user_postings');
       $url->set_var('username', $this->get_name());
       return $url;
-    }
-
-
-    function get_postings_url_string() {
-      return $this->get_postings_url()->get_string();
     }
 
 

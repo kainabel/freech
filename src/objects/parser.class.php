@@ -35,11 +35,6 @@ class Parser {
   }
 
 
-  function _parse_error($_error) {
-    $this->error = $_error.' at line '.$this->line;
-  }
-
-
   function _get_next_token() {
     if (strlen($this->input) <= $this->offset)
       return array('EOF', NULL);
@@ -60,11 +55,6 @@ class Parser {
 
     // Ending up here no matching token was found.
     return array(NULL, NULL);
-  }
-
-
-  function get_error() {
-    return $this->error;
   }
 }
 ?>

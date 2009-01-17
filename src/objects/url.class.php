@@ -37,12 +37,6 @@
     }
 
 
-    // Uses the given string as the URL to which the variables are appended.
-    function set_base($_base = '') {
-      $this->base = $_base;
-    }
-
-
     function get_base() {
       return $this->base;
     }
@@ -66,14 +60,6 @@
     // Deletes the given variable from the URL.
     function delete_var($_name) {
       unset($this->vars[$_name]);
-    }
-
-
-    // Removes all variables from the URL that are not listed in the mask.
-    function mask($_keep = array()) {
-      foreach ($_keep as $var)
-        $vars[$var] = $this->vars[$var];
-      $this->vars = &$vars;
     }
 
 

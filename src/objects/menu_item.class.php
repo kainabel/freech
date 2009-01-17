@@ -59,11 +59,6 @@
     }
 
 
-    function set_text($_text) {
-      $this->url->set_label($_text);
-    }
-
-
     function get_text() {
       return $this->url->get_label();
     }

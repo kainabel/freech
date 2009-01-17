@@ -1,5 +1,11 @@
+**
+* Before 1.0
+**
+
 Maintenance
 ------------
+* Rename freech_posting.is_active to freech_posting.status.
+* Rename freech_group.is_active to freech_group.status.
 * Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
@@ -9,5 +15,23 @@ Maintenance
 Features
 ---------
 * Allow for editing the forum status.
+
+
+**
+* Whenever
+**
+
+Maintenance
+------------
+* Clean up the error/hint/ack message mess by allowing this:
+
+   $printer->show(..., new Error(_('Something went wrong')));
+   $printer->show(..., new Hint(_('My Hint')));
+   $printer->show(..., new Ack(_('Success')));
+   
+
+Features
+---------
 * Allow for moving threads between forums.
 * Respect freech_posting.force_stub.
+* Hide locked messages from the forum.

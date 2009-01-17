@@ -45,7 +45,7 @@
 
     function _assign_user_postings($_user, $_thread_state, $_offset = 0) {
       // Load the postings.
-      $func = array(&$this, '_append_posting');
+      $func = array($this, '_append_posting');
       $this->forumdb->foreach_posting_from_user($_user->get_id(),
                                                 $_offset,
                                                 cfg("epp"),
@@ -232,7 +232,7 @@
       $n_rows = $userdb->foreach_user_from_query($search,
                                                  cfg("epp"),
                                                  $_offset,
-                                                 array(&$this, '_append_user'),
+                                                 array($this, '_append_user'),
                                                  '');
 
       // Create the index bar.

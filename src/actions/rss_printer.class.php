@@ -57,7 +57,7 @@
         return;
       
       // Required to enable correct formatting of the posting.
-      $_posting->set_body(preg_replace("/&nbsp;/", " ", $_posting->get_body()));
+      $_posting->set_body(preg_replace('/&nbsp;/', ' ', $_posting->get_body()));
       
       // Append everything to a list.
       array_push($this->postings, $_posting);
@@ -68,15 +68,15 @@
       $this->postings = array();
       
       if ($_n_entries < 1)
-        $_n_entries = cfg("rss_items");
-      if ($_n_entries > cfg("rss_maxitems"))
-        $n_entries = cfg("rss_maxitems");
+        $_n_entries = cfg('rss_items');
+      if ($_n_entries > cfg('rss_maxitems'))
+        $n_entries = cfg('rss_maxitems');
       
       $this->forumdb->foreach_latest_posting($_forum_id,
                                              $_off,
                                              $_n_entries,
                                              FALSE,
-                                             array(&$this, '_append_row'),
+                                             array($this, '_append_row'),
                                              $_forum_id);
       
       $this->clear_all_assign();

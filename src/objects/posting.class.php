@@ -545,18 +545,12 @@ class IndentedBlock {
     }
 
 
-    // The number of children.
-    function set_n_children($_n_children) {
-      $this->fields[n_children] = $_n_children;
-    }
-
-
     function get_n_children() {
       if ($this->fields[relation] != MESSAGE_RELATION_PARENT_STUB
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
         && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
-        die("Posting:get_n_children(): This function must not be called on"
-          . " non-parent rows.");
+        die('Posting:get_n_children(): This function must not be called on'
+          . ' non-parent rows.');
       return $this->fields[n_children] * 1;
     }
 
@@ -565,12 +559,6 @@ class IndentedBlock {
       if ($maxlen)
         return substr($this->fields['ip_hash'], 0, $maxlen);
       return $this->fields['ip_hash'];
-    }
-
-
-    // The relation is the relation in the tree, see the define()s above.
-    function set_relation($_relation) {
-      $this->fields[relation] = $_relation;
     }
 
 

@@ -136,12 +136,6 @@
     }
 
 
-    function add_links($_url_list) {
-      foreach ($_url_list as $url)
-        $this->add_link($url);
-    }
-
-
     function add_text($_text = '', $_priority = NULL) {
       $this->add_item(new MenuItem(NULL, $_text), $_priority);
     }

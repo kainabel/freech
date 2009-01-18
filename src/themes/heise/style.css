@@ -248,6 +248,7 @@ td.null {
   padding: 0;
   width: 33.33%;
   text-align: left;
+  overflow: hidden;
 }
 
 .section h3 {

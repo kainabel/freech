@@ -233,6 +233,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_created_unixtime() {
+    return $this->posting->get_created_unixtime();
+  }
+
+
   function is_new() {
     return $this->posting->is_new();
   }

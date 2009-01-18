@@ -29,7 +29,8 @@
 
     function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $msg_id = $this->parent->get_current_posting_id();
+      $posting = $this->parent->_decorate_posting($_posting);
+      $msg_id  = $this->parent->get_current_posting_id();
       $_posting->set_selected($_posting->get_id() == $msg_id);
       $_posting->apply_block();
 

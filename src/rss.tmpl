@@ -11,8 +11,8 @@
       <author>{$posting->get_username()|escape}</author>
       <guid>{$posting->get_url_string()|escape}</guid>
       <link>{$posting->get_url_string()|escape}</link>
-      <description>{$posting->get_body_html()|escape}</description>
       <pubDate>{$posting->get_created_unixtime()|date_format:"%a, %d %b %Y %R:%S +0000"}</pubDate>
+      <description>{$posting->get_body_html()|escape}</description>
     </item>
 {/foreach}
   </channel>

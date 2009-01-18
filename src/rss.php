@@ -22,12 +22,10 @@
   include_once 'forum.inc.php';
   
   $forum = new FreechForum();
-  header("Content-Type: text/xml; charset=utf-8");
-  if ($_GET[forum_id] != 1)
-    die("If you touch that URL again I will sue you!");
+  header('Content-Type: text/xml; charset=utf-8');
   $forum->print_rss($_GET[forum_id],
-                    cfg("site_title"),
-                    cfg("rss_description"),
+                    cfg('site_title'),
+                    cfg('rss_description'),
                     $_GET[hs],
                     $_GET[len]);
   $forum->destroy();

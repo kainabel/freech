@@ -25,67 +25,67 @@
     var $descr;
     var $url;
     var $countrycode;
-    
+
     function RSSPrinter(&$_forum) {
       $this->PrinterBase(&$_forum);
       $this->postings = array();
     }
-    
-    
+
+
     function set_title($_title) {
       $this->title = $_title;
     }
-    
-    
+
+
     function set_description($_descr) {
       $this->descr = $_descr;
     }
-    
-    
+
+
     function set_base_url($_url) {
       $this->url = $_url;
     }
-    
-    
+
+
     function set_language($_countrycode) {
       $this->countrycode = $_countrycode;
     }
-    
-    
-    function _append_row(&$_posting, $_forum_id) {
+
+
+    function _append_row(&$_posting, $_data) {
       if (!$_posting->is_active())
         return;
-      
+
       // Required to enable correct formatting of the posting.
-      $_posting->set_body(preg_replace('/&nbsp;/', ' ', $_posting->get_body()));
-      
+      $posting = $this->parent->_decorate_posting($_posting);
+      $posting->set_body(preg_replace('/&nbsp;/', ' ', $posting->get_body()));
+
       // Append everything to a list.
-      array_push($this->postings, $_posting);
+      array_push($this->postings, $posting);
     }
-    
-    
+
+
     function show($_forum_id, $_off, $_n_entries) {
       $this->postings = array();
-      
+
       if ($_n_entries < 1)
         $_n_entries = cfg('rss_items');
-      if ($_n_entries > cfg('rss_maxitems'))
-        $n_entries = cfg('rss_maxitems');
-      
-      $this->forumdb->foreach_latest_posting($_forum_id,
-                                             $_off,
-                                             $_n_entries,
+      $n_entries = min(cfg('rss_maxitems'), $_n_entries);
+
+      $this->forumdb->foreach_latest_posting((int)$_forum_id,
+                                             (int)$_off,
+                                             (int)$n_entries,
                                              FALSE,
                                              array($this, '_append_row'),
-                                             $_forum_id);
-      
+                                             '');
+
       $this->clear_all_assign();
       $this->assign_by_ref('title',       $this->title);
       $this->assign_by_ref('link',        $this->url);
       $this->assign_by_ref('language',    $this->countrycode);
       $this->assign_by_ref('description', $this->descr);
       $this->assign_by_ref('postings',    $this->postings);
-      $this->render('../../rss.tmpl');
+      $this->render('../rss.tmpl');
     }
   }
 ?>

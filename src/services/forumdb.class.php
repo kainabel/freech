@@ -106,7 +106,7 @@
 
       // Insert the new node.
       if ($parentrow) {
-        if ($parentrow[status] != MESSAGE_STATUS_ACTIVE)
+        if ($parentrow[status] != POSTING_STATUS_ACTIVE)
           die("ForumDB::insert(): Parent inactive.\n");
         if (strlen($parentrow[path]) / 2 > 252)
           die("ForumDB::insert(): Hierarchy too deep.\n");
@@ -292,7 +292,7 @@
       if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
         $row[allow_answer] = FALSE;
       if ($row[is_parent])
-        $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
+        $row[relation] = POSTING_RELATION_PARENT_UNFOLDED;
 
       $posting = new Posting;
       $posting->set_from_db($row);
@@ -311,27 +311,27 @@
         // Parent node types.
         if ($this->_is_parent($row)
           && !$this->_has_children($row))
-          $row[relation] = MESSAGE_RELATION_PARENT_STUB;
+          $row[relation] = POSTING_RELATION_PARENT_STUB;
         else if ($this->_is_parent($row)
               && !$_thread_state->is_folded($row[id]))
-          $row[relation] = MESSAGE_RELATION_PARENT_UNFOLDED;
+          $row[relation] = POSTING_RELATION_PARENT_UNFOLDED;
         else if ($this->_is_parent($row))
-          $row[relation] = MESSAGE_RELATION_PARENT_FOLDED;
+          $row[relation] = POSTING_RELATION_PARENT_FOLDED;
 
         // Children at a branch end.
         else if ($parents[$indent - 1][n_descendants] == 1
                && !$this->_is_childof($row, $nextrow))
-          $row[relation] = MESSAGE_RELATION_BRANCHEND_STUB;
+          $row[relation] = POSTING_RELATION_BRANCHEND_STUB;
         else if ($parents[$indent - 1][n_descendants] == 1)
-          $row[relation] = MESSAGE_RELATION_BRANCHEND;
+          $row[relation] = POSTING_RELATION_BRANCHEND;
 
         // Other children.
         else if (!$this->_is_childof($row, $nextrow)) {
-          $row[relation] = MESSAGE_RELATION_CHILD_STUB;
+          $row[relation] = POSTING_RELATION_CHILD_STUB;
           $parents[$indent - 1][n_descendants]--;
         }
         else {
-          $row[relation] = MESSAGE_RELATION_CHILD;
+          $row[relation] = POSTING_RELATION_CHILD;
           $parents[$indent - 1][n_descendants]--;
         }
         //echo "$row[subject] ($row[id], $row[path]): $row[relation]<br>\n";
@@ -343,20 +343,20 @@
 
         // Indent.
         $parents[$indent] = $row;
-        if ($row[relation] == MESSAGE_RELATION_PARENT_UNFOLDED
-          || $row[relation] == MESSAGE_RELATION_CHILD
-          || $row[relation] == MESSAGE_RELATION_BRANCHEND) {
-          if ($row[relation] == MESSAGE_RELATION_CHILD)
+        if ($row[relation] == POSTING_RELATION_PARENT_UNFOLDED
+          || $row[relation] == POSTING_RELATION_CHILD
+          || $row[relation] == POSTING_RELATION_BRANCHEND) {
+          if ($row[relation] == POSTING_RELATION_CHILD)
             $indents[$indent] = INDENT_DRAW_DASH;
           else
             $indents[$indent] = INDENT_DRAW_SPACE;
           $indent++;
         }
         // If the last row was a branch end, unindent.
-        else if ($row[relation] == MESSAGE_RELATION_BRANCHEND_STUB) {
+        else if ($row[relation] == POSTING_RELATION_BRANCHEND_STUB) {
           $relation = $parents[$indent][relation];
-          while ($relation == MESSAGE_RELATION_BRANCHEND_STUB
-            || $relation == MESSAGE_RELATION_BRANCHEND) {
+          while ($relation == POSTING_RELATION_BRANCHEND_STUB
+            || $relation == POSTING_RELATION_BRANCHEND) {
             $indent--;
             unset($indents[$indent]);
             $relation = $parents[$indent][relation];
@@ -542,7 +542,7 @@
       $sql  .= " FROM {t_posting}";
       $sql  .= " WHERE status={status} AND ";
       $query = new FreechSqlQuery($sql);
-      $query->set_int('status', MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status', POSTING_STATUS_ACTIVE);
       $_search_query->add_where_expression($query);
       $sql  = $query->sql();
       $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
@@ -753,7 +753,7 @@
       $sql .= " FROM {t_posting}";
       $sql .= " WHERE status={status} AND ";
       $query = new FreechSqlQuery($sql);
-      $query->set_int('status', MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status', POSTING_STATUS_ACTIVE);
       $_search_query->add_where_expression($query);
       return $this->db->GetOne($query->sql());
     }
@@ -810,7 +810,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('id',       $_posting->get_id());
       $query->set_int('forum_id', $_posting->get_forum_id());
-      $query->set_int('status',   MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_forum()');
       $row = $res->FetchRow($res);
@@ -853,7 +853,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('id',       $_posting->get_id());
       $query->set_int('forum_id', $_posting->get_forum_id());
-      $query->set_int('status',   MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_forum()');
       $row = $res->FetchRow($res);
@@ -900,7 +900,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
-      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_thread()');
       $row = $res->FetchRow($res);
@@ -924,7 +924,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
-      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_thread()');
       $row = $res->FetchRow($res);
@@ -946,7 +946,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $forum_id);
       $query->set_int('thread_id', $thread_id);
-      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_prev_thread_id()");
       $row = $res->FetchRow($res);
@@ -968,7 +968,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $forum_id);
       $query->set_int('thread_id', $thread_id);
-      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
+      $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_next_thread_id()");
       $row = $res->FetchRow($res);

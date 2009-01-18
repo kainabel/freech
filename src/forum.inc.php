@@ -754,7 +754,7 @@
       }
 
       // Lock the posting and log the action.
-      $posting->set_status(MESSAGE_STATUS_LOCKED);
+      $posting->set_status(POSTING_STATUS_LOCKED);
       $this->forumdb->save($posting->get_forum_id(), -1, $posting);
       $this->_log_posting_moderation('lock_posting', $posting, $reason);
       $this->_refer_to(urldecode($_POST['refer_to']));
@@ -765,7 +765,7 @@
     function _posting_unlock() {
       $this->_assert_may('moderate');
       $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
-      $posting->set_status(MESSAGE_STATUS_ACTIVE);
+      $posting->set_status(POSTING_STATUS_ACTIVE);
       $this->forumdb->save($posting->get_forum_id(), -1, $posting);
       $this->_log_posting_moderation('unlock_posting', $posting, '');
       $this->_refer_to(urldecode($_GET['refer_to']));

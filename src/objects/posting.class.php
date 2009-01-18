@@ -19,18 +19,18 @@
   */
 ?>
 <?php
-define('MESSAGE_RELATION_UNKNOWN',         0);
-define('MESSAGE_RELATION_PARENT_STUB',     1);
-define('MESSAGE_RELATION_PARENT_UNFOLDED', 2);
-define('MESSAGE_RELATION_PARENT_FOLDED',   3);
-define('MESSAGE_RELATION_BRANCHEND_STUB',  4);
-define('MESSAGE_RELATION_BRANCHEND',       5);
-define('MESSAGE_RELATION_CHILD_STUB',      6);
-define('MESSAGE_RELATION_CHILD',           7);
+define('POSTING_RELATION_UNKNOWN',         0);
+define('POSTING_RELATION_PARENT_STUB',     1);
+define('POSTING_RELATION_PARENT_UNFOLDED', 2);
+define('POSTING_RELATION_PARENT_FOLDED',   3);
+define('POSTING_RELATION_BRANCHEND_STUB',  4);
+define('POSTING_RELATION_BRANCHEND',       5);
+define('POSTING_RELATION_CHILD_STUB',      6);
+define('POSTING_RELATION_CHILD',           7);
 
-define('MESSAGE_STATUS_LOCKED', 0);
-define('MESSAGE_STATUS_ACTIVE', 1);
-define('MESSAGE_STATUS_SPAM',   2);
+define('POSTING_STATUS_LOCKED', 0);
+define('POSTING_STATUS_ACTIVE', 1);
+define('POSTING_STATUS_SPAM',   2);
 
 class IndentedBlock {
   function IndentedBlock($_depth) {
@@ -110,9 +110,9 @@ class IndentedBlock {
       $this->fields = array();
       $this->fields[created]      = time();
       $this->fields[updated]      = $this->fields[created];
-      $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
+      $this->fields[relation]     = POSTING_RELATION_UNKNOWN;
       $this->fields[renderer]     = 'message';
-      $this->fields[status]       = MESSAGE_STATUS_ACTIVE;
+      $this->fields[status]       = POSTING_STATUS_ACTIVE;
       $this->fields[priority]     = 0;
       $this->fields[user_id]      = 2; // Anonymous user.
       $this->fields[allow_answer] = TRUE;
@@ -550,9 +550,9 @@ class IndentedBlock {
 
 
     function get_n_children() {
-      if ($this->fields[relation] != MESSAGE_RELATION_PARENT_STUB
-        && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
-        && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
+      if ($this->fields[relation] != POSTING_RELATION_PARENT_STUB
+        && $this->fields[relation] != POSTING_RELATION_PARENT_UNFOLDED
+        && $this->fields[relation] != POSTING_RELATION_PARENT_FOLDED)
         die('Posting:get_n_children(): This function must not be called on'
           . ' non-parent rows.');
       return $this->fields[n_children] * 1;
@@ -572,7 +572,7 @@ class IndentedBlock {
 
 
     function is_folded() {
-      return $this->get_relation() == MESSAGE_RELATION_PARENT_FOLDED;
+      return $this->get_relation() == POSTING_RELATION_PARENT_FOLDED;
     }
 
 
@@ -587,17 +587,17 @@ class IndentedBlock {
 
 
     function is_active() {
-      return $this->fields[status] == MESSAGE_STATUS_ACTIVE;
+      return $this->fields[status] == POSTING_STATUS_ACTIVE;
     }
 
 
     function is_locked() {
-      return $this->fields[status] == MESSAGE_STATUS_LOCKED;
+      return $this->fields[status] == POSTING_STATUS_LOCKED;
     }
 
 
     function is_spam() {
-      return $this->fields[status] == MESSAGE_STATUS_SPAM;
+      return $this->fields[status] == POSTING_STATUS_SPAM;
     }
 
 
@@ -626,9 +626,9 @@ class IndentedBlock {
 
 
     function has_thread() {
-      if ($this->fields[relation] != MESSAGE_RELATION_PARENT_STUB
-        && $this->fields[relation] != MESSAGE_RELATION_PARENT_UNFOLDED
-        && $this->fields[relation] != MESSAGE_RELATION_PARENT_FOLDED)
+      if ($this->fields[relation] != POSTING_RELATION_PARENT_STUB
+        && $this->fields[relation] != POSTING_RELATION_PARENT_UNFOLDED
+        && $this->fields[relation] != POSTING_RELATION_PARENT_FOLDED)
         return TRUE;
       return $this->fields[n_descendants] != 0;
     }

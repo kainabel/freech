@@ -134,19 +134,19 @@
       $query->set_int   ('id',         $_group->get_id());
       $query->set_string('name',       $_group->get_name());
       $query->set_bool  ('is_special', $_group->is_special());
-      $query->set_bool  ('is_active',  $_group->is_active());
+      $query->set_int   ('status',     $_group->get_status());
       if ($_group->get_id() < 1) {
         $sql   = "INSERT INTO {t_group}";
         $sql  .= " (";
-        $sql  .= "  id, name, is_special, is_active, created";
+        $sql  .= "  id, name, is_special, status, created";
         $sql  .= " )";
         $sql  .= " VALUES (";
-        $sql  .= "  {id}, {name}, {is_special}, {is_active}, NULL";
+        $sql  .= "  {id}, {name}, {is_special}, {status}, NULL";
         $sql  .= " )";
         $query->set_sql($sql);
 
         $this->db->StartTrans();
-        $this->db->Execute($query->sql()) or die("GroupDB::save_group: Ins");
+        $this->db->Execute($query->sql()) or die('GroupDB::save_group: Ins');
         $newid = $this->db->Insert_ID();
         $_group->set_id($newid);
         $this->groups[$newid] = &$_group;
@@ -159,12 +159,12 @@
       $sql  .= " id={id},";
       $sql  .= " name={name},";
       $sql  .= " is_special={is_special},";
-      $sql  .= " is_active={is_active}";
+      $sql  .= " status={status}";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);
 
       $this->db->StartTrans();
-      $this->db->Execute($query->sql()) or die("GroupDB::save_group(): Upd");
+      $this->db->Execute($query->sql()) or die('GroupDB::save_group(): Upd');
       $this->groups[$_group->get_id()] = $_group;
       $this->_save_permissions($_group);
       $this->db->CompleteTrans();

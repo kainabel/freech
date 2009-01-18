@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `freech_group` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate latin1_general_ci NOT NULL,
   `is_special` tinyint(1) unsigned default '0',
-  `is_active` tinyint(1) unsigned default '1',
+  `status` int(11) unsigned default '1',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),

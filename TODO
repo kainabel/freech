@@ -5,7 +5,6 @@
 Maintenance
 ------------
 * Rename freech_posting.is_active to freech_posting.status.
-* Rename freech_group.is_active to freech_group.status.
 * Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
@@ -18,7 +17,7 @@ Features
 
 
 **
-* Whenever
+* Any time
 **
 
 Maintenance
@@ -28,10 +27,10 @@ Maintenance
    $printer->show(..., new Error(_('Something went wrong')));
    $printer->show(..., new Hint(_('My Hint')));
    $printer->show(..., new Ack(_('Success')));
-   
 
 Features
 ---------
 * Allow for moving threads between forums.
 * Respect freech_posting.force_stub.
 * Hide locked messages from the forum.
+* Add a way to flag spam messages, and lock spam IPs for a week.

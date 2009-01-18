@@ -19,6 +19,9 @@
   */
 ?>
 <?php
+define('GROUP_STATUS_DELETED', 0);
+define('GROUP_STATUS_ACTIVE',  1);
+
   /**
    * Represents a group of users.
    */
@@ -40,12 +43,12 @@
     /// Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_object($_db_row))
-        die("Group:set_from_db(): Non-object.");
+        die('Group:set_from_db(): Non-object.');
       $this->clear();
       $this->fields[id]         = $_db_row->id;
       $this->fields[name]       = $_db_row->name;
       $this->fields[is_special] = $_db_row->is_special;
-      $this->fields[is_active]  = $_db_row->is_active;
+      $this->fields[status]     = $_db_row->status;
       $this->fields[created]    = $_db_row->created;
       $this->fields[updated]    = $_db_row->updated;
     }
@@ -68,9 +71,9 @@
 
 
     function set_name($_name) {
-      if (strlen($_name) < cfg("min_usernamelength"))
+      if (strlen($_name) < cfg('min_usernamelength'))
         return ERR_GROUP_NAME_TOO_SHORT;
-      if (strlen($_name) > cfg("max_usernamelength"))
+      if (strlen($_name) > cfg('max_usernamelength'))
         return ERR_GROUP_NAME_TOO_LONG;
       $this->fields[name] = $_name;
     }
@@ -96,13 +99,18 @@
     }
 
 
-    function set_active($_active = TRUE) {
-      $this->fields[is_active] = (bool)$_active;
+    function set_status($_status) {
+      $this->fields[status] = (int)$_status;
+    }
+
+
+    function get_status() {
+      return $this->fields[status];
     }
 
 
     function is_active() {
-      return $this->fields[is_active];
+      return $this->fields[status] == GROUP_STATUS_ACTIVE;
     }
 
 

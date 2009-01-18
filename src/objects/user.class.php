@@ -19,10 +19,10 @@
   */
 ?>
 <?php
-define("USER_STATUS_DELETED",     0);
-define("USER_STATUS_ACTIVE",      1);
-define("USER_STATUS_UNCONFIRMED", 2);
-define("USER_STATUS_BLOCKED",     3);
+define('USER_STATUS_DELETED',     0);
+define('USER_STATUS_ACTIVE',      1);
+define('USER_STATUS_UNCONFIRMED', 2);
+define('USER_STATUS_BLOCKED',     3);
 
   /**
    * Represents a user.

@@ -19,14 +19,18 @@
   */
 ?>
 <?php
-  define("MESSAGE_RELATION_UNKNOWN",         0);
-  define("MESSAGE_RELATION_PARENT_STUB",     1);
-  define("MESSAGE_RELATION_PARENT_UNFOLDED", 2);
-  define("MESSAGE_RELATION_PARENT_FOLDED",   3);
-  define("MESSAGE_RELATION_BRANCHEND_STUB",  4);
-  define("MESSAGE_RELATION_BRANCHEND",       5);
-  define("MESSAGE_RELATION_CHILD_STUB",      6);
-  define("MESSAGE_RELATION_CHILD",           7);
+define('MESSAGE_RELATION_UNKNOWN',         0);
+define('MESSAGE_RELATION_PARENT_STUB',     1);
+define('MESSAGE_RELATION_PARENT_UNFOLDED', 2);
+define('MESSAGE_RELATION_PARENT_FOLDED',   3);
+define('MESSAGE_RELATION_BRANCHEND_STUB',  4);
+define('MESSAGE_RELATION_BRANCHEND',       5);
+define('MESSAGE_RELATION_CHILD_STUB',      6);
+define('MESSAGE_RELATION_CHILD',           7);
+
+define('MESSAGE_STATUS_LOCKED', 0);
+define('MESSAGE_STATUS_ACTIVE', 1);
+define('MESSAGE_STATUS_SPAM',   2);
 
 class IndentedBlock {
   function IndentedBlock($_depth) {
@@ -108,7 +112,7 @@ class IndentedBlock {
       $this->fields[updated]      = $this->fields[created];
       $this->fields[relation]     = MESSAGE_RELATION_UNKNOWN;
       $this->fields[renderer]     = 'message';
-      $this->fields[is_active]    = TRUE;
+      $this->fields[status]       = MESSAGE_STATUS_ACTIVE;
       $this->fields[priority]     = 0;
       $this->fields[user_id]      = 2; // Anonymous user.
       $this->fields[allow_answer] = TRUE;
@@ -145,7 +149,7 @@ class IndentedBlock {
       if (isset($_db_row[relation]))
         $this->fields[relation]       = $_db_row[relation];
       $this->fields[is_parent]        = $_db_row[is_parent];
-      $this->fields[is_active]        = $_db_row[is_active];
+      $this->fields[status]           = $_db_row[status];
       if (isset($_db_row[allow_answer]))
         $this->fields[allow_answer]   = $_db_row[allow_answer];
     }
@@ -572,13 +576,28 @@ class IndentedBlock {
     }
 
 
-    function set_active($_active = TRUE) {
-      $this->fields[is_active] = $_active;
+    function set_status($_status) {
+      $this->fields[status] = (int)$_status;
+    }
+
+
+    function get_status() {
+      return $this->fields[status];
     }
 
 
     function is_active() {
-      return $this->fields[is_active];
+      return $this->fields[status] == MESSAGE_STATUS_ACTIVE;
+    }
+
+
+    function is_locked() {
+      return $this->fields[status] == MESSAGE_STATUS_LOCKED;
+    }
+
+
+    function is_spam() {
+      return $this->fields[status] == MESSAGE_STATUS_SPAM;
     }
 
 

@@ -95,7 +95,7 @@
       //$this->db->debug = true;
 
       // Fetch the parent row.
-      $sql  = "SELECT forum_id,thread_id,HEX(path) path,is_active";
+      $sql  = "SELECT forum_id,thread_id,HEX(path) path,status";
       $sql .= " FROM {t_posting}";
       $sql .= " WHERE id={parent_id}";
       $query = &new FreechSqlQuery($sql);
@@ -106,7 +106,7 @@
 
       // Insert the new node.
       if ($parentrow) {
-        if (!$parentrow[is_active])
+        if ($parentrow[status] != MESSAGE_STATUS_ACTIVE)
           die("ForumDB::insert(): Parent inactive.\n");
         if (strlen($parentrow[path]) / 2 > 252)
           die("ForumDB::insert(): Hierarchy too deep.\n");
@@ -214,7 +214,7 @@
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $this->db->Execute($query->sql())
-                or die("ForumDB::insert(): Insert2.".$query->sql());
+                or die('ForumDB::insert(): Insert2.'.$query->sql());
         $_posting->set_id($this->db->Insert_Id());
       }
 
@@ -243,7 +243,7 @@
       $sql  .= " body={body},";
       $sql  .= " hash={hash},";
       $sql  .= " ip_hash={ip_hash},";
-      $sql  .= " is_active={is_active},";
+      $sql  .= " status={status},";
       $sql  .= " updated=FROM_UNIXTIME({updated})";
       $sql  .= " WHERE id={id}";
       $query = new FreechSqlQuery($sql);
@@ -262,7 +262,7 @@
       $query->set_string('body',            $_posting->get_body());
       $query->set_string('hash',            $_posting->get_hash());
       $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
-      $query->set_string('is_active',       $_posting->is_active());
+      $query->set_string('status',          $_posting->get_status());
       $this->db->Execute($query->sql()) or die('ForumDB::save(): 2');
 
       $this->db->CompleteTrans();
@@ -540,8 +540,9 @@
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_posting}";
-      $sql  .= " WHERE is_active AND ";
-      $query = &new FreechSqlQuery($sql);
+      $sql  .= " WHERE status={status} AND ";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('status', MESSAGE_STATUS_ACTIVE);
       $_search_query->add_where_expression($query);
       $sql  = $query->sql();
       $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
@@ -750,8 +751,9 @@
     function get_n_postings_from_query($_search_query) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_posting}";
-      $sql .= " WHERE is_active AND ";
-      $query = &new FreechSqlQuery($sql);
+      $sql .= " WHERE status={status} AND ";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('status', MESSAGE_STATUS_ACTIVE);
       $_search_query->add_where_expression($query);
       return $this->db->GetOne($query->sql());
     }
@@ -763,7 +765,7 @@
       $sql .= " FROM {t_thread}";
       if ($_forum_id)
         $sql .= " WHERE forum_id={forum_id}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('forum_id', $_forum_id);
       $n = $this->db->GetOne($query->sql());
       return $n;
@@ -776,7 +778,7 @@
       $sql .= " WHERE user_id={user_id}";
       if ($_since)
         $sql .= " AND created > FROM_UNIXTIME({since})";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('user_id', $_user_id);
       $query->set_int('since',   $_since);
       return $this->db->GetOne($query->sql());
@@ -789,7 +791,7 @@
       $sql .= " WHERE ip_hash={ip_hash}";
       if ($_since)
         $sql .= " AND created > FROM_UNIXTIME({since})";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('ip_hash', $_ip_hash);
       $query->set_int('since',   $_since);
       return $this->db->GetOne($query->sql());
@@ -802,12 +804,13 @@
     function get_prev_posting_id_in_forum($_posting) {
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE forum_id={forum_id}";
-      $sql .= " AND is_active";
+      $sql .= " AND status={status}";
       $sql .= " AND id<{id}";
       $sql .= " ORDER BY id DESC";
       $query = new FreechSqlQuery($sql);
       $query->set_int('id',       $_posting->get_id());
       $query->set_int('forum_id', $_posting->get_forum_id());
+      $query->set_int('status',   MESSAGE_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_forum()');
       $row = $res->FetchRow($res);
@@ -844,12 +847,13 @@
     function get_next_posting_id_in_forum($_posting) {
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE forum_id={forum_id}";
-      $sql .= " AND is_active";
+      $sql .= " AND status={status}";
       $sql .= " AND id>{id}";
       $sql .= " ORDER BY id";
       $query = new FreechSqlQuery($sql);
       $query->set_int('id',       $_posting->get_id());
       $query->set_int('forum_id', $_posting->get_forum_id());
+      $query->set_int('status',   MESSAGE_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_forum()');
       $row = $res->FetchRow($res);
@@ -890,12 +894,13 @@
         return 0;
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND is_active";
+      $sql .= " AND status={status}";
       $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=-1";
       $sql .= " ORDER BY path DESC";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
+      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_thread()');
       $row = $res->FetchRow($res);
@@ -911,14 +916,15 @@
       $path      = $_posting->_get_path();
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE thread_id={thread_id}";
-      $sql .= " AND is_active";
+      $sql .= " AND status={status}";
       $sql .= " AND NOT is_parent";
       if ($path)
         $sql .= " AND STRCMP(CONCAT('0x', HEX(path)), '{path}')=1";
       $sql .= " ORDER BY path";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('thread_id', $thread_id);
       $query->set_hex('path',      $path);
+      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_thread()');
       $row = $res->FetchRow($res);
@@ -935,11 +941,12 @@
       $thread_id = $_posting->_get_thread_id();
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
-      $sql .= " AND is_active";
+      $sql .= " AND status={status}";
       $sql .= " ORDER BY thread_id DESC, path";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $forum_id);
       $query->set_int('thread_id', $thread_id);
+      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_prev_thread_id()");
       $row = $res->FetchRow($res);
@@ -954,13 +961,14 @@
     function get_next_thread_id($_posting) {
       $forum_id  = $_posting->get_forum_id();
       $thread_id = $_posting->_get_thread_id();
-      $sql  = "SELECT id FROM {t_posting}";
-      $sql .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
-      $sql .= " AND is_active";
-      $sql .= " ORDER BY thread_id, path";
-      $query = &new FreechSqlQuery($sql);
+      $sql   = "SELECT id FROM {t_posting}";
+      $sql  .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
+      $sql  .= " AND status={status}";
+      $sql  .= " ORDER BY thread_id, path";
+      $query = new FreechSqlQuery($sql);
       $query->set_int('forum_id',  $forum_id);
       $query->set_int('thread_id', $thread_id);
+      $query->set_int('status',    MESSAGE_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_next_thread_id()");
       $row = $res->FetchRow($res);
@@ -969,10 +977,10 @@
 
 
     function get_duplicate_id_from_posting($_posting) {
-      $sql  = "SELECT id";
-      $sql .= " FROM {t_posting}";
-      $sql .= " WHERE created > FROM_UNIXTIME({since}) AND hash={hash}";
-      $query = &new FreechSqlQuery($sql);
+      $sql   = "SELECT id";
+      $sql  .= " FROM {t_posting}";
+      $sql  .= " WHERE created > FROM_UNIXTIME({since}) AND hash={hash}";
+      $query = new FreechSqlQuery($sql);
       $query->set_int('since', time() - 60 * 60 * 2);
       $query->set_string('hash', $_posting->get_hash());
       $res = $this->db->Execute($query->sql())

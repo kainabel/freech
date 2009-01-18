@@ -47,16 +47,19 @@ INSERT INTO `freech_thread` SELECT NULL, forum_id, thread_id, n_children, update
 
   // Create constraints.
   $db->execute("
-ALTER TABLE `freech_group` CHANGE `is_active` `status` INT( 11 ) UNSIGNED NOT NULL,
+ALTER TABLE `freech_group` CHANGE `is_active` `status` INT( 11 ) UNSIGNED NULL DEFAULT '1',
   ADD `priority` int(11) unsigned NOT NULL default '0'") or die();
 
   $db->execute("
 ALTER TABLE `freech_posting` CHANGE `thread_id` `thread_id` INT( 11 ) UNSIGNED NOT NULL,
-  ADD `origin_forum_id` int(11) unsigned NOT NULL default '0'") or die();
+  CHANGE `is_active` `status` INT( 11 ) UNSIGNED NULL DEFAULT '1',
+  ADD `origin_forum_id` int(11) unsigned NOT NULL default '0',
+  ADD INDEX `forum_special1` ( `forum_id`, `is_parent`, `priority`, `created` ),
+  ADD UNIQUE `forum_special2` ( `forum_id`, `status`, `id` )") or die();
 
   $db->Execute("
 ALTER TABLE `freech_forum`
-  CHANGE `is_active` `status` INT( 11 ) UNSIGNED NOT NULL,
+  CHANGE `is_active` `status` INT( 11 ) UNSIGNED NULL DEFAULT '1',
   ADD CONSTRAINT `freech_forum_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
 
   $db->Execute("

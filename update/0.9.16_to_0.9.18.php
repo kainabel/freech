@@ -47,7 +47,8 @@ INSERT INTO `freech_thread` SELECT NULL, forum_id, thread_id, n_children, update
 
   // Create constraints.
   $db->execute("
-ALTER TABLE `freech_group` CHANGE `is_active` `status` INT( 11 ) UNSIGNED NOT NULL") or die();
+ALTER TABLE `freech_group` CHANGE `is_active` `status` INT( 11 ) UNSIGNED NOT NULL,
+  ADD `priority` int(11) unsigned NOT NULL default '0'") or die();
 
   $db->execute("
 ALTER TABLE `freech_posting` CHANGE `thread_id` `thread_id` INT( 11 ) UNSIGNED NOT NULL,

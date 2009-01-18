@@ -44,7 +44,8 @@ class PollPrinter extends PrinterBase {
 
   function get_poll($_poll, $_ack = '') {
     $url = new URL('?', cfg('urlvars'));
-    $url->set_var('action', 'poll_vote');
+    $url->set_var('action',   'poll_vote');
+    $url->set_var('forum_id', $_poll->get_forum_id());
 
     $result_url = $_poll->get_url();
     $result_url->set_var('result', 1);

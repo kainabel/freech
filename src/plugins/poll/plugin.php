@@ -214,7 +214,7 @@ function _save_poll_option($db, $poll_id, $option) {
 function _get_poll_from_id($forum, $poll_id) {
   // Load the posting first, and map it back into a poll.
   $posting = $forum->_get_posting_from_id_or_die($poll_id);
-  $poll    = new Poll($posting, $forum);
+  $poll    = $forum->_decorate_posting($posting);
 
   // Load the options of the poll.
   $sql  = 'SELECT * FROM {t_poll_option}';

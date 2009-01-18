@@ -273,19 +273,19 @@ td.null {
   margin-left: 15px;
 }
 
-#home_forum_links {
-  float: left;
-}
-
-#home_forum_links h3 {
-  margin-right: 5px;
-}
-
 #home_activity {
   float: left;
 }
 
 #home_activity h3 {
+  margin-right: 5px;
+}
+
+#home_forum_links {
+  float: left;
+}
+
+#home_forum_links h3 {
   margin-left: 5px;
   margin-right: 5px;
 }

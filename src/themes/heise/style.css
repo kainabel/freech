@@ -281,6 +281,11 @@ td.null {
   margin-right: 5px;
 }
 
+#home_activity ul {
+  list-style-position: inside;
+  list-style-image: url("img/pen.png");
+}
+
 #home_forum_links {
   float: left;
 }

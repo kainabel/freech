@@ -44,10 +44,18 @@
     }
 
     function render($_template) {
+      $template_dir = 'templates';
+      $theme_dir    = 'themes/' . cfg('theme');
+      if (is_readable($theme_dir . '/' . $_template))
+        $this->smarty->template_dir = $theme_dir;
+      else
+        $this->smarty->template_dir = $template_dir;
       $this->assign_by_ref('__user',      $this->parent->get_current_user());
       $this->assign_by_ref('__group',     $this->parent->get_current_group());
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
-      $this->parent->_append_content($this->smarty->fetch($_template));
+      $cache_id = $this->smarty->template_dir . '/' . $_template;
+      $content  = $this->smarty->fetch($_template, $cache_id);
+      $this->parent->_append_content($content);
     }
   }
 ?>

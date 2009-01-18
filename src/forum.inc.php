@@ -157,7 +157,7 @@
 
       // Init Smarty.
       $this->smarty = new Smarty();
-      $this->smarty->template_dir  = 'themes/' . cfg('theme');
+      $this->smarty->template_dir  = 'templates';
       $this->smarty->compile_dir   = 'data/smarty_templates_c';
       $this->smarty->cache_dir     = 'data/smarty_cache';
       $this->smarty->config_dir    = 'data/smarty_configs';

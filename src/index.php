@@ -22,12 +22,18 @@
   include_once 'forum.inc.php';
 
   // Must be called before any other output is produced.
-  $forum = new FreechForum();
+  $forum = new FreechForum;
+
+  // Let the forum do its work.
+  $forum->run();
 
   // Print the page header.
   $forum->print_head();
 
+  // Print the body.
   $forum->show();
+
+  // Done.
   $forum->destroy();
 ?>
 </body>

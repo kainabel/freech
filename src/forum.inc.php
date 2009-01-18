@@ -199,10 +199,6 @@
 
         $this->account_links->add_link($this->get_logout_url());
       }
-
-      // Go.
-      $this->_run();
-      $this->render_time = microtime(TRUE) - $this->start_time;
     }
 
 
@@ -1189,9 +1185,9 @@
 
 
     /*************************************************************
-     * Main entry point. Called by the constructor.
+     * Public.
      *************************************************************/
-    function _run() {
+    function run() {
       /* Plugin hook: on_run_before
        *   Called before the forum is run and the HTML is produced.
        *   Args: None.
@@ -1327,9 +1323,6 @@
     }
 
 
-    /*************************************************************
-     * Public.
-     *************************************************************/
     function get_forumdb() {
       return $this->forumdb;
     }
@@ -1584,6 +1577,8 @@
       $this->_print_breadcrumbs();
       print($this->content);
       print($body);
+
+      $this->render_time = microtime(TRUE) - $this->start_time;
       if (cfg('show_total_render_time')) {
         $render_time = round($this->get_render_time(), 2);
         print("<p id='rendered'>Site rendered in $render_time seconds.</p>");

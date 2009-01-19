@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `freech_thread` (
 CREATE TABLE IF NOT EXISTS `freech_posting` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `forum_id` int(11) unsigned NOT NULL default '0',
-  `origin_forum_id` int(11) unsigned NOT NULL default '0',
+  `origin_forum_id` int(11) unsigned NULL,
   `thread_id` int(11) unsigned NOT NULL,
   `priority` int(11) unsigned NOT NULL default '0',
   `is_parent` tinyint(1) unsigned default '0',
@@ -251,7 +251,7 @@ ALTER TABLE `freech_thread`
 --
 ALTER TABLE `freech_posting`
   ADD CONSTRAINT `freech_posting_forum_id` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_posting_origin_forum_id` FOREIGN KEY (`origin_forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `freech_posting_origin_forum_id` FOREIGN KEY (`origin_forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `freech_posting_thread_id` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `freech_posting_user_id` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL;
 

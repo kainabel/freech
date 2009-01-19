@@ -113,12 +113,12 @@
 
         // Insert a new child.
         $sql  = "INSERT INTO {t_posting}";
-        $sql .= " (forum_id, thread_id, priority,";
+        $sql .= " (forum_id, origin_forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= "  renderer, username, subject, body,";
         $sql .= "  hash, ip_hash, created)";
         $sql .= " VALUES (";
-        $sql .= " {forum_id}, {thread_id}, {priority},";
+        $sql .= " {forum_id}, {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, {username}, {subject}, {body},";
         $sql .= " {hash}, {ip_hash}, NULL";
@@ -152,24 +152,24 @@
           $sql .= " 0x" . $this->_int2hex($_posting->get_id()) . "00";
         }
         $sql .= " WHERE id={newid}";
-        $query = &new FreechSqlQuery($sql);
+        $query = new FreechSqlQuery($sql);
         $query->set_int('newid', $_posting->get_id());
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Path.");
 
         // Update the child counter of the thread.
-        $sql  = 'UPDATE {t_thread}';
-        $sql .= ' SET n_children=n_children+1,';
-        $sql .= ' updated=NULL';
-        $sql .= ' WHERE id={thread_id}';
-        $query = &new FreechSqlQuery($sql);
+        $sql   = 'UPDATE {t_thread}';
+        $sql  .= ' SET n_children=n_children+1,';
+        $sql  .= ' updated=NULL';
+        $sql  .= ' WHERE id={thread_id}';
+        $query = new FreechSqlQuery($sql);
         $query->set_int('thread_id', $parentrow[thread_id]);
         $this->db->Execute($query->sql()) or die('ForumDB::insert(): n++');
 
         // Update n_descendants of the parent.
-        $sql  = "UPDATE {t_posting} SET n_descendants=n_descendants+1";
-        $sql .= " WHERE id={parent_id}";
-        $query = &new FreechSqlQuery($sql);
+        $sql   = "UPDATE {t_posting} SET n_descendants=n_descendants+1";
+        $sql  .= " WHERE id={parent_id}";
+        $query = new FreechSqlQuery($sql);
         $query->set_int('parent_id', $_parent_id);
         $this->db->Execute($query->sql()) or die('ForumDB::insert(): n_desc');
       }
@@ -177,11 +177,11 @@
       // Insert a new thread.
       else {
         // Create the thread in the thread table.
-        $sql  = "INSERT INTO {t_thread}";
-        $sql .= " (forum_id, created)";
-        $sql .= " VALUES";
-        $sql .= " ({forum_id}, NULL)";
-        $query = &new FreechSqlQuery($sql);
+        $sql   = "INSERT INTO {t_thread}";
+        $sql  .= " (forum_id, created)";
+        $sql  .= " VALUES";
+        $sql  .= " ({forum_id}, NULL)";
+        $query = new FreechSqlQuery($sql);
         $query->set_int('forum_id', $_forum_id);
         $this->db->Execute($query->sql())
                 or die("ForumDB::insert(): Insert2.".$query->sql());
@@ -189,12 +189,12 @@
 
         // Insert the posting.
         $sql  = "INSERT INTO {t_posting}";
-        $sql .= " (path, forum_id, thread_id, priority,";
+        $sql .= " (path, forum_id, origin_forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= "  renderer, is_parent, username,";
         $sql .= "  subject, body, hash, ip_hash, created)";
         $sql .= " VALUES (";
-        $sql .= " '', {forum_id}, {thread_id}, {priority},";
+        $sql .= " '', {forum_id}, {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";

@@ -53,9 +53,12 @@ ALTER TABLE `freech_group` CHANGE `is_active` `status` INT( 11 ) UNSIGNED NULL D
   $db->execute("
 ALTER TABLE `freech_posting` CHANGE `thread_id` `thread_id` INT( 11 ) UNSIGNED NOT NULL,
   CHANGE `is_active` `status` INT( 11 ) UNSIGNED NULL DEFAULT '1',
-  ADD `origin_forum_id` int(11) unsigned NOT NULL default '0',
+  ADD `origin_forum_id` int(11) unsigned NULL,
+  ADD INDEX `origin_forum_id` ( `origin_forum_id` ),
   ADD INDEX `forum_special1` ( `forum_id`, `is_parent`, `priority`, `created` ),
   ADD UNIQUE `forum_special2` ( `forum_id`, `status`, `id` )") or die();
+
+  $res = $db->Execute("UPDATE freech_posting SET origin_forum_id=forum_id") or die();
 
   $db->Execute("
 ALTER TABLE `freech_forum`
@@ -71,7 +74,8 @@ ALTER TABLE `freech_thread`
 ALTER TABLE `freech_posting`
   ADD CONSTRAINT `freech_posting_forum_id` FOREIGN KEY (`forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `freech_posting_thread_id` FOREIGN KEY (`thread_id`) REFERENCES `freech_thread` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `freech_posting_user_id` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL") or die();
+  ADD CONSTRAINT `freech_posting_user_id` FOREIGN KEY (`user_id`) REFERENCES `freech_user` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `freech_posting_origin_forum_id` FOREIGN KEY (`origin_forum_id`) REFERENCES `freech_forum` (`id`) ON DELETE SET NULL") or die();
 
   // Update poll table definition.
   $db->Execute("

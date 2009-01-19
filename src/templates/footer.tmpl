@@ -1,32 +1,21 @@
 <!-- footer -->
-<table width='100%' cellspacing='0' cellpadding='5' border='0' summary=''>
- <tr>
-  <td align='center'>
-  {strip}
+<ul id="views">
 {foreach name=loop item=item from=$footer_links->get_items()}
-  {if $smarty.foreach.loop.index > 0}&nbsp;&nbsp;&nbsp;{/if}
   {if $item->is_separator()}
-    |&nbsp;&nbsp;&nbsp;
+    <li>|</li>
   {elseif !$item->is_link()}
-    {$item->get_text()|escape|replace:" ":"&nbsp;"}
+    <li>{$item->get_text()|escape|replace:" ":"&nbsp;"}</li>
   {else}
-    {$item->get_url_html()}
+    <li>{$item->get_url_html()}</li>
   {/if}
 {/foreach}
-{/strip}
-  </td>
- </tr>
-</table>
+</ul>
 
-<table width='100%' cellspacing='0' cellpadding='5' border='0' summary=''>
- <tr>
-  <td align='center'>
+<div id="powered_by">
   <hr />
-  <span id="powered_by">
+  <span>
   Powered by <a href='{$version.url}'>{$version.text}</a>.
   </span>
-  </td>
- </tr>
-</table>
+</div>
 </div>
 <!-- end footer -->

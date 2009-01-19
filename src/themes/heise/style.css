@@ -160,7 +160,24 @@ input {
 /**
  * Footer.
  **/
+#views {
+  list-style: none;
+  text-align: center;
+  margin: 5px auto;
+  padding: 0;
+}
+
+#views li {
+  display: inline;
+  margin: 5px;
+  padding: 0;
+}
+
 #powered_by {
+  clear: both;
+  margin: 0 auto;
+  padding-top: 5px;
+  text-align: center;
   font-size: .9em;
 }
 

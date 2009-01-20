@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003-2009 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -189,7 +189,8 @@
       $moderator_url->set_var('username', $this->get_moderator_name());
       $mod_icon      = htmlentities($this->get_moderator_icon());
       $mod_groupname = htmlentities($this->get_moderator_group_name());
-      $mod_icon_html = "<img src='$mod_icon' title='$mod_groupname' />";
+      $mod_icon_html = "<img src='$mod_icon'"
+                     . " title='$mod_groupname' alt='$mod_groupname' />";
       $mod_html      = $moderator_url->get_html().$mod_icon_html;
 
       $user_url = new URL('?', cfg('urlvars'), $this->get_attribute('username'));
@@ -198,7 +199,8 @@
       $user_name      = htmlentities($this->get_attribute('username'));
       $user_icon      = htmlentities($this->get_attribute('user_icon'));
       $user_groupname = htmlentities($this->get_attribute('user_groupname'));
-      $user_icon_html = "<img src='$user_icon' title='$user_groupname' />";
+      $user_icon_html = "<img src='$user_icon'"
+                      . " title='$user_groupname' alt='$mod_groupname' />";
       if ($this->get_attribute('user_groupname') == 'anonymous')
         $user_html = $user_name.$user_icon_html;
       else

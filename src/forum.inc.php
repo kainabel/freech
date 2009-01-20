@@ -743,6 +743,9 @@
 
       // Check for completeness.
       $reason = $_POST['reason'];
+      if ($_POST['spam'] == 'on')
+        $reason = lang('moderate_reason_spam');
+
       if (!$reason) {
         $printer = new ModLogPrinter($this);
         return $printer->show_lock_posting($posting,

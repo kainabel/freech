@@ -343,6 +343,19 @@ td.null {
 
 
 /**
+ * Posting moderation.
+ **/
+#spam {
+  font-weight: normal;
+}
+
+#spam input {
+  margin: 0px;
+  padding: 0px;
+}
+
+
+/**
  * Polls.
  **/
 #poll label {

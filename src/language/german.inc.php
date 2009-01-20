@@ -371,4 +371,7 @@
   // Linkify plugin.
   $lang[show_videos] = 'Videos einblenden';
   $lang[hide_videos] = 'Videos ausblenden';
+
+  $lang[moderate_no_reason]    = 'Bitte einen Grund angeben.';
+  $lang[moderate_reason_spam]  = 'Beitrag ist Spam';
 ?>

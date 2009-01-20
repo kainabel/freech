@@ -2,32 +2,54 @@
 <h2>{lang text="posting_lock_title"}</h2>
 {include file="error.inc.tmpl"}
 
+{literal}
+<script type="text/javascript">
+function change () {
+  if (document.getElementById('spam_checkbox').checked == true) {
+    document.getElementById('reason').disabled = true;
+  } else {
+    document.getElementById('reason').disabled = false;
+  }
+}
+</script>
+{/literal}
+
 <form action="{$action|escape}"
       method="post"
       accept-charset="utf-8">
+<div>
 <input type="hidden" name="action"   value="posting_lock_submit" />
 <input type="hidden" name="msg_id"   value="{$posting->get_id()}" />
 <input type="hidden" name="refer_to" value="{$refer_to|escape}" />
 <table summary=''>
   <tr>
     <td>
-      <span class="label">{lang text="posting_lock_username"}</span>
+      <label>{lang text="posting_lock_username"}</label>
     </td>
     <td>{$posting->get_username()|escape}</td>
   </tr>
   <tr>
     <td>
-      <span class="label">{lang text="posting_lock_subject"}</span>
+      <label>{lang text="posting_lock_subject"}</label>
     </td>
     <td>{$posting->get_subject()|escape}</td>
   </tr>
   <tr>
-    <td colspan="2">
-      <span class="label">{lang text="posting_lock_reason"}</span>
+    <td>
+      <label>{lang text="posting_lock_reason"}</label>
+    </td>
+    <td>
+      <label id='spam'>
+        <input id='spam_checkbox'
+               name='spam'
+               type='checkbox'
+               onclick='change();' />
+        {lang text="moderate_reason_spam"}
+      </label>
     </td>
   </tr>
 </table>
-<textarea name='reason' cols='80' rows='10' wrap='virtual'>
+<textarea id='reason' name='reason' cols='80' rows='10'>
 </textarea>
 
 <p>
@@ -35,5 +57,6 @@
          name="posting_lock_submit"
          value="{lang text="posting_lock"}" />
 </p>
+</div>
 </form>
 <!-- end posting lock -->

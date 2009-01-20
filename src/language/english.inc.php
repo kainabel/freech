@@ -353,4 +353,7 @@
   // Linkify plugin.
   $lang[show_videos] = 'Show Videos';
   $lang[hide_videos] = 'Hide Videos';
+
+  $lang[moderate_no_reason]      = 'Please enter a reason.';
+  $lang[moderate_reason_spam]    = 'Posting is spam';
 ?>

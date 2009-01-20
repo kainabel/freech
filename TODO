@@ -32,4 +32,3 @@ Features
 * Allow for moving threads between forums.
 * Respect freech_posting.force_stub.
 * Hide locked messages from the forum.
-* Add a way to flag spam messages, and lock spam IPs for a week.

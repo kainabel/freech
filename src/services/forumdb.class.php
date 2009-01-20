@@ -984,11 +984,27 @@
       $query->set_int('since', time() - 60 * 60 * 2);
       $query->set_string('hash', $_posting->get_hash());
       $res = $this->db->Execute($query->sql())
-                            or die("ForumDB::get_duplicate_id_from_posting()");
+                            or die('ForumDB::get_duplicate_id_from_posting()');
       if ($res->EOF)
         return;
       $row = $res->FetchRow();
       return $row[id];
+    }
+
+
+    function is_spam($_posting) {
+      $sql   = "SELECT id";
+      $sql  .= " FROM {t_posting}";
+      $sql  .= " WHERE ip_hash={ip_hash}";
+      $sql  .= " AND status={status}";
+      $sql  .= " AND created > FROM_UNIXTIME({since})";
+      $query = new FreechSqlQuery($sql);
+      $query->set_string('ip_hash', $_posting->get_ip_address_hash());
+      $query->set_int   ('status',  POSTING_STATUS_SPAM);
+      $query->set_int   ('since',   time() - 60 * 60 * 24 * 7);
+      $res = $this->db->SelectLimit($query->sql(), 1)
+                                          or die('ForumDB::is_spam()');
+      return !$res->EOF;
     }
 
 

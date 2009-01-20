@@ -214,6 +214,7 @@ function message_on_send($forum) {
     if ($duplicate_id)
       $forum->_refer_to_posting_id($duplicate_id);
 
+    // Check whether too many messages were sent.
     $blocked_until = $forum->_flood_blocked_until($posting);
     if ($blocked_until) {
       $args = array('seconds' => $blocked_until - time());
@@ -222,6 +223,13 @@ function message_on_send($forum) {
                                     $parent_id,
                                     $may_quote);
     }
+
+    // Check whether the user or IP is spam-locked.
+    if ($forum->_posting_is_spam($posting))
+      return $printer->show_compose($posting,
+                                    lang('posting_spamblocked'),
+                                    $parent_id,
+                                    $may_quote);
   }
 
   // Save the posting.

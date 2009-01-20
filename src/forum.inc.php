@@ -486,6 +486,11 @@
     }
 
 
+    function _posting_is_spam($_posting) {
+      return $this->forumdb->is_spam($_posting);
+    }
+
+
     function _flood_blocked_until($_posting) {
       $forumdb = $this->forumdb;
       $user    = $this->get_current_user();
@@ -743,8 +748,12 @@
 
       // Check for completeness.
       $reason = $_POST['reason'];
-      if ($_POST['spam'] == 'on')
+      if ($_POST['spam'] == 'on') {
         $reason = lang('moderate_reason_spam');
+        $posting->set_status(POSTING_STATUS_SPAM);
+      }
+      else
+        $posting->set_status(POSTING_STATUS_LOCKED);
 
       if (!$reason) {
         $printer = new ModLogPrinter($this);
@@ -753,7 +762,6 @@
       }
 
       // Lock the posting and log the action.
-      $posting->set_status(POSTING_STATUS_LOCKED);
       $this->forumdb->save($posting->get_forum_id(), -1, $posting);
       $this->_log_posting_moderation('lock_posting', $posting, $reason);
       $this->_refer_to(urldecode($_POST['refer_to']));

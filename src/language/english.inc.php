@@ -356,4 +356,5 @@
 
   $lang[moderate_no_reason]      = 'Please enter a reason.';
   $lang[moderate_reason_spam]    = 'Posting is spam';
+  $lang[posting_spamblocked]     = 'Message rejected by spamblocker.';
 ?>

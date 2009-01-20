@@ -374,4 +374,5 @@
 
   $lang[moderate_no_reason]    = 'Bitte einen Grund angeben.';
   $lang[moderate_reason_spam]  = 'Beitrag ist Spam';
+  $lang[posting_spamblocked]   = 'Nachricht vom Spamblocker abgewiesen.';
 ?>

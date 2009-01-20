@@ -105,7 +105,7 @@ function poll_on_vote($forum) {
 
   // Make sure that a user does not vote twice.
   if (_poll_did_vote($db, $user, $poll_id))
-    return $printer->show_poll_result($poll);
+    $forum->_refer_to_posting_id($poll->get_id());
 
   // Depending on whether it is allowed to check multiple values, we get
   // either a single value or an array of values. If a single value is

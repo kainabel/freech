@@ -140,8 +140,8 @@ input {
 
 #logo {
   border: none;
-  width: 38;
-  height: 40;
+  width: 38px;
+  height: 40px;
 }
 
 #title {
@@ -176,7 +176,7 @@ input {
 #powered_by {
   clear: both;
   margin: 0 auto;
-  padding-top: 5px;
+  padding: 5px;
   text-align: center;
   font-size: .9em;
 }
@@ -235,7 +235,7 @@ td.null {
 
 /* The "last edit" field in a posting. */
 .edited {
-  color: red;
+  color: #ff0000;
 }
 
 #posting {
@@ -254,7 +254,7 @@ td.null {
 
 .forum_status {
   font-style: italic;
-  color: grey;
+  color: gray;
 }
 
 .forum_description {
@@ -337,10 +337,13 @@ td.null {
 
 #quicksearch input {
   width: 10em;
-  border: 1px solid #000000;
-  background-color: #ffffff;
+  border: 1px solid #aaa;
 }
 
+#quicksearch input:focus,
+#quicksearch input:hover {
+  border: 1px solid #777;
+}
 
 /**
  * Posting moderation.

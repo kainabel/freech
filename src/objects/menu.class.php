@@ -38,6 +38,11 @@
     }
 
 
+    function length() {
+      return count($this->items);
+    }
+
+
     function add_index($_url,
                        $_total    = 1,
                        $_per_page = 10,

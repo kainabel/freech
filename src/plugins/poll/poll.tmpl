@@ -6,11 +6,15 @@
 <input type='hidden' name='action'  value='poll_vote' />
 <input type='hidden' name='poll_id' value='{$poll->get_id()}' />
 
-<div id="poll">
+<div id='poll'>
 {if $poll->get_allow_multiple()}
-  {html_checkboxes name=options options=$poll->get_option_map() separator='<br />'}
+  {html_checkboxes name=options
+                   options=$poll->get_option_map()|indent:1
+                   separator='<br />'}
 {else}
-  {html_radios name=options options=$poll->get_option_map() separator='<br />'}
+  {html_radios name=options
+               options=$poll->get_option_map()|indent:1
+               separator='<br />'}
 {/if}
 
 <p>

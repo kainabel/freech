@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003-2008 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003-2009 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ class UnknownPosting extends PostingDecorator {
 
 
   function get_body_html() {
-    return '<font color="red" size="+1">'.$this->get_body().'</font>';
+    return '<div class="error">'.$this->get_body().'</div>';
   }
 
 

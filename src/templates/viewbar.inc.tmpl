@@ -1,0 +1,15 @@
+<!-- view bar -->
+{if $footer_links->length() > 0}
+<ul id="views">
+{foreach name=loop item=item from=$footer_links->get_items()}
+  {if $item->is_separator()}
+    <li>|</li>
+  {elseif !$item->is_link()}
+    <li>{$item->get_text()|escape|replace:" ":"&nbsp;"}</li>
+  {else}
+    <li>{$item->get_url_html()}</li>
+  {/if}
+{/foreach}
+</ul>
+{/if}
+<!-- end view bar -->

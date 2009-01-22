@@ -216,6 +216,12 @@ td.null {
   border: none;
 }
 
+/* Alignment bug in moz/ff/op :: transitional vs. strict. */
+.posting img {
+  vertical-align: bottom;
+  border: none;
+}
+
 
 /**
  * Formatting of postings.

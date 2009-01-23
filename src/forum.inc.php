@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  define('FREECH_VERSION', '0.9.17');
+  define('FREECH_VERSION', '0.9.18');
 
   require_once 'smarty/Smarty.class.php';
   require_once 'adodb/adodb.inc.php';

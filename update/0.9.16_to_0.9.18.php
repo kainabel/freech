@@ -29,7 +29,7 @@ INSERT INTO `freech_thread` SELECT NULL, forum_id, thread_id, n_children, update
   $db->Execute("ALTER IGNORE TABLE `freech_forum` DROP FOREIGN KEY `0_776`");
   $db->Execute("ALTER IGNORE TABLE `freech_posting` DROP FOREIGN KEY `0_778`");
   $db->Execute("ALTER IGNORE TABLE `freech_posting` DROP FOREIGN KEY `0_779`");
-  $db->Execute("ALTER IGNORE TABLE `freech_posting` DROP FOREIGN KEY `0_780`");
+  //$db->Execute("ALTER IGNORE TABLE `freech_posting` DROP FOREIGN KEY `0_780`");
 
   // Map old thread ids to new ones.
   $res = $db->Execute('SELECT id, thread_id FROM freech_thread');

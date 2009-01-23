@@ -5,9 +5,9 @@
 <tr>
   <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>
-  <a href="{$user->get_profile_url_string()}">{$user->get_name()|escape}</a>
+  <a href='{$user->get_profile_url_string()|escape}'>{$user->get_name()|escape}</a>
 {if $group}
-  <img src="{$group->get_icon()|escape}" title="{lang text=$group->get_name()}" alt="" />
+  <img src='{$group->get_icon()|escape}' title='{lang text=$group->get_name()}' alt='' />
 {/if}
   </td>
   <td>&nbsp;</td>

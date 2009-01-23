@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003-2008 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003-2009 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class Message extends PostingDecorator {
       $body = $this->get_body_html();
       $body = string_escape($body);
       $body = preg_replace('/^(&gt; [^\r\n]*)/m',
-                           '<span class="quote">$1</span>',
+                           "<span class='quote'>$1</span>",
                            $body);
       $body = preg_replace('/  /', '&nbsp;&nbsp;', $body);
       $body = nl2br($body);

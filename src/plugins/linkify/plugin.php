@@ -64,32 +64,35 @@ function linkify_try_youtube_url($url, $in_quotes) {
                   $matches))
     return '';
   $video_id = $matches[1];
-  return "<table class='youtube' width='650' summary=''>
-            <tr>
-            <td align='center'>
-              <object width='615' height='494' type='application/x-shockwave-flash'
-                      data='http://www.youtube.com/v/$video_id&amp;hl=en&amp;fs=1&amp;border=1'>
-                <param name='movie' value='http://www.youtube.com/v/$video_id&amp;hl=en&amp;fs=1' />
-                <param name='allowFullScreen' value='true' />
-                <param name='allowscriptaccess' value='always' />
-                <img src='#' alt='flash plug-in is missing or disabled' title='no flash plug-in found' />
-              </object>
-              <br/>
-              <a href='$url'>$url</a>
-            </td>
-            </tr>
-          </table>";
+  return "<!-- plugin linkify -->
+  <div style='margin: 10px; width: 650px; text-align: center' class='video'>
+    <object width='615'
+            height='494'
+            type='application/x-shockwave-flash'
+            data='http://www.youtube.com/v/$video_id&amp;hl=en&amp;fs=1&amp;border=1'>
+      <param name='movie'
+             value='http://www.youtube.com/v/$video_id&amp;hl=en&amp;fs=1' />
+      <param name='allowFullScreen' value='true' />
+      <param name='allowscriptaccess' value='always' />
+      <img class='noflash'
+           src='#'
+           alt='flash plug-in is missing or disabled'
+           title='no flash plug-in found' />
+    </object>
+    <br/>
+    <a href='$url'>$url</a>
+  </div>";
 }
 
 
 function linkify_url2link($match) {
   $prefix    = $match[1].$match[2];
   $url       = $match[3];
-  $quote_pfx = '<font color'; //TODO: font tag?
+  $quote_pfx = "<span class='quote'"; //NOTE: string was used in message.class.php
   $in_quotes = substr($match[2], 0, strlen($quote_pfx)) == $quote_pfx;
   if ($newurl = linkify_try_youtube_url($url, $in_quotes))
     return $prefix.$newurl;
-  return $prefix."<a href=\"$url\">$url</a>";
+  return $prefix."<a class='extern' href='$url'>$url</a>";
 }
 
 

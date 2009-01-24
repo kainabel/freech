@@ -22,7 +22,7 @@
   class FooterPrinter extends PrinterBase {
     function show($_forum_id) {
       $footer_links  = $this->parent->footer_links();
-      $version[url]  = 'http://code.google.com/p/freech/';
+      $version[url]  = 'http://freech.debain.org/';
       $version[text] = 'Freech '.FREECH_VERSION;
 
       // Render the resulting template.

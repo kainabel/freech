@@ -31,7 +31,7 @@
   $lang[countrycode]      = "en";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[forum]            = "Forum";
-  $lang[forum_status]     = "[POSTINGS] postings, [NEWPOSTINGS] new";
+  $lang[forum_info]       = "[POSTINGS] postings, [NEWPOSTINGS] new";
   $lang[forum_n_online]   = "[USERS] users online";
   $lang[breadcrumbs]      = "You are here:";
   $lang[unfoldall]        = "Unfold All";
@@ -274,10 +274,14 @@
   $lang[forum_add]                 = "Add a New Forum";
   $lang[forum_name]                = "Name:";
   $lang[forum_description]         = "Summary:";
+  $lang[forum_status]              = "Status:";
   $lang[forum_save]                = "Save the Forum";
   $lang[forum_saved]               = "The changes have been saved.";
   $lang[forum_invalid_name]        = "Please enter a valid name.";
   $lang[forum_invalid_description] = "Please enter a summary.";
+
+  $lang[FORUM_STATUS_INACTIVE]     = "Inactive";
+  $lang[FORUM_STATUS_ACTIVE]       = "Active";
 
   // Top user list.
   $lang[top_users]   = "Top Users";

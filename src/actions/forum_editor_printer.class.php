@@ -31,10 +31,11 @@ class ForumEditorPrinter extends PrinterBase {
 
     // Render the template.
     $this->clear_all_assign();
-    $this->assign_by_ref('action', $url->get_string());
-    $this->assign_by_ref('forum',  $_forum);
-    $this->assign_by_ref('ack',    $_ack);
-    $this->assign_by_ref('error',  $_error);
+    $this->assign_by_ref('action',      $url->get_string());
+    $this->assign_by_ref('forum',       $_forum);
+    $this->assign_by_ref('status_list', $_forum->get_status_names());
+    $this->assign_by_ref('ack',         $_ack);
+    $this->assign_by_ref('error',       $_error);
     $this->render('forum_editor.tmpl');
   }
 }

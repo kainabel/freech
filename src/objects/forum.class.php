@@ -19,12 +19,16 @@
   */
 ?>
 <?php
+  define('FORUM_STATUS_INACTIVE', 0);
+  define('FORUM_STATUS_ACTIVE',   1);
+
   class Forum {
     function Forum($_title = '', $_description = '') {
       $this->id          = NULL;
       $this->owner_id    = NULL;
       $this->name        = $_name;
       $this->description = $_description;
+      $this->status      = FORUM_STATUS_ACTIVE;
       $this->status_text = '';
     }
 
@@ -34,6 +38,7 @@
       $this->owner_id    = $_obj->owner_id;
       $this->name        = $_obj->name;
       $this->description = $_obj->description;
+      $this->status      = $_obj->status;
     }
 
 
@@ -99,6 +104,37 @@
 
     function get_editor_url_html() {
       return $this->get_editor_url()->get_html();
+    }
+
+
+    function set_status($_status) {
+      $this->status = (int)$_status;
+    }
+
+
+    function get_status() {
+      return $this->status;
+    }
+
+
+    function is_active() {
+      return $this->status == FORUM_STATUS_ACTIVE;
+    }
+
+
+    function get_status_names($_status = -1) {
+      $list = array(
+        FORUM_STATUS_INACTIVE => lang('FORUM_STATUS_INACTIVE'),
+        FORUM_STATUS_ACTIVE   => lang('FORUM_STATUS_ACTIVE')
+      );
+      if ($_status >= 0)
+        return $list[$_status];
+      return $list;
+    }
+
+
+    function get_status_name() {
+      return $this->get_status_names($this->fields[status]);
     }
 
 

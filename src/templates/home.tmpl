@@ -6,7 +6,11 @@
 <div id="forum_home">
 {foreach item=forum from=$forums}
   <p>
+{if $forum->is_active()}
     <span class="forum_link">{$forum->get_url_html()}</span>
+{else}
+    <span class="forum_link_inactive">{$forum->get_url_html()}</span>
+{/if}
 {if $may_edit}
     <span class="forum_edit">{$forum->get_editor_url_html()}</span>
 {/if}

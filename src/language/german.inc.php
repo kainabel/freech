@@ -31,7 +31,7 @@
   $lang[countrycode]      = "de";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[forum]            = "Forum";
-  $lang[forum_status]     = "[POSTINGS] Beiträge, [NEWPOSTINGS] neu";
+  $lang[forum_info]       = "[POSTINGS] Beiträge, [NEWPOSTINGS] neu";
   $lang[forum_n_online]   = "[USERS] User online";
   $lang[breadcrumbs]      = "Sie sind hier:";
   $lang[unfoldall]        = "Alles aufklappen";
@@ -289,10 +289,14 @@
   $lang[forum_add]                 = "Neues Forum hinzufügen";
   $lang[forum_name]                = "Name:";
   $lang[forum_description]         = "Beschreibung:";
+  $lang[forum_status]              = "Status:";
   $lang[forum_save]                = "Forum speichern";
   $lang[forum_saved]               = "Die Änderungen wurden gespeichert.";
   $lang[forum_invalid_name]        = "Bitte einen Namen eingeben.";
   $lang[forum_invalid_description] = "Bitte eine Beschreibung eingeben.";
+
+  $lang[FORUM_STATUS_INACTIVE]     = "Inaktiv";
+  $lang[FORUM_STATUS_ACTIVE]       = "Aktiv";
 
   // Top user list.
   $lang[top_users]   = "Top 20";

@@ -1163,6 +1163,7 @@
       }
       $forum->set_name($_POST['name']);
       $forum->set_description($_POST['description']);
+      $forum->set_status($_POST['status']);
 
       // Check syntax.
       if ($err = $forum->check())
@@ -1473,8 +1474,14 @@
       $id = $this->get_current_forum_id();
       if (!$id)
         return NULL;
-      $this->current_forum = $this->forumdb->get_forum_from_id($id);
-      return $this->current_forum;
+      $forum = $this->forumdb->get_forum_from_id($id);
+      if (!$forum)
+        return NULL;
+      if (!$forum->is_active()
+        && !$this->get_current_group()->may('administer'))
+        return NULL;
+      $this->current_forum = $forum;
+      return $forum;
     }
 
 

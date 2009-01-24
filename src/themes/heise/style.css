@@ -262,6 +262,12 @@ td.null {
   color: #353fa8;
 }
 
+.forum_link_inactive a {
+  text-decoration: line-through;
+  font-size: 1.3em;
+  color: #353fa8;
+}
+
 .forum_status {
   font-style: italic;
   color: gray;

@@ -1025,20 +1025,22 @@
         $sql  = "UPDATE {t_forum} SET";
         $sql .= " name={name},";
         $sql .= " description={description},";
-        $sql .= " owner_id={owner_id}";
+        $sql .= " owner_id={owner_id},";
+        $sql .= " status={status}";
         $sql .= " WHERE id={id}";
       }
       else {
         $sql  = "INSERT INTO {t_forum}";
-        $sql .= " (name, description, owner_id)";
+        $sql .= " (name, description, owner_id, status)";
         $sql .= " VALUES";
-        $sql .= " ({name}, {description}, {owner_id})";
+        $sql .= " ({name}, {description}, {owner_id}, {status})";
       }
       $query = new FreechSqlQuery($sql);
       $query->set_int   ('id',          $_forum->get_id());
       $query->set_int   ('owner_id',    $_forum->get_owner_id());
       $query->set_string('name',        $_forum->get_name());
       $query->set_string('description', $_forum->get_description());
+      $query->set_int   ('status',      $_forum->get_status());
       $this->db->Execute($query->sql()) or die('ForumDB::save_forum');
       if (!$_forum->get_id())
         $_forum->set_id($this->db->Insert_Id());
@@ -1063,12 +1065,16 @@
     }
 
 
-    /* Returns a list of all forums.
+    /* Returns a list of all forums with the given status.
+     * If $_status is -1 all forums are returned.
      */
-    function get_forums($_limit = -1, $_offset = 0) {
-      $sql   = "SELECT * FROM {t_forum}";
+    function get_forums($_status = -1, $_limit = -1, $_offset = 0) {
+      $sql = "SELECT * FROM {t_forum}";
+      if ($_status > -1)
+        $sql .= " WHERE status={status}";
       $sql  .= " ORDER BY id";
       $query = new FreechSqlQuery($sql);
+      $query->set_int('status', $_status);
       $res = $this->db->SelectLimit($query->sql(),
                                     (int)$_limit,
                                     (int)$_offset)

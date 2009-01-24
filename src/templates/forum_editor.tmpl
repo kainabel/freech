@@ -6,12 +6,11 @@
 <div>
 <input type="hidden" name="action"   value="forum_submit" />
 <input type="hidden" name="forum_id" value="{$forum->get_id()}" />
-{*
+
 <p>
   <label>{lang text="forum_status"}</label><br />
-  {html_options name="group_id" options=$status_list selected=$forum->get_status()}
+  {html_options name="status" options=$status_list selected=$forum->get_status()}
 </p>
-*}
 
 <p>
   <label>{lang text="forum_name"}</label><br />

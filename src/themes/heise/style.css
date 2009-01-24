@@ -118,6 +118,10 @@ input {
 }
 
 #page_links {
+  color: #bbb;
+}
+
+#page_links .separator {
   color: #353fa8;
 }
 

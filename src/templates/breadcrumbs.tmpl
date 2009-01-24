@@ -38,7 +38,7 @@
   <span id='page_links'>
   {strip}
 {foreach name=loop item=item from=$page_links->get_items()}
-  {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
+  {if $smarty.foreach.loop.index > 0}<span class="separator">&nbsp;|&nbsp;</span>{/if}
   {if $item->is_link()}
     {$item->get_url_html()}
   {else}

@@ -47,7 +47,7 @@
     function _get_path($_id) {
       $sql  = "SELECT path FROM {t_posting} t1";
       $sql .= " WHERE t1.id={id}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $row = $this->db->GetRow($query->sql()) or die("ForumDB::_get_path()");
       return $row[path];
@@ -56,7 +56,7 @@
 
     function _get_thread_id($_id) {
       $sql = "SELECT thread_id FROM {t_posting} WHERE id={id}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       $row = $this->db->GetRow($query->sql());
       return $row && $row[thread_id] ? $row[thread_id] : 0;
@@ -98,7 +98,7 @@
       $sql  = "SELECT forum_id,thread_id,HEX(path) path,status";
       $sql .= " FROM {t_posting}";
       $sql .= " WHERE id={parent_id}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('parent_id', $_parent_id);
       $parentrow = $this->db->GetRow($query->sql());
 
@@ -106,24 +106,28 @@
 
       // Insert the new node.
       if ($parentrow) {
+        if ($parentrow[force_stub])
+          die('ForumDB::insert(): Response have been deactivated.');
         if ($parentrow[status] != POSTING_STATUS_ACTIVE)
-          die("ForumDB::insert(): Parent inactive.\n");
+          die('ForumDB::insert(): Parent inactive.');
+        if ($parentrow[status] != POSTING_STATUS_ACTIVE)
+          die('ForumDB::insert(): Parent inactive.');
         if (strlen($parentrow[path]) / 2 > 252)
-          die("ForumDB::insert(): Hierarchy too deep.\n");
+          die('ForumDB::insert(): Hierarchy too deep.');
 
         // Insert a new child.
         $sql  = "INSERT INTO {t_posting}";
         $sql .= " (forum_id, origin_forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= "  renderer, username, subject, body,";
-        $sql .= "  hash, ip_hash, created)";
+        $sql .= "  hash, ip_hash, created, force_stub)";
         $sql .= " VALUES (";
         $sql .= " {forum_id}, {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, {username}, {subject}, {body},";
-        $sql .= " {hash}, {ip_hash}, NULL";
+        $sql .= " {hash}, {ip_hash}, NULL, {force_stub}";
         $sql .= ")";
-        $query = &new FreechSqlQuery($sql);
+        $query = new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $parentrow[forum_id]);
         $query->set_int   ('thread_id',       $parentrow[thread_id]);
         $query->set_int   ('priority',        $_posting->get_priority());
@@ -137,6 +141,7 @@
         $query->set_string('body',            $body);
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
+        $query->set_bool  ('force_stub',      $_posting->get_force_stub());
         $this->db->Execute($query->sql()) or die('ForumDB::insert(): Ins1');
         $_posting->set_id($this->db->Insert_Id());
 
@@ -188,18 +193,20 @@
         $thread_id = $this->db->Insert_Id();
 
         // Insert the posting.
-        $sql  = "INSERT INTO {t_posting}";
-        $sql .= " (path, forum_id, origin_forum_id, thread_id, priority,";
-        $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
-        $sql .= "  renderer, is_parent, username,";
-        $sql .= "  subject, body, hash, ip_hash, created)";
-        $sql .= " VALUES (";
+        $sql  = "INSERT INTO {t_posting} (";
+        $sql .= " path, forum_id, origin_forum_id, thread_id, priority,";
+        $sql .= " user_id, user_is_special, user_icon, user_icon_name,";
+        $sql .= " renderer, is_parent, username,";
+        $sql .= " subject, body, hash, ip_hash, created,";
+        $sql .= " force_stub";
+        $sql .= ") VALUES (";
         $sql .= " '', {forum_id}, {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, 1,";
-        $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL";
+        $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL,";
+        $sql .= " {force_stub}";
         $sql .= ")";
-        $query = &new FreechSqlQuery($sql);
+        $query = new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $_forum_id);
         $query->set_int   ('thread_id',       $thread_id);
         $query->set_int   ('priority',        $_posting->get_priority());
@@ -213,6 +220,7 @@
         $query->set_string('body',            $body);
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
+        $query->set_bool  ('force_stub',      $_posting->get_force_stub());
         $this->db->Execute($query->sql())
                 or die('ForumDB::insert(): Insert2.'.$query->sql());
         $_posting->set_id($this->db->Insert_Id());
@@ -244,6 +252,7 @@
       $sql  .= " hash={hash},";
       $sql  .= " ip_hash={ip_hash},";
       $sql  .= " status={status},";
+      $sql  .= " force_stub={force_stub},";
       $sql  .= " updated=FROM_UNIXTIME({updated})";
       $sql  .= " WHERE id={id}";
       $query = new FreechSqlQuery($sql);
@@ -263,6 +272,7 @@
       $query->set_string('hash',            $_posting->get_hash());
       $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
       $query->set_string('status',          $_posting->get_status());
+      $query->set_bool  ('force_stub',      $_posting->get_force_stub());
       $this->db->Execute($query->sql()) or die('ForumDB::save(): 2');
 
       $this->db->CompleteTrans();
@@ -285,7 +295,7 @@
       $sql  .= " FROM {t_posting} p";
       $sql  .= " JOIN {t_user} u ON u.id=p.user_id";
       $sql  .= " WHERE p.id={id}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
       if (!$row = $this->db->GetRow($query->sql()))
         return;
@@ -512,7 +522,7 @@
     function _walk_list($_res, $_func, $_data) {
       $numrows = $_res->RecordCount();
       while ($row = $_res->FetchRow()) {
-        $posting = &new Posting();
+        $posting = new Posting();
         $posting->set_from_db($row);
         call_user_func($_func, $posting, $_data);
       }
@@ -564,7 +574,7 @@
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_posting}";
       $sql  .= " WHERE 1";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       if ($_search_values)
         $this->_add_where_expression($query, $_search_values);
       $sql  = $query->sql();
@@ -673,7 +683,7 @@
       }
       else
         $sql .= " ORDER BY a.created DESC";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('userid', $_user_id);
       //echo $query->sql();
       //$this->db->debug=1;
@@ -721,7 +731,7 @@
         $sql .= " ORDER BY a.id DESC,b.id";
 
       // Pass all postings to the given function.
-      $query   = &new FreechSqlQuery($sql);
+      $query   = new FreechSqlQuery($sql);
       $res     = $this->db->Execute($query->sql())
                           or die("ForumDB::foreach_posting_from_user()");
       $numrows = $res->RecordCount();
@@ -739,7 +749,7 @@
         $sql .= " AND created > FROM_UNIXTIME({since})";
       if ($_until)
         $sql .= " AND created < FROM_UNIXTIME({until})";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('since', $_since);
       $query->set_int('until', $_until);
       if ($_search_values)

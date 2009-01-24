@@ -30,5 +30,4 @@ Maintenance
 Features
 ---------
 * Allow for moving threads between forums.
-* Respect freech_posting.force_stub.
 * Hide locked messages from the forum.

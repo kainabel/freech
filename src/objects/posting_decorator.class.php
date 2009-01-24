@@ -198,6 +198,26 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_stub_url() {
+    return $this->posting->get_stub_url();
+  }
+
+
+  function get_stub_url_string() {
+    return $this->posting->get_stub_url_string();
+  }
+
+
+  function get_unstub_url() {
+    return $this->posting->get_unstub_url();
+  }
+
+
+  function get_unstub_url_string() {
+    return $this->posting->get_unstub_url_string();
+  }
+
+
   function get_prioritize_url($_priority) {
     return $this->posting->get_prioritize_url($_priority);
   }
@@ -315,6 +335,16 @@ class PostingDecorator extends Trackable {
 
   function apply_block() {
     return $this->posting->apply_block();
+  }
+
+
+  function set_force_stub($_force_stub = TRUE) {
+    return $this->posting->set_force_stub($_force_stub);
+  }
+
+
+  function get_force_stub() {
+    return $this->posting->get_force_stub();
   }
 
 

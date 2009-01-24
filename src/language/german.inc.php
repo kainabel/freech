@@ -63,6 +63,8 @@
   // Message administration.
   $lang[posting_stick]    = "Pin setzen";
   $lang[posting_unstick]  = "Pin entfernen";
+  $lang[posting_stub]     = "Antworten verbieten";
+  $lang[posting_unstub]   = "Antworten erlauben";
   $lang[blockedtitle]     = "Gesperrter Beitrag";
   $lang[blockedentry]     = "Der an dieser Stelle platzierte Kommentar enthielt "
                            ."eine rechtswidrige Äußerung oder verletzte "
@@ -358,6 +360,12 @@
   $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] hat den Pin vom'
                                . ' Posting "[POSTING_LINK]" von [USER_LINK]'
                                . ' wieder entfernt.';
+  $lang[modlog_stub_posting]   = '[MODERATOR_LINK] hat Antworten auf das'
+                               . ' Posting "[POSTING_LINK]" von [USER_LINK]'
+                               . ' verboten.';
+  $lang[modlog_unstub_posting] = '[MODERATOR_LINK] hat Antworten auf das'
+                               . ' Posting "[POSTING_LINK]" von [USER_LINK]'
+                               . ' erlaubt.';
 
   // Locking postings.
   $lang[posting_lock_title]     = 'Beitrag sperren';

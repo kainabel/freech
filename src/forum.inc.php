@@ -779,6 +779,28 @@
     }
 
 
+    // Disallow responses to a posting.
+    function _posting_stub() {
+      $this->_assert_may('moderate');
+      $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $posting->set_force_stub(TRUE);
+      $this->forumdb->save($posting->get_forum_id(), -1, $posting);
+      $this->_log_posting_moderation('stub_posting', $posting, '');
+      $this->_refer_to(urldecode($_GET['refer_to']));
+    }
+
+
+    // Allow responses to a posting.
+    function _posting_unstub() {
+      $this->_assert_may('moderate');
+      $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $posting->set_force_stub(FALSE);
+      $this->forumdb->save($posting->get_forum_id(), -1, $posting);
+      $this->_log_posting_moderation('unstub_posting', $posting, '');
+      $this->_refer_to(urldecode($_GET['refer_to']));
+    }
+
+
     /*************************************************************
      * Action controllers for the user profile.
      *************************************************************/
@@ -1240,6 +1262,14 @@
 
       case 'posting_unlock':
         $this->_posting_unlock();
+        break;
+
+      case 'posting_stub':
+        $this->_posting_stub();
+        break;
+
+      case 'posting_unstub':
+        $this->_posting_unstub();
         break;
 
       case 'user_profile':

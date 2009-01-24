@@ -124,6 +124,8 @@
     function add_item($_item, $_priority = NULL) {
       if ($_priority === NULL)
         $_priority = $this->max_priority + 1000;
+      while ($this->items[$_priority])
+        $_priority += 1;
       $this->items[$_priority] = $_item;
       $this->max_priority = max($this->max_priority, $_priority);
     }

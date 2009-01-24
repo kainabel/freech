@@ -150,6 +150,7 @@ class IndentedBlock {
         $this->fields[relation]       = $_db_row[relation];
       $this->fields[is_parent]        = $_db_row[is_parent];
       $this->fields[status]           = $_db_row[status];
+      $this->fields[force_stub]       = $_db_row[force_stub];
       if (isset($_db_row[allow_answer]))
         $this->fields[allow_answer]   = $_db_row[allow_answer];
     }
@@ -431,6 +432,34 @@ class IndentedBlock {
     }
 
 
+    function get_stub_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action',   'posting_stub');
+      $url->set_var('msg_id',   $this->get_id());
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
+      return $url;
+    }
+
+
+    function get_stub_url_string() {
+      return $this->get_stub_url()->get_string();
+    }
+
+
+    function get_unstub_url() {
+      $url = new URL('?', cfg('urlvars'));
+      $url->set_var('action',   'posting_unstub');
+      $url->set_var('msg_id',   $this->get_id());
+      $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
+      return $url;
+    }
+
+
+    function get_unstub_url_string() {
+      return $this->get_unstub_url()->get_string();
+    }
+
+
     // The url for changing the posting priority.
     function get_prioritize_url($_priority) {
       $url = new URL('?', cfg('urlvars'));
@@ -586,6 +615,16 @@ class IndentedBlock {
     }
 
 
+    function set_force_stub($_force_stub = TRUE) {
+      $this->fields[force_stub] = (bool)$_force_stub;
+    }
+
+
+    function get_force_stub() {
+      return $this->fields[force_stub];
+    }
+
+
     function is_active() {
       return $this->fields[status] == POSTING_STATUS_ACTIVE;
     }
@@ -615,13 +654,8 @@ class IndentedBlock {
     }
 
 
-    function set_allow_answer($_allow = TRUE) {
-      $this->fields[allow_answer] = $_allow;
-    }
-
-
     function get_allow_answer() {
-      return $this->fields[allow_answer];
+      return $this->fields[allow_answer] && !$this->fields[force_stub];
     }
 
 

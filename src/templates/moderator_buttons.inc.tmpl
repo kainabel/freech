@@ -26,6 +26,17 @@
   {/if}
 {/if}
 </td>
+<td>
+{if $posting->get_force_stub()}
+<a href="{$posting->get_unstub_url_string()|escape}">
+<img class='icon' src='{$__theme_dir}/img/stub.png' title='{lang text="posting_unstub"}' alt='' />
+</a>
+{else}
+<a href="{$posting->get_stub_url_string()|escape}">
+<img class='icon' src='{$__theme_dir}/img/unstub.png' title='{lang text="posting_stub"}' alt='' />
+</a>
+{/if}
+</td>
 </tr>
 </table>
 <!-- moderator_buttons end -->

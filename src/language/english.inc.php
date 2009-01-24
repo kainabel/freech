@@ -63,6 +63,8 @@
   // Other posting administration.
   $lang[posting_stick]    = "Make sticky";
   $lang[posting_unstick]  = "Remove sticky";
+  $lang[posting_stub]     = "Prevent responses";
+  $lang[posting_unstub]   = "Allow responses";
   $lang[blockedtitle]     = "Blocked Message";
   $lang[blockedentry]     = "This entry was blocked because it violated "
                           . "our terms of usage.";
@@ -340,6 +342,12 @@
                                . ' "[POSTING_LINK]" by [USER_LINK] sticky.';
   $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] has removed the sticky'
                                . ' from "[POSTING_LINK]" by [USER_LINK].';
+  $lang[modlog_stub_posting]   = '[MODERATOR_LINK] has disabled responses to'
+                               . ' a <a href="[POSTING_URL]">posting</a>'
+                               . ' by [USER_LINK].';
+  $lang[modlog_unstub_posting] = '[MODERATOR_LINK] has enabled responses to'
+                               . ' a <a href="[POSTING_URL]">posting</a>'
+                               . ' by [USER_LINK].';
 
   // Locking postings.
   $lang[posting_lock_title]     = 'Lock a Posting';

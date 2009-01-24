@@ -1,19 +1,18 @@
-{strip}
 <!-- moderator_buttons -->
-<table border='0' cellpadding='0' cellspacing='0' summary=''>
-<tr>
-<td>
+<ul id="moderator_buttons">
+<li>
 {if $posting->is_active()}
-<a href="{$posting->get_lock_url_string()|escape}">
-<img class='icon' src='{$__theme_dir}/img/unlock.png' title='{lang text="posting_lock"}' alt='' />
-</a>
+  <a href="{$posting->get_lock_url_string()|escape}">
+  <img class='icon' src='{$__theme_dir}/img/unlock.png' title='{lang text="posting_lock"}' alt='' />
+  </a>
 {else}
-<a href="{$posting->get_unlock_url_string()|escape}">
-<img class='icon' src='{$__theme_dir}/img/lock.png' title='{lang text="posting_unlock"}' alt='' />
-</a>
+  <a href="{$posting->get_unlock_url_string()|escape}">
+  <img class='icon' src='{$__theme_dir}/img/lock.png' title='{lang text="posting_unlock"}' alt='' />
+  </a>
 {/if}
-</td>
-<td>
+</li>
+
+<li>
 {if $posting->is_parent()}
   {if $posting->get_priority() == 0}
   <a href="{$posting->get_prioritize_url_string(1)|escape}">
@@ -25,19 +24,18 @@
   </a>
   {/if}
 {/if}
-</td>
-<td>
+</li>
+
+<li>
 {if $posting->get_force_stub()}
-<a href="{$posting->get_unstub_url_string()|escape}">
-<img class='icon' src='{$__theme_dir}/img/stub.png' title='{lang text="posting_unstub"}' alt='' />
-</a>
+  <a href="{$posting->get_unstub_url_string()|escape}">
+  <img class='icon' src='{$__theme_dir}/img/stub.png' title='{lang text="posting_unstub"}' alt='' />
+  </a>
 {else}
-<a href="{$posting->get_stub_url_string()|escape}">
-<img class='icon' src='{$__theme_dir}/img/unstub.png' title='{lang text="posting_stub"}' alt='' />
-</a>
+  <a href="{$posting->get_stub_url_string()|escape}">
+  <img class='icon' src='{$__theme_dir}/img/unstub.png' title='{lang text="posting_stub"}' alt='' />
+  </a>
 {/if}
-</td>
-</tr>
-</table>
+</li>
+</ul>
 <!-- moderator_buttons end -->
-{/strip}

@@ -95,7 +95,7 @@
       //$this->db->debug = true;
 
       // Fetch the parent row.
-      $sql  = "SELECT forum_id,thread_id,HEX(path) path,status";
+      $sql  = "SELECT forum_id,thread_id,HEX(path) path,status,force_stub";
       $sql .= " FROM {t_posting}";
       $sql .= " WHERE id={parent_id}";
       $query = new FreechSqlQuery($sql);
@@ -107,7 +107,7 @@
       // Insert the new node.
       if ($parentrow) {
         if ($parentrow[force_stub])
-          die('ForumDB::insert(): Response have been deactivated.');
+          die('ForumDB::insert(): Responses have been deactivated.');
         if ($parentrow[status] != POSTING_STATUS_ACTIVE)
           die('ForumDB::insert(): Parent inactive.');
         if ($parentrow[status] != POSTING_STATUS_ACTIVE)

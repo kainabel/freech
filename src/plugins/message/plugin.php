@@ -51,6 +51,8 @@ function message_on_respond($forum) {
   $parent_id = (int)$_GET['parent_id'];
   $posting   = $forum->get_forumdb()->get_posting_from_id($parent_id);
   $printer   = new MessagePrinter($forum);
+  if (!$posting)
+    die('Invalid parent ID');
 
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_link($posting->get_url());

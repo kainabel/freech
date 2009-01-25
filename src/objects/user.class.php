@@ -41,9 +41,9 @@ define('USER_STATUS_BLOCKED',     3);
     function clear() {
       $this->fields = array();
       $this->fields[group_id]    = -1;
-      $this->fields[name]        = "";
-      $this->fields[firstname]   = "";
-      $this->fields[lastname]    = "";
+      $this->fields[name]        = '';
+      $this->fields[firstname]   = '';
+      $this->fields[lastname]    = '';
       $this->fields[status]      = USER_STATUS_UNCONFIRMED;
       $this->fields[public_mail] = FALSE;
       $this->fields[created]     = time();
@@ -54,7 +54,7 @@ define('USER_STATUS_BLOCKED',     3);
     /// Sets all values from a given database row.
     function set_from_db(&$_db_row) {
       if (!is_array($_db_row))
-        die("User:set_from_db(): Non-array.");
+        die('User:set_from_db(): Non-array.');
       $this->clear();
       $this->fields[id]           = $_db_row[id];
       $this->fields[group_id]     = $_db_row[group_id];
@@ -147,11 +147,15 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function set_password($_password) {
-      if (strlen($_password) < cfg("min_passwordlength"))
-        return ERR_USER_PASSWORD_TOO_SHORT;
-      if (strlen($_password) > cfg("max_passwordlength"))
-        return ERR_USER_PASSWORD_TOO_LONG;
-      $this->fields[passwordhash] = crypt(cfg("salt") . $_password);
+      if (strlen($_password) < cfg('min_passwordlength')) {
+        $err = _('Please choose a password with at least %d characters.');
+        return sprintf($err, cfg('min_passwordlength'));
+      }
+      if (strlen($_password) > cfg('max_passwordlength')) {
+        $err = _('Please choose a password with at most %d characters.');
+        return sprintf($err, cfg('max_passwordlength'));
+      }
+      $this->fields[passwordhash] = crypt(cfg('salt') . $_password);
       return 0;
     }
 
@@ -182,7 +186,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_lastname() {
+    function get_lastname() {
       return $this->fields[lastname];
     }
 
@@ -193,17 +197,20 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_mail() {
+    function get_mail() {
       return $this->fields[mail];
     }
 
 
     function check_mail() {
       //FIXME: make a much better check.
-      if (!preg_match("/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/", $this->fields[mail]))
-        return ERR_USER_MAIL_NOT_VALID;
-      if (strlen($this->fields[mail]) > cfg("max_maillength"))
-        return ERR_USER_MAIL_TOO_LONG;
+      if (!preg_match('/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/',
+                      $this->fields[mail]))
+        return _('Please enter a valid email address.');
+      if (strlen($this->fields[mail]) > cfg('max_maillength'))
+        return sprintf(_('Please enter an email address with at most %d'
+                       . ' characters.'),
+                       cfg('max_maillength'));
       return 0;
     }
 
@@ -221,7 +228,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_homepage() {
+    function get_homepage() {
       return $this->fields[homepage];
     }
 
@@ -266,8 +273,8 @@ define('USER_STATUS_BLOCKED',     3);
     /// Returns the formatted time.
     function get_created_time($_format = '') {
       if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[created]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[created]);
     }
 
 
@@ -279,8 +286,8 @@ define('USER_STATUS_BLOCKED',     3);
     /// Returns the formatted time.
     function get_updated_time($_format = '') {
       if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[updated]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[updated]);
     }
 
 
@@ -303,7 +310,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_editor_url() {
-      $url = new URL('?', cfg('urlvars'), lang('account_edit'));
+      $url = new URL('?', cfg('urlvars'), '[' . _('Edit') . ']');
       $url->set_var('action',   'user_editor');
       $url->set_var('username', $this->get_name());
       return $url;
@@ -316,7 +323,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_profile_url() {
-      $caption = lang('profile', array('name' => $this->get_name()));
+      $caption = sprintf(_('Profile of %s'), $this->get_name());
       $url     = new URL('?', cfg('urlvars'), $caption);
       $url->set_var('action',   'user_profile');
       $url->set_var('username', $this->get_name());
@@ -339,7 +346,7 @@ define('USER_STATUS_BLOCKED',     3);
                 . $this->get_firstname()
                 . $this->get_lastname()
                 . $this->get_name());
-      return preg_replace("/\./", "x", $hash);
+      return preg_replace('/\./', 'x', $hash);
     }
 
 
@@ -375,10 +382,10 @@ define('USER_STATUS_BLOCKED',     3);
 
     function get_status_names($_status = -1) {
       $list = array(
-        USER_STATUS_DELETED     => lang('USER_STATUS_DELETED'),
-        USER_STATUS_ACTIVE      => lang('USER_STATUS_ACTIVE'),
-        USER_STATUS_UNCONFIRMED => lang('USER_STATUS_UNCONFIRMED'),
-        USER_STATUS_BLOCKED     => lang('USER_STATUS_BLOCKED')
+        USER_STATUS_DELETED     => _('Deleted'),
+        USER_STATUS_ACTIVE      => _('Active'),
+        USER_STATUS_UNCONFIRMED => _('Unconfirmed'),
+        USER_STATUS_BLOCKED     => _('Locked')
       );
       if ($_status >= 0)
         return $list[$_status];
@@ -408,46 +415,83 @@ define('USER_STATUS_BLOCKED',     3);
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
       if (ctype_space($this->fields[name]))
-        return ERR_USER_LOGIN_INCOMPLETE;
-      if (strlen($this->fields[name]) < cfg("min_usernamelength"))
-        return ERR_USER_LOGIN_TOO_SHORT;
-      if (strlen($this->fields[name]) > cfg("max_usernamelength"))
-        return ERR_USER_LOGIN_TOO_LONG;
-      if (!preg_match(cfg("username_pattern"), $this->fields[name]))
-        return ERR_USER_LOGIN_INVALID_CHARS;
+        return _('Please enter a username.');
+
+      if (strlen($this->fields[name]) < cfg('min_usernamelength')) {
+        $err = _('Your login name is too short. Please enter at least'
+               . ' %d characters.');
+        return sprintf($err, cfg('min_usernamelength'));
+      }
+
+      if (strlen($this->fields[name]) > cfg('max_usernamelength')) {
+        $err = _('Your login name is too long. Please enter at most'
+               . ' %d characters.');
+        return sprintf($err, cfg('max_usernamelength'));
+      }
+
+      if (!preg_match(cfg('username_pattern'), $this->fields[name]))
+        return _('Your username contains invalid characters.');
 
       if (ctype_space($this->fields[passwordhash]))
-        return ERR_USER_PASSWORD_INCOMPLETE;
+        return _('Please enter a password.');
 
       if (ctype_space($this->fields[firstname]))
-        return ERR_USER_FIRSTNAME_INCOMPLETE;
-      if (strlen($this->fields[firstname]) < cfg("min_firstnamelength"))
-        return ERR_USER_FIRSTNAME_TOO_SHORT;
-      if (strlen($this->fields[firstname]) > cfg("max_firstnamelength"))
-        return ERR_USER_FIRSTNAME_TOO_LONG;
+        return _('Please enter a firstname.');
+
+      if (strlen($this->fields[firstname]) < cfg('min_firstnamelength')) {
+        $err = _('Your firstname is too short. Please enter at least'
+               . ' %d characters.');
+        return sprintf($err, cfg('min_firstnamelength'));
+      }
+
+      if (strlen($this->fields[firstname]) > cfg('max_firstnamelength')) {
+        $err = _('Your firstname is too long. Please enter at most'
+               . ' %d characters.');
+        return sprintf($err, cfg('max_firstnamelength'));
+      }
 
       if (ctype_space($this->fields[lastname]))
-        return ERR_USER_LASTNAME_INCOMPLETE;
-      if (strlen($this->fields[lastname]) < cfg("min_lastnamelength"))
-        return ERR_USER_LASTNAME_TOO_SHORT;
-      if (strlen($this->fields[lastname]) > cfg("max_lastnamelength"))
-        return ERR_USER_LASTNAME_TOO_LONG;
+        return _('Please enter a lastname.');
+
+      if (strlen($this->fields[lastname]) < cfg('min_lastnamelength')) {
+        $err = _('Your lastname is too short. Please enter at least'
+               . ' %d characters.');
+        return sprintf($err, cfg('min_lastnamelength'));
+      }
+
+      if (strlen($this->fields[lastname]) > cfg('max_lastnamelength')) {
+        $err = _('Your lastname is too long. Please enter at most'
+               . ' %d characters.');
+        return sprintf($err, cfg('max_lastnamelength'));
+      }
 
       //FIXME: make a much better check.
       if ($this->fields[homepage]) {
-        if (!preg_match('/^http:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+$/i', $this->fields[homepage]))
-          return ERR_USER_HOMEPAGE_NOT_VALID;
-        if (strlen($this->fields[homepage]) > cfg("max_homepageurllength"))
-          return ERR_USER_HOMEPAGE_TOO_LONG;
+        if (!preg_match('/^http:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+$/i',
+                        $this->fields[homepage]))
+          return _('Please enter a valid homepage URL.');
+
+        if (strlen($this->fields[homepage]) > cfg('max_homepageurllength')) {
+          $err = _('Your homepage URL is too long. Please enter at most'
+                 . ' %d characters.');
+          return sprintf($err, cfg('max_homepageurllength'));
+        }
       }
 
-      if (strlen($this->fields[im]) > cfg("max_imlength"))
-        return ERR_USER_IM_TOO_LONG;
+      if (strlen($this->fields[im]) > cfg('max_imlength')) {
+        $err = _('Your instant messenger address is too long. Please enter at'
+               . ' most %d characters.');
+        return sprintf($err, cfg('max_imlength'));
+      }
 
-      if (strlen($this->fields[signature]) > cfg("max_signaturelength"))
-        return ERR_USER_SIGNATURE_TOO_LONG;
-      if (substr_count($this->fields[signature], "\n") > cfg("max_signature_lines"))
-        return ERR_USER_SIGNATURE_TOO_MANY_LINES;
+      if (strlen($this->fields[signature]) > cfg('max_signaturelength')) {
+        $err = _('Your signature is too long. Please enter at most'
+               . ' %d characters.');
+        return sprintf($err, cfg('max_signaturelength'));
+      }
+
+      if (substr_count($this->fields[signature], '\n') > cfg('max_signature_lines'))
+        return _('Too many lines in the signature.');
 
       return $this->check_mail();
     }

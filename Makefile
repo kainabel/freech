@@ -20,6 +20,10 @@ dist-prepare: clean
 	# Update plugin hook documentation.
 	cd $(PACKAGE); ./makedoc.sh; cd -
 
+pot:
+	find src/ -name "*.php" -o -name "*.tmpl" \
+		| xargs xgettext -L php -k'lang' -o po/$(NAME).pot
+
 ###################################################################
 # Standard targets.
 ###################################################################

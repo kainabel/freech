@@ -4,11 +4,11 @@
 
 Maintenance
 ------------
+* Complete the migration to gettext.
 * Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
 * Design a URL scheme that makes sense for URL rewriting.
-* Use gettext and .po/.mo-files to replace the home grown thingy.
 
 Features
 ---------
@@ -29,5 +29,6 @@ Maintenance
 
 Features
 ---------
+* Show a link to the RSS feed.
 * Allow for moving threads between forums.
 * Hide locked messages from the forum.

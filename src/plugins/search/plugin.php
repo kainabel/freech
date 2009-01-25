@@ -15,7 +15,7 @@ include_once dirname(__FILE__).'/search_query.class.php';
 function search_init($forum) {
   $forum->register_action('search', 'search_on_search');
 
-  $url = new URL('?', cfg('urlvars'), lang('search_forum'));
+  $url = new URL('?', cfg('urlvars'), _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum->get_current_forum_id());
   $forum->forum_links()->add_link($url);
@@ -30,7 +30,7 @@ function search_init($forum) {
         . "<input type='hidden' name='action' value='search' />";
   if ($forum_id)
     $html .= "<input type='hidden' name='forum_id' value='$forum_id' />\n";
-  $html .= htmlentities(lang('search_quick'), ENT_QUOTES, 'UTF-8');
+  $html .= htmlentities(_('Find in this forum:'), ENT_QUOTES, 'UTF-8');
   $html .= "&nbsp;<input type='text' name='q' value='' />\n";
   $html .= "</div>\n";
   $html .= "</form>\n";
@@ -48,7 +48,7 @@ function search_on_search($forum) {
 
 function search_on_search_form($forum) {
   $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(lang('search_forum'));
+  $forum->breadcrumbs()->add_text(_('Find'));
   $printer = &new SearchPrinter($forum);
   $printer->show((int)$_GET['forum_id'], $_GET['q']);
 }
@@ -58,7 +58,7 @@ function search_on_search_result($forum) {
   if (!$_GET['q'] || trim($_GET['q']) == '')
     return search_on_search_form($forum);
 
-  $url = new URL('?', cfg('urlvars'), lang('search_forum'));
+  $url = new URL('?', cfg('urlvars'), _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum->get_current_forum_id());
   $forum->breadcrumbs()->add_separator();

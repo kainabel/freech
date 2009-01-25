@@ -42,7 +42,7 @@ class HomepagePrinter extends PrinterBase {
     // Get a list of forums.
     $group         = $this->parent->get_current_group();
     $may_edit      = $group->may('administer');
-    $add_forum_url = new URL('?', cfg('urlvars'), lang('forum_add'));
+    $add_forum_url = new URL('?', cfg('urlvars'), _('Add a New Forum'));
     $add_forum_url->set_var('action', 'forum_add');
 
     // Collect status information regarding each forum.
@@ -56,9 +56,8 @@ class HomepagePrinter extends PrinterBase {
         $n_postings = $this->forumdb->get_n_postings($search);
         $start      = time() - cfg('new_post_time');
         $n_new      = $this->forumdb->get_n_postings($search, $start);
-        $vars       = array('postings'    => $n_postings,
-                            'newpostings' => $n_new);
-        $forum->set_status_text(lang('forum_info', $vars));
+        $text       = sprintf(_('%d postings, %d new'), $n_postings, $n_new);
+        $forum->set_status_text($text);
       }
     }
 

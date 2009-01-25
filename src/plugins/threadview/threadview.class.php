@@ -108,19 +108,19 @@ class ThreadView extends View {
     // Add the 'respond' button.
     if ($may_write) {
       if ($_posting->is_active() && $_posting->get_allow_answer()) {
-        $url = new URL('?', cfg('urlvars'), lang('writeanswer'));
+        $url = new URL('?', cfg('urlvars'), _('Reply'));
         $url->set_var('action',    'respond');
         $url->set_var('forum_id',  $_posting->get_forum_id());
         $url->set_var('parent_id', $_posting->get_id());
         $this->parent->page_links()->add_link($url, 250);
       }
       else
-        $this->parent->page_links()->add_text(lang('writeanswer'), 200);
+        $this->parent->page_links()->add_text(_('Reply'), 200);
     }
 
     // Add the 'edit' button.
     if ($may_edit) {
-      $url = new URL('?', cfg('urlvars'), lang('editposting'));
+      $url = new URL('?', cfg('urlvars'), _('Edit'));
       $url->set_var('action', 'edit');
       $url->set_var('forum_id',  $_posting->get_forum_id());
       $url->set_var('msg_id', $_posting->get_id());
@@ -136,11 +136,11 @@ class ThreadView extends View {
     if ($_posting->has_thread()) {
       if ($_COOKIE[thread] === 'hide') {
         $url->set_var('showthread', 1);
-        $url->set_label(lang('showthread'));
+        $url->set_label(_('Show Thread'));
       }
       else {
         $url->set_var('showthread', -1);
-        $url->set_label(lang('hidethread'));
+        $url->set_label(_('Hide Thread'));
       }
       $this->parent->footer_links()->add_link($url);
     }

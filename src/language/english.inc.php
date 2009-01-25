@@ -31,27 +31,12 @@
   $lang[countrycode]      = "en";
   $lang[dateformat]       = "y-m-d H:i";
   $lang[forum]            = "Forum";
-  $lang[forum_info]       = "[POSTINGS] postings, [NEWPOSTINGS] new";
   $lang[forum_n_online]   = "[USERS] users online";
   $lang[breadcrumbs]      = "You are here:";
-  $lang[unfoldall]        = "Unfold All";
-  $lang[foldall]          = "Fold All";
   $lang[prev]             = "Older Threads";
   $lang[next]             = "Newer Threads";
-  $lang[prev_symbol]      = "<<";
-  $lang[next_symbol]      = ">>";
-  $lang[entry]            = "Message";
-  $lang[thread]           = "Thread";
-  $lang[threadview]       = "Order by Thread";
-  $lang[listview]         = "Order by Date";
   $lang[editposting]      = "Edit";
   $lang[writeanswer]      = "Reply";
-  $lang[writemessage]     = "Start a New Topic";
-  $lang[entryindex]       = "Message Overview";
-  $lang[hidethread]       = "Hide Thread";
-  $lang[showthread]       = "Show Thread";
-  $lang[hidelist]         = "Hide Posting List";
-  $lang[showlist]         = "Show Posting List";
   $lang[postedby]         = "Written by [USER]";
   $lang[lastupdated]      = "(last edited [TIME])";
   $lang[moderator]        = "Moderator";
@@ -84,18 +69,10 @@
   $lang[quote]             = "Quote Message";
   $lang[answer]            = "Re: ";
   $lang[wrote]             = "[USER] wrote on [TIME]:";
-  $lang[too_many_postings] = "You have sent too many messages."
-                           . " [SECONDS] seconds until your message may"
-                           . " be sent.";
 
   // Preview
   $lang[reallysend]       = "Preview";
-  $lang[somethingmissing] = "Warning! Your message is incomplete.";
   $lang[onlywhitespace]   = "Warning! Your message has no visible text."; // Not used
-  $lang[messagetoolong]   = "Your message is longer than $cfg[max_msglength] characters. Please reduce the text length.";
-  $lang[pvw_invalidchars] = "Warning! Your message contains invalid characters.";
-  $lang[nametoolong]      = "Your chosen name is longer than $cfg[max_usernamelength] characters. Please choose a shorter name.";
-  $lang[titletoolong]     = "The subject is longer than $cfg[max_subjectlength] characters. Please choose a shorter subject.";
   $lang[forgotname]       = "Please enter a name."; // Not used
   $lang[forgottitle]      = "Please enter a title."; // Not used
   $lang[forgottext]       = "No text was entered."; // Not used
@@ -136,23 +113,6 @@
   $lang[register_agree]      = "I Agree, Register";
   $lang[register_disagree]   = "I Do Not Agree, Cancel";
   $lang[register_mail_sent]  = "A confirmation mail has been sent.";
-  $lang[invalidmail]         = "Please enter a valid email address.";
-  $lang[invalidhomepage]     = "Please enter a valid homepage URL.";
-  $lang[invalidfirstname]    = "Please enter a valid first name.";
-  $lang[invalidlastname]     = "Please enter a valid last name.";
-
-  // Registration mail.
-  $lang[registration_mail_subject] = "Your registration at $cfg[site_title]";
-  $lang[registration_mail_body]    = "Hello [FIRSTNAME] [LASTNAME],\n"
-                                   . "\n"
-                                   . "Thank you for registering at"
-                                   . " $cfg[site_title]. Your account name"
-                                   . " is \"[LOGIN]\".\n"
-                                   . "\n"
-                                   . "Please confirm your email address by"
-                                   . " clicking the registration link below."
-                                   . "\n"
-                                   . "[URL]\n";
 
   // Change password.
   $lang[change_password_title] = "Password Change";
@@ -160,11 +120,6 @@
   $lang[change_password_btn]   = "Change Password";
   $lang[change_password]       = "Password:";
   $lang[change_password2]      = "Repeat:";
-  $lang[passwordsdonotmatch]   = "Error: Passwords do not match.";
-  $lang[passwordtooshort]      = "Please choose a password with at least"
-                               . " $cfg[min_passwordlength] characters.";
-  $lang[passwordtoolong]       = "Please choose a password with at most"
-                               . " $cfg[max_passwordlength] characters.";
   $lang[password_changed]      = "Your password was changed. You may"
                                . " now log in.";
 
@@ -201,13 +156,9 @@
   $lang[loginunconfirmed] = "Your account is not yet confirmed.";
   $lang[loginlocked]      = "Your account is locked.";
   $lang[resendconfirm]    = "Resend confirmation email";
-  $lang[logintooshort]    = "Your chosen name is too short. Please enter at"
-                          . "least $cfg[min_usernamelength] characters.";
+  $lang[logintooshort]    =
   $lang[logintoolong]     = "Your chosen name is too long. Please enter at"
                           . "most $cfg[max_usernamelength] characters.";
-  $lang[logininvalidchars]    = "Your login name contains invalid characters."
-                              . " Please enter letters, digits or spaces only.";
-  $lang[usernamenotavailable] = "The entered username is not available.";
   $lang[register_mail_exists] = "The given email address already exists"
                               . " in our database.";
 
@@ -238,14 +189,8 @@
   $lang[account_save]       = "Save Changes";
   $lang[account_saved]      = "Your data has been saved.";
   $lang[account_emptyfield] = "None";
-  $lang[account_edit]       = "[Edit]";
   $lang[signature_too_long] = "Please choose a shorter signature.";
   $lang[signature_lines]    = "Too many lines in the signature.";
-
-  $lang[USER_STATUS_DELETED]     = "Deleted";
-  $lang[USER_STATUS_ACTIVE]      = "Active";
-  $lang[USER_STATUS_UNCONFIRMED] = "Unconfirmed";
-  $lang[USER_STATUS_BLOCKED]     = "Locked";
 
   // Group profile.
   $lang[group_profile]         = "Profile of [NAME]";
@@ -269,19 +214,12 @@
   $lang[group_saved]           = "Your changes have been saved.";
 
   // Forum editor.
-  $lang[forum_edit]                = "[Edit]";
-  $lang[forum_editor]              = "Edit a Forum";
-  $lang[forum_add]                 = "Add a New Forum";
-  $lang[forum_name]                = "Name:";
-  $lang[forum_description]         = "Summary:";
-  $lang[forum_status]              = "Status:";
-  $lang[forum_save]                = "Save the Forum";
-  $lang[forum_saved]               = "The changes have been saved.";
-  $lang[forum_invalid_name]        = "Please enter a valid name.";
-  $lang[forum_invalid_description] = "Please enter a summary.";
-
-  $lang[FORUM_STATUS_INACTIVE]     = "Inactive";
-  $lang[FORUM_STATUS_ACTIVE]       = "Active";
+  $lang[forum_editor]      = "Edit a Forum";
+  $lang[forum_name]        = "Name:";
+  $lang[forum_description] = "Summary:";
+  $lang[forum_status]      = "Status:";
+  $lang[forum_save]        = "Save the Forum";
+  $lang[forum_saved]       = "The changes have been saved.";
 
   // Top user list.
   $lang[top_users]   = "Top Users";
@@ -317,41 +255,13 @@
   $lang[poll_allow_multiple]   = "Allow for checking multiple boxes.";
   $lang[poll_option]           = "Option [NUMBER]:";
   $lang[poll_add_row]          = "Add Another Option";
-  $lang[poll_title_missing]    = "Please enter a title.";
-  $lang[poll_title_too_long]   = "The poll title is too long.";
-  $lang[poll_too_few_options]  = "Please add more options.";
-  $lang[poll_too_many_options] = "Too many options.";
-  $lang[poll_option_too_long]  = "An option is too long.";
-  $lang[poll_duplicate_option] = "The poll has duplicate options.";
-  $lang[poll_anonymous]        = "Please log in to cast your vote.";
   $lang[poll_vote]             = "Vote";
-  $lang[poll_vote_accepted]    = "Thank You for your vote.";
-  $lang[poll_limit_reached]    = "You have reached your poll limit. Sorry.";
   $lang[poll_to_result]        = "View results";
 
   // Moderation log.
   $lang[modlog]                = 'Moderation Log';
   $lang[modlog_no_entry]       = 'No entries yet.';
   $lang[modlog_reason]         = 'Reason: [REASON]';
-  $lang[modlog_lock_user]      = '[MODERATOR_LINK] has locked the account'
-                               . ' of "[USERNAME]".';
-  $lang[modlog_unlock_user]    = '[MODERATOR_LINK] has unlocked the account'
-                               . ' of "[USERNAME]".';
-  $lang[modlog_lock_posting]   = '[MODERATOR_LINK] has locked a'
-                               . ' <a href="[POSTING_URL]">posting</a>'
-                               . ' by [USER_LINK].';
-  $lang[modlog_unlock_posting] = '[MODERATOR_LINK] has unlocked the posting'
-                               . ' "[POSTING_LINK]" by [USER_LINK].';
-  $lang[modlog_set_sticky]     = '[MODERATOR_LINK] has made the posting'
-                               . ' "[POSTING_LINK]" by [USER_LINK] sticky.';
-  $lang[modlog_remove_sticky]  = '[MODERATOR_LINK] has removed the sticky'
-                               . ' from "[POSTING_LINK]" by [USER_LINK].';
-  $lang[modlog_stub_posting]   = '[MODERATOR_LINK] has disabled responses to'
-                               . ' a <a href="[POSTING_URL]">posting</a>'
-                               . ' by [USER_LINK].';
-  $lang[modlog_unstub_posting] = '[MODERATOR_LINK] has enabled responses to'
-                               . ' a <a href="[POSTING_URL]">posting</a>'
-                               . ' by [USER_LINK].';
 
   // Locking postings.
   $lang[posting_lock_title]     = 'Lock a Posting';
@@ -368,5 +278,4 @@
 
   $lang[moderate_no_reason]      = 'Please enter a reason.';
   $lang[moderate_reason_spam]    = 'Posting is spam';
-  $lang[posting_spamblocked]     = 'Message rejected by spamblocker.';
 ?>

@@ -63,7 +63,7 @@
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('hint',   $_hint);
       $this->render('password_change.tmpl');
-      $this->parent->_set_title(lang('change_password_title'));
+      $this->parent->_set_title(_('Password Change'));
     }
 
 

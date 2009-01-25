@@ -30,7 +30,7 @@ function message_on_run($forum) {
     return;
 
   // Add 'new message' button to the index bar.
-  $url = new URL('?', cfg('urlvars'), lang('writemessage'));
+  $url = new URL('?', cfg('urlvars'), _('Start a New Topic'));
   $url->set_var('forum_id', $forum->get_current_forum_id());
   $url->set_var('action',   'write');
   $forum->page_links()->add_link($url, 200);
@@ -39,7 +39,7 @@ function message_on_run($forum) {
 
 function message_on_write($forum) {
   $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(lang('writemessage'));
+  $forum->breadcrumbs()->add_text(_('Start a New Topic'));
   $parent_id = (int)$_POST['parent_id'];
   $posting   = new Posting;
   $printer   = new MessagePrinter($forum);
@@ -57,7 +57,7 @@ function message_on_respond($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_link($posting->get_url());
   $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(lang('writeanswer'));
+  $forum->breadcrumbs()->add_text(_('Reply'));
 
   $printer->show_compose_reply($posting, '');
 }
@@ -80,7 +80,7 @@ function message_on_edit_saved($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_link($posting->get_url());
   $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(lang('editposting'));
+  $forum->breadcrumbs()->add_text(_('Edit'));
 
   $printer->show_compose($posting, '', 0, FALSE);
 }
@@ -123,7 +123,6 @@ function message_on_quote($forum) {
 
 // Print a preview of a message.
 function message_on_preview($forum) {
-  global $err;
   $parent_id = (int)$_POST['parent_id'];
   $may_quote = (int)$_POST['may_quote'];
   $printer   = new MessagePrinter($forum);
@@ -132,18 +131,15 @@ function message_on_preview($forum) {
   message_init_posting_from_post_data($message);
 
   // Check the posting for completeness.
-  $ret = $message->check_complete();
-  if ($ret < 0)
-    return $printer->show_compose($message,
-                                  $err[$ret],
-                                  $parent_id,
-                                  $may_quote);
+  $err = $message->check_complete();
+  if ($err)
+    return $printer->show_compose($message, $err, $parent_id, $may_quote);
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
     && !$forum->_username_available($message->get_username()))
      return $printer->show_compose($message,
-                                   lang('usernamenotavailable'),
+                                   _('The entered username is not available.'),
                                    $parent_id,
                                    $may_quote);
 
@@ -155,7 +151,7 @@ function message_on_preview($forum) {
   $forum->eventbus->emit('on_message_preview_print', $forum, $message);
 
   $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(lang('preview'));
+  $forum->breadcrumbs()->add_text(_('Preview'));
 
   $printer->show_preview($message, $parent_id, $may_quote);
 }
@@ -163,7 +159,6 @@ function message_on_preview($forum) {
 
 // Saves the posted message.
 function message_on_send($forum) {
-  global $err;
   $parent_id = (int)$_POST['parent_id'];
   $may_quote = (int)$_POST['may_quote'];
   $printer   = new MessagePrinter($forum);
@@ -195,18 +190,15 @@ function message_on_send($forum) {
     die('Username does not match currently logged in user');
 
   // Check the posting for completeness.
-  $ret = $posting->check_complete();
-  if ($ret < 0)
-    return $printer->show_compose($posting,
-                                  $err[$ret],
-                                  $parent_id,
-                                  $may_quote);
+  $err = $posting->check_complete();
+  if ($err)
+    return $printer->show_compose($posting, $err, $parent_id, $may_quote);
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
     && !$forum->_username_available($posting->get_username()))
     return $printer->show_compose($posting,
-                                  lang('usernamenotavailable'),
+                                   _('The entered username is not available.'),
                                   $parent_id,
                                   $may_quote);
 
@@ -219,9 +211,11 @@ function message_on_send($forum) {
     // Check whether too many messages were sent.
     $blocked_until = $forum->_flood_blocked_until($posting);
     if ($blocked_until) {
-      $args = array('seconds' => $blocked_until - time());
+      $msg  = sprintf(_('You have sent too many messages.'
+                      . ' %d seconds until your message may be sent.'),
+                      $blocked_until - time());
       return $printer->show_compose($posting,
-                                    lang('too_many_postings', $args),
+                                    $msg,
                                     $parent_id,
                                     $may_quote);
     }
@@ -229,7 +223,7 @@ function message_on_send($forum) {
     // Check whether the user or IP is spam-locked.
     if ($forum->_posting_is_spam($posting))
       return $printer->show_compose($posting,
-                                    lang('posting_spamblocked'),
+                                    _('Message rejected by spamblocker.'),
                                     $parent_id,
                                     $may_quote);
   }
@@ -241,7 +235,7 @@ function message_on_send($forum) {
     $forumdb->insert($forum_id, $parent_id, $posting);
   if (!$posting->get_id())
     return $printer->show_compose($posting,
-                                  lang('posting_save_failed'),
+                                  _('Failed to save the posting.'),
                                   $parent_id,
                                   $may_quote);
 

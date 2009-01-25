@@ -33,8 +33,6 @@
   include_once 'functions/httpquery.inc.php';
   include_once 'functions/files.inc.php';
 
-  include_once 'error.inc.php';
-
   include_once 'objects/url.class.php';
   include_once 'objects/posting.class.php';
   include_once 'objects/forum.class.php';
@@ -175,7 +173,7 @@
       }
 
       // Add the modlog URL to the forum links.
-      $url = new URL('?', cfg('urlvars'), lang('modlog'));
+      $url = new URL('?', cfg('urlvars'), _('Moderation Log'));
       $url->set_var('action', 'moderation_log');
       $this->forum_links->add_link($url);
 
@@ -190,11 +188,11 @@
       }
       else {
         $url = $user->get_postings_url();
-        $url->set_label(lang('mypostings'));
+        $url->set_label(_('My Postings'));
         $this->account_links->add_link($url);
 
         $url = $user->get_profile_url();
-        $url->set_label(lang('myprofile'));
+        $url->set_label(_('My Profile'));
         $this->account_links->add_link($url);
 
         $this->account_links->add_link($this->get_logout_url());
@@ -209,13 +207,13 @@
       $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_name($_POST['username']);
       if (!$user)
-        return ERR_LOGIN_FAILED;
+        return _('Login failed.');
       if (!$user->is_confirmed())
-        return ERR_LOGIN_UNCONFIRMED;
+        return _('Your account is not yet confirmed.');
       if (!$user->is_active())
-        return ERR_LOGIN_FAILED;
+        return _('Login failed.');
       if (!$user->is_valid_password($_POST['password']))
-        return ERR_LOGIN_FAILED;
+        return _('Login failed.');
 
       // Save user to update his timestamp.
       $user->set_last_login_time(time());
@@ -436,9 +434,9 @@
     // Returns an URL that points to the homepage.
     function _get_homepage_url() {
       if (!cfg('default_forum_id', FALSE))
-        return new URL('.', cfg('urlvars'), lang('home'));
+        return new URL('.', cfg('urlvars'), _('Home'));
 
-      $url = new URL('?', cfg('urlvars'), lang('home'));
+      $url = new URL('?', cfg('urlvars'), _('Home'));
       $url->set_var('action', 'homepage');
       return $url;
     }
@@ -529,9 +527,10 @@
     // Sends an email to the given user.
     function _send_account_mail(&$user, $subject, $body, $vars) {
       $head  = 'From: '.cfg('mail_from').'\r\n';
-      $vars['login']     = $user->get_name();
-      $vars['firstname'] = $user->get_firstname();
-      $vars['lastname']  = $user->get_lastname();
+      $vars['site_title'] = cfg('site_title');
+      $vars['login']      = $user->get_name();
+      $vars['firstname']  = $user->get_firstname();
+      $vars['lastname']   = $user->get_lastname();
       foreach ($vars as $key => $value) {
         $subject = str_replace('['.strtoupper($key).']', $value, $subject);
         $body    = str_replace('['.strtoupper($key).']', $value, $body);
@@ -542,13 +541,24 @@
 
     // Convenience wrapper around _send_account_mail().
     function _send_password_reset_mail($user) {
-      $subject  = lang('reset_mail_subject');
-      $body     = lang('reset_mail_body');
+      $subject  = _('Your password at [SITE_TITLE]');
+      $body     = _("Hello [FIRSTNAME] [LASTNAME],\n"
+                  . "\n"
+                  . "We have received a password reset request"
+                  . " for your account \"[LOGIN]\".\n"
+                  . "\n"
+                  . "To change your password please click the link"
+                  . " below. If you did not request that your"
+                  . " password be changed you may ignore"
+                  . " this message.\n"
+                  . "\n"
+                  . "[URL]\n");
       $username = urlencode($user->get_name());
       $hash     = urlencode($user->get_confirmation_hash());
       $url      = cfg('site_url') . '?action=password_mail_confirm'
                 . "&username=$username&hash=$hash";
-      $this->_send_account_mail($user, $subject, $body, array('url' => $url));
+      $vars     = array('url' => $url);
+      $this->_send_account_mail($user, $subject, $body, $vars);
     }
 
 
@@ -668,9 +678,9 @@
     function _add_posting_breadcrumbs($_posting) {
       $this->breadcrumbs->add_separator();
       if (!$_posting)
-        $this->breadcrumbs->add_text(lang('noentrytitle'));
+        $this->breadcrumbs->add_text(_('No Such Message'));
       elseif (!$_posting->is_active())
-        $this->breadcrumbs->add_text(lang('blockedtitle'));
+        $this->breadcrumbs->add_text(_('Locked Message'));
       else
         $this->breadcrumbs->add_text($_posting->get_subject());
     }
@@ -709,8 +719,8 @@
         $posting->apply_block();
       else {
         $posting = new Posting;
-        $posting->set_subject(lang('noentrytitle'));
-        $posting->set_body(lang('noentrybody'));
+        $posting->set_subject(_('No Such Message'));
+        $posting->set_body(_('A message with the given ID does not exist.'));
       }
 
       $view = $this->_get_current_view();
@@ -749,7 +759,7 @@
       // Check for completeness.
       $reason = $_POST['reason'];
       if ($_POST['spam'] == 'on') {
-        $reason = lang('moderate_reason_spam');
+        $reason = _('Posting is spam');
         $posting->set_status(POSTING_STATUS_SPAM);
       }
       else
@@ -758,7 +768,7 @@
       if (!$reason) {
         $printer = new ModLogPrinter($this);
         return $printer->show_lock_posting($posting,
-                                           lang('moderate_no_reason'));
+                                           _('Please enter a reason.'));
       }
 
       // Lock the posting and log the action.
@@ -869,7 +879,6 @@
 
     // Submit personal data.
     function _submit_user() {
-      global $err;
       $profile = &new ProfilePrinter($this);
       $user    = $this->get_current_user();
       $group   = $this->get_current_group();
@@ -918,13 +927,13 @@
         $user->set_deleted();
       else {
         // Else make sure that the data is complete and valid.
-        $ret = $user->check_complete();
-        if ($ret < 0)
-          return $profile->show_user_editor($user, $err[$ret]);
+        $err = $user->check_complete();
+        if ($err)
+          return $profile->show_user_editor($user, $err);
 
         // Make sure that the passwords match.
         if ($_POST['password'] !== $_POST['password2']) {
-          $hint = $err[ERR_REGISTER_PASSWORDS_DIFFER];
+          $hint = _('Error: Passwords do not match.');
           return $profile->show_user_editor($user, $hint);
         }
 
@@ -933,14 +942,14 @@
       }
 
       // Save the user.
-      $ret = $this->get_userdb()->save_user($user);
-      if ($ret < 0)
-        return $profile->show_user_editor($user, $err[$ret]);
+      if (!$this->get_userdb()->save_user($user))
+        return $profile->show_user_editor($user,
+                                          _('Failed to save the user.'));
 
       // Done.
       if ($user->is_deleted() && $is_self)
         return $this->_refer_to($this->get_logout_url()->get_string());
-      $profile->show_user_editor($user, lang('account_saved'));
+      $profile->show_user_editor($user, _('Your data has been saved.'));
     }
 
 
@@ -983,17 +992,17 @@
       $profile = &new ProfilePrinter($this);
 
       // Make sure that the data is complete and valid.
-      $ret = $group->check_complete();
-      if ($ret < 0)
-        return $profile->show_group_editor($group, $err[$ret]);
+      $err = $group->check_complete();
+      if ($err)
+        return $profile->show_group_editor($group, $err);
 
       // Save the group.
-      $ret = $this->_get_groupdb()->save_group($group);
-      if ($ret < 0)
-        return $profile->show_group_editor($group, $err[$ret]);
+      if (!$this->_get_groupdb()->save_group($group))
+        return $profile->show_group_editor($group,
+                                           _('Failed to save the group.'));
 
       // Done.
-      $profile->show_group_editor($group, lang('group_saved'));
+      $profile->show_group_editor($group, _('Your changes have been saved.'));
     }
 
 
@@ -1001,19 +1010,12 @@
      * Action controllers for login and password forms.
      *************************************************************/
     function _show_login() {
-      global $err;
-      $user  = $this->_init_user_from_post_data();
-      $login = &new LoginPrinter($this);
-      $user->set_status(USER_STATUS_ACTIVE);
+      $user     = $this->_init_user_from_post_data();
+      $login    = new LoginPrinter($this);
       $refer_to = $this->_get_login_refer_url();
-      if ($this->login_error == 0)
-        $login->show($user, '', $refer_to);
-      elseif ($this->login_error == ERR_LOGIN_UNCONFIRMED) {
-        $user->set_status(USER_STATUS_UNCONFIRMED);
-        $login->show($user, $err[$this->login_error], $refer_to);
-      }
-      else
-        $login->show($user, $err[$this->login_error], $refer_to);
+      if ($this->login_error)
+        return $login->show($user, $this->login_error, $refer_to);
+      $login->show($user, '', $refer_to);
     }
 
 
@@ -1029,7 +1031,6 @@
 
     // Submit a new password.
     function _password_submit() {
-      global $err;
       $userdb  = $this->get_userdb();
       $user    = $this->_init_user_from_post_data();
       $user    = $userdb->get_user_from_name($user->get_name());
@@ -1043,20 +1044,20 @@
 
       // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {
-        $error = lang('passwordsdonotmatch');
+        $error = _('Error: Passwords do not match.');
         return $printer->show_password_change($user, $error);
       }
 
       // Make sure that the password is valid.
-      $ret = $user->set_password($_POST['password']);
-      if ($ret < 0)
-        return $printer->show_password_change($user, $err[$ret]);
+      $err = $user->set_password($_POST['password']);
+      if ($err)
+        return $printer->show_password_change($user, $err);
 
       // Save the password.
       $user->set_status(USER_STATUS_ACTIVE);
-      $ret = $userdb->save_user($user);
-      if ($ret < 0)
-        return $printer->show_password_change($user, $err[$ret]);
+      if (!$userdb->save_user($user))
+        return $printer->show_password_change($user,
+                                              _('Failed to save the user.'));
 
       // Done.
       $printer->show_password_changed($user);
@@ -1073,21 +1074,20 @@
 
     // Send an email with the URL for resetting the password.
     function _password_mail_submit() {
-      global $err;
       $printer = new LoginPrinter($this);
       $user    = $this->_init_user_from_post_data();
 
       // Make sure that the email address is valid.
-      $ret = $user->check_mail();
-      if ($ret != 0)
-        return $printer->show_password_forgotten($user, $err[$ret]);
+      $err = $user->check_mail();
+      if ($err)
+        return $printer->show_password_forgotten($user, $err);
 
       // Find the user with the given mail address.
       $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_mail($user->get_mail());
       if (!$user) {
         $user = $this->_init_user_from_post_data();
-        $msg  = $err[ERR_LOGIN_NO_SUCH_MAIL];
+        $msg  = _('The given email address was not found.');
         return $printer->show_password_forgotten($user, $msg);
       }
 
@@ -1101,7 +1101,7 @@
       elseif ($user->is_active())
         $this->_send_password_reset_mail($user);
       elseif ($user->is_locked()) {
-        $msg = $err[ERR_LOGIN_LOCKED];
+        $msg = _('Your account is locked.');
         return $printer->show_password_forgotten($user, $msg);
       }
       else
@@ -1132,7 +1132,7 @@
     function _forum_add() {
       $this->_assert_may('administer');
       $this->breadcrumbs()->add_separator();
-      $this->breadcrumbs()->add_text(lang('forum_add'));
+      $this->breadcrumbs()->add_text(_('Add a New Forum'));
       $printer = new ForumEditorPrinter($this);
       $printer->show(new Forum);
     }
@@ -1142,7 +1142,7 @@
       $this->_assert_may('administer');
       $forum = $this->forumdb->get_forum_from_id((int)$_GET['forum_id']);
       $this->breadcrumbs()->add_separator();
-      $this->breadcrumbs()->add_text(lang('forum_editor'));
+      $this->breadcrumbs()->add_text(_('Edit a Forum'));
       $printer = new ForumEditorPrinter($this);
       $printer->show($forum);
     }
@@ -1171,7 +1171,7 @@
 
       // Save the data.
       $this->forumdb->save_forum($forum);
-      $printer->show($forum, lang('forum_saved'));
+      $printer->show($forum, _('The changes have been saved.'));
     }
 
 
@@ -1180,7 +1180,7 @@
      *************************************************************/
     function _show_moderation_log() {
       $this->breadcrumbs()->add_separator();
-      $this->breadcrumbs()->add_text(lang('modlog'));
+      $this->breadcrumbs()->add_text(_('Moderation Log'));
       $footer = new ModLogPrinter($this);
       $footer->show((int)$_GET['hs']);
     }
@@ -1212,7 +1212,7 @@
       $rss->set_base_url(cfg('site_url'));
       $rss->set_title($_title);
       $rss->set_description($_descr);
-      $rss->set_language(lang('countrycode'));
+      $rss->set_language(cfg('site_language'));
       $rss->show($_forum_id, $_off, $_n_entries);
       print($this->content);
     }
@@ -1545,7 +1545,7 @@
 
     function get_login_url() {
       $refer_to = $this->_get_login_refer_url();
-      $url      = new URL('?', cfg('urlvars'), lang('login'));
+      $url      = new URL('?', cfg('urlvars'), _('Log in'));
       $url->set_var('action',   'login');
       $url->set_var('refer_to', $refer_to);
       return $url;
@@ -1553,7 +1553,7 @@
 
 
     function get_logout_url() {
-      $url = new URL('?', cfg('urlvars'), lang('logout'));
+      $url = new URL('?', cfg('urlvars'), _('Log out'));
       $url->set_var('action', 'logout');
       return $url;
     }
@@ -1561,7 +1561,7 @@
 
     function get_registration_url() {
       //FIXME: should not be here.
-      $url = new URL('?', cfg('urlvars'), lang('register'));
+      $url = new URL('?', cfg('urlvars'), _('Register Account'));
       $url->set_var('action', 'account_register');
       return $url;
     }

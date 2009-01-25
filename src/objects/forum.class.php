@@ -95,7 +95,7 @@
 
 
     function get_editor_url() {
-      $url = new URL('?', cfg('urlvars'), lang('forum_edit'));
+      $url = new URL('?', cfg('urlvars'), '[' . _('Edit') . ']');
       $url->set_var('action',   'forum_edit');
       $url->set_var('forum_id', $this->get_id());
       return $url;
@@ -124,8 +124,8 @@
 
     function get_status_names($_status = -1) {
       $list = array(
-        FORUM_STATUS_INACTIVE => lang('FORUM_STATUS_INACTIVE'),
-        FORUM_STATUS_ACTIVE   => lang('FORUM_STATUS_ACTIVE')
+        FORUM_STATUS_INACTIVE => _('Inactive'),
+        FORUM_STATUS_ACTIVE   => _('Active')
       );
       if ($_status >= 0)
         return $list[$_status];
@@ -152,9 +152,9 @@
     // Returns NULL otherwise.
     function check() {
       if (!$this->name || ctype_space($this->name))
-        return lang('forum_invalid_name');
+        return _('Please enter a valid name.');
       if (!$this->description || ctype_space($this->description))
-        return lang('forum_invalid_description');
+        return _('Please enter a summary.');
 
       return NULL;
     }

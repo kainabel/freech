@@ -43,7 +43,7 @@
       $this->assign('forum_id', $_forum_id);
       $this->assign('query',    $_query);
       $this->render(dirname(__FILE__).'/search.tmpl');
-      $this->parent->_set_title(lang('search_title'));
+      $this->parent->_set_title(_('Search'));
     }
 
 
@@ -84,7 +84,7 @@
       $this->assign_by_ref('n_rows',         $rows);
       $this->assign_by_ref('postings',       $this->results);
       $this->render(dirname(__FILE__).'/search.tmpl');
-      $this->parent->_set_title(lang('search_title'));
+      $this->parent->_set_title(_('Search'));
     }
 
 
@@ -136,7 +136,7 @@
       $this->assign_by_ref('n_rows',      $n_rows);
       $this->assign_by_ref('users',       $this->results);
       $this->render(dirname(__FILE__).'/search.tmpl');
-      $this->parent->_set_title(lang('search_title'));
+      $this->parent->_set_title(_('Search'));
     }
   }
 ?>

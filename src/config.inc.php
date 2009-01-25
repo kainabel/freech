@@ -123,6 +123,9 @@
   // Number of items shown in the recent activity lists on the homepage.
   $cfg[homepage_n_entries] = 8;
 
+  // The format of the date/time.
+  $cfg[dateformat] = '%x %X';
+
   // *************************************************************
   // Advanced settings.
   // *************************************************************

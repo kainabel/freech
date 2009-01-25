@@ -71,11 +71,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function set_name($_name) {
-      if (strlen($_name) < cfg('min_usernamelength'))
-        return ERR_GROUP_NAME_TOO_SHORT;
-      if (strlen($_name) > cfg('max_usernamelength'))
-        return ERR_GROUP_NAME_TOO_LONG;
-      $this->fields[name] = $_name;
+      $this->fields[name] = trim($_name);
     }
 
 
@@ -116,9 +112,9 @@ define('GROUP_STATUS_ACTIVE',  1);
 
     function get_status_name() {
       if ($this->is_active())
-        return lang('group_status_active');
+        return _('Active');
       else
-        return lang('group_status_inactive');
+        return _('Inactive');
     }
 
 
@@ -130,8 +126,8 @@ define('GROUP_STATUS_ACTIVE',  1);
     /// Returns the formatted time.
     function get_created_time($_format = '') {
       if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[created]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[created]);
     }
 
 
@@ -143,8 +139,8 @@ define('GROUP_STATUS_ACTIVE',  1);
     /// Returns the formatted time.
     function get_updated_time($_format = '') {
       if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[updated]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[updated]);
     }
 
 
@@ -204,7 +200,7 @@ define('GROUP_STATUS_ACTIVE',  1);
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
       if (ctype_space($this->fields[name]))
-        return ERR_GROUP_NAME_INCOMPLETE;
+        return _('Error: Please enter a group name.');
       return 0;
     }
   }

@@ -31,7 +31,7 @@
       $this->assign_by_ref('password2', $_POST['password2']);
       $this->assign_by_ref('error',     $error);
       $this->render(dirname(__FILE__).'/registration.tmpl');
-      $this->parent->_set_title(lang('register_title'));
+      $this->parent->_set_title(_('User Registration'));
     }
 
 

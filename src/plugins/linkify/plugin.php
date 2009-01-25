@@ -23,11 +23,11 @@ function linkify_on_read($forum, $message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
 
   if ($_COOKIE['linkify_show_videos']) {
-    $url = new URL('?', cfg('urlvars'), lang('hide_videos'));
+    $url = new URL('?', cfg('urlvars'), _('Hide Videos'));
     $url->set_var('action', 'linkify_hide_videos');
   }
   else {
-    $url = new URL('?', cfg('urlvars'), lang('show_videos'));
+    $url = new URL('?', cfg('urlvars'), _('Show Videos'));
     $url->set_var('action', 'linkify_show_videos');
   }
   $url->set_var('refer_to', $_SERVER['REQUEST_URI']);

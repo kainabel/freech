@@ -57,12 +57,9 @@
                                  $_hint) {
       // Add "Posting written by ... on ..." before the quoted stuff.
       if ($_parent_msg->is_active()) {
-        $text  = preg_replace('/\[USER\]/',
-                              $_parent_msg->get_username(),
-                              lang('wrote'));
-        $text  = preg_replace('/\[TIME\]/',
-                              $_parent_msg->get_created_time(),
-                              $text);
+        $text  = sprintf(_('%s wrote on %s:'),
+                         $_parent_msg->get_username(),
+                         $_parent_msg->get_created_time());
         $text .= "\n\n";
         $text .= $_parent_msg->get_quoted_body();
         $text .= "\n\n";
@@ -83,8 +80,8 @@
       $message = new Posting;
 
       // Prepend 'Re: ' if necessary
-      if (strpos($_parent_msg->get_subject(), lang('answer')) !== 0) {
-        $subject = lang('answer') . $_parent_msg->get_subject();
+      if (strpos($_parent_msg->get_subject(), _('Re: ')) !== 0) {
+        $subject = _('Re: ') . $_parent_msg->get_subject();
         $message->set_subject(substr($subject, 0, cfg('max_subjectlength')));
       }
       else
@@ -106,7 +103,7 @@
       $this->clear_all_assign();
       $this->assign('may_quote', $_may_quote);
       $this->assign('parent_id', (int)$_parent_id);
-      $this->assign_by_ref('pagetitle', lang('preview'));
+      $this->assign_by_ref('pagetitle', _('Preview'));
       $this->assign_by_ref('action',    $url->get_string());
       $this->assign_by_ref('message',   $_message);
       $this->render(dirname(__FILE__).'/preview.tmpl');

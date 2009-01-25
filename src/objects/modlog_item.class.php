@@ -157,8 +157,8 @@
     /// Returns the formatted time.
     function get_created_time($_format = '') {
       if (!$_format)
-        $_format = lang('dateformat');
-      return date($_format, $this->fields[created]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[created]);
     }
 
 
@@ -211,7 +211,53 @@
                     'posting_url'    => $post_url->get_string(TRUE),
                     'user_link'      => $user_html);
       $args = array_merge($args, $this->attributes);
-      return lang('modlog_'.$this->get_action(), $args);
+
+      switch ($this->get_action()) {
+      case 'lock_user':
+        $text = _('[MODERATOR_LINK] has locked the account of "[USERNAME]".');
+        break;
+
+      case 'unlock_user':
+        $text = _('[MODERATOR_LINK] has unlocked the account of "[USERNAME]".');
+        break;
+
+      case 'lock_posting':
+        $text = _('[MODERATOR_LINK] has locked a'
+                . ' <a href="[POSTING_URL]">posting</a> by [USER_LINK].');
+        break;
+
+      case 'unlock_posting':
+        $text = _('[MODERATOR_LINK] has unlocked the posting'
+                . ' [POSTING_LINK] by [USER_LINK].');
+        break;
+
+      case 'set_sticky':
+        $text = _('[MODERATOR_LINK] has made the posting'
+                . ' [POSTING_LINK] by [USER_LINK] sticky.');
+        break;
+
+      case 'remove_sticky':
+        $text = _('[MODERATOR_LINK] has removed the sticky from'
+                . ' [POSTING_LINK] by [USER_LINK].');
+        break;
+
+      case 'stub_posting':
+        $text = _('[MODERATOR_LINK] has disabled responses to the posting'
+                . ' [POSTING_LINK] by [USER_LINK].');
+        break;
+
+      case 'unstub_posting':
+        $text = _('[MODERATOR_LINK] has enabled responses to the posting'
+                . ' [POSTING_LINK] by [USER_LINK].');
+        break;
+
+      default:
+        die('Unknown modlog action.');
+      }
+
+      foreach ($args as $key => $value)
+        $text = str_replace('['.strtoupper($key).']', $value, $text);
+      return $text;
     }
   }
 ?>

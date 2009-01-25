@@ -36,7 +36,7 @@ function poll_on_run($forum) {
 
   // Add a link to the poll button in the index bar.
   $forum_id = $forum->get_current_forum_id();
-  $url      = new URL('?', cfg('urlvars'), lang('poll_create'));
+  $url      = new URL('?', cfg('urlvars'), _('Start a Poll'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action'  , 'poll_add');
   $forum->page_links()->add_link($url, 400);
@@ -50,14 +50,14 @@ function poll_on_add($forum) {
   $poll->set_forum_id($forum->get_current_forum_id());
 
   $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(lang('poll_create'));
+  $forum->breadcrumbs()->add_text(_('Start a Poll'));
 
   $max_polls      = cfg('max_polls', 2);
   $max_polls_time = time() - cfg('max_polls_time', 60 * 60 * 24);
   if (_n_polls_since($forum->_get_db(),
                      $forum->get_current_user(),
                      $max_polls_time) >= $max_polls)
-    return $printer->show_error(lang('poll_limit_reached'));
+    return $printer->show_error(_('You have reached your poll limit. Sorry.'));
   $printer->show_form($poll);
 }
 
@@ -70,7 +70,7 @@ function poll_on_submit($forum) {
   if ($_POST['add_row']) {
     $option = new PollOption();
     if ($poll->n_options() >= $poll->get_max_options())
-      return $printer->show_form($poll, lang('poll_too_many_options'));
+      return $printer->show_form($poll, _('Too many options.'));
     $poll->add_option($option);
     return $printer->show_form($poll);
   }
@@ -85,7 +85,7 @@ function poll_on_submit($forum) {
     // Save the poll.
     $poll_id = _save_poll($forum, $poll);
     if (!$poll_id)
-      return $printer->show_form($poll, lang('poll_save_failed'));
+      return $printer->show_form($poll, _('Failed to save poll.'));
 
     // Refer to the poll.
     $forum->_refer_to_posting_id($poll->get_id());
@@ -162,8 +162,7 @@ function _save_poll($forum, $poll) {
   $forum_id = $forum->get_current_forum_id();
   $user     = $forum->get_current_user();
   $group    = $forum->get_current_group();
-  $subject  = $poll->get_subject();
-  $subject  = lang('poll', array('title' => $subject));
+  $subject  = sprintf(_('Poll: %s'), $poll->get_subject());
   $poll->set_subject($subject);
   $poll->set_from_user($user);
   $poll->set_from_group($group);

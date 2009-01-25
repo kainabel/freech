@@ -39,7 +39,7 @@ class Poll extends PostingDecorator {
 
 
   function set_title($_title) {
-    $this->posting->set_body(lang('poll', array('title' => $_title)));
+    $this->posting->set_body(sprintf(_('Poll: %s'), $_title));
     return $this->posting->set_subject($_title);
   }
 
@@ -70,13 +70,15 @@ class Poll extends PostingDecorator {
     $printer = new PollPrinter($this->forum);
 
     if ($user->is_anonymous())
-      return $printer->get_poll_result($poll, '', lang('poll_anonymous'));
+      return $printer->get_poll_result($poll,
+                                       '',
+                                       _('Please log in to cast your vote.'));
 
     if ($_GET['result'])
       return $printer->get_poll_result($poll);
 
     if ($_GET['accept'])
-      $hint = lang('poll_vote_accepted');
+      $hint = _('Thank You for your vote.');
 
     if (_poll_did_vote($db, $user, $poll_id))
       return $printer->get_poll_result($poll, $hint);
@@ -202,19 +204,19 @@ class Poll extends PostingDecorator {
 
   function check() {
     if ($this->get_title() == '')
-      return lang('poll_title_missing');
+      return _('Please enter a title.');
     if (strlen($this->get_title()) > cfg('max_subjectlength'))
-      return lang('poll_title_too_long');
+      return _('The poll title is too long.');
     $options = $this->get_filled_options();
     if (count($options) < 2)
-      return lang('poll_too_few_options');
+      return _('Please add more options.');
     if (count($options) > $this->get_max_options())
-      return lang('poll_too_many_options');
+      return _('Too many options.');
     foreach ($options as $option)
       if (strlen($option) > cfg('max_subjectlength'))
-        return lang('poll_option_too_long');
+        return _('An option is too long.');
     if ($this->has_duplicate_options())
-      return lang('poll_duplicate_option');
+      return _('The poll has duplicate options.');
     return NULL;
   }
 }

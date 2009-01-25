@@ -24,31 +24,33 @@ function registration_on_register($forum) {
 
 
 function registration_on_create($forum) {
-  global $err;
   $registration = &new RegistrationPrinter($forum);
   $user         = $forum->_init_user_from_post_data();
 
   // Check the data for completeness.
-  $ret = $user->check_complete();
-  if ($ret < 0)
-    return $registration->show($user, $err[$ret]);
+  $err = $user->check_complete();
+  if ($err)
+    return $registration->show($user, $err);
   if ($_POST['password'] !== $_POST['password2'])
-    return $registration->show($user, $err[ERR_REGISTER_PASSWORDS_DIFFER]);
+    return $registration->show($user, _('Error: Passwords do not match.'));
 
   // Make sure that the name is available.
-  if (!$forum->_username_available($user->get_name()))
-    return $registration->show($user, $err[ERR_REGISTER_USER_EXISTS]);
+  if (!$forum->_username_available($user->get_name())) {
+    $msg = _('The entered username is not available.');
+    return $registration->show($user, $msg);
+  }
 
   // Make sure that the email address is available.
-  if ($forum->get_userdb()->get_user_from_mail($user->get_mail()))
-    return $registration->show($user, $err[ERR_REGISTER_MAIL_EXISTS]);
+  if ($forum->get_userdb()->get_user_from_mail($user->get_mail())) {
+    $msg = _('The given email address already exists in our database.');
+    return $registration->show($user, $msg);
+  }
 
   // Create the user.
   $user->set_group_id(cfg('default_group_id'));
   $userdb = $forum->get_userdb();
-  $ret    = $userdb->save_user($user);
-  if ($ret < 0)
-    return $registration->show($user, $err[$ret]);
+  if (!$userdb->save_user($user))
+    return $registration->show($user, _('Failed to save the user.'));
 
   // Done.
   registration_mail_send($forum, $user);
@@ -96,8 +98,17 @@ function registration_on_reconfirm($forum) {
  * Utilities.
  ***********************************************/
 function registration_mail_send($forum, $user) {
-  $subject  = lang('registration_mail_subject');
-  $body     = lang('registration_mail_body');
+  $subject  = _('Your registration at [SITE_TITLE]');
+  $body     = _("Hello [FIRSTNAME] [LASTNAME],\n"
+              . "\n"
+              . "Thank you for registering at"
+              . " [SITE_TITLE]. Your account name"
+              . " is \"[LOGIN]\".\n"
+              . "\n"
+              . "Please confirm your email address by"
+              . " clicking the registration link below."
+              . "\n"
+              . "[URL]\n");
   $username = urlencode($user->get_name());
   $hash     = urlencode($user->get_confirmation_hash());
   $url      = cfg('site_url') . '?action=account_confirm'

@@ -29,7 +29,7 @@
       $this->assign_by_ref('all_time',   $all_time);
       $this->assign_by_ref('weekly',     $week);
       $this->render(dirname(__FILE__).'/top_users.tmpl');
-      $this->parent->_set_title(lang('top_users'));
+      $this->parent->_set_title(_('Top Users'));
     }
   }
 ?>

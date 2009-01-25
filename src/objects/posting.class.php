@@ -513,14 +513,14 @@ class IndentedBlock {
     // Returns the formatted time.
     function get_created_time($_format = '') {
       if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[created]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[created]);
     }
 
 
     // Returns whether the row was newly created in the last X minutes.
     function is_new() {
-      return (time() - $this->fields[created] < cfg("new_post_time"));
+      return (time() - $this->fields[created] < cfg('new_post_time'));
     }
 
 
@@ -530,7 +530,7 @@ class IndentedBlock {
       if (!$this->is_new())
         return 0;
       $oldness = time() - $this->fields[created];
-      return 100 - ($oldness / cfg("new_post_time") * 100);
+      return 100 - ($oldness / cfg('new_post_time') * 100);
     }
 
 
@@ -538,7 +538,7 @@ class IndentedBlock {
       $value = $this->get_newness() / 100 * 255;
       if ($_reverse)
         $value = 255 - $value;
-      return substr("00" . dechex($value), -2);
+      return substr('00' . dechex($value), -2);
     }
 
 
@@ -555,8 +555,8 @@ class IndentedBlock {
     // Returns the formatted time.
     function get_updated_time($_format = '') {
       if (!$_format)
-        $_format = lang("dateformat");
-      return date($_format, $this->fields[updated]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[updated]);
     }
 
 
@@ -568,8 +568,8 @@ class IndentedBlock {
     // Returns the formatted time.
     function get_thread_updated_time($_format = '') {
       if (!$_format)
-        $_format = lang('dateformat');
-      return date($_format, $this->fields[threadupdate]);
+        $_format = cfg('dateformat');
+      return strftime($_format, $this->fields[threadupdate]);
     }
 
 
@@ -648,7 +648,7 @@ class IndentedBlock {
     function apply_block() {
       if ($this->is_active())
         return;
-      $this->set_subject(lang('blockedtitle'));
+      $this->set_subject(_('Locked Message'));
       $this->set_username('------');
       $this->set_body('');
     }
@@ -694,26 +694,28 @@ class IndentedBlock {
       if (ctype_space($this->fields[username] . "\n")
        || ctype_space($this->fields[subject]  . "\n")
        || ctype_space($this->fields[body]     . "\n"))
-        return ERR_MESSAGE_INCOMPLETE;
+        return _('Warning! Your message is incomplete.');
 
-      if (strlen($this->fields[username]) > cfg("max_usernamelength"))
-        return ERR_MESSAGE_NAME_TOO_LONG;
-      if (!preg_match(cfg("username_pattern"), $this->fields[username]))
-        return ERR_USER_LOGIN_INVALID_CHARS;
+      if (strlen($this->fields[username]) > cfg('max_usernamelength'))
+        return sprintf(_('Please enter a name with at most %d characters.'),
+                       cfg('max_usernamelength'));
+      if (!preg_match(cfg('username_pattern'), $this->fields[username]))
+        return _('Your login name contains invalid characters.');
 
 
-      if (strlen($this->fields[subject]) > cfg("max_subjectlength"))
-        return ERR_MESSAGE_TITLE_TOO_LONG;
+      if (strlen($this->fields[subject]) > cfg('max_subjectlength'))
+        return sprintf(_('Please enter a subject with at most %d characters.'),
+                       cfg('max_subjectlength'));
 
-      if (strlen($this->fields[body]) > cfg("max_msglength"))
-        return ERR_MESSAGE_BODY_TOO_LONG;
+      if (strlen($this->fields[body]) > cfg('max_msglength'))
+        return sprintf(_('Your message exceeds the maximum length'
+                       . ' of %d characters.'),
+                       cfg('max_msglength'));
 
       if (!is_utf8($this->fields[username])
         || !is_utf8($this->fields[subject])
         || !is_utf8($this->fields[body]))
-        return ERR_MESSAGE_BODY_NO_UTF8;
-
-      return 0;
+        return _('Your message contains invalid characters.');
     }
   }
 ?>

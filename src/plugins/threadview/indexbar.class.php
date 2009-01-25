@@ -50,22 +50,22 @@
       if ($fold != THREAD_STATE_UNFOLDED || $swap != '') {
         $url = clone($url);
         $url->set_var('fold', THREAD_STATE_UNFOLDED);
-        $url->set_label(lang('unfoldall'));
+        $url->set_label(_('Unfold All'));
         $this->add_link($url);
       }
       else
-        $this->add_text(lang('unfoldall'));
+        $this->add_text(_('Unfold All'));
 
       // "Fold all" link.
       $this->add_separator();
       if ($fold != THREAD_STATE_FOLDED || $swap != '') {
         $url = clone($url);
         $url->set_var('fold', THREAD_STATE_FOLDED);
-        $url->set_label(lang('foldall'));
+        $url->set_label(_('Fold All'));
         $this->add_link($url);
       }
       else
-        $this->add_text(lang('foldall'));
+        $this->add_text(_('Fold All'));
     }
   }
 ?>

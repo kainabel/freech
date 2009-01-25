@@ -12,6 +12,6 @@ include_once dirname(__FILE__).'/indexbar.class.php';
 include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
 
 function listview_init($forum) {
-  $forum->register_view('list', 'ListView', lang('listview'), 500);
+  $forum->register_view('list', 'ListView', _('Order by Date'), 500);
 }
 ?>

@@ -74,7 +74,7 @@
       $this->assign_by_ref('show_postings2',  $postings2 ? TRUE : FALSE);
       $this->assign_by_ref('postings2_label', cfg('statistics_extra_label'));
       $this->render(dirname(__FILE__).'/statistics.tmpl');
-      $this->parent->_set_title(lang('statistics'));
+      $this->parent->_set_title(_('Statistics'));
     }
   }
 ?>

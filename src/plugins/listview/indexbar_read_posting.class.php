@@ -45,21 +45,21 @@
       // "Previous/Next Posting" buttons.
       if ($_prev_posting_id) {
         $url->set_var('msg_id', $_prev_posting_id);
-        $url->set_label(lang('prev_symbol'));
+        $url->set_label('<<');
         $this->add_link($url);
       }
       else
-        $this->add_text(lang('prev_symbol'));
+        $this->add_text('<<');
 
-      $this->add_text(lang('entry'));
+      $this->add_text(_('Message'));
       if ($_next_posting_id) {
         $url = clone($url);
         $url->set_var('msg_id', $_next_posting_id);
-        $url->set_label(lang('next_symbol'));
+        $url->set_label('>>');
         $this->add_link($url);
       }
       else
-        $this->add_text(lang('next_symbol'));
+        $this->add_text('>>');
     }
   }
 ?>

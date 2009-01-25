@@ -67,11 +67,11 @@
 
       // Show the << link to the previous page.
       if ($activepage == 1)
-        $this->add_text(lang('prev_symbol'));
+        $this->add_text('<<');
       else {
         $url = clone($_url);
         $url->set_var('hs', $_per_page * ($activepage - 2));
-        $url->set_label(lang('prev_symbol'));
+        $url->set_label('<<');
         $this->add_link($url);
       }
 
@@ -111,11 +111,11 @@
 
       // Show the >> link to the next page.
       if ($activepage >= $n_pages)
-        $this->add_text(lang('next_symbol'));
+        $this->add_text('>>');
       else {
         $url = clone($_url);
         $url->set_var('hs', $_per_page * $activepage);
-        $url->set_label(lang('next_symbol'));
+        $url->set_label('>>');
         $this->add_link($url);
       }
     }

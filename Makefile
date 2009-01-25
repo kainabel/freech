@@ -21,8 +21,17 @@ dist-prepare: clean
 	cd $(PACKAGE); ./makedoc.sh; cd -
 
 pot:
-	find src/ -name "*.php" -o -name "*.tmpl" \
-		| xargs xgettext -L php -k'lang' -o po/$(NAME).pot
+	find . -name "*.tmpl" | xargs php5 utils/tsmarty2c.php > po/templates.c
+	xgettext --omit-header -o po/templates.pot po/templates.c
+	find src/ -name "*.php" | xargs xgettext -L php -o po/code.pot
+	( \
+		cat po/code.pot; \
+		echo; \
+		echo "#########################################"; \
+		echo "# Strings extracted from templates below."; \
+		echo "#########################################"; \
+		cat po/templates.pot; \
+	) > po/$(NAME).pot
 
 ###################################################################
 # Standard targets.

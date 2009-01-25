@@ -1,3 +1,6 @@
 CVS
 .svn
 freech.pot
+code.pot
+templates.c
+templates.pot

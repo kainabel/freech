@@ -1,5 +1,5 @@
 <!-- poll form -->
-<h2>{lang text="poll_create"}</h2>
+<h2>{t}Start a Poll{/t}</h2>
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
@@ -9,20 +9,20 @@
 <input type='hidden' name='n_options' value='{$poll->n_options()}' />
 
 <p>
-  <label>{lang text="poll_title"}</label>
-  <i>{lang text="required"}</i><br />
+  <label>{t}Poll title{/t}</label>
+  <i>{t}(required){/t}</i><br />
   <input type='text'
          size='80'
          name='poll_title'
          value='{$poll->get_title()|escape}' /><br/>
   <input type="checkbox"
          name="allow_multiple" {if $poll->get_allow_multiple()}checked="checked"{/if} />
-  {lang text="poll_allow_multiple"}
+  {t}Allow for checking multiple boxes.{/t}
 </p>
 
 {foreach name=options item=option from=$poll->get_options()}
 <p>
-  <label>{lang text="poll_option" number=$smarty.foreach.options.iteration}</label><br />
+  <label>{t number=$smarty.foreach.options.iteration}Option %1{/t}</label><br />
   <input type='text'
          size='80'
          name='poll_option{$smarty.foreach.options.index}'
@@ -31,8 +31,8 @@
 {/foreach}
 
 <p>
-  <input type='submit' name='add_row' value='{lang text="poll_add_row"}' />
-  <input type='submit' name='send' value='{lang text="poll_submit"}' />
+  <input type='submit' name='add_row' value='{t}Add Another Option{/t}' />
+  <input type='submit' name='send' value='{t}Submit Poll{/t}' />
 </p>
 </div>
 </form>

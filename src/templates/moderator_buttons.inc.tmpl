@@ -3,11 +3,11 @@
 <li>
 {if $posting->is_active()}
   <a href="{$posting->get_lock_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/unlock.png' title='{lang text="posting_lock"}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/unlock.png' title='{t}Lock posting{/t}' alt='' />
   </a>
 {else}
   <a href="{$posting->get_unlock_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/lock.png' title='{lang text="posting_unlock"}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/lock.png' title='{t}Unlock posting{/t}' alt='' />
   </a>
 {/if}
 </li>
@@ -16,11 +16,11 @@
 {if $posting->is_parent()}
   {if $posting->get_priority() == 0}
   <a href="{$posting->get_prioritize_url_string(1)|escape}">
-  <img class='icon' src='{$__theme_dir}/img/sticky.png' title='{lang text="posting_stick"}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/sticky.png' title='{t}Make sticky{/t}' alt='' />
   </a>
   {else}
   <a href="{$posting->get_prioritize_url_string(0)|escape}">
-  <img class='icon' src='{$__theme_dir}/img/sticky_red.png' title='{lang text="posting_unstick"}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/sticky_red.png' title='{t}Remove sticky{/t}' alt='' />
   </a>
   {/if}
 {/if}
@@ -29,11 +29,11 @@
 <li>
 {if $posting->get_force_stub()}
   <a href="{$posting->get_unstub_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/stub.png' title='{lang text="posting_unstub"}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/stub.png' title='{t}Allow responses{/t}' alt='' />
   </a>
 {else}
   <a href="{$posting->get_stub_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/unstub.png' title='{lang text="posting_stub"}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/unstub.png' title='{t}Prevent responses{/t}' alt='' />
   </a>
 {/if}
 </li>

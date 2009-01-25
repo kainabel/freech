@@ -70,7 +70,7 @@
 {if $posting->get_user_is_special()}
     <img src="{$posting->get_user_icon()|escape}"
          alt=""
-         title="{lang text=$posting->get_user_icon_name()}" />
+         title="{$posting->get_user_icon_name()|escape}" />
 {/if}
   </td>
 {if $posting->is_selected()}
@@ -91,7 +91,7 @@
 {else}
 <tr>
   <td align='center'>
-    <div id='empty_forum_message'>{lang text="search_no_posting"}</div>
+    <div id='empty_forum_message'>{t}(No postings found){/t}</div>
   </td>
 </tr>
 {/if}

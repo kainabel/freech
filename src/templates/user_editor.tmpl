@@ -1,5 +1,5 @@
 <!-- user editor -->
-<h2>{lang text="account_data" name=$user->get_name()}</h2>
+<h2>{t 1=$user->get_name()}Personal Data of %1{/t}</h2>
 {include file="error.inc.tmpl"}
 
 <form action="{$action|escape}" method="post" accept-charset="utf-8" autocomplete="off">
@@ -7,7 +7,7 @@
 <input type="hidden" name="user_id" value="{$user->get_id()}" />
   <table summary=''>
     <tr>
-      <td>{lang text="group_name"}</td>
+      <td>{t}User group:{/t}</td>
 {if $may_edit_group}
       <td>
       {html_options name="group_id" options=$groups selected=$group->get_id()}
@@ -17,7 +17,7 @@
 {/if}
     </tr>
     <tr>
-      <td>{lang text="account_name"}</td>
+      <td>{t}Username:{/t}</td>
 {if $may_edit_name}
       <td><input size="70" type="text" name="username" value="{$user->get_name()|escape}" /></td>
 {else}
@@ -25,7 +25,7 @@
 {/if}
     </tr>
     <tr>
-      <td>{lang text="account_status"}</td>
+      <td>{t}Account status:{/t}</td>
 {if $may_change_status}
       <td>
       {html_options name="status" options=$status selected=$user->get_status()}
@@ -36,45 +36,45 @@
     </tr>
 {if $may_edit_data}
     <tr>
-      <td>{lang text="account_firstname"}</td>
+      <td>{t}Firstname:{/t}</td>
       <td><input size="70" type="text" name="firstname" value="{$user->get_firstname()|escape}" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_lastname"}</td>
+      <td>{t}Lastname:{/t}</td>
       <td><input size="70" type="text" name="lastname" value="{$user->get_lastname()|escape}" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_mail"}</td>
+      <td>{t}Email:{/t}</td>
       <td><input size="70" type="text" name="mail" value="{$user->get_mail()|escape}" /></td>
     </tr>
     <tr>
       <td></td>
-      <td><input type="checkbox" name="publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{lang text="account_publicmail"}</td>
+      <td><input type="checkbox" name="publicmail" {if $user->mail_is_public()}checked="checked"{/if} />{t}Display this email address publicly{/t}</td>
     </tr>
     <tr>
-      <td>{lang text="account_homepage"}</td>
+      <td>{t}Homepage:{/t}</td>
       <td><input size="70" type="text" name="homepage" value="{$user->get_homepage()|escape}" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_im"}</td>
+      <td>{t}Instant messenger:{/t}</td>
       <td><input size="70" type="text" name="im" value="{$user->get_im()|escape}" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_signature"}</td>
+      <td>{t}Signature:{/t}</td>
       <td><textarea cols="80" rows="{$max_signature_lines}" name="signature">{$user->get_signature()|escape}</textarea></td>
     </tr>
     <tr>
-      <td>{lang text="account_password"}</td>
+      <td>{t}Password:{/t}</td>
       <td><input size="70" type="password" name="password" /></td>
     </tr>
     <tr>
-      <td>{lang text="account_password2"}</td>
+      <td>{t}Repeat:{/t}</td>
       <td><input size="70" type="password" name="password2" /></td>
     </tr>
 {/if}
     <tr>
       <td colspan="2">
-        <input type="submit" name="user_submit" value="{lang text="account_save"}" />
+        <input type="submit" name="user_submit" value="{t}Save Changes{/t}" />
       </td>
     </tr>
   </table>

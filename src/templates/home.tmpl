@@ -1,6 +1,6 @@
 <!-- home -->
-<h2>{lang text="home_welcome"}</h2>
-<span class="intro">{lang text="home_intro"}</span>
+<h2>{t}Welcome!{/t}</h2>
+<span class="intro">{t}Please select a forum from the list.{/t}</span>
 {include file="error.inc.tmpl"}
 
 <div id="forum_home">
@@ -27,7 +27,7 @@
 </div>
 
 <div class="section" id="home_activity">
-  <h3>{lang text="home_activity"}</h3>
+  <h3>{t}Recent Forum Activity{/t}</h3>
   <ul>
   {foreach item=posting from=$postings}
     {if $posting->is_active()}
@@ -40,7 +40,7 @@
 </div>
 
 <div class="section" id="home_forum_links">
-  <h3>{lang text="home_forum_links"}</h3>
+  <h3>{t}Forum Information{/t}</h3>
   <ul>
   {foreach item=item from=$forum_links->get_items()}
     {if $item->is_separator()}
@@ -55,7 +55,7 @@
 </div>
 
 <div class="section" id="home_new_users">
-  <h3>{lang text="home_new_users"}</h3>
+  <h3>{t}Recently Registered Users{/t}</h3>
   <ul>
   {foreach item=user from=$new_users}
     <li>{$user->get_profile_url_html($user->get_name())}</li>

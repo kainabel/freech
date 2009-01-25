@@ -158,7 +158,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function get_editor_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('?', cfg('urlvars'), '[' . _('Edit') . ']');
       $url->set_var('action',    'group_editor');
       $url->set_var('groupname', $this->get_name());
       return $url;
@@ -167,6 +167,11 @@ define('GROUP_STATUS_ACTIVE',  1);
 
     function get_editor_url_string() {
       return $this->get_editor_url()->get_string();
+    }
+
+
+    function get_editor_url_html() {
+      return $this->get_editor_url()->get_html();
     }
 
 

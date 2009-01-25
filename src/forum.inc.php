@@ -29,7 +29,6 @@
   include_once 'objects/thread_state.class.php';
 
   include_once 'functions/config.inc.php';
-  include_once 'functions/language.inc.php';
   include_once 'functions/httpquery.inc.php';
   include_once 'functions/files.inc.php';
 
@@ -160,7 +159,6 @@
       $this->smarty->cache_dir     = 'data/smarty_cache';
       $this->smarty->config_dir    = 'data/smarty_configs';
       $this->smarty->compile_check = cfg('check_cache');
-      $this->smarty->register_function('lang', 'smarty_lang');
 
       // Attempt to login, if requested.
       $this->login_error = 0;

@@ -4,7 +4,8 @@
 
 Maintenance
 ------------
-* Complete the migration to gettext.
+* Add gettext build scripts.
+* Add at least one translation.
 * Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.
@@ -21,6 +22,7 @@ Features
 
 Maintenance
 ------------
+* Unify handling of strings with [VARS] in them.
 * Clean up the error/hint/ack message mess by allowing this:
 
    $printer->show(..., new Error(_('Something went wrong')));
@@ -32,3 +34,4 @@ Features
 * Show a link to the RSS feed.
 * Allow for moving threads between forums.
 * Hide locked messages from the forum.
+* Improve themability by replacing layout tables with divs.

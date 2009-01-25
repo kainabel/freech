@@ -1,40 +1,38 @@
 <!-- group profile -->
 <h2>
-  {lang text="group_profile" name=$group->get_name()}
+  {t name=$group->get_name()}Profile of %1{/t}
 {if $__group->may('administer')}
-  <a href="{$group->get_editor_url_string()|escape}">
-    {lang text="group_edit"}
-  </a>
+  {$group->get_editor_url_html()}
 {/if}
 </h2>
 {include file="error.inc.tmpl"}
 
 <table summary=''>
   <tr>
-    <td>{lang text="group_id"}</td>
+    <td>{t}Group ID:{/t}</td>
     <td>{$group->get_id()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="group_name"}</td>
+    <td>{t}User group:{/t}</td>
     <td>
       {$group->get_name()|escape}
       <img src="{$group->get_icon()}" title="{$group->get_name()}" alt="" />
     </td>
   </tr>
   <tr>
-    <td>{lang text="group_special"}</td>
+    <td>{t}Special functionality:{/t}</td>
 {if $group->is_special()}
-    <td>{lang text="group_is_special"}</td>
+    <td>{t}Yes{/t}</td>
 {else}
-    <td>{lang text="group_is_not_special"}</td>
+    <td>{t}None{/t}</td>
 {/if}
   </tr>
   <tr>
-    <td>{lang text="group_status"}</td>
-    <td>{$group->get_status_name()}</td>
+    <td>{t}Status:{/t}</td>
+    <td>{$group->get_status_name()|escape}</td>
   </tr>
   <tr>
-    <td>{lang text="group_created"}</td>
+    <td>{t}Created on:{/t}</td>
     <td>{$group->get_created_time()|escape}</td>
   </tr>
 </table>

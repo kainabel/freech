@@ -1,5 +1,5 @@
 <!-- message_compose -->
-<h2>{lang text="writeamessage"}</h2>
+<h2>{t}Write a New Message{/t}</h2>
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' id='commentform' method='post' accept-charset='utf-8'>
@@ -10,8 +10,8 @@
 <input type='hidden' name='may_quote' value='{$may_quote|escape}' />
 {if $__user->is_anonymous()}
 <p>
-  <label>{lang text="name"}</label>
-  <i>{lang text="required"}</i><br />
+  <label>{t}Username:{/t}</label>
+  <i>{t}(required){/t}</i><br />
   <input type='text'
          size='80'
          name='username'
@@ -23,8 +23,8 @@
 {/if}
 
 <p>
-  <label>{lang text="msgtitle"}</label>
-  <i>{lang text="required"}</i><br />
+  <label>{t}Subject:{/t}</label>
+  <i>{t}(required){/t}</i><br />
   <input type='text'
          size='80'
          name='subject'
@@ -33,8 +33,8 @@
 </p>
 
 <p>
-  <label>{lang text="msgbody"}</label>
-  <i>{lang text="required"}</i><br />
+  <label>{t}Message:{/t}</label>
+  <i>{t}(required){/t}</i><br />
   {strip}
   <textarea name='body' cols='90' rows='20'>
   {$message->get_body()|escape}
@@ -44,10 +44,10 @@
 
 <p>
 {if $may_quote}
-  <input type='submit' name='quote' value='{lang text="quote"}' />&nbsp;
+  <input type='submit' name='quote' value='{t}Quote Message{/t}' />&nbsp;
 {/if}
-  <input type='submit' name='preview' value='{lang text="preview"}' />&nbsp;
-  <input type='submit' name='send' value='{lang text="send"}' />
+  <input type='submit' name='preview' value='{t}Preview{/t}' />&nbsp;
+  <input type='submit' name='send' value='{t}Send Message{/t}' />
 </p>
 </div>
 </form>

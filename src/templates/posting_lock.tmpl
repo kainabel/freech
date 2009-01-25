@@ -1,5 +1,5 @@
 <!-- posting lock -->
-<h2>{lang text="posting_lock_title"}</h2>
+<h2>{t}Lock a Posting{/t}</h2>
 {include file="error.inc.tmpl"}
 
 {literal}
@@ -24,19 +24,19 @@ function change () {
 <table summary=''>
   <tr>
     <td>
-      <label>{lang text="posting_lock_username"}</label>
+      <label>{t}Username:{/t}</label>
     </td>
     <td>{$posting->get_username()|escape}</td>
   </tr>
   <tr>
     <td>
-      <label>{lang text="posting_lock_subject"}</label>
+      <label>{t}Subject:{/t}</label>
     </td>
     <td>{$posting->get_subject()|escape}</td>
   </tr>
   <tr>
     <td>
-      <label>{lang text="posting_lock_reason"}</label>
+      <label>{t}Reason:{/t}</label>
     </td>
     <td>
       <label id='spam'>
@@ -44,7 +44,7 @@ function change () {
                name='spam'
                type='checkbox'
                onclick='change();' />
-        {lang text="moderate_reason_spam"}
+        {t}Posting is spam{/t}
       </label>
     </td>
   </tr>
@@ -55,7 +55,7 @@ function change () {
 <p>
   <input type="submit"
          name="posting_lock_submit"
-         value="{lang text="posting_lock"}" />
+         value="{t}Lock posting{/t}" />
 </p>
 </div>
 </form>

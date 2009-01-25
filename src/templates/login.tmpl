@@ -1,6 +1,8 @@
 <!-- login -->
-<h2>{lang text="login"}</h2>
-<span class="intro">{lang text="login_text"}</span>
+<h2>{t}Log in{/t}</h2>
+<span class="intro">
+  {t}To log in your browser must support cookies.{/t}
+</span>
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' method='post' accept-charset='utf-8'>
@@ -9,7 +11,7 @@
 <input type='hidden' name='refer_to' value='{$refer_to|escape}' />
 
 <p>
-  <label>{lang text="username"}</label><br />
+  <label>{t}Username:{/t}</label><br />
   <input type="text"
          name="username"
          size="20"
@@ -17,23 +19,23 @@
 </p>
 
 <p>
-  <label>{lang text="passwd"}</label><br />
+  <label>{t}Password:{/t}</label><br />
   <input type="password" name="password" size="20" /><br />
-  <input type="checkbox" name="permanent" value="ON" />
-  {lang text="rememberpasswd"}
+  <input type="checkbox" name="permanent" value="on" />
+  {t}Remember password{/t}
 </p>
 
 <p>
-  <input type="submit" value='{lang text="login"}' />
+  <input type="submit" value='{t}Log in{/t}' />
 </p>
 </div>
 </form>
 
 <p>
-  <a href="{$forgot_url|escape}">{lang text="passwdforgotten"}</a>
+  <a href="{$forgot_url|escape}">{t}Forgot your password?{/t}</a>
 {if !$user->is_confirmed()}
   <br />
-  <a href="{$resend_url|escape}">{lang text="resendconfirm"}</a>
+  <a href="{$resend_url|escape}">{t}Resend confirmation email{/t}</a>
 {/if}
 </p>
 <!-- end login -->

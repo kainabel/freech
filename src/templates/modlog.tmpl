@@ -1,5 +1,5 @@
 <!-- modlog -->
-<h2>{lang text="modlog"}</h2>
+<h2>{t}Moderation Log{/t}</h2>
 {include file="error.inc.tmpl"}
 
 <table width='100%' cellspacing='0' cellpadding='3' border='0' summary=''>
@@ -14,7 +14,7 @@
  <tr>
   <td colspan='2'></td>
   <td align='left' class='modlog_reason'>
-    {lang text="modlog_reason" reason=$item->get_reason()}
+    {t 1=$item->get_reason()}Reason: %1{/t}
   </td>
  </tr>
  {/if}
@@ -22,7 +22,7 @@
 {else}
 <tr>
   <td>
-    <span id='empty_modlog_message'>{lang text="modlog_no_entry"}</span>
+    <span id='empty_modlog_message'>{t}No entries yet.{/t}</span>
   </td>
 </tr>
 {/if}

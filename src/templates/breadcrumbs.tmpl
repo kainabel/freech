@@ -2,7 +2,7 @@
 <table id='breadcrumbs' width='100%' cellpadding='6' cellspacing='0' summary=''>
  <tr>
   <td align='left' valign='middle'>
-  &nbsp;{lang text="breadcrumbs"}{strip}
+  &nbsp;{t}You are here:{/t}{strip}
 {foreach item=item from=$breadcrumbs->get_items()}
   {if $item->is_separator()}
     &nbsp;→

@@ -1,15 +1,18 @@
-<h2>{lang text="account_options"}</h2>
+<!-- user options -->
+<h2>{t}User Options{/t}</h2>
 {include file="error.inc.tmpl"}
 
 <form action="{$action|escape}" method="post" accept-charset="utf-8">
-  <table summary="">
-    <tr>
-      <td>{lang text="account_login"}</td>
-      <td>{$user->get_name()}</td>
-    </tr>
-    <tr>
-      <td>{lang text="updated_threads_first"}</td>
-      <td><input type="text" name="updated_threads_first" value="{$updated_threads_first}" /></td>
-    </tr>
-  </table>
+<div>
+
+<p>
+  <label>{t}Username:{/t}</label><br />
+  <input type="text"
+         name="username"
+         size="20"
+         value="{$user->get_name()|escape}" />
+</p>
+
+</div>
 </form>
+<!-- end user options -->

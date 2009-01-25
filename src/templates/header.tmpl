@@ -32,7 +32,9 @@
     </span>
     <br />
 {if $n_online}
-    <span id='status'>{lang text="forum_n_online" users=$n_online}</span>
+    <span id='status'>
+      {t count=$n_online plural="%1 users online" 1=$n_online}One user online{/t}
+    </span>
 {/if}
   </td>
   <td>&nbsp;</td>

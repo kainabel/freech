@@ -1,6 +1,7 @@
 <!-- statistics -->
-<h2>{lang text="statistics" days=$days}</h2>
-<h3>{lang text="statistics_title" days=$days}</h3>
+<h2>{t}Statistics{/t}</h2>
+<h3>{t 1=$days}Postings and traffic of the last %1 days{/t}</h3>
+
 <div id="plot" style="width:600px;height:300px;"></div>
 <script type="text/javascript" src="{$plugin_dir}/jquery.js"></script>
 <script type="text/javascript" src="{$plugin_dir}/jquery.flot.pack.js"></script>
@@ -32,12 +33,12 @@ $(function () {
   $.plot($("#plot"),
   [
 {/literal}
-    {ldelim} data: postings,  label: "{lang text="statistics_postings"}" {rdelim},
+    {ldelim} data: postings,  label: "{t}Postings{/t}" {rdelim},
 {if $show_postings2}
     {ldelim} data: postings2, label: "{$postings2_label|escape}" {rdelim},
 {/if}
 {if $show_traffic}
-    {ldelim} data: traffic, label: "{lang text="statistics_traffic"}", yaxis: 2 {rdelim},
+    {ldelim} data: traffic, label: "{t}Traffic{/t}", yaxis: 2 {rdelim},
 {/if}
 {literal}
   ],

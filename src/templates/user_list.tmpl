@@ -7,21 +7,21 @@
   <td align='left'>
   <a href='{$user->get_profile_url_string()|escape}'>{$user->get_name()|escape}</a>
 {if $group}
-  <img src='{$group->get_icon()|escape}' title='{lang text=$group->get_name()}' alt='' />
+  <img src='{$group->get_icon()|escape}' title='{$group->get_name()|escape}' alt='' />
 {/if}
   </td>
   <td>&nbsp;</td>
   <td align='left' class='nowrap'>{$user->get_status_name()}</td>
   <td>&nbsp;</td>
   <td align='right' class='nowrap'>
-  {lang text="account_created"} {$user->get_created_time()}
+  {t 1=$user->get_created_time()}Member since: %1{/t}
   </td>
 </tr>
 {/foreach}
 {else}
 <tr>
   <td align='center'>
-    <div id='empty_user_list_message'>{lang text="search_no_users"}</div>
+    <div id='empty_user_list_message'>{t}(No users found){/t}</div>
   </td>
 </tr>
 {/if}

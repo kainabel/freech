@@ -26,10 +26,10 @@
 class PostingDecorator extends Trackable {
   protected $posting;
 
-  function PostingDecorator($_posting, $_forum) {
+  function PostingDecorator($_posting, $_api) {
     $this->Trackable();
     $this->posting = $_posting;
-    $this->forum   = $_forum;
+    $this->api     = $_api;
   }
 
 

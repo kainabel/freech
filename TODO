@@ -4,8 +4,6 @@
 
 Maintenance
 ------------
-* Add gettext build scripts.
-* Add at least one translation.
 * Profile the new db model.
 * Create a dedicated PluginAPI object and pass that to plugins instead
   of the Forum instance.

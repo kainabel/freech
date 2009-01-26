@@ -78,22 +78,38 @@
     // Prepare the forum, set cookies, etc. To be called before the http header
     // was sent.
     function FreechForum() {
-      // Select a language.
-      $l = cfg('lang');
-      if ($l == 'auto')
-        $l = ($_REQUEST[language] ? $_REQUEST[language] : cfg('lang_default'));
-      //putenv("LANG=$l");
-      @setlocale(LC_MESSAGES, $l);
-
       if (cfg_is('salt', ''))
         die('Error: Please define the salt variable in config.inc.php!');
 
-      // Setup gettext.
+      // Select a supported language.
+      $locale_dir = './language/';
+      $domain     = 'freech';
+      if ($_SERVER[HTTP_ACCEPT_LANGUAGE]) {
+        $langs = explode(',', $_SERVER[HTTP_ACCEPT_LANGUAGE]);
+        foreach ($langs as $current) {
+          if (strstr($current, '-')) {
+            $both    = explode('-', $current);
+            $current = $both[0] . '_' . strtoupper($both[1]);
+          }
+          if (is_readable("$locale_dir$current/LC_MESSAGES/$domain.mo")) {
+            $lang = $current;
+            break;
+          }
+        }
+      }
+
+      // Fallback to the default language.
+      if (!$lang || !preg_match('/^[a-z_]*$/i', $lang))
+        $lang = cfg('lang');
+
+      // Init gettext.
       if (!function_exists('gettext'))
         die('This webserver does not have gettext installed.<br/>'
           . 'Please contact your webspace provider.');
-      $domain = 'freech';
-      bindtextdomain($domain, './language');
+
+      putenv("LANG=$lang");
+      @setlocale(LC_ALL, '');
+      bindtextdomain($domain, $locale_dir);
       textdomain($domain);
       bind_textdomain_codeset($domain, 'UTF-8');
 

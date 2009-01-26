@@ -13,7 +13,7 @@
 
   // Forum language. For a list of supported languages please have a look 
   // at the language files in the "language/" subdirectory.
-  $cfg[lang] = 'english';
+  $cfg[lang] = 'en_EN';
 
   // The country code of the language of your site.
   $cfg[site_language] = 'en';

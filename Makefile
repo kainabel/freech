@@ -22,16 +22,14 @@ dist-prepare: clean
 
 pot:
 	find . -name "*.tmpl" | xargs php5 utils/tsmarty2c.php > po/templates.c
-	xgettext --omit-header -o po/templates.pot po/templates.c
-	find src/ -name "*.php" | xargs xgettext -L php -o po/code.pot
-	( \
-		cat po/code.pot; \
-		echo; \
-		echo "#########################################"; \
-		echo "# Strings extracted from templates below."; \
-		echo "#########################################"; \
-		cat po/templates.pot; \
-	) > po/$(NAME).pot
+	xgettext --omit-header -o po/$(NAME).pot po/templates.c
+	find src/ -name "*.php" | xargs xgettext -L php -j -o po/$(NAME).pot
+
+mo:
+	ls -1 po/*.po | while read i; do \
+		mkdir -p src/language/`basename $$i .po`/LC_MESSAGES/; \
+		msgfmt -o src/language/`basename $$i .po`/LC_MESSAGES/$(NAME).mo $$i; \
+	done
 
 ###################################################################
 # Standard targets.

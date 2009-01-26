@@ -1,0 +1,1038 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Freech 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-25 23:27+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Samuel Abels <http://debain.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: po/templates.c:2 po/templates.c:221
+msgid "(No postings found)"
+msgstr "(Keine Postings gefunden)"
+
+#: po/templates.c:5 po/templates.c:254
+msgid "Profile of %1"
+msgstr "Profil von %1"
+
+#: po/templates.c:8 po/templates.c:53 po/templates.c:236 po/templates.c:260
+msgid "User group:"
+msgstr "Benutzergruppe:"
+
+#: po/templates.c:11
+msgid "User ID:"
+msgstr "User-ID:"
+
+#: po/templates.c:14 po/templates.c:56 po/templates.c:101 po/templates.c:164
+#: po/templates.c:281 po/templates.c:314 po/templates.c:377
+msgid "Username:"
+msgstr "Username:"
+
+#: po/templates.c:17 po/templates.c:59
+msgid "Account status:"
+msgstr "Account-Status:"
+
+#: po/templates.c:20
+msgid "Member since:"
+msgstr "Mitglied seit:"
+
+#: po/templates.c:23
+msgid "Forum postings:"
+msgstr "Forenbeiträge:"
+
+#: po/templates.c:26 po/templates.c:68
+msgid "Email:"
+msgstr "Email:"
+
+#: po/templates.c:29
+msgid "Not public"
+msgstr "Nicht öffentlich"
+
+#: po/templates.c:32 po/templates.c:74
+msgid "Homepage:"
+msgstr "Homepage:"
+
+#: po/templates.c:35 po/templates.c:41 po/templates.c:269
+msgid "None"
+msgstr "Keine"
+
+#: po/templates.c:38 po/templates.c:77
+msgid "Instant messenger:"
+msgstr "Instant Messenger:"
+
+#: po/templates.c:44 po/templates.c:296 po/templates.c:302 po/templates.c:308
+#: src/plugins/registration/registration_printer.class.php:34
+msgid "User Registration"
+msgstr "Benutzer-Registrierung"
+
+#: po/templates.c:47 po/templates.c:299
+msgid "Your password was changed. You may now log in."
+msgstr "Ihr Passwort wurde geändert, sie können sich einloggen."
+
+#: po/templates.c:50
+msgid "Personal Data of %1"
+msgstr "Persönliche Daten von %1"
+
+#: po/templates.c:62
+msgid "Firstname:"
+msgstr "Vorname:"
+
+#: po/templates.c:65
+msgid "Lastname:"
+msgstr "Nachname:"
+
+#: po/templates.c:71
+msgid "Display this email address publicly"
+msgstr "Email-Adresse öffentlich anzeigen"
+
+#: po/templates.c:80
+msgid "Signature:"
+msgstr "Signatur:"
+
+#: po/templates.c:83 po/templates.c:110 po/templates.c:167
+msgid "Password:"
+msgstr "Passwort:"
+
+#: po/templates.c:86 po/templates.c:113
+msgid "Repeat:"
+msgstr "Wiederholen:"
+
+#: po/templates.c:89
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: po/templates.c:92 po/templates.c:185
+msgid "Resetting Your Password"
+msgstr "Passwort zurücksetzen"
+
+#: po/templates.c:95
+msgid ""
+"An email with instructions for resetting\n"
+"  your password has been sent to your email\n"
+"  address."
+msgstr ""
+"Eine Mail mit Anleitung zum zurücksetzen wurde\n"
+"  an ihre Email-Adresse versandt."
+
+#: po/templates.c:98
+msgid "User Options"
+msgstr "Benutzer-Einstellungen"
+
+#: po/templates.c:104 src/actions/login_printer.class.php:66
+msgid "Password Change"
+msgstr "Passwort ändern"
+
+#: po/templates.c:107
+msgid "Please assign your personal login password."
+msgstr "Bitte vergeben sie ihr persönliches Login-Passwort."
+
+#: po/templates.c:116
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+#: po/templates.c:119
+msgid "(last edited %1)"
+msgstr "(Editiert am %1)"
+
+#: po/templates.c:122
+msgid "(IP hash: %1)"
+msgstr "(IP-Hash: %1)"
+
+#: po/templates.c:125
+msgid "Welcome!"
+msgstr "Herzlich Willkommen!"
+
+#: po/templates.c:128
+msgid "Please select a forum from the list."
+msgstr "Bitte wählen sie ein Forum aus der Liste."
+
+#: po/templates.c:131
+msgid "Recent Forum Activity"
+msgstr "Neueste Forenbeiträge"
+
+#: po/templates.c:134
+msgid "Forum Information"
+msgstr "Foreninformationen"
+
+#: po/templates.c:137
+msgid "Recently Registered Users"
+msgstr "Neueste User"
+
+#: po/templates.c:140 po/templates.c:293
+msgid "Lock posting"
+msgstr "Beitrag sperren"
+
+#: po/templates.c:143
+msgid "Unlock posting"
+msgstr "Beitrag freigeben"
+
+#: po/templates.c:146
+msgid "Make sticky"
+msgstr "Pin setzen"
+
+#: po/templates.c:149
+msgid "Remove sticky"
+msgstr "Pin entfernen"
+
+#: po/templates.c:152
+msgid "Allow responses"
+msgstr "Antworten erlauben"
+
+#: po/templates.c:155
+msgid "Prevent responses"
+msgstr "Antworten verbieten"
+
+#: po/templates.c:158 po/templates.c:173 src/forum.inc.php:1546
+msgid "Log in"
+msgstr "Einloggen"
+
+#: po/templates.c:161
+msgid "To log in your browser must support cookies."
+msgstr "Hinweis: Um einzuloggen muss Ihr Browser Cookies akzeptieren."
+
+#: po/templates.c:170
+msgid "Remember password"
+msgstr "Passwort merken"
+
+#: po/templates.c:176
+msgid "Forgot your password?"
+msgstr "Zugangsdaten vergessen"
+
+#: po/templates.c:179
+msgid "Resend confirmation email"
+msgstr "Bestätigungsmail erneut versenden"
+
+#: po/templates.c:182
+msgid "You are here:"
+msgstr "Sie sind hier:"
+
+#: po/templates.c:188 po/templates.c:326
+msgid "Email Address:"
+msgstr "Email-Adresse:"
+
+#: po/templates.c:191
+msgid "Reset Password"
+msgstr "Zugangsdaten zurücksetzen"
+
+#: po/templates.c:194 src/forum.inc.php:1143
+msgid "Edit a Forum"
+msgstr "Forum bearbeiten"
+
+#: po/templates.c:197 po/templates.c:272
+msgid "Status:"
+msgstr "Status:"
+
+#: po/templates.c:200
+msgid "Name:"
+msgstr "Name:"
+
+#: po/templates.c:203
+msgid "Summary:"
+msgstr "Beschreibung:"
+
+#: po/templates.c:206
+msgid "Save the Forum"
+msgstr "Forum speichern"
+
+#: po/templates.c:209 src/forum.inc.php:174 src/forum.inc.php:1181
+msgid "Moderation Log"
+msgstr "Moderations-Log"
+
+#: po/templates.c:212
+msgid "Reason: %1"
+msgstr "Grund: %1"
+
+#: po/templates.c:215
+msgid "No entries yet."
+msgstr "Kein Eintrag vorhanden."
+
+#: po/templates.c:218
+msgid "One user online"
+msgid_plural "%1 users online"
+msgstr[0] "Ein User online"
+msgstr[1] "%1 User online"
+
+#: po/templates.c:224
+msgid "Member since: %1"
+msgstr "Mitglied seit: %1"
+
+#: po/templates.c:227
+msgid "(No users found)"
+msgstr "(Keine User gefunden)"
+
+#: po/templates.c:230
+msgid "Permissions of %1"
+msgstr "Berechtigung von %1"
+
+#: po/templates.c:233 po/templates.c:257
+msgid "Group ID:"
+msgstr "Gruppen-ID"
+
+#: po/templates.c:239
+msgid "Icon:"
+msgstr "Icon:"
+
+#: po/templates.c:242 po/templates.c:275
+msgid "Created on:"
+msgstr "Erstellt am:"
+
+#: po/templates.c:245
+msgid "Permissions"
+msgstr "Berechtigungen:"
+
+#: po/templates.c:248
+msgid "Permit '%1'"
+msgstr "'%1' gewähren"
+
+#: po/templates.c:251
+msgid "Save Group"
+msgstr "Daten speichern"
+
+#: po/templates.c:263
+msgid "Special functionality:"
+msgstr "Spezialfunktionen:"
+
+#: po/templates.c:266
+msgid "Yes"
+msgstr "Ja"
+
+#: po/templates.c:278
+msgid "Lock a Posting"
+msgstr "Beitrag sperren"
+
+#: po/templates.c:284 po/templates.c:383
+msgid "Subject:"
+msgstr "Betreff:"
+
+#: po/templates.c:287
+msgid "Reason:"
+msgstr "Begründung:"
+
+#: po/templates.c:290 src/forum.inc.php:760
+msgid "Posting is spam"
+msgstr "Beitrag ist Spam"
+
+#: po/templates.c:305
+msgid ""
+"Your password was changed. Your registration is complete\n"
+"  and you may log in."
+msgstr ""
+"Ihr Passwort wurde gesetzt. Ihre Registrierung ist vollständig\n"
+"  und Sie können sich einloggen."
+
+#: po/templates.c:311
+msgid ""
+"Welcome!\n"
+"\n"
+"  By registering you will be able to participate in our discussion forum.\n"
+"  All you need is a valid email address and a few minutes of your time.\n"
+"\n"
+"  The e-mail address is used only for confirming your registration\n"
+"  details, and for sending you a password reminder if you ever forget\n"
+"  yours. None of your personal data is given to any third parties."
+msgstr ""
+"Bitte registrieren Sie sich hier, um aktiv an den Diskussionsforen und an"
+"  anderen Diensten (wie zum Beispiel Online-Umfragen) teilnehmen zu können."
+"  Sie benötigen dafür lediglich eine gültige E-Mail-Adresse und wenige Minuten"
+"  Zeit.\n"
+"  Wir respektieren den Datenschutz und garantieren, dass wir Ihre persönlichen"
+"  Angaben strikt vertraulich behandeln. Bitte lesen Sie die Erklärung zum"
+"  Datenschutz."
+
+#: po/templates.c:317
+msgid ""
+"Please select a username. The username is used to log into your account "
+"later."
+msgstr ""
+"Wählen Sie einen Benutzernamen zu Ihrer Identifikation bei der Registrierung."
+
+#: po/templates.c:320
+msgid "Firstname and Lastname:"
+msgstr "Vor- und Nachname:"
+
+#: po/templates.c:323
+msgid ""
+"Please enter valid information, your registration is invalid otherwise and "
+"may be deleted."
+msgstr ""
+
+#: po/templates.c:329
+msgid "Public Email:"
+msgstr "Öffentliche E-Mail-Adresse:"
+
+#: po/templates.c:332
+msgid "Click here if you want other users to be able to see the address."
+msgstr "Klicken Sie hier, wenn andere User ihre Email-Adresse sehen sollen."
+
+#: po/templates.c:335
+msgid "Terms of Usage:"
+msgstr "Einwilligungserklärung:"
+
+#: po/templates.c:338
+msgid ""
+"By clicking Register below you agree that we may store your personal data as "
+"stated above.\n"
+"  You also agree to the terms of use."
+msgstr ""
+
+#: po/templates.c:341
+msgid "I Agree, Register"
+msgstr "Ich stimme zu"
+
+#: po/templates.c:344
+msgid "I Do Not Agree, Cancel"
+msgstr "Abbrechen"
+
+#: po/templates.c:347 src/plugins/statistics/statistics_printer.class.php:77
+#: src/plugins/statistics/plugin.php:15 src/plugins/statistics/plugin.php:23
+msgid "Statistics"
+msgstr "Forenstatistik"
+
+#: po/templates.c:350
+msgid "Postings and traffic of the last %1 days"
+msgstr "Postings und Traffic der letzten %1 Tage."
+
+#: po/templates.c:353 po/templates.c:371
+msgid "Postings"
+msgstr "Postings"
+
+#: po/templates.c:356
+msgid "Traffic"
+msgstr "Traffic"
+
+#: po/templates.c:359 src/plugins/top_users/top_users_printer.class.php:32
+#: src/plugins/top_users/plugin.php:15 src/plugins/top_users/plugin.php:23
+msgid "Top Users"
+msgstr "Top 20"
+
+#: po/templates.c:362
+msgid "Weekly Top 20"
+msgstr "Top 20 der letzten 7 Tage"
+
+#: po/templates.c:365
+msgid "All Time Top 20"
+msgstr "Top 20"
+
+#: po/templates.c:368
+msgid "Username"
+msgstr "Username"
+
+#: po/templates.c:374
+msgid "Write a New Message"
+msgstr "Neuen Beitrag für das Forum schreiben"
+
+#: po/templates.c:380 po/templates.c:386 po/templates.c:392 po/templates.c:422
+msgid "(required)"
+msgstr "(bitte unbedingt ausfüllen)"
+
+#: po/templates.c:389
+msgid "Message:"
+msgstr "Beitrag:"
+
+#: po/templates.c:395
+msgid "Quote Message"
+msgstr "Zitat einfügen"
+
+#: po/templates.c:398 src/plugins/message/message_printer.class.php:106
+#: src/plugins/message/plugin.php:154
+msgid "Preview"
+msgstr "Vorschau"
+
+#: po/templates.c:401 po/templates.c:407
+msgid "Send Message"
+msgstr "Abschicken"
+
+#: po/templates.c:404
+msgid "Edit Message"
+msgstr "Nachricht bearbeiten"
+
+#: po/templates.c:410
+msgid "Vote"
+msgstr "Stimme abgeben"
+
+#: po/templates.c:413
+msgid "View results"
+msgstr "Zum Umfrageergebnis"
+
+#: po/templates.c:416 src/plugins/poll/plugin.php:39
+#: src/plugins/poll/plugin.php:53
+msgid "Start a Poll"
+msgstr "Umfrage starten"
+
+#: po/templates.c:419
+msgid "Poll title"
+msgstr "Umfragetitel"
+
+#: po/templates.c:425
+msgid "Allow for checking multiple boxes."
+msgstr "Mehrfachauswahl erlauben."
+
+#: po/templates.c:428
+msgid "Option %1"
+msgstr "Option %1"
+
+#: po/templates.c:431
+msgid "Add Another Option"
+msgstr "Weitere Option hinzufügen"
+
+#: po/templates.c:434
+msgid "Submit Poll"
+msgstr "Umfrage abschicken"
+
+#: po/templates.c:437 src/plugins/search/search_printer.class.php:46
+#: src/plugins/search/search_printer.class.php:87
+#: src/plugins/search/search_printer.class.php:139
+msgid "Search"
+msgstr "Suchen"
+
+#: po/templates.c:440
+msgid "Find Postings"
+msgstr "Beiträge suchen"
+
+#: po/templates.c:443
+msgid "Find Users"
+msgstr "Benutzer suchen"
+
+#: po/templates.c:446 po/templates.c:449
+msgid "One result found."
+msgid_plural "%1 results found."
+msgstr[0] "Ein Ergebnis gefunden"
+msgstr[1] "%1 Ergebnisse gefunden"
+
+#: po/templates.c:452
+msgid "Examples:"
+msgstr "Beispiele:"
+
+#: po/templates.c:455
+msgid ""
+"apples AND \"peaches\"\n"
+"      NOT user:\"that guy\" AND (text:banana OR subject:fruit)\n"
+"      ban?na AND NOT subject:wildcard*matching"
+msgstr ""
+"äpfel AND \"birnen\"\n"
+"  NOT user:\"der da\" AND (text:bananen OR subject:frucht)\n"
+"  ban?nen AND NOT subject:wildcard*matching"
+
+#: src/objects/posting.class.php:651 src/forum.inc.php:681
+msgid "Locked Message"
+msgstr "Gesperrter Beitrag"
+
+#: src/objects/posting.class.php:697
+msgid "Warning! Your message is incomplete."
+msgstr "Achtung! Ihre Nachricht ist unvollständig."
+
+#: src/objects/posting.class.php:700
+#, php-format
+msgid "Please enter a name with at most %d characters."
+msgstr "Bitte einen Namen mit maximal %d Zeichen eingeben."
+
+#: src/objects/posting.class.php:703
+msgid "Your login name contains invalid characters."
+msgstr "Der Benutzername enthält ungültige Zeichen."
+
+#: src/objects/posting.class.php:707
+#, php-format
+msgid "Please enter a subject with at most %d characters."
+msgstr "Bitte einen Betreff mit maximal %d Zeichen eingeben."
+
+#: src/objects/posting.class.php:711
+#, php-format
+msgid "Your message exceeds the maximum length of %d characters."
+msgstr "Die Nachricht überschreitet die maximale Länge von %d Zeichen."
+
+#: src/objects/posting.class.php:718
+msgid "Your message contains invalid characters."
+msgstr "Die Nachricht enthält ungültige Zeichen."
+
+#: src/objects/user.class.php:151
+#, php-format
+msgid "Please choose a password with at least %d characters."
+msgstr "Bitte ein Passwort mit mindestens %d Zeichen eingeben."
+
+#: src/objects/user.class.php:155
+#, php-format
+msgid "Please choose a password with at most %d characters."
+msgstr "Bitte ein Passwort mit maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:209
+msgid "Please enter a valid email address."
+msgstr "Bitte eine gültige Email-Adresse eingeben."
+
+#: src/objects/user.class.php:211
+#, php-format
+msgid "Please enter an email address with at most %d characters."
+msgstr "Bitte eine Email-Adresse mit maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:313 src/objects/forum.class.php:98
+#: src/objects/group.class.php:161 src/plugins/listview/listview.class.php:102
+#: src/plugins/threadview/threadview.class.php:123
+#: src/plugins/message/plugin.php:83
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: src/objects/user.class.php:326
+#, php-format
+msgid "Profile of %s"
+msgstr "Profil von %s"
+
+#: src/objects/user.class.php:385
+msgid "Deleted"
+msgstr "Gelöscht"
+
+#: src/objects/user.class.php:386 src/objects/forum.class.php:128
+#: src/objects/group.class.php:115
+msgid "Active"
+msgstr "Aktiv"
+
+#: src/objects/user.class.php:387
+msgid "Unconfirmed"
+msgstr "Unbestätigt"
+
+#: src/objects/user.class.php:388
+msgid "Locked"
+msgstr "Gesperrt"
+
+#: src/objects/user.class.php:418
+msgid "Please enter a username."
+msgstr "Bitte einen Usernamen eingeben."
+
+#: src/objects/user.class.php:421
+#, php-format
+msgid "Your login name is too short. Please enter at least %d characters."
+msgstr "Der eingegebene Username is zu kurz. Bitte mindestens %d Zeichen eingeben."
+
+#: src/objects/user.class.php:427
+#, php-format
+msgid "Your login name is too long. Please enter at most %d characters."
+msgstr "Der eingegebene Username is zu lang. Bitte maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:433
+msgid "Your username contains invalid characters."
+msgstr "Der eingegebene Username enthält ungültige Zeichen."
+
+#: src/objects/user.class.php:436
+msgid "Please enter a password."
+msgstr "Bitte ein Passwort eingeben."
+
+#: src/objects/user.class.php:439
+msgid "Please enter a firstname."
+msgstr "Bitte einen Vornamen eingeben."
+
+#: src/objects/user.class.php:442
+#, php-format
+msgid "Your firstname is too short. Please enter at least %d characters."
+msgstr "Der eingegebene Vorname ist zu kurz. Bitte mindestens %d Zeichen eingeben."
+
+#: src/objects/user.class.php:448
+#, php-format
+msgid "Your firstname is too long. Please enter at most %d characters."
+msgstr "Der eingegebene Vorname ist zu lang. Bitte maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:454
+msgid "Please enter a lastname."
+msgstr "Bitte einen Nachnamen eingeben."
+
+#: src/objects/user.class.php:457
+#, php-format
+msgid "Your lastname is too short. Please enter at least %d characters."
+msgstr "Der eingegebene Nachname ist zu kurz. Bitte mindestens %d Zeichen eingeben."
+
+#: src/objects/user.class.php:463
+#, php-format
+msgid "Your lastname is too long. Please enter at most %d characters."
+msgstr "Der eingegebene Nachname ist zu lang. Bitte maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:472
+msgid "Please enter a valid homepage URL."
+msgstr "Bitte eine gültige Homepage-URL eingeben."
+
+#: src/objects/user.class.php:475
+#, php-format
+msgid "Your homepage URL is too long. Please enter at most %d characters."
+msgstr "Die eingegebene Homepage-URL ist zu lang. Bitte maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:482
+#, php-format
+msgid ""
+"Your instant messenger address is too long. Please enter at most %d "
+"characters."
+msgstr ""
+"Die eingegebene Instant-Messenger-URL ist zu lang. Bitte maximal %d"
+" Zeichen eingeben."
+
+#: src/objects/user.class.php:488
+#, php-format
+msgid "Your signature is too long. Please enter at most %d characters."
+msgstr "Die eingegebene Signatur ist zu lang. Bitte maximal %d Zeichen eingeben."
+
+#: src/objects/user.class.php:494
+msgid "Too many lines in the signature."
+msgstr "Der eingegebene Signatur hat zu viele Zeilen."
+
+#: src/objects/forum.class.php:127 src/objects/group.class.php:117
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: src/objects/forum.class.php:155
+msgid "Please enter a valid name."
+msgstr "Bitte einen gültigen Namen eingeben."
+
+#: src/objects/forum.class.php:157
+msgid "Please enter a summary."
+msgstr "Bitte eine Beschreibung eingeben."
+
+#: src/objects/group.class.php:208
+msgid "Error: Please enter a group name."
+msgstr "Bitte einen Gruppennamen eingeben."
+
+#: src/objects/modlog_item.class.php:217
+msgid "[MODERATOR_LINK] has locked the account of \"[USERNAME]\"."
+msgstr "[MODERATOR_LINK] hat den Account von \"[USERNAME]\" gesperrt."
+
+#: src/objects/modlog_item.class.php:221
+msgid "[MODERATOR_LINK] has unlocked the account of \"[USERNAME]\"."
+msgstr "[MODERATOR_LINK] hat den Account von \"[USERNAME]\" wieder aktiviert."
+
+#: src/objects/modlog_item.class.php:225
+msgid ""
+"[MODERATOR_LINK] has locked a <a href=\"[POSTING_URL]\">posting</a> by "
+"[USER_LINK]."
+msgstr ""
+"[MODERATOR_LINK] hat ein <a href=\"[POSTING_URL]\">Posting</a> von "
+"[USER_LINK] gesperrt."
+
+#: src/objects/modlog_item.class.php:230
+msgid ""
+"[MODERATOR_LINK] has unlocked the posting [POSTING_LINK] by [USER_LINK]."
+msgstr ""
+"[MODERATOR_LINK] hat das Posting [POSTING_LINK] von [USER_LINK]"
+" wieder freigegeben."
+
+#: src/objects/modlog_item.class.php:235
+msgid ""
+"[MODERATOR_LINK] has made the posting [POSTING_LINK] by [USER_LINK] sticky."
+msgstr ""
+"[MODERATOR_LINK] hat das Posting \"[POSTING_LINK]\" von [USER_LINK] festgepinnt."
+
+#: src/objects/modlog_item.class.php:240
+msgid ""
+"[MODERATOR_LINK] has removed the sticky from [POSTING_LINK] by [USER_LINK]."
+msgstr ""
+"[MODERATOR_LINK] hat den Pin vom Posting \"[POSTING_LINK]\" von [USER_LINK]"
+" wieder entfernt."
+
+#: src/objects/modlog_item.class.php:245
+msgid ""
+"[MODERATOR_LINK] has disabled responses to the posting [POSTING_LINK] by "
+"[USER_LINK]."
+msgstr ""
+"[MODERATOR_LINK] hat Antworten auf das Posting [POSTING_LINK] von "
+"[USER_LINK] verboten."
+
+#: src/objects/modlog_item.class.php:250
+msgid ""
+"[MODERATOR_LINK] has enabled responses to the posting [POSTING_LINK] by "
+"[USER_LINK]."
+msgstr ""
+"[MODERATOR_LINK] hat Antworten auf das Posting [POSTING_LINK] von "
+"[USER_LINK] erlaubt."
+
+#: src/objects/indexbar_user_postings.class.php:55
+#: src/objects/indexbar_user_postings.class.php:59
+#: src/plugins/threadview/indexbar.class.php:53
+#: src/plugins/threadview/indexbar.class.php:57
+msgid "Unfold All"
+msgstr "Alles aufklappen"
+
+#: src/objects/indexbar_user_postings.class.php:66
+#: src/objects/indexbar_user_postings.class.php:70
+#: src/plugins/threadview/indexbar.class.php:64
+#: src/plugins/threadview/indexbar.class.php:68
+msgid "Fold All"
+msgstr "Alles zuklappen"
+
+#: src/actions/homepage_printer.class.php:45 src/forum.inc.php:1133
+msgid "Add a New Forum"
+msgstr "Neues Forum hinzufügen"
+
+#: src/actions/homepage_printer.class.php:59
+#, php-format
+msgid "%d postings, %d new"
+msgstr "%d Beiträge, %d neu"
+
+#: src/forum.inc.php:189
+msgid "My Postings"
+msgstr "Meine Postings"
+
+#: src/forum.inc.php:193
+msgid "My Profile"
+msgstr "Mein Profil"
+
+#: src/forum.inc.php:208 src/forum.inc.php:212 src/forum.inc.php:214
+msgid "Login failed."
+msgstr "Login fehlgeschlagen."
+
+#: src/forum.inc.php:210
+msgid "Your account is not yet confirmed."
+msgstr "Der Account ist noch nicht freigeschaltet."
+
+#: src/forum.inc.php:435 src/forum.inc.php:437
+msgid "Home"
+msgstr "Startseite"
+
+#: src/forum.inc.php:542
+msgid "Your password at [SITE_TITLE]"
+msgstr "Dein Passwort bei [SITE_TITLE]"
+
+#: src/forum.inc.php:543
+msgid ""
+"Hello [FIRSTNAME] [LASTNAME],\n"
+"\n"
+"We have received a password reset request for your account \"[LOGIN]\".\n"
+"\n"
+"To change your password please click the link below. If you did not request "
+"that your password be changed you may ignore this message.\n"
+"\n"
+"[URL]\n"
+msgstr ""
+"Hallo [FIRSTNAME] [LASTNAME],\n"
+"\n"
+"Wir haben eine Anfrage zur Zurücksetzung des Passwortes für deinen Account"
+" \"[LOGIN]\" erhalten.\n"
+"\n"
+"Um das Passwort jetzt zurückzusetzen klicke bitte den Link unten an."
+" Falls du keine Anfrage zur Zurücksetzung gestellt hast, ignoriere bitte"
+" diese Mail.\n"
+"\n"
+"[URL]\n"
+
+#: src/forum.inc.php:679 src/forum.inc.php:720
+msgid "No Such Message"
+msgstr "Dieser Beitrag ist nicht vorhanden"
+
+#: src/forum.inc.php:721
+msgid "A message with the given ID does not exist."
+msgstr ""
+"Der von ihnen angeforderte Beitrag existiert in diesem Forum nicht."
+
+#: src/forum.inc.php:769
+msgid "Please enter a reason."
+msgstr "Bitte eine Begründung angeben."
+
+#: src/forum.inc.php:934 src/forum.inc.php:1045
+#: src/plugins/registration/plugin.php:35
+msgid "Error: Passwords do not match."
+msgstr "Fehler: Die Passworte stimmen nicht überein."
+
+#: src/forum.inc.php:945 src/forum.inc.php:1058
+#: src/plugins/registration/plugin.php:53
+msgid "Failed to save the user."
+msgstr "Speichern the Benutzers fehlgeschlagen."
+
+#: src/forum.inc.php:950
+msgid "Your data has been saved."
+msgstr "Die Daten wurden gespeichert."
+
+#: src/forum.inc.php:1000
+msgid "Failed to save the group."
+msgstr "Speichern der Gruppe fehlgeschlagen."
+
+#: src/forum.inc.php:1003
+msgid "Your changes have been saved."
+msgstr "Die Änderungen wurden gespeichert."
+
+#: src/forum.inc.php:1088
+msgid "The given email address was not found."
+msgstr "Die angegebene Email-Adresse ist unbekannt."
+
+#: src/forum.inc.php:1102
+msgid "Your account is locked."
+msgstr "Der Account ist gesperrt."
+
+#: src/forum.inc.php:1172
+msgid "The changes have been saved."
+msgstr "Die Änderungen wurden gespeichert."
+
+#: src/forum.inc.php:1554
+msgid "Log out"
+msgstr "Ausloggen"
+
+#: src/forum.inc.php:1562
+msgid "Register Account"
+msgstr "Account registrieren"
+
+#: src/plugins/linkify/plugin.php:26
+msgid "Hide Videos"
+msgstr "Videos ausblenden"
+
+#: src/plugins/linkify/plugin.php:30
+msgid "Show Videos"
+msgstr "Videos einblenden"
+
+#: src/plugins/listview/listview.class.php:90
+#: src/plugins/listview/listview.class.php:97
+#: src/plugins/threadview/threadview.class.php:111
+#: src/plugins/threadview/threadview.class.php:118
+#: src/plugins/message/plugin.php:60
+msgid "Reply"
+msgstr "Beantworten"
+
+#: src/plugins/listview/listview.class.php:118
+msgid "Show Posting List"
+msgstr "Posting-Liste einblenden"
+
+#: src/plugins/listview/listview.class.php:122
+msgid "Hide Posting List"
+msgstr "Posting-Liste ausblenden"
+
+#: src/plugins/listview/indexbar_read_posting.class.php:54
+#: src/plugins/threadview/indexbar_read_posting.class.php:56
+msgid "Message"
+msgstr "Beitrag"
+
+#: src/plugins/listview/plugin.php:15
+msgid "Order by Date"
+msgstr "Flache Darstellung"
+
+#: src/plugins/registration/plugin.php:39 src/plugins/message/plugin.php:142
+#: src/plugins/message/plugin.php:201
+msgid "The entered username is not available."
+msgstr "Der Benutzername gehört bereits einem registrierten User."
+
+#: src/plugins/registration/plugin.php:45
+msgid "The given email address already exists in our database."
+msgstr "Die angegebene Email-Adresse gehört bereits einem registrierten User."
+
+#: src/plugins/registration/plugin.php:101
+msgid "Your registration at [SITE_TITLE]"
+msgstr "Deine Registrierung bei [SITE_TITLE]"
+
+#: src/plugins/registration/plugin.php:102
+msgid ""
+"Hello [FIRSTNAME] [LASTNAME],\n"
+"\n"
+"Thank you for registering at [SITE_TITLE]. Your account name is \"[LOGIN]"
+"\".\n"
+"\n"
+"Please confirm your email address by clicking the registration link below.\n"
+"[URL]\n"
+msgstr ""
+"Hallo [FIRSTNAME] [LASTNAME]!\n"
+"\n"
+"Vielen Dank für deine Registrierung bei [SITE_TITLE]. Dein Account-Name ist"
+" \"[LOGIN]\".\n"
+"\n"
+"Bitte bestätige deine Email-Adresse durch Klick auf den folgenden Link:\n"
+"\n"
+"[URL]\n"
+
+
+#: src/plugins/threadview/threadview.class.php:139
+msgid "Show Thread"
+msgstr "Thread einblenden"
+
+#: src/plugins/threadview/threadview.class.php:143
+msgid "Hide Thread"
+msgstr "Thread ausblenden"
+
+#: src/plugins/threadview/indexbar_read_posting.class.php:82
+msgid "Thread"
+msgstr "Thread"
+
+#: src/plugins/threadview/plugin.php:15
+msgid "Order by Thread"
+msgstr "Thread-Darstellung"
+
+#: src/plugins/message/message_printer.class.php:60
+#, php-format
+msgid "%s wrote on %s:"
+msgstr "%s schrieb am %s:"
+
+#: src/plugins/message/message_printer.class.php:83
+#: src/plugins/message/message_printer.class.php:84
+msgid "Re: "
+msgstr "Re: "
+
+#: src/plugins/message/plugin.php:33 src/plugins/message/plugin.php:42
+msgid "Start a New Topic"
+msgstr "Neues Thema"
+
+#: src/plugins/message/plugin.php:214
+#, php-format
+msgid ""
+"You have sent too many messages. %d seconds until your message may be sent."
+msgstr ""
+"Sie haben zu viele Nachrichten abgeschickt. Nächstes Posting ist erst in %d"
+" Sekunden wieder möglich."
+
+#: src/plugins/message/plugin.php:226
+msgid "Message rejected by spamblocker."
+msgstr "Nachricht vom Spamblocker abgewiesen."
+
+#: src/plugins/message/plugin.php:238
+msgid "Failed to save the posting."
+msgstr "Speichern des Postings fehlgeschlagen."
+
+#: src/plugins/poll/poll.class.php:42 src/plugins/poll/plugin.php:165
+#, php-format
+msgid "Poll: %s"
+msgstr "Umfrage: %s"
+
+#: src/plugins/poll/poll.class.php:75
+msgid "Please log in to cast your vote."
+msgstr "Um Abzustimmen bitte einloggen."
+
+#: src/plugins/poll/poll.class.php:81
+msgid "Thank You for your vote."
+msgstr "Ihre Stimmabgabe wurde gewertet."
+
+#: src/plugins/poll/poll.class.php:207
+msgid "Please enter a title."
+msgstr "Bitte einen Titel angeben."
+
+#: src/plugins/poll/poll.class.php:209
+msgid "The poll title is too long."
+msgstr "Bitte einen kürzeren Titel wählen."
+
+#: src/plugins/poll/poll.class.php:212
+msgid "Please add more options."
+msgstr "Bitte weitere Optionen ausfüllen."
+
+#: src/plugins/poll/poll.class.php:214 src/plugins/poll/plugin.php:73
+msgid "Too many options."
+msgstr "Zu viele Optionen."
+
+#: src/plugins/poll/poll.class.php:217
+msgid "An option is too long."
+msgstr "Eine der Optionen ist zu lang."
+
+#: src/plugins/poll/poll.class.php:219
+msgid "The poll has duplicate options."
+msgstr "Die Umfrage hat doppelte Optionen."
+
+#: src/plugins/poll/plugin.php:60
+msgid "You have reached your poll limit. Sorry."
+msgstr "Sie haben ihre Umfragen bereits verbraucht."
+
+#: src/plugins/poll/plugin.php:88
+msgid "Failed to save poll."
+msgstr "Speichern der Umfrage fehlgeschlagen."
+
+#: src/plugins/search/plugin.php:18 src/plugins/search/plugin.php:51
+#: src/plugins/search/plugin.php:61
+msgid "Find"
+msgstr "Finden"
+
+#: src/plugins/search/plugin.php:33
+msgid "Find in this forum:"
+msgstr "In diesem Forum suchen:"

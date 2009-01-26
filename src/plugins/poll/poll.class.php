@@ -151,11 +151,13 @@ class Poll extends PostingDecorator {
 
   function has_duplicate_options() {
     $options = array();
-    foreach ($this->options as $option)
-      if ($option->name != '' && $options[$option->name])
+    foreach ($this->options as $option) {
+      $name = strtoupper($option->name);
+      if ($name != '' && $options[$name])
         return TRUE;
       else
-        $options[$option->name] = TRUE;
+        $options[$name] = TRUE;
+    }
     return FALSE;
   }
 

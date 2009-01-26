@@ -197,12 +197,12 @@ function _n_polls_since($db, $user, $_since = 0) {
 
 
 function _save_poll_option($db, $poll_id, $option) {
-  $sql  = 'INSERT INTO {t_poll_option}';
-  $sql .= ' (poll_id, name)';
-  $sql .= ' VALUES (';
-  $sql .= ' {poll_id}, {name}';
-  $sql .= ')';
-  $query = &new FreechSqlQuery($sql);
+  $sql   = 'INSERT INTO {t_poll_option}';
+  $sql  .= ' (poll_id, name)';
+  $sql  .= ' VALUES (';
+  $sql  .= ' {poll_id}, {name}';
+  $sql  .= ')';
+  $query = new FreechSqlQuery($sql);
   $query->set_int   ('poll_id', $poll_id);
   $query->set_string('name',    $option);
   $db->Execute($query->sql()) or die('_save_poll_option(): Insert');

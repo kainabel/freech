@@ -42,13 +42,13 @@ function linkify_on_preview($forum, $message) {
 
 function linkify_on_show_videos($forum) {
   $forum->set_cookie('linkify_show_videos', TRUE);
-  $forum->_refer_to($_GET['refer_to']);
+  $forum->refer_to($_GET['refer_to']);
 }
 
 
 function linkify_on_hide_videos($forum) {
   $forum->set_cookie('linkify_show_videos', FALSE);
-  $forum->_refer_to($_GET['refer_to']);
+  $forum->refer_to($_GET['refer_to']);
 }
 
 

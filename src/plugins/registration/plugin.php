@@ -65,7 +65,7 @@ function registration_on_confirm($forum) {
 
   // See if the user still needs to set a password.
   if (!$user->get_password_hash()) {
-    $url = new URL(cfg('site_url').'?', cfg('urlvars'));
+    $url = new URL(cfg('site_url').'', cfg('urlvars'));
     $url->set_var('action',   'password_change');
     $url->set_var('username', $user->get_name());
     $url->set_var('hash',     $_GET['hash']);

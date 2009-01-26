@@ -302,7 +302,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_postings_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',   'user_postings');
       $url->set_var('username', $this->get_name());
       return $url;
@@ -310,7 +310,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_editor_url() {
-      $url = new URL('?', cfg('urlvars'), '[' . _('Edit') . ']');
+      $url = new URL('', cfg('urlvars'), '[' . _('Edit') . ']');
       $url->set_var('action',   'user_editor');
       $url->set_var('username', $this->get_name());
       return $url;
@@ -324,7 +324,7 @@ define('USER_STATUS_BLOCKED',     3);
 
     function get_profile_url() {
       $caption = sprintf(_('Profile of %s'), $this->get_name());
-      $url     = new URL('?', cfg('urlvars'), $caption);
+      $url     = new URL('', cfg('urlvars'), $caption);
       $url->set_var('action',   'user_profile');
       $url->set_var('username', $this->get_name());
       return $url;

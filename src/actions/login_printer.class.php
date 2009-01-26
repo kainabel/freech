@@ -21,18 +21,18 @@
 <?php
   class LoginPrinter extends PrinterBase {
     function show($_user, $_hint = '', $_refer_to) {
-      $login_url = new URL('?', cfg('urlvars'));
+      $login_url = new URL('', cfg('urlvars'));
       $login_url->set_var('action', 'login');
 
       if ($_user->get_name() && !$_user->is_confirmed()) {
-        $resend_url = new URL('?',
+        $resend_url = new URL('',
                               cfg('urlvars'),
                               _('Resend confirmation email'));
         $resend_url->set_var('action',   'account_reconfirm');
         $resend_url->set_var('username', $_user->get_name());
       }
 
-      $forgot_url = new URL('?',
+      $forgot_url = new URL('',
                             cfg('urlvars'),
                             _('Forgot your password?'));
       $forgot_url->set_var('action', 'password_forgotten');
@@ -62,7 +62,7 @@
 
 
     function show_password_change($_user, $_hint = '') {
-      $url = &new URL('?', cfg('urlvars'));
+      $url = &new URL('', cfg('urlvars'));
       $url->set_var('action', 'password_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('action', $url->get_string());
@@ -74,7 +74,7 @@
 
 
     function show_password_forgotten($_user, $_hint = '') {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action', 'password_mail_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);

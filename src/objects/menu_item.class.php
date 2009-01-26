@@ -50,7 +50,7 @@
 
 
     function is_link() {
-      return $this->url->get_base() ? TRUE : FALSE;
+      return $this->url->get_string() ? TRUE : FALSE;
     }
 
 

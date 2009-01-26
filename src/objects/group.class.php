@@ -145,7 +145,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function get_profile_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',    'group_profile');
       $url->set_var('groupname', $this->get_name());
       return $url;
@@ -158,7 +158,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function get_editor_url() {
-      $url = new URL('?', cfg('urlvars'), '[' . _('Edit') . ']');
+      $url = new URL('', cfg('urlvars'), '[' . _('Edit') . ']');
       $url->set_var('action',    'group_editor');
       $url->set_var('groupname', $this->get_name());
       return $url;

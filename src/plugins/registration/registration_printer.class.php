@@ -21,7 +21,7 @@
 <?php
   class RegistrationPrinter extends PrinterBase {
     function show($user, $error = '') {
-      $url = &new URL('?', cfg('urlvars'));
+      $url = &new URL('', cfg('urlvars'));
       $url->set_var('action', 'account_create');
       
       $this->clear_all_assign();

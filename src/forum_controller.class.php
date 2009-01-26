@@ -190,7 +190,7 @@
       }
 
       // Add the modlog URL to the forum links.
-      $url = new URL('?', cfg('urlvars'), _('Moderation Log'));
+      $url = new URL('', cfg('urlvars'), _('Moderation Log'));
       $url->set_var('action', 'moderation_log');
       $this->forum_links->add_link($url);
 
@@ -479,7 +479,7 @@
       if (!cfg('default_forum_id', FALSE))
         return new URL('.', cfg('urlvars'), _('Home'));
 
-      $url = new URL('?', cfg('urlvars'), _('Home'));
+      $url = new URL('', cfg('urlvars'), _('Home'));
       $url->set_var('action', 'homepage');
       return $url;
     }
@@ -645,7 +645,7 @@
 
 
     function _refer_to_posting_id($_posting_id) {
-      $url = &new URL(cfg('site_url').'?', cfg('urlvars'));
+      $url = &new URL(cfg('site_url').'', cfg('urlvars'));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $_posting_id);
       $url->set_var('forum_id', $this->get_current_forum_id());
@@ -1136,7 +1136,7 @@
 
       // Send the mail.
       if (!$user->is_confirmed()) {
-        $url = new URL(cfg('site_url').'?', cfg('urlvars'));
+        $url = new URL(cfg('site_url').'', cfg('urlvars'));
         $url->set_var('action',   'account_reconfirm');
         $url->set_var('username', $user->get_name());
         $this->_refer_to($url->get_string());
@@ -1548,7 +1548,7 @@
       if ($this->_get_current_view_name() == $_name)
         return $this->footer_links->add_text($_caption, $_priority);
 
-      $url = new URL('?', cfg('urlvars'), $_caption);
+      $url = new URL('', cfg('urlvars'), $_caption);
       $url->set_var('forum_id',   $this->get_current_forum_id());
       $url->set_var('changeview', $_name);
       $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
@@ -1588,7 +1588,7 @@
 
     function get_login_url() {
       $refer_to = $this->_get_login_refer_url();
-      $url      = new URL('?', cfg('urlvars'), _('Log in'));
+      $url      = new URL('', cfg('urlvars'), _('Log in'));
       $url->set_var('action',   'login');
       $url->set_var('refer_to', $refer_to);
       return $url;
@@ -1596,7 +1596,7 @@
 
 
     function get_logout_url() {
-      $url = new URL('?', cfg('urlvars'), _('Log out'));
+      $url = new URL('', cfg('urlvars'), _('Log out'));
       $url->set_var('action', 'logout');
       return $url;
     }
@@ -1604,7 +1604,7 @@
 
     function get_registration_url() {
       //FIXME: should not be here.
-      $url = new URL('?', cfg('urlvars'), _('Register Account'));
+      $url = new URL('', cfg('urlvars'), _('Register Account'));
       $url->set_var('action', 'account_register');
       return $url;
     }

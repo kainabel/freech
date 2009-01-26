@@ -30,7 +30,7 @@
                           $_may_quote) {
       $forum_id = $this->api->get_current_forum_id();
 
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('forum_id',  $forum_id);
       $url->set_var('parent_id', $_parent_id);
 
@@ -96,7 +96,7 @@
 
     /* Show a preview form of the message. */
     function show_preview(&$_message, $_parent_id, $_may_quote) {
-      $url  = new URL('?', cfg('urlvars'));
+      $url  = new URL('', cfg('urlvars'));
       $url->set_var('forum_id',  $this->api->get_current_forum_id());
       $url->set_var('parent_id', $_parent_id);
 

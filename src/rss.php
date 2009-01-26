@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  include_once 'forum_controller.inc.php';
+  include_once 'forum.class.php';
 
   $forum = new FreechForum;
   header('Content-Type: text/xml; charset=utf-8');

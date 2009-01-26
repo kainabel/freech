@@ -31,7 +31,7 @@
       $this->Menu();
 
       // Prints the index (pagination).
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',   $_args[action]);
       $url->set_var('username', $_args[user]->get_name());
       $url->set_var('hs',     0);

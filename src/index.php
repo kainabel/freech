@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  include_once 'forum.inc.php';
+  include_once 'forum.class.php';
 
   // Must be called before any other output is produced.
   $forum = new FreechForum;

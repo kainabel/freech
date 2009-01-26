@@ -15,7 +15,7 @@ include_once dirname(__FILE__).'/search_query.class.php';
 function search_init($forum) {
   $forum->register_action('search', 'search_on_search');
 
-  $url = new URL('?', cfg('urlvars'), _('Find'));
+  $url = new URL('', cfg('urlvars'), _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum->get_current_forum_id());
   $forum->forum_links()->add_link($url);
@@ -58,7 +58,7 @@ function search_on_search_result($forum) {
   if (!$_GET['q'] || trim($_GET['q']) == '')
     return search_on_search_form($forum);
 
-  $url = new URL('?', cfg('urlvars'), _('Find'));
+  $url = new URL('', cfg('urlvars'), _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum->get_current_forum_id());
   $forum->breadcrumbs()->add_separator();

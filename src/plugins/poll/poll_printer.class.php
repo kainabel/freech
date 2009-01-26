@@ -28,7 +28,7 @@ class PollPrinter extends PrinterBase {
 
 
   function show_form($_poll, $_error = '') {
-    $url = new URL('?', cfg('urlvars'));
+    $url = new URL('', cfg('urlvars'));
     $url->set_var('action', 'poll_submit');
 
     while ($_poll->n_options() < 2)
@@ -43,7 +43,7 @@ class PollPrinter extends PrinterBase {
 
 
   function get_poll($_poll, $_ack = '') {
-    $url = new URL('?', cfg('urlvars'));
+    $url = new URL('', cfg('urlvars'));
     $url->set_var('action',   'poll_vote');
     $url->set_var('forum_id', $_poll->get_forum_id());
 

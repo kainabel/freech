@@ -25,10 +25,14 @@
       $version[url]  = 'http://freech.debain.org/';
       $version[text] = 'Freech '.FREECH_VERSION;
 
+      $rss_url = new URL('rss.php', cfg('urlvars'), _('RSS feed'));
+      $rss_url->set_var('forum_id', $this->api->get_current_forum_id());
+
       // Render the resulting template.
       $this->clear_all_assign();
       $this->assign_by_ref('footer_links', $footer_links);
       $this->assign_by_ref('version',      $version);
+      $this->assign_by_ref('rss_url',      $rss_url);
       $this->render('footer.tmpl');
     }
   }

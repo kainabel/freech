@@ -12,7 +12,7 @@ include_once dirname(__FILE__).'/top_users_printer.class.php';
 function top_users_init($forum) {
   $forum->register_action('top_posters', 'top_users_on_show');
 
-  $url = new URL('?', cfg('urlvars'), _('Top Users'));
+  $url = new URL('', cfg('urlvars'), _('Top Users'));
   $url->set_var('action', 'top_posters');
   $forum->forum_links()->add_link($url);
 }

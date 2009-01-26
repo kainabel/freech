@@ -351,7 +351,7 @@ class IndentedBlock {
 
 
     function get_url() {
-      $url = new URL('?', cfg('urlvars'), $this->get_subject());
+      $url = new URL('', cfg('urlvars'), $this->get_subject());
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('forum_id', $this->get_forum_id());
@@ -378,7 +378,7 @@ class IndentedBlock {
         $url->set_var('showthread', -1);
       }
       elseif ($_GET['action'] == 'user_postings') {
-        $url = new URL('?', cfg('urlvars'));
+        $url = new URL('', cfg('urlvars'));
         $url->set_var('action',   'user_postings');
         $url->set_var('username', $_GET['username']);
         if ($_GET['hs'])
@@ -387,7 +387,7 @@ class IndentedBlock {
         $url->set_var('user_postings_c', $this->get_id());
       }
       else {
-        $url = new URL('?', cfg('urlvars'));
+        $url = new URL('', cfg('urlvars'));
         if ($_GET['hs'])
           $url->set_var('hs', (int)$_GET[hs]);
         $url->set_var('forum_id', $this->get_forum_id());
@@ -405,7 +405,7 @@ class IndentedBlock {
 
     // The url for locking the posting.
     function get_lock_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action', 'posting_lock');
       $url->set_var('msg_id', $this->get_id());
       return $url;
@@ -419,7 +419,7 @@ class IndentedBlock {
 
     // The url for unlocking the posting.
     function get_unlock_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',   'posting_unlock');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
@@ -433,7 +433,7 @@ class IndentedBlock {
 
 
     function get_stub_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',   'posting_stub');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
@@ -447,7 +447,7 @@ class IndentedBlock {
 
 
     function get_unstub_url() {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',   'posting_unstub');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
@@ -462,7 +462,7 @@ class IndentedBlock {
 
     // The url for changing the posting priority.
     function get_prioritize_url($_priority) {
-      $url = new URL('?', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action',   'posting_prioritize');
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('priority', (int)$_priority);
@@ -481,7 +481,7 @@ class IndentedBlock {
         $username = $this->fields['current_username'];
       else
         $username = $this->get_username();
-      $profile_url = new URL('?', cfg('urlvars'));
+      $profile_url = new URL('', cfg('urlvars'));
       $profile_url->set_var('action',   'user_profile');
       $profile_url->set_var('username', $username);
       return $profile_url;

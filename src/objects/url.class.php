@@ -24,21 +24,21 @@
    */
   class URL {
     var $label;
-    var $base;
+    var $path;
     var $vars;
 
 
     // Constructor.
-    function URL($_base = '?', $_vars = array(), $_label = '') {
+    function URL($_path = '', $_vars = array(), $_label = '') {
       $this->label = $_label;
-      $this->base  = $_base;
+      $this->path  = $_path;
       $this->vars  = array();
       $this->set_var_from_array($_vars);
     }
 
 
-    function get_base() {
-      return $this->base;
+    function get_path() {
+      return $this->path;
     }
 
 
@@ -65,10 +65,22 @@
 
     // Returns the URL as a string.
     function get_string($_escape = FALSE) {
-      if ($_escape)
-        return htmlentities($this->base . http_build_query($this->vars));
+      $query = http_build_query($this->vars);
+
+      if (!$query)
+        $url = $this->path;
+      elseif (!$this->path)
+        $url = '?' . $query;
+      elseif (!strstr($this->path, '?'))
+        $url = $this->path . '?' . $query;
+      elseif (substr($this->path, -1) != '&')
+        $url = $this->path . '&' . $query;
       else
-        return $this->base . http_build_query($this->vars);
+        $url = $this->path . $query;
+
+      if ($_escape)
+        return htmlentities($url);
+      return $url;
     }
 
 

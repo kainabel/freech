@@ -65,7 +65,7 @@ class SearchQuery extends Parser {
 
     // Translate wildcard chars.
     $value = str_replace('*', '%',  $value);
-    $value = str_replace('?', '_',  $value);
+    $value = str_replace('', '_',  $value);
 
     // Add '%' at beginning and end, and remove duplicate '%'.
     return preg_replace("/^%%+$/", '', '%'.$value.'%');

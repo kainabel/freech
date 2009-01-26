@@ -20,13 +20,13 @@
 ?>
 <?php
 class HomepagePrinter extends PrinterBase {
-  function HomepagePrinter($_forum) {
-    $this->PrinterBase($_forum);
+  function HomepagePrinter($_api) {
+    $this->PrinterBase($_api);
     $this->postings = array();
   }
 
 
-  function _append_posting(&$_posting, $_data) {
+  function _append_posting($_posting, $_data) {
     // Required to enable correct formatting of the posting.
     $posting    = $this->api->decorate_posting($_posting);
     $current_id = $this->api->get_current_posting_id();
@@ -42,7 +42,7 @@ class HomepagePrinter extends PrinterBase {
     // Get a list of forums.
     $group         = $this->api->group();
     $may_edit      = $group->may('administer');
-    $add_forum_url = new URL('?', cfg('urlvars'), _('Add a New Forum'));
+    $add_forum_url = new URL('', cfg('urlvars'), _('Add a New Forum'));
     $add_forum_url->set_var('action', 'forum_add');
 
     // Collect status information regarding each forum.

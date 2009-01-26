@@ -35,7 +35,7 @@ function poll_on_run($forum) {
 
   // Add a link to the poll button in the index bar.
   $forum_id = $forum->get_current_forum_id();
-  $url      = new URL('?', cfg('urlvars'), _('Start a Poll'));
+  $url      = new URL('', cfg('urlvars'), _('Start a Poll'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action'  , 'poll_add');
   $forum->page_links()->add_link($url, 400);

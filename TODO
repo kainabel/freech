@@ -29,6 +29,7 @@ Maintenance
 * Move forum->get_registration_url() to the registration plugin.
 * Rename forum to api in plugins.
 * Convert the modlog into a plugin.
+* Clean URL handling up.
 
 Features
 ---------

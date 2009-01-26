@@ -20,13 +20,8 @@
 ?>
 <?php
 class ForumEditorPrinter extends PrinterBase {
-  function ForumEditorPrinter($_forum) {
-    $this->PrinterBase($_forum);
-  }
-
-
   function show($_forum = NULL, $_ack = '', $_error = '') {
-    $url = new URL('?', cfg('urlvars'));
+    $url = new URL('', cfg('urlvars'));
     $url->set_var('action', 'forum_submit');
 
     // Render the template.

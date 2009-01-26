@@ -12,7 +12,7 @@ include_once dirname(__FILE__).'/statistics_printer.class.php';
 function statistics_init($forum) {
   $forum->register_action('statistics', 'statistics_on_show');
 
-  $url = new URL('?', cfg('urlvars'), _('Statistics'));
+  $url = new URL('', cfg('urlvars'), _('Statistics'));
   $url->set_var('action', 'statistics');
   $forum->forum_links()->add_link($url);
 }

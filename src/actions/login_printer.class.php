@@ -24,11 +24,17 @@
       $login_url = new URL('?', cfg('urlvars'));
       $login_url->set_var('action', 'login');
 
-      $resend_url = new URL('?', cfg('urlvars'));
-      $resend_url->set_var('action',   'account_reconfirm');
-      $resend_url->set_var('username', $_user->get_name());
+      if ($_user->get_name() && !$_user->is_confirmed()) {
+        $resend_url = new URL('?',
+                              cfg('urlvars'),
+                              _('Resend confirmation email'));
+        $resend_url->set_var('action',   'account_reconfirm');
+        $resend_url->set_var('username', $_user->get_name());
+      }
 
-      $forgot_url = new URL('?', cfg('urlvars'));
+      $forgot_url = new URL('?',
+                            cfg('urlvars'),
+                            _('Forgot your password?'));
       $forgot_url->set_var('action', 'password_forgotten');
 
       $this->clear_all_assign();
@@ -36,8 +42,8 @@
       $this->assign_by_ref('hint',       $_hint);
       $this->assign_by_ref('refer_to',   urlencode($_refer_to));
       $this->assign_by_ref('action',     $login_url->get_string());
-      $this->assign_by_ref('resend_url', $resend_url->get_string());
-      $this->assign_by_ref('forgot_url', $forgot_url->get_string());
+      $this->assign_by_ref('resend_url', $resend_url);
+      $this->assign_by_ref('forgot_url', $forgot_url);
       $this->render('login.tmpl');
     }
 

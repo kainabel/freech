@@ -9,7 +9,6 @@ Maintenance
 * Remove marked methods from the FreechForum class.
 * Rename PrinterBase->parent to PrinterBase->api.
 * Rename PostingDecorator->forum to PostingDecorator->api.
-* Fix: Hide "resend confirmation mail" link when user is unknown.
 
 Features
 ---------

@@ -32,10 +32,10 @@
 </form>
 
 <p>
-  <a href="{$forgot_url|escape}">{t}Forgot your password?{/t}</a>
-{if !$user->is_confirmed()}
+  {$forgot_url->get_html()}
+{if $resend_url}
   <br />
-  <a href="{$resend_url|escape}">{t}Resend confirmation email{/t}</a>
+  {$resend_url->get_html()}
 {/if}
 </p>
 <!-- end login -->

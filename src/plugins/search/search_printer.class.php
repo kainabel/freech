@@ -28,7 +28,7 @@
 
     function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $posting    = $this->parent->_decorate_posting($_posting);
+      $posting    = $this->parent->decorate_posting($_posting);
       $current_id = $this->parent->get_current_posting_id();
       $posting->set_selected($posting->get_id() == $current_id);
       $posting->apply_block();
@@ -75,7 +75,7 @@
                      n_postings_per_page => cfg('epp'),
                      n_offset            => $_offset,
                      n_pages_per_index   => cfg('ppi'));
-      $indexbar = &new IndexBarSearchResult($args);
+      $indexbar = new IndexBarSearchResult($args);
 
       // Render the result.
       $this->assign_by_ref('posting_search', 1);
@@ -100,7 +100,7 @@
 
       // Run the search.
       $search    = array('name' => '%'.trim($_query).'%');
-      $userdb    = $this->parent->get_userdb();
+      $userdb    = $this->parent->userdb();
       $n_entries = $userdb->get_n_users_from_query($search);
       $n_rows    = 0;
       if ($n_entries > 0) {
@@ -127,7 +127,7 @@
                          n_users_per_page  => cfg("epp"),
                          n_offset          => $_offset,
                          n_pages_per_index => cfg("ppi"));
-      $indexbar = &new IndexBarSearchUsers($args);
+      $indexbar = new IndexBarSearchUsers($args);
 
       // Render the result.
       $this->assign_by_ref('user_search', 1);

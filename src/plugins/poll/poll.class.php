@@ -65,8 +65,8 @@ class Poll extends PostingDecorator {
     // Fetch the poll from the database.
     $poll_id = $this->posting->get_id();
     $poll    = _get_poll_from_id($this->forum, $poll_id);
-    $user    = $this->forum->get_current_user();
-    $db      = $this->forum->_get_db();
+    $user    = $this->forum->user();
+    $db      = $this->forum->db();
     $printer = new PollPrinter($this->forum);
 
     if ($user->is_anonymous())

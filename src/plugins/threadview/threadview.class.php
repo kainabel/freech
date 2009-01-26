@@ -30,9 +30,9 @@ class ThreadView extends View {
   }
 
 
-  function _append_posting(&$_posting, $_data) {
+  function _append_posting($_posting, $_data) {
     // Required to enable correct formatting of the posting.
-    $posting    = $this->parent->_decorate_posting($_posting);
+    $posting    = $this->parent->decorate_posting($_posting);
     $current_id = $this->parent->get_current_posting_id();
     $posting->set_selected($posting->get_id() == $current_id);
     $posting->apply_block();
@@ -47,7 +47,7 @@ class ThreadView extends View {
 
   function show($_forum_id, $_offset) {
     // Load postings from the database.
-    $thread_state = $this->parent->get_thread_state('');
+    $thread_state = $this->parent->thread_state('');
     $func         = array(&$this, '_append_posting');
     $this->forumdb->foreach_child($_forum_id,
                                   0,
@@ -59,7 +59,7 @@ class ThreadView extends View {
                                   '');
 
     // Create the index bar.
-    $group     = $this->parent->get_current_group();
+    $group     = $this->parent->group();
     $n_threads = $this->forumdb->get_n_threads($_forum_id, $may_write);
     $args      = array(forum_id           => (int)$_forum_id,
                        n_threads          => $n_threads,
@@ -82,8 +82,8 @@ class ThreadView extends View {
 
 
   function show_posting($_posting) {
-    $user            = $this->parent->get_current_user();
-    $group           = $this->parent->get_current_group();
+    $user            = $this->parent->user();
+    $group           = $this->parent->group();
     $db              = $this->forumdb;
     $prev_posting_id = $db->get_prev_posting_id_in_thread($_posting);
     $next_posting_id = $db->get_next_posting_id_in_thread($_posting);

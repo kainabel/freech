@@ -21,7 +21,7 @@
 <?php
   class ModLogPrinter extends PrinterBase {
     function show($_offset = 0) {
-      $modlogdb = $this->parent->get_modlogdb();
+      $modlogdb = $this->parent->modlogdb();
       $items    = $modlogdb->get_items_from_query(array(),
                                                   cfg('modlog_epp'),
                                                   (int)$_offset);

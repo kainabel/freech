@@ -9,7 +9,7 @@ Constructor: linkify_init
 
 
 function linkify_init($forum) {
-  $eventbus = $forum->get_eventbus();
+  $eventbus = $forum->eventbus();
   $eventbus->signal_connect('on_message_read_print',    'linkify_on_read');
   $eventbus->signal_connect('on_message_preview_print', 'linkify_on_preview');
 

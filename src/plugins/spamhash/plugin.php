@@ -13,18 +13,18 @@ define('CHECK_REGISTERED_ACCOUNTS', FALSE);
 $spamhash = ''; // The spamhash instance.
 
 
-function spamhash_init(&$forum) {
-  $eventbus = &$forum->get_eventbus();
+function spamhash_init($forum) {
+  $eventbus = $forum->eventbus();
   $eventbus->signal_connect('on_run_before', 'spamhash_on_run');
 }
 
 
-function spamhash_on_run(&$forum) {
+function spamhash_on_run($forum) {
   global $spamhash;
   if (!CHECK_REGISTERED_ACCOUNTS
-    && !$forum->get_current_user()->is_anonymous())
+    && !$forum->user()->is_anonymous())
     return;
-  $action = $forum->get_current_action();
+  $action = $forum->action();
   if ($action == 'write'
     || $action == 'respond'
     || $action == 'edit'
@@ -34,43 +34,45 @@ function spamhash_on_run(&$forum) {
     $spamhash = new SpamHash('registration');
   else
     return;
-  $eventbus = &$forum->get_eventbus();
+  $eventbus = $forum->eventbus();
   $eventbus->signal_connect('on_header_print_before',
                             'spamhash_on_header_print');
 }
 
 
-function spamhash_on_header_print(&$forum) {
+function spamhash_on_header_print($forum) {
   global $spamhash;
   if (!$spamhash)
     return;
-  if ($forum->get_current_action() == 'message_submit'
+  if ($forum->action() == 'message_submit'
     && $_POST[send]
     && !spamhash_check_hash())
     return;
-  if ($forum->get_current_action() == 'account_create'
+  if ($forum->action() == 'account_create'
     && !spamhash_check_hash())
     return;
-  $forum->content = $spamhash->insert_header_code($forum->content);
-  $forum->content = $spamhash->insert_body_code($forum->content);
-  $eventbus       = &$forum->get_eventbus();
-  $eventbus->signal_connect("on_content_print_before",
-                            "spamhash_on_content_print");
+  $content = $spamhash->insert_header_code($forum->get_content());
+  $content = $spamhash->insert_body_code($content);
+  $forum->set_content($content);
+  $eventbus = $forum->eventbus();
+  $eventbus->signal_connect('on_content_print_before',
+                            'spamhash_on_content_print');
 }
 
 
-function spamhash_on_content_print(&$forum) {
+function spamhash_on_content_print($forum) {
   global $spamhash;
   if (!$spamhash)
     return;
-  if ($forum->get_current_action() == 'message_submit'
+  if ($forum->action() == 'message_submit'
     && $_POST[send]
     && !spamhash_html_contains_form($forum->content)) {
     unset($spamhash);
     return;
   }
-  $forum->content = $spamhash->insert_form_code($forum->content);
-  $forum->content = $spamhash->insert_body_code($forum->content);
+  $content = $spamhash->insert_form_code($forum->get_content());
+  $content = $spamhash->insert_body_code($content);
+  $forum->set_content($content);
 }
 
 

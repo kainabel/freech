@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-25 23:27+0100\n"
+"POT-Creation-Date: 2009-01-26 20:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr ""
 msgid "User Registration"
 msgstr ""
 
-#: po/templates.c:47 po/templates.c:299
+#: po/templates.c:47
 msgid "Your password was changed. You may now log in."
 msgstr ""
 
@@ -190,7 +190,7 @@ msgstr ""
 msgid "Prevent responses"
 msgstr ""
 
-#: po/templates.c:158 po/templates.c:173 src/forum.inc.php:1546
+#: po/templates.c:158 po/templates.c:173 src/forum_controller.class.php:1591
 msgid "Log in"
 msgstr ""
 
@@ -222,7 +222,7 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: po/templates.c:194 src/forum.inc.php:1143
+#: po/templates.c:194 src/forum_controller.class.php:1188
 msgid "Edit a Forum"
 msgstr ""
 
@@ -242,7 +242,8 @@ msgstr ""
 msgid "Save the Forum"
 msgstr ""
 
-#: po/templates.c:209 src/forum.inc.php:174 src/forum.inc.php:1181
+#: po/templates.c:209 src/forum_controller.class.php:193
+#: src/forum_controller.class.php:1226
 msgid "Moderation Log"
 msgstr ""
 
@@ -316,8 +317,12 @@ msgstr ""
 msgid "Reason:"
 msgstr ""
 
-#: po/templates.c:290 src/forum.inc.php:760
+#: po/templates.c:290 src/forum_controller.class.php:805
 msgid "Posting is spam"
+msgstr ""
+
+#: po/templates.c:299
+msgid "A confirmation mail has been sent to your email address."
 msgstr ""
 
 #: po/templates.c:305
@@ -452,8 +457,8 @@ msgstr ""
 msgid "View results"
 msgstr ""
 
-#: po/templates.c:416 src/plugins/poll/plugin.php:39
-#: src/plugins/poll/plugin.php:53
+#: po/templates.c:416 src/plugins/poll/plugin.php:38
+#: src/plugins/poll/plugin.php:52
 msgid "Start a Poll"
 msgstr ""
 
@@ -508,7 +513,7 @@ msgid ""
 "      ban?na AND NOT subject:wildcard*matching"
 msgstr ""
 
-#: src/objects/posting.class.php:651 src/forum.inc.php:681
+#: src/objects/posting.class.php:651 src/forum_controller.class.php:726
 msgid "Locked Message"
 msgstr ""
 
@@ -674,7 +679,7 @@ msgstr ""
 msgid "Please enter a summary."
 msgstr ""
 
-#: src/objects/group.class.php:208
+#: src/objects/group.class.php:214
 msgid "Error: Please enter a group name."
 msgstr ""
 
@@ -733,40 +738,32 @@ msgstr ""
 msgid "Fold All"
 msgstr ""
 
-#: src/actions/homepage_printer.class.php:45 src/forum.inc.php:1133
-msgid "Add a New Forum"
-msgstr ""
-
-#: src/actions/homepage_printer.class.php:59
-#, php-format
-msgid "%d postings, %d new"
-msgstr ""
-
-#: src/forum.inc.php:189
+#: src/forum_controller.class.php:208
 msgid "My Postings"
 msgstr ""
 
-#: src/forum.inc.php:193
+#: src/forum_controller.class.php:212
 msgid "My Profile"
 msgstr ""
 
-#: src/forum.inc.php:208 src/forum.inc.php:212 src/forum.inc.php:214
+#: src/forum_controller.class.php:253 src/forum_controller.class.php:257
+#: src/forum_controller.class.php:259
 msgid "Login failed."
 msgstr ""
 
-#: src/forum.inc.php:210
+#: src/forum_controller.class.php:255
 msgid "Your account is not yet confirmed."
 msgstr ""
 
-#: src/forum.inc.php:435 src/forum.inc.php:437
+#: src/forum_controller.class.php:480 src/forum_controller.class.php:482
 msgid "Home"
 msgstr ""
 
-#: src/forum.inc.php:542
+#: src/forum_controller.class.php:587
 msgid "Your password at [SITE_TITLE]"
 msgstr ""
 
-#: src/forum.inc.php:543
+#: src/forum_controller.class.php:588
 msgid ""
 "Hello [FIRSTNAME] [LASTNAME],\n"
 "\n"
@@ -778,58 +775,68 @@ msgid ""
 "[URL]\n"
 msgstr ""
 
-#: src/forum.inc.php:679 src/forum.inc.php:720
+#: src/forum_controller.class.php:724 src/forum_controller.class.php:765
 msgid "No Such Message"
 msgstr ""
 
-#: src/forum.inc.php:721
+#: src/forum_controller.class.php:766
 msgid "A message with the given ID does not exist."
 msgstr ""
 
-#: src/forum.inc.php:769
+#: src/forum_controller.class.php:814
 msgid "Please enter a reason."
 msgstr ""
 
-#: src/forum.inc.php:934 src/forum.inc.php:1045
+#: src/forum_controller.class.php:979 src/forum_controller.class.php:1090
 #: src/plugins/registration/plugin.php:35
 msgid "Error: Passwords do not match."
 msgstr ""
 
-#: src/forum.inc.php:945 src/forum.inc.php:1058
-#: src/plugins/registration/plugin.php:53
+#: src/forum_controller.class.php:990 src/forum_controller.class.php:1103
+#: src/plugins/registration/plugin.php:52
 msgid "Failed to save the user."
 msgstr ""
 
-#: src/forum.inc.php:950
+#: src/forum_controller.class.php:995
 msgid "Your data has been saved."
 msgstr ""
 
-#: src/forum.inc.php:1000
+#: src/forum_controller.class.php:1045
 msgid "Failed to save the group."
 msgstr ""
 
-#: src/forum.inc.php:1003
+#: src/forum_controller.class.php:1048
 msgid "Your changes have been saved."
 msgstr ""
 
-#: src/forum.inc.php:1088
+#: src/forum_controller.class.php:1133
 msgid "The given email address was not found."
 msgstr ""
 
-#: src/forum.inc.php:1102
+#: src/forum_controller.class.php:1147
 msgid "Your account is locked."
 msgstr ""
 
-#: src/forum.inc.php:1172
+#: src/forum_controller.class.php:1178
+#: src/actions/homepage_printer.class.php:45
+msgid "Add a New Forum"
+msgstr ""
+
+#: src/forum_controller.class.php:1217
 msgid "The changes have been saved."
 msgstr ""
 
-#: src/forum.inc.php:1554
+#: src/forum_controller.class.php:1599
 msgid "Log out"
 msgstr ""
 
-#: src/forum.inc.php:1562
+#: src/forum_controller.class.php:1607
 msgid "Register Account"
+msgstr ""
+
+#: src/actions/homepage_printer.class.php:59
+#, php-format
+msgid "%d postings, %d new"
 msgstr ""
 
 #: src/plugins/linkify/plugin.php:26
@@ -874,11 +881,11 @@ msgstr ""
 msgid "The given email address already exists in our database."
 msgstr ""
 
-#: src/plugins/registration/plugin.php:101
+#: src/plugins/registration/plugin.php:100
 msgid "Your registration at [SITE_TITLE]"
 msgstr ""
 
-#: src/plugins/registration/plugin.php:102
+#: src/plugins/registration/plugin.php:101
 msgid ""
 "Hello [FIRSTNAME] [LASTNAME],\n"
 "\n"
@@ -933,7 +940,7 @@ msgstr ""
 msgid "Failed to save the posting."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:42 src/plugins/poll/plugin.php:165
+#: src/plugins/poll/poll.class.php:42 src/plugins/poll/plugin.php:162
 #, php-format
 msgid "Poll: %s"
 msgstr ""
@@ -946,35 +953,35 @@ msgstr ""
 msgid "Thank You for your vote."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:207
+#: src/plugins/poll/poll.class.php:209
 msgid "Please enter a title."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:209
+#: src/plugins/poll/poll.class.php:211
 msgid "The poll title is too long."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:212
+#: src/plugins/poll/poll.class.php:214
 msgid "Please add more options."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:214 src/plugins/poll/plugin.php:73
+#: src/plugins/poll/poll.class.php:216 src/plugins/poll/plugin.php:72
 msgid "Too many options."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:217
+#: src/plugins/poll/poll.class.php:219
 msgid "An option is too long."
 msgstr ""
 
-#: src/plugins/poll/poll.class.php:219
+#: src/plugins/poll/poll.class.php:221
 msgid "The poll has duplicate options."
 msgstr ""
 
-#: src/plugins/poll/plugin.php:60
+#: src/plugins/poll/plugin.php:59
 msgid "You have reached your poll limit. Sorry."
 msgstr ""
 
-#: src/plugins/poll/plugin.php:88
+#: src/plugins/poll/plugin.php:87
 msgid "Failed to save poll."
 msgstr ""
 

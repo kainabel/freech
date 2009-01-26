@@ -190,6 +190,12 @@ define('GROUP_STATUS_ACTIVE',  1);
     }
 
 
+    function assert_may($_permission) {
+      if (!$this->may($_permission))
+        die('Permission denied.');
+    }
+
+
     function get_permission_list() {
       $actions     = array('write',
                            'administer',

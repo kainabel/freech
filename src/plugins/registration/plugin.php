@@ -41,15 +41,14 @@ function registration_on_create($forum) {
   }
 
   // Make sure that the email address is available.
-  if ($forum->get_userdb()->get_user_from_mail($user->get_mail())) {
+  if ($forum->userdb()->get_user_from_mail($user->get_mail())) {
     $msg = _('The given email address already exists in our database.');
     return $registration->show($user, $msg);
   }
 
   // Create the user.
   $user->set_group_id(cfg('default_group_id'));
-  $userdb = $forum->get_userdb();
-  if (!$userdb->save_user($user))
+  if (!$forum->userdb()->save_user($user))
     return $registration->show($user, _('Failed to save the user.'));
 
   // Done.
@@ -60,7 +59,7 @@ function registration_on_create($forum) {
 // Called when the user opens the link in the initial account confirmation
 // mail.
 function registration_on_confirm($forum) {
-  $userdb = $forum->get_userdb();
+  $userdb = $forum->userdb();
   $user   = $userdb->get_user_from_name($_GET['username']);
   $forum->_assert_confirmation_hash_is_valid($user);
 
@@ -70,7 +69,7 @@ function registration_on_confirm($forum) {
     $url->set_var('action',   'password_change');
     $url->set_var('username', $user->get_name());
     $url->set_var('hash',     $_GET['hash']);
-    $forum->_refer_to($url->get_string());
+    $forum->refer_to($url->get_string());
   }
 
   // Make the user active.
@@ -80,13 +79,13 @@ function registration_on_confirm($forum) {
     die('User activation failed');
 
   // Done.
-  $registration = &new RegistrationPrinter($forum);
+  $registration = new RegistrationPrinter($forum);
   $registration->show_done($user);
 }
 
 
 function registration_on_reconfirm($forum) {
-  $userdb  = $forum->get_userdb();
+  $userdb  = $forum->userdb();
   $user    = $userdb->get_user_from_name($_GET['username']);
   if ($user->get_status() != USER_STATUS_UNCONFIRMED)
     die('User is already confirmed.');
@@ -113,7 +112,7 @@ function registration_mail_send($forum, $user) {
   $hash     = urlencode($user->get_confirmation_hash());
   $url      = cfg('site_url') . '?action=account_confirm'
             . "&username=$username&hash=$hash";
-  $forum->_send_account_mail($user, $subject, $body, array('url' => $url));
+  $forum->send_account_mail($user, $subject, $body, array('url' => $url));
   $printer = new RegistrationPrinter($forum);
   $printer->show_mail_sent($user);
 }

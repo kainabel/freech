@@ -19,9 +19,9 @@
   */
 ?>
 <?php
-  include_once 'forum.inc.php';
-  
-  $forum = new FreechForum();
+  include_once 'forum_controller.inc.php';
+
+  $forum = new FreechForum;
   header('Content-Type: text/xml; charset=utf-8');
   $forum->print_rss($_GET[forum_id],
                     cfg('site_title'),

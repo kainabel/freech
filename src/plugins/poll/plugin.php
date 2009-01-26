@@ -17,11 +17,10 @@ function poll_init($forum) {
   $forum->register_renderer('poll',      'Poll');
 
   // For anonymous users we don't need to do anything else.
-  $user = $forum->get_current_user();
-  if ($user->is_anonymous())
+  if ($forum->user()->is_anonymous())
     return;
 
-  $forum->get_eventbus()->signal_connect('on_run_before', 'poll_on_run');
+  $forum->eventbus()->signal_connect('on_run_before', 'poll_on_run');
 
   // Register our extra actions.
   $forum->register_action('poll_add',    'poll_on_add');
@@ -31,7 +30,7 @@ function poll_init($forum) {
 
 
 function poll_on_run($forum) {
-  if (!$forum->get_current_group()->may('write'))
+  if (!$forum->group()->may('write'))
     return;
 
   // Add a link to the poll button in the index bar.
@@ -54,8 +53,8 @@ function poll_on_add($forum) {
 
   $max_polls      = cfg('max_polls', 2);
   $max_polls_time = time() - cfg('max_polls_time', 60 * 60 * 24);
-  if (_n_polls_since($forum->_get_db(),
-                     $forum->get_current_user(),
+  if (_n_polls_since($forum->db(),
+                     $forum->user(),
                      $max_polls_time) >= $max_polls)
     return $printer->show_error(_('You have reached your poll limit. Sorry.'));
   $printer->show_form($poll);
@@ -88,7 +87,7 @@ function poll_on_submit($forum) {
       return $printer->show_form($poll, _('Failed to save poll.'));
 
     // Refer to the poll.
-    $forum->_refer_to_posting_id($poll->get_id());
+    $forum->refer_to_posting($poll);
   }
 }
 
@@ -96,16 +95,16 @@ function poll_on_submit($forum) {
 function poll_on_vote($forum) {
   $poll_id = (int)$_POST['poll_id'];
   $poll    = _get_poll_from_id($forum, $poll_id);
-  $user    = $forum->get_current_user();
-  $db      = $forum->_get_db();
+  $user    = $forum->user();
+  $db      = $forum->db();
   $printer = new PollPrinter($forum);
 
   if (!$_POST['options'])
-    $forum->_refer_to_posting_id($poll->get_id());
+    $forum->refer_to_posting($poll);
 
   // Make sure that a user does not vote twice.
   if (_poll_did_vote($db, $user, $poll_id))
-    $forum->_refer_to_posting_id($poll->get_id());
+    $forum->refer_to_posting($poll);
 
   // Depending on whether it is allowed to check multiple values, we get
   // either a single value or an array of values. If a single value is
@@ -136,7 +135,7 @@ function poll_on_vote($forum) {
   // Reload the poll (to include results) and show the result.
   $accept_url = $poll->get_url();
   $accept_url->set_var('accept', 1);
-  $forum->_refer_to(cfg('site_url').$accept_url->get_string());
+  $forum->refer_to(cfg('site_url').$accept_url->get_string());
 }
 
 
@@ -160,17 +159,15 @@ function _poll_get_from_post() {
 
 function _save_poll($forum, $poll) {
   $forum_id = $forum->get_current_forum_id();
-  $user     = $forum->get_current_user();
-  $group    = $forum->get_current_group();
   $subject  = sprintf(_('Poll: %s'), $poll->get_subject());
   $poll->set_subject($subject);
-  $poll->set_from_user($user);
-  $poll->set_from_group($group);
+  $poll->set_from_user($forum->user());
+  $poll->set_from_group($forum->group());
 
   // Save the poll.
-  $db = $forum->_get_db();
+  $db = $forum->db();
   $db->StartTrans();
-  $forum->get_forumdb()->insert($forum_id, NULL, $poll);
+  $forum->forumdb()->insert($forum_id, NULL, $poll);
 
   // Now save the corresponding poll options.
   foreach ($poll->get_filled_options() as $option)
@@ -212,15 +209,15 @@ function _save_poll_option($db, $poll_id, $option) {
 
 function _get_poll_from_id($forum, $poll_id) {
   // Load the posting first, and map it back into a poll.
-  $posting = $forum->_get_posting_from_id_or_die($poll_id);
-  $poll    = $forum->_decorate_posting($posting);
+  $posting = $forum->get_posting_from_id_or_die($poll_id);
+  $poll    = $forum->decorate_posting($posting);
 
   // Load the options of the poll.
-  $sql  = 'SELECT * FROM {t_poll_option}';
-  $sql .= ' WHERE poll_id={poll_id}';
-  $query = &new FreechSqlQuery($sql);
+  $sql   = 'SELECT * FROM {t_poll_option}';
+  $sql  .= ' WHERE poll_id={poll_id}';
+  $query = new FreechSqlQuery($sql);
   $query->set_int('poll_id', $poll_id);
-  $db  = $forum->_get_db();
+  $db  = $forum->db();
   $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
 
   while ($row = $res->FetchRow($res)) {
@@ -236,7 +233,6 @@ function _get_poll_from_id($forum, $poll_id) {
   $sql .= ' GROUP BY o.id';
   $query = &new FreechSqlQuery($sql);
   $query->set_int('poll_id', $poll_id);
-  $db  = $forum->_get_db();
   $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
   while ($row = $res->FetchRow())
     $poll->add_result($row[id], $row[votes]);

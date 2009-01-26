@@ -33,7 +33,7 @@ class ListView extends View {
 
   function _append_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
-    $posting    = $this->parent->_decorate_posting($_posting);
+    $posting    = $this->parent->decorate_posting($_posting);
     $current_id = $this->parent->get_current_posting_id();
     $posting->set_selected($posting->get_id() == $current_id);
     $posting->apply_block();
@@ -53,7 +53,7 @@ class ListView extends View {
                                       array(&$this, '_append_posting'),
                                       '');
 
-    $group     = $this->parent->get_current_group();
+    $group     = $this->parent->group();
     $search    = array('forum_id' => (int)$_forum_id);
     $n_entries = $this->forumdb->get_n_postings($search);
     $args      = array(forum_id            => (int)$_forum_id,
@@ -72,8 +72,8 @@ class ListView extends View {
 
 
   function show_posting($_posting) {
-    $user        = $this->parent->get_current_user();
-    $group       = $this->parent->get_current_group();
+    $user        = $this->parent->user();
+    $group       = $this->parent->group();
     $db          = $this->forumdb;
     $msg_uid     = $_posting ? $_posting->get_user_id() : -1;
     $showlist    = $_posting && $_COOKIE[thread] != 'hide'; //FIXME: rename "thread" cookie
@@ -140,7 +140,7 @@ class ListView extends View {
     $this->clear_all_assign();
     $this->assign_by_ref('showlist', $showlist);
     if ($showlist) {
-      $posting    = $this->parent->_decorate_posting($_posting);
+      $posting    = $this->parent->decorate_posting($_posting);
       $current_id = $this->parent->get_current_posting_id();
       $func       = array(&$this, '_append_posting');
       $posting->set_selected($posting->get_id() == $current_id);

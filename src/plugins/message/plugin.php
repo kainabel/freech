@@ -11,7 +11,7 @@ include_once dirname(__FILE__).'/message.class.php';
 include_once dirname(__FILE__).'/message_printer.class.php';
 
 function message_init($forum) {
-  $forum->get_eventbus()->signal_connect('on_run_before', 'message_on_run');
+  $forum->eventbus()->signal_connect('on_run_before', 'message_on_run');
 
   // Register a class that is responsible for formatting the posting object
   // that holds the message.
@@ -26,7 +26,7 @@ function message_init($forum) {
 
 
 function message_on_run($forum) {
-  if (!$forum->get_current_group()->may('write'))
+  if (!$forum->group()->may('write'))
     return;
 
   // Add 'new message' button to the index bar.
@@ -49,7 +49,7 @@ function message_on_write($forum) {
 
 function message_on_respond($forum) {
   $parent_id = (int)$_GET['parent_id'];
-  $posting   = $forum->get_forumdb()->get_posting_from_id($parent_id);
+  $posting   = $forum->forumdb()->get_posting_from_id($parent_id);
   $printer   = new MessagePrinter($forum);
   if (!$posting)
     die('Invalid parent ID');
@@ -64,8 +64,8 @@ function message_on_respond($forum) {
 
 
 function message_on_edit_saved($forum) {
-  $user    = $forum->get_current_user();
-  $posting = $forum->get_forumdb()->get_posting_from_id($_GET['msg_id']);
+  $user    = $forum->user();
+  $posting = $forum->forumdb()->get_posting_from_id($_GET['msg_id']);
   $printer = new MessagePrinter($forum);
 
   if (!cfg('postings_editable'))
@@ -114,7 +114,7 @@ function message_on_edit_unsaved($forum) {
 // Insert a quote from the parent message.
 function message_on_quote($forum) {
   $parent_id  = (int)$_POST['parent_id'];
-  $quoted_msg = $forum->get_forumdb()->get_posting_from_id($parent_id);
+  $quoted_msg = $forum->forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
   $printer    = new MessagePrinter($forum);
   $printer->show_compose_quoted($posting, $quoted_msg, '');
@@ -126,7 +126,7 @@ function message_on_preview($forum) {
   $parent_id = (int)$_POST['parent_id'];
   $may_quote = (int)$_POST['may_quote'];
   $printer   = new MessagePrinter($forum);
-  $user      = $forum->get_current_user();
+  $user      = $forum->user();
   $message   = new Message(message_get_new_posting($forum), $forum);
   message_init_posting_from_post_data($message);
 
@@ -148,7 +148,7 @@ function message_on_preview($forum) {
    *   Called before the HTML for the posting preview is produced.
    *   Args: posting: The posting that is about to be previewed.
    */
-  $forum->eventbus->emit('on_message_preview_print', $forum, $message);
+  $forum->eventbus()->emit('on_message_preview_print', $forum, $message);
 
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Preview'));
@@ -162,10 +162,10 @@ function message_on_send($forum) {
   $parent_id = (int)$_POST['parent_id'];
   $may_quote = (int)$_POST['may_quote'];
   $printer   = new MessagePrinter($forum);
-  $user      = $forum->get_current_user();
+  $user      = $forum->user();
   $forum_id  = $forum->get_current_forum_id();
-  $forumdb   = $forum->get_forumdb();
-  $forum->_assert_may('write');
+  $forumdb   = $forum->forumdb();
+  $forum->group()->assert_may('write');
 
   // Check whether editing is allowed per configuration.
   if ($_POST['msg_id'] && !cfg('postings_editable'))
@@ -206,7 +206,7 @@ function message_on_send($forum) {
     // If the posting a new one (not an edited one), check for duplicates.
     $duplicate_id = $forumdb->get_duplicate_id_from_posting($posting);
     if ($duplicate_id)
-      $forum->_refer_to_posting_id($duplicate_id);
+      $forum->refer_to_posting_id($duplicate_id);
 
     // Check whether too many messages were sent.
     $blocked_until = $forum->_flood_blocked_until($posting);
@@ -240,7 +240,7 @@ function message_on_send($forum) {
                                   $may_quote);
 
   // Success! Refer to the new item.
-  $forum->_refer_to_posting_id($posting->get_id());
+  $forum->refer_to_posting($posting);
 }
 
 
@@ -251,8 +251,8 @@ function message_on_send($forum) {
 // user/group.
 function message_get_new_posting($forum) {
   $posting = new Posting;
-  $posting->set_from_group($forum->get_current_group());
-  $posting->set_from_user($forum->get_current_user());
+  $posting->set_from_group($forum->group());
+  $posting->set_from_user($forum->user());
   return $posting;
 }
 

@@ -5,9 +5,11 @@
 Maintenance
 ------------
 * Profile the new db model.
-* Create a dedicated PluginAPI object and pass that to plugins instead
-  of the Forum instance.
 * Design a URL scheme that makes sense for URL rewriting.
+* Remove marked methods from the FreechForum class.
+* Rename PrinterBase->parent to PrinterBase->api.
+* Rename PostingDecorator->forum to PostingDecorator->api.
+* Fix: Hide "resend confirmation mail" link when user is unknown.
 
 Features
 ---------
@@ -26,6 +28,10 @@ Maintenance
    $printer->show(..., new Error(_('Something went wrong')));
    $printer->show(..., new Hint(_('My Hint')));
    $printer->show(..., new Ack(_('Success')));
+
+* Move forum->get_registration_url() to the registration plugin.
+* Rename forum to api in plugins.
+* Convert the modlog into a plugin.
 
 Features
 ---------

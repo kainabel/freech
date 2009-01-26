@@ -20,16 +20,16 @@
 ?>
 <?php
   class ProfilePrinter extends PrinterBase {
-    function ProfilePrinter(&$_forum) {
-      $this->PrinterBase(&$_forum);
+    function ProfilePrinter($_api) {
+      $this->PrinterBase($_api);
       $this->postings = array();
       $this->users    = array();
     }
 
 
-    function _append_posting(&$_posting, $_data) {
+    function _append_posting($_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $posting = $this->parent->_decorate_posting($_posting);
+      $posting = $this->parent->decorate_posting($_posting);
       $msg_id  = $this->parent->get_current_posting_id();
       $_posting->set_selected($_posting->get_id() == $msg_id);
       $_posting->apply_block();
@@ -58,7 +58,7 @@
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->forumdb->get_n_postings($search);
-      $action    = $this->parent->get_current_action();
+      $action    = $this->parent->action();
       $args      = array(action              => $action,
                          user                => $_user,
                          n_postings          => $n_entries,
@@ -66,7 +66,7 @@
                          n_offset            => $_offset,
                          n_pages_per_index   => cfg("ppi"),
                          thread_state        => $_thread_state);
-      $indexbar = &new IndexBarUserPostings($args);
+      $indexbar = new IndexBarUserPostings($args);
 
       $this->assign_by_ref('n_rows',     count($this->postings));
       $this->assign_by_ref('n_postings', $n_entries);
@@ -79,13 +79,13 @@
 
     function show_user_profile($_user, $_thread_state, $_offset = 0) {
       // Load the group info.
-      $groupdb = $this->parent->_get_groupdb();
+      $groupdb = $this->parent->groupdb();
       $search  = array('id' => $_user->get_group_id());
       $group   = $groupdb->get_group_from_query($search);
 
       // Check permissions.
-      $current   = $this->parent->get_current_user();
-      $curgroup  = $this->parent->get_current_group();
+      $current   = $this->parent->user();
+      $curgroup  = $this->parent->group();
       $is_self   = $current->get_id() == $_user->get_id();
       $may_admin = $curgroup->may('administer');
       $may_mod   = $curgroup->may('moderate') && !$group->may('administer');
@@ -118,8 +118,8 @@
 
 
     function show_user_postings($_user, $_thread_state, $_offset = 0) {
-      $current  = $this->parent->get_current_user();
-      $group    = $this->parent->get_current_group();
+      $current  = $this->parent->user();
+      $group    = $this->parent->group();
       $showlist = $_user->get_name() == $current->get_name();
       $showlist = $showlist || $group->may('moderate');
       $this->parent->_set_title($_user->get_name());
@@ -144,13 +144,13 @@
       $url->set_var('action', 'user_submit');
 
       // Fetch the corresponding group.
-      $groupdb = $this->parent->_get_groupdb();
+      $groupdb = $this->parent->groupdb();
       $query   = array('id' => $_user->get_group_id());
       $group   = $groupdb->get_group_from_query($query);
 
       // Find permissions.
-      $current      = $this->parent->get_current_user();
-      $curgroup     = $this->parent->get_current_group();
+      $current      = $this->parent->user();
+      $curgroup     = $this->parent->group();
       $is_self      = $current->get_id() == $_user->get_id();
       $edit_sane    = !$_user->is_anonymous();
       $lock_sane    = $edit_sane && $_user->is_active();
@@ -229,7 +229,7 @@
     function show_group_profile($_group, $_offset = 0) {
       // Load a list of users.
       $search = array('group_id' => $_group->get_id());
-      $userdb = $this->parent->get_userdb();
+      $userdb = $this->parent->userdb();
       $n_rows = $userdb->foreach_user_from_query($search,
                                                  cfg("epp"),
                                                  $_offset,

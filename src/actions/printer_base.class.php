@@ -24,11 +24,11 @@
     var $smarty;
     var $db;
     
-    function PrinterBase(&$_parent) {
-      $this->parent   = &$_parent;
-      $this->smarty   = $_parent->_get_smarty();
-      $this->forumdb  = $_parent->get_forumdb();
-      $this->eventbus = $_parent->get_eventbus();
+    function PrinterBase($_api) {
+      $this->parent   = $_api;
+      $this->smarty   = $_api->smarty();
+      $this->forumdb  = $_api->forumdb();
+      $this->eventbus = $_api->eventbus();
     }
 
     function clear_all_assign() {
@@ -50,12 +50,12 @@
         $this->smarty->template_dir = $theme_dir;
       else
         $this->smarty->template_dir = $template_dir;
-      $this->assign_by_ref('__user',      $this->parent->get_current_user());
-      $this->assign_by_ref('__group',     $this->parent->get_current_group());
+      $this->assign_by_ref('__user',      $this->parent->user());
+      $this->assign_by_ref('__group',     $this->parent->group());
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $cache_id = $this->smarty->template_dir . '/' . $_template;
       $content  = $this->smarty->fetch($_template, $cache_id);
-      $this->parent->_append_content($content);
+      $this->parent->append_content($content);
     }
   }
 ?>

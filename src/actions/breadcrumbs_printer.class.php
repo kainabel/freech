@@ -21,8 +21,8 @@
 <?php
   class BreadCrumbsPrinter extends PrinterBase {
     function show($_breadcrumbs, $_show_page_links) {
-      $page_links   = $this->parent->page_links();
-      $search_links = $this->parent->search_links();
+      $page_links   = $this->api->page_links();
+      $search_links = $this->api->search_links();
 
       $this->clear_all_assign();
       $this->assign_by_ref('breadcrumbs',     $_breadcrumbs);

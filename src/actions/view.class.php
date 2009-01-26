@@ -24,8 +24,8 @@
  * as the page on which a posting is shown.
  */
 class View extends PrinterBase {
-  function View($_forum) {
-    $this->PrinterBase($_forum);
+  function View($_api) {
+    $this->PrinterBase($_api);
   }
 
 

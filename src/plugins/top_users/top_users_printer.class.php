@@ -21,7 +21,7 @@
 <?php
   class TopUsersPrinter extends PrinterBase {
     function show() {
-      $userdb   = $this->parent->userdb();
+      $userdb   = $this->api->userdb();
       $all_time = $userdb->get_top_users(20);
       $week     = $userdb->get_top_users(20, time() - 60*60*24*7);
       $this->clear_all_assign();
@@ -29,7 +29,7 @@
       $this->assign_by_ref('all_time',   $all_time);
       $this->assign_by_ref('weekly',     $week);
       $this->render(dirname(__FILE__).'/top_users.tmpl');
-      $this->parent->_set_title(_('Top Users'));
+      $this->api->_set_title(_('Top Users'));
     }
   }
 ?>

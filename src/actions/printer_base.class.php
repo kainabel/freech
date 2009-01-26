@@ -25,7 +25,7 @@
     var $db;
     
     function PrinterBase($_api) {
-      $this->parent   = $_api;
+      $this->api      = $_api;
       $this->smarty   = $_api->smarty();
       $this->forumdb  = $_api->forumdb();
       $this->eventbus = $_api->eventbus();
@@ -50,12 +50,12 @@
         $this->smarty->template_dir = $theme_dir;
       else
         $this->smarty->template_dir = $template_dir;
-      $this->assign_by_ref('__user',      $this->parent->user());
-      $this->assign_by_ref('__group',     $this->parent->group());
+      $this->assign_by_ref('__user',      $this->api->user());
+      $this->assign_by_ref('__group',     $this->api->group());
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $cache_id = $this->smarty->template_dir . '/' . $_template;
       $content  = $this->smarty->fetch($_template, $cache_id);
-      $this->parent->append_content($content);
+      $this->api->append_content($content);
     }
   }
 ?>

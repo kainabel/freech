@@ -29,8 +29,8 @@
 
     function _append_posting($_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $posting = $this->parent->decorate_posting($_posting);
-      $msg_id  = $this->parent->get_current_posting_id();
+      $posting = $this->api->decorate_posting($_posting);
+      $msg_id  = $this->api->get_current_posting_id();
       $_posting->set_selected($_posting->get_id() == $msg_id);
       $_posting->apply_block();
 
@@ -58,7 +58,7 @@
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->forumdb->get_n_postings($search);
-      $action    = $this->parent->action();
+      $action    = $this->api->action();
       $args      = array(action              => $action,
                          user                => $_user,
                          n_postings          => $n_entries,
@@ -79,13 +79,13 @@
 
     function show_user_profile($_user, $_thread_state, $_offset = 0) {
       // Load the group info.
-      $groupdb = $this->parent->groupdb();
+      $groupdb = $this->api->groupdb();
       $search  = array('id' => $_user->get_group_id());
       $group   = $groupdb->get_group_from_query($search);
 
       // Check permissions.
-      $current   = $this->parent->user();
-      $curgroup  = $this->parent->group();
+      $current   = $this->api->user();
+      $curgroup  = $this->api->group();
       $is_self   = $current->get_id() == $_user->get_id();
       $may_admin = $curgroup->may('administer');
       $may_mod   = $curgroup->may('moderate') && !$group->may('administer');
@@ -113,16 +113,16 @@
       $this->assign_by_ref('showinfo', TRUE);
       $this->assign_by_ref('showlist', $showlist);
       $this->render('user_profile.tmpl');
-      $this->parent->_set_title($_user->get_name());
+      $this->api->_set_title($_user->get_name());
     }
 
 
     function show_user_postings($_user, $_thread_state, $_offset = 0) {
-      $current  = $this->parent->user();
-      $group    = $this->parent->group();
+      $current  = $this->api->user();
+      $group    = $this->api->group();
       $showlist = $_user->get_name() == $current->get_name();
       $showlist = $showlist || $group->may('moderate');
-      $this->parent->_set_title($_user->get_name());
+      $this->api->_set_title($_user->get_name());
       if (!$showlist)
         return;
 
@@ -144,13 +144,13 @@
       $url->set_var('action', 'user_submit');
 
       // Fetch the corresponding group.
-      $groupdb = $this->parent->groupdb();
+      $groupdb = $this->api->groupdb();
       $query   = array('id' => $_user->get_group_id());
       $group   = $groupdb->get_group_from_query($query);
 
       // Find permissions.
-      $current      = $this->parent->user();
-      $curgroup     = $this->parent->group();
+      $current      = $this->api->user();
+      $curgroup     = $this->api->group();
       $is_self      = $current->get_id() == $_user->get_id();
       $edit_sane    = !$_user->is_anonymous();
       $lock_sane    = $edit_sane && $_user->is_active();
@@ -208,7 +208,7 @@
       $this->assign_by_ref('action',              $url->get_string());
       $this->assign_by_ref('max_signature_lines', cfg('max_signature_lines'));
       $this->render('user_editor.tmpl');
-      $this->parent->_set_title($_user->get_name());
+      $this->api->_set_title($_user->get_name());
     }
 
 
@@ -222,14 +222,14 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_options.tmpl');
-      $this->parent->_set_title($_user->get_name());
+      $this->api->_set_title($_user->get_name());
     }
 
 
     function show_group_profile($_group, $_offset = 0) {
       // Load a list of users.
       $search = array('group_id' => $_group->get_id());
-      $userdb = $this->parent->userdb();
+      $userdb = $this->api->userdb();
       $n_rows = $userdb->foreach_user_from_query($search,
                                                  cfg("epp"),
                                                  $_offset,
@@ -252,7 +252,7 @@
       $this->assign_by_ref('n_rows',   $n_rows);
       $this->assign_by_ref('users',    $this->users);
       $this->render('group_profile.tmpl');
-      $this->parent->_set_title($_group->get_name());
+      $this->api->_set_title($_group->get_name());
     }
 
 
@@ -266,7 +266,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('group_editor.tmpl');
-      $this->parent->_set_title($_group->get_name());
+      $this->api->_set_title($_group->get_name());
     }
   }
 ?>

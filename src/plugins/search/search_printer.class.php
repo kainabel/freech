@@ -28,8 +28,8 @@
 
     function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $posting    = $this->parent->decorate_posting($_posting);
-      $current_id = $this->parent->get_current_posting_id();
+      $posting    = $this->api->decorate_posting($_posting);
+      $current_id = $this->api->get_current_posting_id();
       $posting->set_selected($posting->get_id() == $current_id);
       $posting->apply_block();
 
@@ -43,7 +43,7 @@
       $this->assign('forum_id', $_forum_id);
       $this->assign('query',    $_query);
       $this->render(dirname(__FILE__).'/search.tmpl');
-      $this->parent->_set_title(_('Search'));
+      $this->api->_set_title(_('Search'));
     }
 
 
@@ -84,7 +84,7 @@
       $this->assign_by_ref('n_rows',         $rows);
       $this->assign_by_ref('postings',       $this->results);
       $this->render(dirname(__FILE__).'/search.tmpl');
-      $this->parent->_set_title(_('Search'));
+      $this->api->_set_title(_('Search'));
     }
 
 
@@ -100,7 +100,7 @@
 
       // Run the search.
       $search    = array('name' => '%'.trim($_query).'%');
-      $userdb    = $this->parent->userdb();
+      $userdb    = $this->api->userdb();
       $n_entries = $userdb->get_n_users_from_query($search);
       $n_rows    = 0;
       if ($n_entries > 0) {
@@ -136,7 +136,7 @@
       $this->assign_by_ref('n_rows',      $n_rows);
       $this->assign_by_ref('users',       $this->results);
       $this->render(dirname(__FILE__).'/search.tmpl');
-      $this->parent->_set_title(_('Search'));
+      $this->api->_set_title(_('Search'));
     }
   }
 ?>

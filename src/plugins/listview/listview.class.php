@@ -33,8 +33,8 @@ class ListView extends View {
 
   function _append_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
-    $posting    = $this->parent->decorate_posting($_posting);
-    $current_id = $this->parent->get_current_posting_id();
+    $posting    = $this->api->decorate_posting($_posting);
+    $current_id = $this->api->get_current_posting_id();
     $posting->set_selected($posting->get_id() == $current_id);
     $posting->apply_block();
 
@@ -53,7 +53,7 @@ class ListView extends View {
                                       array(&$this, '_append_posting'),
                                       '');
 
-    $group     = $this->parent->group();
+    $group     = $this->api->group();
     $search    = array('forum_id' => (int)$_forum_id);
     $n_entries = $this->forumdb->get_n_postings($search);
     $args      = array(forum_id            => (int)$_forum_id,
@@ -72,8 +72,8 @@ class ListView extends View {
 
 
   function show_posting($_posting) {
-    $user        = $this->parent->user();
-    $group       = $this->parent->group();
+    $user        = $this->api->user();
+    $group       = $this->api->group();
     $db          = $this->forumdb;
     $msg_uid     = $_posting ? $_posting->get_user_id() : -1;
     $showlist    = $_posting && $_COOKIE[thread] != 'hide'; //FIXME: rename "thread" cookie
@@ -91,10 +91,10 @@ class ListView extends View {
         $url->set_var('action',    'respond');
         $url->set_var('forum_id',  $_posting->get_forum_id());
         $url->set_var('parent_id', $_posting->get_id());
-        $this->parent->page_links()->add_link($url, 250);
+        $this->api->page_links()->add_link($url, 250);
       }
       else
-        $this->parent->page_links()->add_text(_('Reply'), 200);
+        $this->api->page_links()->add_text(_('Reply'), 200);
     }
 
     // Add the 'edit' button.
@@ -103,7 +103,7 @@ class ListView extends View {
       $url->set_var('action', 'edit');
       $url->set_var('forum_id',  $_posting->get_forum_id());
       $url->set_var('msg_id', $_posting->get_id());
-      $this->parent->page_links()->add_link($url, 300);
+      $this->api->page_links()->add_link($url, 300);
     }
 
     // Add 'show/hide thread' buttons.
@@ -121,7 +121,7 @@ class ListView extends View {
         $url->set_var('showthread', -1);
         $url->set_label(_('Hide Posting List'));
       }
-      $this->parent->footer_links()->add_link($url);
+      $this->api->footer_links()->add_link($url);
     }
 
     // Create the indexbar.
@@ -140,8 +140,8 @@ class ListView extends View {
     $this->clear_all_assign();
     $this->assign_by_ref('showlist', $showlist);
     if ($showlist) {
-      $posting    = $this->parent->decorate_posting($_posting);
-      $current_id = $this->parent->get_current_posting_id();
+      $posting    = $this->api->decorate_posting($_posting);
+      $current_id = $this->api->get_current_posting_id();
       $func       = array(&$this, '_append_posting');
       $posting->set_selected($posting->get_id() == $current_id);
       $this->posting_map[$_posting->get_id()] = $posting;
@@ -157,7 +157,7 @@ class ListView extends View {
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render(dirname(__FILE__).'/listview_read_posting.tmpl');
-    $this->parent->_set_title($_posting->get_subject());
+    $this->api->_set_title($_posting->get_subject());
   }
 }
 ?>

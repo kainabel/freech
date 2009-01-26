@@ -28,8 +28,8 @@ class HomepagePrinter extends PrinterBase {
 
   function _append_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
-    $posting    = $this->parent->decorate_posting($_posting);
-    $current_id = $this->parent->get_current_posting_id();
+    $posting    = $this->api->decorate_posting($_posting);
+    $current_id = $this->api->get_current_posting_id();
     $posting->set_selected($posting->get_id() == $current_id);
     $posting->apply_block();
 
@@ -40,7 +40,7 @@ class HomepagePrinter extends PrinterBase {
 
   function show() {
     // Get a list of forums.
-    $group         = $this->parent->group();
+    $group         = $this->api->group();
     $may_edit      = $group->may('administer');
     $add_forum_url = new URL('?', cfg('urlvars'), _('Add a New Forum'));
     $add_forum_url->set_var('action', 'forum_add');
@@ -71,8 +71,8 @@ class HomepagePrinter extends PrinterBase {
                                       '');
 
     // Get other page info.
-    $forum_links = $this->parent->forum_links();
-    $new_users   = $this->parent->get_newest_users(cfg('homepage_n_entries'));
+    $forum_links = $this->api->forum_links();
+    $new_users   = $this->api->get_newest_users(cfg('homepage_n_entries'));
 
     // Render the template.
     $this->clear_all_assign();

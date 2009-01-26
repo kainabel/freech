@@ -57,7 +57,7 @@
         return;
 
       // Required to enable correct formatting of the posting.
-      $posting = $this->parent->_decorate_posting($_posting);
+      $posting = $this->api->_decorate_posting($_posting);
       $posting->set_body(preg_replace('/&nbsp;/', ' ', $posting->get_body()));
 
       // Append everything to a list.

@@ -28,7 +28,7 @@
                           $_hint,
                           $_parent_id,
                           $_may_quote) {
-      $forum_id = $this->parent->get_current_forum_id();
+      $forum_id = $this->api->get_current_forum_id();
 
       $url = new URL('?', cfg('urlvars'));
       $url->set_var('forum_id',  $forum_id);
@@ -43,7 +43,7 @@
       $this->assign('max_subjectlength',  cfg('max_subjectlength'));
       $this->assign_by_ref('message', $_message);
       $this->render(dirname(__FILE__).'/compose.tmpl');
-      $this->parent->_set_title($_message->get_subject());
+      $this->api->_set_title($_message->get_subject());
     }
 
 
@@ -97,7 +97,7 @@
     /* Show a preview form of the message. */
     function show_preview(&$_message, $_parent_id, $_may_quote) {
       $url  = new URL('?', cfg('urlvars'));
-      $url->set_var('forum_id',  $this->parent->get_current_forum_id());
+      $url->set_var('forum_id',  $this->api->get_current_forum_id());
       $url->set_var('parent_id', $_parent_id);
 
       $this->clear_all_assign();
@@ -107,7 +107,7 @@
       $this->assign_by_ref('action',    $url->get_string());
       $this->assign_by_ref('message',   $_message);
       $this->render(dirname(__FILE__).'/preview.tmpl');
-      $this->parent->_set_title($_message->get_subject());
+      $this->api->_set_title($_message->get_subject());
     }
   }
 ?>

@@ -26,8 +26,8 @@
     var $url;
     var $countrycode;
 
-    function RSSPrinter(&$_forum) {
-      $this->PrinterBase(&$_forum);
+    function RSSPrinter($_api) {
+      $this->PrinterBase($_api);
       $this->postings = array();
     }
 
@@ -57,7 +57,7 @@
         return;
 
       // Required to enable correct formatting of the posting.
-      $posting = $this->api->_decorate_posting($_posting);
+      $posting = $this->api->decorate_posting($_posting);
       $posting->set_body(preg_replace('/&nbsp;/', ' ', $posting->get_body()));
 
       // Append everything to a list.

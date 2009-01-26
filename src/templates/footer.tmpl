@@ -2,10 +2,17 @@
 {include file="viewbar.inc.tmpl"}
 </div>
 
-<div id="powered_by">
+<div id="footer">
   <hr />
-  <span>
+  <span id="powered_by">
   Powered by <a href='{$version.url}'>{$version.text}</a>.
+  </span>
+  |
+  <span id="rss">
+    <a href="{$rss_url->get_string()|escape}">
+      <img src="{$__theme_dir}/img/rss.png" alt="" />
+    </a>
+    {$rss_url->get_html()}
   </span>
 </div>
 <!-- end footer -->

@@ -177,12 +177,16 @@ input {
   padding: 0;
 }
 
-#powered_by {
+#footer {
   clear: both;
   margin: 0 auto;
   padding: 5px;
   text-align: center;
   font-size: .9em;
+}
+
+#rss img {
+  border: 0;
 }
 
 #rendered {

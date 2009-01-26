@@ -82,8 +82,6 @@
         die('Error: Please define the salt variable in config.inc.php!');
 
       // Select a supported language.
-      $locale_dir = './language/';
-      $domain     = 'freech';
       if ($_SERVER[HTTP_ACCEPT_LANGUAGE]) {
         $langs = explode(',', $_SERVER[HTTP_ACCEPT_LANGUAGE]);
         foreach ($langs as $current) {
@@ -91,8 +89,9 @@
             $both    = explode('-', $current);
             $current = $both[0] . '_' . strtoupper($both[1]);
           }
-          if (is_readable("$locale_dir$current/LC_MESSAGES/$domain.mo")) {
-            $lang = $current;
+          $best = $this->_get_language($current);
+          if ($best) {
+            $lang = $best;
             break;
           }
         }
@@ -107,6 +106,8 @@
         die('This webserver does not have gettext installed.<br/>'
           . 'Please contact your webspace provider.');
 
+      $locale_dir = './language/';
+      $domain     = 'freech';
       putenv("LANG=$lang");
       @setlocale(LC_ALL, '');
       bindtextdomain($domain, $locale_dir);
@@ -217,6 +218,32 @@
     /*************************************************************
      * Initialization and login/cookie handling.
      *************************************************************/
+    function _language_supported($_lang) {
+      if (is_readable("./language/$_lang/LC_MESSAGES/freech.mo"))
+        return TRUE;
+    }
+
+
+    function _get_language($_lang) {
+      if ($this->_language_supported($_lang))
+        return $_lang;
+
+      // Cut de_CH -> de.
+      if (preg_match('/^([a-z]+)_[A-Z]+$/', $_lang, $matches)) {
+        $_lang = $matches[1];
+        if ($this->_language_supported($_lang))
+          return $_lang;
+      }
+
+      // Change de -> de_DE
+      $lang = $_lang . '_' . strtoupper($_lang);
+      if ($this->_language_supported($lang))
+        return $lang;
+
+      return NULL;
+    }
+
+
     function _try_login() {
       $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_name($_POST['username']);

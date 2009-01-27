@@ -72,7 +72,7 @@ class HomepagePrinter extends PrinterBase {
 
     // Get other page info.
     $forum_links = $this->api->forum_links();
-    $new_users   = $this->api->get_newest_users(cfg('homepage_n_entries'));
+    $new_users   = $this->userdb->get_newest_users(cfg('homepage_n_entries'));
 
     // Render the template.
     $this->clear_all_assign();

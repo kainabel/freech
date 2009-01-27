@@ -1615,11 +1615,6 @@
     }
 
 
-    function get_newest_users($_limit) {
-      return $this->get_userdb()->get_newest_users($_limit);
-    }
-
-
     function print_head($_header = NULL) {
       $oldcontent    = $this->content;
       $this->content = '';

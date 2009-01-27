@@ -374,11 +374,6 @@
     }
 
 
-    function get_newest_users($_limit) {
-      return $this->controller->get_newest_users($_limit);
-    }
-
-
     function refer_to_posting_id($_id) {
       return $this->controller->_refer_to_posting_id($_id);
     }

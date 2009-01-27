@@ -45,16 +45,16 @@
   include_once 'objects/indexbar_footer.class.php';
   include_once 'objects/parser.class.php';
 
-  include_once 'actions/printer_base.class.php';
-  include_once 'actions/modlog_printer.class.php';
-  include_once 'actions/rss_printer.class.php';
-  include_once 'actions/breadcrumbs_printer.class.php';
-  include_once 'actions/login_printer.class.php';
-  include_once 'actions/profile_printer.class.php';
-  include_once 'actions/homepage_printer.class.php';
-  include_once 'actions/header_printer.class.php';
-  include_once 'actions/footer_printer.class.php';
-  include_once 'actions/forum_editor_printer.class.php';
+  include_once 'actions/controller.class.php';
+  include_once 'actions/modlog_controller.class.php';
+  include_once 'actions/rss_controller.class.php';
+  include_once 'actions/breadcrumbs_controller.class.php';
+  include_once 'actions/login_controller.class.php';
+  include_once 'actions/profile_controller.class.php';
+  include_once 'actions/homepage_controller.class.php';
+  include_once 'actions/header_controller.class.php';
+  include_once 'actions/footer_controller.class.php';
+  include_once 'actions/forum_editor_controller.class.php';
   include_once 'actions/view.class.php';
 
   include_once 'services/groupdb.class.php';
@@ -388,7 +388,7 @@
 
     function _get_groupdb() {
       if (!$this->groupdb)
-        $this->groupdb = &new GroupDB($this->db);
+        $this->groupdb = new GroupDB($this->db);
       return $this->groupdb;
     }
 
@@ -647,7 +647,7 @@
 
 
     function _refer_to_posting_id($_posting_id) {
-      $url = &new URL(cfg('site_url').'', cfg('urlvars'));
+      $url = new URL(cfg('site_url').'', cfg('urlvars'));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $_posting_id);
       $url->set_var('forum_id', $this->get_current_forum_id());
@@ -703,8 +703,8 @@
      *************************************************************/
     // Shows the homepage.
     function _show_homepage() {
-      $printer = new HomepagePrinter($this->api);
-      $printer->show();
+      $controller = new HomepageController($this->api);
+      $controller->show();
     }
 
 
@@ -790,9 +790,9 @@
     // Locks an existing posting.
     function _posting_lock() {
       $this->_assert_may('moderate');
-      $posting = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
-      $printer = new ModLogPrinter($this->api);
-      $printer->show_lock_posting($posting);
+      $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+      $controller = new ModLogController($this->api);
+      $controller->show_lock_posting($posting);
     }
 
 
@@ -811,9 +811,9 @@
         $posting->set_status(POSTING_STATUS_LOCKED);
 
       if (!$reason) {
-        $printer = new ModLogPrinter($this->api);
-        return $printer->show_lock_posting($posting,
-                                           _('Please enter a reason.'));
+        $controller = new ModLogController($this->api);
+        return $controller->show_lock_posting($posting,
+                                              _('Please enter a reason.'));
       }
 
       // Lock the posting and log the action.
@@ -880,7 +880,7 @@
     function _show_user_postings() {
       $user         = $this->_get_user_from_name_or_die($_GET['username']);
       $thread_state = $this->get_thread_state('user_postings_');
-      $profile      = new ProfilePrinter($this->api);
+      $profile      = new ProfileController($this->api);
       $this->_add_profile_breadcrumbs($user);
       $profile->show_user_postings($user, $thread_state, (int)$_GET['hs']);
     }
@@ -890,7 +890,7 @@
     function _show_user_profile() {
       $user         = $this->_get_user_from_name_or_die($_GET['username']);
       $thread_state = $this->get_thread_state('user_postings_');
-      $profile      = new ProfilePrinter($this->api);
+      $profile      = new ProfileController($this->api);
       $this->_add_profile_breadcrumbs($user);
       $profile->show_user_profile($user, $thread_state, (int)$_GET['hs']);
     }
@@ -917,14 +917,14 @@
 
       // Accepted.
       $this->_add_profile_breadcrumbs($user);
-      $profile = new ProfilePrinter($this->api);
+      $profile = new ProfileController($this->api);
       $profile->show_user_editor($user);
     }
 
 
     // Submit personal data.
     function _submit_user() {
-      $profile = new ProfilePrinter($this->api);
+      $profile = new ProfileController($this->api);
       $user    = $this->get_current_user();
       $group   = $this->get_current_group();
       $is_self = $_POST['user_id'] == $user->get_id();
@@ -1001,7 +1001,7 @@
     function _show_user_options() {
       $user = $this->get_current_user();
       $this->_add_profile_breadcrumbs($user);
-      $profile = new ProfilePrinter($this->api);
+      $profile = new ProfileController($this->api);
       $profile->show_user_options($user);
     }
 
@@ -1013,7 +1013,7 @@
     function _show_group_profile() {
       $group = $this->_get_group_from_name_or_die($_GET['groupname']);
       $this->_add_profile_breadcrumbs($group);
-      $profile = new ProfilePrinter($this->api);
+      $profile = new ProfileController($this->api);
       $profile->show_group_profile($group, (int)$_GET['hs']);
     }
 
@@ -1023,7 +1023,7 @@
       $this->_assert_may('administer');
       $group = $this->_get_group_from_name_or_die($_GET['groupname']);
       $this->_add_profile_breadcrumbs($group);
-      $profile = new ProfilePrinter($this->api);
+      $profile = new ProfileController($this->api);
       $profile->show_group_editor($group);
     }
 
@@ -1034,7 +1034,7 @@
       $group = $this->_get_group_from_id_or_die($_POST['group_id']);
       $this->_init_group_from_post_data($group);
       $this->_add_profile_breadcrumbs($group);
-      $profile = new ProfilePrinter($this->api);
+      $profile = new ProfileController($this->api);
 
       // Make sure that the data is complete and valid.
       $err = $group->check_complete();
@@ -1056,7 +1056,7 @@
      *************************************************************/
     function _show_login() {
       $user     = $this->_init_user_from_post_data();
-      $login    = new LoginPrinter($this->api);
+      $login    = new LoginController($this->api);
       $refer_to = $this->_get_login_refer_url();
       if ($this->login_error)
         return $login->show($user, $this->login_error, $refer_to);
@@ -1069,18 +1069,18 @@
       $user = $this->_get_current_or_confirming_user();
       if ($user->is_anonymous())
         die('Invalid user');
-      $registration = new LoginPrinter($this->api);
+      $registration = new LoginController($this->api);
       $registration->show_password_change($user);
     }
 
 
     // Submit a new password.
     function _password_submit() {
-      $userdb  = $this->get_userdb();
-      $user    = $this->_init_user_from_post_data();
-      $user    = $userdb->get_user_from_name($user->get_name());
-      $current = $this->_get_current_or_confirming_user();
-      $printer = new LoginPrinter($this->api);
+      $userdb     = $this->get_userdb();
+      $user       = $this->_init_user_from_post_data();
+      $user       = $userdb->get_user_from_name($user->get_name());
+      $current    = $this->_get_current_or_confirming_user();
+      $controller = new LoginController($this->api);
 
       if ($user->is_anonymous())
         die('Invalid user');
@@ -1090,42 +1090,43 @@
       // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {
         $error = _('Error: Passwords do not match.');
-        return $printer->show_password_change($user, $error);
+        return $controller->show_password_change($user, $error);
       }
 
       // Make sure that the password is valid.
       $err = $user->set_password($_POST['password']);
       if ($err)
-        return $printer->show_password_change($user, $err);
+        return $controller->show_password_change($user, $err);
 
       // Save the password.
       $user->set_status(USER_STATUS_ACTIVE);
-      if (!$userdb->save_user($user))
-        return $printer->show_password_change($user,
-                                              _('Failed to save the user.'));
+      if (!$userdb->save_user($user)) {
+        $msg = _('Failed to save the user.');
+        return $controller->show_password_change($user, $msg);
+      }
 
       // Done.
-      $printer->show_password_changed($user);
+      $controller->show_password_changed($user);
     }
 
 
     // Show a form for requesting that the password should be reset.
     function _password_forgotten() {
-      $user    = $this->_init_user_from_post_data();
-      $printer = new LoginPrinter($this->api);
-      $printer->show_password_forgotten($user);
+      $user       = $this->_init_user_from_post_data();
+      $controller = new LoginController($this->api);
+      $controller->show_password_forgotten($user);
     }
 
 
     // Send an email with the URL for resetting the password.
     function _password_mail_submit() {
-      $printer = new LoginPrinter($this->api);
-      $user    = $this->_init_user_from_post_data();
+      $controller = new LoginController($this->api);
+      $user       = $this->_init_user_from_post_data();
 
       // Make sure that the email address is valid.
       $err = $user->check_mail();
       if ($err)
-        return $printer->show_password_forgotten($user, $err);
+        return $controller->show_password_forgotten($user, $err);
 
       // Find the user with the given mail address.
       $userdb = $this->get_userdb();
@@ -1133,7 +1134,7 @@
       if (!$user) {
         $user = $this->_init_user_from_post_data();
         $msg  = _('The given email address was not found.');
-        return $printer->show_password_forgotten($user, $msg);
+        return $controller->show_password_forgotten($user, $msg);
       }
 
       // Send the mail.
@@ -1147,13 +1148,13 @@
         $this->_send_password_reset_mail($user);
       elseif ($user->is_locked()) {
         $msg = _('Your account is locked.');
-        return $printer->show_password_forgotten($user, $msg);
+        return $controller->show_password_forgotten($user, $msg);
       }
       else
         die('Invalid user status');
 
       // Done.
-      $printer->show_password_mail_sent($user);
+      $controller->show_password_mail_sent($user);
     }
 
 
@@ -1178,8 +1179,8 @@
       $this->_assert_may('administer');
       $this->breadcrumbs()->add_separator();
       $this->breadcrumbs()->add_text(_('Add a New Forum'));
-      $printer = new ForumEditorPrinter($this->api);
-      $printer->show(new Forum);
+      $controller = new ForumEditorController($this->api);
+      $controller->show(new Forum);
     }
 
 
@@ -1188,15 +1189,15 @@
       $forum = $this->forumdb->get_forum_from_id((int)$_GET['forum_id']);
       $this->breadcrumbs()->add_separator();
       $this->breadcrumbs()->add_text(_('Edit a Forum'));
-      $printer = new ForumEditorPrinter($this->api);
-      $printer->show($forum);
+      $controller = new ForumEditorController($this->api);
+      $controller->show($forum);
     }
 
 
     function _forum_submit() {
       $this->_assert_may('administer');
-      $printer  = new ForumEditorPrinter($this->api);
-      $forum_id = (int)$_POST['forum_id'];
+      $controller = new ForumEditorController($this->api);
+      $forum_id   = (int)$_POST['forum_id'];
 
       // Fetch the forum and merge POST data.
       if ($forum_id)
@@ -1212,11 +1213,11 @@
 
       // Check syntax.
       if ($err = $forum->check())
-        return $printer->show($forum, '', $err);
+        return $controller->show($forum, '', $err);
 
       // Save the data.
       $this->forumdb->save_forum($forum);
-      $printer->show($forum, _('The changes have been saved.'));
+      $controller->show($forum, _('The changes have been saved.'));
     }
 
 
@@ -1226,7 +1227,7 @@
     function _show_moderation_log() {
       $this->breadcrumbs()->add_separator();
       $this->breadcrumbs()->add_text(_('Moderation Log'));
-      $footer = new ModLogPrinter($this->api);
+      $footer = new ModLogController($this->api);
       $footer->show((int)$_GET['hs']);
     }
 
@@ -1234,14 +1235,14 @@
     // Prints the footer of the page.
     function _print_breadcrumbs() {
       $show_page_links = (bool)$this->get_current_forum_id();
-      $printer         = new BreadCrumbsPrinter($this->api);
-      $printer->show($this->breadcrumbs, $show_page_links);
+      $controller      = new BreadCrumbsController($this->api);
+      $controller->show($this->breadcrumbs, $show_page_links);
     }
 
 
     // Prints the footer of the page.
     function _print_footer() {
-      $footer = new FooterPrinter($this->api);
+      $footer = new FooterController($this->api);
       $footer->show($this->get_current_forum_id());
     }
 
@@ -1253,7 +1254,7 @@
                        $_off,
                        $_n_entries) {
       $this->content = '';
-      $rss = new RSSPrinter($this->api);
+      $rss = new RSSController($this->api);
       $rss->set_base_url(cfg('site_url'));
       $rss->set_title($_title);
       $rss->set_description($_descr);
@@ -1417,7 +1418,7 @@
 
     function get_userdb() {
       if (!$this->userdb)
-        $this->userdb = &new UserDB($this->db);
+        $this->userdb = new UserDB($this->db);
       return $this->userdb;
     }
 
@@ -1429,7 +1430,7 @@
 
     function get_modlogdb() {
       if (!$this->modlogdb)
-        $this->modlogdb = &new ModLogDB($this->db);
+        $this->modlogdb = new ModLogDB($this->db);
       return $this->modlogdb;
     }
 
@@ -1627,7 +1628,7 @@
         header('Content-Type: text/html; charset=utf-8');
         header('Pragma: no-cache');
         header('Cache-control: no-cache');
-        $header = new HeaderPrinter($this->api);
+        $header = new HeaderController($this->api);
         $header->show($this->get_title());
       }
 

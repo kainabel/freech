@@ -19,17 +19,19 @@
   */
 ?>
 <?php
-  class HeaderPrinter extends PrinterBase {
-    function show($_title) {
-      $account_links = $this->api->account_links();
-      $n_online      = $this->visitordb->get_n_visitors(time() - 60 * 5);
+class ForumEditorController extends Controller {
+  function show($_forum = NULL, $_ack = '', $_error = '') {
+    $url = new URL('', cfg('urlvars'));
+    $url->set_var('action', 'forum_submit');
 
-      $this->clear_all_assign();
-      $this->assign('title',         $_title);
-      $this->assign('site_title',    cfg('site_title'));
-      $this->assign('account_links', $account_links);
-      $this->assign('n_online',      $n_online);
-      $this->render('header.tmpl');
-    }
+    // Render the template.
+    $this->clear_all_assign();
+    $this->assign_by_ref('action',      $url->get_string());
+    $this->assign_by_ref('forum',       $_forum);
+    $this->assign_by_ref('status_list', $_forum->get_status_names());
+    $this->assign_by_ref('ack',         $_ack);
+    $this->assign_by_ref('error',       $_error);
+    $this->render('forum_editor.tmpl');
   }
+}
 ?>

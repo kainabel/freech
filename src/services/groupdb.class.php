@@ -130,7 +130,7 @@
     function save_group($_group) {
       if (!is_object($_group))
         die("GroupDB::save_group(): Invalid arg.");
-      $query = &new FreechSqlQuery();
+      $query = new FreechSqlQuery();
       $query->set_int   ('id',         $_group->get_id());
       $query->set_string('name',       $_group->get_name());
       $query->set_bool  ('is_special', $_group->is_special());

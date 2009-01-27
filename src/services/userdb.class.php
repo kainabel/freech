@@ -37,7 +37,7 @@
     function save_user(&$_user) {
       if (!is_object($_user))
         die('UserDB::save_user(): Invalid arg.');
-      $query = &new FreechSqlQuery();
+      $query = new FreechSqlQuery();
       $query->set_int   ('id',          $_user->get_id());
       $query->set_int   ('group_id',    $_user->get_group_id());
       $query->set_int   ('status',      $_user->get_status());
@@ -183,7 +183,7 @@
       if (!$_search)
         $_search = array();
 
-      $query = &new FreechSqlQuery();
+      $query = new FreechSqlQuery();
       $sql   = "SELECT COUNT(*) FROM {t_user}";
       $sql  .= " WHERE 1";
       foreach ($_search as $key => $value) {
@@ -235,7 +235,7 @@
       $user    = new User($_name);
       $soundex = $user->get_soundexed_name();
 
-      $query = &new FreechSqlQuery();
+      $query = new FreechSqlQuery();
       $sql   = "SELECT COUNT(*) FROM {t_user}";
       $sql  .= " WHERE soundexname={soundexname}";
       $query->set_sql($sql);
@@ -259,12 +259,12 @@
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_user}";
       $sql  .= " ORDER BY id DESC";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $res = $this->db->SelectLimit($query->sql(), $_limit)
                              or die("UserDB::get_newest_users(): Select");
       $users = array();
       while ($row = &$res->FetchRow()) {
-        $user = &new User;
+        $user = new User;
         $user->set_from_db($row);
         $this->users[$row[id]] = &$user;
         array_push($users, $user);
@@ -289,14 +289,14 @@
         $sql .= " AND m.created>FROM_UNIXTIME({since})";
       $sql  .= " GROUP BY u.id";
       $sql  .= " ORDER BY n_postings DESC";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('anonymous', cfg('anonymous_user_id'));
       $query->set_int('since',     $_since);
       $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
                     or die("UserDB::get_top_users()");
       $users = array();
       while ($row = &$res->FetchRow()) {
-        $user = &new User;
+        $user = new User;
         $user->set_from_db($row);
         $this->users[$row[id]] = &$user;
         $user->n_postings = $row['n_postings'];

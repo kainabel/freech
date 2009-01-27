@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  class ModLogPrinter extends PrinterBase {
+  class ModLogController extends Controller {
     function show($_offset = 0) {
       $modlogdb = $this->api->modlogdb();
       $items    = $modlogdb->get_items_from_query(array(),

@@ -7,7 +7,7 @@ Maintenance
 * Profile the new db model.
 * Design a URL scheme that makes sense for URL rewriting.
 * Remove marked methods from the FreechForum class.
-* Rename *Printer to *Controller, actions to controllers.
+* Rename actions to controllers.
 
 Features
 ---------

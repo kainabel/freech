@@ -19,9 +19,9 @@
   */
 ?>
 <?php
-class HomepagePrinter extends PrinterBase {
-  function HomepagePrinter($_api) {
-    $this->PrinterBase($_api);
+class HomepageController extends Controller {
+  function HomepageController($_api) {
+    $this->Controller($_api);
     $this->postings = array();
   }
 

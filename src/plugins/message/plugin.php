@@ -8,7 +8,7 @@ Constructor: message_init
 Active:      1
 */
 include_once dirname(__FILE__).'/message.class.php';
-include_once dirname(__FILE__).'/message_printer.class.php';
+include_once dirname(__FILE__).'/message_controller.class.php';
 
 function message_init($forum) {
   $forum->eventbus()->signal_connect('on_run_before', 'message_on_run');
@@ -40,17 +40,17 @@ function message_on_run($forum) {
 function message_on_write($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Start a New Topic'));
-  $parent_id = (int)$_POST['parent_id'];
-  $posting   = new Posting;
-  $printer   = new MessagePrinter($forum);
-  $printer->show_compose($posting, '', $parent_id, FALSE);
+  $parent_id  = (int)$_POST['parent_id'];
+  $posting    = new Posting;
+  $controller = new MessageController($forum);
+  $controller->show_compose($posting, '', $parent_id, FALSE);
 }
 
 
 function message_on_respond($forum) {
-  $parent_id = (int)$_GET['parent_id'];
-  $posting   = $forum->forumdb()->get_posting_from_id($parent_id);
-  $printer   = new MessagePrinter($forum);
+  $parent_id  = (int)$_GET['parent_id'];
+  $posting    = $forum->forumdb()->get_posting_from_id($parent_id);
+  $controller = new MessageController($forum);
   if (!$posting)
     die('Invalid parent ID');
 
@@ -59,14 +59,14 @@ function message_on_respond($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Reply'));
 
-  $printer->show_compose_reply($posting, '');
+  $controller->show_compose_reply($posting, '');
 }
 
 
 function message_on_edit_saved($forum) {
-  $user    = $forum->user();
-  $posting = $forum->forumdb()->get_posting_from_id($_GET['msg_id']);
-  $printer = new MessagePrinter($forum);
+  $user       = $forum->user();
+  $posting    = $forum->forumdb()->get_posting_from_id($_GET['msg_id']);
+  $controller = new MessageController($forum);
 
   if (!cfg('postings_editable'))
     die('Postings may not be changed as per configuration.');
@@ -82,7 +82,7 @@ function message_on_edit_saved($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Edit'));
 
-  $printer->show_compose($posting, '', 0, FALSE);
+  $controller->show_compose($posting, '', 0, FALSE);
 }
 
 
@@ -102,12 +102,12 @@ function message_on_submit($forum) {
 
 // Edit an unsaved message.
 function message_on_edit_unsaved($forum) {
-  $parent_id = (int)$_POST['parent_id'];
-  $may_quote = (int)$_POST['may_quote'];
-  $posting   = message_init_posting_from_post_data();
-  $printer   = new MessagePrinter($forum);
+  $parent_id  = (int)$_POST['parent_id'];
+  $may_quote  = (int)$_POST['may_quote'];
+  $posting    = message_init_posting_from_post_data();
+  $controller = new MessageController($forum);
 
-  $printer->show_compose($posting, '', $parent_id, $may_quote);
+  $controller->show_compose($posting, '', $parent_id, $may_quote);
 }
 
 
@@ -116,32 +116,31 @@ function message_on_quote($forum) {
   $parent_id  = (int)$_POST['parent_id'];
   $quoted_msg = $forum->forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
-  $printer    = new MessagePrinter($forum);
-  $printer->show_compose_quoted($posting, $quoted_msg, '');
+  $controller = new MessageController($forum);
+  $controller->show_compose_quoted($posting, $quoted_msg, '');
 }
 
 
 // Print a preview of a message.
 function message_on_preview($forum) {
-  $parent_id = (int)$_POST['parent_id'];
-  $may_quote = (int)$_POST['may_quote'];
-  $printer   = new MessagePrinter($forum);
-  $user      = $forum->user();
-  $message   = new Message(message_get_new_posting($forum), $forum);
+  $parent_id  = (int)$_POST['parent_id'];
+  $may_quote  = (int)$_POST['may_quote'];
+  $controller = new MessageController($forum);
+  $user       = $forum->user();
+  $message    = new Message(message_get_new_posting($forum), $forum);
   message_init_posting_from_post_data($message);
 
   // Check the posting for completeness.
   $err = $message->check_complete();
   if ($err)
-    return $printer->show_compose($message, $err, $parent_id, $may_quote);
+    return $controller->show_compose($message, $err, $parent_id, $may_quote);
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$forum->_username_available($message->get_username()))
-     return $printer->show_compose($message,
-                                   _('The entered username is not available.'),
-                                   $parent_id,
-                                   $may_quote);
+    && !$forum->_username_available($message->get_username())) {
+     $msg = _('The entered username is not available.');
+     return $controller->show_compose($message, $msg, $parent_id, $may_quote);
+  }
 
   // Success.
   /* Plugin hook: on_message_preview_print
@@ -153,18 +152,18 @@ function message_on_preview($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Preview'));
 
-  $printer->show_preview($message, $parent_id, $may_quote);
+  $controller->show_preview($message, $parent_id, $may_quote);
 }
 
 
 // Saves the posted message.
 function message_on_send($forum) {
-  $parent_id = (int)$_POST['parent_id'];
-  $may_quote = (int)$_POST['may_quote'];
-  $printer   = new MessagePrinter($forum);
-  $user      = $forum->user();
-  $forum_id  = $forum->get_current_forum_id();
-  $forumdb   = $forum->forumdb();
+  $parent_id  = (int)$_POST['parent_id'];
+  $may_quote  = (int)$_POST['may_quote'];
+  $controller = new MessageController($forum);
+  $user       = $forum->user();
+  $forum_id   = $forum->get_current_forum_id();
+  $forumdb    = $forum->forumdb();
   $forum->group()->assert_may('write');
 
   // Check whether editing is allowed per configuration.
@@ -192,15 +191,14 @@ function message_on_send($forum) {
   // Check the posting for completeness.
   $err = $posting->check_complete();
   if ($err)
-    return $printer->show_compose($posting, $err, $parent_id, $may_quote);
+    return $controller->show_compose($posting, $err, $parent_id, $may_quote);
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$forum->_username_available($posting->get_username()))
-    return $printer->show_compose($posting,
-                                   _('The entered username is not available.'),
-                                  $parent_id,
-                                  $may_quote);
+    && !$forum->_username_available($posting->get_username())) {
+    $msg = _('The entered username is not available.');
+    return $controller->show_compose($posting, $msg, $parent_id, $may_quote);
+  }
 
   if ($posting->get_id() <= 0) {
     // If the posting a new one (not an edited one), check for duplicates.
@@ -214,18 +212,15 @@ function message_on_send($forum) {
       $msg  = sprintf(_('You have sent too many messages.'
                       . ' %d seconds until your message may be sent.'),
                       $blocked_until - time());
-      return $printer->show_compose($posting,
-                                    $msg,
-                                    $parent_id,
-                                    $may_quote);
+      return $controller->show_compose($posting, $msg, $parent_id, $may_quote);
     }
 
     // Check whether the user or IP is spam-locked.
     if ($forum->_posting_is_spam($posting))
-      return $printer->show_compose($posting,
-                                    _('Message rejected by spamblocker.'),
-                                    $parent_id,
-                                    $may_quote);
+      return $controller->show_compose($posting,
+                                       _('Message rejected by spamblocker.'),
+                                       $parent_id,
+                                       $may_quote);
   }
 
   // Save the posting.
@@ -234,10 +229,10 @@ function message_on_send($forum) {
   else
     $forumdb->insert($forum_id, $parent_id, $posting);
   if (!$posting->get_id())
-    return $printer->show_compose($posting,
-                                  _('Failed to save the posting.'),
-                                  $parent_id,
-                                  $may_quote);
+    return $controller->show_compose($posting,
+                                     _('Failed to save the posting.'),
+                                     $parent_id,
+                                     $may_quote);
 
   // Success! Refer to the new item.
   $forum->refer_to_posting($posting);

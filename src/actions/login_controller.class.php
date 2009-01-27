@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  class LoginPrinter extends PrinterBase {
+  class LoginController extends Controller {
     function show($_user, $_hint = '', $_refer_to) {
       $login_url = new URL('', cfg('urlvars'));
       $login_url->set_var('action', 'login');
@@ -62,7 +62,7 @@
 
 
     function show_password_change($_user, $_hint = '') {
-      $url = &new URL('', cfg('urlvars'));
+      $url = new URL('', cfg('urlvars'));
       $url->set_var('action', 'password_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('action', $url->get_string());

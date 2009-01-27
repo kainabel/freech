@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  class MessagePrinter extends PrinterBase {
+  class MessageController extends Controller {
     /**
      * Shows a form for editing a message. The values given in $_message are
      * filled into the fields.

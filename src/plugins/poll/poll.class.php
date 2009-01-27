@@ -63,26 +63,26 @@ class Poll extends PostingDecorator {
     if (!$this->is_active())
       return '';
     // Fetch the poll from the database.
-    $poll_id = $this->posting->get_id();
-    $poll    = _get_poll_from_id($this->api, $poll_id);
-    $user    = $this->api->user();
-    $db      = $this->api->db();
-    $printer = new PollPrinter($this->api);
+    $poll_id    = $this->posting->get_id();
+    $poll       = _get_poll_from_id($this->api, $poll_id);
+    $user       = $this->api->user();
+    $db         = $this->api->db();
+    $controller = new PollController($this->api);
 
-    if ($user->is_anonymous())
-      return $printer->get_poll_result($poll,
-                                       '',
-                                       _('Please log in to cast your vote.'));
+    if ($user->is_anonymous()) {
+      $msg = _('Please log in to cast your vote.');
+      return $controller->get_poll_result($poll, '', $msg);
+    }
 
     if ($_GET['result'])
-      return $printer->get_poll_result($poll);
+      return $controller->get_poll_result($poll);
 
     if ($_GET['accept'])
       $hint = _('Thank You for your vote.');
 
     if (_poll_did_vote($db, $user, $poll_id))
-      return $printer->get_poll_result($poll, $hint);
-    return $printer->get_poll($poll);
+      return $controller->get_poll_result($poll, $hint);
+    return $controller->get_poll($poll);
   }
 
 

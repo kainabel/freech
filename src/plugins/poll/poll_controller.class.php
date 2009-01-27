@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-class PollPrinter extends PrinterBase {
+class PollController extends Controller {
   function show_error($_error) {
     $this->clear_all_assign();
     $this->assign_by_ref('error', $_error);

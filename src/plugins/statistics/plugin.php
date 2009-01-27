@@ -7,7 +7,7 @@ Description: This plugin adds a page with statistics to the forum.
 Constructor: statistics_init
 Active:      1
 */
-include_once dirname(__FILE__).'/statistics_printer.class.php';
+include_once dirname(__FILE__).'/statistics_controller.class.php';
 
 function statistics_init($forum) {
   $forum->register_action('statistics', 'statistics_on_show');
@@ -21,8 +21,8 @@ function statistics_init($forum) {
 function statistics_on_show($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Statistics'));
-  $printer = new StatisticsPrinter($forum);
-  $printer->show();
+  $controller = new StatisticsController($forum);
+  $controller->show();
 }
 
 

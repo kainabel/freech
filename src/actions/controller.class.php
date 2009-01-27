@@ -18,13 +18,16 @@
   */
 ?>
 <?php
-  class PrinterBase {
+  /**
+   * Abstract base class for all controllers.
+   */
+  class Controller {
     var $parent;
     var $eventbus;
     var $smarty;
     var $db;
     
-    function PrinterBase($_api) {
+    function Controller($_api) {
       $this->api       = $_api;
       $this->smarty    = $_api->smarty();
       $this->userdb    = $_api->userdb();

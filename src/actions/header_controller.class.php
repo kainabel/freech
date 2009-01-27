@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2008 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,17 +19,17 @@
   */
 ?>
 <?php
-  class TopUsersPrinter extends PrinterBase {
-    function show() {
-      $userdb   = $this->api->userdb();
-      $all_time = $userdb->get_top_users(20);
-      $week     = $userdb->get_top_users(20, time() - 60*60*24*7);
+  class HeaderController extends Controller {
+    function show($_title) {
+      $account_links = $this->api->account_links();
+      $n_online      = $this->visitordb->get_n_visitors(time() - 60 * 5);
+
       $this->clear_all_assign();
-      $this->assign_by_ref('plugin_dir', dirname(__FILE__));
-      $this->assign_by_ref('all_time',   $all_time);
-      $this->assign_by_ref('weekly',     $week);
-      $this->render(dirname(__FILE__).'/top_users.tmpl');
-      $this->api->set_title(_('Top Users'));
+      $this->assign('title',         $_title);
+      $this->assign('site_title',    cfg('site_title'));
+      $this->assign('account_links', $account_links);
+      $this->assign('n_online',      $n_online);
+      $this->render('header.tmpl');
     }
   }
 ?>

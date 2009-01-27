@@ -7,7 +7,7 @@ Description: Adds a search function to the forum.
 Constructor: search_init
 Active:      1
 */
-include_once dirname(__FILE__).'/search_printer.class.php';
+include_once dirname(__FILE__).'/search_controller.class.php';
 include_once dirname(__FILE__).'/indexbar_search_result.class.php';
 include_once dirname(__FILE__).'/indexbar_search_users.class.php';
 include_once dirname(__FILE__).'/search_query.class.php';
@@ -49,8 +49,8 @@ function search_on_search($forum) {
 function search_on_search_form($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Find'));
-  $printer = &new SearchPrinter($forum);
-  $printer->show((int)$_GET['forum_id'], $_GET['q']);
+  $controller = new SearchController($forum);
+  $controller->show((int)$_GET['forum_id'], $_GET['q']);
 }
 
 
@@ -67,12 +67,12 @@ function search_on_search_result($forum) {
   $forum->breadcrumbs()->add_text($_GET['q']);
 
   // Search for postings or users.
-  $printer  = new SearchPrinter($forum);
-  $forum_id = (int)$_GET['forum_id'];
+  $controller = new SearchController($forum);
+  $forum_id   = (int)$_GET['forum_id'];
   if ($_GET['user_search'])
-    $printer->show_users($_GET['q'], $_GET['hs']);
+    $controller->show_users($_GET['q'], $_GET['hs']);
   else
-    $printer->show_postings($forum_id, $_GET['q'], $_GET['hs']);
+    $controller->show_postings($forum_id, $_GET['q'], $_GET['hs']);
 }
 
 

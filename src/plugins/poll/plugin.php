@@ -8,7 +8,7 @@ Constructor: poll_init
 Active:      1
 */
 include_once dirname(__FILE__).'/poll.class.php';
-include_once dirname(__FILE__).'/poll_printer.class.php';
+include_once dirname(__FILE__).'/poll_controller.class.php';
 
 function poll_init($forum) {
   // Register a class that is responsible for formatting the posting object
@@ -43,9 +43,9 @@ function poll_on_run($forum) {
 
 
 function poll_on_add($forum) {
-  $printer = new PollPrinter($forum);
-  $posting = new Posting;
-  $poll    = new Poll($posting, $forum);
+  $controller = new PollController($forum);
+  $posting    = new Posting;
+  $poll       = new Poll($posting, $forum);
   $poll->set_forum_id($forum->get_current_forum_id());
 
   $forum->breadcrumbs()->add_separator();
@@ -55,23 +55,25 @@ function poll_on_add($forum) {
   $max_polls_time = time() - cfg('max_polls_time', 60 * 60 * 24);
   if (_n_polls_since($forum->db(),
                      $forum->user(),
-                     $max_polls_time) >= $max_polls)
-    return $printer->show_error(_('You have reached your poll limit. Sorry.'));
-  $printer->show_form($poll);
+                     $max_polls_time) >= $max_polls) {
+    $msg = _('You have reached your poll limit. Sorry.');
+    return $controller->show_error($msg);
+  }
+  $controller->show_form($poll);
 }
 
 
 function poll_on_submit($forum) {
-  $printer = new PollPrinter($forum);
-  $poll    = _poll_get_from_post();
+  $controller = new PollController($forum);
+  $poll       = _poll_get_from_post();
 
   // Add a new option to the poll form.
   if ($_POST['add_row']) {
     $option = new PollOption();
     if ($poll->n_options() >= $poll->get_max_options())
-      return $printer->show_form($poll, _('Too many options.'));
+      return $controller->show_form($poll, _('Too many options.'));
     $poll->add_option($option);
-    return $printer->show_form($poll);
+    return $controller->show_form($poll);
   }
 
   // Create the new poll.
@@ -79,12 +81,12 @@ function poll_on_submit($forum) {
     // Sanity check.
     $err = $poll->check();
     if ($err)
-      return $printer->show_form($poll, $err);
+      return $controller->show_form($poll, $err);
 
     // Save the poll.
     $poll_id = _save_poll($forum, $poll);
     if (!$poll_id)
-      return $printer->show_form($poll, _('Failed to save poll.'));
+      return $controller->show_form($poll, _('Failed to save poll.'));
 
     // Refer to the poll.
     $forum->refer_to_posting($poll);
@@ -93,11 +95,11 @@ function poll_on_submit($forum) {
 
 
 function poll_on_vote($forum) {
-  $poll_id = (int)$_POST['poll_id'];
-  $poll    = _get_poll_from_id($forum, $poll_id);
-  $user    = $forum->user();
-  $db      = $forum->db();
-  $printer = new PollPrinter($forum);
+  $poll_id    = (int)$_POST['poll_id'];
+  $poll       = _get_poll_from_id($forum, $poll_id);
+  $user       = $forum->user();
+  $db         = $forum->db();
+  $controller = new PollController($forum);
 
   if (!$_POST['options'])
     $forum->refer_to_posting($poll);
@@ -185,7 +187,7 @@ function _n_polls_since($db, $user, $_since = 0) {
   $sql .= " AND (renderer='poll' or renderer='multipoll')";
   if ($_since)
     $sql .= ' AND created > FROM_UNIXTIME({since})';
-  $query = &new FreechSqlQuery($sql);
+  $query = new FreechSqlQuery($sql);
   $query->set_int('user_id', $user->get_id());
   if ($_since)
     $query->set_int('since', $_since);
@@ -231,7 +233,7 @@ function _get_poll_from_id($forum, $poll_id) {
   $sql .= ' LEFT JOIN {t_poll_vote} v ON o.id=v.option_id';
   $sql .= ' WHERE o.poll_id={poll_id}';
   $sql .= ' GROUP BY o.id';
-  $query = &new FreechSqlQuery($sql);
+  $query = new FreechSqlQuery($sql);
   $query->set_int('poll_id', $poll_id);
   $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
   while ($row = $res->FetchRow())
@@ -245,7 +247,7 @@ function _poll_did_vote($db, $user, $poll_id) {
   $sql .= ' FROM {t_poll_option} o';
   $sql .= ' LEFT JOIN {t_poll_vote} v ON o.id=v.option_id';
   $sql .= ' WHERE o.poll_id={poll_id} and v.user_id={user_id}';
-  $query = &new FreechSqlQuery($sql);
+  $query = new FreechSqlQuery($sql);
   $query->set_int('user_id', $user->get_id());
   $query->set_int('poll_id', $poll_id);
   $res = $db->Execute($query->sql()) or die('_poll_did_vote()');
@@ -261,7 +263,7 @@ function _poll_cast($db, $user, $option_id) {
   $sql .= ' VALUES (';
   $sql .= ' {option_id}, {user_id}';
   $sql .= ')';
-  $query = &new FreechSqlQuery($sql);
+  $query = new FreechSqlQuery($sql);
   $query->set_int('option_id', $option_id);
   $query->set_int('user_id',   $user->get_id());
   $db->Execute($query->sql()) or die('_poll_cast(): Insert');

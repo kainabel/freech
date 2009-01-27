@@ -19,9 +19,9 @@
   */
 ?>
 <?php
-  class ProfilePrinter extends PrinterBase {
-    function ProfilePrinter($_api) {
-      $this->PrinterBase($_api);
+  class ProfileController extends Controller {
+    function ProfileController($_api) {
+      $this->Controller($_api);
       $this->postings = array();
       $this->users    = array();
     }
@@ -243,7 +243,7 @@
                          n_users_per_page  => cfg("epp"),
                          n_offset          => $_offset,
                          n_pages_per_index => cfg("ppi"));
-      $indexbar = &new IndexBarGroupProfile($args);
+      $indexbar = new IndexBarGroupProfile($args);
 
       // Render the template.
       $this->clear_all_assign();

@@ -19,15 +19,15 @@
   */
 ?>
 <?php
-  class RSSPrinter extends PrinterBase {
+  class RSSController extends Controller {
     var $postings;
     var $title;
     var $descr;
     var $url;
     var $countrycode;
 
-    function RSSPrinter($_api) {
-      $this->PrinterBase($_api);
+    function RSSController($_api) {
+      $this->Controller($_api);
       $this->postings = array();
     }
 

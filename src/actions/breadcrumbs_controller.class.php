@@ -19,21 +19,17 @@
   */
 ?>
 <?php
-  class FooterPrinter extends PrinterBase {
-    function show($_forum_id) {
-      $footer_links  = $this->api->footer_links();
-      $version[url]  = 'http://freech.debain.org/';
-      $version[text] = 'Freech '.FREECH_VERSION;
+  class BreadCrumbsController extends Controller {
+    function show($_breadcrumbs, $_show_page_links) {
+      $page_links   = $this->api->page_links();
+      $search_links = $this->api->search_links();
 
-      $rss_url = new URL('rss.php', cfg('urlvars'), _('RSS feed'));
-      $rss_url->set_var('forum_id', $this->api->get_current_forum_id());
-
-      // Render the resulting template.
       $this->clear_all_assign();
-      $this->assign_by_ref('footer_links', $footer_links);
-      $this->assign_by_ref('version',      $version);
-      $this->assign_by_ref('rss_url',      $rss_url);
-      $this->render('footer.tmpl');
+      $this->assign_by_ref('breadcrumbs',     $_breadcrumbs);
+      $this->assign_by_ref('page_links',      $page_links);
+      $this->assign_by_ref('show_page_links', $_show_page_links);
+      $this->assign_by_ref('search_links',    $search_links);
+      $this->render('breadcrumbs.tmpl');
     }
   }
 ?>

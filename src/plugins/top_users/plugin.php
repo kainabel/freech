@@ -7,7 +7,7 @@ Description: This plugin adds a page that shows the top users.
 Constructor: top_users_init
 Active:      1
 */
-include_once dirname(__FILE__).'/top_users_printer.class.php';
+include_once dirname(__FILE__).'/top_users_controller.class.php';
 
 function top_users_init($forum) {
   $forum->register_action('top_posters', 'top_users_on_show');
@@ -22,8 +22,8 @@ function top_users_on_show($forum) {
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Top Users'));
 
-  $printer = new TopUsersPrinter($forum);
-  $printer->show();
+  $controller = new TopUsersController($forum);
+  $controller->show();
 }
 
 

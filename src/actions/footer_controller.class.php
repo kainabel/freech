@@ -19,19 +19,21 @@
   */
 ?>
 <?php
-class ForumEditorPrinter extends PrinterBase {
-  function show($_forum = NULL, $_ack = '', $_error = '') {
-    $url = new URL('', cfg('urlvars'));
-    $url->set_var('action', 'forum_submit');
+  class FooterController extends Controller {
+    function show($_forum_id) {
+      $footer_links  = $this->api->footer_links();
+      $version[url]  = 'http://freech.debain.org/';
+      $version[text] = 'Freech '.FREECH_VERSION;
 
-    // Render the template.
-    $this->clear_all_assign();
-    $this->assign_by_ref('action',      $url->get_string());
-    $this->assign_by_ref('forum',       $_forum);
-    $this->assign_by_ref('status_list', $_forum->get_status_names());
-    $this->assign_by_ref('ack',         $_ack);
-    $this->assign_by_ref('error',       $_error);
-    $this->render('forum_editor.tmpl');
+      $rss_url = new URL('rss.php', cfg('urlvars'), _('RSS feed'));
+      $rss_url->set_var('forum_id', $this->api->get_current_forum_id());
+
+      // Render the resulting template.
+      $this->clear_all_assign();
+      $this->assign_by_ref('footer_links', $footer_links);
+      $this->assign_by_ref('version',      $version);
+      $this->assign_by_ref('rss_url',      $rss_url);
+      $this->render('footer.tmpl');
+    }
   }
-}
 ?>

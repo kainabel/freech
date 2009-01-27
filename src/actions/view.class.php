@@ -23,9 +23,9 @@
  * A base class for all views. Views render the forum overview as well
  * as the page on which a posting is shown.
  */
-class View extends PrinterBase {
+class View extends Controller {
   function View($_api) {
-    $this->PrinterBase($_api);
+    $this->Controller($_api);
   }
 
 

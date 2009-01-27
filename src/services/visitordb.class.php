@@ -42,7 +42,7 @@
     function &_id_of($_ip, $_since) {
       $sql  = "SELECT id FROM {t_visitor}";
       $sql .= " WHERE ip_hash={ip_hash} and visit > {since}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_string('ip_hash', $_ip);
       $query->set_int('since', $_since);
       $row = $this->db->GetRow($query->sql());
@@ -56,7 +56,7 @@
       $sql  = "UPDATE {t_visitor}";
       $sql .= " SET visit={visit}";
       $sql .= " WHERE id={id}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('visit', time());
       $query->set_string('id', $_id);
       $this->db->Execute($query->sql()) or die("VisitorDB::_update_time()");
@@ -72,7 +72,7 @@
       $sql  = "INSERT INTO {t_visitor}";
       $sql .= " (ip_hash, counter, visit)";
       $sql .= " VALUES ({ip_hash}, {counter}, {visit})";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('visit', time());
       $query->set_string('ip_hash', $_ip_hash);
       $query->set_string('counter', $_count);
@@ -85,7 +85,7 @@
     function _flush() {
       $sql  = "DELETE FROM {t_visitor}";
       $sql .= " WHERE visit < {end}";
-      $query = &new FreechSqlQuery($sql);
+      $query = new FreechSqlQuery($sql);
       $query->set_int('end', time() - 60 * 60 * 24 * 30);
       $this->db->Execute($query->sql());
     }
@@ -121,11 +121,11 @@
     /* Returns the number of visitors. */
     function get_n_visitors($_since = 0) {
       if ($_since == 0)
-        $query = &new FreechSqlQuery("SELECT MAX(counter) FROM {t_visitor}");
+        $query = new FreechSqlQuery("SELECT MAX(counter) FROM {t_visitor}");
       else {
         $sql   = "SELECT COUNT(*) FROM {t_visitor}";
         $sql  .= " WHERE visit > {start}";
-        $query = &new FreechSqlQuery($sql);
+        $query = new FreechSqlQuery($sql);
         $query->set_int('start', $_since);
       }
       $n = $this->db->GetOne($query->sql());

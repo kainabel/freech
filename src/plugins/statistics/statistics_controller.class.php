@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  class StatisticsPrinter extends PrinterBase {
+  class StatisticsController extends Controller {
     // Read a list of date/value pairs from a CSV file into an array.
     function _read_csv($file) {
       $results = array();

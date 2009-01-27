@@ -7,7 +7,7 @@ Description: Adds pages for user registration to the forum.
 Constructor: registration_init
 Active:      1
 */
-include_once dirname(__FILE__).'/registration_printer.class.php';
+include_once dirname(__FILE__).'/registration_controller.class.php';
 
 function registration_init($forum) {
   $forum->register_action('account_register',  'registration_on_register');
@@ -18,13 +18,13 @@ function registration_init($forum) {
 
 
 function registration_on_register($forum) {
-  $registration = &new RegistrationPrinter($forum);
+  $registration = new RegistrationController($forum);
   $registration->show(new User);
 }
 
 
 function registration_on_create($forum) {
-  $registration = &new RegistrationPrinter($forum);
+  $registration = new RegistrationController($forum);
   $user         = $forum->_init_user_from_post_data();
 
   // Check the data for completeness.
@@ -79,7 +79,7 @@ function registration_on_confirm($forum) {
     die('User activation failed');
 
   // Done.
-  $registration = new RegistrationPrinter($forum);
+  $registration = new RegistrationController($forum);
   $registration->show_done($user);
 }
 
@@ -113,7 +113,7 @@ function registration_mail_send($forum, $user) {
   $url      = cfg('site_url') . '?action=account_confirm'
             . "&username=$username&hash=$hash";
   $forum->send_mail($user, $subject, $body, array('url' => $url));
-  $printer = new RegistrationPrinter($forum);
-  $printer->show_mail_sent($user);
+  $controller = new RegistrationController($forum);
+  $controller->show_mail_sent($user);
 }
 ?>

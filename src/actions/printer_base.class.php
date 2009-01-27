@@ -25,10 +25,12 @@
     var $db;
     
     function PrinterBase($_api) {
-      $this->api      = $_api;
-      $this->smarty   = $_api->smarty();
-      $this->forumdb  = $_api->forumdb();
-      $this->eventbus = $_api->eventbus();
+      $this->api       = $_api;
+      $this->smarty    = $_api->smarty();
+      $this->userdb    = $_api->userdb();
+      $this->forumdb   = $_api->forumdb();
+      $this->visitordb = $_api->visitordb();
+      $this->eventbus  = $_api->eventbus();
     }
 
     function clear_all_assign() {

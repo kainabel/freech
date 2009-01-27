@@ -1615,11 +1615,6 @@
     }
 
 
-    function get_online_users() {
-      return $this->visitordb->get_n_visitors(time() - 60 * 5);
-    }
-
-
     function get_newest_users($_limit) {
       return $this->get_userdb()->get_newest_users($_limit);
     }

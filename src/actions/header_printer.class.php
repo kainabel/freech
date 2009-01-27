@@ -22,7 +22,7 @@
   class HeaderPrinter extends PrinterBase {
     function show($_title) {
       $account_links = $this->api->account_links();
-      $n_online      = $this->api->get_online_users();
+      $n_online      = $this->visitordb->get_n_visitors(time() - 60 * 5);
 
       $this->clear_all_assign();
       $this->assign('title',         $_title);

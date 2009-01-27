@@ -374,11 +374,6 @@
     }
 
 
-    function get_online_users() {
-      return $this->controller->get_online_users();
-    }
-
-
     function get_newest_users($_limit) {
       return $this->controller->get_newest_users($_limit);
     }

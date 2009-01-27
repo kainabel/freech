@@ -66,7 +66,7 @@
   include_once 'services/plugin_registry.class.php';
   ini_set('arg_separator.output', '&');
 
-  class ForumController {
+  class MainController {
     var $db;
     var $forum;
     var $eventbus;
@@ -74,7 +74,7 @@
     var $thread_state;
     var $api;
 
-    function ForumController($_plugin_api) {
+    function MainController($_plugin_api) {
       if (cfg_is('salt', ''))
         die('Error: Please define the salt variable in config.inc.php!');
       $this->api = $_plugin_api;

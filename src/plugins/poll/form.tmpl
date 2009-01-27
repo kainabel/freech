@@ -9,7 +9,7 @@
 <input type='hidden' name='n_options' value='{$poll->n_options()}' />
 
 <p>
-  <label>{t}Poll title{/t}</label>
+  <label>{t}Poll title:{/t}</label>
   <i>{t}(required){/t}</i><br />
   <input type='text'
          size='80'
@@ -22,7 +22,7 @@
 
 {foreach name=options item=option from=$poll->get_options()}
 <p>
-  <label>{t number=$smarty.foreach.options.iteration}Option %1{/t}</label><br />
+  <label>{t number=$smarty.foreach.options.iteration}Option %1:{/t}</label><br />
   <input type='text'
          size='80'
          name='poll_option{$smarty.foreach.options.index}'

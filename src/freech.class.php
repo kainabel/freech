@@ -20,15 +20,15 @@
 ?>
 <?php
   define('FREECH_VERSION', '0.9.19');
-  include_once 'forum_controller.class.php';
+  include_once 'main_controller.class.php';
 
   /**
    * This class provides the public API to access the forum. It also
    * serves as the API for plugins.
    */
-  class FreechForum {
-    function FreechForum() {
-      $this->controller = new ForumController($this);
+  class Freech {
+    function Freech() {
+      $this->controller = new MainController($this);
       $this->controller->init();
     }
 
@@ -58,7 +58,7 @@
 
 
     /**
-     * Returns the current forum, if the user is viewing it.
+     * Returns the current forum, if the user is viewing one.
      * Returns NULL if a forum is not viewed (for example because the request
      * points to a special page such as the homepage or the statistics).
      */

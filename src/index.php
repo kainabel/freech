@@ -19,10 +19,10 @@
   */
 ?>
 <?php
-  include_once 'forum.class.php';
+  include_once 'freech.class.php';
 
   // Must be called before any other output is produced.
-  $forum = new FreechForum;
+  $forum = new Freech;
 
   // Let the forum do its work.
   $forum->run();

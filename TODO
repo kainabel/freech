@@ -7,6 +7,7 @@ Maintenance
 * Profile the new db model.
 * Design a URL scheme that makes sense for URL rewriting.
 * Remove marked methods from the FreechForum class.
+* Rename *Printer to *Controller, actions to controllers.
 
 Features
 ---------
@@ -33,7 +34,7 @@ Maintenance
 
 Features
 ---------
-* Show a link to the RSS feed.
 * Allow for moving threads between forums.
 * Hide locked messages from the forum.
 * Improve themability by replacing layout tables with divs.
+* Remove user posting list from the user profile and link to the posting list instead.

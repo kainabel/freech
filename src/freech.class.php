@@ -33,6 +33,9 @@
     }
 
 
+    /*************************************************************
+     * Access to internal state.
+     *************************************************************/
     /**
      * Returns the current user.
      */
@@ -67,6 +70,36 @@
     }
 
 
+    /**
+     * Returns a state object that represents the folding (folded/unfolded) of
+     * all threads.
+     */
+    function thread_state($_section) {
+      return $this->controller->get_thread_state($_section);
+    }
+
+
+    /**
+     * Defines a title for the current site. Note the the title is
+     * overwritten by the forum at the time the run() method is called.
+     */
+    function set_title($_title) {
+      return $this->controller->set_title($_title);
+    }
+
+
+    /**
+     * Returns a title for the current site. Note the the title is
+     * only defined after the run() method was called.
+     */
+    function get_title() {
+      return $this->controller->get_title();
+    }
+
+
+    /*************************************************************
+     * Access to the database adapters.
+     *************************************************************/
     /**
      * Provides access to the adodb database connection.
      */
@@ -115,6 +148,9 @@
     }
 
 
+    /*************************************************************
+     * Access to the the eventbus and smarty.
+     *************************************************************/
     /**
      * An eventbus over which plugins and the forum may communicate.
      */
@@ -131,37 +167,9 @@
     }
 
 
-    /**
-     * Calls the forum to do the actual work and prepare the output.
-     */
-    function run() {
-      return $this->controller->run();
-    }
-
-
-    function set_cookie($_name, $_value) {
-      return $this->controller->set_cookie($_name, $_value);
-    }
-
-
-    function register_action($_action, $_func) {
-      return $this->controller->register_action($_action, $_func);
-    }
-
-
-    function register_view($_name, $_view, $_caption, $_priority) {
-      return $this->controller->register_view($_name,
-                                              $_view,
-                                              $_caption,
-                                              $_priority);
-    }
-
-
-    function register_renderer($_name, $_decorator_name) {
-      return $this->controller->register_renderer($_name, $_decorator_name);
-    }
-
-
+    /*************************************************************
+     * Access to link sections that are rendered in the HTML.
+     *************************************************************/
     function forum_links() {
       return $this->controller->forum_links();
     }
@@ -192,11 +200,30 @@
     }
 
 
+    /*************************************************************
+     * Actions.
+     *************************************************************/
+    /**
+     * Calls the forum to do the actual work and prepare the output.
+     */
+    function run() {
+      return $this->controller->run();
+    }
+
+
+    /**
+     * Renders the HTML header. The run() method MUST be called before
+     * using this function.
+     */
     function print_head($_header = NULL) {
       return $this->controller->print_head($_header);
     }
 
 
+    /**
+     * Renders the HTML. The run() method MUST be called before
+     * using this function.
+     */
     function show() {
       return $this->controller->show();
     }
@@ -217,6 +244,45 @@
 
     function destroy() {
       return $this->controller->destroy();
+    }
+
+
+    /*************************************************************
+     * Hooks for plugins.
+     *************************************************************/
+    function register_action($_action, $_func) {
+      return $this->controller->register_action($_action, $_func);
+    }
+
+
+    function register_view($_name, $_view, $_caption, $_priority) {
+      return $this->controller->register_view($_name,
+                                              $_view,
+                                              $_caption,
+                                              $_priority);
+    }
+
+
+    function register_renderer($_name, $_decorator_name) {
+      return $this->controller->register_renderer($_name, $_decorator_name);
+    }
+
+
+    /*************************************************************
+     * Utilities.
+     *************************************************************/
+    function set_cookie($_name, $_value) {
+      return $this->controller->set_cookie($_name, $_value);
+    }
+
+
+    function refer_to($_url_string) {
+      return $this->controller->_refer_to($_url_string);
+    }
+
+
+    function refer_to_posting($_posting) {
+      return $this->controller->_refer_to_posting_id($_posting->get_id());
     }
 
 
@@ -249,25 +315,6 @@
     }
 
 
-    function refer_to($_url_string) {
-      return $this->controller->_refer_to($_url_string);
-    }
-
-
-    function refer_to_posting($_posting) {
-      return $this->controller->_refer_to_posting_id($_posting->get_id());
-    }
-
-
-    /**
-     * Returns a state object that represents the folding (folded/unfolded) of
-     * all threads.
-     */
-    function thread_state($_section) {
-      return $this->controller->get_thread_state($_section);
-    }
-
-
     /************
      * FIXME: Methods below should definitely be removed.
      ************/
@@ -296,11 +343,6 @@
     }
 
 
-    function _set_title($_title) {
-      return $this->controller->_set_title($_title);
-    }
-
-
     function get_content() {
       return $this->controller->content;
     }
@@ -313,14 +355,6 @@
 
     function decorate_posting($_posting) {
       return $this->controller->_decorate_posting($_posting);
-    }
-
-
-    /**
-     * Returns a title for the current site.
-     */
-    function get_current_title() {
-      return $this->controller->get_current_title();
     }
 
 

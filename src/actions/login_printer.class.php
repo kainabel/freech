@@ -69,7 +69,7 @@
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('hint',   $_hint);
       $this->render('password_change.tmpl');
-      $this->api->_set_title(_('Password Change'));
+      $this->api->set_title(_('Password Change'));
     }
 
 

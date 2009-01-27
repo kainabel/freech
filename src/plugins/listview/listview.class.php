@@ -157,7 +157,7 @@ class ListView extends View {
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render(dirname(__FILE__).'/listview_read_posting.tmpl');
-    $this->api->_set_title($_posting->get_subject());
+    $this->api->set_title($_posting->get_subject());
   }
 }
 ?>

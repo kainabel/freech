@@ -113,7 +113,7 @@
       $this->assign_by_ref('showinfo', TRUE);
       $this->assign_by_ref('showlist', $showlist);
       $this->render('user_profile.tmpl');
-      $this->api->_set_title($_user->get_name());
+      $this->api->set_title($_user->get_name());
     }
 
 
@@ -122,7 +122,7 @@
       $group    = $this->api->group();
       $showlist = $_user->get_name() == $current->get_name();
       $showlist = $showlist || $group->may('moderate');
-      $this->api->_set_title($_user->get_name());
+      $this->api->set_title($_user->get_name());
       if (!$showlist)
         return;
 
@@ -208,7 +208,7 @@
       $this->assign_by_ref('action',              $url->get_string());
       $this->assign_by_ref('max_signature_lines', cfg('max_signature_lines'));
       $this->render('user_editor.tmpl');
-      $this->api->_set_title($_user->get_name());
+      $this->api->set_title($_user->get_name());
     }
 
 
@@ -222,7 +222,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_options.tmpl');
-      $this->api->_set_title($_user->get_name());
+      $this->api->set_title($_user->get_name());
     }
 
 
@@ -252,7 +252,7 @@
       $this->assign_by_ref('n_rows',   $n_rows);
       $this->assign_by_ref('users',    $this->users);
       $this->render('group_profile.tmpl');
-      $this->api->_set_title($_group->get_name());
+      $this->api->set_title($_group->get_name());
     }
 
 
@@ -266,7 +266,7 @@
       $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('group_editor.tmpl');
-      $this->api->_set_title($_group->get_name());
+      $this->api->set_title($_group->get_name());
     }
   }
 ?>

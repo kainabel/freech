@@ -663,12 +663,12 @@
     }
 
 
-    function _set_title(&$_title) {
+    function set_title($_title) {
       $this->title = $_title;
     }
 
 
-    function _append_content(&$_content) {
+    function _append_content($_content) {
       $this->content .= $_content . "\n";
     }
 
@@ -1485,7 +1485,7 @@
 
 
     // Returns a title for the current site.
-    function get_current_title() {
+    function get_title() {
       if ($this->title)
         return $this->title.' - '.cfg('site_title');
       $forum = $this->get_current_forum();
@@ -1636,7 +1636,7 @@
         header('Pragma: no-cache');
         header('Cache-control: no-cache');
         $header = new HeaderPrinter($this->api);
-        $header->show($this->get_current_title());
+        $header->show($this->get_title());
       }
 
       /* Plugin hook: on_header_print_before

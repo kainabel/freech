@@ -43,7 +43,7 @@
       $this->assign('max_subjectlength',  cfg('max_subjectlength'));
       $this->assign_by_ref('message', $_message);
       $this->render(dirname(__FILE__).'/compose.tmpl');
-      $this->api->_set_title($_message->get_subject());
+      $this->api->set_title($_message->get_subject());
     }
 
 
@@ -107,7 +107,7 @@
       $this->assign_by_ref('action',    $url->get_string());
       $this->assign_by_ref('message',   $_message);
       $this->render(dirname(__FILE__).'/preview.tmpl');
-      $this->api->_set_title($_message->get_subject());
+      $this->api->set_title($_message->get_subject());
     }
   }
 ?>

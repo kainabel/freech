@@ -568,7 +568,9 @@
 
 
     // Sends an email to the given user.
-    function _send_account_mail($user, $subject, $body, $vars) {
+    function _send_mail($user, $subject, $body, $vars = NULL) {
+      if (!$vars)
+        $vars = array();
       $head  = 'From: '.cfg('mail_from').'\r\n';
       $vars['site_title'] = cfg('site_title');
       $vars['login']      = $user->get_name();
@@ -582,7 +584,7 @@
     }
 
 
-    // Convenience wrapper around _send_account_mail().
+    // Convenience wrapper around _send_mail().
     function _send_password_reset_mail($user) {
       $subject  = _('Your password at [SITE_TITLE]');
       $body     = _("Hello [FIRSTNAME] [LASTNAME],\n"
@@ -601,7 +603,7 @@
       $url      = cfg('site_url') . '?action=password_mail_confirm'
                 . "&username=$username&hash=$hash";
       $vars     = array('url' => $url);
-      $this->_send_account_mail($user, $subject, $body, $vars);
+      $this->_send_mail($user, $subject, $body, $vars);
     }
 
 

@@ -286,6 +286,21 @@
     }
 
 
+    /**
+     * Sends an email to the given user. $_vars is an associative
+     * array that contains the values for fields that are replaced
+     * in the subject and body. For example, if the body contains
+     * a field in brackets such as "[NAME]", the array('name' => 'Joe')
+     * causes that field to be replaced.
+     */
+    function send_mail($_user, $_subject, $_body, $_vars = NULL) {
+      return $this->controller->_send_mail($_user,
+                                           $_subject,
+                                           $_body,
+                                           $_vars);
+    }
+
+
     /************
      * Methods below should possibly be merged.
      ************/
@@ -302,14 +317,6 @@
     /************
      * FIXME: Methods below should possibly be removed.
      ************/
-    function send_account_mail($_user, $_subject, $_body, $_vars) {
-      return $this->controller->_send_account_mail($_user,
-                                                   $_subject,
-                                                   $_body,
-                                                   $_vars);
-    }
-
-
     function append_content($_content) {
       return $this->controller->_append_content($_content);
     }

@@ -112,7 +112,7 @@ function registration_mail_send($forum, $user) {
   $hash     = urlencode($user->get_confirmation_hash());
   $url      = cfg('site_url') . '?action=account_confirm'
             . "&username=$username&hash=$hash";
-  $forum->send_account_mail($user, $subject, $body, array('url' => $url));
+  $forum->send_mail($user, $subject, $body, array('url' => $url));
   $printer = new RegistrationPrinter($forum);
   $printer->show_mail_sent($user);
 }

@@ -379,10 +379,5 @@
       //FIXME: should not be here.
       return $this->controller->get_registration_url();
     }
-
-
-    function get_posting_from_id_or_die($_id) {
-      return $this->controller->_get_posting_from_id_or_die($_id);
-    }
   }
 ?>

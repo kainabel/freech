@@ -485,18 +485,6 @@
     }
 
 
-    // Returns TRUE if the username is available, FALSE otherwise.
-    function _username_available(&$_username) {
-      $userdb = $this->get_userdb();
-      $needle = new User($_username);
-      $users  = $userdb->get_similar_users_from_name($_username);
-      foreach ($users as $user)
-        if ($user->is_lexically_similar_to($needle))
-          return FALSE;
-      return TRUE;
-    }
-
-
     // Wrapper around get_current_user() that also works if a matching
     // user/hash combination was passed in through the GET request.
     function _get_current_or_confirming_user() {

@@ -35,7 +35,7 @@ function registration_on_create($forum) {
     return $registration->show($user, _('Error: Passwords do not match.'));
 
   // Make sure that the name is available.
-  if (!$forum->_username_available($user->get_name())) {
+  if (!$forum->userdb()->username_is_available($user->get_name())) {
     $msg = _('The entered username is not available.');
     return $registration->show($user, $msg);
   }

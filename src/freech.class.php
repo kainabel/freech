@@ -340,11 +340,6 @@
     }
 
 
-    function _username_available($_name) {
-      return $this->controller->_username_available($_name);
-    }
-
-
     function _flood_blocked_until($_posting) {
       return $this->controller->_flood_blocked_until($_posting);
     }

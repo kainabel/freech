@@ -138,7 +138,7 @@ function message_on_preview($forum) {
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$forum->_username_available($message->get_username())) {
+    && !$forum->userdb()->username_is_available($message->get_username())) {
      $msg = _('The entered username is not available.');
      return $controller->show_compose($message, $msg, $parent_id, $may_quote);
   }
@@ -196,7 +196,7 @@ function message_on_send($forum) {
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$forum->_username_available($posting->get_username())) {
+    && !$forum->userdb()->username_is_available($posting->get_username())) {
     $msg = _('The entered username is not available.');
     return $controller->show_compose($posting, $msg, $parent_id, $may_quote);
   }

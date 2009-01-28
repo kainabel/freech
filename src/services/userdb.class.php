@@ -210,7 +210,7 @@
                                          $_limit = -1,
                                          $_offset = 0) {
       if (!$_name)
-        die("UserDB::get_similar_users_from_name(): Invalid name.");
+        die('UserDB::get_similar_users_from_name(): Invalid name.');
       $user    = new User($_name);
       $soundex = $user->get_soundexed_name();
       $search  = array('soundexname' => $soundex);
@@ -218,9 +218,23 @@
       $res     = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset)
                       or die("UserDB::get_similar_users_from_name(): Select");
       $users = array();
-      while ($row = &$res->FetchRow())
+      while ($row = $res->FetchRow())
         array_push($users, $this->_get_user_from_row($row));
       return $users;
+    }
+
+
+    /**
+     * Returns TRUE if the given username is available, FALSE otherwise.
+     * $_username: The name of the user.
+     */
+    function username_is_available($_username) {
+      $needle = new User($_username);
+      $users  = $this->get_similar_users_from_name($_username);
+      foreach ($users as $user)
+        if ($user->is_lexically_similar_to($needle))
+          return FALSE;
+      return TRUE;
     }
 
 
@@ -231,7 +245,7 @@
      */
     function count_similar_users_from_name($_name) {
       if (!$_name)
-        die("UserDB::count_similar_users_from_name(): Invalid name.");
+        die('UserDB::count_similar_users_from_name(): Invalid name.');
       $user    = new User($_name);
       $soundex = $user->get_soundexed_name();
 

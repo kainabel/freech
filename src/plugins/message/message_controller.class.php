@@ -36,6 +36,7 @@
 
       $this->clear_all_assign();
       $this->assign('onsubmit_js',        $this->api->get_js('onsubmit'));
+      $this->assign('form_html',          $this->api->get_html('form'));
       $this->assign('may_quote',          $_may_quote);
       $this->assign('parent_id',          $_parent_id);
       $this->assign('action',             $url->get_string());
@@ -103,6 +104,7 @@
 
       $this->clear_all_assign();
       $this->assign_by_ref('onsubmit_js', $this->api->get_js('onsubmit'));
+      $this->assign_by_ref('form_html',   $this->api->get_html('form'));
       $this->assign_by_ref('may_quote',   $_may_quote);
       $this->assign_by_ref('parent_id',   (int)$_parent_id);
       $this->assign_by_ref('pagetitle', _('Preview'));

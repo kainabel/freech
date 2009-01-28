@@ -48,21 +48,10 @@ function spamhash_on_run($forum) {
     spamhash_check_hash();
 
   $forum->add_js('head',     $spamhash->get_header_code());
-  $forum->add_js('onload',   $spamhash->get_body_code());
+  $forum->add_js('onload',   $spamhash->get_onload_code());
   $forum->add_js('onsubmit', $spamhash->get_onsubmit_code());
-
-  $eventbus = $forum->eventbus();
-  $eventbus->signal_connect('on_content_print_before',
-                            'spamhash_on_content_print');
-}
-
-
-function spamhash_on_content_print($forum) {
-  global $spamhash;
-  if (!$spamhash)
-    return;
-  $content = $spamhash->insert_form_code($forum->get_content());
-  $forum->set_content($content);
+  $forum->add_style($spamhash->get_style());
+  $forum->add_html('form', $spamhash->get_form_html());
 }
 
 

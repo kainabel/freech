@@ -8,6 +8,7 @@
       method='post'
       accept-charset='utf-8'>
 <div>
+{if $form_html}{$form_html}{/if}
 <input type='hidden' name='action'    value='message_submit' />
 <input type='hidden' name='parent_id' value='{$parent_id}' />
 <input type='hidden' name='msg_id'    value='{$message->get_id()}' />

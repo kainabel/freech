@@ -1559,6 +1559,28 @@
     }
 
 
+    function get_style() {
+      return $this->style;
+    }
+
+
+    function add_style($_css) {
+      $this->style .= $_css . ';';
+    }
+
+
+    function get_html($_where) {
+      return $this->html[$_where];
+    }
+
+
+    function add_html($_where, $_html) {
+      if (!in_array($_where, array('form')))
+        die("add_html(): Unsupported location '$_where'.");
+      $this->html[$_where] .= $_html;
+    }
+
+
     function forum_links() {
       return $this->forum_links;
     }

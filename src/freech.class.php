@@ -278,6 +278,26 @@
     }
 
 
+    function get_style() {
+      return $this->controller->get_style();
+    }
+
+
+    function add_style($_css) {
+      return $this->controller->add_style($_css);
+    }
+
+
+    function get_html($_where) {
+      return $this->controller->get_html($_where);
+    }
+
+
+    function add_html($_where, $_css) {
+      return $this->controller->add_html($_where, $_css);
+    }
+
+
     /*************************************************************
      * Utilities.
      *************************************************************/
@@ -352,16 +372,6 @@
 
     function _flood_blocked_until($_posting) {
       return $this->controller->_flood_blocked_until($_posting);
-    }
-
-
-    function get_content() {
-      return $this->controller->content;
-    }
-
-
-    function set_content($_content) {
-      $this->controller->content = $_content;
     }
 
 

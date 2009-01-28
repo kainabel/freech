@@ -21,7 +21,7 @@ class SpamHash {
   var $form_field_id; // Id of the hidden field inserted into the form.
   var $fn_enable_name;// Name of the on_load() JS function.
   var $js;            // The entire generated JS snippet.
-  
+
   /**
    * Instantiate a SpamHash generator.
    * Args: $form_id: The id of the HTML form into which a hash is inserted.
@@ -44,20 +44,20 @@ class SpamHash {
     $val_name             = $this->_get_random_string(rand(6, 18));
     $eElement             = $this->_get_random_string(rand(6, 18));
     $in_str               = $this->_get_random_string(rand(6, 18));
-    
+
     /**
      * Define Javascript snippets.
      */
     // The Javascript that calculates the MD5 checksums.
     $bits = $this->_get_md5_javascript($md5_name);
-    
+
     $script  = "function " . $this->form_action . "($in_str){";
     $script .=   "$eElement=document.getElementById('$this->form_field_id');";
     $script .=   "if(!$eElement){ return false; }";
     $script .=   "else { $eElement" . ".name = $md5_name($in_str);";
     $script .=   $eElement . ".value = $val_name(); return true; }}";
     $bits[]  = $script;
-    
+
     $bits[] = $this->_get_field_value_js($val_name);
 
     // The Javascript that enables all input fields and the form.
@@ -65,11 +65,7 @@ class SpamHash {
     $script .=   'form = document.getElementById("'.$this->form_id.'");';
     $script .=   'inputs = form.getElementsByTagName("input");';
     $script .=   'for (var i = 0; i < inputs.length; i++) {';
-    $script .=      'thisinput = inputs[i]; thisinput.disabled = false; }';
-    //$script .=   'inputs = document.evaluate("//input", form, null,';
-    //$script .=                              'XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);';
-    //$script .=   'for (var i = 0; i < inputs.snapshotLength; i++) {';
-    //$script .=      'thisinput = inputs.snapshotItem(i); thisinput.disabled = false; }';
+    $script .=      "thisinput = inputs[i]; thisinput.style.display = 'inline'; }";
     $script .= "document.getElementById('" . $this->form_id . "').style.display = 'block';";
     $script .= '}';
     $bits [] = $script;
@@ -77,9 +73,8 @@ class SpamHash {
     // Merge script snippets together.
     shuffle($bits);
     $this->js    = implode(" ", $bits);
-    $this->style = '#' . $this->form_id . "{display: none;}\n";
   }
-  
+
   /**
    * Args: $length:  The length of the string.
    * Returns: A random string with the given length.
@@ -196,40 +191,40 @@ class SpamHash {
     $script .=     'd=' . $names[13] . '(d,oldd);}';
     $script .=   'return Array(a,b,c,d);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[12] . '(q,a,b,x,s,t){';
     $script .=   'return ' . $names[13] . '(' . $names[16] . '(';
     $script .=               $names[13] . '(' . $names[13] . '(a,q),';
     $script .=               $names[13] . '(x,t)),s),b);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[8] . '(a,b,c,d,x,s,t){';
     $script .=   'return ' . $names[12] . '((b&c)|((~b)&d),a,b,x,s,t);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[9] . '(a,b,c,d,x,s,t){';
     $script .=   'return ' . $names[12] . '((b&d)|(c&(~d)),a,b,x,s,t);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[10] . '(a,b,c,d,x,s,t){';
     $script .=   'return ' . $names[12] . '(b ^ c ^ d,a,b,x,s,t);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[11] . '(a,b,c,d,x,s,t){';
     $script .=   'return ' . $names[12] . '(c ^(b|(~d)),a,b,x,s,t);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[13] . '(x,y){';
     $script .=   'var lsw=(x&0xFFFF)+(y&0xFFFF);';
     $script .=   'var msw=(x>>16)+(y>>16)+(lsw>>16);';
     $script .=   'return(msw<<16)|(lsw&0xFFFF);}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[16] . '(' . $names[20] . ', ' . $names[21] . '){';
     $script .=   'return(' . $names[20] . ' << ' . $names[21] . ')';
     $script .=   '|(' . $names[20] . ' >>> (32 - ' . $names[21] . '));}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[7] . '(' . $names[18] . '){';
     $script .=   'var ' . $names[17] . '=Array();';
     $script .=   'var ' . $names[19] . '=(1<<8)-1;';
@@ -238,7 +233,7 @@ class SpamHash {
     $script .=                            '.charCodeAt(i/8)&' . $names[19] . ')<<(i%32);';
     $script .=     'return ' . $names[17] . ';}';
     $bits[] = $script;
-    
+
     $script  = 'function ' . $names[5] . '(' . $names[15] . '){';
     $script .=   'var ' . $names[14] . '="0123456789abcdef";';
     $script .=   'var str="";';
@@ -267,7 +262,7 @@ class SpamHash {
    */
   function _get_field_value_js($val_name) {
     $js = 'function ' . $val_name . '(){';
-    
+
     $type = rand(0, 5);
     switch ($type) {
       /* Addition of n times of field value / n, + modulus */
@@ -277,17 +272,17 @@ class SpamHash {
         $inc = rand(1, $val - 1);
         $n = floor($val / $inc);
         $r = $val % $inc;
-        
+
         $js .= "var $eax = $inc; ";
         for($i = 0; $i < $n - 1; $i++){
           $js .= "$eax += $inc; ";
         }
-        
+
         $js .= "$eax += $r; ";
         $js .= "return $eax; ";
-      
+
         break;
-      
+
       /* Conversion from binary */
       case 1:
         $eax = $this->_get_random_string(rand(8,10));
@@ -306,7 +301,7 @@ class SpamHash {
         $js .= "$ecx++; ";
         $js .= "} ";
         $js .= "return $ebx; ";
-        
+
         break;
 
       /* Multiplication of square roots */
@@ -361,45 +356,28 @@ class SpamHash {
         $js .= "return $eax; ";
         break;
     }
-    
+
     $js .= "} ";
     return $js;
   }
-  
-  /**
-   * Takes: An array matching the form html.
-   * Returns: The "improved" form html code.
-   */
-  function &_form_replace_callback(&$matches){
-    $field_name = $this->_get_random_string(rand(6, 18));
 
-    // Insert hidden field into the form.
-    $hidden  = "<input type='hidden'";
-    $hidden .= " id='"    . $this->form_field_id . "'";
-    $hidden .= " name='"  . $field_name          . "'";
-    $hidden .= " value='" . rand(100, 99999999)  . "' />\n";
-    $text    = preg_replace("/<input[^>]*?>/si",
-                            "$hidden\n$0",
-                            $matches[0],
-                            1);
-  
-    // Disable all input elements.
-    $text = preg_replace('/<input([^>]*?)/si', '<input disabled="disabled"$1', $text);
-
-    // Show a better message for browsers that have Javascript disabled.
-    $str  = "<noscript><p>Due to spam protection mechanisms, your browser";
-    $str .= " must have Javascript enabled to post a message. Please enable";
-    $str .= " Javascript and reload this page to add your comment.";
-    $str .= " Sorry about that...</p></noscript>\n";
-	  return str_replace("<form", "$str<form", $text);
-  }
 
   function get_header_code() {
     return $this->js;
   }
 
 
-  function get_body_code() {
+  function get_style() {
+    return '#' . $this->form_id . " {\n"
+         . " display: none;\n"
+         . "}\n"
+         . '#' . $this->form_id . " input {\n"
+         . " display: none;\n"
+         . "}\n";
+  }
+
+
+  function get_onload_code() {
     return $this->fn_enable_name . '();';
   }
 
@@ -409,11 +387,13 @@ class SpamHash {
   }
 
 
-  function insert_form_code($page) {
-    // Insert snippets into the form. (hide input fields, register
-    // onsubmit(), etc)
-    $form = '/<form[^>]*?' . $this->form_id . '.*?<\/form>/si';
-    return preg_replace_callback($form, array(&$this, "_form_replace_callback"), $page);
+  function get_form_html() {
+    $field_name = $this->_get_random_string(rand(6, 18));
+    $hidden     = "<input type='hidden'";
+    $hidden    .= " id='"    . $this->form_field_id . "'";
+    $hidden    .= " name='"  . $field_name          . "'";
+    $hidden    .= " value='" . rand(100, 99999999)  . "' />\n";
+    return $hidden;
   }
 
 

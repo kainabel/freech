@@ -6,6 +6,11 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="stylesheet" type="text/css" href="{$__theme_dir}/style.css" />
   <title>{$title|escape}</title>
+{if $style}
+<style>
+{$style}
+</style>
+{/if}
 {if $head_js}
 <script language="javascript">
 {$head_js}

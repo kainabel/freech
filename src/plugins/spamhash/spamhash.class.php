@@ -76,12 +76,8 @@ class SpamHash {
 
     // Merge script snippets together.
     shuffle($bits);
-    $this->js = '<script type="text/javascript">' . "\n"
-              . '<!--'                            . "\n"
-              . implode(" ", $bits)               . "\n"
-              . '-->'                             . "\n"
-              . '</script>'                       . "\n"
-              . '<style type="text/css">#' . $this->form_id . "{display: none;}</style>\n";
+    $this->js    = implode(" ", $bits);
+    $this->style = '#' . $this->form_id . "{display: none;}\n";
   }
   
   /**
@@ -407,9 +403,8 @@ class SpamHash {
    * Takes: A single HTML header.
    * Returns: The same page with a Javascript code added.
    */
-  function &insert_header_code(&$page) {
-    // Insert the bulk of the snippets into <head>.
-    return str_replace("</head>", "$this->js</head>", $page);
+  function get_header_code() {
+    return $this->js;
   }
 
 
@@ -417,8 +412,8 @@ class SpamHash {
    * Takes: A single HTML header.
    * Returns: The same page with a Javascript code added.
    */
-  function &insert_body_code(&$page) {
-    return str_replace('<body', '<body onload="' . $this->fn_enable_name . '();"', $page);
+  function get_body_code() {
+    return $this->fn_enable_name . '();';
   }
 
 

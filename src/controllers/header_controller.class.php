@@ -23,10 +23,14 @@
     function show($_title) {
       $account_links = $this->api->account_links();
       $n_online      = $this->visitordb->get_n_visitors(time() - 60 * 5);
+      $head_js       = $this->api->get_js('head');
+      $onload_js     = $this->api->get_js('onload');
 
       $this->clear_all_assign();
       $this->assign('title',         $_title);
       $this->assign('site_title',    cfg('site_title'));
+      $this->assign('head_js',       $head_js);
+      $this->assign('onload_js',     $onload_js);
       $this->assign('account_links', $account_links);
       $this->assign('n_online',      $n_online);
       $this->render('header.tmpl');

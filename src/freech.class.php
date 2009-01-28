@@ -56,7 +56,7 @@
      * Returns the current action.
      */
     function action() {
-      return $this->controller->get_current_group();
+      return $this->controller->get_current_action();
     }
 
 
@@ -265,6 +265,16 @@
 
     function register_renderer($_name, $_decorator_name) {
       return $this->controller->register_renderer($_name, $_decorator_name);
+    }
+
+
+    function get_js($_where) {
+      return $this->controller->get_js($_where);
+    }
+
+
+    function add_js($_where, $_javascript) {
+      return $this->controller->add_js($_where, $_javascript);
     }
 
 

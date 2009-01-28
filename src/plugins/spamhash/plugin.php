@@ -51,9 +51,8 @@ function spamhash_on_header_print($forum) {
   if ($forum->action() == 'account_create'
     && !spamhash_check_hash())
     return;
-  $content = $spamhash->insert_header_code($forum->get_content());
-  $content = $spamhash->insert_body_code($content);
-  $forum->set_content($content);
+  $forum->add_js('head',   $spamhash->get_header_code());
+  $forum->add_js('onload', $spamhash->get_body_code());
   $eventbus = $forum->eventbus();
   $eventbus->signal_connect('on_content_print_before',
                             'spamhash_on_content_print');
@@ -71,13 +70,13 @@ function spamhash_on_content_print($forum) {
     return;
   }
   $content = $spamhash->insert_form_code($forum->get_content());
-  $content = $spamhash->insert_body_code($content);
+  $forum->add_js('onload', $spamhash->get_body_code());
   $forum->set_content($content);
 }
 
 
-function spamhash_html_contains_form(&$html) {
-  return preg_match("/<form /i", $html) > 0;
+function spamhash_html_contains_form($html) {
+  return preg_match('/<form /i', $html) > 0;
 }
 
 

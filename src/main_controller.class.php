@@ -1547,6 +1547,16 @@
     }
 
 
+    function get_js($_where) {
+      return $this->js[$_where];
+    }
+
+
+    function add_js($_where, $_javascript) {
+      $this->js[$_where] .= $_javascript . ';';
+    }
+
+
     function forum_links() {
       return $this->forum_links;
     }
@@ -1605,6 +1615,12 @@
       $oldcontent    = $this->content;
       $this->content = '';
 
+      /* Plugin hook: on_header_print_before
+       *   Called before the HTML header is sent.
+       *   Args: $html: A reference to the HTML header.
+       */
+      $this->eventbus->emit('on_header_print_before', $this->api);
+
       if ($_header)
         $this->_append_content($_header);
       elseif (!headers_sent()) {
@@ -1614,12 +1630,6 @@
         $header = new HeaderController($this->api);
         $header->show($this->get_title());
       }
-
-      /* Plugin hook: on_header_print_before
-       *   Called before the HTML header is sent.
-       *   Args: $html: A reference to the HTML header.
-       */
-      $this->eventbus->emit('on_header_print_before', $this->api);
 
       print($this->content);
 

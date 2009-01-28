@@ -6,8 +6,13 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="stylesheet" type="text/css" href="{$__theme_dir}/style.css" />
   <title>{$title|escape}</title>
+{if $head_js}
+<script language="javascript">
+{$head_js}
+</script>
+{/if}
 </head>
-<body>
+<body {if $onload_js}onload="{$onload_js|escape}"{/if}>
 <table id='header' width='100%' cellpadding='2' cellspacing='0' summary=''>
  <tr>
   <td>&nbsp;</td>

@@ -29,6 +29,7 @@
   include_once 'functions/config.inc.php';
   include_once 'functions/httpquery.inc.php';
   include_once 'functions/files.inc.php';
+  include_once 'functions/forum.inc.php';
 
   include_once 'objects/url.class.php';
   include_once 'objects/posting.class.php';
@@ -486,21 +487,8 @@
       if (!$user|| $user->is_anonymous())
         return $this->get_current_user();
 
-      $this->_assert_confirmation_hash_is_valid($user);
+      assert_user_confirmation_hash_is_valid($user);
       return $user;
-    }
-
-
-    // Dies if the confirmation hash passed in through GET is not valid.
-    function _assert_confirmation_hash_is_valid(&$user) {
-      if (!$user)
-        die('Invalid user');
-      $given_hash = $_GET['hash'] ? $_GET['hash'] : $_POST['hash'];
-      $hash       = $user->get_confirmation_hash();
-      if ($user->get_confirmation_hash() !== $given_hash)
-        die('Invalid confirmation hash');
-      if ($user->is_locked())
-        die('User is locked');
     }
 
 
@@ -1134,7 +1122,7 @@
       $user   = $this->_get_current_or_confirming_user();
       $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_name($user->get_name());
-      $this->_assert_confirmation_hash_is_valid($user);
+      assert_user_confirmation_hash_is_valid($user);
 
       if (!$user->is_active())
         die('Error: User status is not active.');

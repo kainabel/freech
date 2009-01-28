@@ -68,7 +68,7 @@ function registration_on_create($forum) {
 function registration_on_confirm($forum) {
   $userdb = $forum->userdb();
   $user   = $userdb->get_user_from_name($_GET['username']);
-  $forum->_assert_confirmation_hash_is_valid($user);
+  assert_user_confirmation_hash_is_valid($user);
 
   // See if the user still needs to set a password.
   if (!$user->get_password_hash()) {

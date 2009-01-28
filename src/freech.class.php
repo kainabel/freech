@@ -45,7 +45,7 @@
 
 
     /**
-     * Returns the current group.
+     * Returns the group of the current user.
      */
     function group() {
       return $this->controller->get_current_group();
@@ -371,11 +371,6 @@
     /************
      * FIXME: Methods below should definitely be removed.
      ************/
-    function _assert_confirmation_hash_is_valid($_user) {
-      return $this->controller->_assert_confirmation_hash_is_valid($_user);
-    }
-
-
     function _init_user_from_post_data($_user = NULL) {
       return $this->controller->_init_user_from_post_data($_user);
     }

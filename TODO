@@ -30,6 +30,7 @@ Maintenance
 * Rename forum to api in plugins.
 * Convert the modlog into a plugin.
 * Clean URL handling up.
+* Possibly add Freech->links($_which) similar to Freech->get_url().
 
 Features
 ---------

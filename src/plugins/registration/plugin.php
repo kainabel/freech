@@ -14,6 +14,10 @@ function registration_init($forum) {
   $forum->register_action('account_create',    'registration_on_create');
   $forum->register_action('account_confirm',   'registration_on_confirm');
   $forum->register_action('account_reconfirm', 'registration_on_reconfirm');
+
+  $url = new URL('', cfg('urlvars'), _('Register Account'));
+  $url->set_var('action', 'account_register');
+  $forum->register_url('registration', $url);
 }
 
 

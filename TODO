@@ -26,7 +26,7 @@ Maintenance
    $printer->show(..., new Hint(_('My Hint')));
    $printer->show(..., new Ack(_('Success')));
 
-* Move forum->get_registration_url() to the registration plugin.
+* Merge MainController->get_log(in|out)_url into get_url().
 * Rename forum to api in plugins.
 * Convert the modlog into a plugin.
 * Clean URL handling up.

@@ -268,6 +268,14 @@
     }
 
 
+    /**
+     * Plugins may use this to make an URL available to the API user.
+     */
+    function register_url($_name, $_url) {
+      return $this->controller->register_url($_name, $_url);
+    }
+
+
     function get_js($_where) {
       return $this->controller->get_js($_where);
     }
@@ -336,16 +344,19 @@
     }
 
 
-    /************
-     * Methods below should possibly be merged.
-     ************/
-    function get_login_url() {
-      return $this->controller->get_login_url();
-    }
+    function get_url($_which) {
+      switch ($_which) {
+      case 'login':
+        return $this->controller->get_login_url();
 
+      case 'logout':
+        return $this->controller->get_logout_url();
 
-    function get_logout_url() {
-      return $this->controller->get_logout_url();
+      default:
+        if (!$url = $this->controller->get_url($_which))
+          die('Freech->get_url(): No such URL.');
+        return $url;
+      }
     }
 
 
@@ -382,12 +393,6 @@
 
     function get_current_posting_id() {
       return $this->controller->get_current_posting_id();
-    }
-
-
-    function get_registration_url() {
-      //FIXME: should not be here.
-      return $this->controller->get_registration_url();
     }
   }
 ?>

@@ -200,7 +200,7 @@
       if (!$user->is_active())
         return $this->_refer_to($this->get_logout_url()->get_string());
       elseif ($user->is_anonymous()) {
-        $this->account_links->add_link($this->get_registration_url());
+        $this->account_links->add_link($this->get_url('registration'));
         $this->account_links->add_link($this->get_login_url());
       }
       else {
@@ -1519,6 +1519,16 @@
     }
 
 
+    function register_url($_name, $_url) {
+      $this->urls[$_name] = $_url;
+    }
+
+
+    function get_url($_name) {
+      return $this->urls[$_name];
+    }
+
+
     function register_action($_action, $_func) {
       $this->actions[$_action] = $_func;
     }
@@ -1618,14 +1628,6 @@
     function get_logout_url() {
       $url = new URL('', cfg('urlvars'), _('Log out'));
       $url->set_var('action', 'logout');
-      return $url;
-    }
-
-
-    function get_registration_url() {
-      //FIXME: should not be here.
-      $url = new URL('', cfg('urlvars'), _('Register Account'));
-      $url->set_var('action', 'account_register');
       return $url;
     }
 

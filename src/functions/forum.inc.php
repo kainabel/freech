@@ -19,6 +19,20 @@
   */
 ?>
 <?php
+function init_user_from_post_data($_user = NULL) {
+  if (!$_user)
+    $_user = new User($_POST['username']);
+  $_user->set_password($_POST['password']);
+  $_user->set_firstname($_POST['firstname']);
+  $_user->set_lastname($_POST['lastname']);
+  $_user->set_mail($_POST['mail'], $_POST['publicmail'] == 'on');
+  $_user->set_homepage($_POST['homepage']);
+  $_user->set_im($_POST['im']);
+  $_user->set_signature($_POST['signature']);
+  return $_user;
+}
+
+
 // Dies if the confirmation hash passed in through GET is not valid.
 function assert_user_confirmation_hash_is_valid(&$user) {
   if (!$user)

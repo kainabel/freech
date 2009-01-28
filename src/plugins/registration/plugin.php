@@ -29,7 +29,7 @@ function registration_on_register($forum) {
 
 function registration_on_create($forum) {
   $registration = new RegistrationController($forum);
-  $user         = $forum->_init_user_from_post_data();
+  $user         = init_user_from_post_data();
 
   if ($_POST['cancel'])
     $forum->refer_to(cfg('site_url'));

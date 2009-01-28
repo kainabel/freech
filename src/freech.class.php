@@ -371,11 +371,6 @@
     /************
      * FIXME: Methods below should definitely be removed.
      ************/
-    function _init_user_from_post_data($_user = NULL) {
-      return $this->controller->_init_user_from_post_data($_user);
-    }
-
-
     function _flood_blocked_until($_posting) {
       return $this->controller->_flood_blocked_until($_posting);
     }

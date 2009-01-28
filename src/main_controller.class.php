@@ -435,20 +435,6 @@
     }
 
 
-    function _init_user_from_post_data($_user = NULL) {
-      if (!$_user)
-        $_user = new User($_POST['username']);
-      $_user->set_password($_POST['password']);
-      $_user->set_firstname($_POST['firstname']);
-      $_user->set_lastname($_POST['lastname']);
-      $_user->set_mail($_POST['mail'], $_POST['publicmail'] == 'on');
-      $_user->set_homepage($_POST['homepage']);
-      $_user->set_im($_POST['im']);
-      $_user->set_signature($_POST['signature']);
-      return $_user;
-    }
-
-
     function _init_group_from_post_data($_group = NULL) {
       if (!$_group)
         $_group = new Group;
@@ -896,13 +882,13 @@
         $user->set_name($_POST['username']);
         $user->set_group_id($_POST['group_id']);
         $user->set_status($_POST['status']);
-        $this->_init_user_from_post_data($user);
+        init_user_from_post_data($user);
       }
       elseif ($is_self) {
         if ($_POST['status'] != USER_STATUS_DELETED
          && $_POST['status'] != USER_STATUS_ACTIVE)
           die('Invalid status');
-        $this->_init_user_from_post_data($user);
+        init_user_from_post_data($user);
         $user->set_status($_POST['status']);
       }
       elseif ($group->may('moderate')) {
@@ -1014,7 +1000,7 @@
      * Action controllers for login and password forms.
      *************************************************************/
     function _show_login() {
-      $user     = $this->_init_user_from_post_data();
+      $user     = init_user_from_post_data();
       $login    = new LoginController($this->api);
       $refer_to = $this->_get_login_refer_url();
       if ($this->login_error)
@@ -1036,7 +1022,7 @@
     // Submit a new password.
     function _password_submit() {
       $userdb     = $this->get_userdb();
-      $user       = $this->_init_user_from_post_data();
+      $user       = init_user_from_post_data();
       $user       = $userdb->get_user_from_name($user->get_name());
       $current    = $this->_get_current_or_confirming_user();
       $controller = new LoginController($this->api);
@@ -1071,7 +1057,7 @@
 
     // Show a form for requesting that the password should be reset.
     function _password_forgotten() {
-      $user       = $this->_init_user_from_post_data();
+      $user       = init_user_from_post_data();
       $controller = new LoginController($this->api);
       $controller->show_password_forgotten($user);
     }
@@ -1080,7 +1066,7 @@
     // Send an email with the URL for resetting the password.
     function _password_mail_submit() {
       $controller = new LoginController($this->api);
-      $user       = $this->_init_user_from_post_data();
+      $user       = init_user_from_post_data();
 
       // Make sure that the email address is valid.
       $err = $user->check_mail();
@@ -1091,7 +1077,7 @@
       $userdb = $this->get_userdb();
       $user   = $userdb->get_user_from_mail($user->get_mail());
       if (!$user) {
-        $user = $this->_init_user_from_post_data();
+        $user = init_user_from_post_data();
         $msg  = _('The given email address was not found.');
         return $controller->show_password_forgotten($user, $msg);
       }

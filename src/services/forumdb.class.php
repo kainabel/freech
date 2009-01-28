@@ -63,6 +63,13 @@
     }
 
 
+    function &_get_posting_from_row(&$_row) {
+      $posting = new Posting;
+      $posting->set_from_db($_row);
+      return $posting;
+    }
+
+
     function _is_parent(&$_row) {
       return $_row[path] == "";
     }
@@ -304,9 +311,7 @@
       if ($row[is_parent])
         $row[relation] = POSTING_RELATION_PARENT_UNFOLDED;
 
-      $posting = new Posting;
-      $posting->set_from_db($row);
-      return $posting;
+      return $this->_get_posting_from_row($row);
     }
 
 
@@ -346,8 +351,7 @@
         }
         //echo "$row[subject] ($row[id], $row[path]): $row[relation]<br>\n";
 
-        $posting = new Posting;
-        $posting->set_from_db($row);
+        $posting = $this->_get_posting_from_row($row);
         $posting->set_indent($indents);
         call_user_func($_func, $posting, $_data);
 
@@ -522,8 +526,7 @@
     function _walk_list($_res, $_func, $_data) {
       $numrows = $_res->RecordCount();
       while ($row = $_res->FetchRow()) {
-        $posting = new Posting();
-        $posting->set_from_db($row);
+        $posting = $this->_get_posting_from_row($row);
         call_user_func($_func, $posting, $_data);
       }
       return $numrows;
@@ -584,8 +587,7 @@
                             or die("ForumDB::foreach_posting_from_query()");
       $postings = array();
       while (!$res->EOF) {
-        $posting = new Posting;
-        $posting->set_from_db($res->FetchRow());
+        $posting = $this->_get_posting_from_row($res->FetchRow());
         array_push($postings, $posting);
       }
       return $postings;

@@ -19,14 +19,14 @@
   */
 ?>
 <?php
-  include_once 'forum.class.php';
+  include_once 'freech.class.php';
 
-  $forum = new FreechForum;
+  $freech = new Freech;
   header('Content-Type: text/xml; charset=utf-8');
-  $forum->print_rss($_GET[forum_id],
-                    cfg('site_title'),
-                    cfg('rss_description'),
-                    $_GET[hs],
-                    $_GET[len]);
-  $forum->destroy();
+  $freech->print_rss($_GET[forum_id],
+                     cfg('site_title'),
+                     cfg('rss_description'),
+                     $_GET[hs],
+                     $_GET[len]);
+  $freech->destroy();
 ?>

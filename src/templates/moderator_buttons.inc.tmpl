@@ -3,37 +3,43 @@
 <li>
 {if $posting->is_active()}
   <a href="{$posting->get_lock_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/unlock.png' title='{t}Lock posting{/t}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/unlock.png' title='{t}Lock posting{/t}' alt='[L]' />
+  <span class='moderator_button_text'>{t}Lock posting{/t}</span>
   </a>
 {else}
   <a href="{$posting->get_unlock_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/lock.png' title='{t}Unlock posting{/t}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/lock.png' title='{t}Unlock posting{/t}' alt='[l]' />
+  <span class='moderator_button_text'>{t}Unlock posting{/t}</span>
   </a>
 {/if}
 </li>
 
-<li>
 {if $posting->is_parent()}
+<li>
   {if $posting->get_priority() == 0}
   <a href="{$posting->get_prioritize_url_string(1)|escape}">
-  <img class='icon' src='{$__theme_dir}/img/sticky.png' title='{t}Make sticky{/t}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/sticky.png' title='{t}Make sticky{/t}' alt='[S]' />
+  <span class='moderator_button_text'>{t}Make sticky{/t}</span>
   </a>
   {else}
   <a href="{$posting->get_prioritize_url_string(0)|escape}">
-  <img class='icon' src='{$__theme_dir}/img/sticky_red.png' title='{t}Remove sticky{/t}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/unsticky.png' title='{t}Remove sticky{/t}' alt='[s]' />
+  <span class='moderator_button_text'>{t}Remove sticky{/t}</span>
   </a>
   {/if}
-{/if}
 </li>
+{/if}
 
 <li>
 {if $posting->get_force_stub()}
   <a href="{$posting->get_unstub_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/stub.png' title='{t}Allow responses{/t}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/stub.png' title='{t}Allow responses{/t}' alt='[R]' />
+  <span class='moderator_button_text'>{t}Allow responses{/t}</span>
   </a>
 {else}
   <a href="{$posting->get_stub_url_string()|escape}">
-  <img class='icon' src='{$__theme_dir}/img/unstub.png' title='{t}Prevent responses{/t}' alt='' />
+  <img class='icon' src='{$__theme_dir}/img/unstub.png' title='{t}Prevent responses{/t}' alt='[r]' />
+  <span class='moderator_button_text'>{t}Prevent responses{/t}</span>
   </a>
 {/if}
 </li>

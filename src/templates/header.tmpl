@@ -7,14 +7,17 @@
   <link rel="stylesheet" type="text/css" href="{$__theme_dir}/style.css" />
   <title>{$title|escape}</title>
 {if $style}
-<style>
-{$style}
-</style>
+  <style type="text/css">
+  {$style}
+  </style>
 {/if}
 {if $head_js}
-<script language="javascript">
-{$head_js}
-</script>
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <script type="text/javascript">
+//<![CDATA[
+  {$head_js}
+//]]>
+  </script>
 {/if}
 </head>
 <body {if $onload_js}onload="{$onload_js|escape}"{/if}>

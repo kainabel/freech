@@ -270,6 +270,9 @@ td.null {
   margin: 0;
 }
 
+.moderator_button_text {
+  display: none;
+}
 
 /**
  * Homepage specific styles.

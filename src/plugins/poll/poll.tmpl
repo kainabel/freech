@@ -1,4 +1,4 @@
-<!-- poll -->
+<!-- plugin:poll -->
 {include file="error.inc.tmpl"}
 
 <form action='{$action|escape}' id='voteform' method='post' accept-charset='utf-8'>
@@ -19,9 +19,10 @@
 
 <p>
   <input type='submit' name='send' value='{t}Vote{/t}' />
-  &nbsp;<a href="{$result_url}">{t}View results{/t}</a>
+  &nbsp;<a href="{$result_url|escape}">{t}View results{/t}</a>
 </p>
 </div>
 </div>
 </form>
-<!-- end poll -->
+<!-- end plugin:poll -->
+

@@ -45,17 +45,17 @@
   include_once 'objects/indexbar_footer.class.php';
   include_once 'objects/parser.class.php';
 
-  include_once 'actions/controller.class.php';
-  include_once 'actions/modlog_controller.class.php';
-  include_once 'actions/rss_controller.class.php';
-  include_once 'actions/breadcrumbs_controller.class.php';
-  include_once 'actions/login_controller.class.php';
-  include_once 'actions/profile_controller.class.php';
-  include_once 'actions/homepage_controller.class.php';
-  include_once 'actions/header_controller.class.php';
-  include_once 'actions/footer_controller.class.php';
-  include_once 'actions/forum_editor_controller.class.php';
-  include_once 'actions/view.class.php';
+  include_once 'controllers/controller.class.php';
+  include_once 'controllers/modlog_controller.class.php';
+  include_once 'controllers/rss_controller.class.php';
+  include_once 'controllers/breadcrumbs_controller.class.php';
+  include_once 'controllers/login_controller.class.php';
+  include_once 'controllers/profile_controller.class.php';
+  include_once 'controllers/homepage_controller.class.php';
+  include_once 'controllers/header_controller.class.php';
+  include_once 'controllers/footer_controller.class.php';
+  include_once 'controllers/forum_editor_controller.class.php';
+  include_once 'controllers/view.class.php';
 
   include_once 'services/groupdb.class.php';
   include_once 'services/sql_query.class.php';

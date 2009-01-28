@@ -385,11 +385,6 @@ class SpamHash {
   
     // Disable all input elements.
     $text = preg_replace('/<input([^>]*?)/si', '<input disabled="disabled"$1', $text);
-    
-    // Register the Javascript that does the calculation, so that it is
-    // called when sending the form.
-    $js   = $this->form_action . "('" . $this->_get_special_code() . "');";
-	  $text = str_replace('<form', "<form onsubmit=\"$js\"", $text);
 
     // Show a better message for browsers that have Javascript disabled.
     $str  = "<noscript><p>Due to spam protection mechanisms, your browser";
@@ -399,29 +394,22 @@ class SpamHash {
 	  return str_replace("<form", "$str<form", $text);
   }
 
-  /**
-   * Takes: A single HTML header.
-   * Returns: The same page with a Javascript code added.
-   */
   function get_header_code() {
     return $this->js;
   }
 
 
-  /**
-   * Takes: A single HTML header.
-   * Returns: The same page with a Javascript code added.
-   */
   function get_body_code() {
     return $this->fn_enable_name . '();';
   }
 
 
-  /**
-   * Takes: A single HTML header.
-   * Returns: The same page with a Javascript code added.
-   */
-  function &insert_form_code(&$page) {
+  function get_onsubmit_code() {
+    return $this->form_action . "('" . $this->_get_special_code() . "');";
+  }
+
+
+  function insert_form_code($page) {
     // Insert snippets into the form. (hide input fields, register
     // onsubmit(), etc)
     $form = '/<form[^>]*?' . $this->form_id . '.*?<\/form>/si';

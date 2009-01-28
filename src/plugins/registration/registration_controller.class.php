@@ -25,11 +25,12 @@
       $url->set_var('action', 'account_create');
       
       $this->clear_all_assign();
-      $this->assign_by_ref('action',    $url->get_string());
-      $this->assign_by_ref('user',      $user);
-      $this->assign_by_ref('password',  $_POST['password']);
-      $this->assign_by_ref('password2', $_POST['password2']);
-      $this->assign_by_ref('error',     $error);
+      $this->assign_by_ref('onsubmit_js', $this->api->get_js('onsubmit'));
+      $this->assign_by_ref('action',      $url->get_string());
+      $this->assign_by_ref('user',        $user);
+      $this->assign_by_ref('password',    $_POST['password']);
+      $this->assign_by_ref('password2',   $_POST['password2']);
+      $this->assign_by_ref('error',       $error);
       $this->render(dirname(__FILE__).'/registration.tmpl');
       $this->api->set_title(_('User Registration'));
     }

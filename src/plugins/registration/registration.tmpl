@@ -12,7 +12,11 @@
 </span>
 {include file="error.inc.tmpl"}
 
-<form action='{$action|escape}' id='registration' method='post' accept-charset='utf-8'>
+<form {if $onsubmit_js}onsubmit="{$onsubmit_js}"{/if}
+      action='{$action|escape}'
+      id='registration'
+      method='post'
+      accept-charset='utf-8'>
 <div>
 <input type='hidden' name='action' value='account_create' />
 

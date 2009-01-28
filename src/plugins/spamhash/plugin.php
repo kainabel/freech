@@ -7,7 +7,7 @@ Description: Client-side Javascript computes an md5 code, server double
              checks. Blocks spam bots and makes DoS a little more difficult.
 Constructor: spamhash_init
 */
-include_once "spamhash.class.php";
+include_once 'spamhash.class.php';
 
 define('CHECK_REGISTERED_ACCOUNTS', FALSE);
 $spamhash = ''; // The spamhash instance.
@@ -21,9 +21,12 @@ function spamhash_init($forum) {
 
 function spamhash_on_run($forum) {
   global $spamhash;
-  if (!CHECK_REGISTERED_ACCOUNTS
-    && !$forum->user()->is_anonymous())
+
+  // Check if the plugin is enabled for the given user.
+  if (!CHECK_REGISTERED_ACCOUNTS && !$forum->user()->is_anonymous())
     return;
+
+  // Create a new instance of the spamhash generator/checker.
   $action = $forum->action();
   if ($action == 'write'
     || $action == 'respond'
@@ -34,25 +37,20 @@ function spamhash_on_run($forum) {
     $spamhash = new SpamHash('registration');
   else
     return;
-  $eventbus = $forum->eventbus();
-  $eventbus->signal_connect('on_header_print_before',
-                            'spamhash_on_header_print');
-}
 
+  // If this is an attempt to submit a message, check the hash.
+  // Note that this may lead to rendering a form if an error such as
+  // an unfilled username field happens, so we may still need to inject
+  // the Javascript into the resulting page.
+  if ($action == 'message_submit' && $_POST[send])
+    spamhash_check_hash();
+  if ($action == 'account_create')
+    spamhash_check_hash();
 
-function spamhash_on_header_print($forum) {
-  global $spamhash;
-  if (!$spamhash)
-    return;
-  if ($forum->action() == 'message_submit'
-    && $_POST[send]
-    && !spamhash_check_hash())
-    return;
-  if ($forum->action() == 'account_create'
-    && !spamhash_check_hash())
-    return;
-  $forum->add_js('head',   $spamhash->get_header_code());
-  $forum->add_js('onload', $spamhash->get_body_code());
+  $forum->add_js('head',     $spamhash->get_header_code());
+  $forum->add_js('onload',   $spamhash->get_body_code());
+  $forum->add_js('onsubmit', $spamhash->get_onsubmit_code());
+
   $eventbus = $forum->eventbus();
   $eventbus->signal_connect('on_content_print_before',
                             'spamhash_on_content_print');
@@ -63,20 +61,8 @@ function spamhash_on_content_print($forum) {
   global $spamhash;
   if (!$spamhash)
     return;
-  if ($forum->action() == 'message_submit'
-    && $_POST[send]
-    && !spamhash_html_contains_form($forum->content)) {
-    unset($spamhash);
-    return;
-  }
   $content = $spamhash->insert_form_code($forum->get_content());
-  $forum->add_js('onload', $spamhash->get_body_code());
   $forum->set_content($content);
-}
-
-
-function spamhash_html_contains_form($html) {
-  return preg_match('/<form /i', $html) > 0;
 }
 
 
@@ -89,28 +75,23 @@ function spamhash_check_hash() {
     break;
 
   case SPAMHASH_ERROR_REFERRER:
-    echo "Error: Invalid referrer - sorry, blocked due to spam protection.";
-    die();
+    die('Error: Invalid referrer - blocked due to spam protection.');
     return FALSE;
 
   case SPAMHASH_ERROR_REMOTE_ADDRESS:
-    echo "Error: Invalid remote address - sorry, blocked due to spam protection.";
-    die();
+    die('Error: Invalid remote address - blocked due to spam protection.');
     return FALSE;
 
   case SPAMHASH_ERROR_SESSION:
-    echo "Error: Invalid session ID - sorry, blocked due to spam protection.";
-    die();
+    die('Error: Invalid session ID - blocked due to spam protection.');
     return FALSE;
 
   case SPAMHASH_ERROR_HASH_MISSING:
-    echo "Error: Missing hash  - sorry, blocked due to spam protection.";
-    die();
+    die('Error: Missing hash - blocked due to spam protection.');
     return FALSE;
 
   case SPAMHASH_ERROR_UNKNOWN:
-    echo "Error: Invalid hash - sorry, blocked due to spam protection.";
-    die();
+    die('Error: Invalid hash - blocked due to spam protection.');
     return FALSE;
 
   default:

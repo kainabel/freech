@@ -1553,6 +1553,8 @@
 
 
     function add_js($_where, $_javascript) {
+      if (!in_array($_where, array('head', 'onload', 'onsubmit')))
+        die("add_js(): Unsupported location '$_where'.");
       $this->js[$_where] .= $_javascript . ';';
     }
 

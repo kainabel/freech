@@ -787,7 +787,7 @@
       // Check for completeness.
       $reason = $_POST['reason'];
       if ($_POST['spam'] == 'on') {
-        $reason = _('Posting is spam');
+        $reason = '[IS_SPAM]';
         $posting->set_status(POSTING_STATUS_SPAM);
       }
       else

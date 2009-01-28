@@ -109,7 +109,7 @@
 
       $locale_dir = './language/';
       $domain     = 'freech';
-      putenv("LANG=$lang");
+      putenv("LANG=$lang.UTF-8");
       @setlocale(LC_ALL, '');
       bindtextdomain($domain, $locale_dir);
       textdomain($domain);

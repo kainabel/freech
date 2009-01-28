@@ -26,7 +26,7 @@
       $version[text] = 'Freech '.FREECH_VERSION;
 
       $rss_url = new URL('rss.php', cfg('urlvars'), _('RSS feed'));
-      $rss_url->set_var('forum_id', $this->api->get_current_forum_id());
+      $rss_url->set_var('forum_id', (int)$_forum_id);
 
       // Render the resulting template.
       $this->clear_all_assign();

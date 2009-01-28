@@ -30,8 +30,9 @@ function message_on_run($forum) {
     return;
 
   // Add 'new message' button to the index bar.
-  $url = new URL('', cfg('urlvars'), _('Start a New Topic'));
-  $url->set_var('forum_id', $forum->get_current_forum_id());
+  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $url      = new URL('', cfg('urlvars'), _('Start a New Topic'));
+  $url->set_var('forum_id', $forum_id);
   $url->set_var('action',   'write');
   $forum->page_links()->add_link($url, 200);
 }
@@ -162,7 +163,7 @@ function message_on_send($forum) {
   $may_quote  = (int)$_POST['may_quote'];
   $controller = new MessageController($forum);
   $user       = $forum->user();
-  $forum_id   = $forum->get_current_forum_id();
+  $forum_id   = $forum->forum()->get_id();
   $forumdb    = $forum->forumdb();
   $forum->group()->assert_may('write');
 

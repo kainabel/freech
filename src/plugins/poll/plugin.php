@@ -34,7 +34,7 @@ function poll_on_run($forum) {
     return;
 
   // Add a link to the poll button in the index bar.
-  $forum_id = $forum->get_current_forum_id();
+  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
   $url      = new URL('', cfg('urlvars'), _('Start a Poll'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action'  , 'poll_add');
@@ -46,7 +46,7 @@ function poll_on_add($forum) {
   $controller = new PollController($forum);
   $posting    = new Posting;
   $poll       = new Poll($posting, $forum);
-  $poll->set_forum_id($forum->get_current_forum_id());
+  $poll->set_forum_id($forum->forum()->get_id());
 
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_text(_('Start a Poll'));
@@ -160,7 +160,7 @@ function _poll_get_from_post() {
 
 
 function _save_poll($forum, $poll) {
-  $forum_id = $forum->get_current_forum_id();
+  $forum_id = $forum->forum()->get_id();
   $subject  = sprintf(_('Poll: %s'), $poll->get_subject());
   $poll->set_subject($subject);
   $poll->set_from_user($forum->user());

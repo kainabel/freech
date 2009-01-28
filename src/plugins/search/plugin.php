@@ -15,11 +15,11 @@ include_once dirname(__FILE__).'/search_query.class.php';
 function search_init($forum) {
   $forum->register_action('search', 'search_on_search');
 
-  $url = new URL('', cfg('urlvars'), _('Find'));
+  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $url      = new URL('', cfg('urlvars'), _('Find'));
   $url->set_var('action',   'search');
-  $url->set_var('forum_id', $forum->get_current_forum_id());
+  $url->set_var('forum_id', $forum_id);
   $forum->forum_links()->add_link($url);
-  $forum_id = $forum->get_current_forum_id();
 
   // Add a small search field to the forum.
   $html = "<form id='quicksearch'\n"
@@ -58,9 +58,10 @@ function search_on_search_result($forum) {
   if (!$_GET['q'] || trim($_GET['q']) == '')
     return search_on_search_form($forum);
 
-  $url = new URL('', cfg('urlvars'), _('Find'));
+  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $url      = new URL('', cfg('urlvars'), _('Find'));
   $url->set_var('action',   'search');
-  $url->set_var('forum_id', $forum->get_current_forum_id());
+  $url->set_var('forum_id', $forum_id);
   $forum->breadcrumbs()->add_separator();
   $forum->breadcrumbs()->add_link($url);
   $forum->breadcrumbs()->add_separator();
@@ -68,7 +69,6 @@ function search_on_search_result($forum) {
 
   // Search for postings or users.
   $controller = new SearchController($forum);
-  $forum_id   = (int)$_GET['forum_id'];
   if ($_GET['user_search'])
     $controller->show_users($_GET['q'], $_GET['hs']);
   else

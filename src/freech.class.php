@@ -281,6 +281,11 @@
     }
 
 
+    function refer_to_posting_id($_id) {
+      return $this->controller->_refer_to_posting_id($_id);
+    }
+
+
     function refer_to_posting($_posting) {
       return $this->controller->_refer_to_posting_id($_posting->get_id());
     }
@@ -365,11 +370,6 @@
     }
 
 
-    function get_current_forum_id() {
-      return $this->controller->get_current_forum_id();
-    }
-
-
     function get_current_posting_id() {
       return $this->controller->get_current_posting_id();
     }
@@ -378,11 +378,6 @@
     function get_registration_url() {
       //FIXME: should not be here.
       return $this->controller->get_registration_url();
-    }
-
-
-    function refer_to_posting_id($_id) {
-      return $this->controller->_refer_to_posting_id($_id);
     }
 
 

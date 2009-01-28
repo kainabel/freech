@@ -350,11 +350,6 @@
     }
 
 
-    function _posting_is_spam($_posting) {
-      return $this->controller->_posting_is_spam($_posting);
-    }
-
-
     function get_content() {
       return $this->controller->content;
     }

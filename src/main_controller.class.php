@@ -527,11 +527,6 @@
     }
 
 
-    function _posting_is_spam($_posting) {
-      return $this->forumdb->is_spam($_posting);
-    }
-
-
     function _flood_blocked_until($_posting) {
       $forumdb = $this->forumdb;
       $user    = $this->get_current_user();

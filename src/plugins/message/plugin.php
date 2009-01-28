@@ -217,7 +217,7 @@ function message_on_send($forum) {
     }
 
     // Check whether the user or IP is spam-locked.
-    if ($forum->_posting_is_spam($posting))
+    if ($forum->forumdb()->is_spam($posting))
       return $controller->show_compose($posting,
                                        _('Message rejected by spamblocker.'),
                                        $parent_id,

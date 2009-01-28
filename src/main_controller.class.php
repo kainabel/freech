@@ -140,7 +140,6 @@
       $this->breadcrumbs   = new Menu;
       $this->actions       = array();
       $this->views         = array();
-      $this->renderers     = array();
       $this->current_user  = NULL;
       $this->current_forum = NULL;
 
@@ -148,7 +147,7 @@
       $this->db = ADONewConnection(cfg('db_dbn'))
         or die('FreechForum::FreechForum(): Error: Can\'t connect.'
              . ' Please check username, password and hostname.');
-      $this->forumdb   = new ForumDB($this->db);
+      $this->forumdb = new ForumDB($this->api);
 
       $registry = new PluginRegistry;
       foreach (cfg('plugins') as $plugin => $active)
@@ -464,16 +463,6 @@
     }
 
 
-    function _decorate_posting($_posting) {
-      if (!$_posting)
-        return $_posting;
-      $renderer = $this->renderers[$_posting->get_renderer()];
-      if ($renderer)
-        return new $renderer($_posting, $this->api);
-      return new UnknownPosting($_posting, $this->api);
-    }
-
-
     // Returns an URL that points to the homepage.
     function _get_homepage_url() {
       if (!cfg('default_forum_id', FALSE))
@@ -733,7 +722,6 @@
     // Read a posting.
     function _posting_read() {
       $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
-      $posting = $this->_decorate_posting($posting);
       $this->_add_posting_breadcrumbs($posting);
 
       /* Plugin hook: on_message_read_print
@@ -1549,11 +1537,6 @@
       $url->set_var('changeview', $_name);
       $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
       $this->footer_links->add_link($url, $_priority);
-    }
-
-
-    function register_renderer($_name, $_decorator_name) {
-      $this->renderers[$_name] = $_decorator_name;
     }
 
 

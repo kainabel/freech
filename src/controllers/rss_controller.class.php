@@ -57,11 +57,12 @@
         return;
 
       // Required to enable correct formatting of the posting.
-      $posting = $this->api->decorate_posting($_posting);
-      $posting->set_body(preg_replace('/&nbsp;/', ' ', $posting->get_body()));
+      $_posting->set_body(preg_replace('/&nbsp;/',
+                                       ' ',
+                                       $_posting->get_body()));
 
       // Append everything to a list.
-      array_push($this->postings, $posting);
+      array_push($this->postings, $_posting);
     }
 
 

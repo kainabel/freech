@@ -25,8 +25,9 @@
   class ForumDB {
     var $db;
 
-    function ForumDB(&$_db) {
-      $this->db = &$_db;
+    function ForumDB(&$_api) {
+      $this->api = $_api;
+      $this->db  = $_api->db();
     }
 
 
@@ -63,10 +64,20 @@
     }
 
 
+    function &_decorate_posting(&$_posting) {
+      if (!$_posting)
+        return NULL;
+      $renderer = $this->renderers[$_posting->get_renderer()];
+      if ($renderer)
+        return new $renderer($_posting, $this->api);
+      return new UnknownPosting($_posting, $this->api);
+    }
+
+
     function &_get_posting_from_row(&$_row) {
       $posting = new Posting;
       $posting->set_from_db($_row);
-      return $posting;
+      return $this->_decorate_posting($posting);
     }
 
 
@@ -88,6 +99,11 @@
     /***********************************************************************
      * Public API.
      ***********************************************************************/
+    function register_renderer($_name, $_decorator_name) {
+      $this->renderers[$_name] = $_decorator_name;
+    }
+
+
     /* Insert a new child.
      *
      * $_forum:   The forum id.

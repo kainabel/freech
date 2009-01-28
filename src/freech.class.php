@@ -264,7 +264,7 @@
 
 
     function register_renderer($_name, $_decorator_name) {
-      return $this->controller->register_renderer($_name, $_decorator_name);
+      return $this->forumdb()->register_renderer($_name, $_decorator_name);
     }
 
 
@@ -383,11 +383,6 @@
 
     function _flood_blocked_until($_posting) {
       return $this->controller->_flood_blocked_until($_posting);
-    }
-
-
-    function decorate_posting($_posting) {
-      return $this->controller->_decorate_posting($_posting);
     }
 
 

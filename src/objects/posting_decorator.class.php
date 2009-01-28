@@ -323,6 +323,16 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function set_status($_status) {
+    return $this->posting->set_status($_status);
+  }
+
+
+  function get_status() {
+    return $this->posting->get_status();
+  }
+
+
   function is_active() {
     return $this->posting->is_active();
   }
@@ -355,6 +365,11 @@ class PostingDecorator extends Trackable {
 
   function has_thread() {
     return $this->posting->has_thread();
+  }
+
+
+  function set_indent($_indent) {
+    return $this->posting->set_indent($_indent);
   }
 
 

@@ -28,13 +28,12 @@
 
     function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $posting    = $this->api->decorate_posting($_posting);
       $current_id = $this->api->get_current_posting_id();
-      $posting->set_selected($posting->get_id() == $current_id);
-      $posting->apply_block();
+      $_posting->set_selected($_posting->get_id() == $current_id);
+      $_posting->apply_block();
 
       // Append everything to a list.
-      array_push($this->results, $posting);
+      array_push($this->results, $_posting);
     }
 
 

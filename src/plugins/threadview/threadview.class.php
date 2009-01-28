@@ -30,18 +30,19 @@ class ThreadView extends View {
   }
 
 
-  function _append_posting($_posting, $_data) {
+  function _append_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
-    $posting    = $this->api->decorate_posting($_posting);
     $current_id = $this->api->get_current_posting_id();
-    $posting->set_selected($posting->get_id() == $current_id);
-    $posting->apply_block();
+    $_posting->set_selected($_posting->get_id() == $current_id);
+    $_posting->apply_block();
 
-    if ($posting->is_folded())
-      $posting->set_created_unixtime($posting->get_thread_updated_unixtime());
+    if ($_posting->is_folded()) {
+      $updated = $_posting->get_thread_updated_unixtime();
+      $_posting->set_created_unixtime($updated);
+    }
 
     // Append everything to a list.
-    array_push($this->postings, $posting);
+    array_push($this->postings, $_posting);
   }
 
 

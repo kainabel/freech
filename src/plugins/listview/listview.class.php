@@ -33,14 +33,13 @@ class ListView extends View {
 
   function _append_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
-    $posting    = $this->api->decorate_posting($_posting);
     $current_id = $this->api->get_current_posting_id();
-    $posting->set_selected($posting->get_id() == $current_id);
-    $posting->apply_block();
+    $_posting->set_selected($_posting->get_id() == $current_id);
+    $_posting->apply_block();
 
     // Append everything to a list.
     array_push($this->postings, $_posting);
-    $this->posting_map[$_posting->get_id()] = $posting;
+    $this->posting_map[$_posting->get_id()] = $_posting;
   }
 
 
@@ -140,11 +139,10 @@ class ListView extends View {
     $this->clear_all_assign();
     $this->assign_by_ref('showlist', $showlist);
     if ($showlist) {
-      $posting    = $this->api->decorate_posting($_posting);
       $current_id = $this->api->get_current_posting_id();
       $func       = array(&$this, '_append_posting');
-      $posting->set_selected($posting->get_id() == $current_id);
-      $this->posting_map[$_posting->get_id()] = $posting;
+      $_posting->set_selected($_posting->get_id() == $current_id);
+      $this->posting_map[$_posting->get_id()] = $_posting;
       $db->foreach_prev_posting($_posting, cfg('epp') / 2, $func);
       $db->foreach_next_posting($_posting, cfg('epp') / 2, $func);
       krsort($this->posting_map);

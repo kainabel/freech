@@ -1359,6 +1359,7 @@
       else {
         $this->current_user = new User;
         $this->current_user->set_id(cfg('anonymous_user_id'));
+        $this->current_user->set_status(USER_STATUS_ACTIVE);
       }
       return $this->current_user;
     }

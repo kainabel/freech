@@ -60,7 +60,7 @@
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $cache_id = $this->smarty->template_dir . '/' . $_template;
       $content  = $this->smarty->fetch($_template, $cache_id);
-      $this->api->append_content($content);
+      $this->api->controller->_append_content($content);
     }
   }
 ?>

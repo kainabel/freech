@@ -358,13 +358,5 @@
         return $url;
       }
     }
-
-
-    /************
-     * FIXME: Methods below should possibly be removed.
-     ************/
-    function append_content($_content) {
-      return $this->controller->_append_content($_content);
-    }
   }
 ?>

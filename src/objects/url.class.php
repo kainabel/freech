@@ -42,12 +42,24 @@
     }
 
 
+    function set_path($_path) {
+      $this->path = $_path;
+    }
+
+
     // Appends the given variable to the URL.
     function set_var($_name, $_value) {
       if ($_value)
         $this->vars[$_name] = $_value;
       else
         $this->delete_var($_name);
+    }
+
+
+    function get_var($_name, $_default = NULL) {
+      if (!$this->vars[$_name])
+        return $default;
+      return $this->vars[$_name];
     }
 
 

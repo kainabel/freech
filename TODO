@@ -5,7 +5,6 @@
 Maintenance
 ------------
 * Profile the new db model.
-* Design a URL scheme that makes sense for URL rewriting.
 
 Features
 ---------

@@ -26,5 +26,52 @@
     function FreechURL($_path = '', $_label = '') {
       $this->URL($_path, cfg('urlvars'), $_label);
     }
+
+
+    function _get_mod_rewrite_url($_escape = FALSE) {
+      $path     = $this->get_path();
+      $action   = $this->get_var('action');
+      $forum_id = $this->get_var('forum_id');
+      $msg_id   = $this->get_var('msg_id');
+      $username = $this->get_var('username');
+      $this->delete_var('action');
+
+      if ($forum_id) {
+        $this->set_path($path . "forum-$forum_id/");
+        $this->delete_var('forum_id');
+      }
+
+      switch ($action) {
+      case '':
+        break;
+
+      case 'user_profile':
+        $this->set_path($path . "user/$username/");
+        $this->delete_var('username');
+        break;
+
+      case 'user_editor':
+        $this->set_path($path . "user/$username/edit");
+        $this->delete_var('username');
+        break;
+
+      case 'user_postings':
+        $this->set_path($path . "user/$username/postings");
+        $this->delete_var('username');
+        break;
+
+      default:
+        $this->set_var('action', $action);
+      }
+
+      return parent::get_string($_escape);
+    }
+
+
+    function get_string($_escape = FALSE) {
+      if (!$_GET['rewrite'])
+        return parent::get_string($_escape);
+      return $this->_get_mod_rewrite_url($_escape);
+    }
   }
 ?>

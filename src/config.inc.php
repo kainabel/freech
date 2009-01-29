@@ -39,6 +39,10 @@
   // subdirectory.
   $cfg[theme] = 'heise';
 
+  // The default display type. Allowed values depend on the installed
+  // plugins, by default 'list' or 'thread'.
+  $cfg[default_view] = 'thread';
+
   // If a default forum id is given then the corresponding forum is shown
   // in place of the homepage.
   //$cfg[default_forum_id] = 1;

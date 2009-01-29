@@ -25,7 +25,7 @@
 class UnknownPosting extends PostingDecorator {
   function get_body() {
     $renderer = $this->posting->get_renderer();
-    return "Plugin for posting type \"$renderer\" not found.";
+    return "Plugin for posting type \"$renderer\" inactive or not installed.";
   }
 
 

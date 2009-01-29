@@ -590,7 +590,10 @@
       $name = $_COOKIE['view'];
       if ($name && $this->views[$name])
         return $name;
-      return 'thread'; //FIXME: make configurable
+      $name = cfg('default_view');
+      if ($this->views[$name])
+        return $name;
+      die("Default view $name is inactive or not installed.");
     }
 
 

@@ -371,11 +371,6 @@
     /************
      * FIXME: Methods below should definitely be removed.
      ************/
-    function _flood_blocked_until($_posting) {
-      return $this->controller->_flood_blocked_until($_posting);
-    }
-
-
     function get_current_posting_id() {
       return $this->controller->get_current_posting_id();
     }

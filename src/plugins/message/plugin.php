@@ -208,7 +208,7 @@ function message_on_send($forum) {
       $forum->refer_to_posting_id($duplicate_id);
 
     // Check whether too many messages were sent.
-    $blocked_until = $forum->_flood_blocked_until($posting);
+    $blocked_until = $forum->forumdb()->get_flood_blocked_until($posting);
     if ($blocked_until) {
       $msg  = sprintf(_('You have sent too many messages.'
                       . ' %d seconds until your message may be sent.'),

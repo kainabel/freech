@@ -478,41 +478,6 @@
     }
 
 
-    function _flood_blocked_until($_posting) {
-      $forumdb = $this->forumdb;
-      $user    = $this->get_current_user();
-      $since   = time() - cfg('max_postings_time');
-      $offset  = cfg('max_postings') * -1;
-
-      // Find out how many postings were sent from the given user lately.
-      if (!$user->is_anonymous()) {
-        $uid        = $user->get_id();
-        $n_postings = $forumdb->get_n_postings_from_user_id($uid, $since);
-        if ($n_postings < cfg('max_postings'))
-          return;
-        $search       = array('user_id' => $uid);
-        $last_posting = $forumdb->get_posting_from_query($search, $offset);
-      }
-
-      // Find out how many postings were sent from the given IP lately.
-      if (!$last_posting) {
-        $ip_hash    = $_posting->get_ip_address_hash();
-        $n_postings = $forumdb->get_n_postings_from_ip_hash($ip_hash, $since);
-        if ($n_postings < cfg('max_postings'))
-          return;
-        $search       = array('ip_hash' => $ip_hash);
-        $last_posting = $forumdb->get_posting_from_query($search, $offset);
-      }
-
-      if (!$last_posting)
-        return;
-
-      // If the too many postings were posted, block this.
-      $post_time = $last_posting->get_created_unixtime();
-      return $post_time + cfg('max_postings_time');
-    }
-
-
     // Sends an email to the given user.
     function _send_mail($user, $subject, $body, $vars = NULL) {
       if (!$vars)

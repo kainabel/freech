@@ -1441,11 +1441,6 @@
     }
 
 
-    function get_current_posting_id() {
-      return $_GET['msg_id'] ? (int)$_GET['msg_id'] : '';
-    }
-
-
     function register_url($_name, $_url) {
       $this->urls[$_name] = $_url;
     }

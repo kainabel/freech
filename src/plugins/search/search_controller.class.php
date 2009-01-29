@@ -28,7 +28,7 @@
 
     function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
-      $current_id = $this->api->get_current_posting_id();
+      $current_id = (int)$_GET['msg_id'];
       $_posting->set_selected($_posting->get_id() == $current_id);
       $_posting->apply_block();
 

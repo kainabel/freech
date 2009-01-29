@@ -366,13 +366,5 @@
     function append_content($_content) {
       return $this->controller->_append_content($_content);
     }
-
-
-    /************
-     * FIXME: Methods below should definitely be removed.
-     ************/
-    function get_current_posting_id() {
-      return $this->controller->get_current_posting_id();
-    }
   }
 ?>

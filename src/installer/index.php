@@ -22,29 +22,31 @@
 require_once '../smarty/Smarty.class.php';
 require_once '../adodb/adodb.inc.php';
 include_once '../libuseful/SqlQuery.class.php5';
+include_once 'result.class.php';
+include_once 'util.inc.php';
 include_once 'state.class.php';
 include_once 'statedb.class.php';
 include_once 'step.class.php';
 include_once 'welcome.class.php';
-#include_once 'check_requirements.class.php';
-#include_once 'database_setup.class.php';
-#include_once 'create_default_user.class.php';
-#include_once 'done.class.php';
+include_once 'check_requirements.class.php';
+include_once 'database_setup.class.php';
+include_once 'create_default_user.class.php';
+include_once 'done.class.php';
 
 $steps = array('Welcome',
                'CheckRequirements',
-               'DatebaseSetup',
-               'CreateDefaultUser',
+//               'DatebaseSetup',
+//               'CreateDefaultUser',
                'Done');
 
-$smarty = new Smarty;
+$statedb = new StateDB('../data/installer');
+$smarty  = new Smarty;
 $smarty->template_dir = '.';
 $smarty->compile_dir  = '../data/installer';
 $smarty->cache_dir    = '../data/smarty_cache';
 $smarty->config_dir   = '../data/smarty_configs';
 $smarty->display('header.tmpl');
 
-$statedb      = new StateDB('../data/installer');
 $step_id      = (int)$_GET['step'];
 $prev_step_id = $step_id - 1;
 $state        = $statedb->get($prev_step_id);

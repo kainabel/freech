@@ -1,0 +1,28 @@
+<p/>
+<table width="100%" cellpadding="0">
+{foreach item=item from=$items}
+  <tr>
+    <td>{$item->get_name()|escape}</td>
+    <td>&nbsp;</td>
+    <td align="right">
+{if $item->result}
+      <font color="green">Success</font>
+{else}
+      <font color="red">Failed</font>
+{/if}
+    </td>
+  </tr>
+{if $item->hint}
+    <tr>
+      <td>
+        <font size="-1">{$item->hint|escape}</font>
+      </td>
+      <td colspan="2">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" height="5"></td>
+    </tr>
+{/if}
+{/foreach}
+</table>

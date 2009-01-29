@@ -19,28 +19,16 @@
   */
 ?>
 <?php
-class Step {
-  function Step($_id, $_smarty, $_state) {
-    $this->id     = $_id;
-    $this->smarty = $_smarty;
-    $this->state  = $_state;
-  }
-
-  function render($_filename, $_args = array()) {
-    $this->smarty->assign('nextstep', $this->id + 1);
-    foreach ($_args as $key => $value)
-      $this->smarty->assign($key, $value);
-    $this->smarty->display($_filename);
+class Result {
+  function Result($_name, $_result, $_hint = '') {
+    $this->name   = $_name;
+    $this->result = $_result;
+    $this->hint   = $_hint;
   }
 
 
-  function check() {
-    return TRUE;
-  }
-
-
-  function submit() {
-    return TRUE;
+  function get_name() {
+    return $this->name;
   }
 }
 ?>

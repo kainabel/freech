@@ -19,28 +19,13 @@
   */
 ?>
 <?php
-class Step {
-  function Step($_id, $_smarty, $_state) {
-    $this->id     = $_id;
-    $this->smarty = $_smarty;
-    $this->state  = $_state;
+class Done extends Step {
+  function show() {
+    $this->render('done.tmpl');
   }
-
-  function render($_filename, $_args = array()) {
-    $this->smarty->assign('nextstep', $this->id + 1);
-    foreach ($_args as $key => $value)
-      $this->smarty->assign($key, $value);
-    $this->smarty->display($_filename);
-  }
-
 
   function check() {
-    return TRUE;
-  }
-
-
-  function submit() {
-    return TRUE;
+    return FALSE;
   }
 }
 ?>

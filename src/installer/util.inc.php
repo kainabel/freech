@@ -19,28 +19,10 @@
   */
 ?>
 <?php
-class Step {
-  function Step($_id, $_smarty, $_state) {
-    $this->id     = $_id;
-    $this->smarty = $_smarty;
-    $this->state  = $_state;
-  }
-
-  function render($_filename, $_args = array()) {
-    $this->smarty->assign('nextstep', $this->id + 1);
-    foreach ($_args as $key => $value)
-      $this->smarty->assign($key, $value);
-    $this->smarty->display($_filename);
-  }
-
-
-  function check() {
-    return TRUE;
-  }
-
-
-  function submit() {
-    return TRUE;
-  }
+function util_check_php_function_exists($_name) {
+  $caption = sprintf('Checking support for "%s".', $_name);
+  if (function_exists($_name))
+    return new Result($caption, TRUE);
+  return new Result($caption, FALSE, 'The function does not exists.');
 }
 ?>

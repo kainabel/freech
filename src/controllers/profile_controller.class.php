@@ -139,7 +139,7 @@
 
 
     function show_user_editor($_user, $_hint = '') {
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action', 'user_submit');
 
       // Fetch the corresponding group.
@@ -212,7 +212,7 @@
 
 
     function show_user_options($_user, $_hint = '') {
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action', 'user_options_submit');
 
       // Render the template.
@@ -256,7 +256,7 @@
 
 
     function show_group_editor($_group, $_hint = '') {
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action', 'group_submit');
 
       // Render the template.

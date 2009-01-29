@@ -78,6 +78,8 @@
       else
         $url = $this->path . $query;
 
+      if (!$url)
+        $url = '.';
       if ($_escape)
         return htmlentities($url);
       return $url;

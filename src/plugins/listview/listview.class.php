@@ -86,7 +86,7 @@ class ListView extends View {
     // Add the 'respond' button.
     if ($may_write) {
       if ($_posting->is_active() && $_posting->get_allow_answer()) {
-        $url = new URL('', cfg('urlvars'), _('Reply'));
+        $url = new FreechURL('', _('Reply'));
         $url->set_var('action',    'respond');
         $url->set_var('forum_id',  $_posting->get_forum_id());
         $url->set_var('parent_id', $_posting->get_id());
@@ -98,7 +98,7 @@ class ListView extends View {
 
     // Add the 'edit' button.
     if ($may_edit) {
-      $url = new URL('', cfg('urlvars'), _('Edit'));
+      $url = new FreechURL('', _('Edit'));
       $url->set_var('action', 'edit');
       $url->set_var('forum_id',  $_posting->get_forum_id());
       $url->set_var('msg_id', $_posting->get_id());
@@ -106,7 +106,7 @@ class ListView extends View {
     }
 
     // Add 'show/hide thread' buttons.
-    $url = new URL('', cfg('urlvars'));
+    $url = new FreechURL;
     $url->set_var('action',   'read');
     $url->set_var('forum_id', $_posting->get_forum_id());
     $url->set_var('msg_id',   $_posting->get_id());

@@ -31,7 +31,7 @@ function message_on_run($forum) {
 
   // Add 'new message' button to the index bar.
   $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
-  $url      = new URL('', cfg('urlvars'), _('Start a New Topic'));
+  $url      = new FreechURL('', _('Start a New Topic'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action',   'write');
   $forum->page_links()->add_link($url, 200);

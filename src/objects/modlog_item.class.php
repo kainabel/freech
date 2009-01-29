@@ -188,12 +188,12 @@
 
     function get_html() {
       // This entire method is an evil hack.
-      $post_url = new URL('', cfg('urlvars'), $this->get_attribute('subject'));
+      $post_url = new FreechURL('', $this->get_attribute('subject'));
       $post_url->set_var('action',   'read');
       $post_url->set_var('msg_id',   $this->get_attribute('id'));
       $post_url->set_var('forum_id', $this->get_attribute('forum_id'));
 
-      $moderator_url = new URL('', cfg('urlvars'), $this->get_moderator_name());
+      $moderator_url = new FreechURL('', $this->get_moderator_name());
       $moderator_url->set_var('action',   'user_profile');
       $moderator_url->set_var('username', $this->get_moderator_name());
       $mod_icon      = htmlentities($this->get_moderator_icon());
@@ -202,7 +202,7 @@
                      . " title='$mod_groupname' alt='$mod_groupname' />";
       $mod_html      = $moderator_url->get_html().$mod_icon_html;
 
-      $user_url = new URL('', cfg('urlvars'), $this->get_attribute('username'));
+      $user_url = new FreechURL('', $this->get_attribute('username'));
       $user_url->set_var('action',   'user_profile');
       $user_url->set_var('username', $this->get_attribute('username'));
       $user_name      = htmlentities($this->get_attribute('username'));

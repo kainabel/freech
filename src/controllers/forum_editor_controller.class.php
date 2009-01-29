@@ -21,7 +21,7 @@
 <?php
 class ForumEditorController extends Controller {
   function show($_forum = NULL, $_ack = '', $_error = '') {
-    $url = new URL('', cfg('urlvars'));
+    $url = new FreechURL;
     $url->set_var('action', 'forum_submit');
 
     // Render the template.

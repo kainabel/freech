@@ -41,7 +41,7 @@ class HomepageController extends Controller {
     // Get a list of forums.
     $group         = $this->api->group();
     $may_edit      = $group->may('administer');
-    $add_forum_url = new URL('', cfg('urlvars'), _('Add a New Forum'));
+    $add_forum_url = new FreechURL('', _('Add a New Forum'));
     $add_forum_url->set_var('action', 'forum_add');
 
     // Collect status information regarding each forum.

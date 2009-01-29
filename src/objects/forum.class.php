@@ -83,7 +83,7 @@
 
 
     function get_url() {
-      $url = new URL('', cfg('urlvars'), $this->get_name());
+      $url = new FreechURL('', $this->get_name());
       $url->set_var('forum_id', $this->get_id());
       return $url;
     }
@@ -95,7 +95,7 @@
 
 
     function get_editor_url() {
-      $url = new URL('', cfg('urlvars'), '[' . _('Edit') . ']');
+      $url = new FreechURL('', '[' . _('Edit') . ']');
       $url->set_var('action',   'forum_edit');
       $url->set_var('forum_id', $this->get_id());
       return $url;

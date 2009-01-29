@@ -31,7 +31,7 @@
       $this->Menu();
 
       // Prints the index (pagination).
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action',    'group_profile');
       $url->set_var('groupname', $_args[group]->get_name());
       $this->add_index($url,

@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2009 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,21 +19,12 @@
   */
 ?>
 <?php
-  class FooterController extends Controller {
-    function show($_forum_id) {
-      $footer_links  = $this->api->footer_links();
-      $version[url]  = 'http://freech.debain.org/';
-      $version[text] = 'Freech '.FREECH_VERSION;
-
-      $rss_url = new FreechURL('rss.php', _('RSS feed'));
-      $rss_url->set_var('forum_id', (int)$_forum_id);
-
-      // Render the resulting template.
-      $this->clear_all_assign();
-      $this->assign_by_ref('footer_links', $footer_links);
-      $this->assign_by_ref('version',      $version);
-      $this->assign_by_ref('rss_url',      $rss_url);
-      $this->render('footer.tmpl');
+  /**
+   * Represents a URL, including the query variables.
+   */
+  class FreechURL extends URL {
+    function FreechURL($_path = '', $_label = '') {
+      $this->URL($_path, cfg('urlvars'), $_label);
     }
   }
 ?>

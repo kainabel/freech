@@ -39,7 +39,7 @@
         return;
       }
 
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   1);
       $url->set_var('forum_id', $_posting->get_forum_id());

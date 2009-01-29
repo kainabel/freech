@@ -16,7 +16,7 @@ function search_init($forum) {
   $forum->register_action('search', 'search_on_search');
 
   $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
-  $url      = new URL('', cfg('urlvars'), _('Find'));
+  $url      = new FreechURL('', _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum_id);
   $forum->forum_links()->add_link($url);
@@ -59,7 +59,7 @@ function search_on_search_result($forum) {
     return search_on_search_form($forum);
 
   $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
-  $url      = new URL('', cfg('urlvars'), _('Find'));
+  $url      = new FreechURL('', _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum_id);
   $forum->breadcrumbs()->add_separator();

@@ -31,7 +31,7 @@
       $this->Menu();
 
       // Prints the index (pagination).
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action',   'search');
       $url->set_var('q',        $_args[query]);
       $url->set_var('forum_id', $_args[forum_id]);

@@ -34,7 +34,7 @@
 
 
     function show_lock_posting($_posting, $_error = '') {
-      $url = new URL('', cfg('urlvars'));
+      $url = new FreechURL;
       $url->set_var('action', 'posting_lock_submit');
       $url->set_var('msg_id', $_posting->get_id());
 

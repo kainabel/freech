@@ -32,6 +32,7 @@
   include_once 'functions/forum.inc.php';
 
   include_once 'objects/url.class.php';
+  include_once 'objects/freech_url.class.php';
   include_once 'objects/posting.class.php';
   include_once 'objects/forum.class.php';
   include_once 'objects/user.class.php';
@@ -185,12 +186,12 @@
         $this->login_error = $this->_try_login();
       if ($this->get_current_action() == 'logout') {
         session_unset();
-        $url = new URL('.', cfg('urlvars'));
+        $url = new FreechURL;
         $this->_refer_to($url->get_string());
       }
 
       // Add the modlog URL to the forum links.
-      $url = new URL('', cfg('urlvars'), _('Moderation Log'));
+      $url = new FreechURL('', _('Moderation Log'));
       $url->set_var('action', 'moderation_log');
       $this->forum_links->add_link($url);
 
@@ -453,9 +454,9 @@
     // Returns an URL that points to the homepage.
     function _get_homepage_url() {
       if (!cfg('default_forum_id', FALSE))
-        return new URL('.', cfg('urlvars'), _('Home'));
+        return new FreechURL('', _('Home'));
 
-      $url = new URL('', cfg('urlvars'), _('Home'));
+      $url = new FreechURL('', _('Home'));
       $url->set_var('action', 'homepage');
       return $url;
     }
@@ -541,7 +542,7 @@
         $forum = $this->get_current_forum();
         if ($forum)
           return $forum->get_url()->get_string();
-        $url = new URL('.', cfg('urlvars'));
+        $url = new FreechURL;
         return $url->get_string();
       }
       elseif ($_SERVER['REQUEST_URI'] == '/')
@@ -558,7 +559,7 @@
 
 
     function _refer_to_posting_id($_posting_id) {
-      $url = new URL(cfg('site_url').'', cfg('urlvars'));
+      $url = new FreechURL(cfg('site_url'));
       $url->set_var('action',   'read');
       $url->set_var('msg_id',   $_posting_id);
       $url->set_var('forum_id', $this->get_current_forum_id());
@@ -588,20 +589,21 @@
 
     function _get_current_view_name() {
       $name = $_COOKIE['view'];
-      if ($name && $this->views[$name])
+      if ($name)
         return $name;
-      $name = cfg('default_view');
-      if ($this->views[$name])
-        return $name;
-      die("Default view $name is inactive or not installed.");
+      return cfg('default_view');
     }
 
 
     function _get_current_view_class() {
       $view_name  = $this->_get_current_view_name();
       $view_class = $this->views[$view_name];
+      if (!$view_class) {
+        $view_name  = cfg('default_view');
+        $view_class = $this->views[$view_name];
+      }
       if (!$view_class)
-        die('Plugin for current view is not installed (or active).');
+        die('Plugin for default view is not installed (or active).');
       return $view_class;
     }
 
@@ -1052,7 +1054,7 @@
 
       // Send the mail.
       if (!$user->is_confirmed()) {
-        $url = new URL(cfg('site_url').'', cfg('urlvars'));
+        $url = new FreechURL(cfg('site_url'));
         $url->set_var('action',   'account_reconfirm');
         $url->set_var('username', $user->get_name());
         $this->_refer_to($url->get_string());
@@ -1467,10 +1469,10 @@
         && $this->get_current_action() != 'read')
         return;
 
-      if ($this->_get_current_view_name() == $_name)
+      if ($this->_get_current_view_name() === $_name)
         return $this->footer_links->add_text($_caption, $_priority);
 
-      $url = new URL('', cfg('urlvars'), $_caption);
+      $url = new FreechURL('', $_caption);
       $url->set_var('forum_id',   $this->get_current_forum_id());
       $url->set_var('changeview', $_name);
       $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
@@ -1539,7 +1541,7 @@
 
     function get_login_url() {
       $refer_to = $this->_get_login_refer_url();
-      $url      = new URL('', cfg('urlvars'), _('Log in'));
+      $url      = new FreechURL('', _('Log in'));
       $url->set_var('action',   'login');
       $url->set_var('refer_to', $refer_to);
       return $url;
@@ -1547,7 +1549,7 @@
 
 
     function get_logout_url() {
-      $url = new URL('', cfg('urlvars'), _('Log out'));
+      $url = new FreechURL('', _('Log out'));
       $url->set_var('action', 'logout');
       return $url;
     }

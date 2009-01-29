@@ -30,12 +30,15 @@
     // Constructor.
     function MenuItem($_url = '', $_text = '') {
       $this->html = '';
-      if ($_url)
+      if ($_url) {
         $this->set_url($_url);
-      else
-        $this->url = new URL('', cfg('urlvars'));
-      if ($_text)
-        $this->url->set_label($_text);
+        if ($_text)
+          $this->url->set_label($_text);
+      }
+      else {
+        $this->url  = NULL;
+        $this->text = $_text;
+      }
     }
 
 
@@ -50,7 +53,7 @@
 
 
     function is_link() {
-      return $this->url->get_string() ? TRUE : FALSE;
+      return $this->url ? TRUE : FALSE;
     }
 
 
@@ -60,7 +63,10 @@
 
 
     function get_text() {
-      return $this->url->get_label();
+      if ($this->url)
+        return $this->url->get_label();
+      else
+        return $this->text;
     }
 
 

@@ -15,7 +15,7 @@ function registration_init($forum) {
   $forum->register_action('account_confirm',   'registration_on_confirm');
   $forum->register_action('account_reconfirm', 'registration_on_reconfirm');
 
-  $url = new URL('', cfg('urlvars'), _('Register Account'));
+  $url = new FreechURL('', _('Register Account'));
   $url->set_var('action', 'account_register');
   $forum->register_url('registration', $url);
 }
@@ -72,7 +72,7 @@ function registration_on_confirm($forum) {
 
   // See if the user still needs to set a password.
   if (!$user->get_password_hash()) {
-    $url = new URL(cfg('site_url').'', cfg('urlvars'));
+    $url = new FreechURL(cfg('site_url'));
     $url->set_var('action',   'password_change');
     $url->set_var('username', $user->get_name());
     $url->set_var('hash',     $_GET['hash']);

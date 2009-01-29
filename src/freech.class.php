@@ -328,18 +328,9 @@
 
 
     function get_url($_which) {
-      switch ($_which) {
-      case 'login':
-        return $this->controller->get_login_url();
-
-      case 'logout':
-        return $this->controller->get_logout_url();
-
-      default:
-        if (!$url = $this->controller->get_url($_which))
-          die('Freech->get_url(): No such URL.');
-        return $url;
-      }
+      if (!$url = $this->controller->get_url($_which))
+        die('Freech->get_url(): No such URL.');
+      return $url;
     }
   }
 ?>

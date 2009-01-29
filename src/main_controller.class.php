@@ -195,14 +195,25 @@
       $url->set_var('action', 'moderation_log');
       $this->links['forum']->add_link($url);
 
+      // Add login/logout links.
+      $refer_to = $this->_get_login_refer_url();
+      $url      = new FreechURL('', _('Log in'));
+      $url->set_var('action',   'login');
+      $url->set_var('refer_to', $refer_to);
+      $this->register_url('login',  $url);
+
+      $url = new FreechURL('', _('Log out'));
+      $url->set_var('action', 'logout');
+      $this->register_url('logout', $url);
+
       // Add user-specific links.
       //FIXME: this probably should not be here.
       $user = $this->get_current_user();
       if (!$user->is_active())
-        return $this->_refer_to($this->get_logout_url()->get_string());
+        return $this->_refer_to($this->get_url('logout')->get_string());
       elseif ($user->is_anonymous()) {
         $this->links['account']->add_link($this->get_url('registration'));
-        $this->links['account']->add_link($this->get_login_url());
+        $this->links['account']->add_link($this->get_url('login'));
       }
       else {
         $url = $user->get_postings_url();
@@ -213,7 +224,7 @@
         $url->set_label(_('My Profile'));
         $this->links['account']->add_link($url);
 
-        $this->links['account']->add_link($this->get_logout_url());
+        $this->links['account']->add_link($this->get_url('logout'));
       }
     }
 
@@ -908,7 +919,7 @@
 
       // Done.
       if ($user->is_deleted() && $is_self)
-        return $this->_refer_to($this->get_logout_url()->get_string());
+        return $this->_refer_to($this->get_url('logout')->get_string());
       $profile->show_user_editor($user, _('Your data has been saved.'));
     }
 
@@ -1516,22 +1527,6 @@
 
     function links($_where) {
       return $this->links[$_where];
-    }
-
-
-    function get_login_url() {
-      $refer_to = $this->_get_login_refer_url();
-      $url      = new FreechURL('', _('Log in'));
-      $url->set_var('action',   'login');
-      $url->set_var('refer_to', $refer_to);
-      return $url;
-    }
-
-
-    function get_logout_url() {
-      $url = new FreechURL('', _('Log out'));
-      $url->set_var('action', 'logout');
-      return $url;
     }
 
 

@@ -14,7 +14,7 @@ function top_users_init($forum) {
 
   $url = new FreechURL('', _('Top Users'));
   $url->set_var('action', 'top_posters');
-  $forum->forum_links()->add_link($url);
+  $forum->links('forum')->add_link($url);
 }
 
 

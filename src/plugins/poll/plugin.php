@@ -38,7 +38,7 @@ function poll_on_run($forum) {
   $url      = new FreechURL('', _('Start a Poll'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action'  , 'poll_add');
-  $forum->page_links()->add_link($url, 400);
+  $forum->links('page')->add_link($url, 400);
 }
 
 

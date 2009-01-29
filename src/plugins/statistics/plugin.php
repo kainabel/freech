@@ -14,7 +14,7 @@ function statistics_init($forum) {
 
   $url = new FreechURL('', _('Statistics'));
   $url->set_var('action', 'statistics');
-  $forum->forum_links()->add_link($url);
+  $forum->links('forum')->add_link($url);
 }
 
 

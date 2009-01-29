@@ -19,7 +19,7 @@ function search_init($forum) {
   $url      = new FreechURL('', _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum_id);
-  $forum->forum_links()->add_link($url);
+  $forum->links('forum')->add_link($url);
 
   // Add a small search field to the forum.
   $html = "<form id='quicksearch'\n"
@@ -34,7 +34,7 @@ function search_init($forum) {
   $html .= "&nbsp;<input type='text' name='q' value='' />\n";
   $html .= "</div>\n";
   $html .= "</form>\n";
-  $forum->search_links()->add_html($html);
+  $forum->links('search')->add_html($html);
 }
 
 

@@ -21,14 +21,11 @@
 <?php
   class BreadCrumbsController extends Controller {
     function show($_breadcrumbs, $_show_page_links) {
-      $page_links   = $this->api->page_links();
-      $search_links = $this->api->search_links();
-
       $this->clear_all_assign();
       $this->assign_by_ref('breadcrumbs',     $_breadcrumbs);
-      $this->assign_by_ref('page_links',      $page_links);
+      $this->assign_by_ref('page_links',      $this->api->links('page'));
       $this->assign_by_ref('show_page_links', $_show_page_links);
-      $this->assign_by_ref('search_links',    $search_links);
+      $this->assign_by_ref('search_links',    $this->api->links('search'));
       $this->render('breadcrumbs.tmpl');
     }
   }

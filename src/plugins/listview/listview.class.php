@@ -90,10 +90,10 @@ class ListView extends View {
         $url->set_var('action',    'respond');
         $url->set_var('forum_id',  $_posting->get_forum_id());
         $url->set_var('parent_id', $_posting->get_id());
-        $this->api->page_links()->add_link($url, 250);
+        $this->api->links('page')->add_link($url, 250);
       }
       else
-        $this->api->page_links()->add_text(_('Reply'), 200);
+        $this->api->links('page')->add_text(_('Reply'), 200);
     }
 
     // Add the 'edit' button.
@@ -102,7 +102,7 @@ class ListView extends View {
       $url->set_var('action', 'edit');
       $url->set_var('forum_id',  $_posting->get_forum_id());
       $url->set_var('msg_id', $_posting->get_id());
-      $this->api->page_links()->add_link($url, 300);
+      $this->api->links('page')->add_link($url, 300);
     }
 
     // Add 'show/hide thread' buttons.
@@ -120,7 +120,7 @@ class ListView extends View {
         $url->set_var('showthread', -1);
         $url->set_label(_('Hide Posting List'));
       }
-      $this->api->footer_links()->add_link($url);
+      $this->api->links('footer')->add_link($url);
     }
 
     // Create the indexbar.

@@ -168,39 +168,6 @@
 
 
     /*************************************************************
-     * Access to link sections that are rendered in the HTML.
-     *************************************************************/
-    function forum_links() {
-      return $this->controller->forum_links();
-    }
-
-
-    function page_links() {
-      return $this->controller->page_links();
-    }
-
-
-    function search_links() {
-      return $this->controller->search_links();
-    }
-
-
-    function account_links() {
-      return $this->controller->account_links();
-    }
-
-
-    function footer_links() {
-      return $this->controller->footer_links();
-    }
-
-
-    function breadcrumbs() {
-      return $this->controller->breadcrumbs();
-    }
-
-
-    /*************************************************************
      * Actions.
      *************************************************************/
     /**
@@ -303,6 +270,22 @@
 
     function add_html($_where, $_css) {
       return $this->controller->add_html($_where, $_css);
+    }
+
+
+    /**
+     * Provides access to link sections that are rendered in the HTML.
+     */
+    function links($_where) {
+      return $this->controller->links($_where);
+    }
+
+
+    /**
+     * Convenience wrapper around links().
+     */
+    function breadcrumbs() {
+      return $this->controller->links('breadcrumbs');
     }
 
 

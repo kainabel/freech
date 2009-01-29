@@ -70,8 +70,7 @@ class HomepageController extends Controller {
                                       '');
 
     // Get other page info.
-    $forum_links = $this->api->forum_links();
-    $new_users   = $this->userdb->get_newest_users(cfg('homepage_n_entries'));
+    $new_users = $this->userdb->get_newest_users(cfg('homepage_n_entries'));
 
     // Render the template.
     $this->clear_all_assign();
@@ -79,7 +78,7 @@ class HomepageController extends Controller {
     $this->assign('may_edit',      $may_edit);
     $this->assign('add_forum_url', $add_forum_url);
     $this->assign('forums',        $forums);
-    $this->assign('forum_links',   $forum_links);
+    $this->assign('forum_links',   $this->api->links('forum'));
     $this->assign('postings',      $this->postings);
     $this->assign('new_users',     $new_users);
     $this->render('home.tmpl');

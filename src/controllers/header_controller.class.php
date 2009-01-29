@@ -29,7 +29,7 @@
       $this->assign('style',         $this->api->get_style());
       $this->assign('head_js',       $this->api->get_js('head'));
       $this->assign('onload_js',     $this->api->get_js('onload'));
-      $this->assign('account_links', $this->api->account_links());
+      $this->assign('account_links', $this->api->links('account'));
       $this->assign('n_online',      $n_online);
       $this->render('header.tmpl');
     }

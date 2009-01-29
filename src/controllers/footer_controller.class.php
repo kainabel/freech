@@ -21,7 +21,6 @@
 <?php
   class FooterController extends Controller {
     function show($_forum_id) {
-      $footer_links  = $this->api->footer_links();
       $version[url]  = 'http://freech.debain.org/';
       $version[text] = 'Freech '.FREECH_VERSION;
 
@@ -30,7 +29,7 @@
 
       // Render the resulting template.
       $this->clear_all_assign();
-      $this->assign_by_ref('footer_links', $footer_links);
+      $this->assign_by_ref('footer_links', $this->api->links('footer'));
       $this->assign_by_ref('version',      $version);
       $this->assign_by_ref('rss_url',      $rss_url);
       $this->render('footer.tmpl');

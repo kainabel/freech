@@ -134,16 +134,16 @@
 
       // (Ab)use a Trackable as an eventbus.
       $this->eventbus      = new Trackable;
-      $this->forum_links   = new Menu;
-      $this->page_links    = new Menu;
-      $this->search_links  = new Menu;
-      $this->footer_links  = new Menu;
-      $this->account_links = new Menu;
-      $this->breadcrumbs   = new Menu;
       $this->actions       = array();
       $this->views         = array();
       $this->current_user  = NULL;
       $this->current_forum = NULL;
+      $this->links = array('forum'       => new Menu,
+                           'page'        => new Menu,
+                           'search'      => new Menu,
+                           'footer'      => new Menu,
+                           'account'     => new Menu,
+                           'breadcrumbs' => new Menu);
 
       // Connect to the DB.
       $this->db = ADONewConnection(cfg('db_dbn'))
@@ -193,7 +193,7 @@
       // Add the modlog URL to the forum links.
       $url = new FreechURL('', _('Moderation Log'));
       $url->set_var('action', 'moderation_log');
-      $this->forum_links->add_link($url);
+      $this->links['forum']->add_link($url);
 
       // Add user-specific links.
       //FIXME: this probably should not be here.
@@ -201,19 +201,19 @@
       if (!$user->is_active())
         return $this->_refer_to($this->get_logout_url()->get_string());
       elseif ($user->is_anonymous()) {
-        $this->account_links->add_link($this->get_url('registration'));
-        $this->account_links->add_link($this->get_login_url());
+        $this->links['account']->add_link($this->get_url('registration'));
+        $this->links['account']->add_link($this->get_login_url());
       }
       else {
         $url = $user->get_postings_url();
         $url->set_label(_('My Postings'));
-        $this->account_links->add_link($url);
+        $this->links['account']->add_link($url);
 
         $url = $user->get_profile_url();
         $url->set_label(_('My Profile'));
-        $this->account_links->add_link($url);
+        $this->links['account']->add_link($url);
 
-        $this->account_links->add_link($this->get_logout_url());
+        $this->links['account']->add_link($this->get_logout_url());
       }
     }
 
@@ -348,13 +348,13 @@
 
     function _init_breadcrumbs() {
       $url = $this->_get_homepage_url();
-      $this->breadcrumbs->add_link($url);
+      $this->breadcrumbs()->add_link($url);
 
       if ($this->get_current_forum_id() == NULL)
         return;
       $url = $this->get_current_forum()->get_url();
-      $this->breadcrumbs->add_separator();
-      $this->breadcrumbs->add_link($url);
+      $this->breadcrumbs()->add_separator();
+      $this->breadcrumbs()->add_link($url);
     }
 
 
@@ -637,13 +637,13 @@
      *************************************************************/
     // Prints the breadcrumbs pointing to the given posting.
     function _add_posting_breadcrumbs($_posting) {
-      $this->breadcrumbs->add_separator();
+      $this->breadcrumbs()->add_separator();
       if (!$_posting)
-        $this->breadcrumbs->add_text(_('No Such Message'));
+        $this->breadcrumbs()->add_text(_('No Such Message'));
       elseif (!$_posting->is_active())
-        $this->breadcrumbs->add_text(_('Locked Message'));
+        $this->breadcrumbs()->add_text(_('Locked Message'));
       else
-        $this->breadcrumbs->add_text($_posting->get_subject());
+        $this->breadcrumbs()->add_text($_posting->get_subject());
     }
 
 
@@ -786,8 +786,8 @@
 
 
     function _add_profile_breadcrumbs($_named_item) {
-      $this->breadcrumbs->add_separator();
-      $this->breadcrumbs->add_text($_named_item->get_name());
+      $this->breadcrumbs()->add_separator();
+      $this->breadcrumbs()->add_text($_named_item->get_name());
     }
 
 
@@ -1151,7 +1151,7 @@
     function _print_breadcrumbs() {
       $show_page_links = (bool)$this->get_current_forum_id();
       $controller      = new BreadCrumbsController($this->api);
-      $controller->show($this->breadcrumbs, $show_page_links);
+      $controller->show($this->breadcrumbs(), $show_page_links);
     }
 
 
@@ -1470,13 +1470,13 @@
         return;
 
       if ($this->_get_current_view_name() === $_name)
-        return $this->footer_links->add_text($_caption, $_priority);
+        return $this->links('footer')->add_text($_caption, $_priority);
 
       $url = new FreechURL('', $_caption);
       $url->set_var('forum_id',   $this->get_current_forum_id());
       $url->set_var('changeview', $_name);
       $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
-      $this->footer_links->add_link($url, $_priority);
+      $this->links('footer')->add_link($url, $_priority);
     }
 
 
@@ -1514,28 +1514,8 @@
     }
 
 
-    function forum_links() {
-      return $this->forum_links;
-    }
-
-
-    function page_links() {
-      return $this->page_links;
-    }
-
-
-    function search_links() {
-      return $this->search_links;
-    }
-
-
-    function account_links() {
-      return $this->account_links;
-    }
-
-
-    function footer_links() {
-      return $this->footer_links;
+    function links($_where) {
+      return $this->links[$_where];
     }
 
 
@@ -1556,7 +1536,7 @@
 
 
     function breadcrumbs() {
-      return $this->breadcrumbs;
+      return $this->links['breadcrumbs'];
     }
 
 

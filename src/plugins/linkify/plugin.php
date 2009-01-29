@@ -31,7 +31,7 @@ function linkify_on_read($forum, $message) {
     $url->set_var('action', 'linkify_show_videos');
   }
   $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-  $forum->footer_links()->add_link($url);
+  $forum->links('footer')->add_link($url);
 }
 
 

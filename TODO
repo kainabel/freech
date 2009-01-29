@@ -27,7 +27,6 @@ Maintenance
 * Merge MainController->get_log(in|out)_url into get_url().
 * Rename forum to api in plugins.
 * Convert the modlog into a plugin.
-* Possibly add Freech->links($_which) similar to Freech->get_url().
 
 Features
 ---------

@@ -11,12 +11,14 @@
   $cfg[db_pass] = 'password';  // Password on your database host.
   $cfg[db_name] = 'freech';    // Database name.
 
-  // Forum language. For a list of supported languages please have a look 
-  // at the language files in the "language/" subdirectory.
-  $cfg[lang] = 'en_EN';
+  // The default language of the user interface elements.
+  // For a list of supported languages please have a look 
+  // at the "language/" subdirectory.
+  $cfg[default_language] = 'en_EN';
 
-  // The country code of the language of your site.
-  $cfg[site_language] = 'en';
+  // The country code of the language of the content on your site.
+  // This is used in the RSS feed.
+  $cfg[content_language] = 'en';
 
   // The address used in the "from" field of any mail sent by the forum.
   $cfg[mail_from] = 'noreply@debain.org';

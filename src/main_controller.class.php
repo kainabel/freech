@@ -101,7 +101,7 @@
 
       // Fallback to the default language.
       if (!$lang || !preg_match('/^[a-z_]*$/i', $lang))
-        $lang = cfg('lang');
+        $lang = cfg('default_language');
 
       // Init gettext.
       if (!function_exists('gettext'))
@@ -1168,7 +1168,7 @@
       $rss->set_base_url(cfg('site_url'));
       $rss->set_title($_title);
       $rss->set_description($_descr);
-      $rss->set_language(cfg('site_language'));
+      $rss->set_language(cfg('content_language'));
       $rss->show((int)$_forum_id, (int)$_off, (int)$_n_entries);
       print($this->content);
     }

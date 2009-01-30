@@ -4,8 +4,6 @@ Plugin:      Message
 Version:     0.1
 Author:      Samuel Abels
 Description: Shows normal messages in the forum.
-Constructor: message_init
-Active:      1
 */
 include_once dirname(__FILE__).'/message.class.php';
 include_once dirname(__FILE__).'/message_controller.class.php';

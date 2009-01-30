@@ -4,7 +4,6 @@ Plugin:      Linkify
 Version:     0.1
 Author:      Samuel Abels
 Description: Converts URLs in messages into hyperlinks.
-Constructor: linkify_init
 */
 
 

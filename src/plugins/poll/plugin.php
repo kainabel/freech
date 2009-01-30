@@ -4,8 +4,6 @@ Plugin:      Poll
 Version:     0.1
 Author:      Samuel Abels
 Description: Adds support for pollings.
-Constructor: poll_init
-Active:      1
 */
 include_once dirname(__FILE__).'/poll.class.php';
 include_once dirname(__FILE__).'/poll_controller.class.php';

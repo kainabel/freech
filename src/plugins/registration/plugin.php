@@ -4,8 +4,6 @@ Plugin:      Registration
 Version:     0.1
 Author:      Samuel Abels
 Description: Adds pages for user registration to the forum.
-Constructor: registration_init
-Active:      1
 */
 include_once dirname(__FILE__).'/registration_controller.class.php';
 

@@ -4,7 +4,6 @@ Plugin:      List View
 Version:     0.1
 Author:      Samuel Abels
 Description: This plugin adds a view that shows postings in time order.
-Constructor: listview_init
 Active:      1
 */
 include_once dirname(__FILE__).'/listview.class.php';

@@ -4,8 +4,6 @@ Plugin:      Search
 Version:     0.1
 Author:      Samuel Abels
 Description: Adds a search function to the forum.
-Constructor: search_init
-Active:      1
 */
 include_once dirname(__FILE__).'/search_controller.class.php';
 include_once dirname(__FILE__).'/indexbar_search_result.class.php';

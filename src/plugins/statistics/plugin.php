@@ -4,8 +4,6 @@ Plugin:      Statistics
 Version:     0.1
 Author:      Samuel Abels
 Description: This plugin adds a page with statistics to the forum.
-Constructor: statistics_init
-Active:      1
 */
 include_once dirname(__FILE__).'/statistics_controller.class.php';
 

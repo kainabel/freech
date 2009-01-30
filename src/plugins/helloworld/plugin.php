@@ -4,8 +4,6 @@ Plugin:      Hello World
 Version:     0.1
 Author:      Samuel Abels
 Description: Demo plugin to shows how it works.
-Constructor: helloworld_init
-Active:      0
 */
 
 

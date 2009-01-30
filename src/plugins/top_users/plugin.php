@@ -4,8 +4,6 @@ Plugin:      Top Users
 Version:     0.1
 Author:      Samuel Abels
 Description: This plugin adds a page that shows the top users.
-Constructor: top_users_init
-Active:      1
 */
 include_once dirname(__FILE__).'/top_users_controller.class.php';
 

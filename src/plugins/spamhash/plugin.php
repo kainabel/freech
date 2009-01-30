@@ -5,7 +5,6 @@ Version:     0.2
 Author:      Samuel Abels, Elliott Back
 Description: Client-side Javascript computes an md5 code, server double
              checks. Blocks spam bots and makes DoS a little more difficult.
-Constructor: spamhash_init
 */
 include_once 'spamhash.class.php';
 

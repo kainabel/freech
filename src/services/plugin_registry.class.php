@@ -18,7 +18,6 @@ class PluginRegistry {
     $tag = '';
     fgets($fp);
     fgets($fp);
-    $plugin->active = true;
     while ($line = fgets($fp)) {
       if (preg_match("/^(Plugin:)\s+(.*)$/", $line, $matches)) {
         $tag          = $matches[1];
@@ -31,15 +30,6 @@ class PluginRegistry {
       else if (preg_match("/^(Author:)\s+(.*)$/", $line, $matches)) {
         $tag            = $matches[1];
         $plugin->author = $matches[2];
-      }
-      else if (preg_match("/^(Constructor:)\s+(.*)$/", $line, $matches)) {
-        $tag                 = $matches[1];
-        $plugin->constructor = $matches[2];
-      }
-      else if (preg_match("/^(Active:)\s+(.*)$/", $line, $matches)) {
-        $tag            = $matches[1];
-        if ($matches[2] == "0")
-          $plugin->active = false;
       }
       else if (preg_match("/^(Description:)\s+(.*)$/", $line, $matches)) {
         $tag           = $matches[1];
@@ -56,14 +46,12 @@ class PluginRegistry {
     if (!$plugin->name
       || !$plugin->version
       || !$plugin->author
-      || !$plugin->descr
-      || !$plugin->constructor) {
+      || !$plugin->descr) {
       echo "Incomplete plugin header in '$filename'.<br>";
       echo "Name: $plugin->name<br>";
       echo "Version: $plugin->version<br>";
       echo "Author: $plugin->author<br>";
       echo "Description: $plugin->descr<br>";
-      echo "Constructor: $plugin->constructor<br>";
       return;
     }
     return $plugin;
@@ -74,7 +62,7 @@ class PluginRegistry {
    */
   function read_plugins($dirname) {
     if (!preg_match("/^[a-z\-_0-9]+$/i", $dirname))
-      die("PluginRegistry::read_plugins(): Invalid path.");
+      die('PluginRegistry::read_plugins(): Invalid path.');
     $list = scandir($dirname);
     foreach ($list as $path) {
       $path = "$dirname/$path";

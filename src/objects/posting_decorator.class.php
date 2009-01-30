@@ -68,6 +68,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function set_priority($_priority) {
+    return $this->posting->set_priority($_priority);
+  }
+
+
   function get_priority() {
     return $this->posting->get_priority();
   }

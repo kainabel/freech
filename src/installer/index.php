@@ -30,12 +30,14 @@ include_once 'step.class.php';
 include_once 'welcome.class.php';
 include_once 'check_requirements.class.php';
 include_once 'database_setup.class.php';
+include_once 'create_database_tables.class.php';
 include_once 'create_default_user.class.php';
 include_once 'done.class.php';
 
 $steps = array('Welcome',
                'CheckRequirements',
-//               'DatebaseSetup',
+               'DatabaseSetup',
+//               'CreateDatabaseTables',
 //               'CreateDefaultUser',
                'Done');
 
@@ -67,9 +69,4 @@ else {
 }
 
 $smarty->display('footer.tmpl');
-
-// clear entire compile directory
-$smarty->clear_compiled_tpl();
-$smarty->compile_dir = '../data/smarty_templates_c';
-$smarty->clear_compiled_tpl();
 ?>

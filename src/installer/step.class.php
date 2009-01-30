@@ -20,7 +20,7 @@
 ?>
 <?php
 class Step {
-  function Step($_id, $_smarty, $_state) {
+  function Step(&$_id, &$_smarty, &$_state) {
     $this->id     = $_id;
     $this->smarty = $_smarty;
     $this->state  = $_state;

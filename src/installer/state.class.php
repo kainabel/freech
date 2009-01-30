@@ -26,12 +26,12 @@ class State {
   }
 
 
-  function set_attribute($_name, $_value) {
+  function set($_name, $_value) {
     $this->attribs[$_name] = $_value;
   }
 
 
-  function get_attribute($_name, $_default = NULL) {
+  function get($_name, $_default = NULL) {
     if (!$this->attribs[$_name])
       return $_default;
     return $this->attribs[$_name];

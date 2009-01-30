@@ -19,18 +19,4 @@
   */
 ?>
 <?php
-class Done extends Step {
-  function show() {
-    $this->render('done.tmpl');
-
-    // clear entire compile directory
-    $this->smarty->clear_compiled_tpl();
-    $this->smarty->compile_dir = '../data/smarty_templates_c';
-    $this->smarty->clear_compiled_tpl();
-  }
-
-  function check() {
-    return FALSE;
-  }
-}
 ?>

@@ -44,7 +44,7 @@ class StateDB {
 
     $pairs = parse_ini_file($this->_filename_of($_id));
     foreach ($pairs as $key => $value)
-      $state->set_attribute($key, $value);
+      $state->set($key, $value);
     return $state;
   }
 

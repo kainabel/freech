@@ -25,4 +25,26 @@ function util_check_php_function_exists($_name) {
     return new Result($caption, TRUE);
   return new Result($caption, FALSE, 'The function does not exists.');
 }
+
+function util_check_db_connection($_dbn) {
+  $caption = 'Trying to connect to the database.';
+  $db      = ADONewConnection($_dbn);
+  if ($db)
+    return new Result($caption, TRUE);
+  return new Result($caption, FALSE, 'Connection failed.');
+}
+
+function util_check_db_supports_constraints($_dbn) {
+  $caption = 'Checking whether database supports constraints.';
+  $db      = ADONewConnection($_dbn);
+  if (!$db)
+    return new Result($caption, FALSE, 'Database connection failed.');
+  $res = $db->execute('SHOW variables LIKE "have_innodb"');
+  if (!$res)
+    return new Result($caption, FALSE, 'Request failed.');
+  $supported = $res->FetchRow();
+  if (!$supported)
+    return new Result($caption, FALSE, 'No supported.');
+  return new Result($caption, TRUE);
+}
 ?>

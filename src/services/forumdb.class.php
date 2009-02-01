@@ -1123,7 +1123,7 @@
       $sql = "SELECT * FROM {t_forum}";
       if ($_status > -1)
         $sql .= " WHERE status={status}";
-      $sql  .= " ORDER BY id";
+      $sql  .= " ORDER BY id, priority";
       $query = new FreechSqlQuery($sql);
       $query->set_int('status', $_status);
       $res = $this->db->SelectLimit($query->sql(),

@@ -19,4 +19,35 @@
   */
 ?>
 <?php
+class Install extends Step {
+  function Install($_id, $_smarty, $_state) {
+    $this->Step($_id, $_smarty, $_state);
+    $this->results = array();
+    $this->failed  = FALSE;
+    $fp            = fopen('mysql_matpath.sql', 'r');
+    while ($sql = util_get_next_sql_command($fp)) {
+      $result = util_execute_sql($this->state->get('dbn'), $sql);
+      array_push($this->results, $result);
+      if (!$result->result)
+        $this->failed = TRUE;
+    }
+    fclose($fp);
+  }
+
+
+  function show() {
+    $args = array('results' => $this->results,
+                  'success' => !$this->failed);
+    $this->render('install.tmpl', $args);
+  }
+
+
+  function check() {
+    if ($this->failed) {
+      $this->show();
+      return FALSE;
+    }
+    return TRUE;
+  }
+}
 ?>

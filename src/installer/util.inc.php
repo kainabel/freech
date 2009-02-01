@@ -47,4 +47,47 @@ function util_check_db_supports_constraints($_dbn) {
     return new Result($caption, FALSE, 'No supported.');
   return new Result($caption, TRUE);
 }
+
+function util_get_next_sql_command($_fp) {
+  $sql = '';
+  while (!feof($_fp)) {
+    $line = fgets($_fp);
+
+    // Strip comments.
+    $comment_start = strpos($line, '--');
+    if ($comment_start !== FALSE)
+      $line = substr($line, 0, $comment_start);
+
+    // Collect the SQL statement. Statements are terminated by a semicolon.
+    $sql .= trim($line);
+    if (strpos($line, ';') !== FALSE)
+      break;
+  }
+
+  // Strip the semicolon and everything after it.
+  return substr($sql, 0, strpos($sql, ';'));
+}
+
+function util_execute_sql($_dbn, $_sql) {
+  // Find the SQL command type.
+  if (preg_match('/^ *CREATE TABLE[^\(]* +(\S+) +\(/', $_sql, $matches))
+    $caption = 'Creating database table ' . $matches[1] . '.';
+  elseif (preg_match('/^ *ALTER TABLE (\S+)/', $_sql, $matches))
+    $caption = 'Altering database table ' . $matches[1] . '.';
+  elseif (preg_match('/^ *INSERT INTO (\S+)/', $_sql, $matches))
+    $caption = 'Inserting row into database table ' . $matches[1] . '.';
+  else
+    $caption = 'Executing SQL command.';
+
+  // Connect to the database.
+  $db = ADONewConnection($_dbn);
+  if (!$db)
+    return new Result($caption, FALSE, 'Database connection failed.');
+
+  // Run.
+  $res = $db->execute($_sql);
+  if (!$res)
+    return new Result($caption, FALSE, 'Request failed: '.$db->ErrorMsg());
+  return new Result($caption, TRUE);
+}
 ?>

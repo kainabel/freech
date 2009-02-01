@@ -30,15 +30,15 @@ include_once 'step.class.php';
 include_once 'welcome.class.php';
 include_once 'check_requirements.class.php';
 include_once 'database_setup.class.php';
-include_once 'create_database_tables.class.php';
-include_once 'create_default_user.class.php';
+include_once 'default_user_setup.class.php';
+include_once 'install.class.php';
 include_once 'done.class.php';
 
 $steps = array('Welcome',
                'CheckRequirements',
                'DatabaseSetup',
-//               'CreateDatabaseTables',
-//               'CreateDefaultUser',
+//               'DefaultUserSetup',
+               'Install',
                'Done');
 
 $statedb = new StateDB('../data/installer');

@@ -112,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `freech_permission` (
   `allow` tinyint(1) unsigned default '0',
   `created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
+  UNIQUE KEY `group_id_2` (`group_id`, `name`),
   KEY `group_id` (`group_id`, `allow`),
   KEY `allow` (`allow`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
@@ -326,5 +327,5 @@ INSERT INTO freech_user (id, group_id, status, name, password, firstname, lastna
                   VALUES (1, 2, 1, 'anonymous', '', 'Anonymous', 'George', NULL);
 
 -- Create a default forum.
-INSERT INTO freech_forum (name, description, owner_id, created)
-                   VALUES ('Forum', 'Default forum', 1, NULL);
+INSERT INTO freech_forum (id, name, description, owner_id, created)
+                   VALUES (1, 'Forum', 'Default forum', 1, NULL);

@@ -23,13 +23,14 @@
   // The address used in the "from" field of any mail sent by the forum.
   $cfg[mail_from] = 'noreply@debain.org';
 
-  // The URL of your domain.
+  // The URL pointing to your Freech installation, for example
+  //  http://www.mydomain.com/freech/
   $cfg[site_url] = 'http://debain.org/';
 
   // A human readable title for your forum.
   $cfg[site_title] = 'Freech Forum';
 
-  // The descripton included in the RSS.
+  // The descripton included in the RSS feed.
   $cfg[rss_description] = 'Freech Discussion Forum';
 
   // *************************************************************

@@ -16,6 +16,14 @@ function registration_init($forum) {
   $url = new FreechURL('', _('Register Account'));
   $url->set_var('action', 'account_register');
   $forum->register_url('registration', $url);
+
+  $forum->eventbus()->signal_connect('on_run_before', 'registration_on_run');
+}
+
+
+function registration_on_run($forum) {
+  if ($forum->user()->is_anonymous())
+    $forum->links('account')->add_link($forum->get_url('registration'));
 }
 
 

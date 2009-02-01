@@ -213,10 +213,8 @@ class MainController {
     $user = $this->get_current_user();
     if (!$user->is_active())
       return $this->_refer_to($this->get_url('logout')->get_string());
-    elseif ($user->is_anonymous()) {
-      $this->links['account']->add_link($this->get_url('registration'));
+    elseif ($user->is_anonymous())
       $this->links['account']->add_link($this->get_url('login'));
-    }
     else {
       $url = $user->get_postings_url();
       $url->set_label(_('My Postings'));

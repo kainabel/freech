@@ -108,23 +108,16 @@ class ThreadView extends View {
 
     // Add the 'respond' button.
     if ($may_write) {
-      if ($_posting->is_active() && $_posting->get_allow_answer()) {
-        $url = new FreechURL('', _('Reply'));
-        $url->set_var('action',    'respond');
-        $url->set_var('forum_id',  $_posting->get_forum_id());
-        $url->set_var('parent_id', $_posting->get_id());
+      $url = $_posting->get_respond_url();
+      if ($_posting->is_active() && $_posting->get_allow_answer())
         $this->api->links('page')->add_link($url, 250);
-      }
       else
-        $this->api->links('page')->add_text(_('Reply'), 200);
+        $this->api->links('page')->add_text($url->get_label(), 200);
     }
 
     // Add the 'edit' button.
     if ($may_edit) {
-      $url = new FreechURL('', _('Edit'));
-      $url->set_var('action', 'edit');
-      $url->set_var('forum_id',  $_posting->get_forum_id());
-      $url->set_var('msg_id', $_posting->get_id());
+      $url = $_posting->get_edit_url();
       $this->api->links('page')->add_link($url, 300);
     }
 

@@ -281,7 +281,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int   ('id',              $_posting->get_id());
       $query->set_int   ('forum_id',        $_forum_id);
-      //$query->set_int   ('thread_id',       $_posting->_get_thread_id());
+      //$query->set_int   ('thread_id',       $_posting->get_thread_id());
       $query->set_int   ('priority',        $_posting->get_priority());
       $query->set_int   ('updated',         $_posting->get_updated_unixtime());
       $query->set_int   ('user_id',         $_posting->get_user_id());
@@ -519,6 +519,14 @@
         $sql .= " AND forum_id={forum_id}";
         $_query->set_int('forum_id', $_search_values['forum_id']);
       }
+      if ($_search_values['thread_id']) {
+        $sql .= " AND thread_id={thread_id}";
+        $_query->set_int('thread_id', $_search_values['thread_id']);
+      }
+      if ($_search_values['is_parent']) {
+        $sql .= " AND is_parent={is_parent}";
+        $_query->set_bool('is_parent', $_search_values['is_parent']);
+      }
       if ($_search_values['userid']) {
         $sql .= " AND user_id={userid}";
         $_query->set_int('userid', $_search_values['userid']);
@@ -546,6 +554,52 @@
         call_user_func($_func, $posting, $_data);
       }
       return $numrows;
+    }
+
+
+    function _get_foreach_postings_sql($_fields) {
+      $sql   = "SELECT *,";
+      $sql  .= "UNIX_TIMESTAMP(updated) updated,";
+      $sql  .= "UNIX_TIMESTAMP(created) created";
+      $sql  .= " FROM {t_posting}";
+      $sql  .= " WHERE 1";
+      $query = new FreechSqlQuery($sql);
+      if ($_fields)
+        $this->_add_where_expression($query, $_fields);
+      return $query->sql() . ' ORDER BY created DESC';
+    }
+
+
+    function foreach_posting_from_fields($_fields,
+                                         $_offset = 0,
+                                         $_limit  = -1,
+                                         $_func   = NULL,
+                                         $_data   = NULL) {
+      $limit    = $_limit  * 1;
+      $offset   = $_offset * 1;
+      $postings = array();
+      $sql      = $this->_get_foreach_postings_sql($_fields);
+      $res      = $this->db->SelectLimit($sql, $limit, $offset)
+                            or die('ForumDB::foreach_posting_from_fields()');
+      return $this->_walk_list($res, $_func, $_data);
+    }
+
+
+    function get_postings_from_fields($_fields,
+                                      $_offset = 0,
+                                      $_limit  = -1) {
+      $limit    = $_limit  * 1;
+      $offset   = $_offset * 1;
+      $postings = array();
+      $sql      = $this->_get_foreach_postings_sql($_fields);
+      $res      = $this->db->SelectLimit($sql, $limit, $offset)
+                            or die('ForumDB::foreach_posting_from_fields()');
+
+      while (!$res->EOF) {
+        $posting = $this->_get_posting_from_row($res->FetchRow());
+        array_push($postings, $posting);
+      }
+      return $postings;
     }
 
 
@@ -577,7 +631,7 @@
       $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
       $query->set_sql($sql);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
-                            or die("ForumDB::foreach_posting_from_query()");
+                            or die('ForumDB::foreach_posting_from_query()');
       return $this->_walk_list($res, $_func, $_data);
     }
 
@@ -916,7 +970,7 @@
      * entry in the same thread, or 0 if there is no previous entry.
      */
     function get_prev_posting_id_in_thread($_posting) {
-      $thread_id = $_posting->_get_thread_id();
+      $thread_id = $_posting->get_thread_id();
       $path      = $_posting->_get_path();
       if (!$path)
         return 0;
@@ -940,7 +994,7 @@
      * posting in the same thread, or 0 if there is no next entry.
      */
     function get_next_posting_id_in_thread($_posting) {
-      $thread_id = $_posting->_get_thread_id();
+      $thread_id = $_posting->get_thread_id();
       $path      = $_posting->_get_path();
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE thread_id={thread_id}";
@@ -966,7 +1020,7 @@
      */
     function get_prev_thread_id($_posting) {
       $forum_id  = $_posting->get_forum_id();
-      $thread_id = $_posting->_get_thread_id();
+      $thread_id = $_posting->get_thread_id();
       $sql  = "SELECT id FROM {t_posting}";
       $sql .= " WHERE forum_id={forum_id} AND thread_id<{thread_id}";
       $sql .= " AND status={status}";
@@ -988,7 +1042,7 @@
      */
     function get_next_thread_id($_posting) {
       $forum_id  = $_posting->get_forum_id();
-      $thread_id = $_posting->_get_thread_id();
+      $thread_id = $_posting->get_thread_id();
       $sql   = "SELECT id FROM {t_posting}";
       $sql  .= " WHERE forum_id={forum_id} AND thread_id>{thread_id}";
       $sql  .= " AND status={status}";

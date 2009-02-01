@@ -163,7 +163,7 @@ class IndentedBlock {
     }
 
 
-    function _get_thread_id() {
+    function get_thread_id() {
       return $this->fields[thread_id];
     }
 
@@ -350,9 +350,11 @@ class IndentedBlock {
     }
 
 
-    function get_url() {
-      $url = new FreechURL('', $this->get_subject());
-      $url->set_var('action',   'read');
+    function get_url($_action = 'read', $_caption = '') {
+      if (!$_caption)
+        $_caption = $this->get_subject();
+      $url = new FreechURL('', $_caption);
+      $url->set_var('action',   $_action);
       $url->set_var('msg_id',   $this->get_id());
       $url->set_var('forum_id', $this->get_forum_id());
       if (cfg('remember_page'))
@@ -368,6 +370,42 @@ class IndentedBlock {
 
     function get_url_string() {
       return $this->get_url()->get_string();
+    }
+
+
+    function get_edit_url() {
+      return $this->get_url('edit', _('Edit'));
+    }
+
+
+    function get_edit_url_html() {
+      return $this->get_edit_url()->get_html();
+    }
+
+
+    function get_edit_url_string() {
+      return $this->get_edit_url()->get_string();
+    }
+
+
+    function get_respond_url() {
+      $url = new FreechURL('', _('Reply'));
+      $url->set_var('action',    'respond');
+      $url->set_var('parent_id', $this->get_id());
+      $url->set_var('forum_id',  $this->get_forum_id());
+      if (cfg('remember_page'))
+        $url->set_var('hs', (int)$_GET[hs]);
+      return $url;
+    }
+
+
+    function get_respond_url_html() {
+      return $this->get_respond_url()->get_html();
+    }
+
+
+    function get_respond_url_string() {
+      return $this->get_respond_url()->get_string();
     }
 
 

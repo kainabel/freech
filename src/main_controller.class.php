@@ -674,6 +674,18 @@ class MainController {
   }
 
 
+  // Read a thread.
+  function _thread_read() {
+    $args     = array('thread_id' => (int)$_GET['thread_id'],
+                      'is_parent' => 1);
+    $postings = $this->forumdb->get_postings_from_fields($args);
+    $thread   = $postings[0];
+    $this->_add_posting_breadcrumbs($thread);
+    $view = $this->_get_current_view();
+    $view->show_thread($thread);
+  }
+
+
   // Read a posting.
   function _posting_read() {
     $posting = $this->forumdb->get_posting_from_id($_GET['msg_id']);
@@ -1218,7 +1230,10 @@ class MainController {
 
     switch ($action) {
     case 'read':
-      $this->_posting_read();             // Read a posting.
+      if ($_GET['msg_id'])
+        $this->_posting_read();
+      else
+        $this->_thread_read();
       break;
 
     case 'posting_prioritize':

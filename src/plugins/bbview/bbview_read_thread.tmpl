@@ -1,0 +1,7 @@
+{include file="indexbar.tmpl"}
+<br />
+{foreach item=posting from=$postings}
+<hr/>
+{include file="posting.tmpl" posting=$posting}
+{/foreach}
+{include file="indexbar.tmpl"}

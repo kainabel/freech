@@ -21,6 +21,17 @@ function linkify_init($forum) {
 function linkify_on_read($forum, $message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
 
+  // Make sure that the link is not added twice on pages where
+  // this method is called multiple times.
+  foreach ($forum->links('footer')->get_items() as $item) {
+    if (!$item->is_link())
+      continue;
+    if ($item->get_url()->get_var('action') == 'linkify_hide_videos'
+     || $item->get_url()->get_var('action') == 'linkify_show_videos')
+      return;
+  }
+
+  // Add a link to the footer.
   if ($_COOKIE['linkify_show_videos']) {
     $url = new FreechURL('', _('Hide Videos'));
     $url->set_var('action', 'linkify_hide_videos');

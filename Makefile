@@ -52,7 +52,8 @@ uninstall:
 tests:
 	rsync -azr src/ $(PUBLISH_HOST):$(PUBLISH_PATH)/ \
 				--exclude /config.inc.php \
-				--exclude /.git
+				--exclude /.git \
+				--delete
 	ssh $(PUBLISH_HOST) "chown -R www-data:www-data $(PUBLISH_PATH)/"
 	make clean
 

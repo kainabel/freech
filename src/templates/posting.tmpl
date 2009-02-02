@@ -44,6 +44,16 @@
 {$posting->get_body_html()}
 </div>
 <!-- end posting body -->
+{if $show_buttons}
+<ul id="posting_buttons">
+  {if $may_write && $posting->is_active() && $posting->get_allow_answer()}
+    <li>{$posting->get_respond_url_html()}</li>
+  {/if}
+  {if $may_edit && $posting->is_editable() && $__user->get_id() == $posting->get_user_id()}
+    <li>{$posting->get_edit_url_html()}</li>
+  {/if}
+</ul>
+{/if}
   <br />
   <br />
   </td>

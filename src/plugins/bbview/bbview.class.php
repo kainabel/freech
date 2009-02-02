@@ -70,6 +70,13 @@ class BBView extends View {
 
 
   function show_thread($_thread) {
+    $user      = $this->api->user();
+    $group     = $this->api->group();
+    $may_write = $group->may('write');
+    $may_edit  = $may_write
+              && cfg('postings_editable')
+              && !$user->is_anonymous();
+
     // Get all postings from the current thread.
     $db   = $this->forumdb;
     $args = array('thread_id' => (int)$_thread->get_thread_id());
@@ -96,8 +103,10 @@ class BBView extends View {
     }
 
     $this->clear_all_assign();
-    $this->assign_by_ref('indexbar', $indexbar);
-    $this->assign_by_ref('postings', $this->postings);
+    $this->assign_by_ref('indexbar',  $indexbar);
+    $this->assign_by_ref('postings',  $this->postings);
+    $this->assign_by_ref('may_write', $may_write);
+    $this->assign_by_ref('may_edit',  $may_edit);
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render(dirname(__FILE__).'/bbview_read_thread.tmpl');

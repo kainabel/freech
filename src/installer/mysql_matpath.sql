@@ -5,6 +5,16 @@
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `freech_info`
+--
+
+CREATE TABLE IF NOT EXISTS `freech_info` (
+  `name` varchar(50) collate latin1_general_ci NOT NULL,
+  `value` varchar(50) collate latin1_general_ci NOT NULL,
+  PRIMARY KEY  (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+--
 -- Table structure for table `freech_forum`
 --
 

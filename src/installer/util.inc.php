@@ -96,4 +96,30 @@ function util_execute_sql($_dbn, $_sql) {
   else
     return new Result($caption, FALSE, 'Request failed: '.$err . $_sql);
 }
+
+function util_store_attribute($_dbn, $_name, $_value) {
+  $caption = 'Saving ' . $_name;
+
+  // Connect to the database.
+  $db = ADONewConnection($_dbn);
+  if (!$db)
+    return new Result($caption, FALSE, 'Database connection failed.');
+
+  // Insert or update.
+  $sql   = 'INSERT INTO freech_info';
+  $sql  .= ' (name, value)';
+  $sql  .= ' VALUES';
+  $sql  .= ' ({name}, {value})';
+  $sql  .= ' ON DUPLICATE KEY UPDATE value={value}';
+  $query = new FreechSqlQuery($sql);
+  $query->set_string('name',  $_name);
+  $query->set_string('value', $_value);
+
+  // Run,.
+  $res = $db->execute($query->sql());
+  if ($res)
+    return new Result($caption, TRUE);
+  $err = $db->ErrorMsg();
+  return new Result($caption, FALSE, 'Request failed: '.$err);
+}
 ?>

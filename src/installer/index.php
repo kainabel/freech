@@ -21,6 +21,7 @@
 <?php
 require_once '../smarty/Smarty.class.php';
 require_once '../adodb/adodb.inc.php';
+include_once '../freech.class.php';
 include_once '../functions/config.inc.php';
 include_once '../config.inc.php';
 include_once '../libuseful/SqlQuery.class.php5';

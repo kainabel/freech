@@ -21,7 +21,10 @@
 <?php
 class Done extends Step {
   function show() {
-    $this->render('done.tmpl');
+    $dbn    = $this->state->get('dbn');
+    $result = util_store_attribute($dbn, 'version', FREECH_VERSION);
+    $vars   = array('errors' => $result);
+    $this->render('done.tmpl', $vars);
 
     // clear entire compile directory
     $this->smarty->clear_compiled_tpl();

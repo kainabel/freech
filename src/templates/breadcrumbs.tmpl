@@ -2,30 +2,14 @@
 <table id='breadcrumbs' width='100%' cellpadding='6' cellspacing='0' summary=''>
  <tr>
   <td align='left' valign='middle'>
-  &nbsp;{t}You are here:{/t}{strip}
-{foreach item=item from=$breadcrumbs->get_items()}
-  {if $item->is_separator()}
-    &nbsp;→
-  {elseif $item->is_link()}
-    &nbsp;{$item->get_url_html()}
-  {else}
-    &nbsp;{$item->get_text()|escape|replace:" ":"&nbsp;"}
-  {/if}
-{/foreach}
-{/strip}
+  &nbsp;{t}You are here:{/t}
+  {include file="links.inc.tmpl"
+           links=$breadcrumbs
+           name="breadcrumb_links"
+           separator="→"}
   </td>
   <td align='right' valign='middle'>
-{foreach item=item from=$search_links->get_items()}{strip}
-  {if $item->is_separator()}
-    &nbsp;&nbsp;
-  {elseif $item->is_link()}
-    {$item->get_url_html()}
-  {elseif $item->is_html()}
-    {$item->get_html()}
-  {else}
-    {$item->get_text()|escape|replace:" ":"&nbsp;"}
-  {/if}
-{/strip}{/foreach}
+  {include file="links.inc.tmpl" links=$search_links name="search_links"}
   </td>
  </tr>
 </table>
@@ -35,18 +19,7 @@
 <table width='100%' cellpadding='5' cellspacing='0' summary=''>
  <tr>
   <td align='center'>
-  <span id='page_links'>
-  {strip}
-{foreach name=loop item=item from=$page_links->get_items()}
-  {if $smarty.foreach.loop.index > 0}<span class="separator">&nbsp;|&nbsp;</span>{/if}
-  {if $item->is_link()}
-    {$item->get_url_html()}
-  {else}
-    {$item->get_text()|escape|replace:" ":"&nbsp;"}
-  {/if}
-{/foreach}
-{/strip}
-  </span>
+  {include file="links.inc.tmpl" links=$page_links name="page_links"}
   </td>
  </tr>
 </table>

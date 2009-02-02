@@ -1,21 +1,12 @@
 <!-- footer -->
-{include file="viewbar.inc.tmpl"}
+{include file="links.inc.tmpl" links=$view_links name="views"}
 </div>
 
 <div id="footer">
   <hr />
-  <ul id="footer_links">
-  {foreach name=loop item=item from=$footer_links->get_items()}
-    {if $item->is_separator()}
-      <li>|</li>
-    {elseif $item->is_html()}
-      <li>{$item->get_html()}</li>
-    {elseif !$item->is_link()}
-      <li>{$item->get_text()|escape|replace:" ":"&nbsp;"}</li>
-    {else}
-      <li>{$item->get_url_html()}</li>
-    {/if}
-  {/foreach}
-  </ul>
+  {include file="links.inc.tmpl"
+           links=$footer_links
+           name="footer_links"
+           separator="|"}
 </div>
 <!-- end footer -->

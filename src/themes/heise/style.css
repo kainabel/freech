@@ -113,12 +113,33 @@ input {
   background-color: #f4f4f4;
 }
 
-#breadcrumbs a {
+#breadcrumb_links {
+  display: inline;
+  list-style: none;
+  margin: 0px;
+  padding: 0;
+}
+
+#breadcrumb_links li {
+  display: inline;
+  margin: 2px;
+}
+
+#breadcrumb_links a {
   color: #353fa8;
 }
 
 #page_links {
+  display: inline;
+  list-style: none;
+  margin: 0px;
+  padding: 0;
   color: #bbb;
+}
+
+#page_links li {
+  display: inline;
+  margin: 0 5px;
 }
 
 #page_links .separator {
@@ -392,6 +413,18 @@ td.null {
 #quicksearch input:hover {
   border: 1px solid #777;
 }
+
+#search_links {
+  display: inline;
+  list-style: none;
+  margin: 0px;
+  padding: 0;
+}
+
+#search_links li {
+  display: inline;
+}
+
 
 /**
  * Posting moderation.

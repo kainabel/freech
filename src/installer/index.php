@@ -21,7 +21,13 @@
 <?php
 require_once '../smarty/Smarty.class.php';
 require_once '../adodb/adodb.inc.php';
+include_once '../functions/config.inc.php';
+include_once '../config.inc.php';
 include_once '../libuseful/SqlQuery.class.php5';
+include_once '../libuseful/string.inc.php';
+include_once '../services/sql_query.class.php';
+include_once '../services/userdb.class.php';
+include_once '../objects/user.class.php';
 include_once 'result.class.php';
 include_once 'util.inc.php';
 include_once 'state.class.php';
@@ -37,9 +43,15 @@ include_once 'done.class.php';
 $steps = array('Welcome',
                'CheckRequirements',
                'DatabaseSetup',
-//               'DefaultUserSetup',
                'Install',
+               'DefaultUserSetup',
                'Done');
+
+if (get_magic_quotes_gpc()) {
+  $_GET    = array_map('stripslashes_deep', $_GET);
+  $_POST   = array_map('stripslashes_deep', $_POST);
+  $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
+}
 
 $statedb = new StateDB('../data/installer');
 $smarty  = new Smarty;

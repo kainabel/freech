@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003-2008 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003-2009 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,4 +19,61 @@
   */
 ?>
 <?php
+class DefaultUserSetup extends Step {
+  function show($_args = array()) {
+    $this->render('default_user_setup.tmpl', $_args);
+  }
+
+
+  function check() {
+    $username  = trim($_POST['username']);
+    $password1 = trim($_POST['password1']);
+    $password2 = trim($_POST['password2']);
+
+    // Check the syntax.
+    $errors = array();
+    if ($username == '')
+      array_push($errors, new Result('Checking the username.',
+                                     FALSE,
+                                     'Please enter a username.'));
+    if ($password1 == '')
+      array_push($errors, new Result('Checking the password.',
+                                     FALSE,
+                                     'Please enter a password.'));
+    if ($password1 != $password2)
+      array_push($errors, new Result('Checking the password.',
+                                     FALSE,
+                                     'The passwords do not match.'));
+    if (count($errors) > 0) {
+      $this->show($errors);
+      return FALSE;
+    }
+
+    // Connect to the database.
+    $db = ADONewConnection($this->state->get('dbn'));
+    if (!$db) {
+      array_push($errors, new Result('Connecting to the database.',
+                                     FALSE,
+                                     'Database connection failed.'));
+      $this->show($errors);
+      return FALSE;
+    }
+
+    // Create the user.
+    $userdb = new UserDB($db);
+    $user   = new User($username);
+    $user->set_password($password1);
+    $user->set_group_id(1); //FIXME: hardcoded
+    $user->set_status(USER_STATUS_ACTIVE);
+    if (!$userdb->save_user($user)) {
+      $result = new Result('Creating the user.', FALSE, 'Failed.');
+      array_push($errors, $result);
+      $this->show($errors);
+      return FALSE;
+    }
+
+    // Success!
+    return TRUE;
+  }
+}
 ?>

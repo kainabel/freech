@@ -1,0 +1,44 @@
+<h2>Activating The Admin User.</h2>
+
+{include file="checklist.tmpl" items=$errors}
+
+{if $errors}
+<p/>
+{/if}
+
+Please enter a password for your administrator account.
+
+<p/>
+<form method='post' action='?step={$nextstep}'>
+<table width='100%'>
+  <tr>
+    <td>Username:</td>
+    <td>&nbsp;</td>
+    <td width='100%'>
+      <input type="text" name="username" value="{$username|escape}" />
+    </td>
+  </tr>
+  <tr>
+    <td>Password:</td>
+    <td>&nbsp;</td>
+    <td width='100%'>
+      <input type="password" name="password1" />
+    </td>
+  </tr>
+  <tr>
+    <td>Repeat:</td>
+    <td>&nbsp;</td>
+    <td width='100%'>
+      <input type="password" name="password2" />
+    </td>
+  </tr>
+</table>
+
+<hr/>
+<table width='100%'>
+  <tr>
+    <td width='100%'></td>
+    <td><input type='submit' value='Continue'/></td>
+  </tr>
+</table>
+</form>

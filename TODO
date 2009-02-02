@@ -4,7 +4,9 @@
 
 Maintenance
 ------------
-* Complete the installer.
+* Rename config.inc.php to default_config.inc.php.
+* Include the installer-written config.inc.php file.
+* Update the INSTALL file.
 
 Features
 ---------

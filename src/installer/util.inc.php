@@ -59,7 +59,7 @@ function util_get_next_sql_command($_fp) {
       $line = substr($line, 0, $comment_start);
 
     // Collect the SQL statement. Statements are terminated by a semicolon.
-    $sql .= trim($line);
+    $sql .= ' ' . trim($line);
     if (strpos($line, ';') !== FALSE)
       break;
   }
@@ -86,8 +86,14 @@ function util_execute_sql($_dbn, $_sql) {
 
   // Run.
   $res = $db->execute($_sql);
-  if (!$res)
-    return new Result($caption, FALSE, 'Request failed: '.$db->ErrorMsg());
-  return new Result($caption, TRUE);
+  $err = $db->ErrorMsg();
+  if ($res)
+    return new Result($caption, TRUE);
+  elseif (strstr($err, 'Duplicate'))
+    return new Result($caption, TRUE, 'Warning: '.$err);
+  elseif (strstr($err, 'errno: 121') && strstr($_sql, 'ALTER TABLE'))
+    return new Result($caption, TRUE, 'Warning: '.$err);
+  else
+    return new Result($caption, FALSE, 'Request failed: '.$err . $_sql);
 }
 ?>

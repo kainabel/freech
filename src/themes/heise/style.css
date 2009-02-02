@@ -178,6 +178,12 @@ input {
 }
 
 #footer {
+  clear: both;
+  margin: 0px auto;
+  padding: 5px;
+}
+
+#footer_links {
   list-style: none;
   text-align: center;
   margin: 5px auto;
@@ -185,7 +191,7 @@ input {
   font-size: .9em;
 }
 
-#footer li {
+#footer_links li {
   display: inline;
   margin: 1px;
   padding: 0;

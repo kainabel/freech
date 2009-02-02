@@ -2,18 +2,20 @@
 {include file="viewbar.inc.tmpl"}
 </div>
 
-<hr />
-<ul id="footer">
-{foreach name=loop item=item from=$footer_links->get_items()}
-  {if $item->is_separator()}
-    <li>|</li>
-  {elseif $item->is_html()}
-    <li>{$item->get_html()}</li>
-  {elseif !$item->is_link()}
-    <li>{$item->get_text()|escape|replace:" ":"&nbsp;"}</li>
-  {else}
-    <li>{$item->get_url_html()}</li>
-  {/if}
-{/foreach}
-</ul>
+<div id="footer">
+  <hr />
+  <ul id="footer_links">
+  {foreach name=loop item=item from=$footer_links->get_items()}
+    {if $item->is_separator()}
+      <li>|</li>
+    {elseif $item->is_html()}
+      <li>{$item->get_html()}</li>
+    {elseif !$item->is_link()}
+      <li>{$item->get_text()|escape|replace:" ":"&nbsp;"}</li>
+    {else}
+      <li>{$item->get_url_html()}</li>
+    {/if}
+  {/foreach}
+  </ul>
+</div>
 <!-- end footer -->

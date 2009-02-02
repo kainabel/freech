@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freech 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-29 20:49+0100\n"
+"POT-Creation-Date: 2009-02-02 08:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Samuel Abels <http://debain.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,7 +191,7 @@ msgstr "Antworten erlauben"
 msgid "Prevent responses"
 msgstr "Antworten verbieten"
 
-#: po/templates.c:176 po/templates.c:191 src/main_controller.class.php:200
+#: po/templates.c:176 po/templates.c:191 src/main_controller.class.php:202
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -215,7 +215,7 @@ msgstr "Email-Adresse:"
 msgid "Reset Password"
 msgstr "Zugangsdaten zurücksetzen"
 
-#: po/templates.c:206 src/main_controller.class.php:1117
+#: po/templates.c:206 src/main_controller.class.php:1129
 msgid "Edit a Forum"
 msgstr "Forum bearbeiten"
 
@@ -235,8 +235,8 @@ msgstr "Beschreibung:"
 msgid "Save the Forum"
 msgstr "Forum speichern"
 
-#: po/templates.c:221 src/main_controller.class.php:194
-#: src/main_controller.class.php:1155
+#: po/templates.c:221 src/main_controller.class.php:196
+#: src/main_controller.class.php:1167
 msgid "Moderation Log"
 msgstr "Moderations-Log"
 
@@ -363,8 +363,8 @@ msgid ""
 "Please enter valid information, your registration is invalid otherwise and "
 "may be deleted."
 msgstr ""
-"Bitte korrekte Daten eingeben, ihre Registrierung ist sonst ungültig und"
-" ihr Account kann gelöscht werden."
+"Bitte korrekte Daten eingeben, ihre Registrierung ist sonst ungültig und ihr "
+"Account kann gelöscht werden."
 
 #: po/templates.c:341
 msgid "Public Email:"
@@ -384,10 +384,10 @@ msgid ""
 "stated above.\n"
 "  You also agree to the terms of use."
 msgstr ""
-"Wenn Sie mit der Speicherung Ihrer personenbezogenen Daten sowie den Regeln"
-" und Bestimmungen der Nutzungsvereinbarung einverstanden sind, können Sie"
-" mit einem Klick auf den Zustimmen-Button unten fortfahren."
-" Ansonsten drücken Sie bitte Abbrechen."
+"Wenn Sie mit der Speicherung Ihrer personenbezogenen Daten sowie den Regeln "
+"und Bestimmungen der Nutzungsvereinbarung einverstanden sind, können Sie mit "
+"einem Klick auf den Zustimmen-Button unten fortfahren. Ansonsten drücken Sie "
+"bitte Abbrechen."
 
 #: po/templates.c:353
 msgid "I Agree, Register"
@@ -399,7 +399,7 @@ msgstr "Abbrechen"
 
 #: po/templates.c:359
 #: src/plugins/statistics/statistics_controller.class.php:77
-#: src/plugins/statistics/plugin.php:15 src/plugins/statistics/plugin.php:23
+#: src/plugins/statistics/plugin.php:13 src/plugins/statistics/plugin.php:21
 msgid "Statistics"
 msgstr "Forenstatistik"
 
@@ -416,7 +416,7 @@ msgid "Traffic"
 msgstr "Traffic"
 
 #: po/templates.c:371 src/plugins/top_users/top_users_controller.class.php:32
-#: src/plugins/top_users/plugin.php:15 src/plugins/top_users/plugin.php:23
+#: src/plugins/top_users/plugin.php:13 src/plugins/top_users/plugin.php:21
 msgid "Top Users"
 msgstr "Top 20"
 
@@ -449,7 +449,7 @@ msgid "Quote Message"
 msgstr "Zitat einfügen"
 
 #: po/templates.c:410 src/plugins/message/message_controller.class.php:110
-#: src/plugins/message/plugin.php:154
+#: src/plugins/message/plugin.php:152
 msgid "Preview"
 msgstr "Vorschau"
 
@@ -469,8 +469,8 @@ msgstr "Stimme abgeben"
 msgid "View results"
 msgstr "Zum Umfrageergebnis"
 
-#: po/templates.c:428 src/plugins/poll/plugin.php:38
-#: src/plugins/poll/plugin.php:52
+#: po/templates.c:428 src/plugins/poll/plugin.php:36
+#: src/plugins/poll/plugin.php:50
 msgid "Start a Poll"
 msgstr "Umfrage starten"
 
@@ -528,34 +528,44 @@ msgstr ""
 "  NOT user:\"der da\" AND (text:bananen OR subject:frucht)\n"
 "  ban?nen AND NOT subject:wildcard*matching"
 
-#: src/objects/posting.class.php:651 src/main_controller.class.php:655
+#: src/objects/posting.class.php:377 src/objects/user.class.php:313
+#: src/objects/forum.class.php:98 src/objects/group.class.php:161
+#: src/plugins/message/plugin.php:82
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: src/objects/posting.class.php:392 src/plugins/message/plugin.php:59
+msgid "Reply"
+msgstr "Beantworten"
+
+#: src/objects/posting.class.php:689 src/main_controller.class.php:655
 msgid "Locked Message"
 msgstr "Gesperrter Beitrag"
 
-#: src/objects/posting.class.php:697
+#: src/objects/posting.class.php:735
 msgid "Warning! Your message is incomplete."
 msgstr "Achtung! Ihre Nachricht ist unvollständig."
 
-#: src/objects/posting.class.php:700
+#: src/objects/posting.class.php:738
 #, php-format
 msgid "Please enter a name with at most %d characters."
 msgstr "Bitte einen Namen mit maximal %d Zeichen eingeben."
 
-#: src/objects/posting.class.php:703
+#: src/objects/posting.class.php:741
 msgid "Your login name contains invalid characters."
 msgstr "Der Benutzername enthält ungültige Zeichen."
 
-#: src/objects/posting.class.php:707
+#: src/objects/posting.class.php:745
 #, php-format
 msgid "Please enter a subject with at most %d characters."
 msgstr "Bitte einen Betreff mit maximal %d Zeichen eingeben."
 
-#: src/objects/posting.class.php:711
+#: src/objects/posting.class.php:749
 #, php-format
 msgid "Your message exceeds the maximum length of %d characters."
 msgstr "Die Nachricht überschreitet die maximale Länge von %d Zeichen."
 
-#: src/objects/posting.class.php:718
+#: src/objects/posting.class.php:756
 msgid "Your message contains invalid characters."
 msgstr "Die Nachricht enthält ungültige Zeichen."
 
@@ -577,13 +587,6 @@ msgstr "Bitte eine gültige Email-Adresse eingeben."
 #, php-format
 msgid "Please enter an email address with at most %d characters."
 msgstr "Bitte eine Email-Adresse mit maximal %d Zeichen eingeben."
-
-#: src/objects/user.class.php:313 src/objects/forum.class.php:98
-#: src/objects/group.class.php:161 src/plugins/listview/listview.class.php:101
-#: src/plugins/threadview/threadview.class.php:124
-#: src/plugins/message/plugin.php:84
-msgid "Edit"
-msgstr "Bearbeiten"
 
 #: src/objects/user.class.php:326
 #, php-format
@@ -775,7 +778,7 @@ msgstr "Alles aufklappen"
 msgid "Fold All"
 msgstr "Alles zuklappen"
 
-#: src/main_controller.class.php:205
+#: src/main_controller.class.php:207
 msgid "Log out"
 msgstr "Ausloggen"
 
@@ -826,78 +829,70 @@ msgstr ""
 "\n"
 "[URL]\n"
 
-#: src/main_controller.class.php:653 src/main_controller.class.php:693
+#: src/main_controller.class.php:653 src/main_controller.class.php:705
 msgid "No Such Message"
 msgstr "Dieser Beitrag ist nicht vorhanden"
 
-#: src/main_controller.class.php:694
+#: src/main_controller.class.php:706
 msgid "A message with the given ID does not exist."
 msgstr "Der von ihnen angeforderte Beitrag existiert in diesem Forum nicht."
 
-#: src/main_controller.class.php:742
+#: src/main_controller.class.php:754
 msgid "Please enter a reason."
 msgstr "Bitte eine Begründung angeben."
 
-#: src/main_controller.class.php:907 src/main_controller.class.php:1018
-#: src/plugins/registration/plugin.php:42
+#: src/main_controller.class.php:919 src/main_controller.class.php:1030
+#: src/plugins/registration/plugin.php:48
 msgid "Error: Passwords do not match."
 msgstr "Fehler: Die Passworte stimmen nicht überein."
 
-#: src/main_controller.class.php:918 src/main_controller.class.php:1030
-#: src/plugins/registration/plugin.php:59
+#: src/main_controller.class.php:930 src/main_controller.class.php:1042
+#: src/plugins/registration/plugin.php:65
 msgid "Failed to save the user."
 msgstr "Speichern the Benutzers fehlgeschlagen."
 
-#: src/main_controller.class.php:923
+#: src/main_controller.class.php:935
 msgid "Your data has been saved."
 msgstr "Die Daten wurden gespeichert."
 
-#: src/main_controller.class.php:973
+#: src/main_controller.class.php:985
 msgid "Failed to save the group."
 msgstr "Speichern der Gruppe fehlgeschlagen."
 
-#: src/main_controller.class.php:976
+#: src/main_controller.class.php:988
 msgid "Your changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
-#: src/main_controller.class.php:1062
+#: src/main_controller.class.php:1074
 msgid "The given email address was not found."
 msgstr "Die angegebene Email-Adresse ist unbekannt."
 
-#: src/main_controller.class.php:1076
+#: src/main_controller.class.php:1088
 msgid "Your account is locked."
 msgstr "Der Account ist gesperrt."
 
-#: src/main_controller.class.php:1107
+#: src/main_controller.class.php:1119
 #: src/controllers/homepage_controller.class.php:44
 msgid "Add a New Forum"
 msgstr "Neues Forum hinzufügen"
 
-#: src/main_controller.class.php:1146
+#: src/main_controller.class.php:1158
 msgid "The changes have been saved."
 msgstr "Die Änderungen wurden gespeichert."
 
-#: src/plugins/linkify/plugin.php:26
+#: src/plugins/linkify/plugin.php:36
 msgid "Hide Videos"
 msgstr "Videos ausblenden"
 
-#: src/plugins/linkify/plugin.php:30
+#: src/plugins/linkify/plugin.php:40
 msgid "Show Videos"
 msgstr "Videos einblenden"
 
-#: src/plugins/listview/listview.class.php:89
-#: src/plugins/listview/listview.class.php:96
-#: src/plugins/threadview/threadview.class.php:112
-#: src/plugins/threadview/threadview.class.php:119
-#: src/plugins/message/plugin.php:61
-msgid "Reply"
-msgstr "Beantworten"
-
-#: src/plugins/listview/listview.class.php:117
+#: src/plugins/listview/listview.class.php:110
 msgid "Show Posting List"
 msgstr "Posting-Liste einblenden"
 
-#: src/plugins/listview/listview.class.php:121
+#: src/plugins/listview/listview.class.php:114
 msgid "Hide Posting List"
 msgstr "Posting-Liste ausblenden"
 
@@ -906,28 +901,28 @@ msgstr "Posting-Liste ausblenden"
 msgid "Message"
 msgstr "Beitrag"
 
-#: src/plugins/listview/plugin.php:15
+#: src/plugins/listview/plugin.php:14
 msgid "Order by Date"
-msgstr "Flache Darstellung"
+msgstr "Eingangsreihenfolge"
 
-#: src/plugins/registration/plugin.php:18
+#: src/plugins/registration/plugin.php:16
 msgid "Register Account"
 msgstr "Account registrieren"
 
-#: src/plugins/registration/plugin.php:46 src/plugins/message/plugin.php:142
-#: src/plugins/message/plugin.php:200
+#: src/plugins/registration/plugin.php:52 src/plugins/message/plugin.php:140
+#: src/plugins/message/plugin.php:198
 msgid "The entered username is not available."
 msgstr "Der Benutzername gehört bereits einem registrierten User."
 
-#: src/plugins/registration/plugin.php:52
+#: src/plugins/registration/plugin.php:58
 msgid "The given email address already exists in our database."
 msgstr "Die angegebene Email-Adresse gehört bereits einem registrierten User."
 
-#: src/plugins/registration/plugin.php:107
+#: src/plugins/registration/plugin.php:113
 msgid "Your registration at [SITE_TITLE]"
 msgstr "Deine Registrierung bei [SITE_TITLE]"
 
-#: src/plugins/registration/plugin.php:108
+#: src/plugins/registration/plugin.php:114
 msgid ""
 "Hello [FIRSTNAME] [LASTNAME],\n"
 "\n"
@@ -946,11 +941,11 @@ msgstr ""
 "\n"
 "[URL]\n"
 
-#: src/plugins/threadview/threadview.class.php:140
+#: src/plugins/threadview/threadview.class.php:133
 msgid "Show Thread"
 msgstr "Thread einblenden"
 
-#: src/plugins/threadview/threadview.class.php:144
+#: src/plugins/threadview/threadview.class.php:137
 msgid "Hide Thread"
 msgstr "Thread ausblenden"
 
@@ -958,9 +953,13 @@ msgstr "Thread ausblenden"
 msgid "Thread"
 msgstr "Thread"
 
-#: src/plugins/threadview/plugin.php:15
+#: src/plugins/threadview/plugin.php:13
 msgid "Order by Thread"
 msgstr "Thread-Darstellung"
+
+#: src/plugins/bbview/plugin.php:14
+msgid "Order by Topic"
+msgstr "Flache Darstellung"
 
 #: src/plugins/message/message_controller.class.php:62
 #, php-format
@@ -972,11 +971,11 @@ msgstr "%s schrieb am %s:"
 msgid "Re: "
 msgstr "Re: "
 
-#: src/plugins/message/plugin.php:34 src/plugins/message/plugin.php:43
+#: src/plugins/message/plugin.php:32 src/plugins/message/plugin.php:41
 msgid "Start a New Topic"
 msgstr "Neues Thema"
 
-#: src/plugins/message/plugin.php:213
+#: src/plugins/message/plugin.php:211
 #, php-format
 msgid ""
 "You have sent too many messages. %d seconds until your message may be sent."
@@ -984,15 +983,15 @@ msgstr ""
 "Sie haben zu viele Nachrichten abgeschickt. Nächstes Posting ist erst in %d "
 "Sekunden wieder möglich."
 
-#: src/plugins/message/plugin.php:222
+#: src/plugins/message/plugin.php:220
 msgid "Message rejected by spamblocker."
 msgstr "Nachricht vom Spamblocker abgewiesen."
 
-#: src/plugins/message/plugin.php:234
+#: src/plugins/message/plugin.php:232
 msgid "Failed to save the posting."
 msgstr "Speichern des Postings fehlgeschlagen."
 
-#: src/plugins/poll/poll.class.php:42 src/plugins/poll/plugin.php:164
+#: src/plugins/poll/poll.class.php:42 src/plugins/poll/plugin.php:162
 #, php-format
 msgid "Poll: %s"
 msgstr "Umfrage: %s"
@@ -1017,7 +1016,7 @@ msgstr "Bitte einen kürzeren Titel wählen."
 msgid "Please add more options."
 msgstr "Bitte weitere Optionen ausfüllen."
 
-#: src/plugins/poll/poll.class.php:216 src/plugins/poll/plugin.php:74
+#: src/plugins/poll/poll.class.php:216 src/plugins/poll/plugin.php:72
 msgid "Too many options."
 msgstr "Zu viele Optionen."
 
@@ -1029,20 +1028,20 @@ msgstr "Eine der Optionen ist zu lang."
 msgid "The poll has duplicate options."
 msgstr "Die Umfrage hat doppelte Optionen."
 
-#: src/plugins/poll/plugin.php:59
+#: src/plugins/poll/plugin.php:57
 msgid "You have reached your poll limit. Sorry."
 msgstr "Sie haben ihre Umfragen bereits verbraucht."
 
-#: src/plugins/poll/plugin.php:89
+#: src/plugins/poll/plugin.php:87
 msgid "Failed to save poll."
 msgstr "Speichern der Umfrage fehlgeschlagen."
 
-#: src/plugins/search/plugin.php:19 src/plugins/search/plugin.php:51
-#: src/plugins/search/plugin.php:62
+#: src/plugins/search/plugin.php:17 src/plugins/search/plugin.php:49
+#: src/plugins/search/plugin.php:60
 msgid "Find"
 msgstr "Finden"
 
-#: src/plugins/search/plugin.php:33
+#: src/plugins/search/plugin.php:31
 msgid "Find in this forum:"
 msgstr "In diesem Forum suchen:"
 

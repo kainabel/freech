@@ -149,7 +149,12 @@ class MainController {
                          'breadcrumbs' => new Menu);
 
     // Connect to the DB.
-    $this->db = ADONewConnection(cfg('db_dbn'))
+    $vars     = array('host' => cfg('db_host'),
+                      'user' => cfg('db_usr'),
+                      'pass' => cfg('db_pass'),
+                      'db'   => cfg('db_name'));
+    $dbn      = replace_vars(cfg('db_dbn'), $vars);
+    $this->db = ADONewConnection($dbn)
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
     $this->forumdb = new ForumDB($this->api);

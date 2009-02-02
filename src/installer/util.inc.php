@@ -122,4 +122,22 @@ function util_store_attribute($_dbn, $_name, $_value) {
   $err = $db->ErrorMsg();
   return new Result($caption, FALSE, 'Request failed: '.$err);
 }
+
+function util_write_config($_filename, $_config) {
+  $caption = 'Writing configuration file.';
+  if (!$fp = fopen($_filename, 'w'))
+    return new Result($caption, FALSE, 'Failed to open file.');
+  fwrite($fp, "<?php\n// automatically generated - DO NOT EDIT!!!\n");
+  foreach($_config as $key => $value)
+    fwrite($fp, "\$cfg['$key'] = '$value';\n");
+  fwrite($fp, "?>\n");
+  return new Result($caption, TRUE);
+}
+
+function util_get_random_string($length = '') {
+  $code = md5(uniqid(rand(), true));
+  if ($length)
+    return substr($code, 0, $length);
+  return $code;
+}
 ?>

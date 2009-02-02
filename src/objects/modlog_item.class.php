@@ -264,9 +264,7 @@
         die('Unknown modlog action.');
       }
 
-      foreach ($args as $key => $value)
-        $text = str_replace('['.strtoupper($key).']', $value, $text);
-      return $text;
+      return replace_vars($text, $args);
     }
   }
 ?>

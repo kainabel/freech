@@ -21,35 +21,24 @@ Installation Instructions
    subdirectories.
 
 2. Change the permissions of "src/data/" (recursively) so that the webserver
-   can write into the directory. This can either be done somewhere in your
-   FTP client (consult the documentation of the client in case you use one),
-   or by using the following command on the webserver:
+   can write into the directory. This can either be done using your FTP client
+   (consult the documentation of the client in case you use one), or by using
+   the following command on the webserver:
 
      chmod -R a+rwX src/data/
 
-3. Edit the file "config.inc.php" according to your needs. It contains more
-   documentation and should be self explaining.
+3. Point your browser to the installer/ directory. For example:
 
-4. Create your database tables using the file mysql_matpath.sql. If you have a
-   rented webspace, you usually do this by loading the file in the phpMyAdmin
-   tool provided by your webspace provider.
+     http://www.mydomain.com/freech/installer/
 
-5. Open your web page, and click the user registration link to create an
-   account. Make sure that your web server can send mails, because Freech will
-   send an email to you when you register an account.
+4. Follow the installation instructions.
 
-6. When the confirmation mail arrives, click the confirmation link and
-   assign a new password.
+5. Delete the installer/ directory. You are done!
 
-7. Next you will have to grant administrator permissions to your account.
-   You can do this by executing the following statement (using phpMyAdmin
-   or any other SQL console):
-
-     UPDATE freech_user SET group_id=1 WHERE username='Your Username';
-
-  (Of course, replace "Your Username" by the registered username.)
-
-8. Done. You can now log into Freech with administrator permissions.
+6. If you want to, you may now customize your installation by adding
+   options into the data/config.inc.php file.
+   For a list of available options please check the file
+   'default_config.inc.php' that comes with this package.
 
 Do not hesitate to contact me if you run into problems installing the
 software. Also, do not forget to file bugs on the homepage if you find any.

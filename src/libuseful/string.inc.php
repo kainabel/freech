@@ -34,4 +34,11 @@
   function is_utf8($_string) {
     return mb_check_encoding($_string, 'utf8');
   }
+
+
+  function replace_vars($_string, $_vars) {
+    foreach ($_vars as $key => $value)
+      $_string = str_replace('['.strtoupper($key).']', $value, $_string);
+    return $_string;
+  }
 ?>

@@ -143,6 +143,7 @@ class MainController {
     $this->links = array('forum'       => new Menu,
                          'page'        => new Menu,
                          'search'      => new Menu,
+                         'view'        => new Menu,
                          'footer'      => new Menu,
                          'account'     => new Menu,
                          'breadcrumbs' => new Menu);
@@ -1496,13 +1497,13 @@ class MainController {
       return;
 
     if ($this->_get_current_view_name() === $_name)
-      return $this->links('footer')->add_text($_caption, $_priority);
+      return $this->links('view')->add_text($_caption, $_priority);
 
     $url = new FreechURL('', $_caption);
     $url->set_var('forum_id',   $this->get_current_forum_id());
     $url->set_var('changeview', $_name);
     $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
-    $this->links('footer')->add_link($url, $_priority);
+    $this->links('view')->add_link($url, $_priority);
   }
 
 

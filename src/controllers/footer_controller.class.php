@@ -21,17 +21,26 @@
 <?php
   class FooterController extends Controller {
     function show($_forum_id) {
-      $version[url]  = 'http://freech.debain.org/';
-      $version[text] = 'Freech '.FREECH_VERSION;
+      $url = new FreechURL('http://freech.debain.org/',
+                           'Powered by Freech '.FREECH_VERSION);
+      $this->api->links('footer')->add_link($url);
+      $this->api->links('footer')->add_separator();
 
-      $rss_url = new FreechURL('rss.php', _('RSS feed'));
-      $rss_url->set_var('forum_id', (int)$_forum_id);
+      $url = new FreechURL('rss.php', _('RSS feed'));
+      $url->set_var('forum_id', (int)$_forum_id);
+
+      $html = '<span id="rss">'
+            . '<a href="' . $url->get_string(TRUE) . '">'
+            . '<img src="themes/' . cfg('theme') . '/img/rss.png" alt="" />'
+            . '</a>'
+            . '&nbsp;' . $url->get_html()
+            . '</span>';
+      $this->api->links('footer')->add_html($html);
 
       // Render the resulting template.
       $this->clear_all_assign();
+      $this->assign_by_ref('view_links',   $this->api->links('view'));
       $this->assign_by_ref('footer_links', $this->api->links('footer'));
-      $this->assign_by_ref('version',      $version);
-      $this->assign_by_ref('rss_url',      $rss_url);
       $this->render('footer.tmpl');
     }
   }

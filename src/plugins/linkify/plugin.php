@@ -23,7 +23,7 @@ function linkify_on_read($forum, $message) {
 
   // Make sure that the link is not added twice on pages where
   // this method is called multiple times.
-  foreach ($forum->links('footer')->get_items() as $item) {
+  foreach ($forum->links('view')->get_items() as $item) {
     if (!$item->is_link())
       continue;
     if ($item->get_url()->get_var('action') == 'linkify_hide_videos'
@@ -31,7 +31,7 @@ function linkify_on_read($forum, $message) {
       return;
   }
 
-  // Add a link to the footer.
+  // Add a link to the bottom of the page.
   if ($_COOKIE['linkify_show_videos']) {
     $url = new FreechURL('', _('Hide Videos'));
     $url->set_var('action', 'linkify_hide_videos');
@@ -41,7 +41,7 @@ function linkify_on_read($forum, $message) {
     $url->set_var('action', 'linkify_show_videos');
   }
   $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-  $forum->links('footer')->add_link($url);
+  $forum->links('view')->add_link($url);
 }
 
 

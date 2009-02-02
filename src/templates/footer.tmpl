@@ -2,17 +2,18 @@
 {include file="viewbar.inc.tmpl"}
 </div>
 
-<div id="footer">
-  <hr />
-  <span id="powered_by">
-  Powered by <a href='{$version.url}'>{$version.text}</a>.
-  </span>
-  |
-  <span id="rss">
-    <a href="{$rss_url->get_string()|escape}">
-      <img src="{$__theme_dir}/img/rss.png" alt="" />
-    </a>
-    {$rss_url->get_html()}
-  </span>
-</div>
+<hr />
+<ul id="footer">
+{foreach name=loop item=item from=$footer_links->get_items()}
+  {if $item->is_separator()}
+    <li>|</li>
+  {elseif $item->is_html()}
+    <li>{$item->get_html()}</li>
+  {elseif !$item->is_link()}
+    <li>{$item->get_text()|escape|replace:" ":"&nbsp;"}</li>
+  {else}
+    <li>{$item->get_url_html()}</li>
+  {/if}
+{/foreach}
+</ul>
 <!-- end footer -->

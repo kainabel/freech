@@ -136,7 +136,7 @@ class ThreadView extends View {
         $url->set_var('showthread', -1);
         $url->set_label(_('Hide Thread'));
       }
-      $this->api->links('footer')->add_link($url);
+      $this->api->links('view')->add_link($url);
     }
 
     // Load the thread.

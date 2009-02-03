@@ -48,7 +48,7 @@ class DatabaseSetup extends Step {
     $this->state->set('db_name',     trim($_POST['db_name']));
 
     $vars = $this->state->get_attributes();
-    $vars['db_type'] = 'mysql';
+    $vars['db_type'] = 'mysqlt';
     $this->state->set('dbn', $this->_get_dbn($vars));
 
     # Check the syntax.

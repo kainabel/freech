@@ -19,7 +19,6 @@
   */
 ?>
 <?php
-define('FREECH_VERSION', '0.9.19');
 if (!is_readable('data/config.inc.php'))
   die('Error: Config file not found. Please follow the'
     . ' installation instructions delivered with the software.');

@@ -35,16 +35,24 @@ class CheckRequirements extends Step {
 
 
   function _is_not_installed() {
-    $name     = 'Checking whether the installation is already complete.';
+    $name = 'Checking whether the installation is already complete.';
+
+    // Check whether a config file exists.
     $cfg_file = '../data/config.inc.php';
     if (!file_exists($cfg_file))
       return new Result($name, TRUE);
     if (!is_readable($cfg_file))
       return new Result($name, FALSE, 'An unreadable config file was found.');
-    $pairs     = parse_ini_file($cfg_file);
-    $installed = $pairs['installed_version'];
+
+    // Check whether that file contains any database config.
+    $dbn = cfg('db_dbn', FALSE);
+    if (!$dbn)
+      return new Result($name, FALSE, 'Config contains no database config.');
+
+    // Check the version of the database schema.
+    $installed = util_get_attribute($dbn, 'version');
     if ($installed != FREECH_VERSION)
-      return new Result($name, TRUE);
+      return new Result($name, TRUE, "Installed DB schema is $installed.");
 
     $msg = sprintf('Version %s is already installed.', $installed);
     return new Result($name, FALSE, $msg);

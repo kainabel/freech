@@ -123,11 +123,30 @@ function util_store_attribute($_dbn, $_name, $_value) {
   return new Result($caption, FALSE, 'Request failed: '.$err);
 }
 
+function util_get_attribute($_dbn, $_name, $_default = NULL) {
+  // Connect to the database.
+  $db = ADONewConnection($_dbn);
+  if (!$db)
+    return new Result($caption, FALSE, 'Database connection failed.');
+
+  // Insert or update.
+  $sql   = 'SELECT value FROM freech_info WHERE name={name}';
+  $query = new FreechSqlQuery($sql);
+  $query->set_string('name',  $_name);
+
+  // Run,.
+  $res = $db->execute($query->sql());
+  if (!$res)
+    return $_default;
+  $row = $res->FetchObj();
+  return $row->value;
+}
+
 function util_write_config($_filename, $_config) {
   $caption = 'Writing configuration file.';
   if (!$fp = fopen($_filename, 'w'))
     return new Result($caption, FALSE, 'Failed to open file.');
-  fwrite($fp, "<?php\n// automatically generated - DO NOT EDIT!!!\n");
+  fwrite($fp, "<?php\n");
   foreach($_config as $key => $value)
     fwrite($fp, "\$cfg['$key'] = '$value';\n");
   fwrite($fp, "?>\n");

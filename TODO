@@ -1,20 +1,3 @@
-**
-* Before 1.0
-**
-
-Maintenance
-------------
-* Update the INSTALL file.
-
-Features
----------
-(none)
-
-
-**
-* Any time
-**
-
 Maintenance
 ------------
 * Unify handling of strings with [VARS] in them.
@@ -26,6 +9,7 @@ Maintenance
 
 * Rename forum to api in plugins.
 * Convert the modlog into a plugin.
+* Define the schema using AdoXML.
 
 Features
 ---------
@@ -33,3 +17,4 @@ Features
 * Hide locked messages from the forum.
 * Improve themability by replacing layout tables with divs.
 * Remove user posting list from the user profile and link to the posting list instead.
+* Check whether support for sqlite is feasible.

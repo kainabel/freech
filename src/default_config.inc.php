@@ -150,9 +150,6 @@
                         'threadview'   => TRUE,
                         'top_users'    => TRUE);
 
-  // If unsure leave unchanged. Currently only MySQL is supported.
-  $cfg[db_dbn] = 'mysqlt://[USER]:[PASS]@[HOST]/[DB]';
-
   // Allows for adding a prefix to your database table names.
   // Note that you will have to rename the tables yourself.
   // If unsure, leave this setting unchanged.

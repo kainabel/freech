@@ -21,22 +21,7 @@
 <?php
 class Done extends Step {
   function show() {
-    // Store the new version number in the database.
-    $dbn    = $this->state->get('dbn');
-    $result = util_store_attribute($dbn, 'version', FREECH_VERSION);
-    $errors = array($result);
-
-    // Write the configuration file.
-    $config = array('db_host' => $this->state->get('db_host'),
-                    'db_usr'  => $this->state->get('db_user'),
-                    'db_pass' => $this->state->get('db_password'),
-                    'db_name' => $this->state->get('db_name'),
-                    'salt'    => util_get_random_string(10));
-    $result = util_write_config('../data/config.inc.php', $config);
-    array_push($errors, $result);
-
-    // Show the template.
-    $this->render('done.tmpl', array('errors' => $errors));
+    $this->render('done.tmpl');
 
     // clear entire compile directory
     $this->smarty->clear_compiled_tpl();

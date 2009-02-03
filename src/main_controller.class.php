@@ -19,6 +19,7 @@
   */
 ?>
 <?php
+define('FREECH_VERSION', '0.9.19');
 require_once 'smarty/Smarty.class.php';
 require_once 'adodb/adodb.inc.php';
 include_once 'libuseful/SqlQuery.class.php5';
@@ -149,12 +150,7 @@ class MainController {
                          'breadcrumbs' => new Menu);
 
     // Connect to the DB.
-    $vars     = array('host' => cfg('db_host'),
-                      'user' => cfg('db_usr'),
-                      'pass' => cfg('db_pass'),
-                      'db'   => cfg('db_name'));
-    $dbn      = replace_vars(cfg('db_dbn'), $vars);
-    $this->db = ADONewConnection($dbn)
+    $this->db = ADONewConnection(cfg('db_dbn'))
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
     $this->forumdb = new ForumDB($this->api);

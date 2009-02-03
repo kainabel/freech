@@ -19,9 +19,9 @@
   */
 ?>
 <?php
-class DefaultUserSetup extends Step {
+class DefaultSetup extends Step {
   function show($_args = array()) {
-    $this->render('default_user_setup.tmpl', $_args);
+    $this->render('default_setup.tmpl', $_args);
   }
 
 
@@ -67,6 +67,30 @@ class DefaultUserSetup extends Step {
     $user->set_status(USER_STATUS_ACTIVE);
     if (!$userdb->save_user($user)) {
       $result = new Result('Creating the user.', FALSE, 'Failed.');
+      array_push($errors, $result);
+      $this->show($errors);
+      return FALSE;
+    }
+
+    // Write the configuration file.
+    $hostname  = $_SERVER['SERVER_NAME'];
+    $mail_from = 'noreply@' . $hostname;
+    $site_url  = 'http://' . $hostname . $_SERVER['SCRIPT_FILENAME'];
+    $config    = array('db_dbn'    => $this->state->get('dbn'),
+                       'salt'      => util_get_random_string(10),
+                       'site_url'  => $site_url,
+                       'mail_from' => $mail_from);
+    $res = util_write_config('../data/config.inc.php', $config);
+    if (!$res->result) {
+      array_push($errors, $result);
+      $this->show($errors);
+      return FALSE;
+    }
+
+    // Store the new version number in the database.
+    $dbn = $this->state->get('dbn');
+    $res = util_store_attribute($dbn, 'version', FREECH_VERSION);
+    if (!$res->result) {
       array_push($errors, $result);
       $this->show($errors);
       return FALSE;

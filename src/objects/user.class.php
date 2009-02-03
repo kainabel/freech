@@ -342,7 +342,8 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_confirmation_hash() {
-      $hash = md5($this->get_id()
+      $hash = md5(cfg('salt')
+                . $this->get_id()
                 . $this->get_firstname()
                 . $this->get_lastname()
                 . $this->get_name());

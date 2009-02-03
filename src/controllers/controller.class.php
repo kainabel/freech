@@ -34,6 +34,18 @@
       $this->forumdb   = $_api->forumdb();
       $this->visitordb = $_api->visitordb();
       $this->eventbus  = $_api->eventbus();
+      $this->hints     = array();
+    }
+
+    function add_hint($_hint) {
+      array_push($this->hints, $_hint);
+    }
+
+    function has_errors() {
+      foreach ($this->hints as $hint)
+        if ($hint->get_type() == 'error')
+          return TRUE;
+      return FALSE;
     }
 
     function clear_all_assign() {
@@ -58,6 +70,7 @@
       $this->assign_by_ref('__user',      $this->api->user());
       $this->assign_by_ref('__group',     $this->api->group());
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
+      $this->assign_by_ref('__hints',     $this->hints);
       $cache_id = $this->smarty->template_dir . '/' . $_template;
       $content  = $this->smarty->fetch($_template, $cache_id);
       $this->api->controller->_append_content($content);

@@ -24,10 +24,7 @@
      * Shows a form for editing a message. The values given in $_message are
      * filled into the fields.
      */
-    function show_compose($_message,
-                          $_hint,
-                          $_parent_id,
-                          $_may_quote) {
+    function show_compose($_message, $_parent_id, $_may_quote) {
       $forum_id = $this->api->forum()->get_id();
 
       $url = new FreechURL;
@@ -40,7 +37,6 @@
       $this->assign('may_quote',          $_may_quote);
       $this->assign('parent_id',          $_parent_id);
       $this->assign('action',             $url->get_string());
-      $this->assign('hint',               $_hint);
       $this->assign('max_usernamelength', cfg('max_usernamelength'));
       $this->assign('max_subjectlength',  cfg('max_subjectlength'));
       $this->assign_by_ref('message', $_message);
@@ -54,9 +50,7 @@
      * filled into the fields, with the values from $_quoted inserted as a
      * quote.
      */
-    function show_compose_quoted(&$_message,
-                                 &$_parent_msg,
-                                 $_hint) {
+    function show_compose_quoted(&$_message, &$_parent_msg) {
       // Add "Posting written by ... on ..." before the quoted stuff.
       if ($_parent_msg->is_active()) {
         $text  = sprintf(_('%s wrote on %s:'),
@@ -68,17 +62,14 @@
       }
       $_message->set_body($text . $_message->get_body());
 
-      $this->show_compose($_message,
-                          $_hint,
-                          $_parent_msg->get_id(),
-                          FALSE);
+      $this->show_compose($_message, $_parent_msg->get_id(), FALSE);
     }
 
 
     /**
      * Shows a form for editing a reply to the given message.
      */
-    function show_compose_reply(&$_parent_msg, $_hint) {
+    function show_compose_reply(&$_parent_msg) {
       $message = new Posting;
 
       // Prepend 'Re: ' if necessary
@@ -89,10 +80,7 @@
       else
         $message->set_subject($_parent_msg->get_subject());
 
-      $this->show_compose($message,
-                          $_hint,
-                          $_parent_msg->get_id(),
-                          TRUE);
+      $this->show_compose($message, $_parent_msg->get_id(), TRUE);
     }
 
 

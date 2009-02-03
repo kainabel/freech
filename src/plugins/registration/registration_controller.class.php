@@ -20,7 +20,7 @@
 ?>
 <?php
   class RegistrationController extends Controller {
-    function show($user, $error = '') {
+    function show($user) {
       $url = new FreechURL;
       $url->set_var('action', 'account_create');
       
@@ -31,27 +31,25 @@
       $this->assign_by_ref('user',        $user);
       $this->assign_by_ref('password',    $_POST['password']);
       $this->assign_by_ref('password2',   $_POST['password2']);
-      $this->assign_by_ref('error',       $error);
       $this->render(dirname(__FILE__).'/registration.tmpl');
       $this->api->set_title(_('User Registration'));
     }
 
 
-    function show_tmpl($_tmpl, $_user, $_hint = '') {
+    function show_tmpl($_tmpl, $_user) {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
-      $this->assign_by_ref('hint', $_hint);
       $this->render(dirname(__FILE__).'/'.$_tmpl);
     }
 
 
-    function show_mail_sent($user, $_hint = '') {
-      $this->show_tmpl('mail_sent.tmpl', $user, $_hint);
+    function show_mail_sent($user) {
+      $this->show_tmpl('mail_sent.tmpl', $user);
     }
 
 
-    function show_done($user, $_hint = '') {
-      $this->show_tmpl('done.tmpl', $user, $_hint);
+    function show_done($user) {
+      $this->show_tmpl('done.tmpl', $user);
     }
   }
 ?>

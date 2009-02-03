@@ -22,12 +22,12 @@
 class PollController extends Controller {
   function show_error($_error) {
     $this->clear_all_assign();
-    $this->assign_by_ref('error', $_error);
+    $this->add_hint(new Error($_error));
     $this->render('error.inc.tmpl');
   }
 
 
-  function show_form($_poll, $_error = '') {
+  function show_form($_poll) {
     $url = new FreechURL;
     $url->set_var('action', 'poll_submit');
 
@@ -37,12 +37,11 @@ class PollController extends Controller {
     $this->clear_all_assign();
     $this->assign_by_ref('action', $url->get_string());
     $this->assign_by_ref('poll',   $_poll);
-    $this->assign_by_ref('error',  $_error);
     $this->render(dirname(__FILE__).'/form.tmpl');
   }
 
 
-  function get_poll($_poll, $_ack = '') {
+  function get_poll($_poll) {
     $url = new FreechURL;
     $url->set_var('action',   'poll_vote');
     $url->set_var('forum_id', $_poll->get_forum_id());
@@ -54,16 +53,13 @@ class PollController extends Controller {
     $this->assign_by_ref('action',     $url->get_string());
     $this->assign_by_ref('poll',       $_poll);
     $this->assign_by_ref('result_url', $result_url->get_string());
-    $this->assign_by_ref('ack',        $_ack);
     return $this->smarty->fetch(dirname(__FILE__).'/poll.tmpl');
   }
 
 
-  function get_poll_result($_poll, $_ack = '', $_hint = '') {
+  function get_poll_result($_poll) {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
-    $this->assign_by_ref('ack',  $_ack);
-    $this->assign_by_ref('hint', $_hint);
     return $this->smarty->fetch(dirname(__FILE__).'/poll_result.tmpl');
   }
 }

@@ -117,7 +117,7 @@ function linkify_on_format($message) {
 
   // Convert URLs to links.
   $body = preg_replace_callback('~'
-                              . '(^|[\r\n])'     // Line start.
+                              . '(^|[\r\n])'   // Line start.
                               . '([^\r\n]*?)'  // Line start to URL start.
                               . '('.cfg('autolink_pattern').')'
                               . '~',

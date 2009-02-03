@@ -69,8 +69,9 @@ function poll_on_submit($api) {
   if ($_POST['add_row']) {
     $option = new PollOption();
     if ($poll->n_options() >= $poll->get_max_options())
-      return $controller->show_form($poll, _('Too many options.'));
-    $poll->add_option($option);
+      $controller->add_hint(new Hint(_('Too many options.')));
+    else
+      $poll->add_option($option);
     return $controller->show_form($poll);
   }
 
@@ -78,13 +79,17 @@ function poll_on_submit($api) {
   elseif ($_POST['send']) {
     // Sanity check.
     $err = $poll->check();
-    if ($err)
-      return $controller->show_form($poll, $err);
+    if ($err) {
+      $controller->add_hint(new Error($err));
+      return $controller->show_form($poll);
+    }
 
     // Save the poll.
     $poll_id = _save_poll($api, $poll);
-    if (!$poll_id)
-      return $controller->show_form($poll, _('Failed to save poll.'));
+    if (!$poll_id) {
+      $controller->add_hint(new Error(_('Failed to save poll.')));
+      return $controller->show_form($poll);
+    }
 
     // Refer to the poll.
     $api->refer_to_posting($poll);

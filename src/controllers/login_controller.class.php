@@ -20,7 +20,7 @@
 ?>
 <?php
   class LoginController extends Controller {
-    function show($_user, $_hint = '', $_refer_to) {
+    function show($_user, $_refer_to) {
       $login_url = new FreechURL;
       $login_url->set_var('action', 'login');
 
@@ -35,7 +35,6 @@
 
       $this->clear_all_assign();
       $this->assign_by_ref('user',       $_user);
-      $this->assign_by_ref('hint',       $_hint);
       $this->assign_by_ref('refer_to',   urlencode($_refer_to));
       $this->assign_by_ref('action',     $login_url->get_string());
       $this->assign_by_ref('resend_url', $resend_url);
@@ -44,44 +43,41 @@
     }
 
 
-    function show_tmpl($_tmpl, $_user, $_hint = '') {
+    function show_tmpl($_tmpl, $_user) {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
-      $this->assign_by_ref('hint', $_hint);
       $this->render($_tmpl);
     }
 
 
-    function show_password_changed($user, $_hint = '') {
-      $this->show_tmpl('password_changed.tmpl', $user, $_hint);
+    function show_password_changed($user) {
+      $this->show_tmpl('password_changed.tmpl', $user);
     }
 
 
-    function show_password_change($_user, $_hint = '') {
+    function show_password_change($_user) {
       $url = new FreechURL;
       $url->set_var('action', 'password_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('action', $url->get_string());
       $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('hint',   $_hint);
       $this->render('password_change.tmpl');
       $this->api->set_title(_('Password Change'));
     }
 
 
-    function show_password_forgotten($_user, $_hint = '') {
+    function show_password_forgotten($_user) {
       $url = new FreechURL;
       $url->set_var('action', 'password_mail_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('password_forgotten.tmpl');
     }
 
 
-    function show_password_mail_sent($user, $_hint = '') {
-      $this->show_tmpl('password_mail_sent.tmpl', $user, $_hint);
+    function show_password_mail_sent($user) {
+      $this->show_tmpl('password_mail_sent.tmpl', $user);
     }
   }
 ?>

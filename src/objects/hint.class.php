@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003-2009 Samuel Abels, <http://debain.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,17 +19,21 @@
   */
 ?>
 <?php
-class ForumEditorController extends Controller {
-  function show($_forum = NULL) {
-    $url = new FreechURL;
-    $url->set_var('action', 'forum_submit');
+class Hint {
+  function Hint($_msg) {
+    $this->msg = $_msg;
+  }
 
-    // Render the template.
-    $this->clear_all_assign();
-    $this->assign_by_ref('action',      $url->get_string());
-    $this->assign_by_ref('forum',       $_forum);
-    $this->assign_by_ref('status_list', $_forum->get_status_names());
-    $this->render('forum_editor.tmpl');
+
+  function get_type() {
+    return 'hint';
+  }
+
+
+  function get_string($_escape = TRUE) {
+    if ($_escape)
+      return htmlentities($this->msg, ENT_QUOTES, 'UTF-8');
+    return $this->msg;
   }
 }
 ?>

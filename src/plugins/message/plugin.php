@@ -42,7 +42,7 @@ function message_on_write($api) {
   $parent_id  = (int)$_POST['parent_id'];
   $posting    = new Posting;
   $controller = new MessageController($api);
-  $controller->show_compose($posting, '', $parent_id, FALSE);
+  $controller->show_compose($posting, $parent_id, FALSE);
 }
 
 
@@ -58,7 +58,7 @@ function message_on_respond($api) {
   $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Reply'));
 
-  $controller->show_compose_reply($posting, '');
+  $controller->show_compose_reply($posting);
 }
 
 
@@ -81,7 +81,7 @@ function message_on_edit_saved($api) {
   $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Edit'));
 
-  $controller->show_compose($posting, '', 0, FALSE);
+  $controller->show_compose($posting, 0, FALSE);
 }
 
 
@@ -106,7 +106,7 @@ function message_on_edit_unsaved($api) {
   $posting    = message_init_posting_from_post_data();
   $controller = new MessageController($api);
 
-  $controller->show_compose($posting, '', $parent_id, $may_quote);
+  $controller->show_compose($posting, $parent_id, $may_quote);
 }
 
 
@@ -116,7 +116,7 @@ function message_on_quote($api) {
   $quoted_msg = $api->forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
   $controller = new MessageController($api);
-  $controller->show_compose_quoted($posting, $quoted_msg, '');
+  $controller->show_compose_quoted($posting, $quoted_msg);
 }
 
 
@@ -131,14 +131,17 @@ function message_on_preview($api) {
 
   // Check the posting for completeness.
   $err = $message->check_complete();
-  if ($err)
-    return $controller->show_compose($message, $err, $parent_id, $may_quote);
+  if ($err) {
+    $controller->add_hint(new Error($err));
+    return $controller->show_compose($message, $parent_id, $may_quote);
+  }
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$api->userdb()->username_is_available($message->get_username())) {
-     $msg = _('The entered username is not available.');
-     return $controller->show_compose($message, $msg, $parent_id, $may_quote);
+   && !$api->userdb()->username_is_available($message->get_username())) {
+    $err = _('The entered username is not available.');
+    $controller->add_hint(new Error($err));
+    return $controller->show_compose($message, $parent_id, $may_quote);
   }
 
   // Success.
@@ -189,14 +192,17 @@ function message_on_send($api) {
 
   // Check the posting for completeness.
   $err = $posting->check_complete();
-  if ($err)
-    return $controller->show_compose($posting, $err, $parent_id, $may_quote);
+  if ($err) {
+    $controller->add_hint(new Error($err));
+    return $controller->show_compose($posting, $parent_id, $may_quote);
+  }
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$api->userdb()->username_is_available($posting->get_username())) {
-    $msg = _('The entered username is not available.');
-    return $controller->show_compose($posting, $msg, $parent_id, $may_quote);
+   && !$api->userdb()->username_is_available($posting->get_username())) {
+    $err = _('The entered username is not available.');
+    $controller->add_hint(new Error($err));
+    return $controller->show_compose($posting, $parent_id, $may_quote);
   }
 
   if ($posting->get_id() <= 0) {
@@ -208,18 +214,18 @@ function message_on_send($api) {
     // Check whether too many messages were sent.
     $blocked_until = $api->forumdb()->get_flood_blocked_until($posting);
     if ($blocked_until) {
-      $msg  = sprintf(_('You have sent too many messages.'
+      $err  = sprintf(_('You have sent too many messages.'
                       . ' %d seconds until your message may be sent.'),
                       $blocked_until - time());
-      return $controller->show_compose($posting, $msg, $parent_id, $may_quote);
+      $controller->add_hint(new Error($err));
+      return $controller->show_compose($posting, $parent_id, $may_quote);
     }
 
     // Check whether the user or IP is spam-locked.
-    if ($api->forumdb()->is_spam($posting))
-      return $controller->show_compose($posting,
-                                       _('Message rejected by spamblocker.'),
-                                       $parent_id,
-                                       $may_quote);
+    if ($api->forumdb()->is_spam($posting)) {
+      $controller->add_hint(new Error(_('Message rejected by spamblocker.')));
+      return $controller->show_compose($posting, $parent_id, $may_quote);
+    }
   }
 
   // Save the posting.
@@ -227,11 +233,10 @@ function message_on_send($api) {
     $forumdb->save($forum_id, $parent_id, $posting);
   else
     $forumdb->insert($forum_id, $parent_id, $posting);
-  if (!$posting->get_id())
-    return $controller->show_compose($posting,
-                                     _('Failed to save the posting.'),
-                                     $parent_id,
-                                     $may_quote);
+  if (!$posting->get_id()) {
+    $controller->add_hint(new Error(_('Failed to save the posting.')));
+    return $controller->show_compose($posting, $parent_id, $may_quote);
+  }
 
   // Success! Refer to the new item.
   $api->refer_to_posting($posting);

@@ -126,7 +126,7 @@
     }
 
 
-    function show_user_editor($_user, $_hint = '') {
+    function show_user_editor($_user) {
       $url = new FreechURL;
       $url->set_var('action', 'user_submit');
 
@@ -191,7 +191,6 @@
       $this->assign_by_ref('group',               $group);
       $this->assign_by_ref('groups',              $groups);
       $this->assign_by_ref('status',              $status);
-      $this->assign_by_ref('hint',                $_hint);
       $this->assign_by_ref('action',              $url->get_string());
       $this->assign_by_ref('max_signature_lines', cfg('max_signature_lines'));
       $this->render('user_editor.tmpl');
@@ -199,14 +198,13 @@
     }
 
 
-    function show_user_options($_user, $_hint = '') {
+    function show_user_options($_user) {
       $url = new FreechURL;
       $url->set_var('action', 'user_options_submit');
 
       // Render the template.
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('user_options.tmpl');
       $this->api->set_title($_user->get_name());
@@ -243,14 +241,13 @@
     }
 
 
-    function show_group_editor($_group, $_hint = '') {
+    function show_group_editor($_group) {
       $url = new FreechURL;
       $url->set_var('action', 'group_submit');
 
       // Render the template.
       $this->clear_all_assign();
       $this->assign_by_ref('group',  $_group);
-      $this->assign_by_ref('hint',   $_hint);
       $this->assign_by_ref('action', $url->get_string());
       $this->render('group_editor.tmpl');
       $this->api->set_title($_group->get_name());

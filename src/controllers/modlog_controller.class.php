@@ -33,7 +33,7 @@
     }
 
 
-    function show_lock_posting($_posting, $_error = '') {
+    function show_lock_posting($_posting) {
       $url = new FreechURL;
       $url->set_var('action', 'posting_lock_submit');
       $url->set_var('msg_id', $_posting->get_id());
@@ -42,7 +42,6 @@
       $this->assign_by_ref('action',   $url->get_string());
       $this->assign_by_ref('refer_to', $_posting->get_url_string());
       $this->assign_by_ref('posting',  $_posting);
-      $this->assign_by_ref('error',    $_error);
       $this->render('posting_lock.tmpl');
     }
   }

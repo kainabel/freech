@@ -26,8 +26,10 @@ class Done extends Step {
 
     // clear entire compile directory
     $this->smarty->clear_compiled_tpl();
+    $old_dir = $this->smarty->compile_dir;
     $this->smarty->compile_dir = '../data/smarty_templates_c';
     $this->smarty->clear_compiled_tpl();
+    $this->smarty->compile_dir = $old_dir;
   }
 
   function check() {

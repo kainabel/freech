@@ -1,6 +1,5 @@
 Maintenance
 ------------
-* Unify handling of strings with [VARS] in them.
 * Clean up the error/hint/ack message mess by allowing this:
 
    $printer->show(..., new Error(_('Something went wrong')));

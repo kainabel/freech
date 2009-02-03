@@ -501,10 +501,8 @@ class MainController {
     $vars['login']      = $user->get_name();
     $vars['firstname']  = $user->get_firstname();
     $vars['lastname']   = $user->get_lastname();
-    foreach ($vars as $key => $value) {
-      $subject = str_replace('['.strtoupper($key).']', $value, $subject);
-      $body    = str_replace('['.strtoupper($key).']', $value, $body);
-    }
+    $subject            = replace_vars($subject, $vars);
+    $body               = replace_vars($body,    $vars);
     mail($user->get_mail(), $subject, $body, $head);
   }
 

@@ -146,10 +146,7 @@
 
     function get_reason_fmt() {
       $args = array('is_spam' => _('Posting is spam'));
-      $text = $this->fields[reason];
-      foreach ($args as $key => $value)
-        $text = str_replace('['.strtoupper($key).']', $value, $text);
-      return $text;
+      return replace_vars($this->fields[reason], $args);
     }
 
 

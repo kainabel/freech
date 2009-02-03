@@ -103,7 +103,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function set_name($_name) {
-      $this->fields[name] = preg_replace("/\s+/", " ", trim($_name));
+      $this->fields[name] = preg_replace('/\s+/', ' ', trim($_name));
     }
 
 
@@ -146,7 +146,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function set_password($_password) {
+    function set_password($_password, $_salt = NULL) {
       if (strlen($_password) < cfg('min_passwordlength')) {
         $err = _('Please choose a password with at least %d characters.');
         return sprintf($err, cfg('min_passwordlength'));
@@ -155,7 +155,9 @@ define('USER_STATUS_BLOCKED',     3);
         $err = _('Please choose a password with at most %d characters.');
         return sprintf($err, cfg('max_passwordlength'));
       }
-      $this->fields[passwordhash] = crypt(cfg('salt') . $_password);
+      if (!$_salt)
+        $_salt = cfg('salt');
+      $this->fields[passwordhash] = crypt($_salt . $_password);
       return 0;
     }
 
@@ -166,13 +168,13 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function is_valid_password($_password) {
-      return crypt(cfg("salt") . $_password, $this->fields[passwordhash])
+      return crypt(cfg('salt') . $_password, $this->fields[passwordhash])
           == $this->fields[passwordhash];
     }
 
 
     function set_firstname($_firstname) {
-      $this->fields[firstname] = preg_replace("/\s+/", " ", trim($_firstname));
+      $this->fields[firstname] = preg_replace('/\s+/', ' ', trim($_firstname));
     }
 
 

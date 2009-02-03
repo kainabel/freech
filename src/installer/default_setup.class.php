@@ -60,9 +60,10 @@ class DefaultSetup extends Step {
     }
 
     // Create the user.
+    $salt   = util_get_random_string(10);
     $userdb = new UserDB($db);
     $user   = new User($username);
-    $user->set_password($password1);
+    $user->set_password($password1, $salt);
     $user->set_group_id(1); //FIXME: hardcoded
     $user->set_status(USER_STATUS_ACTIVE);
     if (!$userdb->save_user($user)) {
@@ -82,7 +83,7 @@ class DefaultSetup extends Step {
 
     // Write the configuration file.
     $config = array('db_dbn'    => $this->state->get('dbn'),
-                    'salt'      => util_get_random_string(10),
+                    'salt'      => $salt,
                     'site_url'  => $site_url,
                     'mail_from' => $mail_from);
     $res = util_write_config('../data/config.inc.php', $config);

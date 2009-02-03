@@ -1,7 +1,6 @@
 Maintenance
 ------------
 * Convert the modlog into a plugin.
-* Move the IndentedBlock class into a separate file.
 * Define the schema using AdoXML.
 
 Features

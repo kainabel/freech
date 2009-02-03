@@ -37,6 +37,7 @@ include_once 'objects/error.class.php';
 include_once 'objects/ack.class.php';
 include_once 'objects/url.class.php';
 include_once 'objects/freech_url.class.php';
+include_once 'objects/indented_block.class.php';
 include_once 'objects/posting.class.php';
 include_once 'objects/forum.class.php';
 include_once 'objects/user.class.php';

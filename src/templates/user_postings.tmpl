@@ -1,0 +1,12 @@
+<!-- user postings -->
+<!-- user profile -->
+<h2>
+  {t 1=$user->get_name()}Postings of %1{/t}
+{if $may_edit}
+  {$user->get_editor_url_html()}
+{/if}
+</h2>
+{include file="error.inc.tmpl"}
+
+{include file="thread_with_indexbar.tmpl"}
+<!-- end user postings -->

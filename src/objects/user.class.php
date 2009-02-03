@@ -303,14 +303,6 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function get_postings_url() {
-      $url = new FreechURL;
-      $url->set_var('action',   'user_postings');
-      $url->set_var('username', $this->get_name());
-      return $url;
-    }
-
-
     function get_editor_url() {
       $url = new FreechURL('', '[' . _('Edit') . ']');
       $url->set_var('action',   'user_editor');
@@ -340,6 +332,25 @@ define('USER_STATUS_BLOCKED',     3);
 
     function get_profile_url_html($_label) {
       return $this->get_profile_url()->get_html($_label);
+    }
+
+
+    function get_postings_url() {
+      $caption = sprintf(_('Postings of %s'), $this->get_name());
+      $url     = new FreechURL('', $caption);
+      $url->set_var('action',   'user_postings');
+      $url->set_var('username', $this->get_name());
+      return $url;
+    }
+
+
+    function get_postings_url_string() {
+      return $this->get_postings_url()->get_string();
+    }
+
+
+    function get_postings_url_html($_label) {
+      return $this->get_postings_url()->get_html($_label);
     }
 
 

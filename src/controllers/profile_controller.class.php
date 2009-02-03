@@ -91,26 +91,17 @@
       $edit_sane = !$_user->is_anonymous();
       $mod_sane  = $edit_sane && ($_user->is_active() || $_user->is_locked());
       $may_edit  = $may_admin || ($mod_sane && ($is_self || $may_mod));
-      $showlist  = $is_self
-                || $curgroup->may('moderate')
-                || $curgroup->may('administer');
 
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();
-      if ($showlist)
-        $this->_assign_user_postings($_user, $_thread_state, $_offset);
-      else {
-        $search    = array('userid' => $_user->get_id());
-        $n_entries = $this->forumdb->get_n_postings($search);
-        $this->assign_by_ref('n_postings', $n_entries);
-      }
+      $search    = array('userid' => $_user->get_id());
+      $n_entries = $this->forumdb->get_n_postings($search);
+      $this->assign_by_ref('n_postings', $n_entries);
 
       // Render the template.
       $this->assign_by_ref('user',     $_user);
       $this->assign_by_ref('group',    $group);
       $this->assign_by_ref('may_edit', $may_edit);
-      $this->assign_by_ref('showinfo', TRUE);
-      $this->assign_by_ref('showlist', $showlist);
       $this->render('user_profile.tmpl');
       $this->api->set_title($_user->get_name());
     }
@@ -130,11 +121,8 @@
       $this->_assign_user_postings($_user, $_thread_state, $_offset);
 
       // Render the template.
-      $this->assign_by_ref('user',     $_user);
-      $this->assign_by_ref('may_edit', FALSE);
-      $this->assign_by_ref('showinfo', FALSE);
-      $this->assign_by_ref('showlist', TRUE);
-      $this->render('user_profile.tmpl');
+      $this->assign_by_ref('user', $_user);
+      $this->render('user_postings.tmpl');
     }
 
 

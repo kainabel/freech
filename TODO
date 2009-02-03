@@ -14,5 +14,4 @@ Features
 * Allow for moving threads between forums.
 * Hide locked messages from the forum.
 * Improve themability by replacing layout tables with divs.
-* Remove user posting list from the user profile and link to the posting list instead.
 * Check whether support for sqlite is feasible.

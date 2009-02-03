@@ -7,7 +7,6 @@
 </h2>
 {include file="error.inc.tmpl"}
 
-{if $showinfo}
 <table summary=''>
   <tr>
     <td>{t}User group:{/t}</td>
@@ -34,7 +33,7 @@
   </tr>
   <tr>
     <td>{t}Forum postings:{/t}</td>
-    <td>{$n_postings|escape}</td>
+    <td>{$user->get_postings_url_html($n_postings)}</td>
   </tr>
   <tr>
     <td>{t}Email:{/t}</td>
@@ -65,12 +64,4 @@
     </td>
   </tr>
 </table>
-{/if}
-{if $showlist}
-<!-- switch to: thread with indexbar -->
-
-{include file="thread_with_indexbar.tmpl"}
-
-<!-- back from: thread with indexbar -->
-{/if}
 <!-- end user profile -->

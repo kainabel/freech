@@ -8,51 +8,51 @@ Description: Adds support for pollings.
 include_once dirname(__FILE__).'/poll.class.php';
 include_once dirname(__FILE__).'/poll_controller.class.php';
 
-function poll_init($forum) {
+function poll_init($api) {
   // Register a class that is responsible for formatting the posting object
   // that holds the poll.
-  $forum->register_renderer('multipoll', 'Poll');
-  $forum->register_renderer('poll',      'Poll');
+  $api->register_renderer('multipoll', 'Poll');
+  $api->register_renderer('poll',      'Poll');
 
   // For anonymous users we don't need to do anything else.
-  if ($forum->user()->is_anonymous())
+  if ($api->user()->is_anonymous())
     return;
 
-  $forum->eventbus()->signal_connect('on_run_before', 'poll_on_run');
+  $api->eventbus()->signal_connect('on_run_before', 'poll_on_run');
 
   // Register our extra actions.
-  $forum->register_action('poll_add',    'poll_on_add');
-  $forum->register_action('poll_submit', 'poll_on_submit');
-  $forum->register_action('poll_vote',   'poll_on_vote');
+  $api->register_action('poll_add',    'poll_on_add');
+  $api->register_action('poll_submit', 'poll_on_submit');
+  $api->register_action('poll_vote',   'poll_on_vote');
 }
 
 
-function poll_on_run($forum) {
-  if (!$forum->group()->may('write'))
+function poll_on_run($api) {
+  if (!$api->group()->may('write'))
     return;
 
   // Add a link to the poll button in the index bar.
-  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
   $url      = new FreechURL('', _('Start a Poll'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action'  , 'poll_add');
-  $forum->links('page')->add_link($url, 400);
+  $api->links('page')->add_link($url, 400);
 }
 
 
-function poll_on_add($forum) {
-  $controller = new PollController($forum);
+function poll_on_add($api) {
+  $controller = new PollController($api);
   $posting    = new Posting;
-  $poll       = new Poll($posting, $forum);
-  $poll->set_forum_id($forum->forum()->get_id());
+  $poll       = new Poll($posting, $api);
+  $poll->set_forum_id($api->forum()->get_id());
 
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(_('Start a Poll'));
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text(_('Start a Poll'));
 
   $max_polls      = cfg('max_polls', 2);
   $max_polls_time = time() - cfg('max_polls_time', 60 * 60 * 24);
-  if (_n_polls_since($forum->db(),
-                     $forum->user(),
+  if (_n_polls_since($api->db(),
+                     $api->user(),
                      $max_polls_time) >= $max_polls) {
     $msg = _('You have reached your poll limit. Sorry.');
     return $controller->show_error($msg);
@@ -61,8 +61,8 @@ function poll_on_add($forum) {
 }
 
 
-function poll_on_submit($forum) {
-  $controller = new PollController($forum);
+function poll_on_submit($api) {
+  $controller = new PollController($api);
   $poll       = _poll_get_from_post();
 
   // Add a new option to the poll form.
@@ -82,29 +82,29 @@ function poll_on_submit($forum) {
       return $controller->show_form($poll, $err);
 
     // Save the poll.
-    $poll_id = _save_poll($forum, $poll);
+    $poll_id = _save_poll($api, $poll);
     if (!$poll_id)
       return $controller->show_form($poll, _('Failed to save poll.'));
 
     // Refer to the poll.
-    $forum->refer_to_posting($poll);
+    $api->refer_to_posting($poll);
   }
 }
 
 
-function poll_on_vote($forum) {
+function poll_on_vote($api) {
   $poll_id    = (int)$_POST['poll_id'];
-  $poll       = _get_poll_from_id($forum, $poll_id);
-  $user       = $forum->user();
-  $db         = $forum->db();
-  $controller = new PollController($forum);
+  $poll       = _get_poll_from_id($api, $poll_id);
+  $user       = $api->user();
+  $db         = $api->db();
+  $controller = new PollController($api);
 
   if (!$_POST['options'])
-    $forum->refer_to_posting($poll);
+    $api->refer_to_posting($poll);
 
   // Make sure that a user does not vote twice.
   if (_poll_did_vote($db, $user, $poll_id))
-    $forum->refer_to_posting($poll);
+    $api->refer_to_posting($poll);
 
   // Depending on whether it is allowed to check multiple values, we get
   // either a single value or an array of values. If a single value is
@@ -135,7 +135,7 @@ function poll_on_vote($forum) {
   // Reload the poll (to include results) and show the result.
   $accept_url = $poll->get_url();
   $accept_url->set_var('accept', 1);
-  $forum->refer_to(cfg('site_url').$accept_url->get_string());
+  $api->refer_to(cfg('site_url').$accept_url->get_string());
 }
 
 
@@ -157,17 +157,17 @@ function _poll_get_from_post() {
 }
 
 
-function _save_poll($forum, $poll) {
-  $forum_id = $forum->forum()->get_id();
+function _save_poll($api, $poll) {
+  $forum_id = $api->forum()->get_id();
   $subject  = sprintf(_('Poll: %s'), $poll->get_subject());
   $poll->set_subject($subject);
-  $poll->set_from_user($forum->user());
-  $poll->set_from_group($forum->group());
+  $poll->set_from_user($api->user());
+  $poll->set_from_group($api->group());
 
   // Save the poll.
-  $db = $forum->db();
+  $db = $api->db();
   $db->StartTrans();
-  $forum->forumdb()->insert($forum_id, NULL, $poll);
+  $api->forumdb()->insert($forum_id, NULL, $poll);
 
   // Now save the corresponding poll options.
   foreach ($poll->get_filled_options() as $option)
@@ -207,9 +207,9 @@ function _save_poll_option($db, $poll_id, $option) {
 }
 
 
-function _get_poll_from_id($forum, $poll_id) {
+function _get_poll_from_id($api, $poll_id) {
   // Load the posting first, and map it back into a poll.
-  $poll = $forum->forumdb()->get_posting_from_id($poll_id);
+  $poll = $api->forumdb()->get_posting_from_id($poll_id);
   if (!$poll)
     die('A poll with the given ID was not found.');
 
@@ -218,7 +218,7 @@ function _get_poll_from_id($forum, $poll_id) {
   $sql  .= ' WHERE poll_id={poll_id}';
   $query = new FreechSqlQuery($sql);
   $query->set_int('poll_id', $poll_id);
-  $db  = $forum->db();
+  $db  = $api->db();
   $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
 
   while ($row = $res->FetchRow($res)) {

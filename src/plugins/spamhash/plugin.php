@@ -12,21 +12,21 @@ define('CHECK_REGISTERED_ACCOUNTS', FALSE);
 $spamhash = ''; // The spamhash instance.
 
 
-function spamhash_init($forum) {
-  $eventbus = $forum->eventbus();
+function spamhash_init($api) {
+  $eventbus = $api->eventbus();
   $eventbus->signal_connect('on_run_before', 'spamhash_on_run');
 }
 
 
-function spamhash_on_run($forum) {
+function spamhash_on_run($api) {
   global $spamhash;
 
   // Check if the plugin is enabled for the given user.
-  if (!CHECK_REGISTERED_ACCOUNTS && !$forum->user()->is_anonymous())
+  if (!CHECK_REGISTERED_ACCOUNTS && !$api->user()->is_anonymous())
     return;
 
   // Create a new instance of the spamhash generator/checker.
-  $action = $forum->action();
+  $action = $api->action();
   if ($action == 'write'
     || $action == 'respond'
     || $action == 'edit'
@@ -46,11 +46,11 @@ function spamhash_on_run($forum) {
   if ($action == 'account_create')
     spamhash_check_hash();
 
-  $forum->add_js('head',     $spamhash->get_header_code());
-  $forum->add_js('onload',   $spamhash->get_onload_code());
-  $forum->add_js('onsubmit', $spamhash->get_onsubmit_code());
-  $forum->add_style($spamhash->get_style());
-  $forum->add_html('form', $spamhash->get_form_html());
+  $api->add_js('head',     $spamhash->get_header_code());
+  $api->add_js('onload',   $spamhash->get_onload_code());
+  $api->add_js('onsubmit', $spamhash->get_onsubmit_code());
+  $api->add_style($spamhash->get_style());
+  $api->add_html('form', $spamhash->get_form_html());
 }
 
 

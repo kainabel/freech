@@ -7,7 +7,6 @@ Maintenance
    $printer->show(..., new Hint(_('My Hint')));
    $printer->show(..., new Ack(_('Success')));
 
-* Rename forum to api in plugins.
 * Convert the modlog into a plugin.
 * Define the schema using AdoXML.
 

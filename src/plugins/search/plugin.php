@@ -10,14 +10,14 @@ include_once dirname(__FILE__).'/indexbar_search_result.class.php';
 include_once dirname(__FILE__).'/indexbar_search_users.class.php';
 include_once dirname(__FILE__).'/search_query.class.php';
 
-function search_init($forum) {
-  $forum->register_action('search', 'search_on_search');
+function search_init($api) {
+  $api->register_action('search', 'search_on_search');
 
-  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
   $url      = new FreechURL('', _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum_id);
-  $forum->links('forum')->add_link($url);
+  $api->links('forum')->add_link($url);
 
   // Add a small search field to the forum.
   $html = "<form id='quicksearch'\n"
@@ -32,41 +32,41 @@ function search_init($forum) {
   $html .= "&nbsp;<input type='text' name='q' value='' />\n";
   $html .= "</div>\n";
   $html .= "</form>\n";
-  $forum->links('search')->add_html($html);
+  $api->links('search')->add_html($html);
 }
 
 
-function search_on_search($forum) {
+function search_on_search($api) {
   if ($_GET['q'])
-    search_on_search_result($forum);
+    search_on_search_result($api);
   else
-    search_on_search_form($forum);
+    search_on_search_form($api);
 }
 
 
-function search_on_search_form($forum) {
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(_('Find'));
-  $controller = new SearchController($forum);
+function search_on_search_form($api) {
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text(_('Find'));
+  $controller = new SearchController($api);
   $controller->show((int)$_GET['forum_id'], $_GET['q']);
 }
 
 
-function search_on_search_result($forum) {
+function search_on_search_result($api) {
   if (!$_GET['q'] || trim($_GET['q']) == '')
-    return search_on_search_form($forum);
+    return search_on_search_form($api);
 
-  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
   $url      = new FreechURL('', _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum_id);
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_link($url);
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text($_GET['q']);
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_link($url);
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text($_GET['q']);
 
   // Search for postings or users.
-  $controller = new SearchController($forum);
+  $controller = new SearchController($api);
   if ($_GET['user_search'])
     $controller->show_users($_GET['q'], $_GET['hs']);
   else

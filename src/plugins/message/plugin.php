@@ -8,64 +8,64 @@ Description: Shows normal messages in the forum.
 include_once dirname(__FILE__).'/message.class.php';
 include_once dirname(__FILE__).'/message_controller.class.php';
 
-function message_init($forum) {
-  $forum->eventbus()->signal_connect('on_run_before', 'message_on_run');
+function message_init($api) {
+  $api->eventbus()->signal_connect('on_run_before', 'message_on_run');
 
   // Register a class that is responsible for formatting the posting object
   // that holds the message.
-  $forum->register_renderer('message', 'Message');
+  $api->register_renderer('message', 'Message');
 
   // Register our extra actions.
-  $forum->register_action('write',          'message_on_write');
-  $forum->register_action('respond',        'message_on_respond');
-  $forum->register_action('edit',           'message_on_edit_saved');
-  $forum->register_action('message_submit', 'message_on_submit');
+  $api->register_action('write',          'message_on_write');
+  $api->register_action('respond',        'message_on_respond');
+  $api->register_action('edit',           'message_on_edit_saved');
+  $api->register_action('message_submit', 'message_on_submit');
 }
 
 
-function message_on_run($forum) {
-  if (!$forum->group()->may('write'))
+function message_on_run($api) {
+  if (!$api->group()->may('write'))
     return;
 
   // Add 'new message' button to the index bar.
-  $forum_id = $forum->forum() ? $forum->forum()->get_id() : NULL;
+  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
   $url      = new FreechURL('', _('Start a New Topic'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action',   'write');
-  $forum->links('page')->add_link($url, 200);
+  $api->links('page')->add_link($url, 200);
 }
 
 
-function message_on_write($forum) {
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(_('Start a New Topic'));
+function message_on_write($api) {
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text(_('Start a New Topic'));
   $parent_id  = (int)$_POST['parent_id'];
   $posting    = new Posting;
-  $controller = new MessageController($forum);
+  $controller = new MessageController($api);
   $controller->show_compose($posting, '', $parent_id, FALSE);
 }
 
 
-function message_on_respond($forum) {
+function message_on_respond($api) {
   $parent_id  = (int)$_GET['parent_id'];
-  $posting    = $forum->forumdb()->get_posting_from_id($parent_id);
-  $controller = new MessageController($forum);
+  $posting    = $api->forumdb()->get_posting_from_id($parent_id);
+  $controller = new MessageController($api);
   if (!$posting)
     die('Invalid parent ID');
 
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_link($posting->get_url());
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(_('Reply'));
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_link($posting->get_url());
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text(_('Reply'));
 
   $controller->show_compose_reply($posting, '');
 }
 
 
-function message_on_edit_saved($forum) {
-  $user       = $forum->user();
-  $posting    = $forum->forumdb()->get_posting_from_id($_GET['msg_id']);
-  $controller = new MessageController($forum);
+function message_on_edit_saved($api) {
+  $user       = $api->user();
+  $posting    = $api->forumdb()->get_posting_from_id($_GET['msg_id']);
+  $controller = new MessageController($api);
 
   if (!cfg('postings_editable'))
     die('Postings may not be changed as per configuration.');
@@ -76,57 +76,57 @@ function message_on_edit_saved($forum) {
   elseif ($user->get_id() != $posting->get_user_id())
     die('You are not the owner.');
 
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_link($posting->get_url());
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(_('Edit'));
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_link($posting->get_url());
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text(_('Edit'));
 
   $controller->show_compose($posting, '', 0, FALSE);
 }
 
 
-function message_on_submit($forum) {
+function message_on_submit($api) {
   if ($_POST['quote'])
-    message_on_quote($forum);
+    message_on_quote($api);
   elseif ($_POST['preview'])
-    message_on_preview($forum);
+    message_on_preview($api);
   elseif ($_POST['send'])
-    message_on_send($forum);
+    message_on_send($api);
   elseif ($_POST['edit'])
-    message_on_edit_unsaved($forum);
+    message_on_edit_unsaved($api);
   else
     die('message_on_submit(): no matching POST field found.');
 }
 
 
 // Edit an unsaved message.
-function message_on_edit_unsaved($forum) {
+function message_on_edit_unsaved($api) {
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $posting    = message_init_posting_from_post_data();
-  $controller = new MessageController($forum);
+  $controller = new MessageController($api);
 
   $controller->show_compose($posting, '', $parent_id, $may_quote);
 }
 
 
 // Insert a quote from the parent message.
-function message_on_quote($forum) {
+function message_on_quote($api) {
   $parent_id  = (int)$_POST['parent_id'];
-  $quoted_msg = $forum->forumdb()->get_posting_from_id($parent_id);
+  $quoted_msg = $api->forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
-  $controller = new MessageController($forum);
+  $controller = new MessageController($api);
   $controller->show_compose_quoted($posting, $quoted_msg, '');
 }
 
 
 // Print a preview of a message.
-function message_on_preview($forum) {
+function message_on_preview($api) {
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
-  $controller = new MessageController($forum);
-  $user       = $forum->user();
-  $message    = new Message(message_get_new_posting($forum), $forum);
+  $controller = new MessageController($api);
+  $user       = $api->user();
+  $message    = new Message(message_get_new_posting($api), $api);
   message_init_posting_from_post_data($message);
 
   // Check the posting for completeness.
@@ -136,7 +136,7 @@ function message_on_preview($forum) {
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$forum->userdb()->username_is_available($message->get_username())) {
+    && !$api->userdb()->username_is_available($message->get_username())) {
      $msg = _('The entered username is not available.');
      return $controller->show_compose($message, $msg, $parent_id, $may_quote);
   }
@@ -146,24 +146,24 @@ function message_on_preview($forum) {
    *   Called before the HTML for the posting preview is produced.
    *   Args: posting: The posting that is about to be previewed.
    */
-  $forum->eventbus()->emit('on_message_preview_print', $forum, $message);
+  $api->eventbus()->emit('on_message_preview_print', $api, $message);
 
-  $forum->breadcrumbs()->add_separator();
-  $forum->breadcrumbs()->add_text(_('Preview'));
+  $api->breadcrumbs()->add_separator();
+  $api->breadcrumbs()->add_text(_('Preview'));
 
   $controller->show_preview($message, $parent_id, $may_quote);
 }
 
 
 // Saves the posted message.
-function message_on_send($forum) {
+function message_on_send($api) {
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
-  $controller = new MessageController($forum);
-  $user       = $forum->user();
-  $forum_id   = $forum->forum()->get_id();
-  $forumdb    = $forum->forumdb();
-  $forum->group()->assert_may('write');
+  $controller = new MessageController($api);
+  $user       = $api->user();
+  $forum_id   = $api->forum()->get_id();
+  $forumdb    = $api->forumdb();
+  $api->group()->assert_may('write');
 
   // Check whether editing is allowed per configuration.
   if ($_POST['msg_id'] && !cfg('postings_editable'))
@@ -178,7 +178,7 @@ function message_on_send($forum) {
     $posting->set_updated_unixtime(time());
   }
   else {
-    $posting = message_get_new_posting($forum);
+    $posting = message_get_new_posting($api);
     message_init_posting_from_post_data($posting);
   }
 
@@ -194,7 +194,7 @@ function message_on_send($forum) {
 
   // Make sure that the username is not in use.
   if ($user->is_anonymous()
-    && !$forum->userdb()->username_is_available($posting->get_username())) {
+    && !$api->userdb()->username_is_available($posting->get_username())) {
     $msg = _('The entered username is not available.');
     return $controller->show_compose($posting, $msg, $parent_id, $may_quote);
   }
@@ -203,10 +203,10 @@ function message_on_send($forum) {
     // If the posting a new one (not an edited one), check for duplicates.
     $duplicate_id = $forumdb->get_duplicate_id_from_posting($posting);
     if ($duplicate_id)
-      $forum->refer_to_posting_id($duplicate_id);
+      $api->refer_to_posting_id($duplicate_id);
 
     // Check whether too many messages were sent.
-    $blocked_until = $forum->forumdb()->get_flood_blocked_until($posting);
+    $blocked_until = $api->forumdb()->get_flood_blocked_until($posting);
     if ($blocked_until) {
       $msg  = sprintf(_('You have sent too many messages.'
                       . ' %d seconds until your message may be sent.'),
@@ -215,7 +215,7 @@ function message_on_send($forum) {
     }
 
     // Check whether the user or IP is spam-locked.
-    if ($forum->forumdb()->is_spam($posting))
+    if ($api->forumdb()->is_spam($posting))
       return $controller->show_compose($posting,
                                        _('Message rejected by spamblocker.'),
                                        $parent_id,
@@ -234,7 +234,7 @@ function message_on_send($forum) {
                                      $may_quote);
 
   // Success! Refer to the new item.
-  $forum->refer_to_posting($posting);
+  $api->refer_to_posting($posting);
 }
 
 
@@ -243,10 +243,10 @@ function message_on_send($forum) {
  ***********************************************/
 // Returns a new Posting object that is initialized for the current
 // user/group.
-function message_get_new_posting($forum) {
+function message_get_new_posting($api) {
   $posting = new Posting;
-  $posting->set_from_group($forum->group());
-  $posting->set_from_user($forum->user());
+  $posting->set_from_group($api->group());
+  $posting->set_from_user($api->user());
   return $posting;
 }
 

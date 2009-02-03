@@ -7,23 +7,23 @@ Description: Converts URLs in messages into hyperlinks.
 */
 
 
-function linkify_init($forum) {
-  $eventbus = $forum->eventbus();
+function linkify_init($api) {
+  $eventbus = $api->eventbus();
   $eventbus->signal_connect('on_message_read_print',    'linkify_on_read');
   $eventbus->signal_connect('on_message_preview_print', 'linkify_on_preview');
 
   // Register our extra actions.
-  $forum->register_action('linkify_hide_videos', 'linkify_on_hide_videos');
-  $forum->register_action('linkify_show_videos', 'linkify_on_show_videos');
+  $api->register_action('linkify_hide_videos', 'linkify_on_hide_videos');
+  $api->register_action('linkify_show_videos', 'linkify_on_show_videos');
 }
 
 
-function linkify_on_read($forum, $message) {
+function linkify_on_read($api, $message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
 
   // Make sure that the link is not added twice on pages where
   // this method is called multiple times.
-  foreach ($forum->links('view')->get_items() as $item) {
+  foreach ($api->links('view')->get_items() as $item) {
     if (!$item->is_link())
       continue;
     if ($item->get_url()->get_var('action') == 'linkify_hide_videos'
@@ -41,24 +41,24 @@ function linkify_on_read($forum, $message) {
     $url->set_var('action', 'linkify_show_videos');
   }
   $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
-  $forum->links('view')->add_link($url);
+  $api->links('view')->add_link($url);
 }
 
 
-function linkify_on_preview($forum, $message) {
+function linkify_on_preview($api, $message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
 }
 
 
-function linkify_on_show_videos($forum) {
-  $forum->set_cookie('linkify_show_videos', TRUE);
-  $forum->refer_to($_GET['refer_to']);
+function linkify_on_show_videos($api) {
+  $api->set_cookie('linkify_show_videos', TRUE);
+  $api->refer_to($_GET['refer_to']);
 }
 
 
-function linkify_on_hide_videos($forum) {
-  $forum->set_cookie('linkify_show_videos', FALSE);
-  $forum->refer_to($_GET['refer_to']);
+function linkify_on_hide_videos($api) {
+  $api->set_cookie('linkify_show_videos', FALSE);
+  $api->refer_to($_GET['refer_to']);
 }
 
 

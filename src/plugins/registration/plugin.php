@@ -7,38 +7,38 @@ Description: Adds pages for user registration to the forum.
 */
 include_once dirname(__FILE__).'/registration_controller.class.php';
 
-function registration_init($forum) {
-  $forum->register_action('account_register',  'registration_on_register');
-  $forum->register_action('account_create',    'registration_on_create');
-  $forum->register_action('account_confirm',   'registration_on_confirm');
-  $forum->register_action('account_reconfirm', 'registration_on_reconfirm');
+function registration_init($api) {
+  $api->register_action('account_register',  'registration_on_register');
+  $api->register_action('account_create',    'registration_on_create');
+  $api->register_action('account_confirm',   'registration_on_confirm');
+  $api->register_action('account_reconfirm', 'registration_on_reconfirm');
 
   $url = new FreechURL('', _('Register Account'));
   $url->set_var('action', 'account_register');
-  $forum->register_url('registration', $url);
+  $api->register_url('registration', $url);
 
-  $forum->eventbus()->signal_connect('on_run_before', 'registration_on_run');
+  $api->eventbus()->signal_connect('on_run_before', 'registration_on_run');
 }
 
 
-function registration_on_run($forum) {
-  if ($forum->user()->is_anonymous())
-    $forum->links('account')->add_link($forum->get_url('registration'));
+function registration_on_run($api) {
+  if ($api->user()->is_anonymous())
+    $api->links('account')->add_link($api->get_url('registration'));
 }
 
 
-function registration_on_register($forum) {
-  $registration = new RegistrationController($forum);
+function registration_on_register($api) {
+  $registration = new RegistrationController($api);
   $registration->show(new User);
 }
 
 
-function registration_on_create($forum) {
-  $registration = new RegistrationController($forum);
+function registration_on_create($api) {
+  $registration = new RegistrationController($api);
   $user         = init_user_from_post_data();
 
   if ($_POST['cancel'])
-    $forum->refer_to(cfg('site_url'));
+    $api->refer_to(cfg('site_url'));
 
   // Check the data for completeness.
   $err = $user->check_complete();
@@ -48,31 +48,31 @@ function registration_on_create($forum) {
     return $registration->show($user, _('Error: Passwords do not match.'));
 
   // Make sure that the name is available.
-  if (!$forum->userdb()->username_is_available($user->get_name())) {
+  if (!$api->userdb()->username_is_available($user->get_name())) {
     $msg = _('The entered username is not available.');
     return $registration->show($user, $msg);
   }
 
   // Make sure that the email address is available.
-  if ($forum->userdb()->get_user_from_mail($user->get_mail())) {
+  if ($api->userdb()->get_user_from_mail($user->get_mail())) {
     $msg = _('The given email address already exists in our database.');
     return $registration->show($user, $msg);
   }
 
   // Create the user.
   $user->set_group_id(cfg('default_group_id'));
-  if (!$forum->userdb()->save_user($user))
+  if (!$api->userdb()->save_user($user))
     return $registration->show($user, _('Failed to save the user.'));
 
   // Done.
-  registration_mail_send($forum, $user);
+  registration_mail_send($api, $user);
 }
 
 
 // Called when the user opens the link in the initial account confirmation
 // mail.
-function registration_on_confirm($forum) {
-  $userdb = $forum->userdb();
+function registration_on_confirm($api) {
+  $userdb = $api->userdb();
   $user   = $userdb->get_user_from_name($_GET['username']);
   assert_user_confirmation_hash_is_valid($user);
 
@@ -82,7 +82,7 @@ function registration_on_confirm($forum) {
     $url->set_var('action',   'password_change');
     $url->set_var('username', $user->get_name());
     $url->set_var('hash',     $_GET['hash']);
-    $forum->refer_to($url->get_string());
+    $api->refer_to($url->get_string());
   }
 
   // Make the user active.
@@ -92,24 +92,24 @@ function registration_on_confirm($forum) {
     die('User activation failed');
 
   // Done.
-  $registration = new RegistrationController($forum);
+  $registration = new RegistrationController($api);
   $registration->show_done($user);
 }
 
 
-function registration_on_reconfirm($forum) {
-  $userdb  = $forum->userdb();
+function registration_on_reconfirm($api) {
+  $userdb  = $api->userdb();
   $user    = $userdb->get_user_from_name($_GET['username']);
   if ($user->get_status() != USER_STATUS_UNCONFIRMED)
     die('User is already confirmed.');
-  registration_mail_send($forum, $user);
+  registration_mail_send($api, $user);
 }
 
 
 /***********************************************
  * Utilities.
  ***********************************************/
-function registration_mail_send($forum, $user) {
+function registration_mail_send($api, $user) {
   $subject  = _('Your registration at [SITE_TITLE]');
   $body     = _("Hello [FIRSTNAME] [LASTNAME],\n"
               . "\n"
@@ -125,8 +125,8 @@ function registration_mail_send($forum, $user) {
   $hash     = urlencode($user->get_confirmation_hash());
   $url      = cfg('site_url') . '?action=account_confirm'
             . "&username=$username&hash=$hash";
-  $forum->send_mail($user, $subject, $body, array('url' => $url));
-  $controller = new RegistrationController($forum);
+  $api->send_mail($user, $subject, $body, array('url' => $url));
+  $controller = new RegistrationController($api);
   $controller->show_mail_sent($user);
 }
 ?>

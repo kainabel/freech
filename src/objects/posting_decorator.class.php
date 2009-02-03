@@ -63,6 +63,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_origin_forum_id() {
+    return $this->posting->get_origin_forum_id();
+  }
+
+
   function is_parent() {
     return $this->posting->is_parent();
   }
@@ -253,6 +258,16 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_move_url() {
+    return $this->posting->get_move_url();
+  }
+
+
+  function get_move_url_string() {
+    return $this->posting->get_move_url_string();
+  }
+
+
   function get_prioritize_url($_priority) {
     return $this->posting->get_prioritize_url($_priority);
   }
@@ -420,6 +435,11 @@ class PostingDecorator extends Trackable {
 
   function is_selected() {
     return $this->posting->is_selected();
+  }
+
+
+  function was_moved() {
+    return $this->posting->was_moved();
   }
 
 

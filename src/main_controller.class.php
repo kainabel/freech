@@ -714,6 +714,31 @@ class MainController {
   }
 
 
+  // Form for moving an entire thread into a different forum.
+  function _thread_move() {
+    $this->_assert_may('moderate');
+    $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
+    $controller = new ModLogController($this->api);
+    $controller->show_thread_move($posting);
+  }
+
+
+  // Moves an entire thread into a different forum.
+  function _thread_move_submit() {
+    $this->_assert_may('moderate');
+    $posting_id = (int)$_POST['msg_id'];
+    $forum_id   = (int)$_POST['forum_id'];
+    $posting    = $this->_get_posting_from_id_or_die($posting_id);
+    if (!$forum_id || $posting->get_forum_id() == $forum_id)
+      $this->_refer_to_posting_id($posting_id);
+
+    $this->_log_posting_moderation('move_thread', $posting, '');
+    $this->forumdb->move_thread($posting->get_thread_id(), $forum_id);
+    $posting->set_forum_id($forum_id);
+    $this->_refer_to($posting->get_url()->get_string());
+  }
+
+
   // Changes the priority of an existing posting.
   function _posting_prioritize() {
     $this->_assert_may('moderate');
@@ -1253,6 +1278,14 @@ class MainController {
         $this->_posting_read();
       else
         $this->_thread_read();
+      break;
+
+    case 'thread_move':
+      $this->_thread_move();
+      break;
+
+    case 'thread_move_submit':
+      $this->_thread_move_submit();
       break;
 
     case 'posting_prioritize':

@@ -257,6 +257,11 @@
                 . ' [POSTING_LINK] by [USER_LINK].');
         break;
 
+      case 'move_thread':
+        $text = _('[MODERATOR_LINK] has moved the thread'
+                . ' [POSTING_LINK] by [USER_LINK].');
+        break;
+
       default:
         die('Unknown modlog action.');
       }

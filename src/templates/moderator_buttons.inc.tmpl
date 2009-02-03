@@ -28,6 +28,13 @@
   </a>
   {/if}
 </li>
+
+<li>
+  <a href="{$posting->get_move_url_string(1)|escape}">
+  <img class='icon' src='{$__theme_dir}/img/move.png' title='{t}Move to a different forum{/t}' alt='[M]' />
+  <span class='moderator_button_text'>{t}Move to a different forum{/t}</span>
+  </a>
+</li>
 {/if}
 
 <li>

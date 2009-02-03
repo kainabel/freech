@@ -6,7 +6,6 @@ Maintenance
 
 Features
 ---------
-* Allow for moving threads between forums.
 * Hide locked messages from the forum.
 * Improve themability by replacing layout tables with divs.
 * Check whether support for sqlite is feasible.

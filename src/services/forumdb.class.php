@@ -302,6 +302,25 @@
     }
 
 
+    /**
+     * Moves the entire thread from the given forum into another forum.
+     */
+    function move_thread($_thread_id, $_forum_id) {
+      $this->db->StartTrans();
+      $sql   = 'UPDATE {t_thread} SET forum_id={forum_id} WHERE id={id}';
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('id',       $_thread_id);
+      $query->set_int('forum_id', $_forum_id);
+      $this->db->Execute($query->sql()) or die('ForumDB::move_thread(): 1');
+
+      $sql   = 'UPDATE {t_posting} SET forum_id={forum_id}';
+      $sql  .= ' WHERE thread_id={id}';
+      $query->set_sql($sql);
+      $this->db->Execute($query->sql()) or die('ForumDB::move_thread(): 2');
+      $this->db->CompleteTrans();
+    }
+
+
     /* Returns a posting from the given forum.
      * This function is exceptional in that the returned posting object
      * will also have the current_username field set.

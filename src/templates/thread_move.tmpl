@@ -1,0 +1,29 @@
+<!-- move thread -->
+<h2>{t}Move a Thread{/t}</h2>
+{include file="error.inc.tmpl"}
+
+<form action="{$action|escape}"
+      method="post"
+      accept-charset="utf-8">
+<div>
+<input type="hidden" name="action"   value="thread_move_submit" />
+<input type="hidden" name="msg_id"   value="{$posting->get_id()}" />
+
+<p>
+  <label>{t}Posting:{/t}</label>
+  {$posting->get_subject()|escape}
+</p>
+
+<p>
+  <label>{t}Move to:{/t}</label>
+  {html_options name="forum_id" options=$forums selected=$posting->get_forum_id()}
+</p>
+
+<p>
+  <input type="submit"
+         name="thread_move_submit"
+         value="{t}Move Thread{/t}" />
+</p>
+</div>
+</form>
+<!-- end move thread -->

@@ -17,6 +17,9 @@
 {else}
   &nbsp;{$posting->get_subject()|escape}
 {/if}
+{if $posting->was_moved()}{strip}
+  &nbsp;<img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
+{/strip}{/if}
   </td>
 {/strip}
   <td><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>

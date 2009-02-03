@@ -55,6 +55,9 @@
      &nbsp;{$posting->get_url_html()}
 {/if}
 {if $posting->get_relation() == 3}&nbsp;({$posting->get_n_children()}){/if}
+{if $posting->was_moved()}{strip}
+  &nbsp;<img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
+{/strip}{/if}
      </td>
     </tr>
    </table>

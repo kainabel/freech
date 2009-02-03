@@ -44,5 +44,25 @@
       $this->assign_by_ref('posting',  $_posting);
       $this->render('posting_lock.tmpl');
     }
+
+
+    function show_thread_move($_posting) {
+      $url = new FreechURL;
+      $url->set_var('action', 'thread_move_submit');
+      $url->set_var('msg_id', $_posting->get_id());
+
+      $forums    = $this->forumdb->get_forums(FORUM_STATUS_ACTIVE);
+      $forum_map = array();
+      foreach ($forums as $forum)
+        if ($forum->get_id() != $_posting->get_forum_id())
+          $forum_map[$forum->get_id()] = $forum->get_name();
+      ksort($forum_map);
+
+      $this->clear_all_assign();
+      $this->assign_by_ref('action',  $url->get_string());
+      $this->assign_by_ref('posting', $_posting);
+      $this->assign_by_ref('forums',  $forum_map);
+      $this->render('thread_move.tmpl');
+    }
   }
 ?>

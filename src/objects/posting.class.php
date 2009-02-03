@@ -128,6 +128,7 @@ class IndentedBlock {
       $this->clear();
       $this->fields[id]               = $_db_row[id];
       $this->fields[forum_id]         = $_db_row[forum_id];
+      $this->fields[origin_forum_id]  = $_db_row[origin_forum_id];
       $this->fields[thread_id]        = $_db_row[thread_id];
       $this->fields[path]             = $_db_row[path];
       $this->fields[priority]         = $_db_row[priority];
@@ -191,6 +192,11 @@ class IndentedBlock {
 
     function get_forum_id() {
       return $this->fields[forum_id];
+    }
+
+
+    function get_origin_forum_id() {
+      return $this->fields[origin_forum_id];
     }
 
 
@@ -498,6 +504,20 @@ class IndentedBlock {
     }
 
 
+    // The url for moving the posting to a different forum.
+    function get_move_url() {
+      $url = new FreechURL;
+      $url->set_var('action', 'thread_move');
+      $url->set_var('msg_id', $this->get_id());
+      return $url;
+    }
+
+
+    function get_move_url_string() {
+      return $this->get_move_url()->get_string();
+    }
+
+
     // The url for changing the posting priority.
     function get_prioritize_url($_priority) {
       $url = new FreechURL;
@@ -723,6 +743,11 @@ class IndentedBlock {
 
     function is_selected() {
       return $this->fields[selected];
+    }
+
+
+    function was_moved() {
+      return $this->get_forum_id() != $this->get_origin_forum_id();
     }
 
 

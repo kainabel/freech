@@ -1,51 +1,42 @@
+<!-- database_setup -->
 <h2>Database Setup.</h2>
 
-{include file="checklist.tmpl" items=$errors}
+<p>Please enter your database settings.</p>
 
 {if $errors}
-<p/>
+  {include file="checklist.tmpl" items=$errors}
+  <hr />
 {/if}
 
-Please enter your database settings.
-
-<p/>
 <form method='post' action='?step={$nextstep}'>
-<table width='100%'>
+<table summary=''>
   <tr>
     <td>Hostname:</td>
-    <td>&nbsp;</td>
-    <td width='100%'>
+    <td>
       <input type="text" name="db_host" value="{$db_host}" />
     </td>
   </tr>
   <tr>
     <td>User:</td>
-    <td>&nbsp;</td>
-    <td width='100%'>
+    <td>
       <input type="text" name="db_user" value="{$db_user}" />
     </td>
   </tr>
   <tr>
     <td>Password:</td>
-    <td>&nbsp;</td>
-    <td width='100%'>
+    <td>
       <input type="password" name="db_password" value="{$db_password}" />
     </td>
   </tr>
   <tr>
     <td>Database:</td>
-    <td>&nbsp;</td>
-    <td width='100%'>
+    <td>
       <input type="text" name="db_name" value="{$db_name}" />
     </td>
   </tr>
 </table>
 
 <hr/>
-<table width='100%'>
-  <tr>
-    <td width='100%'></td>
-    <td><input type='submit' value='Continue'/></td>
-  </tr>
-</table>
+<p class="right"><input type='submit' value='Continue'/></p>
+
 </form>

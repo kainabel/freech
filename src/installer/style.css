@@ -1,0 +1,49 @@
+.color_ok {
+  color: #008000;
+}
+.color_fail {
+  color: #ff0000;
+}
+.small {
+  font-size: small;
+}
+/* form.border {
+  border-top: 1px solid #b4b4b4;
+  padding-top: 1em;
+  border: 1px solid #b4b4b4;
+  padding: 1em;
+} */
+hr {
+  border: 0 none;
+  background: #b4b4b4;
+  color: #b4b4b4;
+  height: 1px;
+  line-height: 1px;
+}
+#center {
+  text-align: center;
+  margin:0;
+}
+#main {
+  text-align: left;
+  margin: 0 auto;
+  width: 800px;
+  background: #f5f5f2;
+  padding: 1em;
+}
+input {
+  width: 15em;
+  margin-left: 1em;
+}
+p.right {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+#footer {
+  text-align: center;
+  width: 100%;
+  border-top: 1px solid #b4b4b4;
+  margin:0;
+  padding-top: 1em;
+}

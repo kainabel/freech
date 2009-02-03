@@ -1,17 +1,13 @@
+<!-- check_requirements -->
 <h2>Checking Requirements.</h2>
 
-Checking whether your environment is set up to support Freech.
+<p>Checking whether your environment is set up to support Freech.</p>
 
 {include file="checklist.tmpl" items=$results}
 
 <hr/>
 {if $success}
 <form method='post' action='?step={$nextstep}'>
-<table width='100%'>
-  <tr>
-    <td width='100%'></td>
-    <td><input type='submit' value='Continue'/></td>
-  </tr>
-</table>
+<p class="right"><input type='submit' value='Continue'/></p>
 </form>
 {/if}

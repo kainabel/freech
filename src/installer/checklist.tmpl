@@ -1,28 +1,31 @@
-<p/>
-<table width="100%" cellpadding="0">
+<!-- checklist -->
+<hr />
+<table width="100%" cellpadding="0" summary=''>
 {foreach item=item from=$items}
   <tr>
     <td>{$item->get_name()|escape}</td>
     <td>&nbsp;</td>
     <td align="right">
 {if $item->result}
-      <font color="green">Success</font>
+      <span class="color_ok">Success</span>
 {else}
-      <font color="red">Failed</font>
+      <span class="color_fail">Failed</span>
 {/if}
     </td>
   </tr>
 {if $item->hint}
     <tr>
       <td>
-        <font size="-1">{$item->hint|escape}</font>
+        <span class="small">{$item->hint|escape}</span>
       </td>
       <td colspan="2">
       </td>
     </tr>
     <tr>
-      <td colspan="3" height="5"></td>
+      <td colspan="3"><br /></td>
     </tr>
 {/if}
 {/foreach}
 </table>
+<!-- /checklist -->
+

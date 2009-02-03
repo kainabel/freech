@@ -27,15 +27,23 @@ Installation Instructions
 
      chmod -R a+rwX src/data/
 
-3. Point your browser to the installer/ directory. For example:
+3. Make sure that your database server has an existing database! The installer
+   will ask you for a database, but it will not create one for you.
+
+     - If you are running the forum in a hosted webspace, your webspace
+       provider has to provide you with the tools to do this.
+     - If you are running your own server it is presumed that you know how
+       to do create a database.
+
+4. Point your browser to the installer/ directory. For example:
 
      http://www.mydomain.com/freech/installer/
 
-4. Follow the installation instructions.
+5. Follow the installation instructions.
 
-5. Delete the installer/ directory. You are done!
+6. Delete the installer/ directory. You are done!
 
-6. If you want to, you may now customize your installation by adding
+7. If you want to, you may now customize your installation by adding
    options into the data/config.inc.php file.
    For a list of available options please check the file
    'default_config.inc.php' that comes with this package.

@@ -72,14 +72,19 @@ class DefaultSetup extends Step {
       return FALSE;
     }
 
-    // Write the configuration file.
+    // Find the public address of the forum.
     $hostname  = $_SERVER['SERVER_NAME'];
     $mail_from = 'noreply@' . $hostname;
-    $site_url  = 'http://' . $hostname . $_SERVER['SCRIPT_FILENAME'];
-    $config    = array('db_dbn'    => $this->state->get('dbn'),
-                       'salt'      => util_get_random_string(10),
-                       'site_url'  => $site_url,
-                       'mail_from' => $mail_from);
+    $full_path = $_SERVER['PHP_SELF'];
+    $home_path = substr($full_path, 0, strrpos($full_path, 'installer'));
+    $site_url  = 'http://' . $hostname . $home_path;
+    $this->state->set('site_url', $site_url);
+
+    // Write the configuration file.
+    $config = array('db_dbn'    => $this->state->get('dbn'),
+                    'salt'      => util_get_random_string(10),
+                    'site_url'  => $site_url,
+                    'mail_from' => $mail_from);
     $res = util_write_config('../data/config.inc.php', $config);
     if (!$res->result) {
       array_push($errors, $result);

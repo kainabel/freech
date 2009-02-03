@@ -21,7 +21,8 @@
 <?php
 class Done extends Step {
   function show() {
-    $this->render('done.tmpl');
+    $vars = array('site_url' => $this->state->get('site_url'));
+    $this->render('done.tmpl', $vars);
 
     // clear entire compile directory
     $this->smarty->clear_compiled_tpl();

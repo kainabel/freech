@@ -51,19 +51,18 @@
       $query->set_var   ('mail',        $_user->get_mail());
       $query->set_string('homepage',    $_user->get_homepage());
       $query->set_string('im',          $_user->get_im());
-      $query->set_string('signature',   $_user->get_signature());
       if ($_user->get_id() < 1) {
         $sql   = "INSERT INTO {t_user}";
         $sql  .= " (";
         $sql  .= "  group_id, name, soundexname, password,";
         $sql  .= "  firstname, lastname,";
-        $sql  .= "  mail, public_mail, homepage, im, signature, status,";
+        $sql  .= "  mail, public_mail, homepage, im, status,";
         $sql  .= " created, lastlogin";
         $sql  .= " )";
         $sql  .= " VALUES (";
         $sql  .= "  {group_id}, {name}, {soundexname}, {password},";
         $sql  .= "  {firstname}, {lastname},";
-        $sql  .= "  {mail}, {public_mail}, {homepage}, {im}, {signature},";
+        $sql  .= "  {mail}, {public_mail}, {homepage}, {im},";
         $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
         $sql  .= ")";
         $query->set_sql($sql);
@@ -80,7 +79,7 @@
       $sql  .= " password={password},";
       $sql  .= " firstname={firstname}, lastname={lastname},";
       $sql  .= " mail={mail}, public_mail={public_mail}, homepage={homepage},";
-      $sql  .= " im={im}, signature={signature}, status={status},";
+      $sql  .= " im={im}, status={status},";
       $sql  .= " lastlogin=FROM_UNIXTIME({lastlogin})";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);

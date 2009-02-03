@@ -26,8 +26,6 @@ class Message extends PostingDecorator {
     function _update_body_html() {
       // Perform non HTML generating formattings.
       $body = $this->get_quoted_body(0);
-      if ($this->get_id() <= 0 && $this->get_signature())
-        $body .= "\n\n--\n" . $this->get_signature();
 
       // Let plugins perform formattings.
       $this->set_body_html($body);

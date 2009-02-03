@@ -183,16 +183,15 @@
 
       // Render the template.
       $this->clear_all_assign();
-      $this->assign_by_ref('may_edit_group',      $may_edit_group);
-      $this->assign_by_ref('may_edit_name',       $may_edit_name);
-      $this->assign_by_ref('may_edit_data',       $may_edit_data);
-      $this->assign_by_ref('may_change_status',   $may_change_status);
-      $this->assign_by_ref('user',                $_user);
-      $this->assign_by_ref('group',               $group);
-      $this->assign_by_ref('groups',              $groups);
-      $this->assign_by_ref('status',              $status);
-      $this->assign_by_ref('action',              $url->get_string());
-      $this->assign_by_ref('max_signature_lines', cfg('max_signature_lines'));
+      $this->assign_by_ref('may_edit_group',    $may_edit_group);
+      $this->assign_by_ref('may_edit_name',     $may_edit_name);
+      $this->assign_by_ref('may_edit_data',     $may_edit_data);
+      $this->assign_by_ref('may_change_status', $may_change_status);
+      $this->assign_by_ref('user',              $_user);
+      $this->assign_by_ref('group',             $group);
+      $this->assign_by_ref('groups',            $groups);
+      $this->assign_by_ref('status',            $status);
+      $this->assign_by_ref('action',            $url->get_string());
       $this->render('user_editor.tmpl');
       $this->api->set_title($_user->get_name());
     }

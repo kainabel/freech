@@ -28,7 +28,6 @@ function init_user_from_post_data($_user = NULL) {
   $_user->set_mail($_POST['mail'], $_POST['publicmail'] == 'on');
   $_user->set_homepage($_POST['homepage']);
   $_user->set_im($_POST['im']);
-  $_user->set_signature($_POST['signature']);
   return $_user;
 }
 

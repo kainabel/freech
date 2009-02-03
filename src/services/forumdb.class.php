@@ -112,9 +112,6 @@
      * Returns:   The id of the newly inserted entry.
      */
     function insert($_forum_id, $_parent_id, &$_posting) {
-      $body = $_posting->get_body();
-      if ($_posting->get_signature())
-        $body .= "\n\n--\n" . $_posting->get_signature();
       //$this->db->debug = true;
 
       // Fetch the parent row.
@@ -161,7 +158,7 @@
         $query->set_string('renderer',        $_posting->get_renderer());
         $query->set_string('username',        $_posting->get_username());
         $query->set_string('subject',         $_posting->get_subject());
-        $query->set_string('body',            $body);
+        $query->set_string('body',            $_posting->get_body());
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $query->set_bool  ('force_stub',      $_posting->get_force_stub());
@@ -240,7 +237,7 @@
         $query->set_string('renderer',        $_posting->get_renderer());
         $query->set_string('username',        $_posting->get_username());
         $query->set_string('subject',         $_posting->get_subject());
-        $query->set_string('body',            $body);
+        $query->set_string('body',            $_posting->get_body());
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $query->set_bool  ('force_stub',      $_posting->get_force_stub());

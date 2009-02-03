@@ -145,7 +145,6 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   `public_mail` tinyint(1) NOT NULL default '0',
   `homepage` varchar(100) collate latin1_general_ci default NULL,
   `im` varchar(100) collate latin1_general_ci default NULL,
-  `signature` varchar(255) collate latin1_general_ci default NULL,
   `status` int(11) unsigned default '2',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',

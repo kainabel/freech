@@ -28,7 +28,7 @@ define('USER_STATUS_BLOCKED',     3);
    * Represents a user.
    */
   class User {
-    var $fields;  ///< Properties of the user, such as name, mail, signature.
+    var $fields;  ///< Properties of the user, such as name, mail.
 
     /// Constructor.
     function User($_name = '') {
@@ -66,7 +66,6 @@ define('USER_STATUS_BLOCKED',     3);
       $this->fields[public_mail]  = $_db_row[public_mail];
       $this->fields[homepage]     = $_db_row[homepage];
       $this->fields[im]           = $_db_row[im];
-      $this->fields[signature]    = $_db_row[signature];
       $this->fields[icon]         = $_db_row[icon];
       $this->fields[icon_name]    = $_db_row[icon_name];
       $this->fields[status]       = $_db_row[status];
@@ -243,17 +242,6 @@ define('USER_STATUS_BLOCKED',     3);
 
     function &get_im() {
       return $this->fields[im];
-    }
-
-
-    /// A signature that can be addded below a message that the user writes.
-    function set_signature($_signature) {
-      $this->fields[signature] = trim($_signature);
-    }
-
-
-    function &get_signature() {
-      return $this->fields[signature];
     }
 
 
@@ -497,15 +485,6 @@ define('USER_STATUS_BLOCKED',     3);
                . ' most %d characters.');
         return sprintf($err, cfg('max_imlength'));
       }
-
-      if (strlen($this->fields[signature]) > cfg('max_signaturelength')) {
-        $err = _('Your signature is too long. Please enter at most'
-               . ' %d characters.');
-        return sprintf($err, cfg('max_signaturelength'));
-      }
-
-      if (substr_count($this->fields[signature], '\n') > cfg('max_signature_lines'))
-        return _('Too many lines in the signature.');
 
       return $this->check_mail();
     }

@@ -122,8 +122,6 @@
   $cfg[max_maillength]        = 100;
   $cfg[max_homepageurllength] = 100;
   $cfg[max_imlength]          = 100;
-  $cfg[max_signaturelength]   = 255;
-  $cfg[max_signature_lines]   = 3;
 
   // Maximum number of moderation log entries per page.
   $cfg[modlog_epp] = 50;

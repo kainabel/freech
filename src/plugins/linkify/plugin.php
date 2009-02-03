@@ -107,14 +107,6 @@ function linkify_url2link($match) {
 
 
 function linkify_on_format($message) {
-  // Split body and signature.
-  $body      = $message->get_body_html();
-  $signature = '';
-  if (preg_match('/^(.*)([\r\n]--.*)$/s', $body, $matches)) {
-    $body      = $matches[1];
-    $signature = $matches[2];
-  }
-
   // Convert URLs to links.
   $body = preg_replace_callback('~'
                               . '(^|[\r\n])'   // Line start.
@@ -122,9 +114,6 @@ function linkify_on_format($message) {
                               . '('.cfg('autolink_pattern').')'
                               . '~',
                                 'linkify_url2link',
-                                $body);
-
-  // Done. Also reattach the signature.
-  $message->set_body_html($body.$signature);
+                                $message->get_body_html());
 }
 ?>

@@ -153,11 +153,6 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function get_signature() {
-    return $this->posting->get_signature();
-  }
-
-
   function get_renderer() {
     return $this->posting->get_renderer();
   }

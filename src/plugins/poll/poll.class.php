@@ -189,16 +189,6 @@ class Poll extends PostingDecorator {
   }
 
 
-  function set_signature() {
-    // Prevent a signature from being added.
-  }
-
-
-  function get_signature() {
-    return '';
-  }
-
-
   function is_editable() {
     return FALSE;
   }

@@ -235,7 +235,6 @@ class IndentedBlock {
     function set_from_user($_user) {
       $this->set_user_id($_user->get_id());
       $this->set_username($_user->get_name());
-      $this->set_signature($_user->get_signature());
     }
 
 
@@ -333,16 +332,6 @@ class IndentedBlock {
       foreach ($this->_get_indented_blocks($body) as $block)
         $quoted .= $block->get_quoted_text($_depth) . "\n\n";
       return trim($quoted);
-    }
-
-
-    function set_signature($_signature) {
-      $this->fields[signature] = trim($_signature);
-    }
-
-
-    function &get_signature() {
-      return $this->fields[signature];
     }
 
 

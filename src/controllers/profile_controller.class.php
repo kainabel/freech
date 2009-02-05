@@ -20,13 +20,13 @@
 ?>
 <?php
   class ProfileController extends Controller {
-    function ProfileController($_api) {
+    function ProfileController(&$_api) {
       $this->Controller($_api);
       $this->users = array();
     }
 
 
-    function _append_posting($_posting, $_data) {
+    function _append_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
       $msg_id  = (int)$_GET['msg_id'];
       $_posting->set_selected($_posting->get_id() == $msg_id);
@@ -39,7 +39,7 @@
     }
 
 
-    function _assign_user_postings($_user, $_thread_state, $_offset = 0) {
+    function _assign_user_postings(&$_user, &$_thread_state, $_offset = 0) {
       // Load the postings.
       $thread_state = $this->api->thread_state('user_postings_');
       $func         = array($this, '_append_posting');
@@ -81,7 +81,7 @@
     }
 
 
-    function show_user_profile($_user, $_thread_state, $_offset = 0) {
+    function show_user_profile(&$_user, &$_thread_state, $_offset = 0) {
       // Load the group info.
       $groupdb = $this->api->groupdb();
       $search  = array('id' => $_user->get_group_id());
@@ -112,7 +112,7 @@
     }
 
 
-    function show_user_postings($_user, $_thread_state, $_offset = 0) {
+    function show_user_postings(&$_user, &$_thread_state, $_offset = 0) {
       $current  = $this->api->user();
       $group    = $this->api->group();
       $showlist = $_user->get_name() == $current->get_name();
@@ -131,7 +131,7 @@
     }
 
 
-    function show_user_editor($_user) {
+    function show_user_editor(&$_user) {
       $url = new FreechURL;
       $url->set_var('action', 'user_submit');
 
@@ -165,7 +165,8 @@
         die('Nothing for you to do here.');
 
       // Load a list of group names.
-      $list   = $groupdb->get_groups_from_query(array());
+      $query  = array();
+      $list   = $groupdb->get_groups_from_query($query);
       $groups = array();
       foreach ($list as $current_group)
         $groups[$current_group->get_id()] = $current_group->get_name();
@@ -202,7 +203,7 @@
     }
 
 
-    function show_user_options($_user) {
+    function show_user_options(&$_user) {
       $url = new FreechURL;
       $url->set_var('action', 'user_options_submit');
 
@@ -215,7 +216,7 @@
     }
 
 
-    function show_group_profile($_group, $_offset = 0) {
+    function show_group_profile(&$_group, $_offset = 0) {
       // Load a list of users.
       $search = array('group_id' => $_group->get_id());
       $userdb = $this->api->userdb();
@@ -245,7 +246,7 @@
     }
 
 
-    function show_group_editor($_group) {
+    function show_group_editor(&$_group) {
       $url = new FreechURL;
       $url->set_var('action', 'group_submit');
 

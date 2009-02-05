@@ -24,7 +24,7 @@
  * as the page on which a posting is shown.
  */
 class ListView extends View {
-  function ListView($_forum) {
+  function ListView(&$_forum) {
     $this->View($_forum);
     $this->postings    = array();
     $this->posting_map = array();
@@ -70,7 +70,7 @@ class ListView extends View {
   }
 
 
-  function show_posting($_posting) {
+  function show_posting(&$_posting) {
     $user      = $this->api->user();
     $group     = $this->api->group();
     $db        = $this->forumdb;

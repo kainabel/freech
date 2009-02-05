@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function IndexBarByThread($_args) {
+    function IndexBarByThread(&$_args) {
       $this->Menu();
 
       // Prints the index (pagination).

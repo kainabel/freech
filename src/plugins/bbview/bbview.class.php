@@ -24,7 +24,7 @@
  * as the page on which a posting is shown.
  */
 class BBView extends View {
-  function BBView($_forum) {
+  function BBView(&$_forum) {
     $this->View($_forum);
     $this->postings    = array();
     $this->posting_map = array();
@@ -69,7 +69,7 @@ class BBView extends View {
   }
 
 
-  function show_thread($_thread) {
+  function show_thread(&$_thread) {
     $user      = $this->api->user();
     $group     = $this->api->group();
     $may_write = $group->may('write');
@@ -114,7 +114,7 @@ class BBView extends View {
   }
 
 
-  function show_posting($_posting) {
+  function show_posting(&$_posting) {
     $this->show_thread($_posting);
   }
 }

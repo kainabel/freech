@@ -20,7 +20,7 @@
 ?>
 <?php
   class LoginController extends Controller {
-    function show($_user, $_refer_to) {
+    function show(&$_user, $_refer_to) {
       $login_url = new FreechURL;
       $login_url->set_var('action', 'login');
 
@@ -43,19 +43,19 @@
     }
 
 
-    function show_tmpl($_tmpl, $_user) {
+    function show_tmpl($_tmpl, &$_user) {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
       $this->render($_tmpl);
     }
 
 
-    function show_password_changed($user) {
+    function show_password_changed(&$user) {
       $this->show_tmpl('password_changed.tmpl', $user);
     }
 
 
-    function show_password_change($_user) {
+    function show_password_change(&$_user) {
       $url = new FreechURL;
       $url->set_var('action', 'password_submit');
       $this->clear_all_assign();
@@ -66,7 +66,7 @@
     }
 
 
-    function show_password_forgotten($_user) {
+    function show_password_forgotten(&$_user) {
       $url = new FreechURL;
       $url->set_var('action', 'password_mail_submit');
       $this->clear_all_assign();
@@ -76,8 +76,8 @@
     }
 
 
-    function show_password_mail_sent($user) {
-      $this->show_tmpl('password_mail_sent.tmpl', $user);
+    function show_password_mail_sent(&$_user) {
+      $this->show_tmpl('password_mail_sent.tmpl', $_user);
     }
   }
 ?>

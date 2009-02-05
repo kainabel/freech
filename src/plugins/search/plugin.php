@@ -10,7 +10,7 @@ include_once dirname(__FILE__).'/indexbar_search_result.class.php';
 include_once dirname(__FILE__).'/indexbar_search_users.class.php';
 include_once dirname(__FILE__).'/search_query.class.php';
 
-function search_init($api) {
+function search_init(&$api) {
   $api->register_action('search', 'search_on_search');
 
   $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
@@ -36,7 +36,7 @@ function search_init($api) {
 }
 
 
-function search_on_search($api) {
+function search_on_search(&$api) {
   if ($_GET['q'])
     search_on_search_result($api);
   else
@@ -44,7 +44,7 @@ function search_on_search($api) {
 }
 
 
-function search_on_search_form($api) {
+function search_on_search_form(&$api) {
   $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Find'));
   $controller = new SearchController($api);
@@ -52,7 +52,7 @@ function search_on_search_form($api) {
 }
 
 
-function search_on_search_result($api) {
+function search_on_search_result(&$api) {
   if (!$_GET['q'] || trim($_GET['q']) == '')
     return search_on_search_form($api);
 

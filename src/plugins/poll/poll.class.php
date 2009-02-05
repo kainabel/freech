@@ -27,7 +27,7 @@ class PollOption {
 }
 
 class Poll extends PostingDecorator {
-  function Poll($_posting, $_forum) {
+  function Poll(&$_posting, &$_forum) {
     $this->PostingDecorator($_posting, $_forum);
     if ($_posting->get_renderer() != 'poll'
       && $_posting->get_renderer() != 'multipoll')
@@ -99,7 +99,7 @@ class Poll extends PostingDecorator {
   }
 
 
-  function get_options() {
+  function &get_options() {
     $options = array();
     foreach ($this->options as $option)
       array_push($options, $option->name);
@@ -107,7 +107,7 @@ class Poll extends PostingDecorator {
   }
 
 
-  function get_filled_options() {
+  function &get_filled_options() {
     $options = array();
     foreach ($this->options as $option)
       if (trim($option->name) != '')
@@ -116,7 +116,7 @@ class Poll extends PostingDecorator {
   }
 
 
-  function get_option_map() {
+  function &get_option_map() {
     $options = array();
     foreach ($this->options as $option)
       if (trim($option->name) != '')

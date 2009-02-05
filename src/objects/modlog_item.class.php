@@ -39,7 +39,7 @@
 
 
     /// Sets all values from a given database row.
-    function set_from_db($_db_row) {
+    function set_from_db(&$_db_row) {
       if (!is_object($_db_row))
         die('ModLogItem:set_from_db(): Non-object.');
       $this->clear();
@@ -54,7 +54,7 @@
     }
 
 
-    function set_attribute_from_db($_db_row) {
+    function set_attribute_from_db(&$_db_row) {
       if (!is_object($_db_row))
         die('ModLogItem:set_attribute_from_db(): Non-object.');
       if (!$_db_row->attribute_name)
@@ -81,13 +81,13 @@
     }
 
 
-    function set_from_user($_user) {
+    function set_from_user(&$_user) {
       $this->fields[moderator_id]   = $_user->get_id();
       $this->fields[moderator_name] = $_user->get_name();
     }
 
 
-    function set_from_moderator_group($_group) {
+    function set_from_moderator_group(&$_group) {
       $this->fields[moderator_group_name] = $_group->get_name();
       $this->fields[moderator_icon]       = $_group->get_icon();
     }

@@ -20,7 +20,7 @@
 ?>
 <?php
   class BreadCrumbsController extends Controller {
-    function show($_breadcrumbs, $_show_page_links) {
+    function show(&$_breadcrumbs, $_show_page_links) {
       $this->clear_all_assign();
       $this->assign_by_ref('breadcrumbs',     $_breadcrumbs);
       $this->assign_by_ref('page_links',      $this->api->links('page'));

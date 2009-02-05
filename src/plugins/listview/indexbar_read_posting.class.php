@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function ListViewIndexBarReadPosting($_posting,
+    function ListViewIndexBarReadPosting(&$_posting,
                                          $_prev_posting_id,
                                          $_next_posting_id) {
       $this->Menu();

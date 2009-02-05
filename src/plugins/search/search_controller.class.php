@@ -21,7 +21,7 @@
 <?php
   class SearchController extends Controller {
     function SearchController(&$_forum) {
-      $this->Controller(&$_forum);
+      $this->Controller($_forum);
       $this->results = array();
     }
 

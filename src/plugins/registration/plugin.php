@@ -7,7 +7,7 @@ Description: Adds pages for user registration to the forum.
 */
 include_once dirname(__FILE__).'/registration_controller.class.php';
 
-function registration_init($api) {
+function registration_init(&$api) {
   $api->register_action('account_register',  'registration_on_register');
   $api->register_action('account_create',    'registration_on_create');
   $api->register_action('account_confirm',   'registration_on_confirm');
@@ -21,19 +21,19 @@ function registration_init($api) {
 }
 
 
-function registration_on_run($api) {
+function registration_on_run(&$api) {
   if ($api->user()->is_anonymous())
     $api->links('account')->add_link($api->get_url('registration'));
 }
 
 
-function registration_on_register($api) {
+function registration_on_register(&$api) {
   $registration = new RegistrationController($api);
   $registration->show(new User);
 }
 
 
-function registration_on_create($api) {
+function registration_on_create(&$api) {
   $registration = new RegistrationController($api);
   $user         = init_user_from_post_data();
 
@@ -79,7 +79,7 @@ function registration_on_create($api) {
 
 // Called when the user opens the link in the initial account confirmation
 // mail.
-function registration_on_confirm($api) {
+function registration_on_confirm(&$api) {
   $userdb = $api->userdb();
   $user   = $userdb->get_user_from_name($_GET['username']);
   assert_user_confirmation_hash_is_valid($user);
@@ -105,7 +105,7 @@ function registration_on_confirm($api) {
 }
 
 
-function registration_on_reconfirm($api) {
+function registration_on_reconfirm(&$api) {
   $userdb  = $api->userdb();
   $user    = $userdb->get_user_from_name($_GET['username']);
   if ($user->get_status() != USER_STATUS_UNCONFIRMED)
@@ -117,7 +117,7 @@ function registration_on_reconfirm($api) {
 /***********************************************
  * Utilities.
  ***********************************************/
-function registration_mail_send($api, $user) {
+function registration_mail_send(&$api, &$user) {
   $subject  = _('Your registration at [SITE_TITLE]');
   $body     = _("Hello [FIRSTNAME] [LASTNAME],\n"
               . "\n"

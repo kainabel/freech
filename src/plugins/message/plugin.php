@@ -8,7 +8,7 @@ Description: Shows normal messages in the forum.
 include_once dirname(__FILE__).'/message.class.php';
 include_once dirname(__FILE__).'/message_controller.class.php';
 
-function message_init($api) {
+function message_init(&$api) {
   $api->eventbus()->signal_connect('on_run_before', 'message_on_run');
 
   // Register a class that is responsible for formatting the posting object
@@ -23,7 +23,7 @@ function message_init($api) {
 }
 
 
-function message_on_run($api) {
+function message_on_run(&$api) {
   if (!$api->group()->may('write'))
     return;
 
@@ -36,7 +36,7 @@ function message_on_run($api) {
 }
 
 
-function message_on_write($api) {
+function message_on_write(&$api) {
   $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Start a New Topic'));
   $parent_id  = (int)$_POST['parent_id'];
@@ -46,7 +46,7 @@ function message_on_write($api) {
 }
 
 
-function message_on_respond($api) {
+function message_on_respond(&$api) {
   $parent_id  = (int)$_GET['parent_id'];
   $posting    = $api->forumdb()->get_posting_from_id($parent_id);
   $controller = new MessageController($api);
@@ -62,7 +62,7 @@ function message_on_respond($api) {
 }
 
 
-function message_on_edit_saved($api) {
+function message_on_edit_saved(&$api) {
   $user       = $api->user();
   $posting    = $api->forumdb()->get_posting_from_id($_GET['msg_id']);
   $controller = new MessageController($api);
@@ -85,7 +85,7 @@ function message_on_edit_saved($api) {
 }
 
 
-function message_on_submit($api) {
+function message_on_submit(&$api) {
   if ($_POST['quote'])
     message_on_quote($api);
   elseif ($_POST['preview'])
@@ -100,7 +100,7 @@ function message_on_submit($api) {
 
 
 // Edit an unsaved message.
-function message_on_edit_unsaved($api) {
+function message_on_edit_unsaved(&$api) {
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $posting    = message_init_posting_from_post_data();
@@ -111,7 +111,7 @@ function message_on_edit_unsaved($api) {
 
 
 // Insert a quote from the parent message.
-function message_on_quote($api) {
+function message_on_quote(&$api) {
   $parent_id  = (int)$_POST['parent_id'];
   $quoted_msg = $api->forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
@@ -121,7 +121,7 @@ function message_on_quote($api) {
 
 
 // Print a preview of a message.
-function message_on_preview($api) {
+function message_on_preview(&$api) {
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $controller = new MessageController($api);
@@ -159,7 +159,7 @@ function message_on_preview($api) {
 
 
 // Saves the posted message.
-function message_on_send($api) {
+function message_on_send(&$api) {
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $controller = new MessageController($api);
@@ -248,7 +248,7 @@ function message_on_send($api) {
  ***********************************************/
 // Returns a new Posting object that is initialized for the current
 // user/group.
-function message_get_new_posting($api) {
+function &message_get_new_posting(&$api) {
   $posting = new Posting;
   $posting->set_from_group($api->group());
   $posting->set_from_user($api->user());
@@ -256,7 +256,7 @@ function message_get_new_posting($api) {
 }
 
 
-function message_init_posting_from_post_data($_posting = NULL) {
+function &message_init_posting_from_post_data(&$_posting = NULL) {
   if (!$_posting)
     $_posting = new Posting;
   $_posting->set_id($_POST['msg_id']);

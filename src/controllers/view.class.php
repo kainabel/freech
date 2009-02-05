@@ -24,17 +24,17 @@
  * as the page on which a posting is shown.
  */
 class View extends Controller {
-  function View($_api) {
-    $this->Controller($_api);
-  }
-
-
   function show($_forum_id, $_offset) {
     die('show() not implemented.');
   }
 
 
-  function show_posting($_posting) {
+  function show_thread(&$_thread) {
+    die('show_thread() not implemented.');
+  }
+
+
+  function show_posting(&$_posting) {
     die('show_posting() not implemented.');
   }
 }

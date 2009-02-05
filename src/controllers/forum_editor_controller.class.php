@@ -20,7 +20,7 @@
 ?>
 <?php
 class ForumEditorController extends Controller {
-  function show($_forum = NULL) {
+  function show(&$_forum = NULL) {
     $url = new FreechURL;
     $url->set_var('action', 'forum_submit');
 

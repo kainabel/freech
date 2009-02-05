@@ -42,7 +42,7 @@ class Freech {
   /**
    * Returns the current user.
    */
-  function user() {
+  function &user() {
     return $this->controller->get_current_user();
   }
 
@@ -50,7 +50,7 @@ class Freech {
   /**
    * Returns the group of the current user.
    */
-  function group() {
+  function &group() {
     return $this->controller->get_current_group();
   }
 
@@ -58,7 +58,7 @@ class Freech {
   /**
    * Returns the current action.
    */
-  function action() {
+  function &action() {
     return $this->controller->get_current_action();
   }
 
@@ -68,7 +68,7 @@ class Freech {
    * Returns NULL if a forum is not viewed (for example because the request
    * points to a special page such as the homepage or the statistics).
    */
-  function forum() {
+  function &forum() {
     return $this->controller->get_current_forum();
   }
 
@@ -77,7 +77,7 @@ class Freech {
    * Returns a state object that represents the folding (folded/unfolded) of
    * all threads.
    */
-  function thread_state($_section) {
+  function &thread_state($_section) {
     return $this->controller->get_thread_state($_section);
   }
 
@@ -106,7 +106,7 @@ class Freech {
   /**
    * Provides access to the adodb database connection.
    */
-  function db() {
+  function &db() {
     return $this->controller->_get_db();
   }
 
@@ -114,7 +114,7 @@ class Freech {
   /**
    * Provides access to the forum database that contains all postings.
    */
-  function forumdb() {
+  function &forumdb() {
     return $this->controller->get_forumdb();
   }
 
@@ -122,7 +122,7 @@ class Freech {
   /**
    * Provides access to the user database.
    */
-  function userdb() {
+  function &userdb() {
     return $this->controller->get_userdb();
   }
 
@@ -130,7 +130,7 @@ class Freech {
   /**
    * Provides access to the user group database.
    */
-  function groupdb() {
+  function &groupdb() {
     return $this->controller->_get_groupdb();
   }
 
@@ -138,7 +138,7 @@ class Freech {
   /**
    * Provides access to the visitor database.
    */
-  function visitordb() {
+  function &visitordb() {
     return $this->controller->visitordb;
   }
 
@@ -146,7 +146,7 @@ class Freech {
   /**
    * Provides access to the moderation log.
    */
-  function modlogdb() {
+  function &modlogdb() {
     return $this->controller->get_modlogdb();
   }
 
@@ -157,7 +157,7 @@ class Freech {
   /**
    * An eventbus over which plugins and the forum may communicate.
    */
-  function eventbus() {
+  function &eventbus() {
     return $this->controller->get_eventbus();
   }
 
@@ -165,7 +165,7 @@ class Freech {
   /**
    * The smarty template processor used by this forum.
    */
-  function smarty() {
+  function &smarty() {
     return $this->controller->_get_smarty();
   }
 
@@ -241,7 +241,7 @@ class Freech {
   /**
    * Plugins may use this to make an URL available to the API user.
    */
-  function register_url($_name, $_url) {
+  function register_url($_name, &$_url) {
     return $this->controller->register_url($_name, $_url);
   }
 
@@ -279,7 +279,7 @@ class Freech {
   /**
    * Provides access to link sections that are rendered in the HTML.
    */
-  function links($_where) {
+  function &links($_where) {
     return $this->controller->links($_where);
   }
 
@@ -287,7 +287,7 @@ class Freech {
   /**
    * Convenience wrapper around links().
    */
-  function breadcrumbs() {
+  function &breadcrumbs() {
     return $this->controller->links('breadcrumbs');
   }
 
@@ -310,7 +310,7 @@ class Freech {
   }
 
 
-  function refer_to_posting($_posting) {
+  function refer_to_posting(&$_posting) {
     return $this->controller->_refer_to_posting_id($_posting->get_id());
   }
 
@@ -322,7 +322,7 @@ class Freech {
    * a field in brackets such as "[NAME]", the array('name' => 'Joe')
    * causes that field to be replaced.
    */
-  function send_mail($_user, $_subject, $_body, $_vars = NULL) {
+  function send_mail(&$_user, $_subject, $_body, $_vars = NULL) {
     return $this->controller->_send_mail($_user,
                                          $_subject,
                                          $_body,
@@ -330,7 +330,7 @@ class Freech {
   }
 
 
-  function get_url($_which) {
+  function &get_url($_which) {
     if (!$url = $this->controller->get_url($_which))
       die('Freech->get_url(): No such URL.');
     return $url;

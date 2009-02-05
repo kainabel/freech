@@ -7,7 +7,7 @@ Description: Converts URLs in messages into hyperlinks.
 */
 
 
-function linkify_init($api) {
+function linkify_init(&$api) {
   $eventbus = $api->eventbus();
   $eventbus->signal_connect('on_message_read_print',    'linkify_on_read');
   $eventbus->signal_connect('on_message_preview_print', 'linkify_on_preview');
@@ -18,7 +18,7 @@ function linkify_init($api) {
 }
 
 
-function linkify_on_read($api, $message) {
+function linkify_on_read(&$api, &$message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
 
   // Make sure that the link is not added twice on pages where
@@ -45,18 +45,18 @@ function linkify_on_read($api, $message) {
 }
 
 
-function linkify_on_preview($api, $message) {
+function linkify_on_preview(&$api, &$message) {
   $message->signal_connect('on_format_after_html', 'linkify_on_format');
 }
 
 
-function linkify_on_show_videos($api) {
+function linkify_on_show_videos(&$api) {
   $api->set_cookie('linkify_show_videos', TRUE);
   $api->refer_to($_GET['refer_to']);
 }
 
 
-function linkify_on_hide_videos($api) {
+function linkify_on_hide_videos(&$api) {
   $api->set_cookie('linkify_show_videos', FALSE);
   $api->refer_to($_GET['refer_to']);
 }
@@ -106,7 +106,7 @@ function linkify_url2link($match) {
 }
 
 
-function linkify_on_format($message) {
+function linkify_on_format(&$message) {
   // Convert URLs to links.
   $body = preg_replace_callback('~'
                               . '(^|[\r\n])'   // Line start.

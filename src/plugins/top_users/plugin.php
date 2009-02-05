@@ -7,7 +7,7 @@ Description: This plugin adds a page that shows the top users.
 */
 include_once dirname(__FILE__).'/top_users_controller.class.php';
 
-function top_users_init($api) {
+function top_users_init(&$api) {
   $api->register_action('top_posters', 'top_users_on_show');
 
   $url = new FreechURL('', _('Top Users'));
@@ -16,7 +16,7 @@ function top_users_init($api) {
 }
 
 
-function top_users_on_show($api) {
+function top_users_on_show(&$api) {
   $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Top Users'));
 

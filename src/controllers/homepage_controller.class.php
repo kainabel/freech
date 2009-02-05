@@ -20,13 +20,13 @@
 ?>
 <?php
 class HomepageController extends Controller {
-  function HomepageController($_api) {
+  function HomepageController(&$_api) {
     $this->Controller($_api);
     $this->postings = array();
   }
 
 
-  function _append_posting($_posting, $_data) {
+  function _append_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
     $current_id = (int)$_GET['msg_id'];
     $_posting->set_selected($_posting->get_id() == $current_id);

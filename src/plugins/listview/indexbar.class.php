@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function IndexBarByTime($_args) {
+    function IndexBarByTime(&$_args) {
       $this->Menu();
 
       // Prints the index (pagination).

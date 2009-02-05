@@ -24,11 +24,6 @@
  * as the page on which a posting is shown.
  */
 class ThreadView extends View {
-  function ThreadView($_forum) {
-    $this->View($_forum);
-  }
-
-
   function _format_posting(&$_posting, $_data) {
     $current_id = (int)$_GET['msg_id'];
     $_posting->set_selected($_posting->get_id() == $current_id);
@@ -78,7 +73,7 @@ class ThreadView extends View {
   }
 
 
-  function show_posting($_posting) {
+  function show_posting(&$_posting) {
     $user            = $this->api->user();
     $group           = $this->api->group();
     $db              = $this->forumdb;

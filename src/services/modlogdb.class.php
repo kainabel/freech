@@ -22,12 +22,12 @@
   class ModLogDB {
     var $db;
 
-    function ModLogDB($_db) {
+    function ModLogDB(&$_db) {
       $this->db = $_db;
     }
 
 
-    function _get_sql_from_query($_search) {
+    function _get_sql_from_query(&$_search) {
       if (!$_search)
         $_search = array();
 
@@ -51,7 +51,7 @@
     }
 
 
-    function _get_item_from_row($row) {
+    function &_get_item_from_row(&$row) {
       if (!$row)
         return;
       $item = new ModLogItem;
@@ -60,7 +60,7 @@
     }
 
 
-    function _pop_item_from_result($res) {
+    function &_pop_item_from_result(&$res) {
       if ($res->EOF)
         return;
       $row  = $res->FetchObj();
@@ -94,7 +94,7 @@
     }
 
 
-    function _save_attributes($_item) {
+    function _save_attributes(&$_item) {
       foreach ($_item->get_attribute_list() as $name => $value)
         $this->_save_attribute($_item->get_id(), $name, $value);
     }
@@ -104,7 +104,7 @@
      * Logs an item.
      * Returns: The id of the (maybe newly inserted) group.
      */
-    function log($_item) {
+    function log(&$_item) {
       if (!is_object($_item))
         die('ModLogDB::save_item(): Invalid arg.');
       $query = new FreechSqlQuery();
@@ -150,7 +150,7 @@
      * Returns all items that match the given criteria.
      * $_search: The search values.
      */
-    function get_items_from_query($_search, $_limit = -1, $_offset = 0) {
+    function &get_items_from_query(&$_search, $_limit = -1, $_offset = 0) {
       // Get a list of item ids.
       $query = new FreechSqlQuery;
       $sql   = 'SELECT m.id';

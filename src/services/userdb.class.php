@@ -89,7 +89,7 @@
     }
 
 
-    function _get_sql_from_query($_search) {
+    function _get_sql_from_query(&$_search) {
       if (!$_search)
         $_search = array();
 
@@ -112,7 +112,7 @@
     }
 
 
-    function _get_user_from_row($row) {
+    function &_get_user_from_row(&$row) {
       if (!$row)
         return;
       $user = new User;
@@ -126,11 +126,12 @@
      * Returns the user with the given id.
      * $_id: The id of the user.
      */
-    function get_user_from_id($_id) {
+    function &get_user_from_id($_id) {
       if (!$_id)
         die("UserDB::get_user_from_id(): Invalid id.");
-      $sql = $this->_get_sql_from_query(array('id' => $_id));
-      $row = $this->db->GetRow($sql);
+      $query = array('id' => $_id);
+      $sql   = $this->_get_sql_from_query($query);
+      $row   = $this->db->GetRow($sql);
       return $this->_get_user_from_row($row);
     }
 
@@ -139,11 +140,12 @@
      * Returns the user with the given name.
      * $_name: The name of the user.
      */
-    function get_user_from_name($_name) {
+    function &get_user_from_name($_name) {
       if (!$_name)
         die("UserDB::get_user_from_name(): Invalid name.");
-      $sql = $this->_get_sql_from_query(array('name' => $_name));
-      $row = $this->db->GetRow($sql);
+      $query = array('name' => $_name);
+      $sql   = $this->_get_sql_from_query($query);
+      $row   = $this->db->GetRow($sql);
       return $this->_get_user_from_row($row);
     }
 
@@ -152,7 +154,7 @@
      * Returns the user with the given email address.
      * $_mail: The email address of the user.
      */
-    function get_user_from_mail($_mail) {
+    function &get_user_from_mail($_mail) {
       if (!$_mail)
         die("UserDB::get_user_from_mail(): Invalid email address.");
       $sql = $this->_get_sql_from_query(array('mail' => $_mail));
@@ -161,7 +163,7 @@
     }
 
 
-    function foreach_user_from_query($_search,
+    function foreach_user_from_query(&$_search,
                                      $_limit,
                                      $_offset,
                                      $_func,
@@ -178,7 +180,7 @@
 
 
     /* Returns the number of users that match the given search values. */
-    function get_n_users_from_query($_search = NULL) {
+    function get_n_users_from_query(&$_search = NULL) {
       if (!$_search)
         $_search = array();
 
@@ -205,9 +207,9 @@
      * given one.
      * $_name: The name for which to find similar users.
      */
-    function get_similar_users_from_name($_name,
-                                         $_limit = -1,
-                                         $_offset = 0) {
+    function &get_similar_users_from_name($_name,
+                                          $_limit = -1,
+                                          $_offset = 0) {
       if (!$_name)
         die('UserDB::get_similar_users_from_name(): Invalid name.');
       $user    = new User($_name);
@@ -264,7 +266,7 @@
      * Returns the most recently created users.
      * $_limit: The maximum number of results.
      */
-    function get_newest_users($_limit) {
+    function &get_newest_users($_limit) {
       // Ordering by 'created' is slow, so using the primary key instead.
       // Status == 0 is USER_STATUS_DELETED.
       $sql   = "SELECT *,";
@@ -290,7 +292,7 @@
      * Returns the users who wrote the highest number of postings.
      * $_limit: The maximum number of results.
      */
-    function get_top_users($_limit, $_since = 0) {
+    function &get_top_users($_limit, $_since = 0) {
       $sql   = "SELECT u.*, g.name icon_name, COUNT(*) n_postings,";
       $sql  .= "UNIX_TIMESTAMP(u.updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(u.created) created";

@@ -27,7 +27,7 @@
     var $smarty;
     var $db;
     
-    function Controller($_api) {
+    function Controller(&$_api) {
       $this->api       = $_api;
       $this->smarty    = $_api->smarty();
       $this->userdb    = $_api->userdb();

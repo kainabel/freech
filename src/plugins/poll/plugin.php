@@ -8,7 +8,7 @@ Description: Adds support for pollings.
 include_once dirname(__FILE__).'/poll.class.php';
 include_once dirname(__FILE__).'/poll_controller.class.php';
 
-function poll_init($api) {
+function poll_init(&$api) {
   // Register a class that is responsible for formatting the posting object
   // that holds the poll.
   $api->register_renderer('multipoll', 'Poll');
@@ -27,7 +27,7 @@ function poll_init($api) {
 }
 
 
-function poll_on_run($api) {
+function poll_on_run(&$api) {
   if (!$api->group()->may('write'))
     return;
 
@@ -40,7 +40,7 @@ function poll_on_run($api) {
 }
 
 
-function poll_on_add($api) {
+function poll_on_add(&$api) {
   $controller = new PollController($api);
   $posting    = new Posting;
   $poll       = new Poll($posting, $api);
@@ -61,7 +61,7 @@ function poll_on_add($api) {
 }
 
 
-function poll_on_submit($api) {
+function poll_on_submit(&$api) {
   $controller = new PollController($api);
   $poll       = _poll_get_from_post();
 
@@ -97,7 +97,7 @@ function poll_on_submit($api) {
 }
 
 
-function poll_on_vote($api) {
+function poll_on_vote(&$api) {
   $poll_id    = (int)$_POST['poll_id'];
   $poll       = _get_poll_from_id($api, $poll_id);
   $user       = $api->user();
@@ -150,7 +150,7 @@ function poll_on_vote($api) {
 function _poll_get_from_post() {
   $n_options = (int)$_POST['n_options'];
   $posting   = new Posting;
-  $poll      = new Poll($posting, NULL);
+  $poll      = new Poll($posting, new Forum);
   $poll->set_title($_POST['poll_title']);
   $poll->set_allow_multiple($_POST['allow_multiple'] == 'on');
   $poll->set_forum_id((int)$_POST['forum_id']);
@@ -162,7 +162,7 @@ function _poll_get_from_post() {
 }
 
 
-function _save_poll($api, $poll) {
+function _save_poll(&$api, &$poll) {
   $forum_id = $api->forum()->get_id();
   $subject  = sprintf(_('Poll: %s'), $poll->get_subject());
   $poll->set_subject($subject);
@@ -183,7 +183,7 @@ function _save_poll($api, $poll) {
 }
 
 
-function _n_polls_since($db, $user, $_since = 0) {
+function _n_polls_since(&$db, &$user, $_since = 0) {
   $sql  = 'SELECT COUNT(*) n_polls';
   $sql .= ' FROM {t_posting}';
   $sql .= ' WHERE user_id={user_id}';
@@ -198,7 +198,7 @@ function _n_polls_since($db, $user, $_since = 0) {
 }
 
 
-function _save_poll_option($db, $poll_id, $option) {
+function _save_poll_option(&$db, $poll_id, $option) {
   $sql   = 'INSERT INTO {t_poll_option}';
   $sql  .= ' (poll_id, name)';
   $sql  .= ' VALUES (';
@@ -212,7 +212,7 @@ function _save_poll_option($db, $poll_id, $option) {
 }
 
 
-function _get_poll_from_id($api, $poll_id) {
+function _get_poll_from_id(&$api, $poll_id) {
   // Load the posting first, and map it back into a poll.
   $poll = $api->forumdb()->get_posting_from_id($poll_id);
   if (!$poll)
@@ -246,7 +246,7 @@ function _get_poll_from_id($api, $poll_id) {
 }
 
 
-function _poll_did_vote($db, $user, $poll_id) {
+function _poll_did_vote(&$db, &$user, $poll_id) {
   $sql  = 'SELECT o.id';
   $sql .= ' FROM {t_poll_option} o';
   $sql .= ' LEFT JOIN {t_poll_vote} v ON o.id=v.option_id';
@@ -261,7 +261,7 @@ function _poll_did_vote($db, $user, $poll_id) {
 }
 
 
-function _poll_cast($db, $user, $option_id) {
+function _poll_cast(&$db, &$user, $option_id) {
   $sql  = 'INSERT INTO {t_poll_vote}';
   $sql .= ' (option_id, user_id)';
   $sql .= ' VALUES (';

@@ -22,7 +22,8 @@
   class ModLogController extends Controller {
     function show($_offset = 0) {
       $modlogdb = $this->api->modlogdb();
-      $items    = $modlogdb->get_items_from_query(array(),
+      $query    = array();
+      $items    = $modlogdb->get_items_from_query($query,
                                                   cfg('modlog_epp'),
                                                   (int)$_offset);
       $this->clear_all_assign();
@@ -33,7 +34,7 @@
     }
 
 
-    function show_lock_posting($_posting) {
+    function show_lock_posting(&$_posting) {
       $url = new FreechURL;
       $url->set_var('action', 'posting_lock_submit');
       $url->set_var('msg_id', $_posting->get_id());
@@ -46,7 +47,7 @@
     }
 
 
-    function show_thread_move($_posting) {
+    function show_thread_move(&$_posting) {
       $url = new FreechURL;
       $url->set_var('action', 'thread_move_submit');
       $url->set_var('msg_id', $_posting->get_id());

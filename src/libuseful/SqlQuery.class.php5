@@ -108,7 +108,7 @@ class SqlQuery
   }
   
   
-  function sql()
+  function &sql()
   {
     return $this->get_sql();
   }

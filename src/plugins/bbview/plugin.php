@@ -10,7 +10,7 @@ include_once dirname(__FILE__).'/bbview.class.php';
 include_once dirname(__FILE__).'/indexbar.class.php';
 include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
 
-function bbview_init($api) {
+function bbview_init(&$api) {
   $api->register_view('bbview', 'BBView', _('Order by Topic'), 600);
 }
 ?>

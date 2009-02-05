@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function BBViewIndexBarReadPosting($_thread, $_args) {
+    function BBViewIndexBarReadPosting(&$_thread, &$_args) {
       $this->Menu();
 
       // Prints the index (pagination).

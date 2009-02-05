@@ -25,12 +25,12 @@ class Thread {
   }
 
 
-  function _get_posting_path($_posting) {
+  function _get_posting_path(&$_posting) {
     return '00000000' . substr($_posting->_get_path(), 0, -2);
   }
 
 
-  function _get_posting_depth($_posting) {
+  function _get_posting_depth(&$_posting) {
     if (!$_posting)
       return 0;
     return (strlen($this->_get_posting_path($_posting)) / 8) - 1;
@@ -51,7 +51,7 @@ class Thread {
   }
 
 
-  function _posting_has_unlocked_children($_unlocked, $_posting) {
+  function _posting_has_unlocked_children(&$_unlocked, &$_posting) {
     if (!$_posting->has_descendants())
       return FALSE;
     $path = $this->_get_posting_path($_posting);
@@ -112,7 +112,7 @@ class Thread {
   }
 
 
-  function set_from_db($_res) {
+  function set_from_db(&$_res) {
     while (!$_res->EOF) {
       $row = $_res->FetchObj();
       if (!isset($thread_id))
@@ -131,7 +131,7 @@ class Thread {
   }
 
 
-  function get_parent() {
+  function &get_parent() {
     return $this->postings['00000000'];
   }
 

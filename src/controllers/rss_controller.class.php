@@ -26,7 +26,7 @@
     var $url;
     var $countrycode;
 
-    function RSSController($_api) {
+    function RSSController(&$_api) {
       $this->Controller($_api);
       $this->postings = array();
     }

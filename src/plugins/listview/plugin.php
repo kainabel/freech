@@ -10,7 +10,7 @@ include_once dirname(__FILE__).'/listview.class.php';
 include_once dirname(__FILE__).'/indexbar.class.php';
 include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
 
-function listview_init($api) {
+function listview_init(&$api) {
   $api->register_view('list', 'ListView', _('Order by Date'), 500);
 }
 ?>

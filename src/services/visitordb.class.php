@@ -91,10 +91,7 @@
     }
 
 
-    /* Returns the user with the given id.
-     * $_ip: The ip address of the user.
-     */
-    function &count() {
+    function count() {
       // If the current user was here in the last 10 minutes, just 
       // update his timestamp and return.
       $ip      = getenv("REMOTE_ADDR");

@@ -27,7 +27,7 @@
 
 
     // Constructor.
-    function ThreadViewIndexBarReadPosting($_posting,
+    function ThreadViewIndexBarReadPosting(&$_posting,
                                            $_prev_posting_id,
                                            $_next_posting_id,
                                            $_prev_thread_id,

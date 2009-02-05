@@ -20,7 +20,7 @@
 ?>
 <?php
   class RegistrationController extends Controller {
-    function show($user) {
+    function show(&$user) {
       $url = new FreechURL;
       $url->set_var('action', 'account_create');
       
@@ -36,19 +36,19 @@
     }
 
 
-    function show_tmpl($_tmpl, $_user) {
+    function show_tmpl($_tmpl, &$_user) {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
       $this->render(dirname(__FILE__).'/'.$_tmpl);
     }
 
 
-    function show_mail_sent($user) {
+    function show_mail_sent(&$user) {
       $this->show_tmpl('mail_sent.tmpl', $user);
     }
 
 
-    function show_done($user) {
+    function show_done(&$user) {
       $this->show_tmpl('done.tmpl', $user);
     }
   }

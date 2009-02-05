@@ -194,19 +194,19 @@ class Posting {
   }
 
 
-  function &get_user_id() {
+  function get_user_id() {
     return $this->fields[user_id];
   }
 
 
-  function set_from_group($_group) {
+  function set_from_group(&$_group) {
     $this->set_user_icon($_group->get_icon());
     $this->set_user_icon_name($_group->get_name());
     $this->set_user_is_special($_group->is_special());
   }
 
 
-  function set_from_user($_user) {
+  function set_from_user(&$_user) {
     $this->set_user_id($_user->get_id());
     $this->set_username($_user->get_name());
   }
@@ -319,7 +319,7 @@ class Posting {
   }
 
 
-  function get_url($_action = 'read', $_caption = '') {
+  function &get_url($_action = 'read', $_caption = '') {
     if (!$_caption)
       $_caption = $this->get_subject();
     $url = new FreechURL('', $_caption);
@@ -342,7 +342,7 @@ class Posting {
   }
 
 
-  function get_edit_url() {
+  function &get_edit_url() {
     return $this->get_url('edit', _('Edit'));
   }
 
@@ -357,7 +357,7 @@ class Posting {
   }
 
 
-  function get_respond_url() {
+  function &get_respond_url() {
     $url = new FreechURL('', _('Reply'));
     $url->set_var('action',    'respond');
     $url->set_var('parent_id', $this->get_id());
@@ -379,7 +379,7 @@ class Posting {
 
 
   // The url behind the "+/-" toggle button.
-  function get_fold_url() {
+  function &get_fold_url() {
     if ($_GET['action'] == 'read') {
       $url = $this->get_url();
       $url->set_var('showthread', -1);
@@ -411,7 +411,7 @@ class Posting {
 
 
   // The url for locking the posting.
-  function get_lock_url() {
+  function &get_lock_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_lock');
     $url->set_var('forum_id', $this->get_forum_id());
@@ -426,7 +426,7 @@ class Posting {
 
 
   // The url for unlocking the posting.
-  function get_unlock_url() {
+  function &get_unlock_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_unlock');
     $url->set_var('msg_id',   $this->get_id());
@@ -440,7 +440,7 @@ class Posting {
   }
 
 
-  function get_stub_url() {
+  function &get_stub_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_stub');
     $url->set_var('msg_id',   $this->get_id());
@@ -454,7 +454,7 @@ class Posting {
   }
 
 
-  function get_unstub_url() {
+  function &get_unstub_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_unstub');
     $url->set_var('msg_id',   $this->get_id());
@@ -469,7 +469,7 @@ class Posting {
 
 
   // The url for moving the posting to a different forum.
-  function get_move_url() {
+  function &get_move_url() {
     $url = new FreechURL;
     $url->set_var('action',   'thread_move');
     $url->set_var('forum_id', $this->get_forum_id());
@@ -484,7 +484,7 @@ class Posting {
 
 
   // The url for changing the posting priority.
-  function get_prioritize_url($_priority) {
+  function &get_prioritize_url($_priority) {
     $url = new FreechURL;
     $url->set_var('action',   'posting_prioritize');
     $url->set_var('msg_id',   $this->get_id());
@@ -499,7 +499,7 @@ class Posting {
   }
 
 
-  function get_user_profile_url() {
+  function &get_user_profile_url() {
     if (isset($this->fields['current_username']))
       $username = $this->fields['current_username'];
     else
@@ -516,7 +516,7 @@ class Posting {
   }
 
 
-  function &get_hash() {
+  function get_hash() {
     return md5($this->get_username()
              . $this->get_subject()
              . $this->get_body());

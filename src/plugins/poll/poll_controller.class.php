@@ -27,7 +27,7 @@ class PollController extends Controller {
   }
 
 
-  function show_form($_poll) {
+  function show_form(&$_poll) {
     $url = new FreechURL;
     $url->set_var('action', 'poll_submit');
 
@@ -41,7 +41,7 @@ class PollController extends Controller {
   }
 
 
-  function get_poll($_poll) {
+  function get_poll(&$_poll) {
     $url = new FreechURL;
     $url->set_var('action',   'poll_vote');
     $url->set_var('forum_id', $_poll->get_forum_id());
@@ -57,7 +57,7 @@ class PollController extends Controller {
   }
 
 
-  function get_poll_result($_poll) {
+  function get_poll_result(&$_poll) {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
     return $this->smarty->fetch(dirname(__FILE__).'/poll_result.tmpl');

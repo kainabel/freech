@@ -193,14 +193,14 @@ class SearchQuery extends Parser {
   }
 
 
-  function get_field_values($_name) {
+  function &get_field_values($_name) {
     if (!$this->uses_field($_name))
       return array();
     return $this->fields[$_name];
   }
 
 
-  function add_where_expression($_sql_query) {
+  function add_where_expression(&$_sql_query) {
     $_sql_query->set_sql($_sql_query->sql() . $this->sql);
     foreach ($this->vars as $key => $value)
       $_sql_query->set_var($key, $value);

@@ -24,7 +24,7 @@
 
 
     // Constructor.
-    function IndexBarBBView($_args) {
+    function IndexBarBBView(&$_args) {
       $this->Menu();
 
       // Prints the index (pagination).

@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-function init_user_from_post_data($_user = NULL) {
+function &init_user_from_post_data(&$_user = NULL) {
   if (!$_user)
     $_user = new User($_POST['username']);
   $_user->set_password($_POST['password']);

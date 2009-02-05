@@ -82,7 +82,7 @@ class MainController {
   var $thread_state;
   var $api;
 
-  function MainController($_plugin_api) {
+  function MainController(&$_plugin_api) {
     if (is_dir('installer') && !cfg('ignore_installer_dir', FALSE))
       die('Error: Please delete the installer/ directory before using this forum.');
     if (cfg_is('salt', ''))
@@ -379,12 +379,12 @@ class MainController {
   /*************************************************************
    * Private utilities.
    *************************************************************/
-  function _get_user_from_id($_id) {
+  function &_get_user_from_id($_id) {
     return $this->get_userdb()->get_user_from_id((int)$_id);
   }
 
 
-  function _get_user_from_id_or_die($_id) {
+  function &_get_user_from_id_or_die($_id) {
     $user = $this->_get_user_from_id($_id);
     if (!$user)
       die('No such user');
@@ -392,12 +392,12 @@ class MainController {
   }
 
 
-  function _get_user_from_name($_name) {
+  function &_get_user_from_name($_name) {
     return $this->get_userdb()->get_user_from_name($_name);
   }
 
 
-  function _get_user_from_name_or_die($_name) {
+  function &_get_user_from_name_or_die($_name) {
     $user = $this->_get_user_from_name($_name);
     if (!$user)
       die('No such user');
@@ -405,20 +405,20 @@ class MainController {
   }
 
 
-  function _get_groupdb() {
+  function &_get_groupdb() {
     if (!$this->groupdb)
       $this->groupdb = new GroupDB($this->db);
     return $this->groupdb;
   }
 
 
-  function _get_group_from_id($_id) {
+  function &_get_group_from_id($_id) {
     $query = array('id' => (int)$_id);
     return $this->_get_groupdb()->get_group_from_query($query);
   }
 
 
-  function _get_group_from_id_or_die($_id) {
+  function &_get_group_from_id_or_die($_id) {
     $group = $this->_get_group_from_id($_id);
     if (!$group)
       die('No such group');
@@ -426,13 +426,13 @@ class MainController {
   }
 
 
-  function _get_group_from_name($_name) {
+  function &_get_group_from_name($_name) {
     $query = array('name' => $_name);
     return $this->_get_groupdb()->get_group_from_query($query);
   }
 
 
-  function _get_group_from_name_or_die($_name) {
+  function &_get_group_from_name_or_die($_name) {
     $group = $this->_get_group_from_name($_name);
     if (!$group)
       die('No such group');
@@ -440,7 +440,7 @@ class MainController {
   }
 
 
-  function _get_posting_from_id_or_die($_id) {
+  function &_get_posting_from_id_or_die($_id) {
     $posting = $this->forumdb->get_posting_from_id((int)$_id);
     if (!$posting)
       die('No such posting.');
@@ -454,7 +454,7 @@ class MainController {
   }
 
 
-  function _init_group_from_post_data($_group = NULL) {
+  function &_init_group_from_post_data(&$_group = NULL) {
     if (!$_group)
       $_group = new Group;
     $_group->set_name($_POST['groupname']);
@@ -470,7 +470,7 @@ class MainController {
 
 
   // Returns an URL that points to the homepage.
-  function _get_homepage_url() {
+  function &_get_homepage_url() {
     if (!cfg('default_forum_id', FALSE))
       return new FreechURL('', _('Home'));
 
@@ -482,7 +482,7 @@ class MainController {
 
   // Wrapper around get_current_user() that also works if a matching
   // user/hash combination was passed in through the GET request.
-  function _get_current_or_confirming_user() {
+  function &_get_current_or_confirming_user() {
     $userdb   = $this->get_userdb();
     $username = $_GET['username'] ? $_GET['username'] : $_POST['username'];
     if (!$username)
@@ -498,7 +498,7 @@ class MainController {
 
 
   // Sends an email to the given user.
-  function _send_mail($user, $subject, $body, $vars = NULL) {
+  function _send_mail(&$user, $subject, $body, $vars = NULL) {
     if (!$vars)
       $vars = array();
     $head  = 'From: '.cfg('mail_from').'\r\n';
@@ -513,7 +513,7 @@ class MainController {
 
 
   // Convenience wrapper around _send_mail().
-  function _send_password_reset_mail($user) {
+  function _send_password_reset_mail(&$user) {
     $subject  = _('Your password at [SITE_TITLE]');
     $body     = _("Hello [FIRSTNAME] [LASTNAME],\n"
                 . "\n"
@@ -624,7 +624,7 @@ class MainController {
   }
 
 
-  function _get_current_view() {
+  function &_get_current_view() {
     $view_class = $this->_get_current_view_class();
     return new $view_class($this->api);
   }
@@ -652,7 +652,7 @@ class MainController {
    * Action controllers for reading and editing postings.
    *************************************************************/
   // Prints the breadcrumbs pointing to the given posting.
-  function _add_posting_breadcrumbs($_posting) {
+  function _add_posting_breadcrumbs(&$_posting) {
     $this->breadcrumbs()->add_separator();
     if (!$_posting)
       $this->breadcrumbs()->add_text(_('No Such Message'));
@@ -664,7 +664,7 @@ class MainController {
 
 
   // Logs a change to the moderation log.
-  function _log_posting_moderation($_action, $_posting, $_reason) {
+  function _log_posting_moderation($_action, &$_posting, $_reason) {
     $change = new ModLogItem($_action);
     $change->set_reason($_reason);
     $change->set_from_user($this->get_current_user());
@@ -836,7 +836,7 @@ class MainController {
    * Action controllers for the user profile.
    *************************************************************/
   // Logs a change to the moderation log.
-  function _log_user_moderation($_action, $_user, $_reason) {
+  function _log_user_moderation($_action, &$_user, $_reason) {
     $change = new ModLogItem($_action);
     $change->set_reason($_reason);
     $change->set_from_user($this->get_current_user());
@@ -846,7 +846,7 @@ class MainController {
   }
 
 
-  function _add_profile_breadcrumbs($_named_item) {
+  function _add_profile_breadcrumbs(&$_named_item) {
     $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text($_named_item->get_name());
   }
@@ -1414,31 +1414,31 @@ class MainController {
   }
 
 
-  function get_forumdb() {
+  function &get_forumdb() {
     return $this->forumdb;
   }
 
 
-  function get_userdb() {
+  function &get_userdb() {
     if (!$this->userdb)
       $this->userdb = new UserDB($this->db);
     return $this->userdb;
   }
 
 
-  function get_eventbus() {
+  function &get_eventbus() {
     return $this->eventbus;
   }
 
 
-  function get_modlogdb() {
+  function &get_modlogdb() {
     if (!$this->modlogdb)
       $this->modlogdb = new ModLogDB($this->db);
     return $this->modlogdb;
   }
 
 
-  function get_current_user() {
+  function &get_current_user() {
     if ($this->current_user)
       return $this->current_user;
     if (session_id() !== '' && $_SESSION['user_id'])
@@ -1458,7 +1458,7 @@ class MainController {
   }
 
 
-  function get_current_group() {
+  function &get_current_group() {
     if ($this->current_group)
       return $this->current_group;
     $user = $this->get_current_user();
@@ -1518,7 +1518,7 @@ class MainController {
   }
 
 
-  function get_current_forum() {
+  function &get_current_forum() {
     if ($this->current_forum)
       return $this->current_forum;
     $id = $this->get_current_forum_id();
@@ -1535,12 +1535,12 @@ class MainController {
   }
 
 
-  function register_url($_name, $_url) {
+  function register_url($_name, &$_url) {
     $this->urls[$_name] = $_url;
   }
 
 
-  function get_url($_name) {
+  function &get_url($_name) {
     return $this->urls[$_name];
   }
 
@@ -1602,12 +1602,12 @@ class MainController {
   }
 
 
-  function links($_where) {
+  function &links($_where) {
     return $this->links[$_where];
   }
 
 
-  function breadcrumbs() {
+  function &breadcrumbs() {
     return $this->links['breadcrumbs'];
   }
 

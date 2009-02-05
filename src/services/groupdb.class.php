@@ -24,11 +24,11 @@
     var $groups;   // Caches groups.
 
     function GroupDB(&$_db) {
-      $this->db = &$_db;
+      $this->db = $_db;
     }
 
 
-    function _get_sql_from_query($_search) {
+    function _get_sql_from_query(&$_search) {
       if (!$_search)
         $_search = array();
 
@@ -55,7 +55,7 @@
     }
 
 
-    function _get_group_from_row($row) {
+    function &_get_group_from_row(&$row) {
       if (!$row)
         return;
       $group = new Group;
@@ -65,7 +65,7 @@
     }
 
 
-    function _pop_group_from_result($res) {
+    function &_pop_group_from_result(&$res) {
       if ($res->EOF)
         return;
       $row   = $res->FetchObj();
@@ -112,7 +112,7 @@
     }
 
 
-    function _save_permissions($_group) {
+    function _save_permissions(&$_group) {
       foreach ($_group->get_permission_list() as $action => $allow)
         if ($allow)
           $this->_set_permission($_group->get_id(), $action, TRUE);
@@ -127,7 +127,7 @@
      * $_group: The group to be saved.
      * Returns: The id of the (maybe newly inserted) group.
      */
-    function save_group($_group) {
+    function save_group(&$_group) {
       if (!is_object($_group))
         die("GroupDB::save_group(): Invalid arg.");
       $query = new FreechSqlQuery();
@@ -177,7 +177,7 @@
      * Returns the first group that matches the given criteria.
      * $_search: The search values.
      */
-    function get_group_from_query($_search) {
+    function &get_group_from_query(&$_search) {
       $sql = $this->_get_sql_from_query($_search);
       $res = $this->db->Execute($sql)
                               or die("GroupDB::get_group_from_query()");
@@ -189,7 +189,7 @@
      * Returns all groups that match the given criteria.
      * $_search: The search values.
      */
-    function get_groups_from_query($_search, $_limit = -1, $_offset = 0) {
+    function &get_groups_from_query(&$_search, $_limit = -1, $_offset = 0) {
       $sql  = $this->_get_sql_from_query($_search);
       $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
       $list = array();

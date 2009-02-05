@@ -144,7 +144,7 @@ define('GROUP_STATUS_ACTIVE',  1);
     }
 
 
-    function get_profile_url() {
+    function &get_profile_url() {
       $url = new FreechURL;
       $url->set_var('action',    'group_profile');
       $url->set_var('groupname', $this->get_name());
@@ -157,7 +157,7 @@ define('GROUP_STATUS_ACTIVE',  1);
     }
 
 
-    function get_editor_url() {
+    function &get_editor_url() {
       $url = new FreechURL('', '[' . _('Edit') . ']');
       $url->set_var('action',    'group_editor');
       $url->set_var('groupname', $this->get_name());
@@ -196,7 +196,7 @@ define('GROUP_STATUS_ACTIVE',  1);
     }
 
 
-    function get_permission_list() {
+    function &get_permission_list() {
       $actions     = array('write',
                            'administer',
                            'moderate',

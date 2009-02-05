@@ -82,7 +82,7 @@
     }
 
 
-    function get_url() {
+    function &get_url() {
       $url = new FreechURL('', $this->get_name());
       $url->set_var('forum_id', $this->get_id());
       return $url;
@@ -94,7 +94,7 @@
     }
 
 
-    function get_editor_url() {
+    function &get_editor_url() {
       $url = new FreechURL('', '[' . _('Edit') . ']');
       $url->set_var('action',   'forum_edit');
       $url->set_var('forum_id', $this->get_id());
@@ -122,7 +122,7 @@
     }
 
 
-    function get_status_names($_status = -1) {
+    function &get_status_names($_status = -1) {
       $list = array(
         FORUM_STATUS_INACTIVE => _('Inactive'),
         FORUM_STATUS_ACTIVE   => _('Active')

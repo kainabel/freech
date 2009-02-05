@@ -24,7 +24,7 @@
      * Shows a form for editing a message. The values given in $_message are
      * filled into the fields.
      */
-    function show_compose($_message, $_parent_id, $_may_quote) {
+    function show_compose(&$_message, $_parent_id, $_may_quote) {
       $forum_id = $this->api->forum()->get_id();
 
       $url = new FreechURL;

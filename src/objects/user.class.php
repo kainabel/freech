@@ -111,7 +111,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_normalized_name() {
+    function get_normalized_name() {
       $src  = array(".", "_", "-", "0", "1", "5", "6", "8");
       $dst  = array(" ", " ", " ", "O", "I", "S", "G", "B");
       $norm = str_replace($src, $dst, $this->fields[name]);
@@ -123,13 +123,13 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_soundexed_name() {
+    function get_soundexed_name() {
       $name = preg_replace("/\s*\d+\s*/", "", $this->get_normalized_name());
       return soundex($name);
     }
 
 
-    function &get_lexical_similarity($_user) {
+    function get_lexical_similarity($_user) {
       $name1 = $this->get_normalized_name();
       $name2 = $_user->get_normalized_name();
       $len       = max(strlen($name1), strlen($name2));
@@ -291,7 +291,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function get_editor_url() {
+    function &get_editor_url() {
       $url = new FreechURL('', '[' . _('Edit') . ']');
       $url->set_var('action',   'user_editor');
       $url->set_var('username', $this->get_name());
@@ -304,7 +304,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function get_profile_url() {
+    function &get_profile_url() {
       $caption = sprintf(_('Profile of %s'), $this->get_name());
       $url     = new FreechURL('', $caption);
       $url->set_var('action',   'user_profile');
@@ -323,7 +323,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function get_postings_url() {
+    function &get_postings_url() {
       $caption = sprintf(_('Postings of %s'), $this->get_name());
       $url     = new FreechURL('', $caption);
       $url->set_var('action',   'user_postings');
@@ -382,7 +382,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function get_status_names($_status = -1) {
+    function &get_status_names($_status = -1) {
       $list = array(
         USER_STATUS_DELETED     => _('Deleted'),
         USER_STATUS_ACTIVE      => _('Active'),

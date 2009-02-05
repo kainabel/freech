@@ -12,13 +12,13 @@ define('CHECK_REGISTERED_ACCOUNTS', FALSE);
 $spamhash = ''; // The spamhash instance.
 
 
-function spamhash_init($api) {
+function spamhash_init(&$api) {
   $eventbus = $api->eventbus();
   $eventbus->signal_connect('on_run_before', 'spamhash_on_run');
 }
 
 
-function spamhash_on_run($api) {
+function spamhash_on_run(&$api) {
   global $spamhash;
 
   // Check if the plugin is enabled for the given user.

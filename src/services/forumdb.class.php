@@ -387,7 +387,7 @@
       $threads = array();
       while (!$res->EOF) {
         $thread = new Thread;
-        $thread->set_from_db($res);
+        $thread->set_from_db($this, $res);
         array_push($threads, $thread);
       }
 
@@ -396,7 +396,8 @@
 
 
     function &get_thread_from_id($_thread_id) {
-      return $this->get_threads_from_id(array($_thread_id));
+      $threads = $this->get_threads_from_id(array($_thread_id));
+      return $threads[0];
     }
 
 
@@ -645,7 +646,7 @@
       $threads = array();
       while (!$res->EOF) {
         $thread = new Thread;
-        $thread->set_from_db($res);
+        $thread->set_from_db($this, $res);
         array_push($threads, $thread);
       }
 

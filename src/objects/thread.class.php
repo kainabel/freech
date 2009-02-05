@@ -112,7 +112,7 @@ class Thread {
   }
 
 
-  function set_from_db(&$_res) {
+  function set_from_db(&$forumdb, &$_res) {
     while (!$_res->EOF) {
       $row = $_res->FetchObj();
       if (!isset($thread_id))
@@ -122,6 +122,7 @@ class Thread {
 
       $posting = new Posting;
       $posting->set_from_db($row);
+      $posting = $forumdb->_decorate_posting($posting);
       $this->postings[$this->_get_posting_path($posting)] = $posting;
 
       $_res->MoveNext();
@@ -176,6 +177,80 @@ class Thread {
     ksort($this->postings, SORT_STRING);
     foreach ($this->postings as $posting)
       call_user_func($_func, $posting, $_data);
+  }
+
+
+  function get_n_postings() {
+    return count($this->postings);
+  }
+
+
+  function get_n_new_postings() {
+    $n = 0;
+    foreach ($this->postings as $posting)
+      if ($posting->is_new())
+        $n++;
+    return $n;
+  }
+
+
+  function get_id() {
+    return $this->get_parent()->get_id();
+  }
+
+
+  function get_priority() {
+    return $this->get_parent()->get_priority();
+  }
+
+
+  function was_moved() {
+    return $this->get_parent()->was_moved();
+  }
+
+
+  function is_new() {
+    return $this->get_parent()->is_new();
+  }
+
+
+  function get_url() {
+    return $this->get_parent()->get_url();
+  }
+
+
+  function get_url_html() {
+    return $this->get_parent()->get_url_html();
+  }
+
+
+  function get_subject() {
+    return $this->get_parent()->get_subject();
+  }
+
+
+  function get_username() {
+    return $this->get_parent()->get_username();
+  }
+
+
+  function get_user_is_special() {
+    return $this->get_parent()->get_user_is_special();
+  }
+
+
+  function get_user_icon() {
+    return $this->get_parent()->get_user_icon();
+  }
+
+
+  function get_user_icon_name() {
+    return $this->get_parent()->get_user_icon_name();
+  }
+
+
+  function get_created_time() {
+    return $this->get_parent()->get_created_time();
   }
 }
 ?>

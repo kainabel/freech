@@ -53,7 +53,7 @@ class ThreadView extends View {
 
     // Create the index bar.
     $group     = $this->api->group();
-    $n_threads = $this->forumdb->get_n_threads($_forum_id, $may_write);
+    $n_threads = $this->forumdb->get_n_threads($_forum_id);
     $args      = array(forum_id           => (int)$_forum_id,
                        n_threads          => $n_threads,
                        n_threads_per_page => cfg('tpp'),

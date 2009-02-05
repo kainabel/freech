@@ -388,6 +388,16 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function is_locked() {
+    return $this->posting->is_locked();
+  }
+
+
+  function is_spam() {
+    return $this->posting->is_spam();
+  }
+
+
   function is_editable() {
     return $this->posting->is_editable();
   }

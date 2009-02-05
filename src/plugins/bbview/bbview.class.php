@@ -24,33 +24,25 @@
  * as the page on which a posting is shown.
  */
 class BBView extends View {
-  function BBView(&$_forum) {
-    $this->View($_forum);
-    $this->postings    = array();
-    $this->posting_map = array();
-  }
-
-
-  function _append_posting(&$_posting, $_data) {
+  function _format_posting(&$_posting, $_data) {
     // Required to enable correct formatting of the posting.
     $current_id = (int)$_GET['msg_id'];
     $_posting->set_selected($_posting->get_id() == $current_id);
     $_posting->apply_block();
-
-    // Append everything to a list.
-    array_push($this->postings, $_posting);
-    $this->posting_map[$_posting->get_id()] = $_posting;
   }
 
 
   function show($_forum_id, $_offset) {
-    $db   = $this->forumdb;
-    $args = array('forum_id' => (int)$forum_id, 'is_parent' => 1);
-    $n    = $db->foreach_posting_from_fields($args,
-                                             (int)$_offset,
-                                             cfg('epp'),
-                                             array(&$this, '_append_posting'),
-                                             '');
+    $func    = array(&$this, '_format_posting');
+    $threads = $this->forumdb->get_threads_from_forum_id($_forum_id,
+                                                         $_offset,
+                                                         cfg('tpp'));
+
+    // Format the threads.
+    foreach ($threads as $thread) {
+      $thread->remove_locked_postings();
+      $thread->foreach_posting($func);
+    }
 
     $group     = $this->api->group();
     $n_threads = $this->forumdb->get_n_threads((int)$_forum_id);
@@ -63,13 +55,13 @@ class BBView extends View {
 
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar', $indexbar);
-    $this->assign_by_ref('n_rows',   $n);
-    $this->assign_by_ref('postings', $this->postings);
+    $this->assign_by_ref('threads',  $threads);
     $this->render(dirname(__FILE__).'/bbview.tmpl');
   }
 
 
   function show_thread(&$_thread) {
+    $func      = array(&$this, '_format_posting');
     $user      = $this->api->user();
     $group     = $this->api->group();
     $may_write = $group->may('write');
@@ -77,24 +69,19 @@ class BBView extends View {
               && cfg('postings_editable')
               && !$user->is_anonymous();
 
-    // Get all postings from the current thread.
-    $db   = $this->forumdb;
-    $args = array('thread_id' => (int)$_thread->get_thread_id());
-    $n    = $db->foreach_posting_from_fields($args,
-                                             (int)$_GET['hs'],
-                                             cfg('epp'),
-                                             array(&$this, '_append_posting'),
-                                             '');
+    // Format the thread.
+    $_thread->remove_locked_postings();
+    $_thread->foreach_posting($func);
 
     // Create the indexbar.
-    $n_postings = $this->forumdb->get_n_postings($args);
+    $n_postings = $_thread->get_n_postings();
     $args       = array(n_postings          => (int)$n_postings,
                         n_postings_per_page => cfg('epp'),
                         n_offset            => (int)$_GET['hs'],
                         n_pages_per_index   => cfg('ppi'));
     $indexbar = new BBViewIndexBarReadPosting($_thread, $args);
 
-    foreach ($this->postings as $posting) {
+    foreach ($_thread->get_postings() as $posting) {
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the posting is produced.
        *   Args: posting: The posting that is about to be shown.
@@ -104,7 +91,7 @@ class BBView extends View {
 
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar',  $indexbar);
-    $this->assign_by_ref('postings',  $this->postings);
+    $this->assign_by_ref('thread',    $_thread);
     $this->assign_by_ref('may_write', $may_write);
     $this->assign_by_ref('may_edit',  $may_edit);
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
@@ -115,7 +102,11 @@ class BBView extends View {
 
 
   function show_posting(&$_posting) {
-    $this->show_thread($_posting);
+    $thread = $this->forumdb->get_thread_from_id($_posting->get_thread_id(),
+                                                 (int)$_GET['hs'],
+                                                 cfg('epp'));
+
+    $this->show_thread($thread);
   }
 }
 ?>

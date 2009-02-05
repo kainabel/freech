@@ -33,7 +33,7 @@
       // Prints the index (pagination).
       $url = $_thread->get_url();
       $url->delete_var('msg_id');
-      $url->set_var('thread_id', $_thread->get_thread_id());
+      $url->set_var('thread_id', $_thread->get_id());
       $this->add_index($url,
                        $_args[n_postings],
                        $_args[n_postings_per_page],

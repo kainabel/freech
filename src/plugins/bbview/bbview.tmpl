@@ -1,3 +1,37 @@
 {include file="indexbar.tmpl"}
-{include file="latest.tmpl"}
+{foreach item=thread from=$threads}
+  <div class="bbview_row">
+    <div class="bbview_icons">
+      {if $thread->get_priority() > 0}
+        <img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
+      {/if}
+      {if $thread->was_moved()}
+        <img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
+      {/if}
+      {if $thread->is_new()}
+        <img src="{$__theme_dir}/img/new.png" alt="" title="{t}New{/t}" />
+      {/if}
+    </div>
+    <div class="bbview_subject">
+      {$thread->get_url_html()}
+    </div>
+    <div class="bbview_user">
+      {$thread->get_username()|escape}
+      {if $thread->get_user_is_special()}
+        <img src="{$thread->get_user_icon()|escape}"
+             alt=""
+             title="{$thread->get_user_icon_name()|escape}" />
+      {/if}
+    </div>
+    <div class="bbview_time">
+      {$thread->get_created_time()}
+    </div>
+    <div class="bbview_n_postings">
+      {$thread->get_n_postings()}
+    </div>
+    <div class="bbview_n_new">
+      {$thread->get_n_new_postings()}
+    </div>
+  </div>
+{/foreach}
 {include file="indexbar.tmpl"}

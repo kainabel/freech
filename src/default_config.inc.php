@@ -9,9 +9,6 @@
   // *************************************************************
   // Essential settings.
   // *************************************************************
-  // You MUST change this. Enter any random value.
-  $cfg[salt] = '';
-
   // The default language of the user interface elements.
   // For a list of supported languages please have a look 
   // at the "language/" subdirectory.
@@ -23,10 +20,6 @@
 
   // The address used in the "from" field of any mail sent by the forum.
   $cfg[mail_from] = 'noreply@debain.org';
-
-  // The URL pointing to your Freech installation, for example
-  //  http://www.mydomain.com/freech/
-  $cfg[site_url] = 'http://debain.org/';
 
   // A human readable title for your forum.
   $cfg[site_title] = 'Freech Forum';

@@ -2,10 +2,10 @@ Maintenance
 ------------
 * Convert the modlog into a plugin.
 * Define the schema using AdoXML.
-* Get rid of ForumDB->walk_tree.
 * Remove Posting->set_from_db().
 * Remove thread_state arguments from ForumDB.
 * Remove thread_state argument from ProfilePrinter.
+* Document all required indexes.
 
 Features
 ---------

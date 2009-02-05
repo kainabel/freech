@@ -358,6 +358,9 @@
 
 
     function get_threads_from_id($_thread_ids) {
+      if (count($_thread_ids) == 0)
+        return array();
+
       // Note that the query returns the threads in order,
       // but it does NOT sort the postings in each thread, as that would
       // require mixing "order by ... ASC" with "order by ... DESC", which

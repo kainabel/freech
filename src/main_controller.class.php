@@ -722,6 +722,10 @@ class MainController {
     $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
     $controller = new ModLogController($this->api);
     $controller->show_thread_move($posting);
+    $this->breadcrumbs()->add_separator();
+    $this->breadcrumbs()->add_link($posting->get_url());
+    $this->breadcrumbs()->add_separator();
+    $this->breadcrumbs()->add_text(_('Move'));
   }
 
 
@@ -761,6 +765,10 @@ class MainController {
     $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
     $controller = new ModLogController($this->api);
     $controller->show_lock_posting($posting);
+    $this->breadcrumbs()->add_separator();
+    $this->breadcrumbs()->add_link($posting->get_url());
+    $this->breadcrumbs()->add_separator();
+    $this->breadcrumbs()->add_text(_('Lock'));
   }
 
 

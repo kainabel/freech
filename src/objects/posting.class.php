@@ -413,8 +413,9 @@ class Posting {
   // The url for locking the posting.
   function get_lock_url() {
     $url = new FreechURL;
-    $url->set_var('action', 'posting_lock');
-    $url->set_var('msg_id', $this->get_id());
+    $url->set_var('action',   'posting_lock');
+    $url->set_var('forum_id', $this->get_forum_id());
+    $url->set_var('msg_id',   $this->get_id());
     return $url;
   }
 
@@ -470,8 +471,9 @@ class Posting {
   // The url for moving the posting to a different forum.
   function get_move_url() {
     $url = new FreechURL;
-    $url->set_var('action', 'thread_move');
-    $url->set_var('msg_id', $this->get_id());
+    $url->set_var('action',   'thread_move');
+    $url->set_var('forum_id', $this->get_forum_id());
+    $url->set_var('msg_id',   $this->get_id());
     return $url;
   }
 

@@ -2,9 +2,12 @@ Maintenance
 ------------
 * Convert the modlog into a plugin.
 * Define the schema using AdoXML.
+* Get rid of ForumDB->walk_tree.
+* Remove Posting->set_from_db().
+* Remove thread_state arguments from ForumDB.
+* Remove thread_state argument from ProfilePrinter.
 
 Features
 ---------
-* Hide locked messages from the forum.
 * Improve themability by replacing layout tables with divs.
 * Check whether support for sqlite is feasible.

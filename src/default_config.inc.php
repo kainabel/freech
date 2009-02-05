@@ -63,11 +63,6 @@
   // Possible values are THREAD_STATE_FOLDED or THREAD_STATE_UNFOLDED.
   $cfg[default_thread_state] = THREAD_STATE_UNFOLDED;
 
-  // Show threads with new posts first. Note that setting this to TRUE has
-  // a severe negative performance impact and is only recommended if
-  // your site does not have a lot of traffic.
-  $cfg[updated_threads_first] = FALSE;
-
   // Disable the posting counter that is shown above the forum. Note that
   // disabling the counter provides a significant performance gain.
   $cfg[disable_posting_counter] = FALSE;

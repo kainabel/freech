@@ -22,8 +22,7 @@
   class ProfileController extends Controller {
     function ProfileController($_api) {
       $this->Controller($_api);
-      $this->postings = array();
-      $this->users    = array();
+      $this->users = array();
     }
 
 
@@ -32,9 +31,6 @@
       $msg_id  = (int)$_GET['msg_id'];
       $_posting->set_selected($_posting->get_id() == $msg_id);
       $_posting->apply_block();
-
-      // Append everything to a list.
-      array_push($this->postings, $_posting);
     }
 
 
@@ -45,14 +41,23 @@
 
     function _assign_user_postings($_user, $_thread_state, $_offset = 0) {
       // Load the postings.
-      $func = array($this, '_append_posting');
-      $this->forumdb->foreach_posting_from_user($_user->get_id(),
-                                                $_offset,
-                                                cfg("epp"),
-                                                cfg("updated_threads_first"),
-                                                $_thread_state,
-                                                $func,
-                                                '');
+      $thread_state = $this->api->thread_state('user_postings_');
+      $func         = array($this, '_append_posting');
+      $threads      = $this->forumdb->get_postings_from_user($_user->get_id(),
+                                                             $_offset,
+                                                             cfg('epp'),
+                                                             $thread_state);
+
+      // Format the threads.
+      foreach ($threads as $thread) {
+        $thread->foreach_posting($func);
+        if (!$thread_state->is_folded($thread->get_parent_id()))
+          continue;
+        $thread->fold();
+        $parent  = $thread->get_parent();
+        $updated = $parent->get_thread_updated_unixtime();
+        $parent->set_created_unixtime($updated);
+      }
 
       // Create the index bar.
       $search    = array('userid' => $_user->get_id());
@@ -67,9 +72,9 @@
                          thread_state        => $_thread_state);
       $indexbar = new IndexBarUserPostings($args);
 
-      $this->assign_by_ref('n_rows',     count($this->postings));
+      $this->assign_by_ref('n_rows',     count($threads));
       $this->assign_by_ref('n_postings', $n_entries);
-      $this->assign_by_ref('postings',   $this->postings);
+      $this->assign_by_ref('threads',    $threads);
       $this->assign_by_ref('indexbar',   $indexbar);
       $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
       $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));

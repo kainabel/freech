@@ -44,6 +44,7 @@ include_once 'objects/user.class.php';
 include_once 'objects/group.class.php';
 include_once 'objects/modlog_item.class.php';
 include_once 'objects/posting_decorator.class.php';
+include_once 'objects/thread.class.php';
 include_once 'objects/unknown_posting.class.php';
 include_once 'objects/menu_item.class.php';
 include_once 'objects/menu.class.php';

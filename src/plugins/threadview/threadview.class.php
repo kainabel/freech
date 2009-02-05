@@ -26,38 +26,35 @@
 class ThreadView extends View {
   function ThreadView($_forum) {
     $this->View($_forum);
-    $this->postings = array();
   }
 
 
-  function _append_posting(&$_posting, $_data) {
-    // Required to enable correct formatting of the posting.
+  function _format_posting(&$_posting, $_data) {
     $current_id = (int)$_GET['msg_id'];
     $_posting->set_selected($_posting->get_id() == $current_id);
     $_posting->apply_block();
-
-    if ($_posting->is_folded()) {
-      $updated = $_posting->get_thread_updated_unixtime();
-      $_posting->set_created_unixtime($updated);
-    }
-
-    // Append everything to a list.
-    array_push($this->postings, $_posting);
   }
 
 
   function show($_forum_id, $_offset) {
-    // Load postings from the database.
+    // Load the threads from the database.
     $thread_state = $this->api->thread_state('');
-    $func         = array(&$this, '_append_posting');
-    $this->forumdb->foreach_child($_forum_id,
-                                  0,
-                                  $_offset,
-                                  cfg('tpp'),
-                                  cfg('updated_threads_first'),
-                                  $thread_state,
-                                  $func,
-                                  '');
+    $func         = array(&$this, '_format_posting');
+    $threads      = $this->forumdb->get_threads_from_forum_id($_forum_id,
+                                                              $_offset,
+                                                              cfg('tpp'));
+
+    // Format the threads.
+    foreach ($threads as $thread) {
+      $thread->remove_locked_postings();
+      $thread->foreach_posting($func);
+      if (!$thread_state->is_folded($thread->get_parent_id()))
+        continue;
+      $thread->fold();
+      $parent  = $thread->get_parent();
+      $updated = $parent->get_thread_updated_unixtime();
+      $parent->set_created_unixtime($updated);
+    }
 
     // Create the index bar.
     $group     = $this->api->group();
@@ -68,16 +65,15 @@ class ThreadView extends View {
                        n_offset           => $_offset,
                        n_pages_per_index  => cfg('ppi'),
                        thread_state       => $thread_state);
-    $n_rows   = count($this->postings);
     $indexbar = new IndexBarByThread($args);
 
     // Render the template.
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar',           $indexbar);
-    $this->assign_by_ref('n_rows',             $n_rows);
-    $this->assign_by_ref('postings',           $this->postings);
-    $this->assign_by_ref('max_usernamelength', cfg("max_usernamelength"));
-    $this->assign_by_ref('max_subjectlength',  cfg("max_subjectlength"));
+    $this->assign_by_ref('n_rows',             count($threads));
+    $this->assign_by_ref('threads',            $threads);
+    $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
+    $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render('thread_with_indexbar.tmpl');
   }
 
@@ -143,16 +139,14 @@ class ThreadView extends View {
     $this->clear_all_assign();
     $this->assign_by_ref('showthread', $showthread);
     if ($showthread) {
-      $state = new ThreadState(THREAD_STATE_UNFOLDED, '');
-      $func  = array(&$this, '_append_posting');
-      $this->forumdb->foreach_child_in_thread($_posting->get_id(),
-                                              0,
-                                              cfg('tpp'),
-                                              $state,
-                                              $func,
-                                              '');
-      $this->assign_by_ref('n_rows',   count($this->postings));
-      $this->assign_by_ref('postings', $this->postings);
+      $state      = new ThreadState(THREAD_STATE_UNFOLDED, '');
+      $func       = array(&$this, '_format_posting');
+      $thread_ids = array($_posting->get_thread_id());
+      $threads    = $this->forumdb->get_threads_from_id($thread_ids);
+      $threads[0]->remove_locked_postings();
+      $threads[0]->foreach_posting($func);
+      $this->assign_by_ref('n_rows',  1);
+      $this->assign_by_ref('threads', $threads);
     }
 
     // Render.

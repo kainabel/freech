@@ -1,7 +1,8 @@
 <!-- thread -->
 <table border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
 {if $n_rows > 0}
-{foreach item=posting from=$postings}
+{foreach item=thread from=$threads}
+{foreach item=posting from=$thread->get_postings()}
 <!-- thread_row -->
 <tr class='posting' valign='middle'>
   <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
@@ -90,6 +91,7 @@
    <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
  </tr>
 <!-- end thread_row -->
+{/foreach}
 {/foreach}
 {else}
 <tr>

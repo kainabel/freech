@@ -358,6 +358,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function set_relation($_relation) {
+    return $this->posting->set_relation($_relation);
+  }
+
+
   function get_relation() {
     return $this->posting->get_relation();
   }
@@ -410,6 +415,11 @@ class PostingDecorator extends Trackable {
 
   function has_thread() {
     return $this->posting->has_thread();
+  }
+
+
+  function has_descendants() {
+    return $this->posting->has_descendants();
   }
 
 

@@ -1,5 +1,5 @@
 NAME=freech
-VERSION=`grep _VERSION src/forum.inc.php | cut -d"'" -f4`
+VERSION=`grep _VERSION src/main_controller.class.php | cut -d"'" -f4`
 PACKAGE=$(NAME)-$(VERSION)-1
 PUBLISH_PATH=/home/sab/backups/code/www/test.debain.org/$(NAME)
 PUBLISH_HOST=root@debain.org

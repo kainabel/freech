@@ -142,6 +142,8 @@ class Thread {
 
 
   function fold() {
+    if (count($this->postings) == 1)
+      return;
     $parent = $this->get_parent();
     $parent->set_relation(POSTING_RELATION_PARENT_FOLDED);
     $this->postings = array($this->_get_posting_path($parent) => $parent);

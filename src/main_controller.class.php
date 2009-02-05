@@ -854,21 +854,19 @@ class MainController {
 
   // Lists all postings of one user.
   function _show_user_postings() {
-    $user         = $this->_get_user_from_name_or_die($_GET['username']);
-    $thread_state = $this->get_thread_state('user_postings_');
-    $profile      = new ProfileController($this->api);
+    $user    = $this->_get_user_from_name_or_die($_GET['username']);
+    $profile = new ProfileController($this->api);
     $this->_add_profile_breadcrumbs($user);
-    $profile->show_user_postings($user, $thread_state, (int)$_GET['hs']);
+    $profile->show_user_postings($user, (int)$_GET['hs']);
   }
 
 
   // Display information of one user.
   function _show_user_profile() {
-    $user         = $this->_get_user_from_name_or_die($_GET['username']);
-    $thread_state = $this->get_thread_state('user_postings_');
-    $profile      = new ProfileController($this->api);
+    $user    = $this->_get_user_from_name_or_die($_GET['username']);
+    $profile = new ProfileController($this->api);
     $this->_add_profile_breadcrumbs($user);
-    $profile->show_user_profile($user, $thread_state, (int)$_GET['hs']);
+    $profile->show_user_profile($user, (int)$_GET['hs']);
   }
 
 

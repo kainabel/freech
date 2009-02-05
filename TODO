@@ -2,7 +2,6 @@ Maintenance
 ------------
 * Convert the modlog into a plugin.
 * Define the schema using AdoXML.
-* Remove thread_state argument from ProfilePrinter.
 * Document all required indexes.
 
 Features

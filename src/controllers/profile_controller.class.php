@@ -39,7 +39,7 @@
     }
 
 
-    function _assign_user_postings(&$_user, &$_thread_state, $_offset = 0) {
+    function _assign_user_postings(&$_user, $_offset = 0) {
       // Load the postings.
       $thread_state = $this->api->thread_state('user_postings_');
       $func         = array($this, '_format_posting');
@@ -68,7 +68,7 @@
                          n_postings_per_page => cfg("epp"),
                          n_offset            => $_offset,
                          n_pages_per_index   => cfg("ppi"),
-                         thread_state        => $_thread_state);
+                         thread_state        => $thread_state);
       $indexbar = new IndexBarUserPostings($args);
 
       $this->assign_by_ref('n_rows',     count($threads));
@@ -80,7 +80,7 @@
     }
 
 
-    function show_user_profile(&$_user, &$_thread_state, $_offset = 0) {
+    function show_user_profile(&$_user, $_offset = 0) {
       // Load the group info.
       $groupdb = $this->api->groupdb();
       $search  = array('id' => $_user->get_group_id());
@@ -111,7 +111,7 @@
     }
 
 
-    function show_user_postings(&$_user, &$_thread_state, $_offset = 0) {
+    function show_user_postings(&$_user, $_offset = 0) {
       $current  = $this->api->user();
       $group    = $this->api->group();
       $showlist = $_user->get_name() == $current->get_name();
@@ -122,7 +122,7 @@
 
       // Load the threads.
       $this->clear_all_assign();
-      $this->_assign_user_postings($_user, $_thread_state, $_offset);
+      $this->_assign_user_postings($_user, $_offset);
 
       // Render the template.
       $this->assign_by_ref('user', $_user);

@@ -686,7 +686,7 @@
     function get_n_threads($_forum_id) {
       $sql  = "SELECT COUNT(*)";
       $sql .= " FROM {t_posting}";
-      $sql .= " WHERE is_parent=1 AND status={status}";
+      $sql .= " WHERE is_parent=1 AND (status={status} OR n_descendants!=0)";
       if ($_forum_id)
         $sql .= " AND forum_id={forum_id}";
       $query = new FreechSqlQuery($sql);

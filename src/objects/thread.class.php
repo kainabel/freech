@@ -121,7 +121,7 @@ class Thread {
         break;
 
       $posting = new Posting;
-      $posting->set_from_db_obj($row);
+      $posting->set_from_db($row);
       $this->postings[$this->_get_posting_path($posting)] = $posting;
 
       $_res->MoveNext();

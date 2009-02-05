@@ -50,8 +50,8 @@
       $sql .= " WHERE t1.id={id}";
       $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
-      $row = $this->db->GetRow($query->sql()) or die("ForumDB::_get_path()");
-      return $row[path];
+      $path = $this->db->GetOne($query->sql()) or die('ForumDB::_get_path()');
+      return $path;
     }
 
 
@@ -346,12 +346,16 @@
       $sql  .= " WHERE p.id={id}";
       $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
-      if (!$row = $this->db->GetRow($query->sql()))
+      $res = $this->db->Execute($query->sql())
+                                  or die('ForumDB::get_posting_from_id()');
+      if ($res->EOF)
         return;
-      if (strlen($row[path]) / 2 > 252)  // Path as long as the the DB field.
-        $row[allow_answer] = FALSE;
-      if ($row[is_parent])
-        $row[relation] = POSTING_RELATION_PARENT_UNFOLDED;
+
+      $row = $res->FetchObj();
+      if (strlen($row->path) / 2 > 252)  // Path as long as the the DB field.
+        $row->allow_answer = FALSE;
+      if ($row->is_parent)
+        $row->relation = POSTING_RELATION_PARENT_UNFOLDED;
 
       return $this->_get_posting_from_row($row);
     }
@@ -415,7 +419,7 @@
 
       $thread_ids = array();
       while (!$res->EOF)
-        array_push($thread_ids, $res->FetchNextObject(FALSE)->thread_id);
+        array_push($thread_ids, $res->FetchNextObj()->thread_id);
 
       return $this->get_threads_from_id($thread_ids);
     }
@@ -423,7 +427,8 @@
 
     function _walk_list(&$_res, $_func, $_data) {
       $numrows = $_res->RecordCount();
-      while ($row = $_res->FetchRow()) {
+      while (!$_res->EOF) {
+        $row     = $_res->FetchNextObj();
         $posting = $this->_get_posting_from_row($row);
         call_user_func($_func, $posting, $_data);
       }
@@ -471,7 +476,7 @@
                             or die('ForumDB::foreach_posting_from_fields()');
 
       while (!$res->EOF) {
-        $posting = $this->_get_posting_from_row($res->FetchRow());
+        $posting = $this->_get_posting_from_row($res->FetchNextObj());
         array_push($postings, $posting);
       }
       return $postings;
@@ -533,7 +538,7 @@
                             or die("ForumDB::foreach_posting_from_query()");
       $postings = array();
       while (!$res->EOF) {
-        $posting = $this->_get_posting_from_row($res->FetchRow());
+        $posting = $this->_get_posting_from_row($res->FetchNextObj());
         array_push($postings, $posting);
       }
       return $postings;
@@ -626,13 +631,14 @@
       $sql .= " WHERE (";
 
       $first = 1;
-      while ($row = &$res->FetchRow()) {
+      while (!$res->EOF) {
+        $row = $res->FetchNextObj();
         if (!$first)
           $sql .= " OR ";
-        if ($_thread_state->is_folded($row[id]))
-          $sql .= "(a.id=$row[id] AND b.id=$row[id])";
+        if ($_thread_state->is_folded($row->id))
+          $sql .= "(a.id=$row->id AND b.id=$row->id)";
         else
-          $sql .= "a.id=$row[id]";
+          $sql .= "a.id=$row->id";
         $first = 0;
       }
 
@@ -741,8 +747,8 @@
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_forum()');
-      $row = $res->FetchRow($res);
-      return $row[id];
+      $row = $res->FetchObj($res);
+      return $row->id;
     }
 
 
@@ -784,8 +790,8 @@
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_forum()');
-      $row = $res->FetchRow($res);
-      return $row[id];
+      $row = $res->FetchObj($res);
+      return $row->id;
     }
 
 
@@ -831,8 +837,8 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_thread()');
-      $row = $res->FetchRow($res);
-      return $row[id];
+      $row = $res->FetchObj($res);
+      return $row->id;
     }
 
 
@@ -855,8 +861,8 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_thread()');
-      $row = $res->FetchRow($res);
-      return $row[id];
+      $row = $res->FetchObj($res);
+      return $row->id;
     }
 
 
@@ -877,8 +883,8 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_prev_thread_id()");
-      $row = $res->FetchRow($res);
-      return $row[id];
+      $row = $res->FetchObj($res);
+      return $row->id;
     }
 
 
@@ -899,8 +905,8 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_next_thread_id()");
-      $row = $res->FetchRow($res);
-      return $row[id];
+      $row = $res->FetchObj($res);
+      return $row->id;
     }
 
 
@@ -915,8 +921,8 @@
                             or die('ForumDB::get_duplicate_id_from_posting()');
       if ($res->EOF)
         return;
-      $row = $res->FetchRow();
-      return $row[id];
+      $row = $res->FetchObj();
+      return $row->id;
     }
 
 

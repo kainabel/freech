@@ -60,43 +60,7 @@ class Posting {
 
 
   // Sets all values from a given database row.
-  function set_from_db(&$_db_row) {
-    if (!is_array($_db_row))
-      die('Posting:set_from_db(): Non-array.');
-    $this->clear();
-    $this->fields[id]               = $_db_row[id];
-    $this->fields[forum_id]         = $_db_row[forum_id];
-    $this->fields[origin_forum_id]  = $_db_row[origin_forum_id];
-    $this->fields[thread_id]        = $_db_row[thread_id];
-    $this->fields[path]             = $_db_row[path];
-    $this->fields[priority]         = $_db_row[priority];
-    $this->fields[user_id]          = $_db_row[user_id];
-    $this->fields[username]         = $_db_row[username];
-    $this->fields[current_username] = $_db_row[current_username];
-    $this->fields[user_is_special]  = $_db_row[user_is_special];
-    $this->fields[user_icon]        = $_db_row[user_icon];
-    $this->fields[user_icon_name]   = $_db_row[user_icon_name];
-    $this->fields[renderer]         = $_db_row[renderer];
-    $this->fields[subject]          = $_db_row[subject];
-    $this->fields[body]             = $_db_row[body];
-    $this->fields[updated]          = $_db_row[updated];
-    $this->fields[created]          = $_db_row[created];
-    $this->fields[n_children]       = $_db_row[n_children];
-    $this->fields[n_descendants]    = $_db_row[n_descendants];
-    $this->fields[ip_hash]          = $_db_row[ip_hash];
-    $this->fields[threadupdate]     = $_db_row[threadupdate];
-    if (isset($_db_row[relation]))
-      $this->fields[relation]       = $_db_row[relation];
-    $this->fields[is_parent]        = $_db_row[is_parent];
-    $this->fields[status]           = $_db_row[status];
-    $this->fields[force_stub]       = $_db_row[force_stub];
-    if (isset($_db_row[allow_answer]))
-      $this->fields[allow_answer]   = $_db_row[allow_answer];
-  }
-
-
-  // Sets all values from a given database row.
-  function set_from_db_obj(&$_row) {
+  function set_from_db(&$_row) {
     if (!is_object($_row))
       die('Posting:set_from_db(): Non-object.');
     $this->clear();
@@ -134,7 +98,7 @@ class Posting {
   function &_ip_hash($_ip) {
     // Note that this needs to work with both, IPv4 and IPv6.
     $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
-    return md5($ip_net . cfg("salt"));
+    return md5($ip_net . cfg('salt'));
   }
 
 

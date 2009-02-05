@@ -115,5 +115,6 @@ function linkify_on_format($message) {
                               . '~',
                                 'linkify_url2link',
                                 $message->get_body_html());
+  $message->set_body_html($body);
 }
 ?>

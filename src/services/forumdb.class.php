@@ -600,52 +600,44 @@
      * $_offset:  The offset of the first posting.
      * $_limit:   The number of postings.
      */
-    function &get_postings_from_user($_user_id, $_offset, $_limit, &$_thread_state) {
+    function &get_postings_from_user($_user_id, $_offset, $_limit) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
       // Select the postings of the user.
-      $sql  = "SELECT a.id,HEX(a.path) path";
+      // IDX: posting:user_id-created
+      $sql  = "SELECT a.id";
       $sql .= " FROM {t_posting} a";
       $sql .= " WHERE a.user_id={userid}";
       $sql .= " ORDER BY a.created DESC";
       $query = new FreechSqlQuery($sql);
       $query->set_int('userid', $_user_id);
-      //echo $query->sql();
-      //$this->db->debug=1;
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
-                     or die("ForumDB::foreach_posting_from_user(): 1");
+                     or die('ForumDB::foreach_posting_from_user(): 1');
+
+      if ($res->EOF)
+        return array();
+      $parent_ids = array();
+      while (!$res->EOF)
+        array_push($parent_ids, $res->FetchNextObj()->id);
 
       // Grab the direct responses to those postings.
-      if ($res->RecordCount() <= 0)
-        return array();
+      // IDX: posting:id
+      // IDX: posting:thread_id
       $sql  = "SELECT b.*,";
+      $sql .= " a.id thread_id,";
       $sql .= " b.n_descendants n_children,";
+      $sql .= " IF(a.id=b.id, 1, 0) is_parent,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
       $sql .= " UNIX_TIMESTAMP(b.updated) updated,";
       $sql .= " UNIX_TIMESTAMP(b.created) created";
       $sql .= " FROM {t_posting} a";
-      $sql .= " JOIN {t_posting} b ON b.thread_id=a.thread_id";
+      $sql .= " LEFT JOIN {t_posting} b ON b.thread_id=a.thread_id";
       $sql .= " AND b.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
       $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
-      $sql .= " WHERE (";
-
-      $first = 1;
-      while (!$res->EOF) {
-        $row = $res->FetchNextObj();
-        if (!$first)
-          $sql .= " OR ";
-        if ($_thread_state->is_folded($row->id))
-          $sql .= "(a.id=$row->id AND b.id=$row->id)";
-        else
-          $sql .= "a.id=$row->id";
-        $first = 0;
-      }
-
-      $sql .= ")";
+      $sql .= ' WHERE a.id IN (' . implode(',', $parent_ids) . ')';
       $sql .= " ORDER BY a.id DESC";
 
-      // Pass all postings to the given function.
       $query = new FreechSqlQuery($sql);
       $res   = $this->db->Execute($query->sql())
                           or die('ForumDB::foreach_posting_from_user()');

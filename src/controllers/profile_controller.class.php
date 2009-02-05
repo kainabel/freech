@@ -26,7 +26,7 @@
     }
 
 
-    function _append_posting(&$_posting, $_data) {
+    function _format_posting(&$_posting, $_data) {
       // Required to enable correct formatting of the posting.
       $msg_id  = (int)$_GET['msg_id'];
       $_posting->set_selected($_posting->get_id() == $msg_id);
@@ -42,11 +42,10 @@
     function _assign_user_postings(&$_user, &$_thread_state, $_offset = 0) {
       // Load the postings.
       $thread_state = $this->api->thread_state('user_postings_');
-      $func         = array($this, '_append_posting');
+      $func         = array($this, '_format_posting');
       $threads      = $this->forumdb->get_postings_from_user($_user->get_id(),
                                                              $_offset,
-                                                             cfg('epp'),
-                                                             $thread_state);
+                                                             cfg('epp'));
 
       // Format the threads.
       foreach ($threads as $thread) {

@@ -630,12 +630,14 @@
       $sql .= " b.n_descendants n_children,";
       $sql .= " IF(a.id=b.id, 1, 0) is_parent,";
       $sql .= " IF(a.id=b.id, '', HEX(SUBSTRING(b.path, -5))) path,";
+      $sql .= " UNIX_TIMESTAMP(t.updated) threadupdate,";
       $sql .= " UNIX_TIMESTAMP(b.updated) updated,";
       $sql .= " UNIX_TIMESTAMP(b.created) created";
       $sql .= " FROM {t_posting} a";
       $sql .= " LEFT JOIN {t_posting} b ON b.thread_id=a.thread_id";
       $sql .= " AND b.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
       $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
+      $sql .= " JOIN {t_thread} b ON b.thread_id=t.id";
       $sql .= ' WHERE a.id IN (' . implode(',', $parent_ids) . ')';
       $sql .= " ORDER BY a.id DESC";
 

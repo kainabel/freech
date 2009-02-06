@@ -22,6 +22,7 @@
 class Thread {
   function Thread() {
     $this->postings = array();
+    $this->fields   = array();
   }
 
 
@@ -120,6 +121,7 @@ class Thread {
       if ($thread_id != $row->thread_id)
         break;
 
+      $this->fields['updated'] = $row->threadupdate;
       $posting = new Posting;
       $posting->set_from_db($row);
       $posting = $forumdb->_decorate_posting($posting);
@@ -246,6 +248,13 @@ class Thread {
 
   function get_user_icon_name() {
     return $this->get_parent()->get_user_icon_name();
+  }
+
+
+  function get_updated_time($_format = '') {
+    if (!$_format)
+      $_format = cfg('dateformat');
+    return strftime($_format, $this->fields['updated']);
   }
 
 

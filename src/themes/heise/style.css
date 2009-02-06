@@ -265,6 +265,75 @@ td.null {
 
 
 /**
+ * BBView related styles.
+ **/
+.bbview_row {
+  display: block;
+  width: 100%;
+  clear: both;
+  margin: 0 3px 0 3px;
+  padding: 0;
+}
+
+.bbview_separator {
+  width: 98%;
+  height: 0;
+  border: 0;
+  border-top: 1px solid #ccc;
+  clear: both;
+  margin: 0 auto;
+  padding: 0 auto;
+}
+
+.bbview_icons {
+  padding: 10px;
+  float: left;
+}
+
+.bbview_row_main {
+  float: left;
+  margin: 5px;
+}
+
+.bbview_user {
+  float: left;
+  font-size: .9em;
+}
+
+.bbview_user img {
+  vertical-align: top;
+}
+
+.bbview_created {
+  float: left;
+  font-size: .9em;
+  vertical-align: bottom;
+  margin-left: 5px;
+  color: #888;
+}
+
+.bbview_row_status {
+  margin: 10px;
+  float: right;
+}
+
+.bbview_time {
+  margin: 5px;
+  float: left;
+}
+
+.bbview_n_postings {
+  margin: 5px;
+  float: left;
+}
+
+.bbview_n_new {
+  margin: 5px;
+  float: left;
+}
+
+
+/**
  * Formatting of postings.
  **/
 .intro {

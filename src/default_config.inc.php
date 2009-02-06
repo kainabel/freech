@@ -36,7 +36,7 @@
 
   // The default display type. Allowed values depend on the installed
   // plugins, by default 'list' or 'thread'.
-  $cfg[default_view] = 'thread';
+  $cfg[default_view] = 'bbview';
 
   // If a default forum id is given then the corresponding forum is shown
   // in place of the homepage.

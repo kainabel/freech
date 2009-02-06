@@ -1,40 +1,51 @@
 {include file="indexbar.tmpl"}
-{foreach item=posting from=$thread->get_postings()}
-  <div class="bbview_posting">
-    <div class="bbview_icons">
-      {if $posting->get_priority() > 0}
-        <img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
-      {/if}
-      {if $posting->was_moved()}
-        <img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
-      {/if}
-      {if $posting->is_new()}
-        <img src="{$__theme_dir}/img/new.png" alt="" title="{t}New{/t}" />
-      {/if}
-      {if $__group->may('moderate')}
-        {include file="moderator_buttons.inc.tmpl" posting=$posting}
-      {/if}
+{foreach item=posting from=$postings}
+  <div class="bbview_post">
+    <div class="bbview_post_status">
+      <div class="bbview_post_time">
+        {$posting->get_created_time()}
+      </div>
     </div>
-    <div class="bbview_subject">
-      {if $posting->is_active()}
-        {$posting->get_url_html()}
-      {else}
-        {$posting->get_subject()|escape}
-      {/if}
-    </div>
-    <div class="bbview_user">
-      {$posting->get_username()|escape}
-      {if $posting->get_user_is_special()}
-        <img src="{$posting->get_user_icon()|escape}"
-             alt=""
-             title="{$posting->get_user_icon_name()|escape}" />
-      {/if}
-    </div>
-    <div class="bbview_time">
-      {$posting->get_created_time()}
-    </div>
-    <div class="bbview_body">
-      {$posting->get_body_html()}
+
+    <div class="bbview_post_box">
+      <div class="bbview_post_info">
+        <div class="bbview_post_user">
+          {$posting->get_username()|escape}
+          {if $posting->get_user_is_special()}
+            <img src="{$posting->get_user_icon()|escape}"
+                 alt=""
+                 title="{$posting->get_user_icon_name()|escape}" />
+          {/if}
+        </div>
+        <div class="bbview_post_icons">
+          {if $posting->get_priority() > 0}
+            <img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
+          {/if}
+          {if $posting->was_moved()}
+            <img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
+          {/if}
+          {if $posting->is_new()}
+            <img src="{$__theme_dir}/img/new.gif" alt="" title="{t}New{/t}" />
+          {else}
+            <img src="{$__theme_dir}/img/notnew.gif" alt="" />
+          {/if}
+          {if $__group->may('moderate')}
+            {include file="moderator_buttons.inc.tmpl" posting=$posting}
+          {/if}
+        </div>
+      </div>
+
+      <div class="bbview_post_text">
+        <div class="bbview_post_subject">
+          {$posting->get_subject()|escape}
+        </div>
+        <div class="bbview_post_body">
+          {$posting->get_body_html()}
+        </div>
+        <div class="bbview_post_buttons">
+          Reply
+        </div>
+      </div>
     </div>
   </div>
 {/foreach}

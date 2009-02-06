@@ -60,7 +60,7 @@ class BBView extends View {
   }
 
 
-  function show_thread(&$_thread) {
+  function show_thread(&$_posting) {
     $func      = array(&$this, '_format_posting');
     $user      = $this->api->user();
     $group     = $this->api->group();
@@ -70,18 +70,22 @@ class BBView extends View {
               && !$user->is_anonymous();
 
     // Format the thread.
-    $_thread->remove_locked_postings();
-    $_thread->foreach_posting($func);
+    $db       = $this->forumdb;
+    $args     = array('thread_id' => (int)$_posting->get_thread_id());
+    $postings = $db->get_postings_from_fields($args,
+                                              FALSE,
+                                              (int)$_GET['hs'],
+                                              cfg('epp'));
 
     // Create the indexbar.
-    $n_postings = $_thread->get_n_postings();
+    $n_postings = $this->forumdb->get_n_postings($args);
     $args       = array(n_postings          => (int)$n_postings,
                         n_postings_per_page => cfg('epp'),
                         n_offset            => (int)$_GET['hs'],
                         n_pages_per_index   => cfg('ppi'));
-    $indexbar = new BBViewIndexBarReadPosting($_thread, $args);
+    $indexbar = new BBViewIndexBarReadPosting($_posting, $args);
 
-    foreach ($_thread->get_postings() as $posting) {
+    foreach ($postings as $posting) {
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the posting is produced.
        *   Args: posting: The posting that is about to be shown.
@@ -91,22 +95,18 @@ class BBView extends View {
 
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar',  $indexbar);
-    $this->assign_by_ref('thread',    $_thread);
+    $this->assign_by_ref('postings',  $postings);
     $this->assign_by_ref('may_write', $may_write);
     $this->assign_by_ref('may_edit',  $may_edit);
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render(dirname(__FILE__).'/bbview_read_thread.tmpl');
-    $this->api->set_title($_thread->get_subject());
+    $this->api->set_title($_posting->get_subject());
   }
 
 
   function show_posting(&$_posting) {
-    $thread = $this->forumdb->get_thread_from_id($_posting->get_thread_id(),
-                                                 (int)$_GET['hs'],
-                                                 cfg('epp'));
-
-    $this->show_thread($thread);
+    $this->show_thread($_posting);
   }
 }
 ?>

@@ -437,7 +437,7 @@
     }
 
 
-    function _get_foreach_postings_sql(&$_fields) {
+    function _get_foreach_postings_sql(&$_fields, $_desc = TRUE) {
       $sql   = "SELECT *,";
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
@@ -447,11 +447,14 @@
       $query->set_int('status', POSTING_STATUS_ACTIVE);
       if ($_fields)
         $this->_add_where_expression($query, $_fields);
-      return $query->sql() . ' ORDER BY created DESC';
+      if ($_desc)
+        return $query->sql() . ' ORDER BY created DESC';
+      return $query->sql();
     }
 
 
     function foreach_posting_from_fields(&$_fields,
+                                         $_desc   = TRUE,
                                          $_offset = 0,
                                          $_limit  = -1,
                                          $_func   = NULL,
@@ -467,12 +470,13 @@
 
 
     function &get_postings_from_fields(&$_fields,
+                                       $_desc   = TRUE,
                                        $_offset = 0,
                                        $_limit  = -1) {
       $limit    = $_limit  * 1;
       $offset   = $_offset * 1;
       $postings = array();
-      $sql      = $this->_get_foreach_postings_sql($_fields);
+      $sql      = $this->_get_foreach_postings_sql($_fields, $_desc);
       $res      = $this->db->SelectLimit($sql, $limit, $offset)
                             or die('ForumDB::foreach_posting_from_fields()');
 

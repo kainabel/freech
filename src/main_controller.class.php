@@ -681,7 +681,7 @@ class MainController {
 
   // Read a thread.
   function _thread_read() {
-    $args     = array('thread_id' => (int)$_GET['thread_id'],
+    $args     = array('id'        => (int)$_GET['msg_id'],
                       'is_parent' => 1);
     $postings = $this->forumdb->get_postings_from_fields($args);
     $thread   = $postings[0];

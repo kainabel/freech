@@ -27,14 +27,11 @@
 
 
     // Constructor.
-    function BBViewIndexBarReadPosting(&$_thread, &$_args) {
+    function BBViewIndexBarReadPosting(&$_posting, &$_args) {
       $this->Menu();
 
       // Prints the index (pagination).
-      $url = $_thread->get_url();
-      $url->delete_var('msg_id');
-      $url->set_var('thread_id', $_thread->get_id());
-      $this->add_index($url,
+      $this->add_index($_posting->get_url(),
                        $_args[n_postings],
                        $_args[n_postings_per_page],
                        $_args[n_pages_per_index],

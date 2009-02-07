@@ -23,18 +23,16 @@
 {/if}
 </head>
 <body {if $onload_js}onload="{$onload_js|escape}"{/if}>
-<table id='header' width='100%' cellpadding='2' cellspacing='0' summary=''>
- <tr>
-  <td>&nbsp;</td>
-  <td>
+<div id='header'>
+  <div id='header1'>
     <a href='.'><img id='logo' src='{$__theme_dir}/img/logo.png' alt='' /></a>
-  </td>
-  <td>&nbsp;</td>
-  <td id='header_middle' align='left' valign='middle'>
+  </div>
+
+  <div id='header2'>
     <a href='.'><span id='title'>{$site_title|escape}</span></a>
-  </td>
-  <td>&nbsp;</td>
-  <td class="nowrap" align="right">
+  </div>
+
+  <div id='header3'>
     <span id='account_links'>
 {foreach name=loop item=item from=$account_links->get_items()}
   {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
@@ -51,8 +49,6 @@
       {t count=$n_online plural="%1 users online" 1=$n_online}One user online{/t}
     </span>
 {/if}
-  </td>
-  <td>&nbsp;</td>
- </tr>
-</table>
+  </div>
+</div>
 <!-- end header -->

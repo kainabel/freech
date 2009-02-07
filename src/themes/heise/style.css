@@ -159,14 +159,25 @@ input {
   background-color: #353fa8;
 }
 
-#header_middle {
-  width: 100%;
+#header1 {
+  float: left;
+  width: 38px;
+  height: 40px;
+  margin: .3em;
 }
 
 #logo {
   border: none;
-  width: 38px;
-  height: 40px;
+}
+
+#header2 {
+  float: left;
+  margin: .5em;
+}
+
+#header3 {
+  float: right;
+  margin-right: .3em;
 }
 
 #title {

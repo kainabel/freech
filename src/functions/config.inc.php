@@ -25,6 +25,8 @@
   include_once '../default_config.inc.php';
   if (is_readable('../data/config.inc.php'))
     include_once '../data/config.inc.php';
+  if (is_readable('../data/user_config.inc.php'))
+    include_once '../data/user_config.inc.php';
   chdir($oldwd);
   
   function &cfg($_key, $_default = NULL) {

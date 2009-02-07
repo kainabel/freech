@@ -98,7 +98,7 @@ class MainController {
   }
 
   function init() {
-    trace();
+    trace('Enter');
     // Select a supported language.
     if ($_SERVER[HTTP_ACCEPT_LANGUAGE]) {
       $langs = explode(',', $_SERVER[HTTP_ACCEPT_LANGUAGE]);
@@ -132,6 +132,8 @@ class MainController {
     textdomain($domain);
     bind_textdomain_codeset($domain, 'UTF-8');
 
+    trace('Gettext initialized');
+
     // Start the PHP session.
     session_set_cookie_params(time() + cfg('login_time'));
     if ($_COOKIE['permanent_session']) {
@@ -143,6 +145,8 @@ class MainController {
       if ($_POST['permanent'] === 'ON')
         setcookie('permanent_session', session_id(), time() + cfg('login_time'));
     }
+
+    trace('Session started');
 
     // Only now start the timer, as cookie handling may scew the result.
     $this->start_time = microtime(TRUE);
@@ -161,24 +165,35 @@ class MainController {
                          'account'     => new Menu,
                          'breadcrumbs' => new Menu);
 
+    trace('Eventbus created');
+
     // Connect to the DB.
     $this->db = ADONewConnection(cfg('db_dbn'))
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
     $this->forumdb = new ForumDB($this->api);
 
+    trace('DB connection opened');
+
     $registry = new PluginRegistry;
+    trace('Plugin registry initialized');
     foreach (cfg('plugins') as $plugin => $active)
       if ($active)
         $registry->activate_plugin_from_dirname('plugins/'.$plugin,
                                                 $this->api);
 
+    trace('Plugins activated');
+
     $this->_handle_cookies();
+
+    trace('Cookies initialized');
 
     // Initialize the visitordb after cookie handling to prevent useless
     // updates.
     $this->visitordb = new VisitorDB($this->db);
     $this->visitordb->count();
+
+    trace('Visitor counted');
 
     /* Plugin hook: on_construct
      *   Called from within the FreechForum() constructor before any
@@ -188,6 +203,8 @@ class MainController {
      */
     $this->eventbus->emit('on_construct', $this->api);
 
+    trace('on_construct calls completed.');
+
     // Init Smarty.
     $this->smarty = new Smarty;
     $this->smarty->template_dir  = 'templates';
@@ -195,6 +212,8 @@ class MainController {
     $this->smarty->cache_dir     = 'data/smarty_cache';
     $this->smarty->config_dir    = 'data/smarty_configs';
     $this->smarty->compile_check = cfg('check_cache');
+
+    trace('Smarty initialized');
 
     // Attempt to login, if requested.
     $this->login_error = 0;
@@ -205,6 +224,8 @@ class MainController {
       $url = new FreechURL;
       $this->_refer_to($url->get_string());
     }
+
+    trace('Login processed');
 
     // Add the modlog URL to the forum links.
     $url = new FreechURL('', _('Moderation Log'));
@@ -240,6 +261,8 @@ class MainController {
 
       $this->links['account']->add_link($this->get_url('logout'));
     }
+
+    trace('Leave');
   }
 
 

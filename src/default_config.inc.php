@@ -200,6 +200,13 @@
   $cfg[max_polls_time] = 60*60*24;
 
   // *************************************************************
+  // Developer's settings.
+  // *************************************************************
+  // Whether to log trace() statements.
+  $cfg[trace_calls] = FALSE;
+  $cfg[trace_log] = dirname(__FILE__) . '/data/trace.log';
+
+  // *************************************************************
   // Performance tweaks.
   // *************************************************************
   // Whether to check templates for changes. Setting this to FALSE

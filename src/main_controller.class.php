@@ -20,6 +20,12 @@
 ?>
 <?php
 define('FREECH_VERSION', '0.9.19');
+
+include_once 'functions/config.inc.php';
+include_once 'services/call_tracer.class.php';
+include_once 'functions/trace.inc.php';
+trace('Start');
+
 require_once 'smarty/Smarty.class.php';
 require_once 'adodb/adodb.inc.php';
 include_once 'libuseful/SqlQuery.class.php5';
@@ -27,7 +33,6 @@ include_once 'libuseful/string.inc.php';
 include_once 'services/trackable.class.php';
 include_once 'objects/thread_state.class.php';
 
-include_once 'functions/config.inc.php';
 include_once 'functions/httpquery.inc.php';
 include_once 'functions/files.inc.php';
 include_once 'functions/forum.inc.php';
@@ -73,6 +78,7 @@ include_once 'services/modlogdb.class.php';
 include_once 'services/visitordb.class.php';
 include_once 'services/plugin_registry.class.php';
 ini_set('arg_separator.output', '&');
+trace('Imports done');
 
 class MainController {
   var $db;
@@ -88,10 +94,11 @@ class MainController {
     if (cfg_is('salt', ''))
       die('Error: Please define the salt variable in config.inc.php!');
     $this->api = $_plugin_api;
+    trace();
   }
 
-
   function init() {
+    trace();
     // Select a supported language.
     if ($_SERVER[HTTP_ACCEPT_LANGUAGE]) {
       $langs = explode(',', $_SERVER[HTTP_ACCEPT_LANGUAGE]);
@@ -1674,6 +1681,7 @@ class MainController {
 
 
   function destroy() {
+    trace('Enter');
     unset($this->content);
     $this->db->Close();
     /* Plugin hook: on_destroy
@@ -1682,6 +1690,7 @@ class MainController {
      *   Args: None.
      */
     $this->eventbus->emit('on_destroy', $this->api);
+    trace('Leave');
   }
 }
 ?>

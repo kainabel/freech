@@ -1,27 +1,27 @@
-<!-- thread_view -->
-<table id='thread_view' summary=''>
+<!-- thread -->
+<table border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
 {if $n_rows > 0}
 {foreach item=thread from=$threads}
 {foreach item=posting from=$thread->get_postings()}
-  <tr class='posting'>
-    {strip}
-  <td>
+<!-- thread_row -->
+<tr class='posting' valign='middle'>
+  <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
+  <td align='left'>{strip}
+  <table border='0' cellspacing='0' cellpadding='0' summary=''>
+    <tr>
+     <td align='left'>
 {*
   $indent:
   1: INDENT_DRAW_DASH
   2: INDENT_DRAW_SPACE
 *}
-
-{foreach item=indent from=$posting->get_indent() name=idx}
+{foreach item=indent from=$posting->get_indent()}
   {if $indent == 1}
-    <img src='{$__theme_dir}/img/l.png' alt='| ' />
-  {elseif !$smarty.foreach.idx.first}
-    <b class='spacer'>&#160;</b>
+     <img src='{$__theme_dir}/img/l.png' width='20' height='23' alt='|' />
   {else}
-    <b class='indent'>&nbsp;</b>
+     <img src='{$__theme_dir}/img/null.png' width='20' height='23' alt='&nbsp;' />
   {/if}
 {/foreach}
-
 {*
   $posting->get_relation():
   1: PARENT_WITHOUT_CHILDREN
@@ -33,57 +33,52 @@
   7: CHILD_WITH_CHILDREN
 *}
 {if $posting->get_relation() == 1}
-  <img src='{$__theme_dir}/img/o.png' alt='[o]' />&nbsp;
+     <img src='{$__theme_dir}/img/o.png' width='9' height='21' alt='' />
 {elseif $posting->get_relation() == 2}
-  <a href='{$posting->get_fold_url_string()|escape}'>
-    <img src='{$__theme_dir}/img/m.png' alt='[-]' />
-  </a>&nbsp;
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/m.png' class='thread_img' width='9' height='21' alt='0' /></a>
 {elseif $posting->get_relation() == 3}
-  <a href='{$posting->get_fold_url_string()|escape}'>
-    <img src='{$__theme_dir}/img/p.png' alt='[+]' />
-  </a>&nbsp;
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='{$__theme_dir}/img/p.png' class='thread_img' width='9' height='21' alt='0' /></a>
 {elseif $posting->get_relation() == 4 || $posting->get_relation() == 5}
-  <img src='{$__theme_dir}/img/e.png' alt='\ ' />
+     <img src='{$__theme_dir}/img/e.png' width='20' height='23' alt='`-' />
 {elseif $posting->get_relation() == 6 || $posting->get_relation() == 7}
-  <img src='{$__theme_dir}/img/x.png' alt='|-' />
+     <img src='{$__theme_dir}/img/x.png' width='20' height='23' alt='|-' />
 {/if}
-
+     </td>
+     <td align='left'>
 {if $posting->get_priority() > 0}
-  <img class='icon' src='{$__theme_dir}/img/sticky.png' alt='[!]' />&nbsp;
+     &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
 {/if}
 {if $posting->is_selected()}
-  <span class='selected'>{$posting->get_subject()|escape}</span>
+     &nbsp;<span class='selected'>{$posting->get_subject()|escape}</span>
 {elseif !$posting->is_active()}
-  {$posting->get_subject()|escape}
+     &nbsp;{$posting->get_subject()|escape}
 {else}
-  {$posting->get_url_html()}
+     &nbsp;{$posting->get_url_html()}
 {/if}
 {if $posting->get_relation() == 3}&nbsp;({$posting->get_n_children()}){/if}
-{if $posting->was_moved()}
-  &nbsp;<img class='icon' src="{$__theme_dir}/img/move.png" alt='[<]' title="{t}Moved{/t}" />
-{/if}
+{if $posting->was_moved()}{strip}
+  &nbsp;<img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
+{/strip}{/if}
+     </td>
+    </tr>
+   </table>
   </td>
-  {/strip}
-  {strip}
-  <td class='thread_name'>
+{/strip}
+  <td><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
+  <td align='left'>
 {if $posting->is_selected()}
-    <span class='selected'>{$posting->get_username()|escape}</span>
-  {else}
-    {$posting->get_username()|escape}
+    &nbsp;<span class='selected'>{$posting->get_username()|escape}</span>
+{else}
+    &nbsp;{$posting->get_username()|escape}
 {/if}
-  {/strip}
 {if $posting->get_user_is_special()}
-  <img class='icon'
-       src='{$posting->get_user_icon()|escape}'
-       alt='[s]'
-       title='{$posting->get_user_icon_name()|escape}' />
+    <img src="{$posting->get_user_icon()|escape}"
+         alt=""
+         title="{$posting->get_user_icon_name()|escape}" />
 {/if}
-  {strip}
   </td>
-  {/strip}
-  {strip}
 {if $posting->is_selected()}
-  <td class='thread_date'>
+   <td align='right' class='nowrap'>
     <span class='selected'>{$posting->get_created_time()}</span>
   </td>
 {elseif $posting->is_updated()}
@@ -99,16 +94,19 @@
     </span>
   </td>
 {else}
-  <td class='thread_date'>{$posting->get_created_time()}</td>
+   <td align='right' class='nowrap'>{$posting->get_created_time()}</td>
 {/if}
-  {/strip}
-  </tr>
+   <td align='center' class='null'><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
+ </tr>
+<!-- end thread_row -->
 {/foreach}
 {/foreach}
 {else}
-  <tr>
-    <td><div id='empty_forum_message'>{t}(No postings found){/t}</div></td>
-  </tr>
+<tr>
+  <td align='center'>
+    <div id='empty_forum_message'>{t}(No postings found){/t}</div>
+  </td>
+</tr>
 {/if}
 </table>
-<!-- end thread_view -->
+<!-- end thread -->

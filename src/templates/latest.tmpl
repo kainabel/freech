@@ -1,41 +1,40 @@
-<!-- list view -->
-<table id='posting_list' summary=''>
+<table id='posting_list' border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
 {if $n_rows > 0}
 {foreach item=posting from=$postings}
-  <tr class='posting'>
-    {strip}
-  <td>
-{if $posting->get_priority() > 0}
-    <img class='icon' src='{$__theme_dir}/img/sticky.png' alt='[!]' />&nbsp;
-{/if}
-{if $posting->is_selected()}
-    <span class='selected'>{$posting->get_subject()|escape}</span>
-{elseif $posting->is_active()}
-    {$posting->get_url_html()}
-{else}
-    {$posting->get_subject()|escape}
-{/if}
-{if $posting->was_moved()}
-    &nbsp;<img class='icon' src='{$__theme_dir}/img/move.png' alt='[<]' title='{t}Moved{/t}' />
-{/if}
+<!-- latest_row -->
+<tr class='posting' valign='middle'>
+  <td align='center' class='null'>
+    <img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' />
   </td>
-    {/strip}
-    {strip}
-  <td class='thread_name'>
+  <td align='left'>{strip}
+{if $posting->get_priority() > 0}
+  &nbsp;<img src='{$__theme_dir}/img/sticky.png' width="16" height="16" alt='!' />
+{/if}
 {if $posting->is_selected()}
-    <span class='selected'>{$posting->get_username()|escape}</span>
+  <span class='selected'>&nbsp;{$posting->get_subject()|escape}</span>
+{elseif $posting->is_active()}
+  &nbsp;{$posting->get_url_html()}
 {else}
-    {$posting->get_username()|escape}
+  &nbsp;{$posting->get_subject()|escape}
+{/if}
+{if $posting->was_moved()}{strip}
+  &nbsp;<img src="{$__theme_dir}/img/move.png" alt="" title="{t}Moved{/t}" />
+{/strip}{/if}
+  </td>
+{/strip}
+  <td><img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' /></td>
+  <td align='left'>
+{if $posting->is_selected()}
+    &nbsp;<span class='selected'>{$posting->get_username()|escape}</span>
+{else}
+    &nbsp;{$posting->get_username()|escape}
 {/if}
 {if $posting->get_user_is_special()}
-    <img class='icon'
-         src='{$posting->get_user_icon()|escape}'
-         alt='[s]'
-         title='{$posting->get_user_icon_name()|escape}' />
+    <img src="{$posting->get_user_icon()|escape}"
+         alt=""
+         title="{$posting->get_user_icon_name()|escape}" />
 {/if}
   </td>
-    {/strip}
-    {strip}
 {if $posting->is_selected()}
   <td class='thread_date'>
     <span class='selected'>{$posting->get_created_time()}</span>
@@ -53,15 +52,19 @@
     </span>
   </td>
 {else}
-  <td class='thread_date'>{$posting->get_created_time()}</td>
+   <td align='right' class='nowrap'>{$posting->get_created_time()}</td>
 {/if}
-    {/strip}
-  </tr>
+   <td align='center' class='null'>
+     <img src='{$__theme_dir}/img/null.png' width='8' height='23' alt='' />
+   </td>
+ </tr>
 {/foreach}
 {else}
-  <tr>
-    <td><div id='empty_forum_message'>{t}(No postings found){/t}</div></td>
-  </tr>
+<tr>
+  <td align='center'>
+    <div id='empty_forum_message'>{t}(No postings found){/t}</div>
+  </td>
+</tr>
 {/if}
 </table>
-<!-- end list view -->
+<!-- end latest_row -->

@@ -250,7 +250,6 @@ td.null {
 #empty_forum_message {
   margin: 5px;
   font-style: italic;
-  text-align: center;
 }
 
 /* Images that make up the tree of a thread. */
@@ -283,7 +282,7 @@ td.null {
   border-top: 1px solid #ccc;
   clear: both;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 auto;
 }
 
 .bbview_icons {

@@ -157,8 +157,9 @@
     function &get_user_from_mail($_mail) {
       if (!$_mail)
         die("UserDB::get_user_from_mail(): Invalid email address.");
-      $sql = $this->_get_sql_from_query(array('mail' => $_mail));
-      $row = $this->db->GetRow($sql);
+      $query = array('mail' => $_mail);
+      $sql   = $this->_get_sql_from_query($query);
+      $row   = $this->db->GetRow($sql);
       return $this->_get_user_from_row($row);
     }
 

@@ -9,7 +9,11 @@
   <div class="bbview_post_box">
     <div class="bbview_post_info">
       <div class="bbview_post_user">
-        {$posting->get_username()|escape}
+        {if $posting->get_user_is_anonymous()}
+          <i>{$posting->get_username()|escape}</i>
+        {else}
+          {$posting->get_user_profile_url_html()}
+        {/if}
         {if $posting->get_user_is_special()}
           <img src="{$posting->get_user_icon()|escape}"
                alt=""

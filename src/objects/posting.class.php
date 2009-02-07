@@ -468,7 +468,7 @@ class Posting {
       $username = $this->fields['current_username'];
     else
       $username = $this->get_username();
-    $profile_url = new FreechURL;
+    $profile_url = new FreechURL('', $this->get_username());
     $profile_url->set_var('action',   'user_profile');
     $profile_url->set_var('username', $username);
     return $profile_url;
@@ -477,6 +477,11 @@ class Posting {
 
   function get_user_profile_url_string() {
     return $this->get_user_profile_url()->get_string();
+  }
+
+
+  function get_user_profile_url_html() {
+    return $this->get_user_profile_url()->get_html();
   }
 
 

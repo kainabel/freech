@@ -16,7 +16,7 @@
 {if $posting->get_user_is_anonymous()}
       <i>{$posting->get_username()|escape}</i>
 {else}
-      <a href="{$posting->get_user_profile_url_string()|escape}">{$posting->get_username()|escape}</a>
+      {$posting->get_user_profile_url_html()}
 {/if}
     </td>
     <td>

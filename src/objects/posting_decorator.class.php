@@ -283,6 +283,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_user_profile_url_html() {
+    return $this->posting->get_user_profile_url_html();
+  }
+
+
   function get_hash() {
     return $this->posting->get_hash();
   }

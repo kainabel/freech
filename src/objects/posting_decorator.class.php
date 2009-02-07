@@ -318,6 +318,16 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_updated_newness() {
+    return $this->posting->get_updated_newness();
+  }
+
+
+  function get_updated_newness_hex() {
+    return $this->posting->get_updated_newness_hex();
+  }
+
+
   function set_updated_unixtime($_time) {
     return $this->posting->set_updated_unixtime($_time);
   }

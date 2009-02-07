@@ -40,9 +40,17 @@
   <td class='thread_date'>
     <span class='selected'>{$posting->get_created_time()}</span>
   </td>
+{elseif $posting->is_updated()}
+  <td class='thread_date'>
+    <span style='color:#{$posting->get_updated_newness_hex()}0000'>
+      !{$posting->get_updated_time()}
+    </span>
+  </td>
 {elseif $posting->is_new()}
   <td class='thread_date'>
-    <span style='color:#{$posting->get_newness_hex()}0000'>{$posting->get_created_time()}</span>
+    <span style='color:#{$posting->get_newness_hex()}0000'>
+      {$posting->get_created_time()}
+    </span>
   </td>
 {else}
   <td class='thread_date'>{$posting->get_created_time()}</td>

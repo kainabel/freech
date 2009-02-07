@@ -565,6 +565,22 @@ class Posting {
   }
 
 
+  // Returns a number between 0 (old) and 100 (new) depending on the
+  // time since the postings was last edited.
+  function get_updated_newness() {
+    $oldness = time() - $this->fields['updated'];
+    return 100 - ($oldness / cfg('new_post_time') * 100);
+  }
+
+
+  function get_updated_newness_hex($_reverse = FALSE) {
+    $value = $this->get_updated_newness() / 100 * 255;
+    if ($_reverse)
+      $value = 255 - $value;
+    return substr('00' . dechex($value), -2);
+  }
+
+
   function get_n_children() {
     if ($this->fields[relation] != POSTING_RELATION_PARENT_STUB
       && $this->fields[relation] != POSTING_RELATION_PARENT_UNFOLDED

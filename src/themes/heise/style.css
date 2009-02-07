@@ -322,14 +322,12 @@ td.null {
   float: left;
 }
 
-.bbview_n_postings {
-  margin: 5px;
-  float: left;
-}
-
+.bbview_n_postings,
 .bbview_n_new {
   margin: 5px;
   float: left;
+  width: 1.8em;
+  text-align: right;
 }
 
 

@@ -234,6 +234,16 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
+    function get_homepage_url() {
+      return new FreechURL($this->fields[homepage]);
+    }
+
+
+    function get_homepage_url_html() {
+      return $this->get_homepage_url()->get_html();
+    }
+
+
     /// Instant messenger address.
     function set_im($_im) {
       $this->fields[im] = trim($_im);

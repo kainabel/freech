@@ -11,7 +11,7 @@
   <tr>
     <td>{t}User group:{/t}</td>
     <td>
-      <a href="{$group->get_profile_url_string()|escape}">{$group->get_name()|escape}</a>
+      {$group->get_profile_url_html()}
       <img src="{$group->get_icon()}" title="{$group->get_name()|escape}" alt="" />
     </td>
   </tr>
@@ -47,7 +47,7 @@
     <td>{t}Homepage:{/t}</td>
     <td>
 {if $user->get_homepage()}
-      <a href="{$user->get_homepage()|escape}">{$user->get_homepage()|escape}</a>
+      {$user->get_homepage_url_html()}
 {else}
       <i>{t}None{/t}</i>
 {/if}

@@ -145,7 +145,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function &get_profile_url() {
-      $url = new FreechURL;
+      $url = new FreechURL('', $this->get_name());
       $url->set_var('action',    'group_profile');
       $url->set_var('groupname', $this->get_name());
       return $url;
@@ -154,6 +154,11 @@ define('GROUP_STATUS_ACTIVE',  1);
 
     function get_profile_url_string() {
       return $this->get_profile_url()->get_string();
+    }
+
+
+    function get_profile_url_html() {
+      return $this->get_profile_url()->get_html();
     }
 
 

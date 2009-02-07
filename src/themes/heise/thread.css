@@ -40,7 +40,6 @@ td.thread_date {
 b.indent {
   padding: 0;
   width: 23px;
-  margin: 0 0 0 -29px; /* ie does not display negative margins. */
   display: inline-block;
 }
 

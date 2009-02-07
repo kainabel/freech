@@ -186,6 +186,7 @@ input {
 }
 
 #status {
+  float: right;
   display: block;
   vertical-align: bottom;
   font-size: .9em;

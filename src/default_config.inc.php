@@ -124,7 +124,7 @@
   // Advanced settings.
   // *************************************************************
   // Active plugins.
-  $cfg[plugins] = array('bbview'       => FALSE,
+  $cfg[plugins] = array('bbview'       => TRUE,
                         'linkify'      => TRUE,
                         'listview'     => TRUE,
                         'message'      => TRUE,

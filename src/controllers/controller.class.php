@@ -60,7 +60,7 @@
       $this->smarty->assign_by_ref($_name, $_value);
     }
 
-    function render($_template) {
+    function fetch($_template) {
       $template_dir = 'templates';
       $theme_dir    = 'themes/' . cfg('theme');
       if (is_readable($theme_dir . '/' . $_template))
@@ -72,8 +72,11 @@
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $this->assign_by_ref('__hints',     $this->hints);
       $cache_id = $this->smarty->template_dir . '/' . $_template;
-      $content  = $this->smarty->fetch($_template, $cache_id);
-      $this->api->controller->_append_content($content);
+      return $this->smarty->fetch($_template, $cache_id);
+    }
+
+    function render($_template) {
+      $this->api->controller->_append_content($this->fetch($_template));
     }
   }
 ?>

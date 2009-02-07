@@ -53,14 +53,14 @@ class PollController extends Controller {
     $this->assign_by_ref('action',     $url->get_string());
     $this->assign_by_ref('poll',       $_poll);
     $this->assign_by_ref('result_url', $result_url->get_string());
-    return $this->smarty->fetch(dirname(__FILE__).'/poll.tmpl');
+    return $this->fetch(dirname(__FILE__).'/poll.tmpl');
   }
 
 
   function get_poll_result(&$_poll) {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
-    return $this->smarty->fetch(dirname(__FILE__).'/poll_result.tmpl');
+    return $this->fetch(dirname(__FILE__).'/poll_result.tmpl');
   }
 }
 ?>

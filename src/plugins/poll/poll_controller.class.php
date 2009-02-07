@@ -24,6 +24,7 @@ class PollController extends Controller {
     $this->clear_all_assign();
     $this->add_hint(new Error($_error));
     $this->render('error.inc.tmpl');
+    $this->restore_all_assign();
   }
 
 
@@ -38,6 +39,7 @@ class PollController extends Controller {
     $this->assign_by_ref('action', $url->get_string());
     $this->assign_by_ref('poll',   $_poll);
     $this->render(dirname(__FILE__).'/form.tmpl');
+    $this->restore_all_assign();
   }
 
 
@@ -53,14 +55,18 @@ class PollController extends Controller {
     $this->assign_by_ref('action',     $url->get_string());
     $this->assign_by_ref('poll',       $_poll);
     $this->assign_by_ref('result_url', $result_url->get_string());
-    return $this->fetch(dirname(__FILE__).'/poll.tmpl');
+    $result = $this->fetch(dirname(__FILE__).'/poll.tmpl');
+    $this->restore_all_assign();
+    return $result;
   }
 
 
   function get_poll_result(&$_poll) {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
-    return $this->fetch(dirname(__FILE__).'/poll_result.tmpl');
+    $result = $this->fetch(dirname(__FILE__).'/poll_result.tmpl');
+    $this->restore_all_assign();
+    return $result;
   }
 }
 ?>

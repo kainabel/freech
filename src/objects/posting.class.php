@@ -668,7 +668,7 @@ class Posting {
 
 
   function get_allow_answer() {
-    return $this->fields[allow_answer] && !$this->fields[force_stub];
+    return $this->fields['allow_answer'] && !$this->fields['force_stub'];
   }
 
 

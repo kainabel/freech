@@ -35,6 +35,7 @@
       $this->visitordb = $_api->visitordb();
       $this->eventbus  = $_api->eventbus();
       $this->hints     = array();
+      $this->var_stack = array();
     }
 
     function add_hint($_hint) {
@@ -49,7 +50,13 @@
     }
 
     function clear_all_assign() {
+      array_push($this->var_stack, $this->smarty->get_template_vars());
       $this->smarty->clear_all_assign();
+    }
+
+    function restore_all_assign() {
+      $this->smarty->clear_all_assign();
+      $this->smarty->assign(array_pop($this->var_stack));
     }
 
     function assign($_name, $_value) {

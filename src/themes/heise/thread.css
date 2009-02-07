@@ -1,0 +1,87 @@
+/**
+ * Posting list and posting tree related styles.
+ **/
+/* Row in the posting list/tree. */
+tr.posting:hover {
+  background-color: #eeeeee;
+}
+
+tr.posting:hover a {
+  text-decoration: underline;
+}
+
+.selected {
+  color: #008000;
+}
+
+td.thread_date {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.edit_marker {
+}
+
+td.null {
+  width: 8px;
+}
+
+#empty_forum_message {
+  margin: 5px;
+  font-style: italic;
+}
+
+/* Images that make up the tree of a thread. */
+.thread_img {
+  border: none;
+}
+
+/* Alignment bug in moz/ff/op :: transitional vs. strict. */
+.posting img {
+  vertical-align: bottom;
+  border: none;
+}
+
+
+/**
+ * Formatting of postings.
+ **/
+.intro {
+  padding-bottom: 15px;
+}
+
+.quote {
+  color: #990000;
+}
+
+/* The date field in a posting. */
+.date {
+  color: #555555;
+}
+
+/* The "last edit" field in a posting. */
+.edited {
+  color: #ff0000;
+}
+
+#posting {
+  margin-left: 10px;
+  width: 80%;
+}
+
+#moderator_buttons {
+  list-style: none;
+  text-align: center;
+  margin: 0px;
+  padding: 0;
+}
+
+#moderator_buttons li {
+  display: inline;
+  padding: 0;
+  margin: 0;
+}
+
+.moderator_button_text {
+  display: none;
+}

@@ -1,0 +1,134 @@
+/**
+ * BBView overview.
+ **/
+.bbview_row {
+  display: block;
+  width: 100%;
+  clear: both;
+  margin: 0 3px 0 3px;
+  padding: 0;
+}
+
+.bbview_separator {
+  width: 98%;
+  height: 0;
+  border: 0;
+  border-top: 1px solid #ccc;
+  clear: both;
+  margin: 0 auto;
+  padding: 0 auto;
+}
+
+.bbview_icons {
+  padding: 10px;
+  float: left;
+}
+
+.bbview_row_main {
+  float: left;
+  margin: 5px;
+}
+
+.bbview_user {
+  float: left;
+  font-size: .9em;
+}
+
+.bbview_user img {
+  vertical-align: top;
+}
+
+.bbview_created {
+  float: left;
+  font-size: .9em;
+  vertical-align: bottom;
+  margin-left: 5px;
+  color: #888;
+}
+
+.bbview_row_status {
+  margin: 10px;
+  float: right;
+}
+
+.bbview_time {
+  margin: 5px;
+  float: left;
+}
+
+.bbview_n_postings,
+.bbview_n_new {
+  margin: 5px;
+  float: left;
+  width: 1.8em;
+  text-align: right;
+}
+
+
+/**
+ * BBView postings.
+ **/
+.bbview_post {
+  clear: both;
+  margin: 0 auto;
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+.bbview_post_status {
+  margin: 0 5px;
+  padding: .2em;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+}
+
+.bbview_post_time {
+  margin-left: 5px;
+}
+
+.bbview_post_box {
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-top: 0;
+  background-color: #fafafa;
+}
+
+.bbview_post_info {
+  float: left;
+  width: 150px;
+  padding: .5em;
+}
+
+.bbview_post_user {
+  float: left;
+  margin-bottom: .3em;
+}
+
+.bbview_post_icons {
+  float: left;
+  clear: both;
+}
+
+.bbview_post_text {
+  margin-left: 185px;
+  padding: .5em;
+  vertical-align: top;
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+}
+
+.bbview_post_subject {
+  font-weight: bold;
+  padding: 3px;
+  margin-bottom: .5em;
+}
+
+.bbview_post_body {
+  padding: 3px;
+}
+
+.bbview_post_buttons {
+  text-align: right;
+  padding: 0;
+}

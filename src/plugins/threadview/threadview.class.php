@@ -46,9 +46,11 @@ class ThreadView extends View {
       if (!$thread_state->is_folded($thread->get_parent_id()))
         continue;
       $thread->fold();
-      $parent  = $thread->get_parent();
-      $updated = $parent->get_thread_updated_unixtime();
+      $parent      = $thread->get_parent();
+      $was_updated = $parent->is_updated();
+      $updated     = $parent->get_thread_updated_unixtime();
       $parent->set_created_unixtime($updated);
+      $parent->set_updated_unixtime($updated);
     }
 
     // Create the index bar.

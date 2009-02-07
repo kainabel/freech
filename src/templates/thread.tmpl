@@ -84,7 +84,8 @@
 {elseif $posting->is_updated()}
   <td class='thread_date'>
     <span style='color:#{$posting->get_updated_newness_hex()}0000'>
-      !{$posting->get_updated_time()}
+      <span class="edit_marker" title="{t}Edited{/t}">*</span>
+      {$posting->get_updated_time()}
     </span>
   </td>
 {elseif $posting->is_new()}

@@ -248,6 +248,9 @@ td.thread_date {
   white-space: nowrap;
 }
 
+.edit_marker {
+}
+
 td.null {
   width: 8px;
 }

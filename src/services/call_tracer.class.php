@@ -36,10 +36,10 @@ class CallTracer {
 
     // Fake some strace output.
     list($msec, $sec) = explode(' ', microtime());
-    $msec      = (int)substr($msec, 2, -2);
-    $str       = "MARK: $file($line): $func, $_comment";
-    $access    = "0000 $sec.$msec access(\"$str\", F_OK)\n";
-    //$complete = sprintf('0000 %s execve("%s"), ', $str);
+    list($foo, $msec) = explode('.', $msec);
+    $msec   = (int)substr($msec, 0, -2);
+    $str    = "MARK: $file($line): $func, $_comment";
+    $access = sprintf("0000 $sec.%06d access(\"$str\", F_OK)\n", $msec);
     if ($this->logfile)
       fwrite($this->logfile, $access);
   }

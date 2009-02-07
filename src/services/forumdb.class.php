@@ -641,7 +641,7 @@
       $sql .= " LEFT JOIN {t_posting} b ON b.thread_id=a.thread_id";
       $sql .= " AND b.path LIKE CONCAT(REPLACE(REPLACE(REPLACE(a.path, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
       $sql .= " AND LENGTH(b.path)<=LENGTH(a.path)+5";
-      $sql .= " JOIN {t_thread} b ON b.thread_id=t.id";
+      $sql .= " JOIN {t_thread} t ON b.thread_id=t.id";
       $sql .= ' WHERE a.id IN (' . implode(',', $parent_ids) . ')';
       $sql .= " ORDER BY a.id DESC";
 

@@ -32,12 +32,15 @@ class ThreadView extends View {
 
 
   function show($_forum_id, $_offset) {
+    trace('enter');
     // Load the threads from the database.
     $thread_state = $this->api->thread_state('');
     $func         = array(&$this, '_format_posting');
+    trace('fetching threads');
     $threads      = $this->forumdb->get_threads_from_forum_id($_forum_id,
                                                               $_offset,
                                                               cfg('tpp'));
+    trace('threads fetched');
 
     // Format the threads.
     foreach ($threads as $thread) {
@@ -52,6 +55,7 @@ class ThreadView extends View {
       $parent->set_created_unixtime($updated);
       $parent->set_updated_unixtime($updated);
     }
+    trace('threads formatted');
 
     // Create the index bar.
     $group     = $this->api->group();
@@ -63,6 +67,7 @@ class ThreadView extends View {
                        n_pages_per_index  => cfg('ppi'),
                        thread_state       => $thread_state);
     $indexbar = new IndexBarByThread($args);
+    trace('indexbar built');
 
     // Render the template.
     $this->clear_all_assign();
@@ -72,17 +77,21 @@ class ThreadView extends View {
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render('thread_with_indexbar.tmpl');
+    trace('leave');
   }
 
 
   function show_posting(&$_posting) {
+    trace('enter');
     $user            = $this->api->user();
     $group           = $this->api->group();
     $db              = $this->forumdb;
     $prev_posting_id = $db->get_prev_posting_id_in_thread($_posting);
     $next_posting_id = $db->get_next_posting_id_in_thread($_posting);
+    trace('previous/next postings found');
     $prev_thread_id  = $db->get_prev_thread_id($_posting);
     $next_thread_id  = $db->get_next_thread_id($_posting);
+    trace('previous/next threads found');
     $posting_uid     = $_posting ? $_posting->get_user_id() : -1;
     $may_write       = $group->may('write');
     $may_edit        = $may_write
@@ -93,11 +102,13 @@ class ThreadView extends View {
     $showthread      = $_posting
                     && $_posting->has_thread()
                     && $_COOKIE[thread] != 'hide';
+
     $indexbar = new ThreadViewIndexBarReadPosting($_posting,
                                                   $prev_posting_id,
                                                   $next_posting_id,
                                                   $prev_thread_id,
                                                   $next_thread_id);
+    trace('indexbar built');
 
     // Add the 'respond' button.
     if ($may_write) {
@@ -131,17 +142,21 @@ class ThreadView extends View {
       }
       $this->api->links('view')->add_link($url);
     }
+    trace('links updated');
 
     // Load the thread.
     $this->clear_all_assign();
     $this->assign_by_ref('showthread', $showthread);
     if ($showthread) {
+      trace('loading thread');
       $state      = new ThreadState(THREAD_STATE_UNFOLDED, '');
       $func       = array(&$this, '_format_posting');
       $thread_ids = array($_posting->get_thread_id());
       $threads    = $this->forumdb->get_threads_from_id($thread_ids);
+      trace('thread loaded');
       $threads[0]->remove_locked_postings();
       $threads[0]->foreach_posting($func);
+      trace('thread formatted');
       $this->assign_by_ref('n_rows',  1);
       $this->assign_by_ref('threads', $threads);
     }
@@ -153,6 +168,7 @@ class ThreadView extends View {
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
     $this->render(dirname(__FILE__).'/threadview_read_posting.tmpl');
     $this->api->set_title($_posting->get_subject());
+    trace('leave');
   }
 }
 ?>

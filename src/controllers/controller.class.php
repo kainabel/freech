@@ -79,7 +79,10 @@
       $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $this->assign_by_ref('__hints',     $this->hints);
       $cache_id = $this->smarty->template_dir . '/' . $_template;
-      return $this->smarty->fetch($_template, $cache_id);
+      trace('rendering template %s', $_template);
+      $result = $this->smarty->fetch($_template, $cache_id);
+      trace('rendered template %s', $_template);
+      return $result;
     }
 
     function render($_template) {

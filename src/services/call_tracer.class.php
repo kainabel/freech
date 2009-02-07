@@ -25,7 +25,7 @@ class CallTracer {
       $this->logfile = fopen($_logfile, 'w+');
   }
 
-  function trace($_comment = '') {
+  function trace() {
     // Dissect the call.
     $backtrace = debug_backtrace();
     $caller    = $backtrace[2];
@@ -37,9 +37,11 @@ class CallTracer {
     // Fake some strace output.
     list($msec, $sec) = explode(' ', microtime());
     list($foo, $msec) = explode('.', $msec);
-    $msec   = (int)substr($msec, 0, -2);
-    $str    = "MARK: $file($line): $func, $_comment";
-    $access = sprintf("0000 $sec.%06d access(\"$str\", F_OK)\n", $msec);
+    $args    = func_get_args();
+    $comment = func_num_args() ? call_user_func_array('sprintf', $args) : '';
+    $msec    = (int)substr($msec, 0, -2);
+    $str     = "MARK: $file($line): $func, $comment";
+    $access  = sprintf("0000 $sec.%06d access(\"$str\", F_OK)\n", $msec);
     if ($this->logfile)
       fwrite($this->logfile, $access);
   }

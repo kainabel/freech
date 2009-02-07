@@ -1245,25 +1245,31 @@ class MainController {
    * Other action controllers.
    *************************************************************/
   function _show_moderation_log() {
+    trace('enter');
     $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Moderation Log'));
     $footer = new ModLogController($this->api);
     $footer->show((int)$_GET['hs']);
+    trace('leave');
   }
 
 
   // Prints the footer of the page.
   function _print_breadcrumbs() {
+    trace('enter');
     $show_page_links = (bool)$this->get_current_forum_id();
     $controller      = new BreadCrumbsController($this->api);
     $controller->show($this->breadcrumbs(), $show_page_links);
+    trace('leave');
   }
 
 
   // Prints the footer of the page.
   function _print_footer() {
+    trace('Enter');
     $footer = new FooterController($this->api);
     $footer->show($this->get_current_forum_id());
+    trace('Leave');
   }
 
 
@@ -1288,11 +1294,13 @@ class MainController {
    * Public.
    *************************************************************/
   function run() {
+    trace('Enter');
     /* Plugin hook: on_run_before
      *   Called before the forum is run and the HTML is produced.
      *   Args: None.
      */
     $this->eventbus->emit('on_run_before', $this->api);
+    trace('on_run_before completed');
     $this->title   = '';
     $this->content = '';
     $action        = $this->get_current_action();
@@ -1300,16 +1308,21 @@ class MainController {
     // Prevent from accessing non-existent forums.
     if ($this->get_current_forum_id() && !$this->get_current_forum())
       die('No such forum.');
+    trace('made sure forum exists');
 
     $this->_init_breadcrumbs();
+    trace('breadcrumbs initialized');
 
     // Check whether a plugin registered the given action. This is done
     // first to allow plugins for overriding the default handler.
     if ($this->actions[$action]) {
+      trace('plugin action started');
       call_user_func($this->actions[$action], $this->api);
+      trace('plugin action completed');
       return $this->_print_footer();
     }
 
+    trace('no plugin action found');
     switch ($action) {
     case 'read':
       if ($_GET['msg_id'])
@@ -1437,8 +1450,10 @@ class MainController {
     default:
       break;
     }
+    trace('action completed');
 
     $this->_print_footer();
+    trace('leave');
   }
 
 

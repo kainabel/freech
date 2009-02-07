@@ -23,10 +23,11 @@ unset($tracer);
 if (cfg('trace_calls'))
   $tracer = new CallTracer(cfg('trace_log'));
 
-function trace($_comment = '') {
+function trace() {
   if (!cfg('trace_calls'))
     return;
+  $args = func_get_args();
   global $tracer;
-  $tracer->trace($_comment);
+  call_user_func_array(array(&$tracer, 'trace'), $args);
 }
 ?>

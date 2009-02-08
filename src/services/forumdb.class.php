@@ -450,7 +450,7 @@
         $this->_add_where_expression($query, $_fields);
       if ($_desc)
         return $query->sql() . ' ORDER BY created DESC';
-      return $query->sql();
+      return $query->sql() . ' ORDER BY created';
     }
 
 

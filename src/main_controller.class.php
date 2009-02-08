@@ -165,9 +165,9 @@ class MainController {
     $this->db = ADONewConnection(cfg('db_dbn'))
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
-    $this->forumdb = new ForumDB($this->api);
-
     trace('DB connection opened');
+    $this->forumdb = new ForumDB($this->api);
+    trace('ForumDB set up');
 
     $registry = new PluginRegistry;
     trace('Plugin registry initialized');

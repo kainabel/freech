@@ -162,7 +162,10 @@ class MainController {
     trace('Eventbus created');
 
     // Connect to the DB.
-    $this->db = ADONewConnection(cfg('db_dbn'))
+    $dbn = cfg('db_dbn');
+    if (cfg('persistent_db_connection'))
+      $dbn .= '?persist';
+    $this->db = ADONewConnection($dbn)
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
     trace('DB connection opened');

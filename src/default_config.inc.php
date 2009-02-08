@@ -210,6 +210,14 @@
   // templates getting out of date.
   $cfg[check_cache] = TRUE;
 
+  // Whether to use persistent DB connections. This must be allowed
+  // in your php.ini to work.
+  // Persistent connections may be faster, but they require a greater
+  // number of concurrent database connections and more memory, so
+  // this may be a bad idea on hosts that have a large number of
+  // concurrent visitors.
+  $cfg[persistent_db_connection] = FALSE;
+
   // Disable the visitor counter that is shown above the forum. Note that
   // disabling the counter provides a significant performance gain.
   $cfg[disable_visitor_counter] = FALSE;

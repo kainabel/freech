@@ -54,3 +54,22 @@ A: For long session timeouts to work, your PHP installation has to support
    (on Unix/Linux systems usually in /etc/php5/apache2/php.ini):
 
      session.gc_maxlifetime = 1000000
+
+
+Performance Tweaks
+- - - - - - - - - -
+
+There are several way in which you may increase the performance of
+your Freech installation:
+
+  - Deactivate unneeded Plugins. The difference between a minimal
+    installation and one that has all the default plugins enabled
+    is approx. 15%, depending on the page that you are viewing.
+
+  - Look at the options listed in the performance tweaks section of
+    default_config.inc.php. Enabling all of them may give you another
+    speedup of 15 - 20%.
+
+  - Install php-apc or a similar solution that provides include()
+    caching. This is your best bet and provides for speedups of
+    >400%.

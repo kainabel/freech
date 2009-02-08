@@ -27,12 +27,13 @@ import re
 import sys
 
 import cairo
+import Image, ImageChops
 
 ### CUSTOMIZATION BEGINS HERE
 
 FONT_NAME = "Bitstream Vera Sans"
 FONT_SIZE = 12
-PIXELS_PER_SECOND = 5000
+PIXELS_PER_SECOND = 10000
 PIXELS_PER_LINE = 14
 PLOT_WIDTH = 1400
 TIME_SCALE_WIDTH = 20
@@ -325,6 +326,18 @@ def plot_syscalls_to_surface(syscalls, metrics):
 
     return surface
 
+def autocrop(file, bgcolor):
+    im = Image.open(file)
+    if im.mode != "RGB":
+        im = im.convert("RGB")
+    bg   = Image.new("RGB", im.size, bgcolor)
+    diff = ImageChops.difference(im, bg)
+    bbox = diff.getbbox()
+    if not bbox:
+        return None # no contents
+    im = im.crop(bbox)
+    im.save(file)
+
 def main(args):
     option_parser = optparse.OptionParser(
         usage="usage: %prog -o output.png <strace.txt>")
@@ -363,6 +376,7 @@ def main(args):
 
     surface = plot_syscalls_to_surface(syscalls, metrics)
     surface.write_to_png(out_filename)
+    autocrop(out_filename, BACKGROUND_COLOR)
 
     return 0
 

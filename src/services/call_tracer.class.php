@@ -28,11 +28,12 @@ class CallTracer {
   function trace() {
     // Dissect the call.
     $backtrace = debug_backtrace();
-    $caller    = $backtrace[2];
+    $caller1   = $backtrace[3];
+    $caller2   = $backtrace[2];
     $dir       = dirname(dirname(__FILE__));
-    $file      = substr($caller['file'], strlen($dir));
-    $func      = $caller['function'];
-    $line      = $caller['line'];
+    $file      = substr($caller2['file'], strlen($dir));
+    $func      = $caller1['function'];
+    $line      = $caller2['line'];
 
     // Fake some strace output.
     list($msec, $sec) = explode(' ', microtime());

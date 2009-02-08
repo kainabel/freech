@@ -27,7 +27,9 @@ include_once 'functions/trace.inc.php';
 trace('Start');
 
 require_once 'smarty/Smarty.class.php';
+trace('Smarty imported');
 require_once 'adodb/adodb.inc.php';
+trace('Adodb imported');
 include_once 'libuseful/SqlQuery.class.php5';
 include_once 'libuseful/string.inc.php';
 include_once 'services/trackable.class.php';

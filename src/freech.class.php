@@ -64,6 +64,14 @@ class Freech {
 
 
   /**
+   * Returns the class of the current view, if any.
+   */
+  function &view_class() {
+    return $this->controller->_get_current_view_class();
+  }
+
+
+  /**
    * Returns the current forum, if the user is viewing one.
    * Returns NULL if a forum is not viewed (for example because the request
    * points to a special page such as the homepage or the statistics).

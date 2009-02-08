@@ -6,11 +6,16 @@ Author:      Samuel Abels
 Description: This plugin adds a view that shows postings in time order.
 Active:      1
 */
-include_once dirname(__FILE__).'/listview.class.php';
-include_once dirname(__FILE__).'/indexbar.class.php';
-include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
-
 function listview_init(&$api) {
   $api->register_view('list', 'ListView', _('Order by Date'), 500);
+  $api->eventbus()->signal_connect('on_run_before', 'listview_on_run');
+}
+
+function listview_on_run(&$api) {
+  if ($api->view_class() != 'ListView')
+    return;
+  include_once dirname(__FILE__).'/listview.class.php';
+  include_once dirname(__FILE__).'/indexbar.class.php';
+  include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
 }
 ?>

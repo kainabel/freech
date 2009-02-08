@@ -21,8 +21,11 @@
 <?php
 define('FREECH_VERSION', '0.9.19');
 ini_set('arg_separator.output', '&');
-ini_set('error_reporting',
-        'E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR');
+error_reporting(E_ERROR
+              | E_COMPILE_ERROR
+              | E_CORE_ERROR
+              | E_RECOVERABLE_ERROR
+              | E_PARSE);
 
 include_once 'functions/config.inc.php';
 include_once 'services/call_tracer.class.php';

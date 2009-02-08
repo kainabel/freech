@@ -18,10 +18,10 @@ class Trackable {
    * Returns: An id that can be used later to unregister the event.
    */
   function signal_connect($event, $func) {
-    if (!$event || !preg_match("/^[a-z_]+$/", $event))
-      die("Trackable::signal_connect(): Invalid event.");
+    if (!$event)
+      die('Trackable::signal_connect(): Invalid event.');
     if (!$func)
-      die("Trackable::signal_connect(): Invalid function.");
+      die('Trackable::signal_connect(): Invalid function.');
     $registered = &$this->callbacks[$event];
     if ($registered)
       $registered[$this->idpool] = &$func;
@@ -39,11 +39,11 @@ class Trackable {
    */
   function signal_disconnect($id) {
     if (!is_int($id))
-      die("Trackable::signal_disconnect(): Invalid id.");
+      die('Trackable::signal_disconnect(): Invalid id.');
     if (!isset($this->idmap[$id]))
       return FALSE;
-    $event       = $this->idmap[$id];
-    $registered = &$this->callbacks[$event];
+    $event      = $this->idmap[$id];
+    $registered = $this->callbacks[$event];
     unset($this->idmap[$id]);
     unset($registered[$id]);
     return TRUE;
@@ -56,9 +56,9 @@ class Trackable {
   function emit() {
     $args  = func_get_args();
     $event = array_shift($args);
-    if (!$event || !preg_match("/^[a-z_]+$/", $event)) 
-      die("Trackable::emit(): Invalid event.");
-    $registered = &$this->callbacks[$event];
+    if (!$event) 
+      die('Trackable::emit(): Invalid event.');
+    $registered = $this->callbacks[$event];
     if (!$registered)
       return;
     foreach ($registered as $id => $func)

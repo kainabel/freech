@@ -71,7 +71,6 @@ include_once 'services/groupdb.class.php';
 include_once 'services/sql_query.class.php';
 include_once 'services/forumdb.class.php';
 include_once 'services/userdb.class.php';
-include_once 'services/visitordb.class.php';
 include_once 'services/plugin_registry.class.php';
 trace('Service imports done');
 
@@ -185,10 +184,12 @@ class MainController {
 
     // Initialize the visitordb after cookie handling to prevent useless
     // updates.
-    $this->visitordb = new VisitorDB($this->db);
-    trace('VisitorDB initialized');
-    $this->visitordb->count();
-
+    if (!cfg('disable_visitor_counter')) {
+      include_once 'services/visitordb.class.php';
+      $this->visitordb = new VisitorDB($this->db);
+      trace('VisitorDB initialized');
+      $this->visitordb->count();
+    }
     trace('Visitor counted');
 
     /* Plugin hook: on_construct

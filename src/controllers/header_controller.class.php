@@ -21,7 +21,8 @@
 <?php
   class HeaderController extends Controller {
     function show($_title) {
-      $n_online = $this->visitordb->get_n_visitors(time() - 60 * 5);
+      if ($this->visitordb)
+        $n_online = $this->visitordb->get_n_visitors(time() - 60 * 5);
 
       $this->clear_all_assign();
       $this->assign('title',         $_title);

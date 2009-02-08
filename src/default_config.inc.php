@@ -57,10 +57,6 @@
   // Possible values are THREAD_STATE_FOLDED or THREAD_STATE_UNFOLDED.
   $cfg[default_thread_state] = THREAD_STATE_UNFOLDED;
 
-  // Disable the posting counter that is shown above the forum. Note that
-  // disabling the counter provides a significant performance gain.
-  $cfg[disable_posting_counter] = FALSE;
-
   // May users edit their postings?
   $cfg[postings_editable] = TRUE;
 
@@ -213,6 +209,14 @@
   // will significantly enhance performance at the cost of changed
   // templates getting out of date.
   $cfg[check_cache] = TRUE;
+
+  // Disable the visitor counter that is shown above the forum. Note that
+  // disabling the counter provides a significant performance gain.
+  $cfg[disable_visitor_counter] = FALSE;
+
+  // Disable the posting counter that is shown on the homepage. Note that
+  // disabling the counter provides a significant performance gain.
+  $cfg[disable_posting_counter] = FALSE;
 
   // If the following is set to FALSE, the permissions set for anonymous
   // users in the DB are ignored. Instead, the forum will use a default

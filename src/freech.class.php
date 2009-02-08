@@ -144,7 +144,8 @@ class Freech {
 
 
   /**
-   * Provides access to the visitor database.
+   * Provides access to the visitor database. Note that this returns
+   * NULL if the visitor counter is disabled in the configuration.
    */
   function &visitordb() {
     return $this->controller->visitordb;

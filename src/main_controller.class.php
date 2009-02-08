@@ -35,7 +35,6 @@ include_once 'libuseful/string.inc.php';
 include_once 'services/trackable.class.php';
 include_once 'objects/thread_state.class.php';
 
-include_once 'functions/httpquery.inc.php';
 include_once 'functions/files.inc.php';
 include_once 'functions/forum.inc.php';
 
@@ -49,34 +48,21 @@ include_once 'objects/posting.class.php';
 include_once 'objects/forum.class.php';
 include_once 'objects/user.class.php';
 include_once 'objects/group.class.php';
-include_once 'objects/modlog_item.class.php';
 include_once 'objects/posting_decorator.class.php';
 include_once 'objects/thread.class.php';
-include_once 'objects/unknown_posting.class.php';
 include_once 'objects/menu_item.class.php';
 include_once 'objects/menu.class.php';
-include_once 'objects/indexbar_group_profile.class.php';
-include_once 'objects/indexbar_user_postings.class.php';
-include_once 'objects/indexbar_footer.class.php';
-include_once 'objects/parser.class.php';
 
 include_once 'controllers/controller.class.php';
-include_once 'controllers/modlog_controller.class.php';
-include_once 'controllers/rss_controller.class.php';
 include_once 'controllers/breadcrumbs_controller.class.php';
-include_once 'controllers/login_controller.class.php';
-include_once 'controllers/profile_controller.class.php';
-include_once 'controllers/homepage_controller.class.php';
 include_once 'controllers/header_controller.class.php';
 include_once 'controllers/footer_controller.class.php';
-include_once 'controllers/forum_editor_controller.class.php';
 include_once 'controllers/view.class.php';
 
 include_once 'services/groupdb.class.php';
 include_once 'services/sql_query.class.php';
 include_once 'services/forumdb.class.php';
 include_once 'services/userdb.class.php';
-include_once 'services/modlogdb.class.php';
 include_once 'services/visitordb.class.php';
 include_once 'services/plugin_registry.class.php';
 ini_set('arg_separator.output', '&');
@@ -667,6 +653,7 @@ class MainController {
    *************************************************************/
   // Shows the homepage.
   function _show_homepage() {
+    include_once 'controllers/homepage_controller.class.php';
     $controller = new HomepageController($this->api);
     $controller->show();
   }
@@ -697,6 +684,7 @@ class MainController {
 
   // Logs a change to the moderation log.
   function _log_posting_moderation($_action, &$_posting, $_reason) {
+    $this->_prepare_modlog();
     $change = new ModLogItem($_action);
     $change->set_reason($_reason);
     $change->set_from_user($this->get_current_user());
@@ -750,6 +738,7 @@ class MainController {
 
   // Form for moving an entire thread into a different forum.
   function _thread_move() {
+    $this->_prepare_modlog();
     $this->_assert_may('moderate');
     $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
     $controller = new ModLogController($this->api);
@@ -793,6 +782,7 @@ class MainController {
 
   // Locks an existing posting.
   function _posting_lock() {
+    $this->_prepare_modlog();
     $this->_assert_may('moderate');
     $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
     $controller = new ModLogController($this->api);
@@ -806,6 +796,7 @@ class MainController {
 
   // Locks an existing posting.
   function _posting_lock_submit() {
+    $this->_prepare_modlog();
     $this->_assert_may('moderate');
     $posting = $this->_get_posting_from_id_or_die((int)$_POST['msg_id']);
 
@@ -867,8 +858,14 @@ class MainController {
   /*************************************************************
    * Action controllers for the user profile.
    *************************************************************/
+  function _import_profile_controller() {
+    include_once 'controllers/profile_controller.class.php';
+  }
+
+
   // Logs a change to the moderation log.
   function _log_user_moderation($_action, &$_user, $_reason) {
+    $this->_prepare_modlog();
     $change = new ModLogItem($_action);
     $change->set_reason($_reason);
     $change->set_from_user($this->get_current_user());
@@ -886,6 +883,7 @@ class MainController {
 
   // Lists all postings of one user.
   function _show_user_postings() {
+    $this->_import_profile_controller();
     $user    = $this->_get_user_from_name_or_die($_GET['username']);
     $profile = new ProfileController($this->api);
     $this->_add_profile_breadcrumbs($user);
@@ -895,6 +893,7 @@ class MainController {
 
   // Display information of one user.
   function _show_user_profile() {
+    $this->_import_profile_controller();
     $user    = $this->_get_user_from_name_or_die($_GET['username']);
     $profile = new ProfileController($this->api);
     $this->_add_profile_breadcrumbs($user);
@@ -923,6 +922,7 @@ class MainController {
 
     // Accepted.
     $this->_add_profile_breadcrumbs($user);
+    $this->_import_profile_controller();
     $profile = new ProfileController($this->api);
     $profile->show_user_editor($user);
   }
@@ -930,6 +930,7 @@ class MainController {
 
   // Submit personal data.
   function _submit_user() {
+    $this->_import_profile_controller();
     $profile = new ProfileController($this->api);
     $user    = $this->get_current_user();
     $group   = $this->get_current_group();
@@ -1009,6 +1010,7 @@ class MainController {
 
 
   function _show_user_options() {
+    $this->_import_profile_controller();
     $user = $this->get_current_user();
     $this->_add_profile_breadcrumbs($user);
     $profile = new ProfileController($this->api);
@@ -1021,6 +1023,7 @@ class MainController {
    *************************************************************/
   // Shows group info and lists all users of one group.
   function _show_group_profile() {
+    $this->_import_profile_controller();
     $group = $this->_get_group_from_name_or_die($_GET['groupname']);
     $this->_add_profile_breadcrumbs($group);
     $profile = new ProfileController($this->api);
@@ -1031,6 +1034,7 @@ class MainController {
   // Edits the group profile.
   function _show_group_editor() {
     $this->_assert_may('administer');
+    $this->_import_profile_controller();
     $group = $this->_get_group_from_name_or_die($_GET['groupname']);
     $this->_add_profile_breadcrumbs($group);
     $profile = new ProfileController($this->api);
@@ -1041,6 +1045,7 @@ class MainController {
   // Saves the group.
   function _group_submit() {
     $this->_assert_may('administer');
+    $this->_import_profile_controller();
     $group = $this->_get_group_from_id_or_die($_POST['group_id']);
     $this->_init_group_from_post_data($group);
     $this->_add_profile_breadcrumbs($group);
@@ -1068,7 +1073,13 @@ class MainController {
   /*************************************************************
    * Action controllers for login and password forms.
    *************************************************************/
+  function _import_login() {
+    include_once 'controllers/login_controller.class.php';
+  }
+
+
   function _show_login() {
+    $this->_import_login();
     $user     = init_user_from_post_data();
     $login    = new LoginController($this->api);
     $refer_to = $this->_get_login_refer_url();
@@ -1083,6 +1094,7 @@ class MainController {
     $user = $this->_get_current_or_confirming_user();
     if ($user->is_anonymous())
       die('Invalid user');
+    $this->_import_login();
     $registration = new LoginController($this->api);
     $registration->show_password_change($user);
   }
@@ -1090,6 +1102,7 @@ class MainController {
 
   // Submit a new password.
   function _password_submit() {
+    $this->_import_login();
     $userdb     = $this->get_userdb();
     $user       = init_user_from_post_data();
     $user       = $userdb->get_user_from_name($user->get_name());
@@ -1128,6 +1141,7 @@ class MainController {
 
   // Show a form for requesting that the password should be reset.
   function _password_forgotten() {
+    $this->_import_login();
     $user       = init_user_from_post_data();
     $controller = new LoginController($this->api);
     $controller->show_password_forgotten($user);
@@ -1136,6 +1150,7 @@ class MainController {
 
   // Send an email with the URL for resetting the password.
   function _password_mail_submit() {
+    $this->_import_login();
     $controller = new LoginController($this->api);
     $user       = init_user_from_post_data();
 
@@ -1194,8 +1209,14 @@ class MainController {
   /*************************************************************
    * Forum editor.
    *************************************************************/
+  function _import_forum_editor() {
+    include_once 'controllers/forum_editor_controller.class.php';
+  }
+
+
   function _forum_add() {
     $this->_assert_may('administer');
+    $this->_import_forum_editor();
     $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Add a New Forum'));
     $controller = new ForumEditorController($this->api);
@@ -1205,6 +1226,7 @@ class MainController {
 
   function _forum_edit() {
     $this->_assert_may('administer');
+    $this->_import_forum_editor();
     $forum = $this->forumdb->get_forum_from_id((int)$_GET['forum_id']);
     $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Edit a Forum'));
@@ -1215,6 +1237,7 @@ class MainController {
 
   function _forum_submit() {
     $this->_assert_may('administer');
+    $this->_import_forum_editor();
     $controller = new ForumEditorController($this->api);
     $forum_id   = (int)$_POST['forum_id'];
 
@@ -1248,6 +1271,7 @@ class MainController {
    *************************************************************/
   function _show_moderation_log() {
     trace('enter');
+    $this->_prepare_modlog();
     $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Moderation Log'));
     $footer = new ModLogController($this->api);
@@ -1281,6 +1305,7 @@ class MainController {
                      $_descr,
                      $_off,
                      $_n_entries) {
+    include_once 'controllers/rss_controller.class.php';
     $this->content = '';
     $rss = new RSSController($this->api);
     $rss->set_base_url(cfg('site_url'));
@@ -1476,7 +1501,15 @@ class MainController {
   }
 
 
+  function &_prepare_modlog() {
+    include_once 'objects/modlog_item.class.php';
+    include_once 'services/modlogdb.class.php';
+    include_once 'controllers/modlog_controller.class.php';
+  }
+
+
   function &get_modlogdb() {
+    $this->_prepare_modlog();
     if (!$this->modlogdb)
       $this->modlogdb = new ModLogDB($this->db);
     return $this->modlogdb;

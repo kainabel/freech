@@ -33,6 +33,7 @@
   </div>
 
   <div id='header3'>
+    {strip}
     <span id='account_links'>
 {foreach name=loop item=item from=$account_links->get_items()}
   {if $smarty.foreach.loop.index > 0}&nbsp;|&nbsp;{/if}
@@ -43,11 +44,14 @@
   {/if}
 {/foreach}
     </span>
+    {/strip}
     <br />
 {if $n_online}
+    {strip}
     <span id='status'>
       {t count=$n_online plural="%1 users online" 1=$n_online}One user online{/t}
     </span>
+    {/strip}
 {/if}
   </div>
 </div>

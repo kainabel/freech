@@ -29,13 +29,17 @@
 <div class="section" id="home_activity">
   <h3>{t}Recent Forum Activity{/t}</h3>
   <ul>
-  {foreach item=posting from=$postings}
-    {if $posting->is_active()}
-      <li>{$posting->get_url_html()}</li>
-    {else}
-      <li>{$posting->get_subject()|escape}</li>
-    {/if}
-  {/foreach}
+  {if $n_rows > 0}
+    {foreach item=posting from=$postings}
+      {if $posting->is_active()}
+        <li>{$posting->get_url_html()}</li>
+      {else}
+        <li>{$posting->get_subject()|escape}</li>
+      {/if}
+    {/foreach}
+  {else}
+    <li>{t}(No postings found){/t}</li>
+  {/if}
   </ul>
 </div>
 

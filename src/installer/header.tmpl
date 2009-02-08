@@ -9,19 +9,16 @@
   <title>Freech Installer</title>
 </head>
 <body>
-<table id='header' width='100%' cellpadding='2' cellspacing='0' summary=''>
- <tr>
-  <td>&nbsp;</td>
-  <td>
+<body {if $onload_js}onload="{$onload_js|escape}"{/if}>
+<div id='header'>
+  <div id='header1'>
     <a href='.'><img id='logo' src='../themes/heise/img/logo.png' alt='' /></a>
-  </td>
-  <td>&nbsp;</td>
-  <td id='header_middle' align='left' valign='middle'>
+  </div>
+
+  <div id='header2'>
     <a href='.'><span id='title'>Freech Installer</span></a>
-  </td>
-  <td>&nbsp;</td>
- </tr>
-</table>
+  </div>
+</div>
 <div id='center'>
   <div id='main'>
 <!-- /header -->

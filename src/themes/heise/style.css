@@ -100,6 +100,7 @@ input {
   vertical-align: top;
   font-size: .9em;
   color: #ffffff;
+  white-space: nowrap;
 }
 
 #account_links a {
@@ -176,8 +177,12 @@ input {
 }
 
 #header3 {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
   margin-right: .3em;
+  width: auto;
+  text-align: right;
 }
 
 #title {

@@ -242,6 +242,7 @@ class Posting {
 
 
   function _get_indented_blocks($_text) {
+    include_once 'objects/indented_block.class.php';
     $text   = preg_replace('/\r/', '', $_text);
     $lines  = explode("\n", $text);
     $blocks = array();
@@ -296,28 +297,8 @@ class Posting {
   }
 
 
-  function get_url_html() {
-    return $this->get_url()->get_html();
-  }
-
-
-  function get_url_string() {
-    return $this->get_url()->get_string();
-  }
-
-
   function &get_edit_url() {
     return $this->get_url('edit', _('Edit'));
-  }
-
-
-  function get_edit_url_html() {
-    return $this->get_edit_url()->get_html();
-  }
-
-
-  function get_edit_url_string() {
-    return $this->get_edit_url()->get_string();
   }
 
 
@@ -329,16 +310,6 @@ class Posting {
     if (cfg('remember_page'))
       $url->set_var('hs', (int)$_GET[hs]);
     return $url;
-  }
-
-
-  function get_respond_url_html() {
-    return $this->get_respond_url()->get_html();
-  }
-
-
-  function get_respond_url_string() {
-    return $this->get_respond_url()->get_string();
   }
 
 
@@ -369,11 +340,6 @@ class Posting {
   }
 
 
-  function get_fold_url_string() {
-    return $this->get_fold_url()->get_string();
-  }
-
-
   // The url for locking the posting.
   function &get_lock_url() {
     $url = new FreechURL;
@@ -381,11 +347,6 @@ class Posting {
     $url->set_var('forum_id', $this->get_forum_id());
     $url->set_var('msg_id',   $this->get_id());
     return $url;
-  }
-
-
-  function get_lock_url_string() {
-    return $this->get_lock_url()->get_string();
   }
 
 
@@ -399,22 +360,12 @@ class Posting {
   }
 
 
-  function get_unlock_url_string() {
-    return $this->get_unlock_url()->get_string();
-  }
-
-
   function &get_stub_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_stub');
     $url->set_var('msg_id',   $this->get_id());
     $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
     return $url;
-  }
-
-
-  function get_stub_url_string() {
-    return $this->get_stub_url()->get_string();
   }
 
 
@@ -427,11 +378,6 @@ class Posting {
   }
 
 
-  function get_unstub_url_string() {
-    return $this->get_unstub_url()->get_string();
-  }
-
-
   // The url for moving the posting to a different forum.
   function &get_move_url() {
     $url = new FreechURL;
@@ -439,11 +385,6 @@ class Posting {
     $url->set_var('forum_id', $this->get_forum_id());
     $url->set_var('msg_id',   $this->get_id());
     return $url;
-  }
-
-
-  function get_move_url_string() {
-    return $this->get_move_url()->get_string();
   }
 
 
@@ -458,11 +399,6 @@ class Posting {
   }
 
 
-  function get_prioritize_url_string($_priority) {
-    return $this->get_prioritize_url($_priority)->get_string();
-  }
-
-
   function &get_user_profile_url() {
     if (isset($this->fields['current_username']))
       $username = $this->fields['current_username'];
@@ -472,16 +408,6 @@ class Posting {
     $profile_url->set_var('action',   'user_profile');
     $profile_url->set_var('username', $username);
     return $profile_url;
-  }
-
-
-  function get_user_profile_url_string() {
-    return $this->get_user_profile_url()->get_string();
-  }
-
-
-  function get_user_profile_url_html() {
-    return $this->get_user_profile_url()->get_html();
   }
 
 

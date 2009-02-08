@@ -44,13 +44,13 @@ include_once 'objects/thread_state.class.php';
 
 include_once 'functions/files.inc.php';
 include_once 'functions/forum.inc.php';
+trace('Function imports done');
 
 include_once 'objects/hint.class.php';
 include_once 'objects/error.class.php';
 include_once 'objects/ack.class.php';
 include_once 'objects/url.class.php';
 include_once 'objects/freech_url.class.php';
-include_once 'objects/indented_block.class.php';
 include_once 'objects/posting.class.php';
 include_once 'objects/forum.class.php';
 include_once 'objects/user.class.php';
@@ -59,11 +59,13 @@ include_once 'objects/posting_decorator.class.php';
 include_once 'objects/thread.class.php';
 include_once 'objects/menu_item.class.php';
 include_once 'objects/menu.class.php';
+trace('Object imports done');
 
 include_once 'controllers/controller.class.php';
 include_once 'controllers/breadcrumbs_controller.class.php';
 include_once 'controllers/footer_controller.class.php';
 include_once 'controllers/view.class.php';
+trace('Controller imports done');
 
 include_once 'services/groupdb.class.php';
 include_once 'services/sql_query.class.php';
@@ -71,7 +73,7 @@ include_once 'services/forumdb.class.php';
 include_once 'services/userdb.class.php';
 include_once 'services/visitordb.class.php';
 include_once 'services/plugin_registry.class.php';
-trace('Imports done');
+trace('Service imports done');
 
 class MainController {
   var $db;
@@ -1729,17 +1731,20 @@ class MainController {
 
 
   function show() {
+    trace('Enter');
     /* Plugin hook: on_content_print_before
      *   Called before the HTML content is sent.
      *   Args: $html: A reference to the content.
      */
     $this->eventbus->emit('on_content_print_before', $this->api);
+    trace('on_content_print_before completed');
 
     $body          = $this->content;
     $this->content = '';
     $this->_print_breadcrumbs();
     print($this->content);
     print($body);
+    trace('print completed');
 
     $this->render_time = microtime(TRUE) - $this->start_time;
     if (cfg('show_total_render_time')) {
@@ -1752,6 +1757,7 @@ class MainController {
      *   Args: none.
      */
     $this->eventbus->emit('on_content_print_after', $this->api);
+    trace('Leave');
   }
 
 

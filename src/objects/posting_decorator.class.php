@@ -24,8 +24,6 @@
  * made available to the templates.
  */
 class PostingDecorator extends Trackable {
-  protected $posting;
-
   function PostingDecorator(&$_posting, &$_api) {
     $this->Trackable();
     $this->posting = $_posting;
@@ -164,12 +162,12 @@ class PostingDecorator extends Trackable {
 
 
   function get_url_html() {
-    return $this->posting->get_url_html();
+    return $this->posting->get_url()->get_html();
   }
 
 
   function get_url_string() {
-    return $this->posting->get_url_string();
+    return $this->posting->get_url()->get_string();
   }
 
 
@@ -179,12 +177,12 @@ class PostingDecorator extends Trackable {
 
 
   function get_edit_url_html() {
-    return $this->posting->get_edit_url_html();
+    return $this->posting->get_edit_url()->get_html();
   }
 
 
   function get_edit_url_string() {
-    return $this->posting->get_edit_url_string();
+    return $this->posting->get_edit_url()->get_string();
   }
 
 
@@ -194,12 +192,12 @@ class PostingDecorator extends Trackable {
 
 
   function get_respond_url_html() {
-    return $this->posting->get_respond_url_html();
+    return $this->posting->get_respond_url()->get_html();
   }
 
 
   function get_respond_url_string() {
-    return $this->posting->get_respond_url_string();
+    return $this->posting->get_respond_url()->get_string();
   }
 
 
@@ -209,7 +207,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_fold_url_string() {
-    return $this->posting->get_fold_url_string();
+    return $this->posting->get_fold_url()->get_string();
   }
 
 
@@ -219,7 +217,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_lock_url_string() {
-    return $this->posting->get_lock_url_string();
+    return $this->posting->get_lock_url()->get_string();
   }
 
 
@@ -229,7 +227,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_unlock_url_string() {
-    return $this->posting->get_unlock_url_string();
+    return $this->posting->get_unlock_url()->get_string();
   }
 
 
@@ -239,7 +237,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_stub_url_string() {
-    return $this->posting->get_stub_url_string();
+    return $this->posting->get_stub_url()->get_string();
   }
 
 
@@ -249,7 +247,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_unstub_url_string() {
-    return $this->posting->get_unstub_url_string();
+    return $this->posting->get_unstub_url()->get_string();
   }
 
 
@@ -259,7 +257,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_move_url_string() {
-    return $this->posting->get_move_url_string();
+    return $this->posting->get_move_url()->get_string();
   }
 
 
@@ -269,7 +267,7 @@ class PostingDecorator extends Trackable {
 
 
   function get_prioritize_url_string($_priority) {
-    return $this->posting->get_prioritize_url_string($_priority);
+    return $this->posting->get_prioritize_url($_priority)->get_string();
   }
 
 
@@ -279,12 +277,12 @@ class PostingDecorator extends Trackable {
 
 
   function get_user_profile_url_string() {
-    return $this->posting->get_user_profile_url_string();
+    return $this->posting->get_user_profile_url()->get_string();
   }
 
 
   function get_user_profile_url_html() {
-    return $this->posting->get_user_profile_url_html();
+    return $this->posting->get_user_profile_url()->get_html();
   }
 
 

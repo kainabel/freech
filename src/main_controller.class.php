@@ -179,6 +179,7 @@ class MainController {
     // Initialize the visitordb after cookie handling to prevent useless
     // updates.
     $this->visitordb = new VisitorDB($this->db);
+    trace('VisitorDB initialized');
     $this->visitordb->count();
 
     trace('Visitor counted');

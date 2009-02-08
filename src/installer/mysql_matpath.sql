@@ -164,14 +164,12 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `freech_visitor` (
-  `id` int(11) NOT NULL auto_increment,
   `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
   `counter` bigint(20) default NULL,
   `visit` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY  (`ip_hash`),
   KEY `counter` (`counter`),
-  KEY `visit` (`visit`),
-  KEY `ip_hash` (`ip_hash`)
+  KEY `visit` (`visit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------

@@ -30,7 +30,7 @@
     function &_ip_hash($_ip) {
       // Note that this needs to work with both, IPv4 and IPv6.
       $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
-      return md5($ip_net . cfg("salt"));
+      return md5($ip_net . cfg('salt'));
     }
 
 
@@ -39,32 +39,38 @@
      * $_ip: The ip address of the user.
      * $_since: The start time.
      */
-    function &_id_of($_ip, $_since) {
-      $sql  = "SELECT id FROM {t_visitor}";
-      $sql .= " WHERE ip_hash={ip_hash} and visit > {since}";
+    function &_was_here($_ip_hash, $_since) {
+      trace('Enter');
+      // IDX: visitor:ip_hash
+      $sql   = "SELECT 1 FROM {t_visitor}";
+      $sql  .= " WHERE ip_hash={ip_hash} and visit > {since}";
       $query = new FreechSqlQuery($sql);
-      $query->set_string('ip_hash', $_ip);
-      $query->set_int('since', $_since);
+      $query->set_string('ip_hash', $_ip_hash);
+      $query->set_int   ('since',   $_since);
       $row = $this->db->GetRow($query->sql());
+      trace('Leave');
       if (!$row)
-        return;
-      return $row[id];
+        return FALSE;
+      return TRUE;
     }
 
 
-    function _update_time($_id) {
+    function _update_time($_ip_hash) {
+      trace('Enter');
+      // IDX: visitor:ip_hash
       $sql  = "UPDATE {t_visitor}";
       $sql .= " SET visit={visit}";
-      $sql .= " WHERE id={id}";
+      $sql .= " WHERE ip_hash={ip_hash}";
       $query = new FreechSqlQuery($sql);
-      $query->set_int('visit', time());
-      $query->set_string('id', $_id);
-      $this->db->Execute($query->sql()) or die("VisitorDB::_update_time()");
+      $query->set_int   ('visit',   time());
+      $query->set_string('ip_hash', $_ip_hash);
+      $this->db->Execute($query->sql()) or die('VisitorDB::_update_time()');
+      trace('Leave');
     }
 
 
     function _is_bot($_host) {
-      return preg_match("/slurp|googlebot|msnbot|crawl/", $_host) != 0;
+      return preg_match('/slurp|googlebot|msnbot|crawl/', $_host) != 0;
     }
 
 
@@ -72,17 +78,18 @@
       $sql  = "INSERT INTO {t_visitor}";
       $sql .= " (ip_hash, counter, visit)";
       $sql .= " VALUES ({ip_hash}, {counter}, {visit})";
+      $sql .= " ON DUPLICATE KEY UPDATE counter={counter}, visit={visit}";
       $query = new FreechSqlQuery($sql);
-      $query->set_int('visit', time());
       $query->set_string('ip_hash', $_ip_hash);
       $query->set_string('counter', $_count);
-      $this->db->Execute($query->sql()) or die("VisitorDB::_insert_entry()");
-      $newid = $this->db->Insert_ID();
+      $query->set_int   ('visit',   time());
+      $this->db->Execute($query->sql()) or die('VisitorDB::_insert_entry()');
     }
 
 
     /* Delete old and unneeded entries from the table. */
     function _flush() {
+      // IDX: visitor:visit
       $sql  = "DELETE FROM {t_visitor}";
       $sql .= " WHERE visit < {end}";
       $query = new FreechSqlQuery($sql);
@@ -92,13 +99,13 @@
 
 
     function count() {
+      trace('Enter');
       // If the current user was here in the last 10 minutes, just 
       // update his timestamp and return.
-      $ip      = getenv("REMOTE_ADDR");
+      $ip      = getenv('REMOTE_ADDR');
       $ip_hash = $this->_ip_hash($ip);
-      $id      = $this->_id_of($ip_hash, time() - 60 * 10);
-      if ($id)
-        return $this->_update_time($id);
+      if ($this->_was_here($ip_hash, time() - 60 * 10))
+        return $this->_update_time($ip_hash);
 
       // Else, check if it is a likely bot.
       $host = gethostbyaddr($ip);
@@ -107,7 +114,7 @@
 
       // Ending up here we have a new visitor. Save it.
       // Note that this needs to work with both, IPv4 and IPv6.
-      $count   = $this->get_n_visitors();
+      $count = $this->get_n_visitors();
       $this->_insert_entry($ip_hash, $count + 1);
 
       // To limit the number of rows, delete old entries.
@@ -117,15 +124,20 @@
 
     /* Returns the number of visitors. */
     function get_n_visitors($_since = 0) {
-      if ($_since == 0)
+      trace('Enter');
+      if ($_since == 0) {
+        // IDX: visitor:counter
         $query = new FreechSqlQuery("SELECT MAX(counter) FROM {t_visitor}");
+      }
       else {
+        // IDX: visitor:visit
         $sql   = "SELECT COUNT(*) FROM {t_visitor}";
         $sql  .= " WHERE visit > {start}";
         $query = new FreechSqlQuery($sql);
         $query->set_int('start', $_since);
       }
       $n = $this->db->GetOne($query->sql());
+      trace('Leave');
       if (!$n)
         return 0;
       return $n;

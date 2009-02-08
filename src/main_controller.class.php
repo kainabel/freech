@@ -20,6 +20,9 @@
 ?>
 <?php
 define('FREECH_VERSION', '0.9.19');
+ini_set('arg_separator.output', '&');
+ini_set('error_reporting',
+        'E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR');
 
 include_once 'functions/config.inc.php';
 include_once 'services/call_tracer.class.php';
@@ -65,7 +68,6 @@ include_once 'services/forumdb.class.php';
 include_once 'services/userdb.class.php';
 include_once 'services/visitordb.class.php';
 include_once 'services/plugin_registry.class.php';
-ini_set('arg_separator.output', '&');
 trace('Imports done');
 
 class MainController {

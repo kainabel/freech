@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `freech_visitor` (
   PRIMARY KEY  (`ip_hash`),
   KEY `counter` (`counter`),
   KEY `visit` (`visit`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 

@@ -6,7 +6,6 @@ Author:      Samuel Abels, Elliott Back
 Description: Client-side Javascript computes an md5 code, server double
              checks. Blocks spam bots and makes DoS a little more difficult.
 */
-include_once 'spamhash.class.php';
 
 define('CHECK_REGISTERED_ACCOUNTS', FALSE);
 $spamhash = ''; // The spamhash instance.
@@ -24,6 +23,7 @@ function spamhash_on_run(&$api) {
   // Check if the plugin is enabled for the given user.
   if (!CHECK_REGISTERED_ACCOUNTS && !$api->user()->is_anonymous())
     return;
+  include_once 'spamhash.class.php';
 
   // Create a new instance of the spamhash generator/checker.
   $action = $api->action();

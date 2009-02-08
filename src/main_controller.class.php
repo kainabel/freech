@@ -30,6 +30,7 @@ require_once 'smarty/Smarty.class.php';
 trace('Smarty imported');
 require_once 'adodb/adodb.inc.php';
 trace('Adodb imported');
+
 include_once 'libuseful/SqlQuery.class.php5';
 include_once 'libuseful/string.inc.php';
 include_once 'services/trackable.class.php';
@@ -55,7 +56,6 @@ include_once 'objects/menu.class.php';
 
 include_once 'controllers/controller.class.php';
 include_once 'controllers/breadcrumbs_controller.class.php';
-include_once 'controllers/header_controller.class.php';
 include_once 'controllers/footer_controller.class.php';
 include_once 'controllers/view.class.php';
 
@@ -1706,6 +1706,7 @@ class MainController {
       header('Content-Type: text/html; charset=utf-8');
       header('Pragma: no-cache');
       header('Cache-control: no-cache');
+      include_once 'controllers/header_controller.class.php';
       $header = new HeaderController($this->api);
       $header->show($this->get_title());
     }

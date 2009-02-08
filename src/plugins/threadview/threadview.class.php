@@ -66,6 +66,8 @@ class ThreadView extends View {
                        n_offset           => $_offset,
                        n_pages_per_index  => cfg('ppi'),
                        thread_state       => $thread_state);
+
+    include_once dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarByThread($args);
     trace('indexbar built');
 
@@ -103,6 +105,7 @@ class ThreadView extends View {
                     && $_posting->has_thread()
                     && $_COOKIE[thread] != 'hide';
 
+    include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
     $indexbar = new ThreadViewIndexBarReadPosting($_posting,
                                                   $prev_posting_id,
                                                   $next_posting_id,

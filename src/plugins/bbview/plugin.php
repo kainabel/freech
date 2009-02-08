@@ -16,7 +16,5 @@ function bbview_on_run(&$api) {
   if ($api->view_class() != 'BBView')
     return;
   include_once dirname(__FILE__).'/bbview.class.php';
-  include_once dirname(__FILE__).'/indexbar.class.php';
-  include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
 }
 ?>

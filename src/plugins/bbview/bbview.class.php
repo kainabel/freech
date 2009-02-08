@@ -51,6 +51,8 @@ class BBView extends View {
                        n_threads_per_page => cfg('epp'),
                        n_offset           => (int)$_offset,
                        n_pages_per_index  => cfg('ppi'));
+
+    include_once dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarBBView($args);
 
     $this->clear_all_assign();
@@ -83,6 +85,8 @@ class BBView extends View {
                         n_postings_per_page => cfg('epp'),
                         n_offset            => (int)$_GET['hs'],
                         n_pages_per_index   => cfg('ppi'));
+
+    include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
     $indexbar = new BBViewIndexBarReadPosting($_posting, $args);
 
     foreach ($postings as $posting) {

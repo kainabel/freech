@@ -62,6 +62,7 @@ class Poll extends PostingDecorator {
   function get_body_html() {
     if (!$this->is_active())
       return '';
+    include_once dirname(__FILE__).'/poll_controller.class.php';
     // Fetch the poll from the database.
     $poll_id    = $this->posting->get_id();
     $poll       = _get_poll_from_id($this->api, $poll_id);

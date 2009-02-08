@@ -6,7 +6,6 @@ Author:      Samuel Abels
 Description: Shows normal messages in the forum.
 */
 include_once dirname(__FILE__).'/message.class.php';
-include_once dirname(__FILE__).'/message_controller.class.php';
 
 function message_init(&$api) {
   $api->eventbus()->signal_connect('on_run_before', 'message_on_run');
@@ -37,6 +36,7 @@ function message_on_run(&$api) {
 
 
 function message_on_write(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Start a New Topic'));
   $parent_id  = (int)$_POST['parent_id'];
@@ -47,6 +47,7 @@ function message_on_write(&$api) {
 
 
 function message_on_respond(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $parent_id  = (int)$_GET['parent_id'];
   $posting    = $api->forumdb()->get_posting_from_id($parent_id);
   $controller = new MessageController($api);
@@ -63,6 +64,7 @@ function message_on_respond(&$api) {
 
 
 function message_on_edit_saved(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $user       = $api->user();
   $posting    = $api->forumdb()->get_posting_from_id($_GET['msg_id']);
   $controller = new MessageController($api);
@@ -101,6 +103,7 @@ function message_on_submit(&$api) {
 
 // Edit an unsaved message.
 function message_on_edit_unsaved(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $posting    = message_init_posting_from_post_data();
@@ -112,6 +115,7 @@ function message_on_edit_unsaved(&$api) {
 
 // Insert a quote from the parent message.
 function message_on_quote(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $parent_id  = (int)$_POST['parent_id'];
   $quoted_msg = $api->forumdb()->get_posting_from_id($parent_id);
   $posting    = message_init_posting_from_post_data();
@@ -122,6 +126,7 @@ function message_on_quote(&$api) {
 
 // Print a preview of a message.
 function message_on_preview(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $controller = new MessageController($api);
@@ -160,6 +165,7 @@ function message_on_preview(&$api) {
 
 // Saves the posted message.
 function message_on_send(&$api) {
+  include_once dirname(__FILE__).'/message_controller.class.php';
   $parent_id  = (int)$_POST['parent_id'];
   $may_quote  = (int)$_POST['may_quote'];
   $controller = new MessageController($api);

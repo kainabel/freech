@@ -6,7 +6,6 @@ Author:      Samuel Abels
 Description: Adds support for pollings.
 */
 include_once dirname(__FILE__).'/poll.class.php';
-include_once dirname(__FILE__).'/poll_controller.class.php';
 
 function poll_init(&$api) {
   // Register a class that is responsible for formatting the posting object
@@ -41,6 +40,7 @@ function poll_on_run(&$api) {
 
 
 function poll_on_add(&$api) {
+  include_once dirname(__FILE__).'/poll_controller.class.php';
   $controller = new PollController($api);
   $posting    = new Posting;
   $poll       = new Poll($posting, $api);
@@ -62,6 +62,7 @@ function poll_on_add(&$api) {
 
 
 function poll_on_submit(&$api) {
+  include_once dirname(__FILE__).'/poll_controller.class.php';
   $controller = new PollController($api);
   $poll       = _poll_get_from_post();
 
@@ -98,6 +99,7 @@ function poll_on_submit(&$api) {
 
 
 function poll_on_vote(&$api) {
+  include_once dirname(__FILE__).'/poll_controller.class.php';
   $poll_id    = (int)$_POST['poll_id'];
   $poll       = _get_poll_from_id($api, $poll_id);
   $user       = $api->user();

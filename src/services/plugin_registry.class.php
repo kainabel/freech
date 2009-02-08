@@ -1,11 +1,5 @@
 <?php
 class PluginRegistry {
-  var $plugins;
-
-  function PluginRegistry() {
-  }
- 
-
   /**
    * Reads the header information from a plugin file.
    * Args: The plugin file that we are going to parse.
@@ -57,28 +51,13 @@ class PluginRegistry {
     return $plugin;
   }
   
-  /**
-   * Reads all plugins from the given directory and parses their headers.
-   */
-  function read_plugins($dirname) {
-    if (!preg_match("/^[a-z\-_0-9]+$/i", $dirname))
-      die('PluginRegistry::read_plugins(): Invalid path.');
-    $list = scandir($dirname);
-    foreach ($list as $path) {
-      $path = "$dirname/$path";
-      if (!is_dir($path))
-        continue;
-      if (!is_file("$path/plugin.php"))
-        continue;
-      $this->plugins[$path] = $this->_parse_plugin("$path/plugin.php");
-    }
-  }
-
-
   function activate_plugin_from_dirname($dirname, $args = '') {
+    trace('activating %s', $dirname);
     include "$dirname/plugin.php";
+    trace('included %s', $dirname);
     $init = basename($dirname).'_init';
     $init($args);
+    trace('initialized %s', $dirname);
   }
 }
 ?>

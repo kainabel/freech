@@ -6,10 +6,8 @@ Author:      Samuel Abels, Elliott Back
 Description: Client-side Javascript computes an md5 code, server double
              checks. Blocks spam bots and makes DoS a little more difficult.
 */
-
 define('CHECK_REGISTERED_ACCOUNTS', FALSE);
-$spamhash = ''; // The spamhash instance.
-
+unset($spamhash); // The spamhash instance.
 
 function spamhash_init(&$api) {
   $eventbus = $api->eventbus();

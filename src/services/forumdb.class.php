@@ -363,6 +363,7 @@
 
 
     function &get_threads_from_id($_thread_ids) {
+      trace('enter');
       if (count($_thread_ids) == 0)
         return array();
 
@@ -384,6 +385,7 @@
       $query = new FreechSqlQuery($sql);
       $res   = $this->db->Execute($query->sql())
                                 or die('ForumDB::get_threads_from_id(): 2');
+      trace('sql executed');
 
       $threads = array();
       while (!$res->EOF) {
@@ -392,6 +394,7 @@
         array_push($threads, $thread);
       }
 
+      trace('threads received');
       return $threads;
     }
 
@@ -405,6 +408,7 @@
     function &get_threads_from_forum_id($_forum_id, $_offset, $_limit) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
+      trace('enter');
 
       // Select all root nodes.
       // IDX: posting:priority-created-is_parent-n_descendants-forum_id-status
@@ -418,11 +422,13 @@
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                             or die('ForumDB::get_threads_from_forum_id(): 1');
+      trace('sql executed');
 
       $thread_ids = array();
       while (!$res->EOF)
         array_push($thread_ids, $res->FetchNextObj()->thread_id);
 
+      trace('thread ids received');
       return $this->get_threads_from_id($thread_ids);
     }
 

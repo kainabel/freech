@@ -114,6 +114,7 @@ class Thread {
 
 
   function set_from_db(&$forumdb, &$_res) {
+    trace('enter');
     while (!$_res->EOF) {
       $row = $_res->FetchObj();
       if (!isset($thread_id))
@@ -130,7 +131,9 @@ class Thread {
       $_res->MoveNext();
     }
 
+    trace('postings fetched');
     $this->_update_relations();
+    trace('leave');
   }
 
 
@@ -154,6 +157,7 @@ class Thread {
 
 
   function remove_locked_postings() {
+    trace('Enter');
     $locked   = array();
     $unlocked = array();
     foreach ($this->postings as $posting)
@@ -165,7 +169,9 @@ class Thread {
     foreach ($locked as $posting)
       if (!$this->_posting_has_unlocked_children($unlocked, $posting))
         unset($this->postings[$this->_get_posting_path($posting)]);
+    trace('locked postings removed');
     $this->_update_relations();
+    trace('leave');
   }
 
 

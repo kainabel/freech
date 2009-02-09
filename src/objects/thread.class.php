@@ -173,13 +173,13 @@ class Thread {
 
   function fold() {
     $this->dirty = FALSE;
-    if (count($this->postings_list) == 1)
-      return;
-    $parent = $this->get_parent();
-    $parent->set_relation(POSTING_RELATION_PARENT_FOLDED);
+    $parent      = $this->get_parent();
+    if (count($this->postings_map) > 1)
+      $parent->set_relation(POSTING_RELATION_PARENT_FOLDED);
+    else
+      $parent->set_relation(POSTING_RELATION_PARENT_STUB);
     $this->postings_list = array($parent);
     $this->postings_map  = array($this->_get_posting_path($parent) => $parent);
-    $this->n_new         = $parent->is_new() ? 1 : 0;
   }
 
 

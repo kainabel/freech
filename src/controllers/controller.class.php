@@ -31,6 +31,7 @@
       $this->eventbus  = $_api->eventbus();
       $this->hints     = array();
       $this->var_stack = array();
+      $this->scope     = array();
     }
 
     function add_hint($_hint) {
@@ -47,6 +48,7 @@
     function clear_all_assign() {
       array_push($this->var_stack, $this->smarty->get_template_vars());
       $this->smarty->clear_all_assign();
+      $this->scope = array();
     }
 
     function restore_all_assign() {
@@ -56,10 +58,12 @@
 
     function assign($_name, $_value) {
       $this->smarty->assign($_name, $_value);
+      $this->scope[$_name] = $_value;
     }
 
-    function assign_by_ref($_name, $_value) {
+    function assign_by_ref($_name, &$_value) {
       $this->smarty->assign_by_ref($_name, $_value);
+      $this->scope[$_name] = $_value;
     }
 
     function fetch($_template) {
@@ -71,8 +75,8 @@
         $this->smarty->template_dir = $template_dir;
       $this->assign_by_ref('__user',      $this->api->user());
       $this->assign_by_ref('__group',     $this->api->group());
-      $this->assign_by_ref('__theme_dir', 'themes/' . cfg('theme'));
       $this->assign_by_ref('__hints',     $this->hints);
+      $this->assign       ('__theme_dir', 'themes/' . cfg('theme'));
       $cache_id = $this->smarty->template_dir . '/' . $_template;
       trace('rendering template %s', $_template);
       $result = $this->smarty->fetch($_template, $cache_id);
@@ -82,6 +86,31 @@
 
     function render($_template) {
       $this->api->controller->_append_content($this->fetch($_template));
+    }
+
+    function fetch_php($_template) {
+      $template_dir = 'templates';
+      $theme_dir    = 'themes/' . cfg('theme');
+      if (is_readable($theme_dir . '/' . $_template))
+        $template_dir = $theme_dir;
+      $__user      = $this->api->user();
+      $__group     = $this->api->group();
+      $__theme_dir = 'themes/' . cfg('theme');
+      $__hints     = $this->hints;
+      foreach ($this->scope as $key => $value)
+        $$key = $value;
+      trace('rendering PHP template %s', $template_dir.'/'.$_template);
+      ob_start();
+      require $template_dir.'/'.$_template;
+      $result = ob_get_contents();
+      ob_end_clean();
+      trace('rendered PHP template %s', $_template);
+      return $result;
+    }
+
+    function render_php($_template) {
+      $content = $this->fetch_php($_template);
+      $this->api->controller->_append_content($content);
     }
   }
 ?>

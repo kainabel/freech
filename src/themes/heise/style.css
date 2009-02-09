@@ -130,6 +130,7 @@ input {
   color: #353fa8;
 }
 
+.page_links,
 #page_links {
   display: inline;
   list-style: none;
@@ -138,15 +139,18 @@ input {
   color: #bbb;
 }
 
+.page_links li,
 #page_links li {
   display: inline;
   margin: 0 5px;
 }
 
+.page_links .separator,
 #page_links .separator {
   color: #353fa8;
 }
 
+.page_links a,
 #page_links a {
   color: #353fa8;
 }

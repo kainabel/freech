@@ -46,7 +46,7 @@
         {$posting->get_body_html()}
       </div>
       <div class="bbview_post_buttons">
-        <ul id="page_links">
+        <ul class="page_links">
           {if $may_write && $posting->is_active() && $posting->get_allow_answer()}
             <li>{$posting->get_respond_url_html()}</li>
           {/if}

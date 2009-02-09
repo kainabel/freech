@@ -362,7 +362,7 @@
     }
 
 
-    function &get_threads_from_id($_thread_ids) {
+    function get_threads_from_id($_thread_ids, $_include_inactive = TRUE) {
       trace('enter');
       if (count($_thread_ids) == 0)
         return array();
@@ -381,10 +381,13 @@
       $sql  .= ' FROM {t_posting} p';
       $sql  .= ' JOIN {t_thread} t ON p.thread_id=t.id';
       $sql  .= ' WHERE t.id IN (' . implode(',', $_thread_ids) . ')';
+      if (!$_include_inactive)
+        $sql .= ' AND p.status={status}';
       $sql  .= ' ORDER BY t.id DESC';
       $query = new FreechSqlQuery($sql);
+      $query->set_int('status', POSTING_STATUS_ACTIVE);
       $res   = $this->db->Execute($query->sql())
-                                or die('ForumDB::get_threads_from_id(): 2');
+                                or die('ForumDB::get_threads_from_id()');
       trace('sql executed');
 
       $threads = array();
@@ -399,13 +402,17 @@
     }
 
 
-    function &get_thread_from_id($_thread_id) {
-      $threads = $this->get_threads_from_id(array($_thread_id));
+    function get_thread_from_id($_thread_id, $_include_inactive = TRUE) {
+      $threads = $this->get_threads_from_id(array($_thread_id),
+                                            $_include_inactive);
       return $threads[0];
     }
 
 
-    function &get_threads_from_forum_id($_forum_id, $_offset, $_limit) {
+    function get_threads_from_forum_id($_forum_id,
+                                       $_include_inactive,
+                                       $_offset,
+                                       $_limit) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
       trace('enter');
@@ -421,7 +428,7 @@
       $query->set_int('forum_id', $_forum_id);
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
-                            or die('ForumDB::get_threads_from_forum_id(): 1');
+                            or die('ForumDB::get_threads_from_forum_id()');
       trace('sql executed');
 
       $thread_ids = array();
@@ -429,7 +436,7 @@
         array_push($thread_ids, $res->FetchNextObj()->thread_id);
 
       trace('thread ids received');
-      return $this->get_threads_from_id($thread_ids);
+      return $this->get_threads_from_id($thread_ids, $_include_inactive);
     }
 
 

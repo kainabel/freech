@@ -107,6 +107,11 @@ class Posting {
   }
 
 
+  function _set_path($_path) {
+    $this->fields[path] = $_path;
+  }
+
+
   function _get_path() {
     return $this->fields[path];
   }

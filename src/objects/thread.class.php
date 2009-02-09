@@ -21,8 +21,11 @@
 <?php
 class Thread {
   function Thread() {
-    $this->postings = array();
-    $this->fields   = array();
+    $this->postings_map  = array();
+    $this->postings_list = array();
+    $this->fields        = array();
+    $this->dirty         = FALSE;
+    $this->n_new         = 0;
   }
 
 
@@ -34,17 +37,16 @@ class Thread {
   function _get_posting_depth(&$_posting) {
     if (!$_posting)
       return 0;
-    return (strlen($this->_get_posting_path($_posting)) / 8) - 1;
+    return max(0, strlen($_posting->_get_path()) - 2) / 8;
   }
 
 
   function _get_next_sibling($_start, $_depth) {
-    $postings   = array_values($this->postings);
-    $n_postings = count($postings);
+    $n_postings = count($this->postings_list);
     for ($i = $_start; $i != $n_postings; $i++) {
-      $depth = $this->_get_posting_depth($postings[$i]);
+      $depth = $this->_get_posting_depth($this->postings_list[$i]);
       if ($depth == $_depth)
-        return $postings[$i];
+        return $this->postings_list[$i];
       elseif ($depth < $_depth)
         return NULL;
     }
@@ -52,37 +54,58 @@ class Thread {
   }
 
 
-  function _posting_has_unlocked_children(&$_unlocked, &$_posting) {
-    if (!$_posting->has_descendants())
-      return FALSE;
+  function _add_posting(&$_posting) {
     $path = $this->_get_posting_path($_posting);
-    $len  = strlen($path);
-    foreach ($_unlocked as $unlocked) {
-      $path2 = $this->_get_posting_path($unlocked);
-      if (substr($path2, 0, $len) == $path)
-        return TRUE;
-    }
-    return FALSE;
+    $this->postings_map[$path] = $_posting;
+    if ($_posting->is_new())
+      $this->n_new++;
+  }
+
+
+  function _create_posting_at(&$_path) {
+    $posting = new Posting;
+    $posting->_set_path(substr($_path, 8) . '00');
+    $posting->set_status(POSTING_STATUS_LOCKED);
+    $posting->apply_block();
+    $this->_add_posting($posting);
+  }
+
+
+  function _create_missing_parents(&$_path) {
+    while ($_path = substr($_path, 0, -8))
+      if (!isset($this->postings_map[$_path]))
+        $this->_create_posting_at($_path);
   }
 
 
   function _update_relations() {
-    ksort($this->postings, SORT_STRING);
-    $postings   = array_values($this->postings);
-    $n_postings = count($postings);
+    trace('enter');
+    $this->dirty = FALSE;
+
+    // Since it is allowed to remove abituary postings from the tree, we
+    // need to create "fake" postings where children would otherwise
+    // have a missing parent.
+    foreach (array_keys($this->postings_map) as $path)
+      $this->_create_missing_parents($path);
+    ksort($this->postings_map, SORT_STRING);
+
+    $this->postings_list = array_values($this->postings_map);
+    $n_postings          = count($this->postings_list);
 
     // Parent node types.
-    if ($n_postings == 1)
-      $postings[0]->set_relation(POSTING_RELATION_PARENT_STUB);
-    else
-      $postings[0]->set_relation(POSTING_RELATION_PARENT_UNFOLDED);
+    if ($n_postings == 1) {
+      $this->postings_list[0]->set_relation(POSTING_RELATION_PARENT_STUB);
+      trace('no children');
+      return;
+    }
+    $this->postings_list[0]->set_relation(POSTING_RELATION_PARENT_UNFOLDED);
 
     // Walk through all nodes (except the parent node).
     $indent = array(INDENT_DRAW_SPACE);
     for ($i = 1; $i != $n_postings; $i++) {
-      $current       = $postings[$i];
+      $current       = $this->postings_list[$i];
       $current_depth = $this->_get_posting_depth($current);
-      $next          = $postings[$i + 1];
+      $next          = $this->postings_list[$i + 1];
       $next_depth    = $this->_get_posting_depth($next);
       $next_sibling  = $this->_get_next_sibling($i + 1, $current_depth);
 
@@ -110,11 +133,13 @@ class Thread {
         for ($f = $current_depth; $f < $next_depth; $f++)
           $indent[$f] = INDENT_DRAW_SPACE;
     }
+    trace('leave');
   }
 
 
   function set_from_db(&$forumdb, &$_res) {
     trace('enter');
+    $this->dirty = TRUE;
     while (!$_res->EOF) {
       $row = $_res->FetchObj();
       if (!isset($thread_id))
@@ -126,19 +151,18 @@ class Thread {
       $posting = new Posting;
       $posting->set_from_db($row);
       $posting = $forumdb->_decorate_posting($posting);
-      $this->postings[$this->_get_posting_path($posting)] = $posting;
+      $posting->apply_block();
+      $this->_add_posting($posting);
 
       $_res->MoveNext();
     }
 
-    trace('postings fetched');
-    $this->_update_relations();
     trace('leave');
   }
 
 
   function &get_parent() {
-    return $this->postings['00000000'];
+    return $this->postings_map['00000000'];
   }
 
 
@@ -148,57 +172,39 @@ class Thread {
 
 
   function fold() {
-    if (count($this->postings) == 1)
+    $this->dirty = FALSE;
+    if (count($this->postings_list) == 1)
       return;
     $parent = $this->get_parent();
     $parent->set_relation(POSTING_RELATION_PARENT_FOLDED);
-    $this->postings = array($this->_get_posting_path($parent) => $parent);
-  }
-
-
-  function remove_locked_postings() {
-    trace('Enter');
-    $locked   = array();
-    $unlocked = array();
-    foreach ($this->postings as $posting)
-      if ($posting->is_locked())
-        array_push($locked, $posting);
-      else
-        array_push($unlocked, $posting);
-
-    foreach ($locked as $posting)
-      if (!$this->_posting_has_unlocked_children($unlocked, $posting))
-        unset($this->postings[$this->_get_posting_path($posting)]);
-    trace('locked postings removed');
-    $this->_update_relations();
-    trace('leave');
+    $this->postings_list = array($parent);
+    $this->postings_map  = array($this->_get_posting_path($parent) => $parent);
+    $this->n_new         = $parent->is_new() ? 1 : 0;
   }
 
 
   function get_postings() {
-    ksort($this->postings, SORT_STRING);
-    return array_values($this->postings);
+    if ($this->dirty)
+      $this->_update_relations();
+    return $this->postings_list;
   }
 
 
-  function foreach_posting($_func, $_data = NULL) {
-    ksort($this->postings, SORT_STRING);
-    foreach ($this->postings as $posting)
-      call_user_func($_func, $posting, $_data);
+  function foreach_posting(&$_func) {
+    if ($this->dirty)
+      $this->_update_relations();
+    foreach ($this->postings_list as $posting)
+      call_user_func($_func, $posting);
   }
 
 
   function get_n_postings() {
-    return count($this->postings);
+    return count($this->postings_list);
   }
 
 
   function get_n_new_postings() {
-    $n = 0;
-    foreach ($this->postings as $posting)
-      if ($posting->is_new())
-        $n++;
-    return $n;
+    return $this->n_new;
   }
 
 

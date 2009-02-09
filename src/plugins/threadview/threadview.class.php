@@ -25,9 +25,7 @@
  */
 class ThreadView extends View {
   function _format_posting(&$_posting, $_data) {
-    $current_id = (int)$_GET['msg_id'];
-    $_posting->set_selected($_posting->get_id() == $current_id);
-    $_posting->apply_block();
+    $_posting->set_selected($_posting->get_id() == (int)$_GET['msg_id']);
   }
 
 
@@ -38,14 +36,13 @@ class ThreadView extends View {
     $func         = array(&$this, '_format_posting');
     trace('fetching threads');
     $threads      = $this->forumdb->get_threads_from_forum_id($_forum_id,
+                                                              FALSE,
                                                               $_offset,
                                                               cfg('tpp'));
     trace('threads fetched');
 
     // Format the threads.
     foreach ($threads as $thread) {
-      $thread->remove_locked_postings();
-      $thread->foreach_posting($func);
       if (!$thread_state->is_folded($thread->get_parent_id()))
         continue;
       $thread->fold();
@@ -155,9 +152,8 @@ class ThreadView extends View {
       $state      = new ThreadState(THREAD_STATE_UNFOLDED, '');
       $func       = array(&$this, '_format_posting');
       $thread_ids = array($_posting->get_thread_id());
-      $threads    = $this->forumdb->get_threads_from_id($thread_ids);
+      $threads    = $this->forumdb->get_threads_from_id($thread_ids, FALSE);
       trace('thread loaded');
-      $threads[0]->remove_locked_postings();
       $threads[0]->foreach_posting($func);
       trace('thread formatted');
       $this->assign       ('n_rows',  1);

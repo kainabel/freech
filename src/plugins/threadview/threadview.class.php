@@ -160,15 +160,15 @@ class ThreadView extends View {
       $threads[0]->remove_locked_postings();
       $threads[0]->foreach_posting($func);
       trace('thread formatted');
-      $this->assign_by_ref('n_rows',  1);
+      $this->assign       ('n_rows',  1);
       $this->assign_by_ref('threads', $threads);
     }
 
     // Render.
     $this->assign_by_ref('indexbar', $indexbar);
     $this->assign_by_ref('posting',  $_posting);
-    $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
-    $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
+    $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
+    $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));
     $this->render(dirname(__FILE__).'/threadview_read_posting.tmpl');
     $this->api->set_title($_posting->get_subject());
     trace('leave');

@@ -1,0 +1,111 @@
+<!-- thread -->
+<table border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
+<?php
+  if ($n_rows > 0) {
+    foreach ($threads as $thread) {
+      foreach ($thread->get_postings() as $posting) {
+?>
+<!-- thread_row -->
+<tr class='posting' valign='middle'>
+  <td align='center' class='null'><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
+  <td align='left'>
+  <table border='0' cellspacing='0' cellpadding='0' summary=''>
+    <tr>
+     <td align='left'>
+<?php
+  foreach ($posting->get_indent() as $indent) {
+    if ($indent == INDENT_DRAW_DASH) {
+?>
+     <img src='<?=$__theme_dir?>/img/l.png' width='20' height='23' alt='|' />
+<?php
+    } else {
+?>
+     <img src='<?=$__theme_dir?>/img/null.png' width='20' height='23' alt='&nbsp;' />
+<?php
+    }
+  }
+?>
+<?php if ($posting->get_relation() == PARENT_WITHOUT_CHILDREN) { ?>
+     <img src='<?=$__theme_dir?>/img/o.png' width='9' height='21' alt='' />
+<?php } elseif ($posting->get_relation() == PARENT_WITH_CHILDREN_UNFOLDED) { ?>
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='<?=$__theme_dir?>/img/m.png' class='thread_img' width='9' height='21' alt='0' /></a>
+<?php } elseif ($posting->get_relation() == PARENT_WITH_CHILDREN_FOLDED) { ?>
+     <a href='{$posting->get_fold_url_string()|escape}'><img src='<?=$__theme_dir?>/img/p.png' class='thread_img' width='9' height='21' alt='0' /></a>
+<?php } elseif ($posting->get_relation() == BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN
+             or $posting->get_relation() == BRANCHBOTTOM_CHILD_WITH_CHILDREN) { ?>
+     <img src='<?=$__theme_dir?>/img/e.png' width='20' height='23' alt='`-' />
+<?php } elseif ($posting->get_relation() == CHILD_WITHOUT_CHILDREN
+             or $posting->get_relation() == CHILD_WITH_CHILDREN) { ?>
+     <img src='<?=$__theme_dir?>/img/x.png' width='20' height='23' alt='|-' />
+<?php } ?>
+     </td>
+     <td align='left'>
+<?php if ($posting->get_priority() > 0) { ?>
+     &nbsp;<img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
+<?php } ?>
+<?php if ($posting->is_selected()) { ?>
+     &nbsp;<span class='selected'>{$posting->get_subject()|escape}</span>
+<?php } elseif (!$posting->is_active()) { ?>
+     &nbsp;{$posting->get_subject()|escape}
+<?php } else { ?>
+     &nbsp;{$posting->get_url_html()}
+<?php } ?>
+<?php if ($posting->get_relation() == PARENT_WITH_CHILDREN_FOLDED) { ?>
+  &nbsp;(<?=$posting->get_n_children();?>)
+<?php } ?>
+<?php if ($posting->was_moved()) { ?>
+  &nbsp;<img src="<?=$__theme_dir?>/img/move.png" alt="" title="<?=_('Moved')?>" />
+<?php } ?>
+     </td>
+    </tr>
+   </table>
+  </td>
+  <td><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
+  <td align='left'>
+<?php if ($posting->is_selected()) { ?>
+    &nbsp;<span class='selected'>{$posting->get_username()|escape}</span>
+<?php } else { ?>
+    &nbsp;{$posting->get_username()|escape}
+<?php } ?>
+<?php if ($posting->get_user_is_special()) { ?>
+    <img src="{$posting->get_user_icon()|escape}"
+         alt=""
+         title="{$posting->get_user_icon_name()|escape}" />
+<?php } ?>
+  </td>
+<?php if ($posting->is_selected()) { ?>
+   <td align='right' class='nowrap'>
+    <span class='selected'><?=$posting->get_created_time();?></span>
+  </td>
+<?php } elseif ($posting->is_updated()) { ?>
+  <td class='thread_date'>
+    <span style='color:#<?=$posting->get_updated_newness_hex();?>0000'>
+      <span class="edit_marker" title="<?=_('Edited')?>">*</span>
+      <?=$posting->get_updated_time();?>
+    </span>
+  </td>
+<?php } elseif ($posting->is_new()) { ?>
+  <td class='thread_date'>
+    <span style='color:#{$posting->get_newness_hex()}0000'>
+      <?=$posting->get_created_time();?>
+    </span>
+  </td>
+<?php } else { ?>
+   <td class='thread_date'><?=$posting->get_created_time();?></td>
+<?php } ?>
+   <td align='center' class='null'><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
+ </tr>
+<!-- end thread_row -->
+<?php
+      }
+    }
+  } else {
+?>
+<tr>
+  <td align='center'>
+    <div id='empty_forum_message'><?=_('(No postings found)')?></div>
+  </td>
+</tr>
+<?php } ?>
+</table>
+<!-- end thread -->

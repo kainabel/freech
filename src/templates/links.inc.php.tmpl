@@ -1,0 +1,16 @@
+<!-- links -->
+<?php if ($links->length() == 0) return; ?>
+  <ul id="<?=$name?>">
+<?php foreach ($links->get_items() as $item) { ?>
+  <?php if ($item->is_separator()) { ?>
+        <li class="separator"><?=$separator?></li>
+  <?php } elseif ($item->is_html()) { ?>
+        <li class="html"><?=$item->get_html()?></li>
+  <?php } elseif (!$item->is_link()) { ?>
+        <li class="text"><?=$item->get_text()?></li>
+  <?php } else { ?>
+        <li class="link"><?=$item->get_url_html()?></li>
+  <?php } ?>
+  </ul>
+<?php } ?>
+<!-- end links -->

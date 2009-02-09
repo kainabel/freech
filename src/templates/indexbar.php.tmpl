@@ -1,0 +1,25 @@
+<!-- indexbar -->
+<table class='index'
+       width='100%'
+       cellspacing='0'
+       cellpadding='5'
+       border='0'
+       summary=''>
+ <tr>
+  <td align='center'>
+  <span>
+<?php
+  foreach ($indexbar->get_items() as $item) {
+    if ($item->is_separator())
+      echo "&nbsp;&nbsp;";
+    elseif ($item->is_link())
+      echo "&nbsp;".$item->get_url_html();
+    else
+      echo "&nbsp;".$item->get_text();
+  }
+?>
+  </span>
+  </td>
+ </tr>
+</table>
+<!-- end indexbar -->

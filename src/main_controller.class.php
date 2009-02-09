@@ -28,7 +28,6 @@ error_reporting(E_ERROR
               | E_PARSE);
 
 include_once 'functions/config.inc.php';
-include_once 'services/call_tracer.class.php';
 include_once 'functions/trace.inc.php';
 trace('Start');
 

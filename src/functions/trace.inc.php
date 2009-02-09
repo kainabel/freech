@@ -20,8 +20,10 @@
 ?>
 <?
 unset($tracer);
-if (cfg('trace_calls'))
+if (cfg('trace_calls')) {
+  require_once dirname(__FILE__).'/../services/call_tracer.class.php';
   $tracer = new CallTracer(cfg('trace_log'));
+}
 
 function trace() {
   if (!cfg('trace_calls'))

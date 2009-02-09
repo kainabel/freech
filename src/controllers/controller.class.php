@@ -81,6 +81,7 @@
       trace('rendering template %s', $_template);
       $result = $this->smarty->fetch($_template, $cache_id);
       trace('rendered template %s', $_template);
+      $this->restore_all_assign();
       return $result;
     }
 

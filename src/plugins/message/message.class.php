@@ -24,12 +24,14 @@
  */
 class Message extends PostingDecorator {
     function _update_body_html() {
+      trace('enter');
       // Perform non HTML generating formattings.
       $body = $this->get_quoted_body(0);
 
       // Let plugins perform formattings.
       $this->set_body_html($body);
       $this->emit('on_format_before_html', $this);
+      trace('on_format_before_html completed');
 
       // Perform HTML generating formattings.
       $body = $this->get_body_html();
@@ -42,6 +44,7 @@ class Message extends PostingDecorator {
       $this->set_body_html($body);
 
       $this->emit('on_format_after_html', $this);
+      trace('leave');
     }
 
 

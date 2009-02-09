@@ -15,6 +15,6 @@ function bbview_init(&$api) {
 function bbview_on_run(&$api) {
   if ($api->view_class() != 'BBView')
     return;
-  include_once dirname(__FILE__).'/bbview.class.php';
+  include dirname(__FILE__).'/bbview.class.php';
 }
 ?>

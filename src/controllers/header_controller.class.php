@@ -25,13 +25,13 @@
         $n_online = $this->visitordb->get_n_visitors(time() - 60 * 5);
 
       $this->clear_all_assign();
-      $this->assign('title',         $_title);
-      $this->assign('site_title',    cfg('site_title'));
-      $this->assign('style',         $this->api->get_style());
-      $this->assign('head_js',       $this->api->get_js('head'));
-      $this->assign('onload_js',     $this->api->get_js('onload'));
-      $this->assign('account_links', $this->api->links('account'));
-      $this->assign('n_online',      $n_online);
+      $this->assign       ('title',         $_title);
+      $this->assign       ('site_title',    cfg('site_title'));
+      $this->assign       ('n_online',      $n_online);
+      $this->assign       ('style',         $this->api->get_style());
+      $this->assign       ('head_js',       $this->api->get_js('head'));
+      $this->assign       ('onload_js',     $this->api->get_js('onload'));
+      $this->assign_by_ref('account_links', $this->api->links('account'));
       $this->render('header.tmpl');
     }
   }

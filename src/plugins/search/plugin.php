@@ -33,11 +33,11 @@ function search_init(&$api) {
 
 
 function search_on_search(&$api) {
-  include_once dirname(__FILE__).'/parser.class.php';
-  include_once dirname(__FILE__).'/search_controller.class.php';
-  include_once dirname(__FILE__).'/indexbar_search_result.class.php';
-  include_once dirname(__FILE__).'/indexbar_search_users.class.php';
-  include_once dirname(__FILE__).'/search_query.class.php';
+  include dirname(__FILE__).'/parser.class.php';
+  include dirname(__FILE__).'/search_controller.class.php';
+  include dirname(__FILE__).'/indexbar_search_result.class.php';
+  include dirname(__FILE__).'/indexbar_search_users.class.php';
+  include dirname(__FILE__).'/search_query.class.php';
 
   if ($_GET['q'])
     search_on_search_result($api);

@@ -70,7 +70,7 @@
                          n_pages_per_index   => cfg("ppi"),
                          thread_state        => $thread_state);
 
-      include_once 'objects/indexbar_user_postings.class.php';
+      include 'objects/indexbar_user_postings.class.php';
       $indexbar = new IndexBarUserPostings($args);
 
       $this->assign_by_ref('n_rows',     count($threads));
@@ -235,7 +235,7 @@
                          n_offset          => $_offset,
                          n_pages_per_index => cfg("ppi"));
 
-      include_once 'objects/indexbar_group_profile.class.php';
+      include 'objects/indexbar_group_profile.class.php';
       $indexbar = new IndexBarGroupProfile($args);
 
       // Render the template.

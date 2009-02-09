@@ -67,7 +67,7 @@ class ThreadView extends View {
                        n_pages_per_index  => cfg('ppi'),
                        thread_state       => $thread_state);
 
-    include_once dirname(__FILE__).'/indexbar.class.php';
+    include dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarByThread($args);
     trace('indexbar built');
 
@@ -76,8 +76,8 @@ class ThreadView extends View {
     $this->assign_by_ref('indexbar',           $indexbar);
     $this->assign_by_ref('n_rows',             count($threads));
     $this->assign_by_ref('threads',            $threads);
-    $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
-    $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
+    $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
+    $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));
     $this->render('thread_with_indexbar.tmpl');
     trace('leave');
   }
@@ -105,7 +105,7 @@ class ThreadView extends View {
                     && $_posting->has_thread()
                     && $_COOKIE[thread] != 'hide';
 
-    include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
+    include dirname(__FILE__).'/indexbar_read_posting.class.php';
     $indexbar = new ThreadViewIndexBarReadPosting($_posting,
                                                   $prev_posting_id,
                                                   $next_posting_id,

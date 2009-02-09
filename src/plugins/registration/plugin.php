@@ -27,14 +27,14 @@ function registration_on_run(&$api) {
 
 
 function registration_on_register(&$api) {
-  include_once dirname(__FILE__).'/registration_controller.class.php';
+  include dirname(__FILE__).'/registration_controller.class.php';
   $registration = new RegistrationController($api);
   $registration->show(new User);
 }
 
 
 function registration_on_create(&$api) {
-  include_once dirname(__FILE__).'/registration_controller.class.php';
+  include dirname(__FILE__).'/registration_controller.class.php';
   $registration = new RegistrationController($api);
   $user         = init_user_from_post_data();
 
@@ -101,7 +101,7 @@ function registration_on_confirm(&$api) {
     die('User activation failed');
 
   // Done.
-  include_once dirname(__FILE__).'/registration_controller.class.php';
+  include dirname(__FILE__).'/registration_controller.class.php';
   $registration = new RegistrationController($api);
   $registration->show_done($user);
 }
@@ -136,7 +136,7 @@ function registration_mail_send(&$api, &$user) {
   $url      = cfg('site_url') . '?action=account_confirm'
             . "&username=$username&hash=$hash";
   $api->send_mail($user, $subject, $body, array('url' => $url));
-  include_once dirname(__FILE__).'/registration_controller.class.php';
+  include dirname(__FILE__).'/registration_controller.class.php';
   $controller = new RegistrationController($api);
   $controller->show_mail_sent($user);
 }

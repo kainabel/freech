@@ -19,22 +19,22 @@
   */
 ?>
 <?php
-  include_once 'freech.class.php';
+include 'freech.class.php';
 
-  // Must be called before any other output is produced.
-  $forum = new Freech;
+// Must be called before any other output is produced.
+$forum = new Freech;
 
-  // Let the forum do its work.
-  $forum->run();
+// Let the forum do its work.
+$forum->run();
 
-  // Print the page header.
-  $forum->print_head();
+// Print the page header.
+$forum->print_head();
 
-  // Print the body.
-  $forum->show();
+// Print the body.
+$forum->show();
 
-  // Done.
-  $forum->destroy();
+// Done.
+$forum->destroy();
 ?>
 </body>
 </html>

@@ -27,60 +27,53 @@ error_reporting(E_ERROR
               | E_RECOVERABLE_ERROR
               | E_PARSE);
 
-include_once 'functions/config.inc.php';
-include_once 'functions/trace.inc.php';
+include 'functions/config.inc.php';
+include 'functions/trace.inc.php';
 trace('Start');
 
-require_once 'smarty/Smarty.class.php';
+require 'smarty/Smarty.class.php';
 trace('Smarty imported');
-require_once 'adodb/adodb.inc.php';
+require 'adodb/adodb.inc.php';
 trace('Adodb imported');
 
-include_once 'libuseful/SqlQuery.class.php5';
-include_once 'libuseful/string.inc.php';
-include_once 'services/trackable.class.php';
-include_once 'objects/thread_state.class.php';
+include 'libuseful/SqlQuery.class.php5';
+include 'libuseful/string.inc.php';
+include 'services/trackable.class.php';
+include 'objects/thread_state.class.php';
 
-include_once 'functions/files.inc.php';
-include_once 'functions/forum.inc.php';
+include 'functions/files.inc.php';
+include 'functions/forum.inc.php';
 trace('Function imports done');
 
-include_once 'objects/hint.class.php';
-include_once 'objects/error.class.php';
-include_once 'objects/ack.class.php';
-include_once 'objects/url.class.php';
-include_once 'objects/freech_url.class.php';
-include_once 'objects/posting.class.php';
-include_once 'objects/forum.class.php';
-include_once 'objects/user.class.php';
-include_once 'objects/group.class.php';
-include_once 'objects/posting_decorator.class.php';
-include_once 'objects/thread.class.php';
-include_once 'objects/menu_item.class.php';
-include_once 'objects/menu.class.php';
+include 'objects/hint.class.php';
+include 'objects/error.class.php';
+include 'objects/ack.class.php';
+include 'objects/url.class.php';
+include 'objects/freech_url.class.php';
+include 'objects/posting.class.php';
+include 'objects/forum.class.php';
+include 'objects/user.class.php';
+include 'objects/group.class.php';
+include 'objects/posting_decorator.class.php';
+include 'objects/thread.class.php';
+include 'objects/menu_item.class.php';
+include 'objects/menu.class.php';
 trace('Object imports done');
 
-include_once 'controllers/controller.class.php';
-include_once 'controllers/breadcrumbs_controller.class.php';
-include_once 'controllers/footer_controller.class.php';
-include_once 'controllers/view.class.php';
+include 'controllers/controller.class.php';
+include 'controllers/breadcrumbs_controller.class.php';
+include 'controllers/footer_controller.class.php';
+include 'controllers/view.class.php';
 trace('Controller imports done');
 
-include_once 'services/groupdb.class.php';
-include_once 'services/sql_query.class.php';
-include_once 'services/forumdb.class.php';
-include_once 'services/userdb.class.php';
-include_once 'services/plugin_registry.class.php';
+include 'services/groupdb.class.php';
+include 'services/sql_query.class.php';
+include 'services/forumdb.class.php';
+include 'services/userdb.class.php';
+include 'services/plugin_registry.class.php';
 trace('Service imports done');
 
 class MainController {
-  var $db;
-  var $forum;
-  var $eventbus;
-  var $smarty;
-  var $thread_state;
-  var $api;
-
   function MainController(&$_plugin_api) {
     if (is_dir('installer') && !cfg('ignore_installer_dir', FALSE))
       die('Error: Please delete the installer/ directory before using this forum.');
@@ -187,7 +180,7 @@ class MainController {
     // Initialize the visitordb after cookie handling to prevent useless
     // updates.
     if (!cfg('disable_visitor_counter')) {
-      include_once 'services/visitordb.class.php';
+      include 'services/visitordb.class.php';
       $this->visitordb = new VisitorDB($this->db);
       trace('VisitorDB initialized');
       $this->visitordb->count();
@@ -664,7 +657,7 @@ class MainController {
    *************************************************************/
   // Shows the homepage.
   function _show_homepage() {
-    include_once 'controllers/homepage_controller.class.php';
+    include 'controllers/homepage_controller.class.php';
     $controller = new HomepageController($this->api);
     $controller->show();
   }
@@ -1221,7 +1214,7 @@ class MainController {
    * Forum editor.
    *************************************************************/
   function _import_forum_editor() {
-    include_once 'controllers/forum_editor_controller.class.php';
+    include 'controllers/forum_editor_controller.class.php';
   }
 
 
@@ -1285,13 +1278,12 @@ class MainController {
     $this->_prepare_modlog();
     $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Moderation Log'));
-    $footer = new ModLogController($this->api);
-    $footer->show((int)$_GET['hs']);
+    $controller = new ModLogController($this->api);
+    $controller->show((int)$_GET['hs']);
     trace('leave');
   }
 
 
-  // Prints the footer of the page.
   function _print_breadcrumbs() {
     trace('enter');
     $show_page_links = (bool)$this->get_current_forum_id();
@@ -1316,7 +1308,7 @@ class MainController {
                      $_descr,
                      $_off,
                      $_n_entries) {
-    include_once 'controllers/rss_controller.class.php';
+    include 'controllers/rss_controller.class.php';
     $this->content = '';
     $rss = new RSSController($this->api);
     $rss->set_base_url(cfg('site_url'));
@@ -1702,6 +1694,7 @@ class MainController {
 
 
   function print_head($_header = NULL) {
+    trace('Enter');
     $oldcontent    = $this->content;
     $this->content = '';
 
@@ -1717,12 +1710,15 @@ class MainController {
       header('Content-Type: text/html; charset=utf-8');
       header('Pragma: no-cache');
       header('Cache-control: no-cache');
-      include_once 'controllers/header_controller.class.php';
+      trace('rendering header');
+      include 'controllers/header_controller.class.php';
       $header = new HeaderController($this->api);
       $header->show($this->get_title());
+      trace('rendered header');
     }
 
     print($this->content);
+    trace('printed header');
 
     /* Plugin hook: on_header_print_before
      *   Called after the HTML header was sent.
@@ -1730,6 +1726,7 @@ class MainController {
      */
     $this->eventbus->emit('on_header_print_after', $this->api);
     $this->content = $oldcontent;
+    trace('Leave');
   }
 
 

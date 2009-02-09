@@ -61,7 +61,7 @@ class ListView extends View {
                        n_offset            => (int)$_offset,
                        n_pages_per_index   => cfg('ppi'));
 
-    include_once dirname(__FILE__).'/indexbar.class.php';
+    include dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarByTime($args);
 
     $this->clear_all_assign();
@@ -128,7 +128,7 @@ class ListView extends View {
       $next_posting_id = $db->get_next_posting_id_in_forum($_posting);
     }
 
-    include_once dirname(__FILE__).'/indexbar_read_posting.class.php';
+    include dirname(__FILE__).'/indexbar_read_posting.class.php';
     $indexbar = new ListViewIndexBarReadPosting($_posting,
                                                 $prev_posting_id,
                                                 $next_posting_id);

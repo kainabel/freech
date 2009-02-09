@@ -66,12 +66,12 @@
       }
 
       $this->clear_all_assign();
-      $this->assign_by_ref('plugin_dir',      'plugins/statistics');
+      $this->assign       ('plugin_dir',      'plugins/statistics');
+      $this->assign       ('show_traffic',    $traffic   ? TRUE : FALSE);
+      $this->assign       ('show_postings2',  $postings2 ? TRUE : FALSE);
       $this->assign_by_ref('days',            $days);
       $this->assign_by_ref('resolution',      $resolution);
       $this->assign_by_ref('data',            $results);
-      $this->assign_by_ref('show_traffic',    $traffic   ? TRUE : FALSE);
-      $this->assign_by_ref('show_postings2',  $postings2 ? TRUE : FALSE);
       $this->assign_by_ref('postings2_label', cfg('statistics_extra_label'));
       $this->render(dirname(__FILE__).'/statistics.tmpl');
       $this->api->set_title(_('Statistics'));

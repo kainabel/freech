@@ -77,7 +77,7 @@
       $indexbar = new IndexBarSearchResult($args);
 
       // Render the result.
-      $this->assign_by_ref('posting_search', 1);
+      $this->assign       ('posting_search', 1);
       $this->assign_by_ref('indexbar',       $indexbar);
       $this->assign_by_ref('n_results',      $total);
       $this->assign_by_ref('n_rows',         $rows);
@@ -129,7 +129,7 @@
       $indexbar = new IndexBarSearchUsers($args);
 
       // Render the result.
-      $this->assign_by_ref('user_search', 1);
+      $this->assign       ('user_search', 1);
       $this->assign_by_ref('indexbar',    $indexbar);
       $this->assign_by_ref('n_results',   $n_entries);
       $this->assign_by_ref('n_rows',      $n_rows);

@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-  include_once 'freech.class.php';
+  include 'freech.class.php';
 
   $freech = new Freech;
   header('Content-Type: text/xml; charset=utf-8');

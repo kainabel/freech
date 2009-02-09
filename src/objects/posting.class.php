@@ -242,7 +242,7 @@ class Posting {
 
 
   function _get_indented_blocks($_text) {
-    include_once 'objects/indented_block.class.php';
+    include 'objects/indented_block.class.php';
     $text   = preg_replace('/\r/', '', $_text);
     $lines  = explode("\n", $text);
     $blocks = array();

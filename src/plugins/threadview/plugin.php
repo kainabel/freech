@@ -14,6 +14,6 @@ function threadview_init($api) {
 function threadview_on_run(&$api) {
   if ($api->view_class() != 'ThreadView')
     return;
-  include_once dirname(__FILE__).'/threadview.class.php';
+  include dirname(__FILE__).'/threadview.class.php';
 }
 ?>

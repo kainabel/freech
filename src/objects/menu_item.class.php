@@ -62,11 +62,14 @@
     }
 
 
-    function get_text() {
+    function get_text($_escape = FALSE) {
       if ($this->url)
-        return $this->url->get_label();
+        $text = $this->url->get_label();
       else
-        return $this->text;
+        $text = $this->text;
+      if ($_escape)
+        return htmlentities($text);
+      return $text;
     }
 
 

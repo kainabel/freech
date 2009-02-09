@@ -21,7 +21,7 @@ function spamhash_on_run(&$api) {
   // Check if the plugin is enabled for the given user.
   if (!CHECK_REGISTERED_ACCOUNTS && !$api->user()->is_anonymous())
     return;
-  include_once 'spamhash.class.php';
+  include 'spamhash.class.php';
 
   // Create a new instance of the spamhash generator/checker.
   $action = $api->action();

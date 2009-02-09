@@ -23,7 +23,7 @@ if (!is_readable('data/config.inc.php'))
   die('Error: Config file not found. Please follow the'
     . ' installation instructions delivered with the software.');
 
-include_once 'main_controller.class.php';
+include 'main_controller.class.php';
 
 /**
  * This class provides the public API to access the forum. It also

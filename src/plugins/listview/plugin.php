@@ -14,6 +14,6 @@ function listview_init(&$api) {
 function listview_on_run(&$api) {
   if ($api->view_class() != 'ListView')
     return;
-  include_once dirname(__FILE__).'/listview.class.php';
+  include dirname(__FILE__).'/listview.class.php';
 }
 ?>

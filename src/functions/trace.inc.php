@@ -18,7 +18,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   */
 ?>
-<?
+<?php
 unset($tracer);
 if (cfg('trace_calls')) {
   require_once dirname(__FILE__).'/../services/call_tracer.class.php';

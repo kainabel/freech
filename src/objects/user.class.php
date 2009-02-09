@@ -52,26 +52,9 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     /// Sets all values from a given database row.
-    function set_from_db(&$_db_row) {
-      if (!is_array($_db_row))
-        die('User:set_from_db(): Non-array.');
+    function set_from_assoc(&$_row) {
       $this->clear();
-      $this->fields[id]           = $_db_row[id];
-      $this->fields[group_id]     = $_db_row[group_id];
-      $this->fields[name]         = $_db_row[name];
-      $this->fields[passwordhash] = $_db_row[password];
-      $this->fields[firstname]    = $_db_row[firstname];
-      $this->fields[lastname]     = $_db_row[lastname];
-      $this->fields[mail]         = $_db_row[mail];
-      $this->fields[public_mail]  = $_db_row[public_mail];
-      $this->fields[homepage]     = $_db_row[homepage];
-      $this->fields[im]           = $_db_row[im];
-      $this->fields[icon]         = $_db_row[icon];
-      $this->fields[icon_name]    = $_db_row[icon_name];
-      $this->fields[status]       = $_db_row[status];
-      $this->fields[created]      = $_db_row[created];
-      $this->fields[updated]      = $_db_row[updated];
-      $this->fields[lastlogin]    = $_db_row[lastlogin];
+      $this->fields = array_merge($this->fields, $_row);
     }
 
 
@@ -156,19 +139,19 @@ define('USER_STATUS_BLOCKED',     3);
       }
       if (!$_salt)
         $_salt = cfg('salt');
-      $this->fields[passwordhash] = crypt($_salt . $_password);
+      $this->fields['password'] = crypt($_salt . $_password);
       return 0;
     }
 
 
     function get_password_hash() {
-      return $this->fields[passwordhash];
+      return $this->fields['password'];
     }
 
 
     function is_valid_password($_password) {
-      return crypt(cfg('salt') . $_password, $this->fields[passwordhash])
-          == $this->fields[passwordhash];
+      return crypt(cfg('salt') . $_password, $this->fields['password'])
+          == $this->fields['password'];
     }
 
 
@@ -444,7 +427,7 @@ define('USER_STATUS_BLOCKED',     3);
       if (!preg_match(cfg('username_pattern'), $this->fields[name]))
         return _('Your username contains invalid characters.');
 
-      if (ctype_space($this->fields[passwordhash]))
+      if (ctype_space($this->fields['password']))
         return _('Please enter a password.');
 
       if (ctype_space($this->fields[firstname]))

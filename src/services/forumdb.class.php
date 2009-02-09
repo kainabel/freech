@@ -66,9 +66,9 @@
     }
 
 
-    function &_get_posting_from_row(&$_row) {
+    function &_get_posting_from_assoc(&$_row) {
       $posting = new Posting;
-      $posting->set_from_db($_row);
+      $posting->set_from_assoc($_row);
       return $this->_decorate_posting($posting);
     }
 
@@ -352,13 +352,13 @@
       if ($res->EOF)
         return;
 
-      $row = $res->FetchObj();
-      if (strlen($row->path) / 2 > 252)  // Path as long as the the DB field.
-        $row->allow_answer = FALSE;
-      if ($row->is_parent)
-        $row->relation = POSTING_RELATION_PARENT_UNFOLDED;
+      $row = $res->fields;
+      if (strlen($row['path']) / 2 > 252)  // Path as long as the the DB field.
+        $row['allow_answer'] = FALSE;
+      if ($row['is_parent'])
+        $row['relation'] = POSTING_RELATION_PARENT_UNFOLDED;
 
-      return $this->_get_posting_from_row($row);
+      return $this->_get_posting_from_assoc($row);
     }
 
 
@@ -432,8 +432,10 @@
       trace('sql executed');
 
       $thread_ids = array();
-      while (!$res->EOF)
-        array_push($thread_ids, $res->FetchNextObj()->thread_id);
+      while (!$res->EOF) {
+        array_push($thread_ids, $res->fields['thread_id']);
+        $res->MoveNext();
+      }
 
       trace('thread ids received');
       return $this->get_threads_from_id($thread_ids, $_include_inactive);
@@ -443,9 +445,9 @@
     function _walk_list(&$_res, $_func, $_data) {
       $numrows = $_res->RecordCount();
       while (!$_res->EOF) {
-        $row     = $_res->FetchNextObj();
-        $posting = $this->_get_posting_from_row($row);
+        $posting = $this->_get_posting_from_assoc($_res->fields);
         call_user_func($_func, $posting, $_data);
+        $_res->MoveNext();
       }
       return $numrows;
     }
@@ -495,8 +497,9 @@
                             or die('ForumDB::foreach_posting_from_fields()');
 
       while (!$res->EOF) {
-        $posting = $this->_get_posting_from_row($res->FetchNextObj());
+        $posting = $this->_get_posting_from_assoc($res->fields);
         array_push($postings, $posting);
+        $res->MoveNext();
       }
       return $postings;
     }
@@ -535,9 +538,9 @@
     }
 
 
-    function &get_postings_from_query(&$_search_values,
-                                      $_offset = 0,
-                                      $_limit  = -1) {
+    function get_postings_from_query(&$_search_values,
+                                     $_offset = 0,
+                                     $_limit  = -1) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
@@ -554,11 +557,12 @@
       $sql .= " ORDER BY created DESC";
       $query->set_sql($sql);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
-                            or die("ForumDB::foreach_posting_from_query()");
+                            or die('ForumDB::foreach_posting_from_query()');
       $postings = array();
       while (!$res->EOF) {
-        $posting = $this->_get_posting_from_row($res->FetchNextObj());
+        $posting = $this->_get_posting_from_assoc($res->fields);
         array_push($postings, $posting);
+        $res->MoveNext();
       }
       return $postings;
     }
@@ -637,8 +641,10 @@
       if ($res->EOF)
         return array();
       $parent_ids = array();
-      while (!$res->EOF)
-        array_push($parent_ids, $res->FetchNextObj()->id);
+      while (!$res->EOF) {
+        array_push($parent_ids, $res->fields['id']);
+        $res->MoveNext();
+      }
 
       // Grab the direct responses to those postings.
       // IDX: posting:id
@@ -760,8 +766,7 @@
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_forum()');
-      $row = $res->FetchObj($res);
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -803,8 +808,7 @@
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_forum()');
-      $row = $res->FetchObj($res);
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -850,8 +854,7 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_prev_posting_id_in_thread()');
-      $row = $res->FetchObj($res);
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -874,8 +877,7 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die('ForumDB::get_next_posting_id_in_thread()');
-      $row = $res->FetchObj($res);
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -896,8 +898,7 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_prev_thread_id()");
-      $row = $res->FetchObj($res);
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -918,8 +919,7 @@
       $query->set_int('status',    POSTING_STATUS_ACTIVE);
       $res = $this->db->SelectLimit($query->sql(), 1)
                           or die("ForumDB::get_next_thread_id()");
-      $row = $res->FetchObj($res);
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -934,8 +934,7 @@
                             or die('ForumDB::get_duplicate_id_from_posting()');
       if ($res->EOF)
         return;
-      $row = $res->FetchObj();
-      return $row->id;
+      return $res->fields['id'];
     }
 
 
@@ -1028,9 +1027,8 @@
                            or die('ForumDB::get_forum_from_id()');
       if ($res->EOF)
         return NULL;
-      $obj   = $res->FetchObj($res);
       $forum = new Forum;
-      $forum->set_from_db($obj);
+      $forum->set_from_assoc($res->fields);
       return $forum;
     }
 
@@ -1051,9 +1049,8 @@
                           or die('ForumDB::get_forums()');
       $forums = array();
       while (!$res->EOF) {
-        $obj   = $res->FetchObj($res);
         $forum = new Forum;
-        $forum->set_from_db($obj);
+        $forum->set_from_assoc($res->fields);
         array_push($forums, $forum);
         $res->MoveNext();
       }

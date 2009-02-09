@@ -3,6 +3,7 @@ Maintenance
 * Convert the modlog into a plugin.
 * Define the schema using AdoXML.
 * Document all required indexes.
+* Maybe get rid of RecordCount() calls.
 
 Features
 ---------

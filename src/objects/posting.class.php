@@ -60,38 +60,9 @@ class Posting {
 
 
   // Sets all values from a given database row.
-  function set_from_db(&$_row) {
-    if (!is_object($_row))
-      die('Posting:set_from_db(): Non-object.');
+  function set_from_assoc(&$_row) {
     $this->clear();
-    $this->fields[id]               = $_row->id;
-    $this->fields[forum_id]         = $_row->forum_id;
-    $this->fields[origin_forum_id]  = $_row->origin_forum_id;
-    $this->fields[thread_id]        = $_row->thread_id;
-    $this->fields[path]             = $_row->path;
-    $this->fields[priority]         = $_row->priority;
-    $this->fields[user_id]          = $_row->user_id;
-    $this->fields[username]         = $_row->username;
-    $this->fields[current_username] = $_row->current_username;
-    $this->fields[user_is_special]  = $_row->user_is_special;
-    $this->fields[user_icon]        = $_row->user_icon;
-    $this->fields[user_icon_name]   = $_row->user_icon_name;
-    $this->fields[renderer]         = $_row->renderer;
-    $this->fields[subject]          = $_row->subject;
-    $this->fields[body]             = $_row->body;
-    $this->fields[updated]          = $_row->updated;
-    $this->fields[created]          = $_row->created;
-    $this->fields[n_children]       = $_row->n_children;
-    $this->fields[n_descendants]    = $_row->n_descendants;
-    $this->fields[ip_hash]          = $_row->ip_hash;
-    $this->fields[threadupdate]     = $_row->threadupdate;
-    if (isset($_row->relation))
-      $this->fields[relation]       = $_row->relation;
-    $this->fields[is_parent]        = $_row->is_parent;
-    $this->fields[status]           = $_row->status;
-    $this->fields[force_stub]       = $_row->force_stub;
-    if (isset($_row->allow_answer))
-      $this->fields[allow_answer]   = $_row->allow_answer;
+    $this->fields = array_merge($this->fields, $_row);
   }
 
 

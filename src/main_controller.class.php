@@ -160,6 +160,8 @@ class MainController {
     $this->db = ADONewConnection($dbn)
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
+    global $ADODB_FETCH_MODE;
+    $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
     trace('DB connection opened');
     $this->forumdb = new ForumDB($this->api);
     trace('ForumDB set up');

@@ -112,12 +112,12 @@
     }
 
 
-    function &_get_user_from_row(&$row) {
+    function _get_user_from_row(&$row) {
       if (!$row)
         return;
       $user = new User;
-      $user->set_from_db($row);
-      $this->users[$row[id]] = $user;
+      $user->set_from_assoc($row);
+      $this->users[$row['id']] = $user;
       return $user;
     }
 
@@ -126,13 +126,11 @@
      * Returns the user with the given id.
      * $_id: The id of the user.
      */
-    function &get_user_from_id($_id) {
-      if (!$_id)
-        die("UserDB::get_user_from_id(): Invalid id.");
+    function get_user_from_id($_id) {
       $query = array('id' => $_id);
       $sql   = $this->_get_sql_from_query($query);
-      $row   = $this->db->GetRow($sql);
-      return $this->_get_user_from_row($row);
+      $res   = $this->db->Execute($sql);
+      return $this->_get_user_from_row($res->fields);
     }
 
 
@@ -140,13 +138,11 @@
      * Returns the user with the given name.
      * $_name: The name of the user.
      */
-    function &get_user_from_name($_name) {
-      if (!$_name)
-        die("UserDB::get_user_from_name(): Invalid name.");
+    function get_user_from_name($_name) {
       $query = array('name' => $_name);
       $sql   = $this->_get_sql_from_query($query);
-      $row   = $this->db->GetRow($sql);
-      return $this->_get_user_from_row($row);
+      $res   = $this->db->Execute($sql);
+      return $this->_get_user_from_row($res->fields);
     }
 
 
@@ -154,13 +150,11 @@
      * Returns the user with the given email address.
      * $_mail: The email address of the user.
      */
-    function &get_user_from_mail($_mail) {
-      if (!$_mail)
-        die("UserDB::get_user_from_mail(): Invalid email address.");
+    function get_user_from_mail($_mail) {
       $query = array('mail' => $_mail);
       $sql   = $this->_get_sql_from_query($query);
-      $row   = $this->db->GetRow($sql);
-      return $this->_get_user_from_row($row);
+      $res   = $this->db->Execute($sql);
+      return $this->_get_user_from_row($res->fields);
     }
 
 
@@ -172,9 +166,10 @@
       $sql  = $this->_get_sql_from_query($_search);
       $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
       $rows = $res->RecordCount();
-      while ($row = $res->FetchRow()) {
-        $user = $this->_get_user_from_row($row);
+      while (!$res->EOF) {
+        $user = $this->_get_user_from_row($res->fields);
         call_user_func($_func, $user, $_data);
+        $res->MoveNext();
       }
       return $rows;
     }
@@ -220,8 +215,10 @@
       $res     = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset)
                       or die("UserDB::get_similar_users_from_name(): Select");
       $users = array();
-      while ($row = $res->FetchRow())
-        array_push($users, $this->_get_user_from_row($row));
+      while (!$res->EOF) {
+        array_push($users, $this->_get_user_from_row($res->fields));
+        $res->MoveNext();
+      }
       return $users;
     }
 
@@ -279,11 +276,10 @@
       $res = $this->db->SelectLimit($query->sql(), $_limit)
                              or die("UserDB::get_newest_users(): Select");
       $users = array();
-      while ($row = &$res->FetchRow()) {
-        $user = new User;
-        $user->set_from_db($row);
-        $this->users[$row[id]] = &$user;
+      while (!$res->EOF) {
+        $user = $this->_get_user_from_row($res->fields);
         array_push($users, $user);
+        $res->MoveNext();
       }
       return $users;
     }
@@ -311,12 +307,11 @@
       $res   = $this->db->SelectLimit($query->sql(), (int)$_limit)
                     or die("UserDB::get_top_users()");
       $users = array();
-      while ($row = &$res->FetchRow()) {
-        $user = new User;
-        $user->set_from_db($row);
-        $this->users[$row[id]] = &$user;
-        $user->n_postings = $row['n_postings'];
+      while (!$res->EOF) {
+        $user = $this->_get_user_from_row($res->fields);
+        $user->n_postings = $res->fields['n_postings'];
         array_push($users, $user);
+        $res->MoveNext();
       }
       return $users;
     }

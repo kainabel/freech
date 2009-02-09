@@ -141,15 +141,15 @@ class Thread {
     trace('enter');
     $this->dirty = TRUE;
     while (!$_res->EOF) {
-      $row = $_res->FetchObj();
+      $row = $_res->fields;
       if (!isset($thread_id))
-        $thread_id = $row->thread_id;
-      if ($thread_id != $row->thread_id)
+        $thread_id = $row['thread_id'];
+      if ($thread_id != $row['thread_id'])
         break;
 
-      $this->fields['updated'] = $row->threadupdate;
+      $this->fields['updated'] = $row['threadupdate'];
       $posting = new Posting;
-      $posting->set_from_db($row);
+      $posting->set_from_assoc($row);
       $posting = $forumdb->_decorate_posting($posting);
       $posting->apply_block();
       $this->_add_posting($posting);

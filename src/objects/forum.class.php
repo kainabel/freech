@@ -24,61 +24,57 @@
 
   class Forum {
     function Forum($_title = '', $_description = '') {
-      $this->id          = NULL;
-      $this->owner_id    = NULL;
-      $this->name        = $_name;
-      $this->description = $_description;
-      $this->status      = FORUM_STATUS_ACTIVE;
-      $this->status_text = '';
+      $this->fields['id']          = NULL;
+      $this->fields['owner_id']    = NULL;
+      $this->fields['name']        = $_name;
+      $this->fields['description'] = $_description;
+      $this->fields['status']      = FORUM_STATUS_ACTIVE;
+      $this->fields['status_text'] = '';
     }
 
 
-    function set_from_db($_obj) {
-      $this->id          = $_obj->id;
-      $this->owner_id    = $_obj->owner_id;
-      $this->name        = $_obj->name;
-      $this->description = $_obj->description;
-      $this->status      = $_obj->status;
+    function set_from_assoc(&$_row) {
+      $this->fields = array_merge($this->fields, $_row);
     }
 
 
     function set_id($_id) {
-      $this->id = (int)$_id;
+      $this->fields['id'] = (int)$_id;
     }
 
 
     function get_id() {
-      return $this->id;
+      return $this->fields['id'];
     }
 
 
     function set_owner_id($_id) {
-      $this->owner_id = (int)$_id;
+      $this->fields['owner_id'] = (int)$_id;
     }
 
 
     function get_owner_id() {
-      return $this->owner_id;
+      return $this->fields['owner_id'];
     }
 
 
     function set_name($_name) {
-      $this->name = $_name;
+      $this->fields['name'] = $_name;
     }
 
 
     function get_name() {
-      return $this->name;
+      return $this->fields['name'];
     }
 
 
     function set_description($_description) {
-      $this->description = $_description;
+      $this->fields['description'] = $_description;
     }
 
 
     function get_description() {
-      return $this->description;
+      return $this->fields['description'];
     }
 
 
@@ -108,17 +104,17 @@
 
 
     function set_status($_status) {
-      $this->status = (int)$_status;
+      $this->fields['status'] = (int)$_status;
     }
 
 
     function get_status() {
-      return $this->status;
+      return $this->fields['status'];
     }
 
 
     function is_active() {
-      return $this->status == FORUM_STATUS_ACTIVE;
+      return $this->fields['status'] == FORUM_STATUS_ACTIVE;
     }
 
 
@@ -134,26 +130,26 @@
 
 
     function get_status_name() {
-      return $this->get_status_names($this->fields[status]);
+      return $this->get_status_names($this->fields['status']);
     }
 
 
     function set_status_text($_status_text) {
-      $this->status_text = $_status_text;
+      $this->fields['status_text'] = $_status_text;
     }
 
 
     function get_status_text() {
-      return $this->status_text;
+      return $this->fields['status_text'];
     }
 
 
     // Returns an error if any of the required fields is not filled.
     // Returns NULL otherwise.
     function check() {
-      if (!$this->name || ctype_space($this->name))
+      if (!$this->fields['name'] || ctype_space($this->fields['name']))
         return _('Please enter a valid name.');
-      if (!$this->description || ctype_space($this->description))
+      if (!$this->fields['description'] || ctype_space($this->fields['description']))
         return _('Please enter a summary.');
 
       return NULL;

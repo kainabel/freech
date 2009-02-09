@@ -1,0 +1,40 @@
+<!-- breadcrumbs -->
+<table id='breadcrumbs' width='100%' cellpadding='6' cellspacing='0' summary=''>
+ <tr>
+  <td align='left' valign='middle'>
+  &nbsp;<?=_('You are here:')?>
+<?php
+  $name      = "breadcrumb_links";
+  $links     = $breadcrumbs;
+  $separator = "→";
+  require "$template_dir/links.inc.php.tmpl";
+?>
+  </td>
+  <td align='right' valign='middle'>
+<?php
+  $name      = "search_links";
+  $links     = $search_links;
+  $separator = "";
+  require "$template_dir/links.inc.php.tmpl";
+?>
+  </td>
+ </tr>
+</table>
+<!-- end breadcrumbs -->
+<!-- page links -->
+<?php if ($show_page_links) { ?>
+  <table width='100%' cellpadding='5' cellspacing='0' summary=''>
+   <tr>
+    <td align='center'>
+<?php
+  $name      = "page_links";
+  $links     = $page_links;
+  $separator = "";
+  require "$template_dir/links.inc.php.tmpl";
+?>
+    </td>
+   </tr>
+  </table>
+<?php } ?>
+<div id="content">
+<!-- end page links -->

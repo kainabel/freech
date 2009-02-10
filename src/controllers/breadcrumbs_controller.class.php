@@ -26,7 +26,7 @@
       $this->assign_by_ref('page_links',      $this->api->links('page'));
       $this->assign_by_ref('show_page_links', $_show_page_links);
       $this->assign_by_ref('search_links',    $this->api->links('search'));
-      $this->render('breadcrumbs.tmpl');
+      $this->render_php('breadcrumbs.php.tmpl');
     }
   }
 ?>

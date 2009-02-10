@@ -14,41 +14,43 @@
      <td align='left'>
 <?php
   foreach ($posting->get_indent() as $indent) {
-    if ($indent == INDENT_DRAW_DASH) {
-?>
-     <img src='<?=$__theme_dir?>/img/l.png' width='20' height='23' alt='|' />
-<?php
-    } else {
-?>
-     <img src='<?=$__theme_dir?>/img/null.png' width='20' height='23' alt='&nbsp;' />
-<?php
-    }
+    if ($indent == INDENT_DRAW_DASH)
+     echo "<img src='$__theme_dir/img/l.png' width='20' height='23' alt='|' />";
+    else
+     echo "<img src='$__theme_dir/img/null.png' width='20' height='23' alt='&nbsp;' />";
   }
 ?>
-<?php if ($posting->get_relation() == PARENT_WITHOUT_CHILDREN) { ?>
-     <img src='<?=$__theme_dir?>/img/o.png' width='9' height='21' alt='' />
-<?php } elseif ($posting->get_relation() == PARENT_WITH_CHILDREN_UNFOLDED) { ?>
-     <a href='{$posting->get_fold_url_string()|escape}'><img src='<?=$__theme_dir?>/img/m.png' class='thread_img' width='9' height='21' alt='0' /></a>
-<?php } elseif ($posting->get_relation() == PARENT_WITH_CHILDREN_FOLDED) { ?>
-     <a href='{$posting->get_fold_url_string()|escape}'><img src='<?=$__theme_dir?>/img/p.png' class='thread_img' width='9' height='21' alt='0' /></a>
-<?php } elseif ($posting->get_relation() == BRANCHBOTTOM_CHILD_WITHOUT_CHILDREN
-             or $posting->get_relation() == BRANCHBOTTOM_CHILD_WITH_CHILDREN) { ?>
-     <img src='<?=$__theme_dir?>/img/e.png' width='20' height='23' alt='`-' />
-<?php } elseif ($posting->get_relation() == CHILD_WITHOUT_CHILDREN
-             or $posting->get_relation() == CHILD_WITH_CHILDREN) { ?>
-     <img src='<?=$__theme_dir?>/img/x.png' width='20' height='23' alt='|-' />
-<?php } ?>
+<?php
+  if ($posting->get_relation() == POSTING_RELATION_PARENT_STUB) {
+?><img src='<?=$__theme_dir;?>/img/o.png' width='9' height='21' alt='' />
+<?php
+  } elseif ($posting->get_relation() == POSTING_RELATION_PARENT_UNFOLDED) {
+?><a href='<?=htmlentities($posting->get_fold_url_string())?>'><img src='<?=$__theme_dir?>/img/m.png' class='thread_img' width='9' height='21' alt='0' /></a>
+<?php
+  } elseif ($posting->get_relation() == POSTING_RELATION_PARENT_FOLDED) {
+?><a href='<?=htmlentities($posting->get_fold_url_string())?>'><img src='<?=$__theme_dir?>/img/p.png' class='thread_img' width='9' height='21' alt='0' /></a>
+<?php
+  } elseif ($posting->get_relation() == POSTING_RELATION_BRANCHEND_STUB
+        or $posting->get_relation() == POSTING_RELATION_BRANCHEND) {
+?><img src='<?=$__theme_dir?>/img/e.png' width='20' height='23' alt='`-' />
+<?php
+  } elseif ($posting->get_relation() == POSTING_RELATION_CHILD_STUB
+         or $posting->get_relation() == POSTING_RELATION_CHILD) {
+?><img src='<?=$__theme_dir?>/img/x.png' width='20' height='23' alt='|-' />
+<?php
+  }
+?>
      </td>
      <td align='left'>
 <?php if ($posting->get_priority() > 0) { ?>
      &nbsp;<img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
 <?php } ?>
 <?php if ($posting->is_selected()) { ?>
-     &nbsp;<span class='selected'>{$posting->get_subject()|escape}</span>
+     &nbsp;<span class='selected'><?=htmlentities($posting->get_subject())?></span>
 <?php } elseif (!$posting->is_active()) { ?>
-     &nbsp;{$posting->get_subject()|escape}
+     &nbsp;<?=htmlentities($posting->get_subject())?>
 <?php } else { ?>
-     &nbsp;{$posting->get_url_html()}
+     &nbsp;<?=$posting->get_url_html()?>
 <?php } ?>
 <?php if ($posting->get_relation() == PARENT_WITH_CHILDREN_FOLDED) { ?>
   &nbsp;(<?=$posting->get_n_children();?>)
@@ -63,14 +65,14 @@
   <td><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>
 <?php if ($posting->is_selected()) { ?>
-    &nbsp;<span class='selected'>{$posting->get_username()|escape}</span>
+    &nbsp;<span class='selected'><?=htmlentities($posting->get_username())?></span>
 <?php } else { ?>
-    &nbsp;{$posting->get_username()|escape}
+    &nbsp;<?=htmlentities($posting->get_username())?>
 <?php } ?>
 <?php if ($posting->get_user_is_special()) { ?>
-    <img src="{$posting->get_user_icon()|escape}"
+    <img src="<?=htmlentities($posting->get_user_icon())?>"
          alt=""
-         title="{$posting->get_user_icon_name()|escape}" />
+         title="<?=htmlentities($posting->get_user_icon_name())?>" />
 <?php } ?>
   </td>
 <?php if ($posting->is_selected()) { ?>
@@ -79,19 +81,19 @@
   </td>
 <?php } elseif ($posting->is_updated()) { ?>
   <td class='thread_date'>
-    <span style='color:#<?=$posting->get_updated_newness_hex();?>0000'>
+    <span style='color:#<?=$posting->get_updated_newness_hex()?>0000'>
       <span class="edit_marker" title="<?=_('Edited')?>">*</span>
       <?=$posting->get_updated_time();?>
     </span>
   </td>
 <?php } elseif ($posting->is_new()) { ?>
   <td class='thread_date'>
-    <span style='color:#{$posting->get_newness_hex()}0000'>
+    <span style='color:#<?=$posting->get_newness_hex()?>0000'>
       <?=$posting->get_created_time();?>
     </span>
   </td>
 <?php } else { ?>
-   <td class='thread_date'><?=$posting->get_created_time();?></td>
+   <td class='thread_date'><?=$posting->get_created_time()?></td>
 <?php } ?>
    <td align='center' class='null'><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
  </tr>

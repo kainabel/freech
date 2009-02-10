@@ -90,7 +90,7 @@
       $query->set_string('attribute_name',  $_name);
       $query->set_string('attribute_type',  'string');  //FIXME
       $query->set_string('attribute_value', $_value);
-      $this->db->Execute($query->sql()) or die('ModLogDB::_save_attribute()');
+      $this->db->_Execute($query->sql()) or die('ModLogDB::_save_attribute()');
     }
 
 
@@ -137,7 +137,7 @@
       $query->set_sql($sql);
 
       $this->db->StartTrans();
-      $this->db->Execute($query->sql()) or die('ModLogDB::save_item: Ins');
+      $this->db->_Execute($query->sql()) or die('ModLogDB::save_item: Ins');
       $newid = $this->db->Insert_ID();
       $_item->set_id($newid);
       $this->_save_attributes($_item);
@@ -183,7 +183,7 @@
       }
       $sql  .= ' ORDER BY m.id DESC';
       $query = new FreechSqlQuery($sql);
-      $res   = $this->db->Execute($query->sql());
+      $res   = $this->db->_Execute($query->sql());
       $list  = array();
       while ($item = $this->_pop_item_from_result($res))
         array_push($list, $item);

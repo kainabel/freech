@@ -52,7 +52,7 @@
 <?php } else { ?>
      &nbsp;<?=$posting->get_url_html()?>
 <?php } ?>
-<?php if ($posting->get_relation() == PARENT_WITH_CHILDREN_FOLDED) { ?>
+<?php if ($posting->get_relation() == POSTING_RELATION_PARENT_FOLDED) { ?>
   &nbsp;(<?=$posting->get_n_children();?>)
 <?php } ?>
 <?php if ($posting->was_moved()) { ?>

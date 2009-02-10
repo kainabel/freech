@@ -32,7 +32,7 @@
       $this->assign       ('head_js',       $this->api->get_js('head'));
       $this->assign       ('onload_js',     $this->api->get_js('onload'));
       $this->assign_by_ref('account_links', $this->api->links('account'));
-      $this->render('header.tmpl');
+      $this->render_php('header.php.tmpl');
     }
   }
 ?>

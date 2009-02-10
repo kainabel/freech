@@ -96,15 +96,21 @@ input {
 }
 
 #account_links {
-  display: block;
+  display: inline;
+  list-style: none;
   vertical-align: top;
-  font-size: .9em;
   color: #ffffff;
   white-space: nowrap;
+  padding-bottom: 2em;
+}
+
+#account_links li {
+  font-size: .9em;
+  margin: 0 0px 0px 2px;
+  display: inline;
 }
 
 #account_links a {
-  font-size: .9em;
   color: #ffffff;
 }
 
@@ -187,6 +193,8 @@ input {
   margin-right: .3em;
   width: auto;
   text-align: right;
+  vertical-align: bottom;
+  height: 50px;
 }
 
 #title {
@@ -195,11 +203,12 @@ input {
 }
 
 #status {
-  float: right;
-  display: block;
-  vertical-align: bottom;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   font-size: .9em;
   color: #ffffff;
+  margin-bottom: 3px;
 }
 
 

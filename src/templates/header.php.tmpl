@@ -35,8 +35,10 @@
   <div id='header3'>
     <span id='account_links'>
     <?php
-      $indexbar = $account_links;
-      require "$template_dir/indexbar.tmpl.php";
+      $name            = 'account_links';
+      $links           = $account_links;
+      $extra_separator = '|';
+      require "$template_dir/links.inc.php.tmpl";
     ?>
     </span>
     <br />

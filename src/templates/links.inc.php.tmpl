@@ -1,8 +1,13 @@
 <!-- links -->
 <?php if ($links->length() == 0) return; ?>
   <ul id="<?=$name?>">
-<?php foreach ($links->get_items() as $item) { ?>
-  <?php if ($item->is_separator()) { ?>
+<?php
+  foreach ($links->get_items() as $item) {
+    $i++;
+    if ($extra_separator and $i != 1) {
+  ?>
+        <li class="separator"><?=$extra_separator?></li>
+  <?php } if ($item->is_separator()) { ?>
         <li class="separator"><?=$separator?></li>
   <?php } elseif ($item->is_html()) { ?>
         <li class="html"><?=$item->get_html()?></li>
@@ -12,5 +17,8 @@
         <li class="link"><?=$item->get_url_html()?></li>
   <?php } ?>
   </ul>
-<?php } ?>
+<?php
+  }
+  unset($extra_separator);
+?>
 <!-- end links -->

@@ -92,17 +92,17 @@
     function fetch_php($_template) {
       $template_dir = 'templates';
       $theme_dir    = 'themes/' . cfg('theme');
-      if (is_readable($theme_dir . '/' . $_template))
-        $template_dir = $theme_dir;
-      $__user      = $this->api->user();
-      $__group     = $this->api->group();
-      $__theme_dir = 'themes/' . cfg('theme');
-      $__hints     = $this->hints;
+      $__user       = $this->api->user();
+      $__group      = $this->api->group();
+      $__theme_dir  = 'themes/' . cfg('theme');
+      $__hints      = $this->hints;
       foreach ($this->scope as $key => $value)
         $$key = $value;
       trace('rendering PHP template %s', $template_dir.'/'.$_template);
       ob_start();
-      require $template_dir.'/'.$_template;
+      if (!is_readable($_template))
+        $_template = $template_dir . '/' . $_template;
+      require $_template;
       $result = ob_get_contents();
       ob_end_clean();
       trace('rendered PHP template %s', $_template);

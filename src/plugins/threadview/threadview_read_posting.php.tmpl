@@ -1,0 +1,10 @@
+<?php
+  require "$template_dir/indexbar.php.tmpl";
+?>
+<br />
+<?php
+  require "$template_dir/posting.php.tmpl";
+  if ($showthread)
+    require "$template_dir/thread.php.tmpl";
+  require "$template_dir/indexbar.php.tmpl";
+?>

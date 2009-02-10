@@ -165,7 +165,7 @@ class ThreadView extends View {
     $this->assign_by_ref('posting',  $_posting);
     $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
     $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));
-    $this->render(dirname(__FILE__).'/threadview_read_posting.tmpl');
+    $this->render_php(dirname(__FILE__).'/threadview_read_posting.php.tmpl');
     $this->api->set_title($_posting->get_subject());
     trace('leave');
   }

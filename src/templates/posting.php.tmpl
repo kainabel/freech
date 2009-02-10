@@ -1,0 +1,55 @@
+<!-- posting -->
+<table id='posting' border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
+ <tr valign='middle'>
+  <td>
+  <span class='date'><?=$posting->get_created_time()?></span>
+<?php if ($posting->is_updated()) { ?>
+  <span class='edited'>
+    <?=htmlentities(sprintf(_("(last edited %d)"), $posting->get_updated_time()))?>
+  </span>
+<?php } ?>
+  <br />
+  <b><?=htmlentities($posting->get_subject())?></b>
+<table summary=''>
+  <tr>
+    <td>
+<?php if ($posting->get_user_is_anonymous()) { ?>
+      <i><?=htmlentities($posting->get_username())?></i>
+<?php } else { ?>
+      <?=$posting->get_user_profile_url_html()?>
+<?php } ?>
+    </td>
+    <td>
+    <img class='icon'
+         src="<?=htmlentities($posting->get_user_icon())?>"
+         alt=""
+         title="<?=htmlentities($posting->get_user_icon_name())?>" />
+    </td>
+    <td>
+<?php
+  if ($__group->may('moderate'))
+    require "$template_dir/moderator_buttons.inc.php.tmpl";
+?>
+    </td>
+<?php if ($posting->get_user_is_anonymous()) { ?>
+    <td>
+      <?=htmlentities(sprintf(_('(IP hash: %s'), $posting->get_ip_address_hash(10)))?>
+    </td>
+<?php } ?>
+  </tr>
+</table>
+  </td>
+ </tr>
+ <tr>
+  <td><br />
+<!-- posting body -->
+<div id='posting_body'>
+<?=$posting->get_body_html()?>
+</div>
+<!-- end posting body -->
+  <br />
+  <br />
+  </td>
+ </tr>
+</table>
+<!-- end posting -->

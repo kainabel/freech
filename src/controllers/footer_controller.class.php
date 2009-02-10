@@ -41,7 +41,7 @@
       $this->clear_all_assign();
       $this->assign_by_ref('view_links',   $this->api->links('view'));
       $this->assign_by_ref('footer_links', $this->api->links('footer'));
-      $this->render('footer.tmpl');
+      $this->render_php('footer.php.tmpl');
     }
   }
 ?>

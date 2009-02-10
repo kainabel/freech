@@ -24,25 +24,17 @@
  * as the page on which a posting is shown.
  */
 class BBView extends View {
-  function _format_posting(&$_posting, $_data) {
-    // Required to enable correct formatting of the posting.
-    $current_id = (int)$_GET['msg_id'];
-    $_posting->set_selected($_posting->get_id() == $current_id);
-    $_posting->apply_block();
+  function _format_posting(&$_posting) {
+    $_posting->set_selected($_posting->get_id() == (int)$_GET['msg_id']);
   }
 
 
   function show($_forum_id, $_offset) {
     $func    = array(&$this, '_format_posting');
     $threads = $this->forumdb->get_threads_from_forum_id($_forum_id,
+                                                         FALSE,
                                                          $_offset,
                                                          cfg('tpp'));
-
-    // Format the threads.
-    foreach ($threads as $thread) {
-      $thread->remove_locked_postings();
-      $thread->foreach_posting($func);
-    }
 
     $group     = $this->api->group();
     $n_threads = $this->forumdb->get_n_threads((int)$_forum_id);

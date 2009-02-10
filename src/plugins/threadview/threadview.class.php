@@ -24,7 +24,7 @@
  * as the page on which a posting is shown.
  */
 class ThreadView extends View {
-  function _format_posting(&$_posting, $_data) {
+  function _format_posting(&$_posting) {
     $_posting->set_selected($_posting->get_id() == (int)$_GET['msg_id']);
   }
 

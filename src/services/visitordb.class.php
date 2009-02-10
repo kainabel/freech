@@ -64,7 +64,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int   ('visit',   time());
       $query->set_string('ip_hash', $_ip_hash);
-      $this->db->_query($query->sql()) or die('VisitorDB::_update_time()');
+      $this->db->_query($query->sql(), NULL) or die('VisitorDB:_update_time');
       trace('Leave');
     }
 
@@ -83,7 +83,7 @@
       $query->set_string('ip_hash', $_ip_hash);
       $query->set_string('counter', $_count);
       $query->set_int   ('visit',   time());
-      $this->db->_query($query->sql()) or die('VisitorDB::_insert_entry()');
+      $this->db->_query($query->sql(), NULL) or die('VisitorDB:_insert_entry');
     }
 
 
@@ -94,7 +94,7 @@
       $sql .= " WHERE visit < {end}";
       $query = new FreechSqlQuery($sql);
       $query->set_int('end', time() - 60 * 60 * 24 * 30);
-      $this->db->_query($query->sql());
+      $this->db->_query($query->sql(), NULL);
     }
 
 

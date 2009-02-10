@@ -26,7 +26,7 @@
     }
 
 
-    function _format_posting(&$_posting, $_data) {
+    function _format_posting(&$_posting) {
       // Required to enable correct formatting of the posting.
       $msg_id  = (int)$_GET['msg_id'];
       $_posting->set_selected($_posting->get_id() == $msg_id);

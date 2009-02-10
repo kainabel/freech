@@ -1,0 +1,12 @@
+<!-- user postings -->
+<h2>
+<?=esc(sprintf(_('Postings of %s'), $user->get_name()))?>
+<?php if ($may_edit) { ?>
+  <?=$user->get_editor_url_html()?>
+<?php } ?>
+</h2>
+<?php
+  require "$template_dir/error.inc.php.tmpl";
+  require "$template_dir/thread_with_indexbar.php.tmpl";
+?>
+<!-- end user postings -->

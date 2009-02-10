@@ -5,7 +5,7 @@
   <span class='date'><?=$posting->get_created_time()?></span>
 <?php if ($posting->is_updated()) { ?>
   <span class='edited'>
-    <?=esc(sprintf(_("(last edited %d)"), $posting->get_updated_time()))?>
+    <?=esc(sprintf(_("(last edited %s)"), $posting->get_updated_time()))?>
   </span>
 <?php } ?>
   <br />

@@ -1521,7 +1521,7 @@ class MainController {
   }
 
 
-  function &get_current_user() {
+  function get_current_user() {
     if ($this->current_user)
       return $this->current_user;
     if (session_id() !== '' && $_SESSION['user_id'])

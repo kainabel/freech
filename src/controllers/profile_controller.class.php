@@ -65,9 +65,9 @@
       $args      = array(action              => $action,
                          user                => $_user,
                          n_postings          => $n_entries,
-                         n_postings_per_page => cfg("epp"),
+                         n_postings_per_page => cfg('epp'),
                          n_offset            => $_offset,
-                         n_pages_per_index   => cfg("ppi"),
+                         n_pages_per_index   => cfg('ppi'),
                          thread_state        => $thread_state);
 
       include 'objects/indexbar_user_postings.class.php';
@@ -128,7 +128,7 @@
 
       // Render the template.
       $this->assign_by_ref('user', $_user);
-      $this->render('user_postings.tmpl');
+      $this->render_php('user_postings.php.tmpl');
     }
 
 

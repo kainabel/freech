@@ -29,6 +29,8 @@ trace('Start');
 
 require 'smarty/Smarty.class.php';
 trace('Smarty imported');
+
+$ADODB_INCLUDED_CSV = TRUE;
 require 'adodb/adodb.inc.php';
 trace('Adodb imported');
 

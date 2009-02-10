@@ -20,11 +20,8 @@
 ?>
 <?php
   class UserDB {
-    var $db;
-    var $users;   // Caches users.
-
     function UserDB(&$_db) {
-      $this->db = &$_db;
+      $this->db = $_db;
     }
 
 
@@ -69,7 +66,6 @@
         $this->db->_Execute($query->sql()) or die("UserDB::save_user: Ins");
         $newid = $this->db->Insert_ID();
         $_user->set_id($newid);
-        $this->users[$newid] = &$_user;
         return $newid;
       }
 
@@ -84,7 +80,6 @@
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);
       $this->db->_Execute($query->sql()) or die("UserDB::save_user(): Upd");
-      $this->users[$_user->get_id()] = &$_user;
       return $_user->get_id();
     }
 
@@ -117,7 +112,6 @@
         return;
       $user = new User;
       $user->set_from_assoc($row);
-      $this->users[$row['id']] = $user;
       return $user;
     }
 

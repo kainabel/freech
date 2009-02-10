@@ -1,18 +1,9 @@
 <!-- footer -->
-<?php
-  $name  = 'views';
-  $links = $view_links;
-  require "$template_dir/links.inc.php.tmpl";
-?>
+  <?=html_menu('views', $view_links)?>
 </div>
 
 <div id="footer">
   <hr />
-  <?php
-    $name      = 'footer_links';
-    $links     = $footer_links;
-    $separator = '|';
-    require "$template_dir/links.inc.php.tmpl";
-  ?>
+  <?=html_menu('footer_links', $footer_links, '|')?>
 </div>
 <!-- end footer -->

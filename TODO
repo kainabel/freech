@@ -4,6 +4,7 @@ Maintenance
 * Define the schema using AdoXML.
 * Document all required indexes.
 * Maybe get rid of RecordCount() calls.
+* Replace indexbar.php.tmpl by a call to html_menu().
 
 Features
 ---------

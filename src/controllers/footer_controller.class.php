@@ -24,7 +24,6 @@
       $url = new FreechURL('http://freech.debain.org/',
                            'Powered by Freech '.FREECH_VERSION);
       $this->api->links('footer')->add_link($url);
-      $this->api->links('footer')->add_separator();
 
       $url = new FreechURL('rss.php', _('RSS feed'));
       $url->set_var('forum_id', (int)$_forum_id);

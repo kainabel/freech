@@ -47,7 +47,6 @@ function search_on_search(&$api) {
 
 
 function search_on_search_form(&$api) {
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Find'));
   $controller = new SearchController($api);
   $controller->show((int)$_GET['forum_id'], $_GET['q']);
@@ -62,9 +61,7 @@ function search_on_search_result(&$api) {
   $url      = new FreechURL('', _('Find'));
   $url->set_var('action',   'search');
   $url->set_var('forum_id', $forum_id);
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_link($url);
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text($_GET['q']);
 
   // Search for postings or users.

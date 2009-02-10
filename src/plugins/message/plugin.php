@@ -37,7 +37,6 @@ function message_on_run(&$api) {
 
 function message_on_write(&$api) {
   include dirname(__FILE__).'/message_controller.class.php';
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Start a New Topic'));
   $parent_id  = (int)$_POST['parent_id'];
   $posting    = new Posting;
@@ -54,9 +53,7 @@ function message_on_respond(&$api) {
   if (!$posting)
     die('Invalid parent ID');
 
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_link($posting->get_url());
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Reply'));
 
   $controller->show_compose_reply($posting);
@@ -78,9 +75,7 @@ function message_on_edit_saved(&$api) {
   elseif ($user->get_id() != $posting->get_user_id())
     die('You are not the owner.');
 
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_link($posting->get_url());
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Edit'));
 
   $controller->show_compose($posting, 0, FALSE);
@@ -156,7 +151,6 @@ function message_on_preview(&$api) {
    */
   $api->eventbus()->emit('on_message_preview_print', $api, $message);
 
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Preview'));
 
   $controller->show_preview($message, $parent_id, $may_quote);

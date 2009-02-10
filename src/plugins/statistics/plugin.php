@@ -17,7 +17,6 @@ function statistics_init(&$api) {
 
 function statistics_on_show(&$api) {
   include dirname(__FILE__).'/statistics_controller.class.php';
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Statistics'));
   $controller = new StatisticsController($api);
   $controller->show();

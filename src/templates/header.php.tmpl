@@ -34,12 +34,7 @@
 
   <div id='header3'>
     <span id='account_links'>
-    <?php
-      $name            = 'account_links';
-      $links           = $account_links;
-      $extra_separator = '|';
-      require "$template_dir/links.inc.php.tmpl";
-    ?>
+    <?=html_menu('account_links', $account_links, '|')?>
     </span>
     <br />
 <?php if ($n_online) { ?>

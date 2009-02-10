@@ -23,6 +23,44 @@
   }
 
 
+  function html_debug($_comment = '') {
+    $backtrace = debug_backtrace();
+    $caller    = $backtrace[0];
+    $dir       = dirname(dirname(__FILE__));
+    $file      = substr($caller['file'], strlen($dir) + 1);
+    $line      = $caller['line'];
+    echo sprintf("<!--\n## In %s, line %d: %s ##\n-->\n",
+                 esc($file),
+                 $line,
+                 esc($_comment));
+  }
+
+
+  function html_menu($_name, &$_menu = '', $_separator = '', $_auto = TRUE) {
+    if ($_menu->length() == 0)
+      return;
+
+    $html = '<ul';
+    if ($_name)
+      $html .= " id='$_name' class='$_name'";
+    $html .= '>';
+
+    foreach ($_menu->get_items() as $item) {
+      if ($_separator and $_auto && ++$i != 1)
+        $html .= '<li class="separator">' . $_separator . '</li>';
+      if ($item->is_separator())
+        $html .= '<li class="separator">' . $_separator . '</li>';
+      elseif ($item->is_html())
+        $html .= '<li class="html">' . $item->get_html() . '</li>';
+      elseif ($item->is_link())
+        $html .= '<li class="link">' . $item->get_url_html() . '</li>';
+      else
+        $html .= '<li class="text">' . $item->get_text(TRUE) . '</li>';
+    }
+    return $html . "</ul>\n";
+  }
+
+
   // Removes the escapings that were added by magic-quotes.
   function stripslashes_deep(&$_value) {
     return is_array($_value)

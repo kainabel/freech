@@ -393,7 +393,6 @@ class MainController {
     if ($this->get_current_forum_id() == NULL)
       return;
     $url = $this->get_current_forum()->get_url();
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_link($url);
   }
 
@@ -676,7 +675,6 @@ class MainController {
    *************************************************************/
   // Prints the breadcrumbs pointing to the given posting.
   function _add_posting_breadcrumbs(&$_posting) {
-    $this->breadcrumbs()->add_separator();
     if (!$_posting)
       $this->breadcrumbs()->add_text(_('No Such Message'));
     elseif (!$_posting->is_active())
@@ -747,9 +745,7 @@ class MainController {
     $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
     $controller = new ModLogController($this->api);
     $controller->show_thread_move($posting);
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_link($posting->get_url());
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Move'));
   }
 
@@ -791,9 +787,7 @@ class MainController {
     $posting    = $this->_get_posting_from_id_or_die((int)$_GET['msg_id']);
     $controller = new ModLogController($this->api);
     $controller->show_lock_posting($posting);
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_link($posting->get_url());
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Lock'));
   }
 
@@ -880,7 +874,6 @@ class MainController {
 
 
   function _add_profile_breadcrumbs(&$_named_item) {
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text($_named_item->get_name());
   }
 
@@ -1221,7 +1214,6 @@ class MainController {
   function _forum_add() {
     $this->_assert_may('administer');
     $this->_import_forum_editor();
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Add a New Forum'));
     $controller = new ForumEditorController($this->api);
     $controller->show(new Forum);
@@ -1232,7 +1224,6 @@ class MainController {
     $this->_assert_may('administer');
     $this->_import_forum_editor();
     $forum = $this->forumdb->get_forum_from_id((int)$_GET['forum_id']);
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Edit a Forum'));
     $controller = new ForumEditorController($this->api);
     $controller->show($forum);
@@ -1276,7 +1267,6 @@ class MainController {
   function _show_moderation_log() {
     trace('enter');
     $this->_prepare_modlog();
-    $this->breadcrumbs()->add_separator();
     $this->breadcrumbs()->add_text(_('Moderation Log'));
     $controller = new ModLogController($this->api);
     $controller->show((int)$_GET['hs']);

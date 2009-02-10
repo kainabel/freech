@@ -46,7 +46,6 @@ function poll_on_add(&$api) {
   $poll       = new Poll($posting, $api);
   $poll->set_forum_id($api->forum()->get_id());
 
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Start a Poll'));
 
   $max_polls      = cfg('max_polls', 2);

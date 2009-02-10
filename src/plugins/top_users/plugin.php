@@ -17,7 +17,6 @@ function top_users_init(&$api) {
 
 function top_users_on_show(&$api) {
   include dirname(__FILE__).'/top_users_controller.class.php';
-  $api->breadcrumbs()->add_separator();
   $api->breadcrumbs()->add_text(_('Top Users'));
 
   $controller = new TopUsersController($api);

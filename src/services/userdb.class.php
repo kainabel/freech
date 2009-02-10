@@ -66,7 +66,7 @@
         $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
         $sql  .= ")";
         $query->set_sql($sql);
-        $this->db->Execute($query->sql()) or die("UserDB::save_user: Ins");
+        $this->db->_Execute($query->sql()) or die("UserDB::save_user: Ins");
         $newid = $this->db->Insert_ID();
         $_user->set_id($newid);
         $this->users[$newid] = &$_user;
@@ -83,7 +83,7 @@
       $sql  .= " lastlogin=FROM_UNIXTIME({lastlogin})";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);
-      $this->db->Execute($query->sql()) or die("UserDB::save_user(): Upd");
+      $this->db->_Execute($query->sql()) or die("UserDB::save_user(): Upd");
       $this->users[$_user->get_id()] = &$_user;
       return $_user->get_id();
     }
@@ -129,7 +129,7 @@
     function get_user_from_id($_id) {
       $query = array('id' => $_id);
       $sql   = $this->_get_sql_from_query($query);
-      $res   = $this->db->Execute($sql);
+      $res   = $this->db->_Execute($sql);
       return $this->_get_user_from_row($res->fields);
     }
 
@@ -141,7 +141,7 @@
     function get_user_from_name($_name) {
       $query = array('name' => $_name);
       $sql   = $this->_get_sql_from_query($query);
-      $res   = $this->db->Execute($sql);
+      $res   = $this->db->_Execute($sql);
       return $this->_get_user_from_row($res->fields);
     }
 
@@ -153,7 +153,7 @@
     function get_user_from_mail($_mail) {
       $query = array('mail' => $_mail);
       $sql   = $this->_get_sql_from_query($query);
-      $res   = $this->db->Execute($sql);
+      $res   = $this->db->_Execute($sql);
       return $this->_get_user_from_row($res->fields);
     }
 

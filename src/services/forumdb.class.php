@@ -55,7 +55,7 @@
     }
 
 
-    function &_decorate_posting(&$_posting) {
+    function _decorate_posting(&$_posting) {
       if (!$_posting)
         return NULL;
       $renderer = $this->renderers[$_posting->get_renderer()];
@@ -66,7 +66,7 @@
     }
 
 
-    function &_get_posting_from_assoc(&$_row) {
+    function _get_posting_from_assoc(&$_row) {
       $posting = new Posting;
       $posting->set_from_assoc($_row);
       return $this->_decorate_posting($posting);
@@ -173,7 +173,7 @@
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $query->set_bool  ('force_stub',      $_posting->get_force_stub());
-        $this->db->Execute($query->sql()) or die('ForumDB::insert(): Ins1');
+        $this->db->_Execute($query->sql()) or die('ForumDB::insert(): Ins1');
         $_posting->set_id($this->db->Insert_Id());
 
         // Update the child's path.
@@ -190,7 +190,7 @@
         $sql .= " WHERE id={newid}";
         $query = new FreechSqlQuery($sql);
         $query->set_int('newid', $_posting->get_id());
-        $this->db->Execute($query->sql())
+        $this->db->_Execute($query->sql())
                 or die("ForumDB::insert(): Path.");
 
         // Update the child counter of the thread.
@@ -200,14 +200,14 @@
         $sql  .= ' WHERE id={thread_id}';
         $query = new FreechSqlQuery($sql);
         $query->set_int('thread_id', $parentrow[thread_id]);
-        $this->db->Execute($query->sql()) or die('ForumDB::insert(): n++');
+        $this->db->_Execute($query->sql()) or die('ForumDB::insert(): n++');
 
         // Update n_descendants of the parent.
         $sql   = "UPDATE {t_posting} SET n_descendants=n_descendants+1";
         $sql  .= " WHERE id={parent_id}";
         $query = new FreechSqlQuery($sql);
         $query->set_int('parent_id', $_parent_id);
-        $this->db->Execute($query->sql()) or die('ForumDB::insert(): n_desc');
+        $this->db->_Execute($query->sql()) or die('ForumDB::insert(): n_desc');
       }
 
       // Insert a new thread.
@@ -219,7 +219,7 @@
         $sql  .= " ({forum_id}, NULL)";
         $query = new FreechSqlQuery($sql);
         $query->set_int('forum_id', $_forum_id);
-        $this->db->Execute($query->sql())
+        $this->db->_Execute($query->sql())
                 or die("ForumDB::insert(): Insert2.".$query->sql());
         $thread_id = $this->db->Insert_Id();
 
@@ -252,7 +252,7 @@
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $query->set_bool  ('force_stub',      $_posting->get_force_stub());
-        $this->db->Execute($query->sql())
+        $this->db->_Execute($query->sql())
                 or die('ForumDB::insert(): Insert2.'.$query->sql());
         $_posting->set_id($this->db->Insert_Id());
       }
@@ -304,7 +304,7 @@
       $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
       $query->set_string('status',          $_posting->get_status());
       $query->set_bool  ('force_stub',      $_posting->get_force_stub());
-      $this->db->Execute($query->sql()) or die('ForumDB::save(): 2');
+      $this->db->_Execute($query->sql()) or die('ForumDB::save(): 2');
 
       $this->db->CompleteTrans();
     }
@@ -319,12 +319,12 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('id',       $_thread_id);
       $query->set_int('forum_id', $_forum_id);
-      $this->db->Execute($query->sql()) or die('ForumDB::move_thread(): 1');
+      $this->db->_Execute($query->sql()) or die('ForumDB::move_thread(): 1');
 
       $sql   = 'UPDATE {t_posting} SET forum_id={forum_id}';
       $sql  .= ' WHERE thread_id={id}';
       $query->set_sql($sql);
-      $this->db->Execute($query->sql()) or die('ForumDB::move_thread(): 2');
+      $this->db->_Execute($query->sql()) or die('ForumDB::move_thread(): 2');
       $this->db->CompleteTrans();
     }
 
@@ -336,7 +336,7 @@
      * $_id:    The id of the posting.
      * Returns: The posting.
      */
-    function &get_posting_from_id($_id) {
+    function get_posting_from_id($_id) {
       $sql   = "SELECT p.*,";
       $sql  .= "HEX(p.path) path,";
       $sql  .= "UNIX_TIMESTAMP(p.updated) updated,";
@@ -347,7 +347,7 @@
       $sql  .= " WHERE p.id={id}";
       $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = $this->db->Execute($query->sql())
+      $res = $this->db->_Execute($query->sql())
                                   or die('ForumDB::get_posting_from_id()');
       if ($res->EOF)
         return;
@@ -386,7 +386,7 @@
       $sql  .= ' ORDER BY t.id DESC';
       $query = new FreechSqlQuery($sql);
       $query->set_int('status', POSTING_STATUS_ACTIVE);
-      $res   = $this->db->Execute($query->sql())
+      $res   = $this->db->_Execute($query->sql())
                                 or die('ForumDB::get_threads_from_id()');
       trace('sql executed');
 
@@ -485,10 +485,10 @@
     }
 
 
-    function &get_postings_from_fields(&$_fields,
-                                       $_desc   = TRUE,
-                                       $_offset = 0,
-                                       $_limit  = -1) {
+    function get_postings_from_fields(&$_fields,
+                                      $_desc   = TRUE,
+                                      $_offset = 0,
+                                      $_limit  = -1) {
       $limit    = $_limit  * 1;
       $offset   = $_offset * 1;
       $postings = array();
@@ -568,7 +568,7 @@
     }
 
 
-    function &get_posting_from_query(&$_search_values, $_offset = 0) {
+    function get_posting_from_query(&$_search_values, $_offset = 0) {
       $posting = $this->get_postings_from_query($_search_values, $_offset, 1);
       return $posting[0];
     }
@@ -623,7 +623,7 @@
      * $_offset:  The offset of the first posting.
      * $_limit:   The number of postings.
      */
-    function &get_postings_from_user($_user_id, $_offset, $_limit) {
+    function get_postings_from_user($_user_id, $_offset, $_limit) {
       $limit  = $_limit  * 1;
       $offset = $_offset * 1;
 
@@ -666,7 +666,7 @@
       $sql .= " ORDER BY a.id DESC";
 
       $query = new FreechSqlQuery($sql);
-      $res   = $this->db->Execute($query->sql())
+      $res   = $this->db->_Execute($query->sql())
                           or die('ForumDB::foreach_posting_from_user()');
 
       $threads = array();
@@ -930,7 +930,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int('since', time() - 60 * 60 * 2);
       $query->set_string('hash', $_posting->get_hash());
-      $res = $this->db->Execute($query->sql())
+      $res = $this->db->_Execute($query->sql())
                             or die('ForumDB::get_duplicate_id_from_posting()');
       if ($res->EOF)
         return;
@@ -1010,7 +1010,7 @@
       $query->set_string('name',        $_forum->get_name());
       $query->set_string('description', $_forum->get_description());
       $query->set_int   ('status',      $_forum->get_status());
-      $this->db->Execute($query->sql()) or die('ForumDB::save_forum');
+      $this->db->_Execute($query->sql()) or die('ForumDB::save_forum');
       if (!$_forum->get_id())
         $_forum->set_id($this->db->Insert_Id());
     }
@@ -1018,12 +1018,12 @@
 
     /* Returns the forum with the given id.
      */
-    function &get_forum_from_id($_id) {
+    function get_forum_from_id($_id) {
       $sql   = "SELECT * FROM {t_forum}";
       $sql  .= " WHERE id={id}";
       $query = new FreechSqlQuery($sql);
       $query->set_int('id', $_id);
-      $res = $this->db->Execute($query->sql())
+      $res = $this->db->_Execute($query->sql())
                            or die('ForumDB::get_forum_from_id()');
       if ($res->EOF)
         return NULL;
@@ -1036,7 +1036,7 @@
     /* Returns a list of all forums with the given status.
      * If $_status is -1 all forums are returned.
      */
-    function &get_forums($_status = -1, $_limit = -1, $_offset = 0) {
+    function get_forums($_status = -1, $_limit = -1, $_offset = 0) {
       $sql = "SELECT * FROM {t_forum}";
       if ($_status > -1)
         $sql .= " WHERE status={status}";

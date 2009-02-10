@@ -98,7 +98,7 @@
       $query->set_int   ('group_id', $_group_id);
       $query->set_string('name',     $_action);
       $query->set_bool  ('allow',    $_allow);
-      $this->db->Execute($query->sql()) or die("GroupDB::_set_permission()");
+      $this->db->_Execute($query->sql()) or die("GroupDB::_set_permission()");
     }
 
 
@@ -108,7 +108,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_var('group_id', $_group_id);
       $query->set_var('name',     $_action);
-      $this->db->Execute($query->sql()) or die("GroupDB::_delete_permission");
+      $this->db->_Execute($query->sql()) or die("GroupDB::_delete_permission");
     }
 
 
@@ -146,7 +146,7 @@
         $query->set_sql($sql);
 
         $this->db->StartTrans();
-        $this->db->Execute($query->sql()) or die('GroupDB::save_group: Ins');
+        $this->db->_Execute($query->sql()) or die('GroupDB::save_group: Ins');
         $newid = $this->db->Insert_ID();
         $_group->set_id($newid);
         $this->groups[$newid] = &$_group;
@@ -164,7 +164,7 @@
       $query->set_sql($sql);
 
       $this->db->StartTrans();
-      $this->db->Execute($query->sql()) or die('GroupDB::save_group(): Upd');
+      $this->db->_Execute($query->sql()) or die('GroupDB::save_group(): Upd');
       $this->groups[$_group->get_id()] = $_group;
       $this->_save_permissions($_group);
       $this->db->CompleteTrans();
@@ -179,7 +179,7 @@
      */
     function &get_group_from_query(&$_search) {
       $sql = $this->_get_sql_from_query($_search);
-      $res = $this->db->Execute($sql)
+      $res = $this->db->_Execute($sql)
                               or die("GroupDB::get_group_from_query()");
       return $this->_pop_group_from_result($res);
     }

@@ -27,7 +27,7 @@
     }
     
     
-    function &_ip_hash($_ip) {
+    function _ip_hash($_ip) {
       // Note that this needs to work with both, IPv4 and IPv6.
       $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
       return md5($ip_net . cfg('salt'));
@@ -39,7 +39,7 @@
      * $_ip: The ip address of the user.
      * $_since: The start time.
      */
-    function &_was_here($_ip_hash, $_since) {
+    function _was_here($_ip_hash, $_since) {
       trace('Enter');
       // IDX: visitor:ip_hash
       $sql   = "SELECT 1 FROM {t_visitor}";
@@ -47,9 +47,9 @@
       $query = new FreechSqlQuery($sql);
       $query->set_string('ip_hash', $_ip_hash);
       $query->set_int   ('since',   $_since);
-      $row = $this->db->GetRow($query->sql());
+      $res = $this->db->_Execute($query->sql());
       trace('Leave');
-      if (!$row)
+      if ($res->EOF)
         return FALSE;
       return TRUE;
     }
@@ -64,7 +64,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_int   ('visit',   time());
       $query->set_string('ip_hash', $_ip_hash);
-      $this->db->Execute($query->sql()) or die('VisitorDB::_update_time()');
+      $this->db->_query($query->sql()) or die('VisitorDB::_update_time()');
       trace('Leave');
     }
 
@@ -83,7 +83,7 @@
       $query->set_string('ip_hash', $_ip_hash);
       $query->set_string('counter', $_count);
       $query->set_int   ('visit',   time());
-      $this->db->Execute($query->sql()) or die('VisitorDB::_insert_entry()');
+      $this->db->_query($query->sql()) or die('VisitorDB::_insert_entry()');
     }
 
 
@@ -94,7 +94,7 @@
       $sql .= " WHERE visit < {end}";
       $query = new FreechSqlQuery($sql);
       $query->set_int('end', time() - 60 * 60 * 24 * 30);
-      $this->db->Execute($query->sql());
+      $this->db->_query($query->sql());
     }
 
 

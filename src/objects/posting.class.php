@@ -62,7 +62,7 @@ class Posting {
   // Sets all values from a given database row.
   function set_from_assoc(&$_row) {
     $this->clear();
-    $this->fields = array_merge($this->fields, $_row);
+    $this->fields = $_row + $this->fields;
   }
 
 

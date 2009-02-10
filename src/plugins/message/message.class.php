@@ -35,7 +35,7 @@ class Message extends PostingDecorator {
 
       // Perform HTML generating formattings.
       $body = $this->get_body_html();
-      $body = string_escape($body);
+      $body = esc($body);
       $body = preg_replace('/^(&gt; [^\r\n]*)/m',
                            "<span class='quote'>$1</span>",
                            $body);

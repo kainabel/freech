@@ -5,25 +5,25 @@
   <span class='date'><?=$posting->get_created_time()?></span>
 <?php if ($posting->is_updated()) { ?>
   <span class='edited'>
-    <?=htmlentities(sprintf(_("(last edited %d)"), $posting->get_updated_time()))?>
+    <?=esc(sprintf(_("(last edited %d)"), $posting->get_updated_time()))?>
   </span>
 <?php } ?>
   <br />
-  <b><?=htmlentities($posting->get_subject())?></b>
+  <b><?=esc($posting->get_subject())?></b>
 <table summary=''>
   <tr>
     <td>
 <?php if ($posting->get_user_is_anonymous()) { ?>
-      <i><?=htmlentities($posting->get_username())?></i>
+      <i><?=esc($posting->get_username())?></i>
 <?php } else { ?>
       <?=$posting->get_user_profile_url_html()?>
 <?php } ?>
     </td>
     <td>
     <img class='icon'
-         src="<?=htmlentities($posting->get_user_icon())?>"
+         src="<?=esc($posting->get_user_icon())?>"
          alt=""
-         title="<?=htmlentities($posting->get_user_icon_name())?>" />
+         title="<?=esc($posting->get_user_icon_name())?>" />
     </td>
     <td>
 <?php
@@ -33,7 +33,7 @@
     </td>
 <?php if ($posting->get_user_is_anonymous()) { ?>
     <td>
-      <?=htmlentities(sprintf(_('(IP hash: %s'), $posting->get_ip_address_hash(10)))?>
+      <?=esc(sprintf(_('(IP hash: %s'), $posting->get_ip_address_hash(10)))?>
     </td>
 <?php } ?>
   </tr>

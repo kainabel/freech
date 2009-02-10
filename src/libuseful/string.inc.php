@@ -18,7 +18,7 @@
   */
 ?>
 <?php
-  function string_escape(&$_string) {
+  function esc(&$_string) {
     return htmlentities($_string, ENT_QUOTES, 'UTF-8');
   }
 

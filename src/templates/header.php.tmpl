@@ -39,7 +39,7 @@
     <br />
 <?php if ($n_online) { ?>
     <span id='status'>
-      <?=sprintf(ngettext('%d user online', '%d users online', $n_online), $n_online)?>
+      <?=esc(sprintf(ngettext('%d user online', '%d users online', $n_online), $n_online))?>
     </span>
 <?php } ?>
   </div>

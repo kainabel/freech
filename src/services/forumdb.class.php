@@ -65,8 +65,7 @@
 
 
     function _get_posting_from_assoc(&$_row) {
-      $posting = new Posting;
-      $posting->set_from_assoc($_row);
+      $posting = new Posting($_row);
       return $this->_decorate_posting($posting);
     }
 

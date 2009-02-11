@@ -55,8 +55,7 @@
     function _get_group_from_row(&$row) {
       if (!$row)
         return;
-      $group = new Group;
-      $group->set_from_assoc($row);
+      $group = new Group($row);
       return $group;
     }
 

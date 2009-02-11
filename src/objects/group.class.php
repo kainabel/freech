@@ -27,8 +27,13 @@ define('GROUP_STATUS_ACTIVE',  1);
    */
   class Group {
     /// Constructor.
-    function Group() {
-      $this->clear();
+    function Group(&$_row = '') {
+      if ($_row) {
+        $this->fields      = $_row;
+        $this->permissions = array();
+      }
+      else
+        $this->clear();
     }
 
 
@@ -37,12 +42,6 @@ define('GROUP_STATUS_ACTIVE',  1);
       $this->fields          = array();
       $this->fields[created] = time();
       $this->permissions     = array();
-    }
-
-
-    /// Sets all values from a given database row.
-    function set_from_assoc(&$_row) {
-      $this->fields = $_row;
     }
 
 

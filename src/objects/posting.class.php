@@ -38,8 +38,14 @@ define('POSTING_STATUS_SPAM',   2);
  */
 class Posting {
   // Constructor.
-  function Posting() {
-    $this->clear();
+  function Posting(&$_row = '') {
+    if ($_row) {
+      $this->fields = $_row;
+      $this->fields[allow_answer] = TRUE;
+      $this->fields[indent]       = array();
+    }
+    else
+      $this->clear();
   }
 
 
@@ -55,14 +61,6 @@ class Posting {
     $this->fields[user_id]      = 2; // Anonymous user.
     $this->fields[allow_answer] = TRUE;
     $this->fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
-    $this->fields[indent]       = array();
-  }
-
-
-  // Sets all values from a given database row.
-  function set_from_assoc(&$_row) {
-    $this->fields = $_row;
-    $this->fields[allow_answer] = TRUE;
     $this->fields[indent]       = array();
   }
 

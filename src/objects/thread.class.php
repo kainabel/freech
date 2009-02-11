@@ -148,8 +148,7 @@ class Thread {
         break;
 
       $this->fields['updated'] = $row['threadupdate'];
-      $posting = new Posting;
-      $posting->set_from_assoc($row);
+      $posting = new Posting($row);
       $posting = $forumdb->_decorate_posting($posting);
       $posting->apply_block();
       $this->_add_posting($posting);

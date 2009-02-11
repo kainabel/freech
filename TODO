@@ -5,6 +5,9 @@ Maintenance
 * Document all required indexes.
 * Maybe get rid of RecordCount() calls.
 * Replace indexbar.php.tmpl by a call to html_menu().
+* Allow for passing a DB row to the User constructor.
+* Allow for passing a DB row to the Forum constructor.
+* Fix: Locking a parent message breaks the forum.
 
 Features
 ---------

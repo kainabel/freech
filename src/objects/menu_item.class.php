@@ -68,7 +68,7 @@
       else
         $text = $this->text;
       if ($_escape)
-        return htmlentities($text);
+        return esc($text);
       return $text;
     }
 

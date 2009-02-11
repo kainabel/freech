@@ -36,9 +36,43 @@
   }
 
 
+  function html_checkboxes($_name, $_options, $_separator = '<br/>') {
+    if (count($_options) == 0)
+      return '';
+
+    $html = '';
+    foreach ($_options as $id => $caption) {
+      $html .= '<label>';
+      $html .= "<input type='checkbox' name='".esc($_name)."[]' value='$id'/>";
+      $html .= esc($caption);
+      $html .= '</label>';
+      $html .= $_separator;
+    }
+
+    return $html;
+  }
+
+
+  function html_radios($_name, $_options, $_separator = '<br/>') {
+    if (count($_options) == 0)
+      return '';
+
+    $html = '';
+    foreach ($_options as $id => $caption) {
+      $html .= '<label>';
+      $html .= "<input type='radio' name='".esc($_name)."' value='$id'/>";
+      $html .= esc($caption);
+      $html .= '</label>';
+      $html .= $_separator;
+    }
+
+    return $html;
+  }
+
+
   function html_menu($_name, &$_menu = '', $_separator = '', $_auto = TRUE) {
     if ($_menu->length() == 0)
-      return;
+      return '';
 
     $html = '<ul';
     if ($_name)

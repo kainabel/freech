@@ -1,0 +1,12 @@
+<!-- poll result -->
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<table summary=''>
+<?php foreach ($poll->get_results() as $option_id => $votes) { ?>
+  <tr>
+    <td><?=$poll->get_option($option_id)?>:</td>
+    <td><?=$votes?></td>
+  </tr>
+<?php } ?>
+</table>
+<!-- end poll result -->

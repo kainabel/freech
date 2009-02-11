@@ -23,7 +23,7 @@ class PollController extends Controller {
   function show_error($_error) {
     $this->clear_all_assign();
     $this->add_hint(new Error($_error));
-    $this->render('error.inc.tmpl');
+    $this->render_php('error.inc.php.tmpl');
   }
 
 
@@ -37,7 +37,7 @@ class PollController extends Controller {
     $this->clear_all_assign();
     $this->assign_by_ref('action', $url->get_string());
     $this->assign_by_ref('poll',   $_poll);
-    $this->render(dirname(__FILE__).'/form.tmpl');
+    $this->render_php(dirname(__FILE__).'/form.php.tmpl');
   }
 
 
@@ -53,7 +53,7 @@ class PollController extends Controller {
     $this->assign_by_ref('action',     $url->get_string());
     $this->assign_by_ref('poll',       $_poll);
     $this->assign_by_ref('result_url', $result_url->get_string());
-    $result = $this->fetch(dirname(__FILE__).'/poll.tmpl');
+    $result = $this->fetch_php(dirname(__FILE__).'/poll.php.tmpl');
     return $result;
   }
 
@@ -61,7 +61,7 @@ class PollController extends Controller {
   function get_poll_result(&$_poll) {
     $this->clear_all_assign();
     $this->assign_by_ref('poll', $_poll);
-    $result = $this->fetch(dirname(__FILE__).'/poll_result.tmpl');
+    $result = $this->fetch_php(dirname(__FILE__).'/poll_result.php.tmpl');
     return $result;
   }
 }

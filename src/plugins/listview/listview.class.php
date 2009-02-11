@@ -68,7 +68,7 @@ class ListView extends View {
     $this->assign_by_ref('indexbar', $indexbar);
     $this->assign_by_ref('n_rows',   $n);
     $this->assign_by_ref('postings', $this->postings);
-    $this->render(dirname(__FILE__).'/listview.tmpl');
+    $this->render_php(dirname(__FILE__).'/listview.php.tmpl');
   }
 
 
@@ -149,9 +149,9 @@ class ListView extends View {
 
     $this->assign_by_ref('indexbar', $indexbar);
     $this->assign_by_ref('posting',  $_posting);
-    $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
-    $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
-    $this->render(dirname(__FILE__).'/listview_read_posting.tmpl');
+    $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
+    $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));
+    $this->render_php(dirname(__FILE__).'/listview_read_posting.php.tmpl');
     $this->api->set_title($_posting->get_subject());
   }
 }

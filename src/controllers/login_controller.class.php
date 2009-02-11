@@ -39,19 +39,19 @@
       $this->assign_by_ref('action',     $login_url->get_string());
       $this->assign_by_ref('resend_url', $resend_url);
       $this->assign_by_ref('forgot_url', $forgot_url);
-      $this->render('login.tmpl');
+      $this->render_php('login.php.tmpl');
     }
 
 
     function show_tmpl($_tmpl, &$_user) {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
-      $this->render($_tmpl);
+      $this->render_php($_tmpl);
     }
 
 
     function show_password_changed(&$user) {
-      $this->show_tmpl('password_changed.tmpl', $user);
+      $this->show_tmpl('password_changed.php.tmpl', $user);
     }
 
 
@@ -61,7 +61,7 @@
       $this->clear_all_assign();
       $this->assign_by_ref('action', $url->get_string());
       $this->assign_by_ref('user',   $_user);
-      $this->render('password_change.tmpl');
+      $this->render_php('password_change.php.tmpl');
       $this->api->set_title(_('Password Change'));
     }
 
@@ -72,12 +72,12 @@
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('action', $url->get_string());
-      $this->render('password_forgotten.tmpl');
+      $this->render_php('password_forgotten.php.tmpl');
     }
 
 
     function show_password_mail_sent(&$_user) {
-      $this->show_tmpl('password_mail_sent.tmpl', $_user);
+      $this->show_tmpl('password_mail_sent.php.tmpl', $_user);
     }
   }
 ?>

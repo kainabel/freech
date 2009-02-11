@@ -1,0 +1,41 @@
+<!-- login -->
+<h2><?=esc(_('Log in'))?></h2>
+<span class="intro">
+  <?=esc(_('To log in your browser must support cookies.'))?>
+</span>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<form action='<?=esc($action)?>' method='post' accept-charset='utf-8'>
+<div>
+<input type='hidden' name='action'   value='login' />
+<input type='hidden' name='refer_to' value='<?=esc($refer_to)?>' />
+
+<p>
+  <label><?=esc(_('Username:'))?></label><br />
+  <input type="text"
+         name="username"
+         size="20"
+         value="<?=esc($user->get_name())?>" />
+</p>
+
+<p>
+  <label><?=esc(_('Password:'))?></label><br />
+  <input type="password" name="password" size="20" /><br />
+  <input type="checkbox" name="permanent" value="on" />
+  <?=esc(_('Remember password'))?>
+</p>
+
+<p>
+  <input type="submit" value='<?=esc(_('Log in'))?>' />
+</p>
+</div>
+</form>
+
+<p>
+  <?=$forgot_url->get_html()?>
+<?php if ($resend_url) { ?>
+  <br />
+  <?=$resend_url->get_html()?>
+<?php } ?>
+</p>
+<!-- end login -->

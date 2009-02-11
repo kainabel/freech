@@ -41,16 +41,8 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     /// Sets all values from a given database row.
-    function set_from_db(&$_db_row) {
-      if (!is_object($_db_row))
-        die('Group:set_from_db(): Non-object.');
-      $this->clear();
-      $this->fields[id]         = $_db_row->id;
-      $this->fields[name]       = $_db_row->name;
-      $this->fields[is_special] = $_db_row->is_special;
-      $this->fields[status]     = $_db_row->status;
-      $this->fields[created]    = $_db_row->created;
-      $this->fields[updated]    = $_db_row->updated;
+    function set_from_assoc(&$_row) {
+      $this->fields = $_row;
     }
 
 

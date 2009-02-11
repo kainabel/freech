@@ -20,9 +20,6 @@
 ?>
 <?php
   class GroupDB {
-    var $db;
-    var $groups;   // Caches groups.
-
     function GroupDB(&$_db) {
       $this->db = $_db;
     }
@@ -55,33 +52,32 @@
     }
 
 
-    function &_get_group_from_row(&$row) {
+    function _get_group_from_row(&$row) {
       if (!$row)
         return;
       $group = new Group;
-      $group->set_from_db($row);
-      $this->groups[$row->id] = $group;
+      $group->set_from_assoc($row);
       return $group;
     }
 
 
-    function &_pop_group_from_result(&$res) {
+    function _pop_group_from_result(&$res) {
       if ($res->EOF)
         return;
-      $row   = $res->FetchObj();
+      $row   = $res->fields;
       $group = $this->_get_group_from_row($row);
       do {
-        if ($row->permission_id) {
-          if ($row->permission_allow)
-            $group->grant($row->permission_name);
+        if ($row['permission_id']) {
+          if ($row['permission_allow'])
+            $group->grant($row['permission_name']);
           else
-            $group->deny($row->permission_name);
+            $group->deny($row['permission_name']);
         }
         $res->MoveNext();
         if ($res->EOF)
           break;
-        $row = $res->FetchObj();
-        if ($row->id != $group->get_id())
+        $row = $res->fields;
+        if ($row['id'] != $group->get_id())
           break;
       } while (TRUE);
       return $group;
@@ -108,7 +104,7 @@
       $query = new FreechSqlQuery($sql);
       $query->set_var('group_id', $_group_id);
       $query->set_var('name',     $_action);
-      $this->db->_Execute($query->sql()) or die("GroupDB::_delete_permission");
+      $this->db->_Execute($query->sql()) or die('GroupDB::_delete_permission');
     }
 
 
@@ -129,7 +125,7 @@
      */
     function save_group(&$_group) {
       if (!is_object($_group))
-        die("GroupDB::save_group(): Invalid arg.");
+        die('GroupDB::save_group(): Invalid arg.');
       $query = new FreechSqlQuery();
       $query->set_int   ('id',         $_group->get_id());
       $query->set_string('name',       $_group->get_name());
@@ -149,7 +145,6 @@
         $this->db->_Execute($query->sql()) or die('GroupDB::save_group: Ins');
         $newid = $this->db->Insert_ID();
         $_group->set_id($newid);
-        $this->groups[$newid] = &$_group;
         $this->_save_permissions($_group);
         $this->db->CompleteTrans();
         return $newid;
@@ -165,7 +160,6 @@
 
       $this->db->StartTrans();
       $this->db->_Execute($query->sql()) or die('GroupDB::save_group(): Upd');
-      $this->groups[$_group->get_id()] = $_group;
       $this->_save_permissions($_group);
       $this->db->CompleteTrans();
 
@@ -177,7 +171,7 @@
      * Returns the first group that matches the given criteria.
      * $_search: The search values.
      */
-    function &get_group_from_query(&$_search) {
+    function get_group_from_query(&$_search) {
       $sql = $this->_get_sql_from_query($_search);
       $res = $this->db->_Execute($sql)
                               or die("GroupDB::get_group_from_query()");
@@ -189,7 +183,7 @@
      * Returns all groups that match the given criteria.
      * $_search: The search values.
      */
-    function &get_groups_from_query(&$_search, $_limit = -1, $_offset = 0) {
+    function get_groups_from_query(&$_search, $_limit = -1, $_offset = 0) {
       $sql  = $this->_get_sql_from_query($_search);
       $res  = $this->db->SelectLimit($sql, (int)$_limit, (int)$_offset);
       $list = array();

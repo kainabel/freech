@@ -53,8 +53,7 @@ define('USER_STATUS_BLOCKED',     3);
 
     /// Sets all values from a given database row.
     function set_from_assoc(&$_row) {
-      $this->clear();
-      $this->fields = $_row + $this->fields;
+      $this->fields = $_row;
     }
 
 

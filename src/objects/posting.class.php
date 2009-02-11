@@ -61,8 +61,9 @@ class Posting {
 
   // Sets all values from a given database row.
   function set_from_assoc(&$_row) {
-    $this->clear();
-    $this->fields = $_row + $this->fields;
+    $this->fields = $_row;
+    $this->fields[allow_answer] = TRUE;
+    $this->fields[indent]       = array();
   }
 
 

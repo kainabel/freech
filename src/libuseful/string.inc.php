@@ -36,6 +36,22 @@
   }
 
 
+  function html_options($_name, $_options, $_selected = '') {
+    if (count($_options) == 0)
+      return '';
+
+    $html = '<select name="' . esc($_name) . '">';
+    foreach ($_options as $id => $caption) {
+      $select = ($id == $_selected) ? ' selected="selected"' : '';
+      $html  .= "<option label='".esc($caption)."' value='$id'$select/>\n";
+      $html  .= esc($caption);
+      $html  .= '</option>';
+    }
+
+    return $html . '</select>';
+  }
+
+
   function html_checkboxes($_name, $_options, $_separator = '<br/>') {
     if (count($_options) == 0)
       return '';

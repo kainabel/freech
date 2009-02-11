@@ -118,7 +118,7 @@
     }
 
 
-    function &get_status_names($_status = -1) {
+    function get_status_names($_status = -1) {
       $list = array(
         FORUM_STATUS_INACTIVE => _('Inactive'),
         FORUM_STATUS_ACTIVE   => _('Active')

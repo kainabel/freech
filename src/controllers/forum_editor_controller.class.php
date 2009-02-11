@@ -29,7 +29,7 @@ class ForumEditorController extends Controller {
     $this->assign_by_ref('action',      $url->get_string());
     $this->assign_by_ref('forum',       $_forum);
     $this->assign_by_ref('status_list', $_forum->get_status_names());
-    $this->render('forum_editor.tmpl');
+    $this->render_php('forum_editor.php.tmpl');
   }
 }
 ?>

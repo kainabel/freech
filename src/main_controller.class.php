@@ -27,9 +27,6 @@ include 'functions/config.inc.php';
 include 'functions/trace.inc.php';
 trace('Start');
 
-require 'smarty/Smarty.class.php';
-trace('Smarty imported');
-
 $ADODB_INCLUDED_CSV = TRUE;
 require 'adodb/adodb.inc.php';
 trace('Adodb imported');
@@ -196,16 +193,6 @@ class MainController {
     $this->eventbus->emit('on_construct', $this->api);
 
     trace('on_construct calls completed.');
-
-    // Init Smarty.
-    $this->smarty = new Smarty;
-    $this->smarty->template_dir  = 'templates';
-    $this->smarty->compile_dir   = 'data/smarty_templates_c';
-    $this->smarty->cache_dir     = 'data/smarty_cache';
-    $this->smarty->config_dir    = 'data/smarty_configs';
-    $this->smarty->compile_check = cfg('check_cache');
-
-    trace('Smarty initialized');
 
     // Attempt to login, if requested.
     $this->login_error = 0;
@@ -601,11 +588,6 @@ class MainController {
     $url->set_var('msg_id',   $_posting_id);
     $url->set_var('forum_id', $this->get_current_forum_id());
     $this->_refer_to($url->get_string());
-  }
-
-
-  function &_get_smarty() {
-    return $this->smarty;
   }
 
 

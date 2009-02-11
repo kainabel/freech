@@ -28,7 +28,7 @@
       $this->assign_by_ref('plugin_dir', dirname(__FILE__));
       $this->assign_by_ref('all_time',   $all_time);
       $this->assign_by_ref('weekly',     $week);
-      $this->render(dirname(__FILE__).'/top_users.tmpl');
+      $this->render_php(dirname(__FILE__).'/top_users.php.tmpl');
       $this->api->set_title(_('Top Users'));
     }
   }

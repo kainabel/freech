@@ -20,8 +20,8 @@
 ?>
 <?php
 class Install extends Step {
-  function Install($_id, $_smarty, $_state) {
-    $this->Step($_id, $_smarty, $_state);
+  function Install($_id, $_state) {
+    $this->Step($_id, $_state);
     $this->results = array();
     $this->failed  = FALSE;
     $fp            = fopen('mysql_matpath.sql', 'r');

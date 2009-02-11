@@ -9,7 +9,7 @@
   <title>Freech Installer</title>
 </head>
 <body>
-<body {if $onload_js}onload="{$onload_js|escape}"{/if}>
+<body <?php if ($onload_js) { ?>onload="<?=esc($onload_js)?>"<?php } ?>>
 <div id='header'>
   <div id='header1'>
     <a href='.'><img id='logo' src='../themes/heise/img/logo.png' alt='' /></a>

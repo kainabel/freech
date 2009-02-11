@@ -81,7 +81,7 @@ class HomepageController extends Controller {
     $this->assign('forum_links',   $this->api->links('forum'));
     $this->assign('postings',      $this->postings);
     $this->assign('new_users',     $new_users);
-    $this->render('home.tmpl');
+    $this->render_php('home.php.tmpl');
   }
 }
 ?>

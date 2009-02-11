@@ -62,7 +62,7 @@ class Thread {
   }
 
 
-  function _create_posting_at(&$_path) {
+  function _create_posting_at($_path) {
     $posting = new Posting;
     $posting->_set_path(substr($_path, 8) . '00');
     $posting->set_status(POSTING_STATUS_LOCKED);
@@ -157,11 +157,13 @@ class Thread {
       $_res->MoveNext();
     }
 
+    if (!$this->get_parent())
+      $this->_create_posting_at('00000000');
     trace('leave');
   }
 
 
-  function &get_parent() {
+  function get_parent() {
     return $this->postings_map['00000000'];
   }
 

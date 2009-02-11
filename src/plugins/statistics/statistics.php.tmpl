@@ -1,0 +1,59 @@
+<!-- statistics -->
+<h2><?=esc(_('Statistics'))?></h2>
+<h3><?=esc(sprintf(_('Postings and traffic of the last %s days'), $days))?></h3>
+
+<div id="plot" style="width:600px;height:300px;"></div>
+<script type="text/javascript" src="<?=$plugin_dir?>/jquery.js"></script>
+<script type="text/javascript" src="<?=$plugin_dir?>/jquery.flot.pack.js"></script>
+<script type="text/javascript">
+function day_formatter(val, axis) {
+  var now  = Math.round(new Date().getTime()/1000.0);
+  var time = new Date((now - (<?=$days?> - val) * <?=$resolution?>) * 1000);
+  return time.getDate() + "." + (time.getMonth() + 1) + ".";
+}
+
+function traffic_formatter(val, axis) {
+  return val + " MB";
+}
+
+$(function () {
+  var postings  = [];
+  var postings2 = [];
+  var traffic   = [];
+<?php foreach ($data as $point) { ?>
+      postings.push ([<?=$point->pos?>, <?=$point->postings?>]);
+      postings2.push([<?=$point->pos?>, <?=$point->postings2?>]);
+      traffic.push  ([<?=$point->pos?>, <?=$point->traffic?>]);
+<?php } ?>
+  $.plot($("#plot"),
+  [
+    { data: postings,  label: "<?=esc(_('Postings'))?>" },
+<?php if ($show_postings2) { ?>
+    { data: postings2, label: "<?=esc($postings2_label)?>" },
+<?php } ?>
+<?php if ($show_traffic) { ?>
+    { data: traffic, label: "<?=esc(_('Traffic'))?>", yaxis: 2 },
+<?php } ?>
+  ],
+  {
+    xaxis: {
+      tickFormatter: day_formatter,
+      tickSize: <?=$days/10?>,
+      tickDecimals: 0
+    },
+    yaxis: {
+      autoscaleMargin: .2,
+      min: 0
+    },
+    y2axis: {
+      tickFormatter: traffic_formatter,
+      autoscaleMargin: .2,
+      min: 0
+    },
+    legend: {
+      noColumns: 3
+    }
+  });
+});
+</script>
+<!-- end statistics -->

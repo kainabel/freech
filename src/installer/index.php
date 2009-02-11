@@ -46,12 +46,7 @@ if (get_magic_quotes_gpc()) {
 }
 
 $statedb = new StateDB('../data/installer');
-$smarty  = new Smarty;
-$smarty->template_dir = '.';
-$smarty->compile_dir  = '../data/installer';
-$smarty->cache_dir    = '../data/smarty_cache';
-$smarty->config_dir   = '../data/smarty_configs';
-$smarty->display('header.tmpl');
+require 'header.tmpl';
 
 $step_id      = (int)$_GET['step'];
 $prev_step_id = $step_id - 1;
@@ -60,18 +55,17 @@ $step_cls     = $steps[$step_id];
 
 if ($prev_step_id >= 0) {
   $prev_step_cls = $steps[$prev_step_id];
-  $prev_step     = new $prev_step_cls($prev_step_id, $smarty, $state);
+  $prev_step     = new $prev_step_cls($prev_step_id, $state);
   if ($prev_step->check() && $prev_step->submit()) {
     $statedb->save($step_id, $state);
-    $step = new $step_cls($step_id, $smarty, $state);
+    $step = new $step_cls($step_id, $state);
     $step->show();
   }
 }
 else {
-  $step = new $step_cls($step_id, $smarty, $state);
+  $step = new $step_cls($step_id, $state);
   $step->show();
 }
 
-$smarty->assign('version', FREECH_VERSION);
-$smarty->display('footer.tmpl');
+require 'footer.tmpl';
 ?>

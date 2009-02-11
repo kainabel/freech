@@ -3,17 +3,20 @@
 
 <p>Please enter a password for your administrator account.</p>
 
-{if $errors}
-  {include file="checklist.tmpl" items=$errors}
-  <hr />
-{/if}
+<?php
+  if ($errors) {
+    $items = $errors;
+    require "checklist.tmpl";
+    echo '<hr />';
+  }
+?>
 
-<form method='post' action='?step={$nextstep}' summary=''>
+<form method='post' action='?step=<?=$nextstep?>' summary=''>
 <table>
   <tr>
     <td>Username:</td>
     <td>
-      <input type="text" name="username" value="{$username|escape}" />
+      <input type="text" name="username" value="<?=esc($username)?>" />
     </td>
   </tr>
   <tr>

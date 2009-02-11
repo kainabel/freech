@@ -24,7 +24,6 @@
   class Controller {
     function Controller(&$_api) {
       $this->api       = $_api;
-      $this->smarty    = $_api->smarty();
       $this->userdb    = $_api->userdb();
       $this->forumdb   = $_api->forumdb();
       $this->visitordb = $_api->visitordb();
@@ -46,47 +45,15 @@
     }
 
     function clear_all_assign() {
-      array_push($this->var_stack, $this->smarty->get_template_vars());
-      $this->smarty->clear_all_assign();
       $this->scope = array();
     }
 
-    function restore_all_assign() {
-      $this->smarty->clear_all_assign();
-      $this->smarty->assign(array_pop($this->var_stack));
-    }
-
     function assign($_name, $_value) {
-      $this->smarty->assign($_name, $_value);
       $this->scope[$_name] = $_value;
     }
 
     function assign_by_ref($_name, &$_value) {
-      $this->smarty->assign_by_ref($_name, $_value);
       $this->scope[$_name] = $_value;
-    }
-
-    function fetch($_template) {
-      $template_dir = 'templates';
-      $theme_dir    = 'themes/' . cfg('theme');
-      if (is_readable($theme_dir . '/' . $_template))
-        $this->smarty->template_dir = $theme_dir;
-      else
-        $this->smarty->template_dir = $template_dir;
-      $this->assign_by_ref('__user',      $this->api->user());
-      $this->assign_by_ref('__group',     $this->api->group());
-      $this->assign_by_ref('__hints',     $this->hints);
-      $this->assign       ('__theme_dir', 'themes/' . cfg('theme'));
-      $cache_id = $this->smarty->template_dir . '/' . $_template;
-      trace('rendering template %s', $_template);
-      $result = $this->smarty->fetch($_template, $cache_id);
-      trace('rendered template %s', $_template);
-      $this->restore_all_assign();
-      return $result;
-    }
-
-    function render($_template) {
-      $this->api->controller->_append_content($this->fetch($_template));
     }
 
     function fetch_php($_template) {

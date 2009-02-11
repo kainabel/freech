@@ -1,0 +1,29 @@
+<!-- move thread -->
+<h2><?=esc(_('Move a Thread'))?></h2>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<form action="<?=esc($action)?>"
+      method="post"
+      accept-charset="utf-8">
+<div>
+<input type="hidden" name="action"   value="thread_move_submit" />
+<input type="hidden" name="msg_id"   value="<?=$posting->get_id()?>" />
+
+<p>
+  <label><?=esc(_('Posting:'))?></label>
+  <?=esc($posting->get_subject())?>
+</p>
+
+<p>
+  <label><?=esc(_('Move to:'))?></label>
+  <?=html_options('forum_id', $forums, $posting->get_forum_id())?>
+</p>
+
+<p>
+  <input type="submit"
+         name="thread_move_submit"
+         value="<?=esc(_('Move Thread'))?>" />
+</p>
+</div>
+</form>
+<!-- end move thread -->

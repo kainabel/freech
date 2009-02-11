@@ -160,22 +160,11 @@ class Freech {
   }
 
 
-  /*************************************************************
-   * Access to the the eventbus and smarty.
-   *************************************************************/
   /**
    * An eventbus over which plugins and the forum may communicate.
    */
   function &eventbus() {
     return $this->controller->get_eventbus();
-  }
-
-
-  /**
-   * The smarty template processor used by this forum.
-   */
-  function &smarty() {
-    return $this->controller->_get_smarty();
   }
 
 

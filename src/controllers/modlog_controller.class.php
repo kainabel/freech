@@ -29,7 +29,7 @@
       $this->clear_all_assign();
       $this->assign_by_ref('n_rows', count($items));
       $this->assign_by_ref('items',  $items);
-      $this->render('modlog.tmpl');
+      $this->render_php('modlog.php.tmpl');
     }
 
 
@@ -42,7 +42,7 @@
       $this->assign_by_ref('action',   $url->get_string());
       $this->assign_by_ref('refer_to', $_posting->get_url_string());
       $this->assign_by_ref('posting',  $_posting);
-      $this->render('posting_lock.tmpl');
+      $this->render_php('posting_lock.php.tmpl');
     }
 
 
@@ -62,7 +62,7 @@
       $this->assign_by_ref('action',  $url->get_string());
       $this->assign_by_ref('posting', $_posting);
       $this->assign_by_ref('forums',  $forum_map);
-      $this->render('thread_move.tmpl');
+      $this->render_php('thread_move.php.tmpl');
     }
   }
 ?>

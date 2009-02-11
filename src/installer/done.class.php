@@ -23,13 +23,6 @@ class Done extends Step {
   function show() {
     $vars = array('site_url' => $this->state->get('site_url'));
     $this->render('done.tmpl', $vars);
-
-    // clear entire compile directory
-    $this->smarty->clear_compiled_tpl();
-    $old_dir = $this->smarty->compile_dir;
-    $this->smarty->compile_dir = '../data/smarty_templates_c';
-    $this->smarty->clear_compiled_tpl();
-    $this->smarty->compile_dir = $old_dir;
   }
 
   function check() {

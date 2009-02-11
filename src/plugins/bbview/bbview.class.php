@@ -50,7 +50,7 @@ class BBView extends View {
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar', $indexbar);
     $this->assign_by_ref('threads',  $threads);
-    $this->render(dirname(__FILE__).'/bbview.tmpl');
+    $this->render_php(dirname(__FILE__).'/bbview.php.tmpl');
   }
 
 
@@ -97,7 +97,7 @@ class BBView extends View {
     $this->assign_by_ref('may_edit',   $may_edit);
     $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
     $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
-    $this->render(dirname(__FILE__).'/bbview_read_thread.tmpl');
+    $this->render_php(dirname(__FILE__).'/bbview_read_thread.php.tmpl');
     $this->api->set_title($_posting->get_subject());
   }
 

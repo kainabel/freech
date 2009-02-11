@@ -1,0 +1,67 @@
+<!-- user profile -->
+<h2>
+  <?=esc(sprintf(_('Profile of %s'), $user->get_name()))?>
+<?php if ($may_edit) { ?>
+  <?=$user->get_editor_url_html()?>
+<?php } ?>
+</h2>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<table summary=''>
+  <tr>
+    <td><?=esc(_('User group:'))?></td>
+    <td>
+      <?=$group->get_profile_url_html()?>
+      <img src="<?=$group->get_icon()?>" title="<?=esc($group->get_name())?>" alt="" />
+    </td>
+  </tr>
+  <tr>
+    <td><?=esc(_('User ID:'))?></td>
+    <td><?=esc($user->get_id())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Username:'))?></td>
+    <td><?=esc($user->get_name())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Account status:'))?></td>
+    <td><?=esc($user->get_status_name())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Member since:'))?></td>
+    <td><?=esc($user->get_created_time())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Forum postings:'))?></td>
+    <td><?=$user->get_postings_url_html($n_postings)?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Email:'))?></td>
+<?php if ($user->mail_is_public()) { ?>
+    <td><?=esc($user->get_mail())?></td>
+<?php } else { ?>
+    <td><i><?=esc(_('Not public'))?></i></td>
+<?php } ?>
+  </tr>
+  <tr>
+    <td><?=esc(_('Homepage:'))?></td>
+    <td>
+<?php if ($user->get_homepage()) { ?>
+      <?=$user->get_homepage_url_html()?>
+<?php } else { ?>
+      <i><?=esc(_('None'))?></i>
+<?php } ?>
+    </td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Instant messenger:'))?></td>
+    <td>
+<?php if ($user->get_im()) { ?>
+      <?=esc($user->get_im())?>
+<?php } else { ?>
+      <i><?=esc(_('None'))?></i>
+<?php } ?>
+    </td>
+  </tr>
+</table>
+<!-- end user profile -->

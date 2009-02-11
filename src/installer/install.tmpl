@@ -3,11 +3,14 @@
 
 Installing required database tables and creating the default installation.
 
-{include file="checklist.tmpl" items=$results}
+<?php
+  $items = $results;
+  require "checklist.tmpl";
+?>
 
 <hr/>
-{if $success}
-<form method='post' action='?step={$nextstep}'>
+<?php if ($success) { ?>
+<form method='post' action='?step=<?=$nextstep?>'>
 <p class="right"><input type='submit' value='Continue'/></p>
 </form>
-{/if}
+<?php } ?>

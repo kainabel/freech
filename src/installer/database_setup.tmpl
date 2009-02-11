@@ -3,35 +3,38 @@
 
 <p>Please enter your database settings.</p>
 
-{if $errors}
-  {include file="checklist.tmpl" items=$errors}
-  <hr />
-{/if}
+<?php
+  if ($errors) {
+    $items = $errors;
+    require "checklist.tmpl";
+  }
+?>
+<hr />
 
-<form method='post' action='?step={$nextstep}'>
+<form method='post' action='?step=<?=$nextstep?>'>
 <table summary=''>
   <tr>
     <td>Hostname:</td>
     <td>
-      <input type="text" name="db_host" value="{$db_host}" />
+      <input type="text" name="db_host" value="<?=esc($db_host)?>" />
     </td>
   </tr>
   <tr>
     <td>User:</td>
     <td>
-      <input type="text" name="db_user" value="{$db_user}" />
+      <input type="text" name="db_user" value="<?=esc($db_user)?>" />
     </td>
   </tr>
   <tr>
     <td>Password:</td>
     <td>
-      <input type="password" name="db_password" value="{$db_password}" />
+      <input type="password" name="db_password" value="<?=esc($db_password)?>" />
     </td>
   </tr>
   <tr>
     <td>Database:</td>
     <td>
-      <input type="text" name="db_name" value="{$db_name}" />
+      <input type="text" name="db_name" value="<?=esc($db_name)?>" />
     </td>
   </tr>
 </table>

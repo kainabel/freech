@@ -1,0 +1,42 @@
+<!-- group editor -->
+<h2><?=esc(sprintf(_('Permissions of %s'), $group->get_name()))?></h2>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<form action="<?=esc($action)?>" method="post" accept-charset="utf-8" autocomplete="off">
+<input type="hidden" name="group_id" value="<?=$group->get_id()?>" />
+<table summary=''>
+  <tr>
+    <td><?=esc(_('Group ID:'))?></td>
+    <td><?=esc($group->get_id())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('User group:'))?></td>
+    <td><input size="70" type="text" name="groupname" value="<?=esc($group->get_name())?>" /></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Icon:'))?></td>
+    <td>
+      <?=esc($group->get_icon())?>
+      <img src="<?=$group->get_icon()?>" title="<?=esc($group->get_name())?>" alt="" />
+    </td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Created on:'))?></td>
+    <td><?=esc($group->get_created_time())?></td>
+  </tr>
+</table>
+
+<h3><?=esc(_('Permissions'))?></h3>
+<table summary=''>
+<?php foreach ($group->get_permission_list() as $action => $permission) { ?>
+  <tr>
+    <td>
+      <input type="checkbox" name="may_<?=esc($action)?>" <?php if ($permission) { ?>checked="checked"<?php } ?> />
+      <?=esc(sprintf(_("Permit '%s'"), $action))?>
+    </td>
+  </tr>
+<?php } ?>
+</table>
+<input type="submit" name="group_submit" value="<?=esc(_('Save Group'))?>" />
+</form>
+<!-- end group editor -->

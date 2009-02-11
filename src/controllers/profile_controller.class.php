@@ -108,7 +108,7 @@
       $this->assign_by_ref('user',     $_user);
       $this->assign_by_ref('group',    $group);
       $this->assign_by_ref('may_edit', $may_edit);
-      $this->render('user_profile.tmpl');
+      $this->render_php('user_profile.php.tmpl');
       $this->api->set_title($_user->get_name());
     }
 
@@ -199,7 +199,7 @@
       $this->assign_by_ref('groups',            $groups);
       $this->assign_by_ref('status',            $status);
       $this->assign_by_ref('action',            $url->get_string());
-      $this->render('user_editor.tmpl');
+      $this->render_php('user_editor.php.tmpl');
       $this->api->set_title($_user->get_name());
     }
 
@@ -212,7 +212,7 @@
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
       $this->assign_by_ref('action', $url->get_string());
-      $this->render('user_options.tmpl');
+      $this->render_php('user_options.php.tmpl');
       $this->api->set_title($_user->get_name());
     }
 
@@ -244,7 +244,7 @@
       $this->assign_by_ref('group',    $_group);
       $this->assign_by_ref('n_rows',   $n_rows);
       $this->assign_by_ref('users',    $this->users);
-      $this->render('group_profile.tmpl');
+      $this->render_php('group_profile.php.tmpl');
       $this->api->set_title($_group->get_name());
     }
 
@@ -257,7 +257,7 @@
       $this->clear_all_assign();
       $this->assign_by_ref('group',  $_group);
       $this->assign_by_ref('action', $url->get_string());
-      $this->render('group_editor.tmpl');
+      $this->render_php('group_editor.php.tmpl');
       $this->api->set_title($_group->get_name());
     }
   }

@@ -1,0 +1,24 @@
+<!-- top users -->
+<h2><?=esc(_('Top Users'))?></h2>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<table summary=''>
+  <tr>
+    <td valign='top'>
+    <?php
+      $type  = "weekly_top";
+      $users = $weekly;
+      require "$plugin_dir/score_list.inc.php.tmpl";
+    ?>
+    </td>
+    <td>&nbsp;</td>
+    <td valign='top'>
+    <?php
+      $type  = "alltime_top";
+      $users = $all_time;
+      require "$plugin_dir/score_list.inc.php.tmpl";
+    ?>
+    </td>
+  </tr>
+</table>
+<!-- end top users -->

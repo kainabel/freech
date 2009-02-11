@@ -1,0 +1,47 @@
+<?php require "$template_dir/indexbar.php.tmpl" ?>
+<?php $i = 0; foreach ($threads as $thread) { ?>
+<?php if ($i++) { ?><hr class="bbview_separator"/><?php } ?>
+  <div class="bbview_row">
+    <div class="bbview_icons">
+      <?php if ($thread->is_new()) { ?>
+        <img src="<?=$__theme_dir?>/img/new.gif" alt="" title="<?=esc(_('New'))?>" />
+      <?php } else { ?>
+        <img src="<?=$__theme_dir?>/img/notnew.gif" alt="" />
+      <?php } ?>
+      <?php if ($thread->get_priority() > 0) { ?>
+        <img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
+      <?php } ?>
+      <?php if ($thread->was_moved()) { ?>
+        <img src="<?=$__theme_dir?>/img/move.png" alt="" title="<?=esc(_('Moved'))?>" />
+      <?php } ?>
+    </div>
+    <div class="bbview_row_main">
+      <div class="bbview_subject">
+        <?=$thread->get_url_html()?>
+      </div>
+      <div class="bbview_user">
+        <?=esc(sprintf(_('by %s'), $thread->get_username()))?>
+        <?php if ($thread->get_user_is_special()) { ?>
+          <img src="<?=esc($thread->get_user_icon())?>"
+               alt=""
+               title="<?=esc($thread->get_user_icon_name())?>" />
+        <?php } ?>
+      </div>
+      <div class="bbview_created">
+        <?=esc(sprintf(_('on %s'), $thread->get_created_time()))?>
+      </div>
+    </div>
+    <div class="bbview_row_status">
+      <div class="bbview_time">
+        <?=$thread->get_updated_time()?>
+      </div>
+      <div class="bbview_n_postings">
+        <?=$thread->get_n_postings()?>
+      </div>
+      <div class="bbview_n_new">
+        <?=$thread->get_n_new_postings()?>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+<?php require "$template_dir/indexbar.php.tmpl" ?>

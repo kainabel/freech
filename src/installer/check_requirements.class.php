@@ -20,8 +20,8 @@
 ?>
 <?php
 class CheckRequirements extends Step {
-  function CheckRequirements($_id, $_smarty, $_state) {
-    $this->Step($_id, $_smarty, $_state);
+  function CheckRequirements($_id, $_state) {
+    $this->Step($_id, $_state);
     $this->results = array(
       $this->_is_not_installed(),
       util_check_php_function_exists('gettext')

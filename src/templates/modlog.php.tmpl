@@ -1,0 +1,29 @@
+<!-- modlog -->
+<h2><?=esc(_('Moderation Log'))?></h2>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<table width='100%' cellspacing='0' cellpadding='3' border='0' summary=''>
+<?php foreach ($items as $item) { ?>
+ <tr>
+  <td align='left' class='nowrap'><?=esc($item->get_created_time())?></td>
+  <td>&nbsp;</td>
+  <td align='left' class='modlog_entry'><?=$item->get_html()?></td>
+ </tr>
+ <?php if ($item->has_reason()) { ?>
+ <tr>
+  <td colspan='2'></td>
+  <td align='left' class='modlog_reason'>
+    <?=esc(sprintf(_('Reason: %s'), $item->get_reason_fmt()))?>
+  </td>
+ </tr>
+ <?php } ?>
+<?php } ?>
+<?php if ($n_rows == 0) { ?>
+<tr>
+  <td>
+    <span id='empty_modlog_message'><?=esc(_('No entries yet.'))?></span>
+  </td>
+</tr>
+<?php } ?>
+</table>
+<!-- end modlog -->

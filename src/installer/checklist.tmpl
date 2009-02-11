@@ -1,31 +1,31 @@
 <!-- checklist -->
 <hr />
 <table width="100%" cellpadding="0" summary=''>
-{foreach item=item from=$items}
+<?php foreach ($items as $item) { ?>
   <tr>
-    <td>{$item->get_name()|escape}</td>
+    <td><?=esc($item->get_name())?></td>
     <td>&nbsp;</td>
     <td align="right">
-{if $item->result}
+    <?php if ($item->result) { ?>
       <span class="color_ok">Success</span>
-{else}
+    <?php } else { ?>
       <span class="color_fail">Failed</span>
-{/if}
+    <?php } ?>
     </td>
   </tr>
-{if $item->hint}
-    <tr>
-      <td>
-        <span class="small">{$item->hint|escape}</span>
-      </td>
-      <td colspan="2">
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3"><br /></td>
-    </tr>
-{/if}
-{/foreach}
+  <?php if ($item->hint) { ?>
+  <tr>
+    <td>
+      <span class="small"><?=esc($item->hint)?></span>
+    </td>
+    <td colspan="2">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3"><br /></td>
+  </tr>
+  <?php } ?>
+<?php } ?>
 </table>
 <!-- /checklist -->
 

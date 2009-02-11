@@ -5,7 +5,7 @@
   <span class='date'><?=$posting->get_created_time()?></span>
 <?php if ($posting->is_updated()) { ?>
   <span class='edited'>
-    <?=esc(sprintf(_("(last edited %s)"), $posting->get_updated_time()))?>
+    <?=esc(sprintf(_('(last edited %s)'), $posting->get_updated_time()))?>
   </span>
 <?php } ?>
   <br />
@@ -32,9 +32,7 @@
 ?>
     </td>
 <?php if ($posting->get_user_is_anonymous()) { ?>
-    <td>
-      <?=esc(sprintf(_('(IP hash: %s'), $posting->get_ip_address_hash(10)))?>
-    </td>
+    <td><?=esc(sprintf(_('(IP hash: %s)'), $posting->get_ip_address_hash(10)))?></td>
 <?php } ?>
   </tr>
 </table>

@@ -86,7 +86,7 @@
       $this->assign_by_ref('language',    $this->countrycode);
       $this->assign_by_ref('description', $this->descr);
       $this->assign_by_ref('postings',    $this->postings);
-      $this->render('../rss.tmpl');
+      $this->render_php('../rss.php.tmpl');
     }
   }
 ?>

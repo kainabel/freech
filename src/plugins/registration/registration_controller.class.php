@@ -20,7 +20,7 @@
 ?>
 <?php
   class RegistrationController extends Controller {
-    function show(&$user) {
+    function show(&$_user) {
       $url = new FreechURL;
       $url->set_var('action', 'account_create');
       
@@ -28,10 +28,10 @@
       $this->assign_by_ref('onsubmit_js', $this->api->get_js('onsubmit'));
       $this->assign_by_ref('form_html',   $this->api->get_html('form'));
       $this->assign_by_ref('action',      $url->get_string());
-      $this->assign_by_ref('user',        $user);
+      $this->assign_by_ref('user',        $_user);
       $this->assign_by_ref('password',    $_POST['password']);
       $this->assign_by_ref('password2',   $_POST['password2']);
-      $this->render(dirname(__FILE__).'/registration.tmpl');
+      $this->render_php(dirname(__FILE__).'/registration.php.tmpl');
       $this->api->set_title(_('User Registration'));
     }
 
@@ -39,17 +39,17 @@
     function show_tmpl($_tmpl, &$_user) {
       $this->clear_all_assign();
       $this->assign_by_ref('user', $_user);
-      $this->render(dirname(__FILE__).'/'.$_tmpl);
+      $this->render_php(dirname(__FILE__).'/'.$_tmpl);
     }
 
 
     function show_mail_sent(&$user) {
-      $this->show_tmpl('mail_sent.tmpl', $user);
+      $this->show_tmpl('mail_sent.php.tmpl', $user);
     }
 
 
     function show_done(&$user) {
-      $this->show_tmpl('done.tmpl', $user);
+      $this->show_tmpl('done.php.tmpl', $user);
     }
   }
 ?>

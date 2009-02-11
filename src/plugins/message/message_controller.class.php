@@ -40,7 +40,7 @@
       $this->assign('max_usernamelength', cfg('max_usernamelength'));
       $this->assign('max_subjectlength',  cfg('max_subjectlength'));
       $this->assign_by_ref('message', $_message);
-      $this->render(dirname(__FILE__).'/compose.tmpl');
+      $this->render_php(dirname(__FILE__).'/compose.php.tmpl');
       $this->api->set_title($_message->get_subject());
     }
 
@@ -98,7 +98,7 @@
       $this->assign_by_ref('pagetitle',   _('Preview'));
       $this->assign_by_ref('action',      $url->get_string());
       $this->assign_by_ref('message',     $_message);
-      $this->render(dirname(__FILE__).'/preview.tmpl');
+      $this->render_php(dirname(__FILE__).'/preview.php.tmpl');
       $this->api->set_title($_message->get_subject());
     }
   }

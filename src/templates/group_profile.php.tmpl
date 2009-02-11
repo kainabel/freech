@@ -1,0 +1,45 @@
+<!-- group profile -->
+<h2>
+  <?=esc(sprintf(_('Profile of %s'), $group->get_name()))?>
+<?php if ($__group->may('administer')) { ?>
+  <?=$group->get_editor_url_html()?>
+<?php } ?>
+</h2>
+<?php require "$template_dir/error.inc.php.tmpl" ?>
+
+<table summary=''>
+  <tr>
+    <td><?=esc(_('Group ID:'))?></td>
+    <td><?=esc($group->get_id())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('User group:'))?></td>
+    <td>
+      <?=esc($group->get_name())?>
+      <img src="<?=$group->get_icon()?>" title="<?=$group->get_name()?>" alt="" />
+    </td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Special functionality:'))?></td>
+<?php if ($group->is_special()) { ?>
+    <td><?=esc(_('Yes'))?></td>
+<?php } else { ?>
+    <td><?=esc(_('None'))?></td>
+<?php } ?>
+  </tr>
+  <tr>
+    <td><?=esc(_('Status:'))?></td>
+    <td><?=esc($group->get_status_name())?></td>
+  </tr>
+  <tr>
+    <td><?=esc(_('Created on:'))?></td>
+    <td><?=esc($group->get_created_time())?></td>
+  </tr>
+</table>
+<br />
+<?php
+  require "$template_dir/indexbar.php.tmpl";
+  require "$template_dir/user_list.php.tmpl";
+  require "$template_dir/indexbar.php.tmpl";
+?>
+<!-- end group profile -->

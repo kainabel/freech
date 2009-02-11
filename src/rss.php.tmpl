@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title><?=esc($title)?></title>
+    <link><?=esc($link)?></link>
+    <language><?=esc($language)?></language>
+    <description><?=esc($description)?></description>
+<?php foreach ($postings as $posting) { ?>
+    <item>
+      <title><?=esc($posting->get_subject())?></title>
+      <author><?=esc($posting->get_username())?></author>
+      <guid><?=esc($posting->get_url_string())?></guid>
+      <link><?=esc($posting->get_url_string())?></link>
+      <pubDate><?=strftime('%a, %d %b %Y %R:%S +0000', $posting->get_created_unixtime())?></pubDate>
+      <description><?=esc($posting->get_body_html())?></description>
+    </item>
+<?php } ?>
+  </channel>
+</rss>

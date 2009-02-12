@@ -31,9 +31,11 @@ define('USER_STATUS_BLOCKED',     3);
     var $fields;  ///< Properties of the user, such as name, mail.
 
     /// Constructor.
-    function User($_name = '') {
-      $this->clear();
-      $this->set_name($_name);
+    function User(&$_row = '') {
+      if ($_row)
+        $this->fields = $_row;
+      else
+        $this->clear();
     }
 
 
@@ -48,12 +50,6 @@ define('USER_STATUS_BLOCKED',     3);
       $this->fields[public_mail] = FALSE;
       $this->fields[created]     = time();
       $this->fields[lastlogin]   = time();
-    }
-
-
-    /// Sets all values from a given database row.
-    function set_from_assoc(&$_row) {
-      $this->fields = $_row;
     }
 
 

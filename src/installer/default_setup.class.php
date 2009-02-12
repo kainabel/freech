@@ -62,7 +62,8 @@ class DefaultSetup extends Step {
     // Create the user.
     $salt   = util_get_random_string(10);
     $userdb = new UserDB($db);
-    $user   = new User($username);
+    $user   = new User;
+    $user->set_name($username);
     $user->set_password($password1, $salt);
     $user->set_group_id(1); //FIXME: hardcoded
     $user->set_status(USER_STATUS_ACTIVE);

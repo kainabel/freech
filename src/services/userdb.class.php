@@ -110,9 +110,7 @@
     function _get_user_from_row(&$row) {
       if (!$row)
         return;
-      $user = new User;
-      $user->set_from_assoc($row);
-      return $user;
+      return new User($row);
     }
 
 
@@ -197,12 +195,13 @@
      * given one.
      * $_name: The name for which to find similar users.
      */
-    function &get_similar_users_from_name($_name,
-                                          $_limit = -1,
-                                          $_offset = 0) {
+    function get_similar_users_from_name($_name,
+                                         $_limit = -1,
+                                         $_offset = 0) {
       if (!$_name)
         die('UserDB::get_similar_users_from_name(): Invalid name.');
-      $user    = new User($_name);
+      $user = new User;
+      $user->set_name($_name);
       $soundex = $user->get_soundexed_name();
       $search  = array('soundexname' => $soundex);
       $sql     = $this->_get_sql_from_query($search);
@@ -222,7 +221,8 @@
      * $_username: The name of the user.
      */
     function username_is_available($_username) {
-      $needle = new User($_username);
+      $needle = new User;
+      $needle->set_name($_username);
       $users  = $this->get_similar_users_from_name($_username);
       foreach ($users as $user)
         if ($user->is_lexically_similar_to($needle))
@@ -239,7 +239,8 @@
     function count_similar_users_from_name($_name) {
       if (!$_name)
         die('UserDB::count_similar_users_from_name(): Invalid name.');
-      $user    = new User($_name);
+      $user = new User;
+      $user->set_name($_name);
       $soundex = $user->get_soundexed_name();
 
       $query = new FreechSqlQuery();
@@ -258,7 +259,7 @@
      * Returns the most recently created users.
      * $_limit: The maximum number of results.
      */
-    function &get_newest_users($_limit) {
+    function get_newest_users($_limit) {
       // Ordering by 'created' is slow, so using the primary key instead.
       // Status == 0 is USER_STATUS_DELETED.
       $sql   = "SELECT *,";
@@ -283,7 +284,7 @@
      * Returns the users who wrote the highest number of postings.
      * $_limit: The maximum number of results.
      */
-    function &get_top_users($_limit, $_since = 0) {
+    function get_top_users($_limit, $_since = 0) {
       $sql   = "SELECT u.*, g.name icon_name, COUNT(*) n_postings,";
       $sql  .= "UNIX_TIMESTAMP(u.updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(u.created) created";

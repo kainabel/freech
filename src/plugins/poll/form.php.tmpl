@@ -20,7 +20,7 @@
   <?=esc(_('Allow for checking multiple boxes.'))?>
 </p>
 
-<?php $i = 1; foreach ($poll->get_options() as $option) { ?>
+<?php $i = 0; foreach ($poll->get_options() as $option) { ?>
 <p>
   <label><?=esc(sprintf(_('Option %d:'), $i))?></label><br />
   <input type='text'

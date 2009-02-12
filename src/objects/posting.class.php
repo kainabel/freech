@@ -273,14 +273,19 @@ class Posting {
   }
 
 
-  function get_read_url() {
-    $url = new FreechURL('', $this->fields['subject']);
-    $url->set_var('action',   'read');
-    $url->set_var('msg_id',   $this->fields['id']);
-    $url->set_var('forum_id', $this->fields['forum_id']);
+  // This exists for performance reasons because it is used very often.
+  function get_url_html() {
+    global $cfg;
+    $vars             = $cfg['urlvars'];
+    $vars['action']   = 'read';
+    $vars['msg_id']   = $this->fields['id'];
+    $vars['forum_id'] = $this->fields['forum_id'];
     if (cfg('remember_page'))
-      $url->set_var('hs', (int)$_GET[hs]);
-    return $url;
+      $vars['hs'] = (int)$_GET[hs];
+
+    $url   = http_build_query($vars);
+    $label = htmlentities($this->fields['subject'], ENT_QUOTES, 'UTF-8');
+    return "<a href='?$url'>$label</a>";
   }
 
 
@@ -561,17 +566,17 @@ class Posting {
 
 
   function is_active() {
-    return $this->fields[status] == POSTING_STATUS_ACTIVE;
+    return $this->fields['status'] == POSTING_STATUS_ACTIVE;
   }
 
 
   function is_locked() {
-    return $this->fields[status] == POSTING_STATUS_LOCKED;
+    return $this->fields['status'] == POSTING_STATUS_LOCKED;
   }
 
 
   function is_spam() {
-    return $this->fields[status] == POSTING_STATUS_SPAM;
+    return $this->fields['status'] == POSTING_STATUS_SPAM;
   }
 
 
@@ -624,7 +629,7 @@ class Posting {
 
 
   function is_selected() {
-    return $this->fields[selected];
+    return $this->fields['selected'];
   }
 
 

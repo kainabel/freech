@@ -84,6 +84,10 @@
         $sql .= " AND is_parent={is_parent}";
         $_query->set_bool('is_parent', $_search_values['is_parent']);
       }
+      if ($_search_values['status']) {
+        $sql .= " AND status={status}";
+        $_query->set_int('status', $_search_values['status']);
+      }
       if ($_search_values['userid']) {
         $sql .= " AND user_id={userid}";
         $_query->set_int('userid', $_search_values['userid']);
@@ -368,6 +372,7 @@
       // but it does NOT sort the postings in each thread, as that would
       // require mixing "order by ... ASC" with "order by ... DESC", which
       // is *very* slow.
+      // Parents with children are returned even if they are locked.
       // IDX: thread:id
       // IDX: posting:thread_id
       $sql   = 'SELECT t.n_children,p.*,';
@@ -378,8 +383,10 @@
       $sql  .= ' FROM {t_posting} p';
       $sql  .= ' JOIN {t_thread} t ON p.thread_id=t.id';
       $sql  .= ' WHERE t.id IN (' . implode(',', $_thread_ids) . ')';
-      if (!$_include_inactive)
-        $sql .= ' AND p.status={status}';
+      if (!$_include_inactive) {
+        $sql .= ' AND (p.status={status}';
+        $sql .= ' OR (p.is_parent=1 AND p.n_descendants!=0))';
+      }
       $sql  .= ' ORDER BY t.id DESC';
       $query = new FreechSqlQuery($sql);
       $query->set_int('status', POSTING_STATUS_ACTIVE);
@@ -455,9 +462,8 @@
       $sql  .= "UNIX_TIMESTAMP(updated) updated,";
       $sql  .= "UNIX_TIMESTAMP(created) created";
       $sql  .= " FROM {t_posting}";
-      $sql  .= " WHERE status={status}";
+      $sql  .= " WHERE 1";
       $query = new FreechSqlQuery($sql);
-      $query->set_int('status', POSTING_STATUS_ACTIVE);
       if ($_fields)
         $this->_add_where_expression($query, $_fields);
       if ($_desc)

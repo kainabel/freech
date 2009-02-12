@@ -65,7 +65,6 @@ class Thread {
 
   function _create_posting_at($_path) {
     $posting = new Posting;
-    $posting->set_thread_id($this->fields['id']);
     $posting->_set_path(substr($_path, 8) . '00');
     $posting->set_status(POSTING_STATUS_LOCKED);
     $posting->apply_block();
@@ -143,10 +142,11 @@ class Thread {
 
   function set_from_db(&$forumdb, &$_res) {
     trace('enter');
-    $row                     = $_res->fields;
-    $this->dirty             = TRUE;
-    $this->fields['id']      = $row['thread_id'];
-    $this->fields['updated'] = $row['threadupdate'];
+    $row                      = $_res->fields;
+    $this->dirty              = TRUE;
+    $this->fields['id']       = $row['thread_id'];
+    $this->fields['forum_id'] = $row['forum_id'];
+    $this->fields['updated']  = $row['threadupdate'];
     while (!$_res->EOF) {
       if ($this->fields['id'] != $row['thread_id'])
         break;
@@ -192,13 +192,6 @@ class Thread {
     else
       $parent->set_relation(POSTING_RELATION_PARENT_STUB);
 
-    // Remember the number of children.
-    $n_children = $parent->get_n_children();
-    if ($n_children)
-      $this->fields['n_children'] = $n_children;
-    else
-      $this->fields['n_children'] = count($this->postings_map) - 1;
-
     // Remove the children.
     $this->postings_list = array($parent);
     $this->postings_map  = array($this->_get_posting_path($parent) => $parent);
@@ -221,9 +214,12 @@ class Thread {
 
 
   function get_n_children() {
-    if ($this->fields['n_children'])
-      return $this->fields['n_children'];
     return $this->get_parent()->get_n_children();
+  }
+
+
+  function get_n_postings() {
+    return $this->get_n_children() + 1;
   }
 
 
@@ -253,12 +249,12 @@ class Thread {
 
 
   function get_url() {
-    return $this->get_parent()->get_url();
+    return $this->get_parent()->get_thread_url();
   }
 
 
   function get_url_html() {
-    return $this->get_parent()->get_url_html();
+    return $this->get_parent()->get_url_thread_html();
   }
 
 

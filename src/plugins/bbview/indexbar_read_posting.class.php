@@ -31,7 +31,7 @@
       $this->Menu();
 
       // Prints the index (pagination).
-      $this->add_index($_posting->get_url(),
+      $this->add_index($_posting->get_thread_url(),
                        $_args[n_postings],
                        $_args[n_postings_per_page],
                        $_args[n_pages_per_index],

@@ -7,7 +7,6 @@ Maintenance
 * Replace indexbar.php.tmpl by a call to html_menu().
 * Allow for passing a DB row to the User constructor.
 * Allow for passing a DB row to the Forum constructor.
-* Fix: Number of postings per thread in bbview.
 
 Features
 ---------

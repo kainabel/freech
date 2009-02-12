@@ -104,7 +104,7 @@ class Posting {
 
 
   function set_forum_id($_forum_id) {
-    $this->fields[forum_id] = $_forum_id * 1;
+    $this->fields['forum_id'] = (int)$_forum_id;
   }
 
 
@@ -113,18 +113,28 @@ class Posting {
   }
 
 
+  function set_origin_forum_id($_origin_forum_id) {
+    $this->fields['origin_forum_id'] = (int)$_origin_forum_id;
+  }
+
+
   function get_origin_forum_id() {
-    return $this->fields[origin_forum_id];
+    return $this->fields['origin_forum_id'];
+  }
+
+
+  function set_is_parent($_is_parent = TRUE) {
+    $this->fields['is_parent'] = (bool)$_is_parent;
   }
 
 
   function is_parent() {
-    return $this->fields[is_parent];
+    return $this->fields['is_parent'];
   }
 
 
   function set_priority($_priority) {
-    $this->fields[priority] = $_priority * 1;
+    $this->fields['priority'] = (int)$_priority;
   }
 
 
@@ -271,6 +281,17 @@ class Posting {
     $url->set_var('action',   $_action);
     $url->set_var('msg_id',   $this->get_id());
     $url->set_var('forum_id', $this->get_forum_id());
+    if (cfg('remember_page'))
+      $url->set_var('hs', (int)$_GET[hs]);
+    return $url;
+  }
+
+
+  function get_thread_url() {
+    $url = new FreechURL('', $this->get_subject());
+    $url->set_var('action',    'read');
+    $url->set_var('thread_id', $this->get_thread_id());
+    $url->set_var('forum_id',  $this->get_forum_id());
     if (cfg('remember_page'))
       $url->set_var('hs', (int)$_GET[hs]);
     return $url;
@@ -493,9 +514,7 @@ class Posting {
 
 
   function get_n_children() {
-    if ($this->fields['relation'] != POSTING_RELATION_PARENT_STUB
-      && $this->fields['relation'] != POSTING_RELATION_PARENT_UNFOLDED
-      && $this->fields['relation'] != POSTING_RELATION_PARENT_FOLDED)
+    if (!$this->fields['is_parent'])
       die('Posting:get_n_children(): This function must not be called on'
         . ' non-parent rows.');
     return $this->fields['n_children'];

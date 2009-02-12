@@ -156,7 +156,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_url() {
+  function get_url() {
     return $this->posting->get_url();
   }
 
@@ -171,7 +171,17 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_edit_url() {
+  function get_thread_url() {
+    return $this->posting->get_thread_url();
+  }
+
+
+  function get_url_thread_html() {
+    return $this->posting->get_thread_url()->get_html();
+  }
+
+
+  function get_edit_url() {
     return $this->posting->get_edit_url();
   }
 
@@ -186,7 +196,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_respond_url() {
+  function get_respond_url() {
     return $this->posting->get_respond_url();
   }
 
@@ -201,7 +211,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_fold_url() {
+  function get_fold_url() {
     return $this->posting->get_fold_url();
   }
 
@@ -211,7 +221,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_lock_url() {
+  function get_lock_url() {
     return $this->posting->get_lock_url();
   }
 
@@ -221,7 +231,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_unlock_url() {
+  function get_unlock_url() {
     return $this->posting->get_unlock_url();
   }
 
@@ -231,7 +241,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_stub_url() {
+  function get_stub_url() {
     return $this->posting->get_stub_url();
   }
 
@@ -241,7 +251,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_unstub_url() {
+  function get_unstub_url() {
     return $this->posting->get_unstub_url();
   }
 
@@ -251,7 +261,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_move_url() {
+  function get_move_url() {
     return $this->posting->get_move_url();
   }
 
@@ -261,7 +271,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_prioritize_url($_priority) {
+  function get_prioritize_url($_priority) {
     return $this->posting->get_prioritize_url($_priority);
   }
 
@@ -271,7 +281,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function &get_user_profile_url() {
+  function get_user_profile_url() {
     return $this->posting->get_user_profile_url();
   }
 

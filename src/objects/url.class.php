@@ -103,11 +103,12 @@
 
     // Returns <a href="...">...</a>
     function get_html($_label = '') {
-      $url   = $this->get_string(TRUE);
-      $label = htmlentities($_label, ENT_QUOTES, 'UTF-8');
-      if (!$label)
-        $label = $this->get_label(TRUE);
-      if (!$label)
+      $url = $this->get_string(TRUE);
+      if ($_label)
+        $label = htmlentities($_label, ENT_QUOTES, 'UTF-8');
+      elseif ($this->label)
+        $label = htmlentities($this->label, ENT_QUOTES, 'UTF-8');
+      else
         $label = $url;
       return "<a href=\"$url\">$label</a>";
     }

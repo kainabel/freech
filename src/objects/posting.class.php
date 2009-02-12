@@ -202,7 +202,7 @@ class Posting {
 
 
   function get_subject() {
-    return $this->fields[subject];
+    return $this->fields['subject'];
   }
 
 
@@ -260,12 +260,24 @@ class Posting {
 
 
   function get_url($_action = 'read', $_caption = '') {
-    if (!$_caption)
-      $_caption = $this->get_subject();
-    $url = new FreechURL('', $_caption);
+    if ($_caption)
+      $url = new FreechURL('', $_caption);
+    else
+      $url = new FreechURL('', $this->fields['subject']);
     $url->set_var('action',   $_action);
-    $url->set_var('msg_id',   $this->get_id());
-    $url->set_var('forum_id', $this->get_forum_id());
+    $url->set_var('msg_id',   $this->fields['id']);
+    $url->set_var('forum_id', $this->fields['forum_id']);
+    if (cfg('remember_page'))
+      $url->set_var('hs', (int)$_GET[hs]);
+    return $url;
+  }
+
+
+  function get_read_url() {
+    $url = new FreechURL('', $this->fields['subject']);
+    $url->set_var('action',   'read');
+    $url->set_var('msg_id',   $this->fields['id']);
+    $url->set_var('forum_id', $this->fields['forum_id']);
     if (cfg('remember_page'))
       $url->set_var('hs', (int)$_GET[hs]);
     return $url;

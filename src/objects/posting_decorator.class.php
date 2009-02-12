@@ -171,6 +171,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_read_url() {
+    return $this->posting->get_read_url();
+  }
+
+
   function get_thread_url() {
     return $this->posting->get_thread_url();
   }

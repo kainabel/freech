@@ -29,7 +29,7 @@
     include_once '../data/user_config.inc.php';
   chdir($oldwd);
   
-  function &cfg($_key, $_default = NULL) {
+  function cfg($_key, $_default = NULL) {
     global $cfg;
     if (!$_key)
       die("cfg(): Invalid configuration key '$_key'.\n");
@@ -41,7 +41,7 @@
   }
 
 
-  function &cfg_is($_key, $_compare) {
+  function cfg_is($_key, $_compare) {
     global $cfg;
     return $cfg[$_key] == $_compare;
   }

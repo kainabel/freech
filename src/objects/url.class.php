@@ -22,18 +22,11 @@
   /**
    * Represents a URL, including the query variables.
    */
-  class URL {
-    var $label;
-    var $path;
-    var $vars;
-
-
-    // Constructor.
-    function URL($_path = '', $_vars = array(), $_label = '') {
+  class FreechURL {
+    function FreechURL($_path = '', $_label = '') {
       $this->label = $_label;
       $this->path  = $_path;
-      $this->vars  = array();
-      $this->set_var_from_array($_vars);
+      $this->vars  = cfg('urlvars');
     }
 
 
@@ -63,12 +56,6 @@
     }
 
 
-    function set_var_from_array($_array) {
-      foreach ($_array as $key => $value)
-        $this->set_var($key, $value);
-    }
-
-
     // Deletes the given variable from the URL.
     function delete_var($_name) {
       unset($this->vars[$_name]);
@@ -77,6 +64,9 @@
 
     // Returns the URL as a string.
     function get_string($_escape = FALSE) {
+      if ($_GET['rewrite'])
+        $this->_update_mod_rewrite_url();
+
       $query = http_build_query($this->vars);
 
       if (!$query)
@@ -120,6 +110,44 @@
       if (!$label)
         $label = $url;
       return "<a href=\"$url\">$label</a>";
+    }
+
+
+    function _update_mod_rewrite_url() {
+      $path     = $this->get_path();
+      $action   = $this->get_var('action');
+      $forum_id = $this->get_var('forum_id');
+      $msg_id   = $this->get_var('msg_id');
+      $username = $this->get_var('username');
+      $this->delete_var('action');
+
+      if ($forum_id) {
+        $this->set_path($path . "forum-$forum_id/");
+        $this->delete_var('forum_id');
+      }
+
+      switch ($action) {
+      case '':
+        break;
+
+      case 'user_profile':
+        $this->set_path($path . "user/$username/");
+        $this->delete_var('username');
+        break;
+
+      case 'user_editor':
+        $this->set_path($path . "user/$username/edit");
+        $this->delete_var('username');
+        break;
+
+      case 'user_postings':
+        $this->set_path($path . "user/$username/postings");
+        $this->delete_var('username');
+        break;
+
+      default:
+        $this->set_var('action', $action);
+      }
     }
   }
 ?>

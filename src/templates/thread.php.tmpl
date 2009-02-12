@@ -55,7 +55,7 @@
 <?php } elseif (!$posting->is_active()) { ?>
      &nbsp;<?=esc($posting->get_subject())?>
 <?php } else { ?>
-     &nbsp;<?=$posting->get_url_html()?>
+     &nbsp;<?=$posting->get_url()->get_html()?>
 <?php } ?>
 <?php if ($posting->get_relation() == POSTING_RELATION_PARENT_FOLDED) { ?>
   &nbsp;(<?=$thread->get_n_children();?>)

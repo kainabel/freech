@@ -43,7 +43,6 @@ include 'objects/hint.class.php';
 include 'objects/error.class.php';
 include 'objects/ack.class.php';
 include 'objects/url.class.php';
-include 'objects/freech_url.class.php';
 include 'objects/posting.class.php';
 include 'objects/forum.class.php';
 include 'objects/user.class.php';

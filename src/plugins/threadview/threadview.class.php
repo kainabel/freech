@@ -43,7 +43,7 @@ class ThreadView extends View {
 
     // Format the threads.
     foreach ($threads as $thread) {
-      if (!$thread_state->is_folded($thread->get_parent_id()))
+      if (!$thread_state->is_folded($thread->get_thread_id()))
         continue;
       $thread->fold();
       $parent      = $thread->get_parent();

@@ -20,7 +20,8 @@
 ?>
 <?php
 class Thread {
-  function Thread() {
+  function Thread(&$_api) {
+    $this->api           = $_api;
     $this->postings_map  = array();
     $this->postings_list = array();
     $this->fields        = array();
@@ -64,10 +65,13 @@ class Thread {
 
   function _create_posting_at($_path) {
     $posting = new Posting;
+    $posting->set_thread_id($this->fields['id']);
     $posting->_set_path(substr($_path, 8) . '00');
     $posting->set_status(POSTING_STATUS_LOCKED);
     $posting->apply_block();
+    $posting = $this->api->_decorate_posting($posting);
     $this->_add_posting($posting);
+    return $posting;
   }
 
 
@@ -139,31 +143,37 @@ class Thread {
 
   function set_from_db(&$forumdb, &$_res) {
     trace('enter');
-    $this->dirty = TRUE;
+    $row                     = $_res->fields;
+    $this->dirty             = TRUE;
+    $this->fields['id']      = $row['thread_id'];
+    $this->fields['updated'] = $row['threadupdate'];
     while (!$_res->EOF) {
-      $row = $_res->fields;
-      if (!isset($thread_id))
-        $thread_id = $row['thread_id'];
-      if ($thread_id != $row['thread_id'])
+      if ($this->fields['id'] != $row['thread_id'])
         break;
 
-      $this->fields['updated'] = $row['threadupdate'];
       $posting = new Posting($row);
       $posting = $forumdb->_decorate_posting($posting);
       $posting->apply_block();
       $this->_add_posting($posting);
 
       $_res->MoveNext();
+      $row = $_res->fields;
     }
 
-    if (!$this->get_parent())
-      $this->_create_posting_at('00000000');
     trace('leave');
   }
 
 
+  function get_thread_id() {
+    return $this->fields['id'];
+  }
+
+
   function get_parent() {
-    return $this->postings_map['00000000'];
+    $parent = $this->postings_map['00000000'];
+    if ($parent)
+      return $parent;
+    return $this->_create_posting_at('00000000');
   }
 
 
@@ -174,11 +184,22 @@ class Thread {
 
   function fold() {
     $this->dirty = FALSE;
-    $parent      = $this->get_parent();
+
+    // Fold the parent.
+    $parent = $this->get_parent();
     if (count($this->postings_map) > 1)
       $parent->set_relation(POSTING_RELATION_PARENT_FOLDED);
     else
       $parent->set_relation(POSTING_RELATION_PARENT_STUB);
+
+    // Remember the number of children.
+    $n_children = $parent->get_n_children();
+    if ($n_children)
+      $this->fields['n_children'] = $n_children;
+    else
+      $this->fields['n_children'] = count($this->postings_map) - 1;
+
+    // Remove the children.
     $this->postings_list = array($parent);
     $this->postings_map  = array($this->_get_posting_path($parent) => $parent);
   }
@@ -199,8 +220,10 @@ class Thread {
   }
 
 
-  function get_n_postings() {
-    return count($this->postings_list);
+  function get_n_children() {
+    if ($this->fields['n_children'])
+      return $this->fields['n_children'];
+    return $this->get_parent()->get_n_children();
   }
 
 

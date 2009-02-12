@@ -65,15 +65,20 @@ class Posting {
   }
 
 
-  function &_ip_hash($_ip) {
+  function _ip_hash($_ip) {
     // Note that this needs to work with both, IPv4 and IPv6.
     $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);
     return md5($ip_net . cfg('salt'));
   }
 
 
+  function set_thread_id($_thread_id) {
+    $this->fields['thread_id'] = (int)$_thread_id;
+  }
+
+
   function get_thread_id() {
-    return $this->fields[thread_id];
+    return $this->fields['thread_id'];
   }
 
 
@@ -259,7 +264,7 @@ class Posting {
   }
 
 
-  function &get_url($_action = 'read', $_caption = '') {
+  function get_url($_action = 'read', $_caption = '') {
     if (!$_caption)
       $_caption = $this->get_subject();
     $url = new FreechURL('', $_caption);
@@ -272,12 +277,12 @@ class Posting {
   }
 
 
-  function &get_edit_url() {
+  function get_edit_url() {
     return $this->get_url('edit', _('Edit'));
   }
 
 
-  function &get_respond_url() {
+  function get_respond_url() {
     $url = new FreechURL('', _('Reply'));
     $url->set_var('action',    'respond');
     $url->set_var('parent_id', $this->get_id());
@@ -289,7 +294,7 @@ class Posting {
 
 
   // The url behind the "+/-" toggle button.
-  function &get_fold_url() {
+  function get_fold_url() {
     if ($_GET['action'] == 'read') {
       $url = $this->get_url();
       $url->set_var('showthread', -1);
@@ -301,14 +306,14 @@ class Posting {
       if ($_GET['hs'])
         $url->set_var('hs', (int)$_GET[hs]);
       $url->set_var('forum_id',        $this->get_forum_id());
-      $url->set_var('user_postings_c', $this->get_id());
+      $url->set_var('user_postings_c', $this->get_thread_id());
     }
     else {
       $url = new FreechURL;
       if ($_GET['hs'])
         $url->set_var('hs', (int)$_GET[hs]);
       $url->set_var('forum_id', $this->get_forum_id());
-      $url->set_var('c',        $this->get_id());
+      $url->set_var('c',        $this->get_thread_id());
     }
     $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
     return $url;
@@ -316,7 +321,7 @@ class Posting {
 
 
   // The url for locking the posting.
-  function &get_lock_url() {
+  function get_lock_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_lock');
     $url->set_var('forum_id', $this->get_forum_id());
@@ -326,7 +331,7 @@ class Posting {
 
 
   // The url for unlocking the posting.
-  function &get_unlock_url() {
+  function get_unlock_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_unlock');
     $url->set_var('msg_id',   $this->get_id());
@@ -335,7 +340,7 @@ class Posting {
   }
 
 
-  function &get_stub_url() {
+  function get_stub_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_stub');
     $url->set_var('msg_id',   $this->get_id());
@@ -344,7 +349,7 @@ class Posting {
   }
 
 
-  function &get_unstub_url() {
+  function get_unstub_url() {
     $url = new FreechURL;
     $url->set_var('action',   'posting_unstub');
     $url->set_var('msg_id',   $this->get_id());
@@ -354,7 +359,7 @@ class Posting {
 
 
   // The url for moving the posting to a different forum.
-  function &get_move_url() {
+  function get_move_url() {
     $url = new FreechURL;
     $url->set_var('action',   'thread_move');
     $url->set_var('forum_id', $this->get_forum_id());
@@ -364,7 +369,7 @@ class Posting {
 
 
   // The url for changing the posting priority.
-  function &get_prioritize_url($_priority) {
+  function get_prioritize_url($_priority) {
     $url = new FreechURL;
     $url->set_var('action',   'posting_prioritize');
     $url->set_var('msg_id',   $this->get_id());
@@ -374,7 +379,7 @@ class Posting {
   }
 
 
-  function &get_user_profile_url() {
+  function get_user_profile_url() {
     if (isset($this->fields['current_username']))
       $username = $this->fields['current_username'];
     else
@@ -488,12 +493,12 @@ class Posting {
 
 
   function get_n_children() {
-    if ($this->fields[relation] != POSTING_RELATION_PARENT_STUB
-      && $this->fields[relation] != POSTING_RELATION_PARENT_UNFOLDED
-      && $this->fields[relation] != POSTING_RELATION_PARENT_FOLDED)
+    if ($this->fields['relation'] != POSTING_RELATION_PARENT_STUB
+      && $this->fields['relation'] != POSTING_RELATION_PARENT_UNFOLDED
+      && $this->fields['relation'] != POSTING_RELATION_PARENT_FOLDED)
       die('Posting:get_n_children(): This function must not be called on'
         . ' non-parent rows.');
-    return $this->fields[n_children] * 1;
+    return $this->fields['n_children'];
   }
 
 

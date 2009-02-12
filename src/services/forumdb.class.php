@@ -389,7 +389,7 @@
 
       $threads = array();
       while (!$res->EOF) {
-        $thread = new Thread;
+        $thread = new Thread($this);
         $thread->set_from_db($this, $res);
         array_push($threads, $thread);
       }
@@ -668,7 +668,7 @@
 
       $threads = array();
       while (!$res->EOF) {
-        $thread = new Thread;
+        $thread = new Thread($this);
         $thread->set_from_db($this, $res);
         array_push($threads, $thread);
       }

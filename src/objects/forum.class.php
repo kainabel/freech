@@ -23,18 +23,21 @@
   define('FORUM_STATUS_ACTIVE',   1);
 
   class Forum {
-    function Forum($_title = '', $_description = '') {
-      $this->fields['id']          = NULL;
-      $this->fields['owner_id']    = NULL;
-      $this->fields['name']        = $_name;
-      $this->fields['description'] = $_description;
-      $this->fields['status']      = FORUM_STATUS_ACTIVE;
-      $this->fields['status_text'] = '';
+    function Forum(&$_row = '') {
+      if ($_row)
+        $this->fields = $_row;
+      else
+        $this->clear();
     }
 
 
-    function set_from_assoc(&$_row) {
-      $this->fields = array_merge($this->fields, $_row);
+    function clear() {
+      $this->fields['id']          = NULL;
+      $this->fields['owner_id']    = NULL;
+      $this->fields['name']        = '';
+      $this->fields['description'] = '';
+      $this->fields['status']      = FORUM_STATUS_ACTIVE;
+      $this->fields['status_text'] = '';
     }
 
 

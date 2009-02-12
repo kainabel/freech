@@ -1030,8 +1030,7 @@
                            or die('ForumDB::get_forum_from_id()');
       if ($res->EOF)
         return NULL;
-      $forum = new Forum;
-      $forum->set_from_assoc($res->fields);
+      $forum = new Forum($res->fields);
       return $forum;
     }
 
@@ -1052,8 +1051,7 @@
                           or die('ForumDB::get_forums()');
       $forums = array();
       while (!$res->EOF) {
-        $forum = new Forum;
-        $forum->set_from_assoc($res->fields);
+        $forum = new Forum($res->fields);
         array_push($forums, $forum);
         $res->MoveNext();
       }

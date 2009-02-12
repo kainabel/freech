@@ -21,9 +21,7 @@ dist-prepare: clean
 	cd $(PACKAGE); ./makedoc.sh; cd -
 
 pot:
-	find . -name "*.tmpl" | xargs php5 utils/tsmarty2c.php > po/templates.c
-	xgettext --omit-header -o po/$(NAME).pot po/templates.c
-	find src/ -name "*.php" | xargs xgettext -L php -j -o po/$(NAME).pot
+	find src/ -name "*.php" -o -name "*.php.tmpl" | xargs xgettext -L php -j -o po/$(NAME).pot
 
 mo:
 	ls -1 po/*.po | while read i; do \

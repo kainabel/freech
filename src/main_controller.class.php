@@ -1301,9 +1301,8 @@ class MainController {
      */
     $this->eventbus->emit('on_run_before', $this->api);
     trace('on_run_before completed');
-    $this->title   = '';
-    $this->content = '';
-    $action        = $this->get_current_action();
+    $this->title = '';
+    $action      = $this->get_current_action();
 
     // Prevent from accessing non-existent forums.
     if ($this->get_current_forum_id() && !$this->get_current_forum())
@@ -1312,6 +1311,7 @@ class MainController {
 
     $this->_init_breadcrumbs();
     trace('breadcrumbs initialized');
+    ob_start();
 
     // Check whether a plugin registered the given action. This is done
     // first to allow plugins for overriding the default handler.
@@ -1319,7 +1319,10 @@ class MainController {
       trace('plugin action started');
       call_user_func($this->actions[$action], $this->api);
       trace('plugin action completed');
-      return $this->_print_footer();
+      $this->_print_footer();
+      $this->content = ob_get_contents();
+      ob_end_clean();
+      return;
     }
 
     trace('no plugin action found');
@@ -1453,6 +1456,9 @@ class MainController {
     trace('action completed');
 
     $this->_print_footer();
+
+    $this->content = ob_get_contents();
+    ob_end_clean();
     trace('leave');
   }
 
@@ -1665,8 +1671,6 @@ class MainController {
 
   function print_head($_header = NULL) {
     trace('Enter');
-    $oldcontent    = $this->content;
-    $this->content = '';
 
     /* Plugin hook: on_header_print_before
      *   Called before the HTML header is sent.
@@ -1675,7 +1679,7 @@ class MainController {
     $this->eventbus->emit('on_header_print_before', $this->api);
 
     if ($_header)
-      $this->_append_content($_header);
+      echo $_header;
     elseif (!headers_sent()) {
       header('Content-Type: text/html; charset=utf-8');
       header('Pragma: no-cache');
@@ -1687,7 +1691,6 @@ class MainController {
       trace('rendered header');
     }
 
-    print($this->content);
     trace('printed header');
 
     /* Plugin hook: on_header_print_before
@@ -1695,7 +1698,6 @@ class MainController {
      *   Args: none
      */
     $this->eventbus->emit('on_header_print_after', $this->api);
-    $this->content = $oldcontent;
     trace('Leave');
   }
 
@@ -1709,11 +1711,8 @@ class MainController {
     $this->eventbus->emit('on_content_print_before', $this->api);
     trace('on_content_print_before completed');
 
-    $body          = $this->content;
-    $this->content = '';
     $this->_print_breadcrumbs();
-    print($this->content);
-    print($body);
+    echo $this->content;
     trace('print completed');
 
     $this->render_time = microtime(TRUE) - $this->start_time;

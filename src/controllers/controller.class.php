@@ -57,6 +57,14 @@
     }
 
     function fetch_php($_template) {
+      ob_start();
+      $this->render_php($_template);
+      $result = ob_get_contents();
+      ob_end_clean();
+      return $result;
+    }
+
+    function render_php($_template) {
       $template_dir = 'templates';
       $theme_dir    = 'themes/' . cfg('theme');
       $__user       = $this->api->user();
@@ -66,19 +74,10 @@
       foreach ($this->scope as $key => $value)
         $$key = $value;
       trace('rendering PHP template %s', $template_dir.'/'.$_template);
-      ob_start();
       if (!is_readable($_template))
         $_template = $template_dir . '/' . $_template;
       require $_template;
-      $result = ob_get_contents();
-      ob_end_clean();
       trace('rendered PHP template %s', $_template);
-      return $result;
-    }
-
-    function render_php($_template) {
-      $content = $this->fetch_php($_template);
-      $this->api->controller->_append_content($content);
     }
   }
 ?>

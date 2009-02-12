@@ -22,7 +22,7 @@
 
 <?php $i = 0; foreach ($poll->get_options() as $option) { ?>
 <p>
-  <label><?=esc(sprintf(_('Option %d:'), $i))?></label><br />
+  <label><?=esc(sprintf(_('Option %d:'), $i + 1))?></label><br />
   <input type='text'
          size='80'
          name='poll_option<?=$i++ ?>'

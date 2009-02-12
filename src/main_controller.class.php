@@ -36,7 +36,6 @@ include 'libuseful/string.inc.php';
 include 'services/trackable.class.php';
 include 'objects/thread_state.class.php';
 
-include 'functions/files.inc.php';
 include 'functions/forum.inc.php';
 trace('Function imports done');
 

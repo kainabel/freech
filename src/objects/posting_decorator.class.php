@@ -191,11 +191,6 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function get_edit_url_string() {
-    return $this->posting->get_edit_url()->get_string();
-  }
-
-
   function get_respond_url() {
     return $this->posting->get_respond_url();
   }
@@ -203,11 +198,6 @@ class PostingDecorator extends Trackable {
 
   function get_respond_url_html() {
     return $this->posting->get_respond_url()->get_html();
-  }
-
-
-  function get_respond_url_string() {
-    return $this->posting->get_respond_url()->get_string();
   }
 
 
@@ -283,11 +273,6 @@ class PostingDecorator extends Trackable {
 
   function get_user_profile_url() {
     return $this->posting->get_user_profile_url();
-  }
-
-
-  function get_user_profile_url_string() {
-    return $this->posting->get_user_profile_url()->get_string();
   }
 
 

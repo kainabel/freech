@@ -155,7 +155,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_firstname() {
+    function get_firstname() {
       return $this->fields[firstname];
     }
 
@@ -228,7 +228,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_im() {
+    function get_im() {
       return $this->fields[im];
     }
 
@@ -279,7 +279,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_editor_url() {
+    function get_editor_url() {
       $url = new FreechURL('', '[' . _('Edit') . ']');
       $url->set_var('action',   'user_editor');
       $url->set_var('username', $this->get_name());
@@ -292,7 +292,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_profile_url() {
+    function get_profile_url() {
       $caption = sprintf(_('Profile of %s'), $this->get_name());
       $url     = new FreechURL('', $caption);
       $url->set_var('action',   'user_profile');
@@ -311,17 +311,12 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_postings_url() {
+    function get_postings_url() {
       $caption = sprintf(_('Postings of %s'), $this->get_name());
       $url     = new FreechURL('', $caption);
       $url->set_var('action',   'user_postings');
       $url->set_var('username', $this->get_name());
       return $url;
-    }
-
-
-    function get_postings_url_string() {
-      return $this->get_postings_url()->get_string();
     }
 
 
@@ -370,7 +365,7 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
-    function &get_status_names($_status = -1) {
+    function get_status_names($_status = -1) {
       $list = array(
         USER_STATUS_DELETED     => _('Deleted'),
         USER_STATUS_ACTIVE      => _('Active'),

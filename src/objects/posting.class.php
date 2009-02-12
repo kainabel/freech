@@ -72,11 +72,6 @@ class Posting {
   }
 
 
-  function set_thread_id($_thread_id) {
-    $this->fields['thread_id'] = (int)$_thread_id;
-  }
-
-
   function get_thread_id() {
     return $this->fields['thread_id'];
   }
@@ -113,18 +108,8 @@ class Posting {
   }
 
 
-  function set_origin_forum_id($_origin_forum_id) {
-    $this->fields['origin_forum_id'] = (int)$_origin_forum_id;
-  }
-
-
   function get_origin_forum_id() {
     return $this->fields['origin_forum_id'];
-  }
-
-
-  function set_is_parent($_is_parent = TRUE) {
-    $this->fields['is_parent'] = (bool)$_is_parent;
   }
 
 

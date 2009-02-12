@@ -177,11 +177,6 @@ class Thread {
   }
 
 
-  function get_parent_id() {
-    return $this->get_parent()->get_id();
-  }
-
-
   function fold() {
     $this->dirty = FALSE;
 

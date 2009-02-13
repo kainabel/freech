@@ -276,14 +276,11 @@ class Posting {
   // This exists for performance reasons because it is used very often.
   function get_url_html() {
     global $cfg;
-    $vars             = $cfg['urlvars'];
-    $vars['action']   = 'read';
-    $vars['msg_id']   = $this->fields['id'];
-    $vars['forum_id'] = $this->fields['forum_id'];
-    if (cfg('remember_page'))
-      $vars['hs'] = (int)$_GET[hs];
-
-    $url   = http_build_query($vars);
+    $url .= $cfg['urlvars_str'] . 'action=read'
+          . '&amp;msg_id='   . $this->fields['id']
+          . '&amp;forum_id=' . $this->fields['forum_id'];
+    if ($cfg['remember_page'])
+      $url .= '&amp;hs=' . (int)$_GET['hs'];
     $label = htmlentities($this->fields['subject'], ENT_QUOTES, 'UTF-8');
     return "<a href='?$url'>$label</a>";
   }

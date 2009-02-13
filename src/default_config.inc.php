@@ -11,7 +11,7 @@
   // Essential settings.
   // *************************************************************
   // The default language of the user interface elements.
-  // For a list of supported languages please have a look 
+  // For a list of supported languages please have a look
   // at the "language/" subdirectory.
   $cfg[default_language] = 'en_EN';
 
@@ -144,7 +144,7 @@
   $cfg[urlvars] = array(
     'sid' => $_GET[sid]
   );
-  
+
   // Defines the time a user stays logged in when the "remember password"
   // flag is set below the login form. Note that your PHP configuration must
   // allow long session timeouts for this to work.
@@ -201,6 +201,10 @@
   // Whether to log trace() statements.
   $cfg[trace_calls] = FALSE;
   $cfg[trace_log] = dirname(__FILE__) . '/data/trace.log';
+
+  // Do not change this.
+  $urlvars_str = http_build_query($cfg['urlvars']);
+  $cfg[urlvars_str] = $urlvars_str ? $urlvars_str . '&amp;' : '';
 
   // *************************************************************
   // Performance tweaks.

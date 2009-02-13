@@ -206,6 +206,9 @@
   $urlvars_str = http_build_query($cfg['urlvars']);
   $cfg[urlvars_str] = $urlvars_str ? $urlvars_str . '&amp;' : '';
 
+  // Do not change this.
+  $cfg[new_post_time_abs] = time() - $cfg[new_post_time];
+
   // *************************************************************
   // Performance tweaks.
   // *************************************************************

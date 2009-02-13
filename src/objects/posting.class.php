@@ -40,9 +40,8 @@ class Posting {
   // Constructor.
   function Posting(&$_row = '') {
     if ($_row) {
-      $this->fields = $_row;
-      $this->fields[allow_answer] = TRUE;
-      $this->fields[indent]       = array();
+      $this->fields                 = $_row;
+      $this->fields['allow_answer'] = TRUE;
     }
     else
       $this->clear();
@@ -52,16 +51,16 @@ class Posting {
   // Resets all values.
   function clear() {
     $this->fields = array();
-    $this->fields[created]      = time();
-    $this->fields[updated]      = $this->fields[created];
-    $this->fields[relation]     = POSTING_RELATION_UNKNOWN;
-    $this->fields[renderer]     = 'message';
-    $this->fields[status]       = POSTING_STATUS_ACTIVE;
-    $this->fields[priority]     = 0;
-    $this->fields[user_id]      = 2; // Anonymous user.
-    $this->fields[allow_answer] = TRUE;
-    $this->fields[ip_hash]      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
-    $this->fields[indent]       = array();
+    $this->fields['created']      = time();
+    $this->fields['updated']      = $this->fields[created];
+    $this->fields['relation']     = POSTING_RELATION_UNKNOWN;
+    $this->fields['renderer']     = 'message';
+    $this->fields['status']       = POSTING_STATUS_ACTIVE;
+    $this->fields['priority']     = 0;
+    $this->fields['user_id']      = 2; // Anonymous user.
+    $this->fields['allow_answer'] = TRUE;
+    $this->fields['ip_hash']      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
+    unset($this->fields['indent']);
   }
 
 
@@ -152,37 +151,37 @@ class Posting {
 
 
   function set_user_is_special($_special) {
-    $this->fields[user_is_special] = $_special;
+    $this->fields['user_is_special'] = $_special;
   }
 
 
   function get_user_is_special() {
-    return $this->fields[user_is_special];
+    return $this->fields['user_is_special'];
   }
 
 
   function get_user_is_anonymous() {
-    return $this->fields[user_id] == cfg('anonymous_user_id');
+    return $this->fields['user_id'] == cfg('anonymous_user_id');
   }
 
 
   function set_user_icon($_icon) {
-    $this->fields[user_icon] = $_icon;
+    $this->fields['user_icon'] = $_icon;
   }
 
 
   function get_user_icon() {
-    return $this->fields[user_icon];
+    return $this->fields['user_icon'];
   }
 
 
   function set_user_icon_name($_name) {
-    $this->fields[user_icon_name] = $_name;
+    $this->fields['user_icon_name'] = $_name;
   }
 
 
   function get_user_icon_name() {
-    return $this->fields[user_icon_name];
+    return $this->fields['user_icon_name'];
   }
 
 
@@ -438,22 +437,19 @@ class Posting {
 
   // Returns whether the row was newly created in the last X minutes.
   function is_new() {
-    return (time() - $this->fields[created] < cfg('new_post_time'));
+    global $cfg; // For performance reasons.
+    return $this->fields['created'] > $cfg['new_post_time_abs'];
   }
 
 
-  // Returns a number between 0 (old) and 100 (new) depending on the
+  // Returns a hex number between 00 (old) and ff (new) depending on the
   // time since the postings was posted.
-  function get_newness() {
-    if (!$this->is_new())
-      return 0;
-    $oldness = time() - $this->fields[created];
-    return 100 - ($oldness / cfg('new_post_time') * 100);
-  }
-
-
   function get_newness_hex($_reverse = FALSE) {
-    $value = $this->get_newness() / 100 * 255;
+    global $cfg; // For performance reasons.
+    if ($this->fields['created'] < $cfg['new_post_time_abs'])
+      return 0;
+    $oldness = $this->fields['created'] - $cfg['new_post_time_abs'];
+    $value   = $oldness / $cfg['new_post_time'] * 255;
     if ($_reverse)
       $value = 255 - $value;
     return substr('00' . dechex($value), -2);
@@ -492,20 +488,16 @@ class Posting {
 
 
   function is_updated() {
-    return $this->get_created_unixtime() != $this->get_updated_unixtime();
-  }
-
-
-  // Returns a number between 0 (old) and 100 (new) depending on the
-  // time since the postings was last edited.
-  function get_updated_newness() {
-    $oldness = time() - $this->fields['updated'];
-    return 100 - ($oldness / cfg('new_post_time') * 100);
+    return $this->fields['created'] != $this->fields['updated'];
   }
 
 
   function get_updated_newness_hex($_reverse = FALSE) {
-    $value = $this->get_updated_newness() / 100 * 255;
+    global $cfg; // For performance reasons.
+    if ($this->fields['updated'] < $cfg['new_post_time_abs'])
+      return 0;
+    $oldness = $this->fields['updated'] - $cfg['new_post_time_abs'];
+    $value   = $oldness / $cfg['new_post_time'] * 255;
     if ($_reverse)
       $value = 255 - $value;
     return substr('00' . dechex($value), -2);
@@ -597,31 +589,29 @@ class Posting {
 
 
   function has_thread() {
-    if ($this->fields[relation] != POSTING_RELATION_PARENT_STUB
-      && $this->fields[relation] != POSTING_RELATION_PARENT_UNFOLDED
-      && $this->fields[relation] != POSTING_RELATION_PARENT_FOLDED)
+    if (!$this->fields['is_parent'])
       return TRUE;
-    return $this->fields[n_descendants] != 0;
+    return $this->fields['n_descendants'] != 0;
   }
 
 
   function has_descendants() {
-    return $this->fields[n_descendants] != 0;
+    return $this->fields['n_descendants'] != 0;
   }
 
 
-  function set_indent($_indent) {
-    $this->fields[indent] = $_indent;
+  function set_indent(&$_indent) {
+    $this->fields['indent'] = $_indent;
   }
 
 
   function get_indent() {
-    return $this->fields[indent];
+    return $this->fields['indent'] ? $this->fields['indent'] : array();
   }
 
 
   function set_selected($_selected = TRUE) {
-    $this->fields[selected] = $_selected;
+    $this->fields['selected'] = $_selected;
   }
 
 
@@ -631,7 +621,7 @@ class Posting {
 
 
   function was_moved() {
-    return $this->get_forum_id() != $this->get_origin_forum_id();
+    return $this->fields['forum_id'] != $this->fields['origin_forum_id'];
   }
 
 

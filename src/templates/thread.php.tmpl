@@ -4,6 +4,8 @@
   if ($n_rows > 0) {
     foreach ($threads as $thread) {
       foreach ($thread->get_postings() as $posting) {
+        $selected = $posting->is_selected();
+        $relation = $posting->get_relation();
 ?>
 <!-- thread_row -->
 <tr class='posting' valign='middle'>
@@ -21,7 +23,7 @@
   }
 ?>
 <?php
-  switch ($posting->get_relation()) {
+  switch ($relation) {
   case POSTING_RELATION_PARENT_STUB:
 ?><img src='<?=$__theme_dir;?>/img/o.png' width='9' height='21' alt='' />
 <?php
@@ -50,14 +52,14 @@
 <?php if ($posting->get_priority() > 0) { ?>
      &nbsp;<img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
 <?php } ?>
-<?php if ($posting->is_selected()) { ?>
+<?php if ($selected) { ?>
      &nbsp;<span class='selected'><?=esc($posting->get_subject())?></span>
 <?php } elseif (!$posting->is_active()) { ?>
      &nbsp;<?=esc($posting->get_subject())?>
 <?php } else { ?>
      &nbsp;<?=$posting->get_url_html()?>
 <?php } ?>
-<?php if ($posting->get_relation() == POSTING_RELATION_PARENT_FOLDED) { ?>
+<?php if ($relation == POSTING_RELATION_PARENT_FOLDED) { ?>
   &nbsp;(<?=$thread->get_n_children();?>)
 <?php } ?>
 <?php if ($posting->was_moved()) { ?>
@@ -69,7 +71,7 @@
   </td>
   <td><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>
-<?php if ($posting->is_selected()) { ?>
+<?php if ($selected) { ?>
     &nbsp;<span class='selected'><?=esc($posting->get_username())?></span>
 <?php } else { ?>
     &nbsp;<?=esc($posting->get_username())?>
@@ -80,7 +82,7 @@
          title="<?=esc($posting->get_user_icon_name())?>" />
 <?php } ?>
   </td>
-<?php if ($posting->is_selected()) { ?>
+<?php if ($selected) { ?>
    <td align='right' class='nowrap'>
     <span class='selected'><?=$posting->get_created_time();?></span>
   </td>

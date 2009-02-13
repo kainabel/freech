@@ -306,18 +306,8 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function get_newness() {
-    return $this->posting->get_newness();
-  }
-
-
   function get_newness_hex() {
     return $this->posting->get_newness_hex();
-  }
-
-
-  function get_updated_newness() {
-    return $this->posting->get_updated_newness();
   }
 
 
@@ -441,7 +431,7 @@ class PostingDecorator extends Trackable {
   }
 
 
-  function set_indent($_indent) {
+  function set_indent(&$_indent) {
     return $this->posting->set_indent($_indent);
   }
 

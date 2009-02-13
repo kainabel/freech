@@ -1,5 +1,5 @@
 <!-- thread -->
-<table border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
+<table id='thread_view' summary=''>
 <?php
   if ($n_rows > 0) {
     foreach ($threads as $thread) {
@@ -8,101 +8,93 @@
         $relation = $posting->get_relation();
 ?>
 <!-- thread_row -->
-<tr class='posting' valign='middle'>
-  <td align='center' class='null'><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
-  <td align='left'>
-  <table border='0' cellspacing='0' cellpadding='0' summary=''>
-    <tr>
-     <td align='left'>
+<tr class='posting'>
+  <td class='thread_tree'>
 <?php
+  $firstIndent = TRUE;
   foreach ($posting->get_indent() as $indent) {
     if ($indent == INDENT_DRAW_DASH)
-     echo "<img src='$__theme_dir/img/l.png' width='20' height='23' alt='|' />";
-    else
-     echo "<img src='$__theme_dir/img/null.png' width='20' height='23' alt='&nbsp;' />";
+      echo "<img class='thread_img' src='$__theme_dir/img/l.png' alt='| ' />";
+    else {
+      if ($firstIndent) {
+        echo "<b class='indent'>&#160;</b>";
+        $firstIndent = FALSE;
+      }
+      else
+        echo "<b class='spacer'>&#160;</b>";
+    }
   }
 ?>
 <?php
   switch ($relation) {
-  case POSTING_RELATION_PARENT_STUB:
-?><img src='<?=$__theme_dir;?>/img/o.png' width='9' height='21' alt='' />
-<?php
-    break;
-  case POSTING_RELATION_PARENT_UNFOLDED:
-?><a href='<?=esc($posting->get_fold_url_string())?>'><img src='<?=$__theme_dir?>/img/m.png' class='thread_img' width='9' height='21' alt='0' /></a>
-<?php
-    break;
-  case POSTING_RELATION_PARENT_FOLDED:
-?><a href='<?=esc($posting->get_fold_url_string())?>'><img src='<?=$__theme_dir?>/img/p.png' class='thread_img' width='9' height='21' alt='0' /></a>
-<?php
-    break;
   case POSTING_RELATION_BRANCHEND_STUB:
   case POSTING_RELATION_BRANCHEND:
-?><img src='<?=$__theme_dir?>/img/e.png' width='20' height='23' alt='`-' />
+?><img class='thread_img' src='<?=$__theme_dir?>/img/e.png' alt='\_' />
 <?php
     break;
   case POSTING_RELATION_CHILD_STUB:
   case POSTING_RELATION_CHILD:
-?><img src='<?=$__theme_dir?>/img/x.png' width='20' height='23' alt='|-' />
+?><img class='thread_img' src='<?=$__theme_dir?>/img/x.png' alt='|-' />
+<?php
+    break;
+  case POSTING_RELATION_PARENT_UNFOLDED:
+?><a href='<?=esc($posting->get_fold_url_string())?>'><img class='thread_state' src='<?=$__theme_dir?>/img/m.png' alt='[-]' /></a>
+<?php
+    break;
+  case POSTING_RELATION_PARENT_STUB:
+?><img class='thread_state' src='<?=$__theme_dir;?>/img/o.png' alt='[o]' />
+<?php
+    break;
+  case POSTING_RELATION_PARENT_FOLDED:
+?><a href='<?=esc($posting->get_fold_url_string())?>'><img class='thread_state' src='<?=$__theme_dir?>/img/p.png' alt='[+]' /></a>
 <?php
   }
 ?>
-     </td>
-     <td align='left'>
 <?php if ($posting->get_priority() > 0) { ?>
-     &nbsp;<img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
+    <img class='icon' src='<?=$__theme_dir?>/img/sticky.png' alt='[!]' />
 <?php } ?>
 <?php if ($selected) { ?>
-     &nbsp;<span class='selected'><?=esc($posting->get_subject())?></span>
+    <span class='selected'><?=esc($posting->get_subject())?></span>
 <?php } elseif (!$posting->is_active()) { ?>
-     &nbsp;<?=esc($posting->get_subject())?>
+    <?=esc($posting->get_subject())?>
 <?php } else { ?>
-     &nbsp;<?=$posting->get_url_html()?>
+    <?=$posting->get_url_html()?>
 <?php } ?>
 <?php if ($relation == POSTING_RELATION_PARENT_FOLDED) { ?>
   &nbsp;(<?=$thread->get_n_children();?>)
 <?php } ?>
 <?php if ($posting->was_moved()) { ?>
-  &nbsp;<img src="<?=$__theme_dir?>/img/move.png" alt="" title="<?=_('Moved')?>" />
+  <img class='icon' src="<?=$__theme_dir?>/img/move.png" alt="[m]" title="<?=_('Moved')?>" />&nbsp;
 <?php } ?>
-     </td>
-    </tr>
-   </table>
   </td>
-  <td><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
-  <td align='left'>
+  <td class='thread_user'>
 <?php if ($selected) { ?>
-    &nbsp;<span class='selected'><?=esc($posting->get_username())?></span>
+    <span class='selected'><?=esc($posting->get_username())?></span>
 <?php } else { ?>
-    &nbsp;<?=esc($posting->get_username())?>
+    <?=esc($posting->get_username())?>
 <?php } ?>
 <?php if ($posting->get_user_is_special()) { ?>
-    <img src="<?=esc($posting->get_user_icon())?>"
-         alt=""
-         title="<?=esc($posting->get_user_icon_name())?>" />
+    <img src='<?=esc($posting->get_user_icon())?>'
+         alt=''  class='group_icon'
+         title='<?=esc($posting->get_user_icon_name())?>' />
 <?php } ?>
   </td>
-<?php if ($selected) { ?>
-   <td align='right' class='nowrap'>
-    <span class='selected'><?=$posting->get_created_time();?></span>
-  </td>
-<?php } elseif ($posting->is_updated()) { ?>
   <td class='thread_date'>
+<?php if ($selected) { ?>
+    <span class='selected'><?=$posting->get_created_time();?></span>
+<?php } elseif ($posting->is_updated()) { ?>
     <span style='color:#<?=$posting->get_updated_newness_hex()?>0000'>
-      <span class="edit_marker" title="<?=_('Edited')?>">*</span>
+      <span class="edit_marker" title="<?=_('Edited')?>">*</span>&#160;
       <?=$posting->get_updated_time();?>
     </span>
-  </td>
 <?php } elseif ($posting->is_new()) { ?>
-  <td class='thread_date'>
     <span style='color:#<?=$posting->get_newness_hex()?>0000'>
       <?=$posting->get_created_time();?>
     </span>
-  </td>
 <?php } else { ?>
-   <td class='thread_date'><?=$posting->get_created_time()?></td>
+  <?=$posting->get_created_time()?>
 <?php } ?>
-   <td align='center' class='null'><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
+  </td>
  </tr>
 <!-- end thread_row -->
 <?php

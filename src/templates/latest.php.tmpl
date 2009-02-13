@@ -1,62 +1,51 @@
-<table id='posting_list' border='0' cellpadding='0' cellspacing='0' width='100%' summary=''>
+<table id='list_view' summary=''>
 <?php foreach ($postings as $posting) { ?>
 <!-- latest_row -->
-<tr class='posting' valign='middle'>
-  <td align='center' class='null'>
-    <img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' />
-  </td>
-  <td align='left'>
+<tr class='posting'>
+  <td class='thread_tree'>
 <?php if ($posting->get_priority() > 0) { ?>
-  &nbsp;<img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
+  <img class='icon'  src='<?=$__theme_dir?>/img/sticky.png' alt='[!]' />&#160;
 <?php } ?>
 <?php if ($posting->is_selected()) { ?>
-  <span class='selected'>&nbsp;<?=esc($posting->get_subject())?></span>
+  <span class='selected'><?=esc($posting->get_subject())?></span>
 <?php } elseif ($posting->is_active()) { ?>
-  &nbsp;<?=$posting->get_url_html()?>
+  <?=$posting->get_url_html()?>
 <?php } else { ?>
-  &nbsp;<?=esc($posting->get_subject())?>
+  <?=esc($posting->get_subject())?>
 <?php } ?>
 <?php if ($posting->was_moved()) { ?>
-  &nbsp;<img src="<?=$__theme_dir?>/img/move.png" alt="" title="<?=esc(_('Moved'))?>" />
+  <img class='icon' src='<?=$__theme_dir?>/img/move.png' alt='[m]' title='<?=esc(_('Moved'))?>' />
 <?php } ?>
   </td>
-
-  <td><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
-  <td align='left'>
+  <td class='thread_user'>
 <?php if ($posting->is_selected()) { ?>
-    &nbsp;<span class='selected'><?=esc($posting->get_username())?></span>
+    <span class='selected'><?=esc($posting->get_username())?></span>
 <?php } else { ?>
-    &nbsp;<?=esc($posting->get_username())?>
+    <?=esc($posting->get_username())?>
 <?php } ?>
 <?php if ($posting->get_user_is_special()) { ?>
-    <img src="<?=esc($posting->get_user_icon())?>"
-         alt=""
-         title="<?=esc($posting->get_user_icon_name())?>" />
+    <img src='<?=esc($posting->get_user_icon())?>'
+         alt='[?]'  class='group_icon'
+         title='<?=esc($posting->get_user_icon_name())?>' />
 <?php } ?>
   </td>
+  <td class='thread_date'>
 <?php if ($posting->is_selected()) { ?>
-  <td class='thread_date'>
     <span class='selected'><?=$posting->get_created_time()?></span>
-  </td>
 <?php } elseif ($posting->is_updated()) { ?>
-  <td class='thread_date'>
     <span style='color:#<?=$posting->get_updated_newness_hex()?>0000'>
-      !<?=$posting->get_updated_time()?>
+      <span class="edit_marker" title="<?=_('Edited')?>">*</span>&#160;
+      <?=$posting->get_updated_time()?>
     </span>
-  </td>
 <?php } elseif ($posting->is_new()) { ?>
-  <td class='thread_date'>
     <span style='color:#<?=$posting->get_newness_hex()?>0000'>
       <?=$posting->get_created_time()?>
     </span>
-  </td>
 <?php } else { ?>
-   <td class='thread_date'><?=$posting->get_created_time()?></td>
+    <?=$posting->get_created_time()?>
 <?php } ?>
-   <td align='center' class='null'>
-     <img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' />
-   </td>
- </tr>
+  </td>
+</tr>
 <?php } ?>
 <?php if ($n_rows == 0) { ?>
 <tr>

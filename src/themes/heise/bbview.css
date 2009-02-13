@@ -132,3 +132,8 @@
   text-align: right;
   padding: 0;
 }
+
+/* for ff2 & konqueror */
+.index {
+  clear: both;
+}

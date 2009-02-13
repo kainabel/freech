@@ -1,12 +1,98 @@
-/**
- * Posting list and posting tree related styles.
- **/
-/* Row in the posting list/tree. */
-tr.posting:hover {
+table#list_view,
+table#thread_view {
+/*background: #eee;*/
+width: 100%;
+border-collapse: collapse;
+margin: 0;
+}
+
+table#list_view td,
+table#thread_view td {
+margin: 0;
+padding:0;
+white-space: nowrap;
+line-height: 23px;
+}
+
+table#thread_view img.thread_img {
+  height: 23px;
+  width: 20px;
+}
+
+table#thread_view td * {
+vertical-align: top;
+}
+
+table#list_view img,
+table#thread_view img {
+border: none;
+}
+
+table#thread_view td.thread_tree img {
+vertical-align: bottom;
+}
+
+table#list_view td.thread_user,
+table#thread_view td.thread_user {
+/*background: #cfd;*/
+padding: 0 .25em;
+}
+
+/* gruener abstand links */
+table#list_view td.thread_tree,
+table#thread_view td.thread_tree {
+padding-left: .5em; /* .5em == 8px */
+}
+
+/* gruener abstand rechts */
+table#list_view td.thread_date,
+table#thread_view td.thread_date {
+padding-right: .5em;
+}
+
+/* einzug braun */
+b.indent {
+  width: 0;
+  margin: 0 0 0 10px; /* bei -10px unter [+]/[-]*/
+  padding: 0;
+/*  background: #f60;*/
+}
+
+b.spacer {
+  width: 0;
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+
+.thread_user {
+  width: 20%;
+}
+
+.thread_date {
+  text-align: right;
+  width: 10%;
+}
+
+table#list_view td.thread_tree img.icon,
+table#list_view td.thread_user img.group_icon,
+table#thread_view td.thread_tree img.icon,
+table#thread_view td.thread_user img.group_icon {
+  /* margin-left: .5em; */
+vertical-align: middle;
+}
+
+span span.edit_marker {
+  color: #f00;
+  font-weight: bolder;
+}
+
+table#list_view tr:hover,
+table#thread_view tr:hover {
   background-color: #eeeeee;
 }
 
-tr.posting:hover a {
+table#list_view tr:hover a,
+table#thread_view tr:hover a {
   text-decoration: underline;
 }
 
@@ -14,32 +100,9 @@ tr.posting:hover a {
   color: #008000;
 }
 
-td.thread_date {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.edit_marker {
-}
-
-td.null {
-  width: 8px;
-}
-
 #empty_forum_message {
   margin: 5px;
   font-style: italic;
-}
-
-/* Images that make up the tree of a thread. */
-.thread_img {
-  border: none;
-}
-
-/* Alignment bug in moz/ff/op :: transitional vs. strict. */
-.posting img {
-  vertical-align: bottom;
-  border: none;
 }
 
 

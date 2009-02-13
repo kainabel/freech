@@ -15,7 +15,7 @@
     elseif ($item->is_link())
       echo "&nbsp;".$item->get_url_html();
     else
-      echo "&nbsp;".$item->get_text();
+      echo "&nbsp;".$item->get_text(TRUE);
   }
 ?>
   </span>

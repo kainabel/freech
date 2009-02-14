@@ -72,6 +72,11 @@ class ListView extends View {
   }
 
 
+  function show_thread(&$_parent_posting) {
+    $this->show_posting($_parent_posting);
+  }
+
+
   function show_posting(&$_posting) {
     $user      = $this->api->user();
     $group     = $this->api->group();

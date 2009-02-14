@@ -33,7 +33,11 @@
   </tr>
   <tr>
     <td><?=esc(_('Forum postings:'))?></td>
+<?php if ($may_edit) { ?>
     <td><?=$user->get_postings_url_html($n_postings)?></td>
+<?php } else { ?>
+    <td><?=$n_postings?></td>
+<?php } ?>
   </tr>
   <tr>
     <td><?=esc(_('Email:'))?></td>

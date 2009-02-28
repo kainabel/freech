@@ -60,11 +60,18 @@ class DefaultSetup extends Step {
     }
 
     // Create the user.
-    $salt   = util_get_random_string(10);
-    $userdb = new UserDB($db);
-    $user   = new User;
+    $salt = util_get_random_string(10);
+    $user = new User;
     $user->set_name($username);
-    $user->set_password($password1, $salt);
+    if ($err = $user->set_password($password1, $salt)) {
+      $result = new Result('Checking password security.', FALSE, $err);
+      array_push($errors, $result);
+      $this->show($errors);
+      return FALSE;
+    }
+
+    // Save the user.
+    $userdb = new UserDB($db);
     $user->set_group_id(1); //FIXME: hardcoded
     $user->set_status(USER_STATUS_ACTIVE);
     if (!$userdb->save_user($user)) {

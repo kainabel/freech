@@ -1,4 +1,4 @@
-ARGS="-R --exclude-dir *smarty* --exclude-dir *adodb* --exclude *.js --exclude *.sw[po]"
+ARGS="-R --exclude-dir *adodb* --exclude *.js --exclude *.sw[po]"
 
 egrep $ARGS --exclude "*.tmpl" "function [a-zA-Z0-9_]*\(" * \
   | sed 's/^.*function  *\([^(]*\)(.*/\1/' \

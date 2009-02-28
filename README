@@ -32,15 +32,6 @@ See the INSTALL file shipped with this package.
 FAQ
 ---
 
-Q: I get an error message after installing the forum:
-   "Smarty error: unable to write to $compile_dir"
-A: You did not read the installation instructions in the INSTALL file :-).
-   Particulary, you want to read the instructions under step 2.
-
-Q: I changed the theme in the configfile but the old theme still appears.
-A: The theme is cached on the server. Delete the CONTENTS (not the directory
-   itself) of "src/smarty/templates_c/" and the new theme should appear.
-
 Q: The forum does not work, the trees are all broken when they get larger.
 A: Your MySQL server does not support InnoDB tables. You need to delete all
    existing database tables, then configure MySQL to support InnoDB. After

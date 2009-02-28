@@ -25,9 +25,9 @@
       $results = array();
       $fp      = fopen($file, 'r');
 
-      // Read at most the last 15000 bytes of the file.
-      if (filesize($file) > 15000) {
-        fseek($fp, -15000, SEEK_END);
+      // Read at most the last 50000 bytes of the file.
+      if (filesize($file) > 50000) {
+        fseek($fp, -50000, SEEK_END);
         fgets($fp); // Drop the first line as it may be incomplete.
       }
 

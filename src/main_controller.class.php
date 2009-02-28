@@ -739,9 +739,9 @@ class MainController {
     if (!$forum_id || $posting->get_forum_id() == $forum_id)
       $this->_refer_to_posting_id($posting_id);
 
+    $posting->set_forum_id($forum_id);
     $this->_log_posting_moderation('move_thread', $posting, '');
     $this->forumdb->move_thread($posting->get_thread_id(), $forum_id);
-    $posting->set_forum_id($forum_id);
     $this->_refer_to($posting->get_url()->get_string());
   }
 

@@ -625,7 +625,7 @@ class MainController {
   }
 
 
-  function &_get_current_view() {
+  function _get_current_view() {
     $view_class = $this->_get_current_view_class();
     return new $view_class($this->api);
   }
@@ -1617,10 +1617,12 @@ class MainController {
     if ($this->_get_current_view_name() === $_name)
       return $this->links('view')->add_text($_caption, $_priority);
 
+    $refer_url = new FreechURL;
+    $refer_url->set_var('forum_id', $this->get_current_forum_id());
     $url = new FreechURL('', $_caption);
     $url->set_var('forum_id',   $this->get_current_forum_id());
     $url->set_var('changeview', $_name);
-    $url->set_var('refer_to',   $_SERVER['REQUEST_URI']);
+    $url->set_var('refer_to',   $refer_url->get_string());
     $this->links('view')->add_link($url, $_priority);
   }
 

@@ -1,17 +1,19 @@
+/**
+ * Threadview and Listview
+ **/
 table#list_view,
 table#thread_view {
-/*background: #eee;*/
-width: 100%;
-border-collapse: collapse;
-margin: 0;
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
 }
 
 table#list_view td,
 table#thread_view td {
-margin: 0;
-padding:0;
-white-space: nowrap;
-line-height: 23px;
+  margin: 0;
+  padding:0;
+  white-space: nowrap;
+  line-height: 23px;
 }
 
 table#thread_view img.thread_img {
@@ -20,42 +22,37 @@ table#thread_view img.thread_img {
 }
 
 table#thread_view td * {
-vertical-align: top;
+  vertical-align: top;
 }
 
 table#list_view img,
 table#thread_view img {
-border: none;
+  border: none;
 }
 
 table#thread_view td.thread_tree img {
-vertical-align: bottom;
+  vertical-align: bottom;
 }
 
 table#list_view td.thread_user,
 table#thread_view td.thread_user {
-/*background: #cfd;*/
-padding: 0 .25em;
+  padding: 0 .25em;
 }
 
-/* gruener abstand links */
 table#list_view td.thread_tree,
 table#thread_view td.thread_tree {
-padding-left: .5em; /* .5em == 8px */
+  padding-left: .5em;
 }
 
-/* gruener abstand rechts */
 table#list_view td.thread_date,
 table#thread_view td.thread_date {
-padding-right: .5em;
+  padding-right: .5em;
 }
 
-/* einzug braun */
 b.indent {
   width: 0;
-  margin: 0 0 0 10px; /* bei -10px unter [+]/[-]*/
+  margin: 0 0 0 10px; /* -10px */
   padding: 0;
-/*  background: #f60;*/
 }
 
 b.spacer {
@@ -77,8 +74,7 @@ table#list_view td.thread_tree img.icon,
 table#list_view td.thread_user img.group_icon,
 table#thread_view td.thread_tree img.icon,
 table#thread_view td.thread_user img.group_icon {
-  /* margin-left: .5em; */
-vertical-align: middle;
+  vertical-align: middle;
 }
 
 span span.edit_marker {

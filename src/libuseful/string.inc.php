@@ -43,23 +43,23 @@
     $html = '<select name="' . esc($_name) . '">';
     foreach ($_options as $id => $caption) {
       $select = ($id == $_selected) ? ' selected="selected"' : '';
-      $html  .= "<option label='".esc($caption)."' value='$id'$select/>\n";
+      $html  .= "<option label='".esc($caption)."' value='$id'$select>";
       $html  .= esc($caption);
       $html  .= '</option>';
     }
 
-    return $html . '</select>';
+    return $html . "</select>\n";
   }
 
 
-  function html_checkboxes($_name, $_options, $_separator = '<br/>') {
+  function html_checkboxes($_name, $_options, $_separator = "<br />\n") {
     if (count($_options) == 0)
       return '';
 
     $html = '';
     foreach ($_options as $id => $caption) {
       $html .= '<label>';
-      $html .= "<input type='checkbox' name='".esc($_name)."[]' value='$id'/>";
+      $html .= "<input type='checkbox' name='".esc($_name)."[]' value='$id' />";
       $html .= esc($caption);
       $html .= '</label>';
       $html .= $_separator;
@@ -69,14 +69,14 @@
   }
 
 
-  function html_radios($_name, $_options, $_separator = '<br/>') {
+  function html_radios($_name, $_options, $_separator = "<br />\n") {
     if (count($_options) == 0)
       return '';
 
     $html = '';
     foreach ($_options as $id => $caption) {
       $html .= '<label>';
-      $html .= "<input type='radio' name='".esc($_name)."' value='$id'/>";
+      $html .= "<input type='radio' name='".esc($_name)."' value='$id' /> ";
       $html .= esc($caption);
       $html .= '</label>';
       $html .= $_separator;

@@ -447,7 +447,7 @@ class Posting {
   function get_newness_hex($_reverse = FALSE) {
     global $cfg; // For performance reasons.
     if ($this->fields['created'] < $cfg['new_post_time_abs'])
-      return 0;
+      return '00';
     $oldness = $this->fields['created'] - $cfg['new_post_time_abs'];
     $value   = $oldness / $cfg['new_post_time'] * 255;
     if ($_reverse)
@@ -495,7 +495,7 @@ class Posting {
   function get_updated_newness_hex($_reverse = FALSE) {
     global $cfg; // For performance reasons.
     if ($this->fields['updated'] < $cfg['new_post_time_abs'])
-      return 0;
+      return '00';
     $oldness = $this->fields['updated'] - $cfg['new_post_time_abs'];
     $value   = $oldness / $cfg['new_post_time'] * 255;
     if ($_reverse)

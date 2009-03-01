@@ -589,7 +589,7 @@ class MainController {
   }
 
 
-  function &_get_db() {
+  function _get_db() {
     return $this->db;
   }
 
@@ -1618,7 +1618,10 @@ class MainController {
       return $this->links('view')->add_text($_caption, $_priority);
 
     $refer_url = new FreechURL;
-    $refer_url->set_var('forum_id', $this->get_current_forum_id());
+    $refer_url->set_var('action',   $_GET['action']);
+    $refer_url->set_var('msg_id',   $_GET['msg_id']);
+    $refer_url->set_var('forum_id', $_GET['forum_id']);
+
     $url = new FreechURL('', $_caption);
     $url->set_var('forum_id',   $this->get_current_forum_id());
     $url->set_var('changeview', $_name);

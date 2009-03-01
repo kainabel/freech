@@ -375,7 +375,7 @@
       // Parents with children are returned even if they are locked.
       // IDX: thread:id
       // IDX: posting:thread_id
-      $sql   = 'SELECT t.n_children,p.*,';
+      $sql   = 'SELECT STRAIGHT_JOIN t.n_children,p.*,';
       $sql  .= ' HEX(p.path) path,';
       $sql  .= ' UNIX_TIMESTAMP(t.updated) threadupdate,';
       $sql  .= ' UNIX_TIMESTAMP(p.updated) updated,';
@@ -387,7 +387,7 @@
         $sql .= ' AND (p.status={status}';
         $sql .= ' OR (p.is_parent=1 AND p.n_descendants!=0))';
       }
-      $sql  .= ' ORDER BY t.id DESC';
+      $sql  .= ' ORDER BY p.priority DESC,p.thread_id DESC';
       $query = new FreechSqlQuery($sql);
       $query->set_int('status', POSTING_STATUS_ACTIVE);
       $res   = $this->db->_Execute($query->sql())

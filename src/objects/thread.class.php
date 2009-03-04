@@ -27,6 +27,7 @@ class Thread {
     $this->fields        = array();
     $this->dirty         = FALSE;
     $this->n_new         = 0;
+    $this->max_priority  = 0;
   }
 
 
@@ -150,6 +151,7 @@ class Thread {
     while (!$_res->EOF) {
       if ($this->fields['id'] != $row['thread_id'])
         break;
+      $this->max_priority = max($this->max_priority, $row['priority']);
 
       $posting = new Posting($row);
       $posting = $forumdb->_decorate_posting($posting);

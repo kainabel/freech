@@ -66,6 +66,7 @@ class HomepageController extends Controller {
                                       0,
                                       cfg('homepage_n_entries'),
                                       FALSE,
+                                      FALSE,
                                       array($this, '_append_posting'),
                                       '');
 

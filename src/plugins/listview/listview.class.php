@@ -49,6 +49,7 @@ class ListView extends View {
                                       (int)$_offset,
                                       cfg('epp'),
                                       FALSE,
+                                      TRUE,
                                       array(&$this, '_append_posting'),
                                       '');
 

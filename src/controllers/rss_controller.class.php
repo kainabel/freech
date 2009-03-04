@@ -77,6 +77,7 @@
                                              (int)$_off,
                                              (int)$n_entries,
                                              FALSE,
+                                             FALSE,
                                              array($this, '_append_row'),
                                              '');
 

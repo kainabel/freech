@@ -597,6 +597,7 @@
                                     $_offset,
                                     $_limit,
                                     $_updates,
+                                    $_prio_first,
                                     $_func,
                                     $_data) {
       $limit  = $_limit  * 1;
@@ -610,10 +611,13 @@
       $sql .= " WHERE p.status={status}";
       if ($_forum_id)
         $sql .= " AND p.forum_id={forum_id}";
+      if ($_prio_first)
+        $order .= " p.priority DESC,";
       if ($_updates)
-        $sql .= " ORDER BY p.priority DESC,p.updated DESC";
+        $order .= " p.updated DESC";
       else
-        $sql .= " ORDER BY p.priority DESC,p.created DESC";
+        $order .= " p.created DESC";
+      $sql .= " ORDER BY $order";
       $query = new FreechSqlQuery($sql);
       $query->set_int('status',   POSTING_STATUS_ACTIVE);
       $query->set_int('forum_id', $_forum_id);

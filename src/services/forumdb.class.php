@@ -395,14 +395,16 @@
       trace('sql executed');
 
       $threads = array();
+      $sticky  = array();
       while (!$res->EOF) {
         $thread = new Thread($this);
         $thread->set_from_db($this, $res);
         if ($thread->max_priority > 0)
-          array_unshift($threads, $thread);
+          array_push($sticky, $thread);
         else
           array_push($threads, $thread);
       }
+      $threads = array_merge($sticky, $threads);
 
       trace('threads received');
       return $threads;

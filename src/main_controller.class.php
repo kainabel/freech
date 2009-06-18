@@ -121,7 +121,7 @@ class MainController {
     }
     else {
       session_start();
-      if ($_POST['permanent'] === 'ON')
+      if (strtoupper($_POST['permanent']) === 'ON')
         setcookie('permanent_session', session_id(), time() + cfg('login_time'));
     }
 

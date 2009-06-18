@@ -7,6 +7,7 @@ Maintenance
 * Replace indexbar.php.tmpl by a call to html_menu().
 * Replace underscores by dashes in CSS IDs and CSS class names.
 * Make the flag on edited postings saner.
+* Bug (Time): http://img24.imageshack.us/img24/3290/test777.png
 
 Features
 ---------

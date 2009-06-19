@@ -507,7 +507,7 @@ class MainController {
   function _send_mail(&$user, $subject, $body, $vars = NULL) {
     if (!$vars)
       $vars = array();
-    $head  = 'From: '.cfg('mail_from').'\r\n';
+    $head = 'From: '.cfg('mail_from');
     $vars['site_title'] = cfg('site_title');
     $vars['login']      = $user->get_name();
     $vars['firstname']  = $user->get_firstname();

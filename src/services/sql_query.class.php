@@ -19,25 +19,105 @@
   */
 ?>
 <?php
-class FreechSqlQuery extends SqlQuery {
+$table_keys = array (
+  '{' . t_group            . '}',
+  '{' . t_user             . '}',
+  '{' . t_permission       . '}',
+  '{' . t_forum            . '}',
+  '{' . t_thread           . '}',
+  '{' . t_posting          . '}',
+  '{' . t_visitor          . '}',
+  '{' . t_modlog           . '}',
+  '{' . t_modlog_attribute . '}',
+  '{' . t_poll_option      . '}',
+  '{' . t_poll_vote        . '}'
+);
+$table_names = array (
+  cfg('db_tablebase') . 'group',
+  cfg('db_tablebase') . 'user',
+  cfg('db_tablebase') . 'permission',
+  cfg('db_tablebase') . 'forum',
+  cfg('db_tablebase') . 'thread',
+  cfg('db_tablebase') . 'posting',
+  cfg('db_tablebase') . 'visitor',
+  cfg('db_tablebase') . 'modlog',
+  cfg('db_tablebase') . 'modlog_attribute',
+  cfg('db_tablebase') . 'poll_option',
+  cfg('db_tablebase') . 'poll_vote'
+);
+
+/**
+ * Representation of an SQL statement, including methods to bind variables
+ * into the query.
+ */
+class FreechSqlQuery {
+  var $query = '';
+  var $data  = array();
+
   // Constructor.
-  function FreechSqlQuery($query = '')
-  {
-    parent::SqlQuery($query);
-    $tables = array (
-      t_group            => cfg('db_tablebase') . 'group',
-      t_user             => cfg('db_tablebase') . 'user',
-      t_permission       => cfg('db_tablebase') . 'permission',
-      t_forum            => cfg('db_tablebase') . 'forum',
-      t_thread           => cfg('db_tablebase') . 'thread',
-      t_posting          => cfg('db_tablebase') . 'posting',
-      t_visitor          => cfg('db_tablebase') . 'visitor',
-      t_modlog           => cfg('db_tablebase') . 'modlog',
-      t_modlog_attribute => cfg('db_tablebase') . 'modlog_attribute',
-      t_poll_option      => cfg('db_tablebase') . 'poll_option',
-      t_poll_vote        => cfg('db_tablebase') . 'poll_vote'
-    );
-    $this->set_table_names($tables);
+  function FreechSqlQuery($query = '') {
+    $this->query = $query;
+  }
+
+
+  // Overwrites the SQL query.
+  function set_sql($query = '') {
+    $this->query = $query;
+  }
+
+
+  function set_var($name, $value) {
+    if   ( is_string($value) )
+         $this->set_string( $name,$value );
+
+    if   ( is_null($value) )
+         $this->set_null( $name );
+
+    if   ( is_bool($value) )
+         $this->set_bool( $name,$value );
+
+    if   ( is_int($value) )
+         $this->set_int( $name,$value );
+  }
+
+
+  function set_int($name, $value) {
+    $this->data[$name] = (int)$value;
+  }
+
+
+  function set_string($name, $value) {
+    $value = addslashes($value);
+    $this->data[$name] = '\''.str_replace('}', '\}', $value).'\'';
+  }
+
+
+  function set_hex($name, $value) {
+    $value = addslashes($value);
+    $this->data[$name] = '0x'.str_replace('}', '\}', $value);
+  }
+
+
+  function set_bool($name, $value) {
+    if ($value)
+      $this->set_int($name, 1);
+    else
+      $this->set_int($name, 0);
+  }
+
+
+  function set_null($name) {
+    $this->data[$name] = 'NULL';
+  }
+
+
+  function &sql() {
+    global $table_keys, $table_names;
+    $query = str_replace($table_keys, $table_names, $this->query);
+    foreach ($this->data as $name => $value)
+      $query = str_replace('{'.$name.'}', $value, $query);
+    $query = str_replace('\}', '}', $query);
+    return $query;
   }
 }
 ?>

@@ -31,7 +31,6 @@ $ADODB_INCLUDED_CSV = TRUE;
 require 'adodb/adodb.inc.php';
 trace('Adodb imported');
 
-include 'libuseful/SqlQuery.class.php5';
 include 'libuseful/string.inc.php';
 include 'services/trackable.class.php';
 include 'objects/thread_state.class.php';
@@ -1286,7 +1285,7 @@ class MainController {
     $rss->set_description($_descr);
     $rss->set_language(cfg('content_language'));
     $rss->show((int)$_forum_id, (int)$_off, (int)$_n_entries);
-    print($this->content);
+    print $this->content;
   }
 
 
@@ -1723,7 +1722,7 @@ class MainController {
     $this->render_time = microtime(TRUE) - $this->start_time;
     if (cfg('show_total_render_time')) {
       $render_time = round($this->get_render_time(), 2);
-      print("<p id='rendered'>Site rendered in $render_time seconds.</p>");
+      echo '<p id="rendered">Site rendered in ', $render_time, ' seconds.</p>';
     }
 
     /* Plugin hook: on_content_print_after

@@ -71,7 +71,7 @@
 
 
     function _add_where_expression(&$_query, &$_search_values) {
-      $sql = $_query->get_sql();
+      $sql = $_query->sql();
       if ($_search_values['forum_id']) {
         $sql .= " AND forum_id={forum_id}";
         $_query->set_int('forum_id', $_search_values['forum_id']);

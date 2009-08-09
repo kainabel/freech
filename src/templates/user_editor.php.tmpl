@@ -67,13 +67,22 @@
       <td><?=esc(_('Repeat:'))?></td>
       <td><input size="70" type="password" name="password2" /></td>
     </tr>
-<?php } ?>
     <tr>
       <td colspan="2">
-        <input type="submit" name="user_submit" value="<?=esc(_('Save Changes'))?>" />
+      <h3><?=esc(_('User Settings'))?></h3>
       </td>
     </tr>
+    <tr>
+      <td colspan="2">
+      <input type="checkbox" name="do_notify" <?php if ($user->get_do_notify()) { ?>checked="checked"<?php } ?> /><?=esc(_('Notify me by mail if any of my postings is answered.'))?>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+<?php } ?>
   </table>
 </div>
+<input type="submit" name="user_submit" value="<?=esc(_('Save Changes'))?>" />
 </form>
 <!-- end user editor -->

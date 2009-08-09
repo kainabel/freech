@@ -51,15 +51,16 @@ class Posting {
   // Resets all values.
   function clear() {
     $this->fields = array();
-    $this->fields['created']      = time();
-    $this->fields['updated']      = $this->fields[created];
-    $this->fields['relation']     = POSTING_RELATION_UNKNOWN;
-    $this->fields['renderer']     = 'message';
-    $this->fields['status']       = POSTING_STATUS_ACTIVE;
-    $this->fields['priority']     = 0;
-    $this->fields['user_id']      = 2; // Anonymous user.
-    $this->fields['allow_answer'] = TRUE;
-    $this->fields['ip_hash']      = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
+    $this->fields['created']       = time();
+    $this->fields['updated']       = $this->fields[created];
+    $this->fields['relation']      = POSTING_RELATION_UNKNOWN;
+    $this->fields['renderer']      = 'message';
+    $this->fields['status']        = POSTING_STATUS_ACTIVE;
+    $this->fields['priority']      = 0;
+    $this->fields['user_id']       = 2; // Anonymous user.
+    $this->fields['allow_answer']  = TRUE;
+    $this->fields['notify_author'] = FALSE;
+    $this->fields['ip_hash']       = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
     unset($this->fields['indent']);
   }
 
@@ -147,6 +148,7 @@ class Posting {
   function set_from_user(&$_user) {
     $this->set_user_id($_user->get_id());
     $this->set_username($_user->get_name());
+    $this->set_notify_author($_user->get_do_notify());
   }
 
 
@@ -585,6 +587,16 @@ class Posting {
 
   function get_allow_answer() {
     return $this->fields['allow_answer'] && !$this->fields['force_stub'];
+  }
+
+
+  function set_notify_author($_notify) {
+    return $this->fields['notify_author'] = (bool)$_notify;
+  }
+
+
+  function get_notify_author() {
+    return $this->fields['notify_author'];
   }
 
 

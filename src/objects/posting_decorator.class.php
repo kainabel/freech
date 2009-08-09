@@ -421,6 +421,16 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function set_notify_author($_notify) {
+    return $this->posting->set_notify_author($_notify);
+  }
+
+
+  function get_notify_author() {
+    return $this->posting->get_notify_author();
+  }
+
+
   function has_thread() {
     return $this->posting->has_thread();
   }

@@ -40,6 +40,7 @@
       $query->set_int   ('status',      $_user->get_status());
       $query->set_int   ('lastlogin',   $_user->get_last_login_unixtime());
       $query->set_bool  ('public_mail', $_user->mail_is_public());
+      $query->set_bool  ('do_notify',   $_user->get_do_notify());
       $query->set_string('name',        $_user->get_name());
       $query->set_string('soundexname', $_user->get_soundexed_name());
       $query->set_string('password',    $_user->get_password_hash());
@@ -53,13 +54,13 @@
         $sql  .= " (";
         $sql  .= "  group_id, name, soundexname, password,";
         $sql  .= "  firstname, lastname,";
-        $sql  .= "  mail, public_mail, homepage, im, status,";
+        $sql  .= "  mail, public_mail, do_notify, homepage, im, status,";
         $sql  .= " created, lastlogin";
         $sql  .= " )";
         $sql  .= " VALUES (";
         $sql  .= "  {group_id}, {name}, {soundexname}, {password},";
         $sql  .= "  {firstname}, {lastname},";
-        $sql  .= "  {mail}, {public_mail}, {homepage}, {im},";
+        $sql  .= "  {mail}, {public_mail}, {do_notify}, {homepage}, {im},";
         $sql  .= "  {status}, NULL, FROM_UNIXTIME({lastlogin})";
         $sql  .= ")";
         $query->set_sql($sql);
@@ -75,7 +76,7 @@
       $sql  .= " password={password},";
       $sql  .= " firstname={firstname}, lastname={lastname},";
       $sql  .= " mail={mail}, public_mail={public_mail}, homepage={homepage},";
-      $sql  .= " im={im}, status={status},";
+      $sql  .= " do_notify={do_notify}, im={im}, status={status},";
       $sql  .= " lastlogin=FROM_UNIXTIME({lastlogin})";
       $sql  .= " WHERE id={id}";
       $query->set_sql($sql);

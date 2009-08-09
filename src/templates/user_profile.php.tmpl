@@ -68,4 +68,21 @@
     </td>
   </tr>
 </table>
+
+<?php if ($is_self) { ?>
+<h3><?=esc(_('User Settings'))?></h3>
+
+<table summary=''>
+  <tr>
+    <td><?=esc(_('Is (by default) notified of new responses by email:'))?></td>
+    <td>
+<?php if ($user->get_do_notify()) { ?>
+      <?=esc(_('Yes'))?>
+<?php } else { ?>
+      <?=esc(_('No'))?>
+<?php } ?>
+    </td>
+  </tr>
+</table>
+<?php } ?>
 <!-- end user profile -->

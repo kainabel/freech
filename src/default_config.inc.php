@@ -131,6 +131,7 @@
                         'spamhash'     => TRUE,
                         'statistics'   => TRUE,
                         'threadview'   => TRUE,
+                        'mail'         => TRUE,
                         'top_users'    => TRUE);
 
   // Allows for adding a prefix to your database table names.

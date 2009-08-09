@@ -108,6 +108,7 @@
       $this->assign_by_ref('user',     $_user);
       $this->assign_by_ref('group',    $group);
       $this->assign_by_ref('may_edit', $may_edit);
+      $this->assign_by_ref('is_self',  $is_self);
       $this->render_php('user_profile.php.tmpl');
       $this->api->set_title($_user->get_name());
     }

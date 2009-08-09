@@ -152,12 +152,12 @@
         $sql .= " (forum_id, origin_forum_id, thread_id, priority,";
         $sql .= "  user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= "  renderer, username, subject, body,";
-        $sql .= "  hash, ip_hash, created, force_stub)";
+        $sql .= "  hash, ip_hash, created, force_stub, notify_author)";
         $sql .= " VALUES (";
         $sql .= " {forum_id}, {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, {username}, {subject}, {body},";
-        $sql .= " {hash}, {ip_hash}, NULL, {force_stub}";
+        $sql .= " {hash}, {ip_hash}, NULL, {force_stub}, {notify_author}";
         $sql .= ")";
         $query = new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $parentrow[forum_id]);
@@ -174,6 +174,7 @@
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $query->set_bool  ('force_stub',      $_posting->get_force_stub());
+        $query->set_bool  ('notify_author',   $_posting->get_notify_author());
         $this->db->_Execute($query->sql()) or die('ForumDB::insert(): Ins1');
         $_posting->set_id($this->db->Insert_Id());
 
@@ -230,13 +231,13 @@
         $sql .= " user_id, user_is_special, user_icon, user_icon_name,";
         $sql .= " renderer, is_parent, username,";
         $sql .= " subject, body, hash, ip_hash, created,";
-        $sql .= " force_stub";
+        $sql .= " force_stub, notify_author";
         $sql .= ") VALUES (";
         $sql .= " '', {forum_id}, {forum_id}, {thread_id}, {priority},";
         $sql .= " {user_id}, {user_is_special}, {user_icon}, {user_icon_name},";
         $sql .= " {renderer}, 1,";
         $sql .= " {username}, {subject}, {body}, {hash}, {ip_hash}, NULL,";
-        $sql .= " {force_stub}";
+        $sql .= " {force_stub}, {notify_author}";
         $sql .= ")";
         $query = new FreechSqlQuery($sql);
         $query->set_int   ('forum_id',        $_forum_id);
@@ -253,6 +254,7 @@
         $query->set_string('hash',            $_posting->get_hash());
         $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
         $query->set_bool  ('force_stub',      $_posting->get_force_stub());
+        $query->set_bool  ('notify_author',   $_posting->get_notify_author());
         $this->db->_Execute($query->sql())
                 or die('ForumDB::insert(): Insert2.'.$query->sql());
         $_posting->set_id($this->db->Insert_Id());
@@ -285,6 +287,7 @@
       $sql  .= " ip_hash={ip_hash},";
       $sql  .= " status={status},";
       $sql  .= " force_stub={force_stub},";
+      $sql  .= " notify_author={notify_author},";
       $sql  .= " updated=FROM_UNIXTIME({updated})";
       $sql  .= " WHERE id={id}";
       $query = new FreechSqlQuery($sql);
@@ -305,6 +308,7 @@
       $query->set_string('ip_hash',         $_posting->get_ip_address_hash());
       $query->set_string('status',          $_posting->get_status());
       $query->set_bool  ('force_stub',      $_posting->get_force_stub());
+      $query->set_bool  ('notify_author',   $_posting->get_notify_author());
       $this->db->_Execute($query->sql()) or die('ForumDB::save(): 2');
 
       $this->db->CompleteTrans();

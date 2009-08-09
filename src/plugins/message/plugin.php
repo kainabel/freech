@@ -229,10 +229,28 @@ function message_on_send(&$api) {
   }
 
   // Save the posting.
-  if ($posting->get_id())
+  $eventbus = $api->eventbus();
+  if ($posting->get_id()) {
     $forumdb->save($forum_id, $parent_id, $posting);
-  else
+
+    /* Plugin hook: on_message_edit_after
+     *   Called after a message was edited.
+     *   Args: parent: The parent message id or NULL.
+     *         posting: The posting that was saved.
+     */
+    $eventbus->emit('on_message_edit_after', $api, $parent_id, $posting);
+  }
+  else {
     $forumdb->insert($forum_id, $parent_id, $posting);
+
+    /* Plugin hook: on_message_insert_after
+     *   Called after a new message was posted.
+     *   Args: parent: The parent message id or NULL.
+     *         posting: The posting that was sent.
+     */
+    $eventbus->emit('on_message_insert_after', $api, $parent_id, $posting);
+  }
+
   if (!$posting->get_id()) {
     $controller->add_hint(new Error(_('Failed to save the posting.')));
     return $controller->show_compose($posting, $parent_id, $may_quote);

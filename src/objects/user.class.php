@@ -48,6 +48,7 @@ define('USER_STATUS_BLOCKED',     3);
       $this->fields[lastname]    = '';
       $this->fields[status]      = USER_STATUS_UNCONFIRMED;
       $this->fields[public_mail] = FALSE;
+      $this->fields[do_notify]   = FALSE;
       $this->fields[created]     = time();
       $this->fields[lastlogin]   = time();
     }
@@ -178,6 +179,16 @@ define('USER_STATUS_BLOCKED',     3);
 
     function get_mail() {
       return $this->fields[mail];
+    }
+
+
+    function set_do_notify($_do_notify = TRUE) {
+      $this->fields[do_notify] = (bool)$_do_notify;
+    }
+
+
+    function get_do_notify() {
+      return $this->fields[do_notify];
     }
 
 

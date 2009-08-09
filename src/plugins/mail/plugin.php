@@ -40,6 +40,6 @@ function mail_on_submit(&$api, &$parent_id, &$message) {
              . "*******************************************************\n"
              . "[BODY]"
              . "\n");
-  $api->send_mail($user, $subject2, $body);
+  $api->send_mail($user, $subject2, $body, $vars);
 }
 ?>

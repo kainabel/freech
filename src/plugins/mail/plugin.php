@@ -34,12 +34,12 @@ function mail_on_submit(&$api, &$parent_id, &$message) {
                    'body'    => $message->get_body());
   $body    = _("Hello [FIRSTNAME] [LASTNAME],\n"
              . "\n"
-             . "Your posting [SUBJECT] has received the following"
+             . "Your posting \"[SUBJECT]\" has received the following"
              . " response from [SENDER].\n"
              . "\n"
              . "*******************************************************\n"
              . "[BODY]"
              . "\n");
-  $api->send_mail($user, $subject2, $body, $vars);
+  $api->send_mail($user, $subject, $body, $vars);
 }
 ?>

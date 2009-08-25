@@ -28,7 +28,7 @@ class StateDB {
 
 
   function _filename_of($_id) {
-    return sprintf('%s/state%d.cfg', $this->data_dir, (int)$_id);
+    return sprintf('%s/state%d.cfg.php', $this->data_dir, (int)$_id);
   }
 
 
@@ -55,8 +55,10 @@ class StateDB {
   function save($_id, $_state) {
     $_state->id = $_id;
     $output     = fopen($this->_filename_of($_id), 'w');
+    fwrite($output, "; <?php\n");
     foreach ($_state->get_attributes() as $key => $value)
       fwrite($output, sprintf("%s=%s\n", $key, $value));
+    fwrite($output, "; ?>\n");
     fclose($output);
   }
 }

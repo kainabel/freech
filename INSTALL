@@ -17,6 +17,12 @@ this package.
 Installation Instructions
 - - - - - - - - - - - - - -
 
+0. Configure your PHP installation. The following options are required:
+
+    allow_call_time_pass_reference On
+    register_long_arrays On
+    short_open_tag On
+
 1. Copy the contents of the "src/" directory to your webserver, including all
    subdirectories.
 

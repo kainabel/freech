@@ -1,5 +1,5 @@
 <!-- posting lock -->
-<h2><?=esc(_('Lock a Posting'))?></h2>
+<h2><?php echo esc(_('Lock a Posting'))?></h2>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
 <script type="text/javascript">
@@ -12,29 +12,29 @@ function change () {
 }
 </script>
 
-<form action="<?=esc($action)?>"
+<form action="<?php echo esc($action)?>"
       method="post"
       accept-charset="utf-8">
 <div>
 <input type="hidden" name="action"   value="posting_lock_submit" />
-<input type="hidden" name="msg_id"   value="<?=$posting->get_id()?>" />
-<input type="hidden" name="refer_to" value="<?=esc($refer_to)?>" />
+<input type="hidden" name="msg_id"   value="<?php echo $posting->get_id()?>" />
+<input type="hidden" name="refer_to" value="<?php echo esc($refer_to)?>" />
 <table summary=''>
   <tr>
     <td>
-      <label><?=esc(_('Username:'))?></label>
+      <label><?php echo esc(_('Username:'))?></label>
     </td>
-    <td><?=esc($posting->get_username())?></td>
+    <td><?php echo esc($posting->get_username())?></td>
   </tr>
   <tr>
     <td>
-      <label><?=esc(_('Subject:'))?></label>
+      <label><?php echo esc(_('Subject:'))?></label>
     </td>
-    <td><?=esc($posting->get_subject())?></td>
+    <td><?php echo esc($posting->get_subject())?></td>
   </tr>
   <tr>
     <td>
-      <label><?=esc(_('Reason:'))?></label>
+      <label><?php echo esc(_('Reason:'))?></label>
     </td>
     <td>
       <label id='spam'>
@@ -42,7 +42,7 @@ function change () {
                name='spam'
                type='checkbox'
                onclick='change();' />
-        <?=esc(_('Posting is spam'))?>
+        <?php echo esc(_('Posting is spam'))?>
       </label>
     </td>
   </tr>
@@ -53,7 +53,7 @@ function change () {
 <p>
   <input type="submit"
          name="posting_lock_submit"
-         value="<?=esc(_('Lock posting'))?>" />
+         value="<?php echo esc(_('Lock posting'))?>" />
 </p>
 </div>
 </form>

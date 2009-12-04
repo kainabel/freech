@@ -1,6 +1,6 @@
 <!-- registration -->
-<h2><?=esc(_('User Registration'))?></h2>
-<span class="intro"><?=esc(_('Welcome!
+<h2><?php echo esc(_('User Registration'))?></h2>
+<span class="intro"><?php echo esc(_('Welcome!
 
 By registering you will be able to participate in our discussion forum.
 All you need is a valid email address and a few minutes of your time.
@@ -11,53 +11,53 @@ yours. None of your personal data is given to any third parties.'))?>
 </span>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
-<form <?php if ($onsubmit_js) { ?>onsubmit="<?=$onsubmit_js?>"<?php } ?>
-      action='<?=esc($action)?>'
+<form <?php if ($onsubmit_js) { ?>onsubmit="<?php echo $onsubmit_js?>"<?php } ?>
+      action='<?php echo esc($action)?>'
       id='registration'
       method='post'
       accept-charset='utf-8'>
 <div>
-<?php if ($form_html) { ?><?=$form_html?><?php } ?>
+<?php if ($form_html) { ?><?php echo $form_html?><?php } ?>
 <input type='hidden' name='action' value='account_create' />
 
 <p>
-  <label><?=esc(_('Username:'))?></label><br />
-  <input type="text" name="username" size="20" value="<?=esc($user->get_name())?>" /><br />
+  <label><?php echo esc(_('Username:'))?></label><br />
+  <input type="text" name="username" size="20" value="<?php echo esc($user->get_name())?>" /><br />
   <span class="size80">
-    <?=esc(_('Please select a username. The username is used to log into your account later.'))?>
+    <?php echo esc(_('Please select a username. The username is used to log into your account later.'))?>
   </span>
 </p>
 
 <p>
-  <label><?=esc(_('Firstname and Lastname:'))?></label><br />
-  <input type="text" name="firstname" size="20" value="<?=esc($user->get_firstname())?>" />
-  <input type="text" name="lastname" size="20" value="<?=esc($user->get_lastname())?>" /><br />
+  <label><?php echo esc(_('Firstname and Lastname:'))?></label><br />
+  <input type="text" name="firstname" size="20" value="<?php echo esc($user->get_firstname())?>" />
+  <input type="text" name="lastname" size="20" value="<?php echo esc($user->get_lastname())?>" /><br />
   <span class="size80">
-    <?=esc(_('Please enter valid information, your registration is invalid otherwise and may be deleted.'))?>
+    <?php echo esc(_('Please enter valid information, your registration is invalid otherwise and may be deleted.'))?>
   </span>
 </p>
 
 <p>
-  <label><?=esc(_('Email Address:'))?></label><br />
-  <input type="text" name="mail" size="42" value="<?=esc($user->get_mail())?>" />
+  <label><?php echo esc(_('Email Address:'))?></label><br />
+  <input type="text" name="mail" size="42" value="<?php echo esc($user->get_mail())?>" />
 </p>
 
 <p>
-  <label><?=esc(_('Public Email:'))?></label><br />
+  <label><?php echo esc(_('Public Email:'))?></label><br />
   <input type="checkbox" name="publicmail" />
-  <?=esc(_('Click here if you want other users to be able to see the address.'))?>
+  <?php echo esc(_('Click here if you want other users to be able to see the address.'))?>
 </p>
 
 <p>
-  <label><?=esc(_('Terms of Usage:'))?></label><br />
-  <?=esc(_('By clicking Register below you agree that we may store your personal data as stated above.
+  <label><?php echo esc(_('Terms of Usage:'))?></label><br />
+  <?php echo esc(_('By clicking Register below you agree that we may store your personal data as stated above.
  You also agree to the terms of use.'))?>
 </p>
 
 <p>
-  <input type="submit" name="create" value="<?=esc(_('I Agree, Register'))?>" />
+  <input type="submit" name="create" value="<?php echo esc(_('I Agree, Register'))?>" />
   &nbsp;&nbsp;
-  <input type="submit" name="cancel" value="<?=esc(_('I Do Not Agree, Cancel'))?>" />
+  <input type="submit" name="cancel" value="<?php echo esc(_('I Do Not Agree, Cancel'))?>" />
 </p>
 </div>
 </form>

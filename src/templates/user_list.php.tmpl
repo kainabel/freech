@@ -2,25 +2,25 @@
 <table class='user_list' border='0' cellpadding='0' cellspacing='0' summary=''>
 <?php foreach ($users as $user) { ?>
 <tr>
-  <td align='center' class='null'><img src='<?=$__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
+  <td align='center' class='null'><img src='<?php echo $__theme_dir?>/img/null.png' width='8' height='23' alt='' /></td>
   <td align='left'>
-  <a href='<?=esc($user->get_profile_url_string())?>'><?=esc($user->get_name())?></a>
+  <a href='<?php echo esc($user->get_profile_url_string())?>'><?php echo esc($user->get_name())?></a>
 <?php if ($group) { ?>
-  <img src='<?=esc($group->get_icon())?>' title='<?=esc($group->get_name())?>' alt='' />
+  <img src='<?php echo esc($group->get_icon())?>' title='<?php echo esc($group->get_name())?>' alt='' />
 <?php } ?>
   </td>
   <td>&nbsp;</td>
-  <td align='left' class='nowrap'><?=$user->get_status_name()?></td>
+  <td align='left' class='nowrap'><?php echo $user->get_status_name()?></td>
   <td>&nbsp;</td>
   <td align='right' class='nowrap'>
-  <?=esc(sprintf(_('Member since: %s'), $user->get_created_time()))?>
+  <?php echo esc(sprintf(_('Member since: %s'), $user->get_created_time()))?>
   </td>
 </tr>
 <?php } ?>
 <?php if ($n_rows == 0) { ?>
 <tr>
   <td align='center'>
-    <div id='empty_user_list_message'><?=esc(_('(No users found)'))?></div>
+    <div id='empty_user_list_message'><?php echo esc(_('(No users found)'))?></div>
   </td>
 </tr>
 <?php } ?>

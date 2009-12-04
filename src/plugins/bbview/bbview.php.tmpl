@@ -4,42 +4,42 @@
   <div class="bbview_row">
     <div class="bbview_icons">
       <?php if ($thread->is_new()) { ?>
-        <img src="<?=$__theme_dir?>/img/new.gif" alt="" title="<?=esc(_('New'))?>" />
+        <img src="<?php echo $__theme_dir?>/img/new.gif" alt="" title="<?php echo esc(_('New'))?>" />
       <?php } else { ?>
-        <img src="<?=$__theme_dir?>/img/notnew.gif" alt="" />
+        <img src="<?php echo $__theme_dir?>/img/notnew.gif" alt="" />
       <?php } ?>
       <?php if ($thread->get_priority() > 0) { ?>
-        <img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
+        <img src='<?php echo $__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
       <?php } ?>
       <?php if ($thread->was_moved()) { ?>
-        <img src="<?=$__theme_dir?>/img/move.png" alt="" title="<?=esc(_('Moved'))?>" />
+        <img src="<?php echo $__theme_dir?>/img/move.png" alt="" title="<?php echo esc(_('Moved'))?>" />
       <?php } ?>
     </div>
     <div class="bbview_row_main">
       <div class="bbview_subject">
-        <?=$thread->get_url_html()?>
+        <?php echo $thread->get_url_html()?>
       </div>
       <div class="bbview_user">
-        <?=esc(sprintf(_('by %s'), $thread->get_username()))?>
+        <?php echo esc(sprintf(_('by %s'), $thread->get_username()))?>
         <?php if ($thread->get_user_is_special()) { ?>
-          <img src="<?=esc($thread->get_user_icon())?>"
+          <img src="<?php echo esc($thread->get_user_icon())?>"
                alt=""
-               title="<?=esc($thread->get_user_icon_name())?>" />
+               title="<?php echo esc($thread->get_user_icon_name())?>" />
         <?php } ?>
       </div>
       <div class="bbview_created">
-        <?=esc(sprintf(_('on %s'), $thread->get_created_time()))?>
+        <?php echo esc(sprintf(_('on %s'), $thread->get_created_time()))?>
       </div>
     </div>
     <div class="bbview_row_status">
       <div class="bbview_time">
-        <?=$thread->get_updated_time()?>
+        <?php echo $thread->get_updated_time()?>
       </div>
       <div class="bbview_n_postings">
-        <?=$thread->get_n_children()?>
+        <?php echo $thread->get_n_children()?>
       </div>
       <div class="bbview_n_new">
-        <?=$thread->get_n_new_postings()?>
+        <?php echo $thread->get_n_new_postings()?>
       </div>
     </div>
   </div>

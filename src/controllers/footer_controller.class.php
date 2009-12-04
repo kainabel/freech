@@ -21,7 +21,7 @@
 <?php
   class FooterController extends Controller {
     function show($_forum_id) {
-      $url = new FreechURL('http://freech.debain.org/',
+      $url = new FreechURL('http://code.google.com/p/freech/',
                            'Powered by Freech '.FREECH_VERSION);
       $this->api->links('footer')->add_link($url);
 

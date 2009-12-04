@@ -29,70 +29,70 @@
   switch ($relation) {
   case POSTING_RELATION_BRANCHEND_STUB:
   case POSTING_RELATION_BRANCHEND:
-?><img class='thread_img' src='<?=$__theme_dir?>/img/e.png' alt='\_' />
+?><img class='thread_img' src='<?php echo $__theme_dir?>/img/e.png' alt='\_' />
 <?php
     break;
   case POSTING_RELATION_CHILD_STUB:
   case POSTING_RELATION_CHILD:
-?><img class='thread_img' src='<?=$__theme_dir?>/img/x.png' alt='|-' />
+?><img class='thread_img' src='<?php echo $__theme_dir?>/img/x.png' alt='|-' />
 <?php
     break;
   case POSTING_RELATION_PARENT_UNFOLDED:
-?><a href='<?=esc($posting->get_fold_url_string())?>'><img class='thread_state' src='<?=$__theme_dir?>/img/m.png' alt='[-]' /></a>
+?><a href='<?php echo esc($posting->get_fold_url_string())?>'><img class='thread_state' src='<?php echo $__theme_dir?>/img/m.png' alt='[-]' /></a>
 <?php
     break;
   case POSTING_RELATION_PARENT_STUB:
-?><img class='thread_state' src='<?=$__theme_dir;?>/img/o.png' alt='[o]' />
+?><img class='thread_state' src='<?php echo $__theme_dir;?>/img/o.png' alt='[o]' />
 <?php
     break;
   case POSTING_RELATION_PARENT_FOLDED:
-?><a href='<?=esc($posting->get_fold_url_string())?>'><img class='thread_state' src='<?=$__theme_dir?>/img/p.png' alt='[+]' /></a>
+?><a href='<?php echo esc($posting->get_fold_url_string())?>'><img class='thread_state' src='<?php echo $__theme_dir?>/img/p.png' alt='[+]' /></a>
 <?php
   }
 ?>
 <?php if ($posting->get_priority() > 0) { ?>
-    <img class='icon' src='<?=$__theme_dir?>/img/sticky.png' alt='[!]' />
+    <img class='icon' src='<?php echo $__theme_dir?>/img/sticky.png' alt='[!]' />
 <?php } ?>
 <?php if ($selected) { ?>
-    <span class='selected'><?=esc($posting->get_subject())?></span>
+    <span class='selected'><?php echo esc($posting->get_subject())?></span>
 <?php } elseif (!$posting->is_active()) { ?>
-    <?=esc($posting->get_subject())?>
+    <?php echo esc($posting->get_subject())?>
 <?php } else { ?>
-    <?=$posting->get_url_html()?>
+    <?php echo $posting->get_url_html()?>
 <?php } ?>
 <?php if ($relation == POSTING_RELATION_PARENT_FOLDED) { ?>
-  &nbsp;(<?=$thread->get_n_children();?>)
+  &nbsp;(<?php echo $thread->get_n_children();?>)
 <?php } ?>
 <?php if ($posting->was_moved()) { ?>
-  <img class='icon' src="<?=$__theme_dir?>/img/move.png" alt="[m]" title="<?=_('Moved')?>" />&nbsp;
+  <img class='icon' src="<?php echo $__theme_dir?>/img/move.png" alt="[m]" title="<?php echo _('Moved')?>" />&nbsp;
 <?php } ?>
   </td>
   <td class='thread_user'>
 <?php if ($selected) { ?>
-    <span class='selected'><?=esc($posting->get_username())?></span>
+    <span class='selected'><?php echo esc($posting->get_username())?></span>
 <?php } else { ?>
-    <?=esc($posting->get_username())?>
+    <?php echo esc($posting->get_username())?>
 <?php } ?>
 <?php if ($posting->get_user_is_special()) { ?>
-    <img src='<?=esc($posting->get_user_icon())?>'
+    <img src='<?php echo esc($posting->get_user_icon())?>'
          alt=''  class='group_icon'
-         title='<?=esc($posting->get_user_icon_name())?>' />
+         title='<?php echo esc($posting->get_user_icon_name())?>' />
 <?php } ?>
   </td>
   <td class='thread_date'>
 <?php if ($selected) { ?>
-    <span class='selected'><?=$posting->get_created_time();?></span>
+    <span class='selected'><?php echo $posting->get_created_time();?></span>
 <?php } elseif ($posting->is_updated()) { ?>
-    <span style='color:#<?=$posting->get_updated_newness_hex()?>0000'>
-      <span class="edit_marker" title="<?=_('Edited')?>">*</span>&#160;
-      <?=$posting->get_updated_time();?>
+    <span style='color:#<?php echo $posting->get_updated_newness_hex()?>0000'>
+      <span class="edit_marker" title="<?php echo _('Edited')?>">*</span>&#160;
+      <?php echo $posting->get_updated_time();?>
     </span>
 <?php } elseif ($posting->is_new()) { ?>
-    <span style='color:#<?=$posting->get_newness_hex()?>0000'>
-      <?=$posting->get_created_time();?>
+    <span style='color:#<?php echo $posting->get_newness_hex()?>0000'>
+      <?php echo $posting->get_created_time();?>
     </span>
 <?php } else { ?>
-  <?=$posting->get_created_time()?>
+  <?php echo $posting->get_created_time()?>
 <?php } ?>
   </td>
  </tr>
@@ -104,7 +104,7 @@
 ?>
 <tr>
   <td align='center'>
-    <div id='empty_forum_message'><?=_('(No postings found)')?></div>
+    <div id='empty_forum_message'><?php echo _('(No postings found)')?></div>
   </td>
 </tr>
 <?php } ?>

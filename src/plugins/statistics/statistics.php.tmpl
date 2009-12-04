@@ -1,14 +1,14 @@
 <!-- statistics -->
-<h2><?=esc(_('Statistics'))?></h2>
-<h3><?=esc(sprintf(_('Postings and traffic of the last %s days'), $days))?></h3>
+<h2><?php echo esc(_('Statistics'))?></h2>
+<h3><?php echo esc(sprintf(_('Postings and traffic of the last %s days'), $days))?></h3>
 
 <div id="plot" style="width:600px;height:300px;"></div>
-<script type="text/javascript" src="<?=$plugin_dir?>/jquery.js"></script>
-<script type="text/javascript" src="<?=$plugin_dir?>/jquery.flot.pack.js"></script>
+<script type="text/javascript" src="<?php echo $plugin_dir?>/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $plugin_dir?>/jquery.flot.pack.js"></script>
 <script type="text/javascript">
 function day_formatter(val, axis) {
   var now  = Math.round(new Date().getTime()/1000.0);
-  var time = new Date((now - (<?=$days?> - val) * <?=$resolution?>) * 1000);
+  var time = new Date((now - (<?php echo $days?> - val) * <?php echo $resolution?>) * 1000);
   return time.getDate() + "." + (time.getMonth() + 1) + ".";
 }
 
@@ -21,24 +21,24 @@ $(function () {
   var postings2 = [];
   var traffic   = [];
 <?php foreach ($data as $point) { ?>
-      postings.push ([<?=$point->pos?>, <?=$point->postings?>]);
-      postings2.push([<?=$point->pos?>, <?=$point->postings2?>]);
-      traffic.push  ([<?=$point->pos?>, <?=$point->traffic?>]);
+      postings.push ([<?php echo $point->pos?>, <?php echo $point->postings?>]);
+      postings2.push([<?php echo $point->pos?>, <?php echo $point->postings2?>]);
+      traffic.push  ([<?php echo $point->pos?>, <?php echo $point->traffic?>]);
 <?php } ?>
   $.plot($("#plot"),
   [
-    { data: postings,  label: "<?=esc(_('Postings'))?>" },
+    { data: postings,  label: "<?php echo esc(_('Postings'))?>" },
 <?php if ($show_postings2) { ?>
-    { data: postings2, label: "<?=esc($postings2_label)?>" },
+    { data: postings2, label: "<?php echo esc($postings2_label)?>" },
 <?php } ?>
 <?php if ($show_traffic) { ?>
-    { data: traffic, label: "<?=esc(_('Traffic'))?>", yaxis: 2 },
+    { data: traffic, label: "<?php echo esc(_('Traffic'))?>", yaxis: 2 },
 <?php } ?>
   ],
   {
     xaxis: {
       tickFormatter: day_formatter,
-      tickSize: <?=$days/10?>,
+      tickSize: <?php echo $days/10?>,
       tickDecimals: 0
     },
     yaxis: {

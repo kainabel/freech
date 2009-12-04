@@ -11,12 +11,12 @@
   }
 ?>
 
-<form method='post' action='?step=<?=$nextstep?>' summary=''>
+<form method='post' action='?step=<?php echo $nextstep?>' summary=''>
 <table>
   <tr>
     <td>Username:</td>
     <td>
-      <input type="text" name="username" value="<?=esc($username)?>" />
+      <input type="text" name="username" value="<?php echo esc($username)?>" />
     </td>
   </tr>
   <tr>

@@ -1,38 +1,38 @@
 <!-- poll form -->
-<h2><?=esc(_('Start a Poll'))?></h2>
+<h2><?php echo esc(_('Start a Poll'))?></h2>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
-<form action='<?=esc($action)?>' method='post' accept-charset='utf-8'>
+<form action='<?php echo esc($action)?>' method='post' accept-charset='utf-8'>
 <div>
 <input type='hidden' name='action'    value='poll_submit' />
-<input type='hidden' name='forum_id'  value='<?=$poll->get_forum_id()?>' />
-<input type='hidden' name='n_options' value='<?=$poll->n_options()?>' />
+<input type='hidden' name='forum_id'  value='<?php echo $poll->get_forum_id()?>' />
+<input type='hidden' name='n_options' value='<?php echo $poll->n_options()?>' />
 
 <p>
-  <label><?=esc(_('Poll title:'))?></label>
-  <i><?=esc(_('(required)'))?></i><br />
+  <label><?php echo esc(_('Poll title:'))?></label>
+  <i><?php echo esc(_('(required)'))?></i><br />
   <input type='text'
          size='80'
          name='poll_title'
-         value='<?=esc($poll->get_title())?>' /><br/>
+         value='<?php echo esc($poll->get_title())?>' /><br/>
   <input type="checkbox"
          name="allow_multiple" <?php if ($poll->get_allow_multiple()) { ?>checked="checked"<?php } ?> />
-  <?=esc(_('Allow for checking multiple boxes.'))?>
+  <?php echo esc(_('Allow for checking multiple boxes.'))?>
 </p>
 
 <?php $i = 0; foreach ($poll->get_options() as $option) { ?>
 <p>
-  <label><?=esc(sprintf(_('Option %d:'), $i + 1))?></label><br />
+  <label><?php echo esc(sprintf(_('Option %d:'), $i + 1))?></label><br />
   <input type='text'
          size='80'
-         name='poll_option<?=$i++ ?>'
-         value='<?=esc($option)?>' /><br />
+         name='poll_option<?php echo $i++ ?>'
+         value='<?php echo esc($option)?>' /><br />
 </p>
 <?php } ?>
 
 <p>
-  <input type='submit' name='add_row' value='<?=esc(_('Add Another Option'))?>' />
-  <input type='submit' name='send' value='<?=esc(_('Submit Poll'))?>' />
+  <input type='submit' name='add_row' value='<?php echo esc(_('Add Another Option'))?>' />
+  <input type='submit' name='send' value='<?php echo esc(_('Submit Poll'))?>' />
 </p>
 </div>
 </form>

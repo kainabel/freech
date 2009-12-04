@@ -2,14 +2,14 @@
 <ul id="moderator_buttons">
 <li>
 <?php if ($posting->is_active()) { ?>
-  <a href="<?=esc($posting->get_lock_url_string())?>">
-  <img class='icon' src='<?=$__theme_dir?>/img/unlock.png' title='<?=esc(_('Lock posting'))?>' alt='[L]' />
-  <span class='moderator_button_text'><?=esc(_('Lock posting'))?></span>
+  <a href="<?php echo esc($posting->get_lock_url_string())?>">
+  <img class='icon' src='<?php echo $__theme_dir?>/img/unlock.png' title='<?php echo esc(_('Lock posting'))?>' alt='[L]' />
+  <span class='moderator_button_text'><?php echo esc(_('Lock posting'))?></span>
   </a>
 <?php } else { ?>
-  <a href="<?=esc($posting->get_unlock_url_string())?>">
-  <img class='icon' src='<?=$__theme_dir?>/img/lock.png' title='<?=esc(_('Unlock posting'))?>' alt='[l]' />
-  <span class='moderator_button_text'><?=esc(_('Unlock posting'))?></span>
+  <a href="<?php echo esc($posting->get_unlock_url_string())?>">
+  <img class='icon' src='<?php echo $__theme_dir?>/img/lock.png' title='<?php echo esc(_('Unlock posting'))?>' alt='[l]' />
+  <span class='moderator_button_text'><?php echo esc(_('Unlock posting'))?></span>
   </a>
 <?php } ?>
 </li>
@@ -17,36 +17,36 @@
 <?php if ($posting->is_parent()) { ?>
 <li>
   <?php if ($posting->get_priority() == 0) { ?>
-    <a href="<?=esc($posting->get_prioritize_url_string(1))?>">
-    <img class='icon' src='<?=$__theme_dir?>/img/sticky.png' title='<?=esc(_('Make sticky'))?>' alt='[S]' />
-    <span class='moderator_button_text'><?=esc(_('Make sticky'))?></span>
+    <a href="<?php echo esc($posting->get_prioritize_url_string(1))?>">
+    <img class='icon' src='<?php echo $__theme_dir?>/img/sticky.png' title='<?php echo esc(_('Make sticky'))?>' alt='[S]' />
+    <span class='moderator_button_text'><?php echo esc(_('Make sticky'))?></span>
     </a>
   <?php } else { ?>
-    <a href="<?=esc($posting->get_prioritize_url_string(0))?>">
-    <img class='icon' src='<?=$__theme_dir?>/img/unsticky.png' title='<?=esc(_('Remove sticky'))?>' alt='[s]' />
-    <span class='moderator_button_text'><?=esc(_('Remove sticky'))?></span>
+    <a href="<?php echo esc($posting->get_prioritize_url_string(0))?>">
+    <img class='icon' src='<?php echo $__theme_dir?>/img/unsticky.png' title='<?php echo esc(_('Remove sticky'))?>' alt='[s]' />
+    <span class='moderator_button_text'><?php echo esc(_('Remove sticky'))?></span>
     </a>
   <?php } ?>
 </li>
 
 <li>
-  <a href="<?=esc($posting->get_move_url_string(1))?>">
-  <img class='icon' src='<?=$__theme_dir?>/img/move.png' title='<?=esc(_('Move to a different forum'))?>' alt='[M]' />
-  <span class='moderator_button_text'><?=esc(_('Move to a different forum'))?></span>
+  <a href="<?php echo esc($posting->get_move_url_string(1))?>">
+  <img class='icon' src='<?php echo $__theme_dir?>/img/move.png' title='<?php echo esc(_('Move to a different forum'))?>' alt='[M]' />
+  <span class='moderator_button_text'><?php echo esc(_('Move to a different forum'))?></span>
   </a>
 </li>
 <?php } ?>
 
 <li>
   <?php if ($posting->get_force_stub()) { ?>
-    <a href="<?=esc($posting->get_unstub_url_string())?>">
-    <img class='icon' src='<?=$__theme_dir?>/img/stub.png' title='<?=esc(_('Allow responses'))?>' alt='[R]' />
-    <span class='moderator_button_text'><?=esc(_('Allow responses'))?></span>
+    <a href="<?php echo esc($posting->get_unstub_url_string())?>">
+    <img class='icon' src='<?php echo $__theme_dir?>/img/stub.png' title='<?php echo esc(_('Allow responses'))?>' alt='[R]' />
+    <span class='moderator_button_text'><?php echo esc(_('Allow responses'))?></span>
     </a>
   <?php } else { ?>
-    <a href="<?=esc($posting->get_stub_url_string())?>">
-    <img class='icon' src='<?=$__theme_dir?>/img/unstub.png' title='<?=esc(_('Prevent responses'))?>' alt='[r]' />
-    <span class='moderator_button_text'><?=esc(_('Prevent responses'))?></span>
+    <a href="<?php echo esc($posting->get_stub_url_string())?>">
+    <img class='icon' src='<?php echo $__theme_dir?>/img/unstub.png' title='<?php echo esc(_('Prevent responses'))?>' alt='[r]' />
+    <span class='moderator_button_text'><?php echo esc(_('Prevent responses'))?></span>
     </a>
   <?php } ?>
 </li>

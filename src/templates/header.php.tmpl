@@ -4,40 +4,40 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
-  <link rel="stylesheet" type="text/css" href="<?=$__theme_dir?>/style.css" />
-  <link rel="stylesheet" type="text/css" href="<?=$__theme_dir?>/thread.css" />
-  <link rel="stylesheet" type="text/css" href="<?=$__theme_dir?>/bbview.css" />
-  <title><?=esc($title)?></title>
+  <link rel="stylesheet" type="text/css" href="<?php echo $__theme_dir?>/style.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo $__theme_dir?>/thread.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo $__theme_dir?>/bbview.css" />
+  <title><?php echo esc($title)?></title>
 <?php if ($style) { ?>
   <style type="text/css">
-  <?=$style?>
+  <?php echo $style?>
   </style>
 <?php } ?>
 <?php if ($head_js) { ?>
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <script type="text/javascript">
 //<![CDATA[
-  <?=$head_js?>
+  <?php echo $head_js?>
 //]]>
   </script>
 <?php } ?>
 </head>
-<body <?php if ($onload_js) { ?>onload="<?=esc($onload_js)?>"<?php } ?>>
+<body <?php if ($onload_js) { ?>onload="<?php echo esc($onload_js)?>"<?php } ?>>
 <div id='header'>
   <div id='header1'>
-    <a href='.'><img id='logo' src='<?=$__theme_dir?>/img/logo.png' alt='' /></a>
+    <a href='.'><img id='logo' src='<?php echo $__theme_dir?>/img/logo.png' alt='' /></a>
   </div>
 
   <div id='header2'>
-    <a href='.'><span id='title'><?=esc($site_title)?></span></a>
+    <a href='.'><span id='title'><?php echo esc($site_title)?></span></a>
   </div>
 
   <div id='header3'>
-    <?=html_menu('account_links', $account_links, '|')?>
+    <?php echo html_menu('account_links', $account_links, '|')?>
     <br />
 <?php if ($n_online) { ?>
     <span id='status'>
-      <?=esc(sprintf(ngettext('%d user online', '%d users online', $n_online), $n_online))?>
+      <?php echo esc(sprintf(ngettext('%d user online', '%d users online', $n_online), $n_online))?>
     </span>
 <?php } ?>
   </div>

@@ -1,22 +1,22 @@
 <!-- search -->
-<h2><?=esc(_('Search'))?></h2>
+<h2><?php echo esc(_('Search'))?></h2>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
 <form action='.' method='get' accept-charset='utf-8'>
 <div>
 <input type="hidden" name="action"   value="search" />
 <?php if ($forum_id) { ?>
-<input type="hidden" name="forum_id" value="<?=$forum_id?>" />
+<input type="hidden" name="forum_id" value="<?php echo $forum_id?>" />
 <?php } ?>
-<input type="text"   name="q" size="50" value="<?=esc($query)?>" />
-<input type="submit" value="<?=esc(_('Find Postings'))?>" />
-<input type="submit" name="user_search" value="<?=esc(_('Find Users'))?>" />
+<input type="text"   name="q" size="50" value="<?php echo esc($query)?>" />
+<input type="submit" value="<?php echo esc(_('Find Postings'))?>" />
+<input type="submit" name="user_search" value="<?php echo esc(_('Find Users'))?>" />
 </div>
 </form>
 
 <?php if ($posting_search) { ?>
 <br />
-<?=esc(sprintf(ngettext('%d result found.', '%d results found.', $n_results), $n_results))?><br/>
+<?php echo esc(sprintf(ngettext('%d result found.', '%d results found.', $n_results), $n_results))?><br/>
 <?php
   require "$template_dir/indexbar.php.tmpl";
   require "$template_dir/latest.php.tmpl";
@@ -24,7 +24,7 @@
 ?>
 <?php } elseif ($user_search) { ?>
 <br />
-<?=esc(sprintf(ngettext('%d result found.', '%d results found.', $n_results), $n_results))?><br/>
+<?php echo esc(sprintf(ngettext('%d result found.', '%d results found.', $n_results), $n_results))?><br/>
 <?php
   require "$template_dir/indexbar.php.tmpl";
   require "$template_dir/user_list.php.tmpl";
@@ -34,9 +34,9 @@
 <table summary=''>
   <tr>
     <td valign='top'>
-      <b><?=esc(_('Examples:'))?></b>
+      <b><?php echo esc(_('Examples:'))?></b>
     </td>
-    <td><i><?=nl2br(esc(_('apples AND "peaches"
+    <td><i><?php echo nl2br(esc(_('apples AND "peaches"
 NOT user:"that guy" AND (text:banana OR subject:fruit)
 ban?na AND NOT subject:wildcard*matching')))?></i>
     </td>

@@ -1,80 +1,80 @@
 <!-- user editor -->
-<h2><?=esc(sprintf(_('Personal Data of %s'), $user->get_name()))?></h2>
+<h2><?php echo esc(sprintf(_('Personal Data of %s'), $user->get_name()))?></h2>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
-<form action="<?=esc($action)?>" method="post" accept-charset="utf-8" autocomplete="off">
+<form action="<?php echo esc($action)?>" method="post" accept-charset="utf-8" autocomplete="off">
 <div>
-<input type="hidden" name="user_id" value="<?=$user->get_id()?>" />
+<input type="hidden" name="user_id" value="<?php echo $user->get_id()?>" />
   <table summary=''>
     <tr>
-      <td><?=esc(_('User group:'))?></td>
+      <td><?php echo esc(_('User group:'))?></td>
 <?php if ($may_edit_group) { ?>
       <td>
-      <?=html_options('group_id', $groups, $group->get_id())?>
+      <?php echo html_options('group_id', $groups, $group->get_id())?>
       </td>
 <?php } else { ?>
-      <td><?=esc($group->get_name())?></td>
+      <td><?php echo esc($group->get_name())?></td>
 <?php } ?>
     </tr>
     <tr>
-      <td><?=esc(_('Username:'))?></td>
+      <td><?php echo esc(_('Username:'))?></td>
 <?php if ($may_edit_name) { ?>
-      <td><input size="70" type="text" name="username" value="<?=esc($user->get_name())?>" /></td>
+      <td><input size="70" type="text" name="username" value="<?php echo esc($user->get_name())?>" /></td>
 <?php } else { ?>
-      <td><?=esc($user->get_name())?></td>
+      <td><?php echo esc($user->get_name())?></td>
 <?php } ?>
     </tr>
     <tr>
-      <td><?=esc(_('Account status:'))?></td>
+      <td><?php echo esc(_('Account status:'))?></td>
 <?php if ($may_change_status) { ?>
       <td>
-      <?=html_options('status', $status, $user->get_status())?>
+      <?php echo html_options('status', $status, $user->get_status())?>
       </td>
 <?php } else { ?>
-      <td><?=esc($user->get_status_name())?></td>
+      <td><?php echo esc($user->get_status_name())?></td>
 <?php } ?>
     </tr>
 <?php if ($may_edit_data) { ?>
     <tr>
-      <td><?=esc(_('Firstname:'))?></td>
-      <td><input size="70" type="text" name="firstname" value="<?=esc($user->get_firstname())?>" /></td>
+      <td><?php echo esc(_('Firstname:'))?></td>
+      <td><input size="70" type="text" name="firstname" value="<?php echo esc($user->get_firstname())?>" /></td>
     </tr>
     <tr>
-      <td><?=esc(_('Lastname:'))?></td>
-      <td><input size="70" type="text" name="lastname" value="<?=esc($user->get_lastname())?>" /></td>
+      <td><?php echo esc(_('Lastname:'))?></td>
+      <td><input size="70" type="text" name="lastname" value="<?php echo esc($user->get_lastname())?>" /></td>
     </tr>
     <tr>
-      <td><?=esc(_('Email:'))?></td>
-      <td><input size="70" type="text" name="mail" value="<?=esc($user->get_mail())?>" /></td>
+      <td><?php echo esc(_('Email:'))?></td>
+      <td><input size="70" type="text" name="mail" value="<?php echo esc($user->get_mail())?>" /></td>
     </tr>
     <tr>
       <td></td>
-      <td><input type="checkbox" name="publicmail" <?php if ($user->mail_is_public()) { ?>checked="checked"<?php } ?> /><?=esc(_('Display this email address publicly'))?></td>
+      <td><input type="checkbox" name="publicmail" <?php if ($user->mail_is_public()) { ?>checked="checked"<?php } ?> /><?php echo esc(_('Display this email address publicly'))?></td>
     </tr>
     <tr>
-      <td><?=esc(_('Homepage:'))?></td>
-      <td><input size="70" type="text" name="homepage" value="<?=esc($user->get_homepage())?>" /></td>
+      <td><?php echo esc(_('Homepage:'))?></td>
+      <td><input size="70" type="text" name="homepage" value="<?php echo esc($user->get_homepage())?>" /></td>
     </tr>
     <tr>
-      <td><?=esc(_('Instant messenger:'))?></td>
-      <td><input size="70" type="text" name="im" value="<?=esc($user->get_im())?>" /></td>
+      <td><?php echo esc(_('Instant messenger:'))?></td>
+      <td><input size="70" type="text" name="im" value="<?php echo esc($user->get_im())?>" /></td>
     </tr>
     <tr>
-      <td><?=esc(_('Password:'))?></td>
+      <td><?php echo esc(_('Password:'))?></td>
       <td><input size="70" type="password" name="password" /></td>
     </tr>
     <tr>
-      <td><?=esc(_('Repeat:'))?></td>
+      <td><?php echo esc(_('Repeat:'))?></td>
       <td><input size="70" type="password" name="password2" /></td>
     </tr>
     <tr>
       <td colspan="2">
-      <h3><?=esc(_('User Settings'))?></h3>
+      <h3><?php echo esc(_('User Settings'))?></h3>
       </td>
     </tr>
     <tr>
       <td colspan="2">
-      <input type="checkbox" name="do_notify" <?php if ($user->get_do_notify()) { ?>checked="checked"<?php } ?> /><?=esc(_('Notify me by mail if any of my postings is answered.'))?>
+      <input type="checkbox" name="do_notify" <?php if ($user->get_do_notify()) { ?>checked="checked"<?php } ?> /><?php echo esc(_('Notify me by mail if any of my postings is answered.'))?>
       </td>
     </tr>
     <tr>
@@ -83,6 +83,6 @@
 <?php } ?>
   </table>
 </div>
-<input type="submit" name="user_submit" value="<?=esc(_('Save Changes'))?>" />
+<input type="submit" name="user_submit" value="<?php echo esc(_('Save Changes'))?>" />
 </form>
 <!-- end user editor -->

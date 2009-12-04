@@ -4,45 +4,45 @@
 <tr class='posting'>
   <td class='thread_tree'>
 <?php if ($posting->get_priority() > 0) { ?>
-  <img class='icon'  src='<?=$__theme_dir?>/img/sticky.png' alt='[!]' />&#160;
+  <img class='icon'  src='<?php echo $__theme_dir?>/img/sticky.png' alt='[!]' />&#160;
 <?php } ?>
 <?php if ($posting->is_selected()) { ?>
-  <span class='selected'><?=esc($posting->get_subject())?></span>
+  <span class='selected'><?php echo esc($posting->get_subject())?></span>
 <?php } elseif ($posting->is_active()) { ?>
-  <?=$posting->get_url_html()?>
+  <?php echo $posting->get_url_html()?>
 <?php } else { ?>
-  <?=esc($posting->get_subject())?>
+  <?php echo esc($posting->get_subject())?>
 <?php } ?>
 <?php if ($posting->was_moved()) { ?>
-  <img class='icon' src='<?=$__theme_dir?>/img/move.png' alt='[m]' title='<?=esc(_('Moved'))?>' />
+  <img class='icon' src='<?php echo $__theme_dir?>/img/move.png' alt='[m]' title='<?php echo esc(_('Moved'))?>' />
 <?php } ?>
   </td>
   <td class='thread_user'>
 <?php if ($posting->is_selected()) { ?>
-    <span class='selected'><?=esc($posting->get_username())?></span>
+    <span class='selected'><?php echo esc($posting->get_username())?></span>
 <?php } else { ?>
-    <?=esc($posting->get_username())?>
+    <?php echo esc($posting->get_username())?>
 <?php } ?>
 <?php if ($posting->get_user_is_special()) { ?>
-    <img src='<?=esc($posting->get_user_icon())?>'
+    <img src='<?php echo esc($posting->get_user_icon())?>'
          alt='[?]'  class='group_icon'
-         title='<?=esc($posting->get_user_icon_name())?>' />
+         title='<?php echo esc($posting->get_user_icon_name())?>' />
 <?php } ?>
   </td>
   <td class='thread_date'>
 <?php if ($posting->is_selected()) { ?>
-    <span class='selected'><?=$posting->get_created_time()?></span>
+    <span class='selected'><?php echo $posting->get_created_time()?></span>
 <?php } elseif ($posting->is_updated()) { ?>
-    <span style='color:#<?=$posting->get_updated_newness_hex()?>0000'>
-      <span class="edit_marker" title="<?=_('Edited')?>">*</span>&#160;
-      <?=$posting->get_updated_time()?>
+    <span style='color:#<?php echo $posting->get_updated_newness_hex()?>0000'>
+      <span class="edit_marker" title="<?php echo _('Edited')?>">*</span>&#160;
+      <?php echo $posting->get_updated_time()?>
     </span>
 <?php } elseif ($posting->is_new()) { ?>
-    <span style='color:#<?=$posting->get_newness_hex()?>0000'>
-      <?=$posting->get_created_time()?>
+    <span style='color:#<?php echo $posting->get_newness_hex()?>0000'>
+      <?php echo $posting->get_created_time()?>
     </span>
 <?php } else { ?>
-    <?=$posting->get_created_time()?>
+    <?php echo $posting->get_created_time()?>
 <?php } ?>
   </td>
 </tr>
@@ -50,7 +50,7 @@
 <?php if ($n_rows == 0) { ?>
 <tr>
   <td align='center'>
-    <div id='empty_forum_message'><?=esc(_('(No postings found)'))?></div>
+    <div id='empty_forum_message'><?php echo esc(_('(No postings found)'))?></div>
   </td>
 </tr>
 <?php } ?>

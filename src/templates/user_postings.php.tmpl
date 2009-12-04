@@ -1,8 +1,8 @@
 <!-- user postings -->
 <h2>
-<?=esc(sprintf(_('Postings of %s'), $user->get_name()))?>
+<?php echo esc(sprintf(_('Postings of %s'), $user->get_name()))?>
 <?php if ($may_edit) { ?>
-  <?=$user->get_editor_url_html()?>
+  <?php echo $user->get_editor_url_html()?>
 <?php } ?>
 </h2>
 <?php

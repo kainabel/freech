@@ -1,56 +1,56 @@
 <!-- message_compose -->
-<h2><?=esc(_('Write a New Message'))?></h2>
+<h2><?php echo esc(_('Write a New Message'))?></h2>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
-<form <?php if ($onsubmit_js) { ?>onsubmit="<?=$onsubmit_js?>"<?php } ?>
-      action='<?=esc($action)?>'
+<form <?php if ($onsubmit_js) { ?>onsubmit="<?php echo $onsubmit_js?>"<?php } ?>
+      action='<?php echo esc($action)?>'
       id='commentform'
       method='post'
       accept-charset='utf-8'>
 <div>
-<?php if ($form_html) { ?><?=$form_html?><?php } ?>
+<?php if ($form_html) { ?><?php echo $form_html?><?php } ?>
 <input type='hidden' name='action'    value='message_submit' />
-<input type='hidden' name='parent_id' value='<?=$parent_id?>' />
-<input type='hidden' name='msg_id'    value='<?=$message->get_id()?>' />
-<input type='hidden' name='may_quote' value='<?=esc($may_quote)?>' />
+<input type='hidden' name='parent_id' value='<?php echo $parent_id?>' />
+<input type='hidden' name='msg_id'    value='<?php echo $message->get_id()?>' />
+<input type='hidden' name='may_quote' value='<?php echo esc($may_quote)?>' />
 <?php if ($__user->is_anonymous()) { ?>
 <p>
-  <label><?=esc(_('Username:'))?></label>
-  <i><?=esc(_('(required)'))?></i><br />
+  <label><?php echo esc(_('Username:'))?></label>
+  <i><?php echo esc(_('(required)'))?></i><br />
   <input type='text'
          size='80'
          name='username'
-         value='<?=esc($message->get_username())?>'
-         maxlength='<?=$max_usernamelength?>' />
+         value='<?php echo esc($message->get_username())?>'
+         maxlength='<?php echo $max_usernamelength?>' />
 </p>
 <?php } else { ?>
-  <input type='hidden' name='username' value='<?=esc($__user->get_name())?>' />
+  <input type='hidden' name='username' value='<?php echo esc($__user->get_name())?>' />
 <?php } ?>
 
 <p>
-  <label><?=esc(_('Subject:'))?></label>
-  <i><?=esc(_('(required)'))?></i><br />
+  <label><?php echo esc(_('Subject:'))?></label>
+  <i><?php echo esc(_('(required)'))?></i><br />
   <input type='text'
          size='80'
          name='subject'
-         value='<?=esc($message->get_subject())?>'
-         maxlength='<?=$max_subjectlength?>' />
+         value='<?php echo esc($message->get_subject())?>'
+         maxlength='<?php echo $max_subjectlength?>' />
 </p>
 
 <p>
-  <label><?=esc(_('Message:'))?></label>
-  <i><?=esc(_('(required)'))?></i><br />
+  <label><?php echo esc(_('Message:'))?></label>
+  <i><?php echo esc(_('(required)'))?></i><br />
   
-  <textarea name='body' cols='90' rows='20'><?=esc($message->get_body())?></textarea>
+  <textarea name='body' cols='90' rows='20'><?php echo esc($message->get_body())?></textarea>
   
 </p>
 
 <p>
 <?php if ($may_quote) { ?>
-  <input type='submit' name='quote' value='<?=esc(_('Quote Message'))?>' />&nbsp;
+  <input type='submit' name='quote' value='<?php echo esc(_('Quote Message'))?>' />&nbsp;
 <?php } ?>
-  <input type='submit' name='preview' value='<?=esc(_('Preview'))?>' />&nbsp;
-  <input type='submit' name='send' value='<?=esc(_('Send Message'))?>' />
+  <input type='submit' name='preview' value='<?php echo esc(_('Preview'))?>' />&nbsp;
+  <input type='submit' name='send' value='<?php echo esc(_('Send Message'))?>' />
 </p>
 </div>
 </form>

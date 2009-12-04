@@ -1,26 +1,26 @@
 <table summary=''>
   <tr>
 <?php if ($type == "weekly_top") { ?>
-    <th colspan="3"><?=esc(_('Weekly Top 20'))?></th>
+    <th colspan="3"><?php echo esc(_('Weekly Top 20'))?></th>
 <?php } elseif ($type == "alltime_top") { ?>
-    <th colspan="3"><?=esc(_('All Time Top 20'))?></th>
+    <th colspan="3"><?php echo esc(_('All Time Top 20'))?></th>
 <?php } ?>
   </tr>
   <tr>
     <th></th>
-    <th align='left'><?=esc(_('Username'))?></th>
-    <th align='right'><?=esc(_('Postings'))?></th>
+    <th align='left'><?php echo esc(_('Username'))?></th>
+    <th align='right'><?php echo esc(_('Postings'))?></th>
   </tr>
 <?php $i = 0; foreach ($users as $user) { ?>
   <tr>
-    <td align='right'><?=++$i?>.</td>
+    <td align='right'><?php echo ++$i?>.</td>
     <td>
-      <a href="<?=esc($user->get_profile_url_string())?>"><?=esc($user->get_name())?></a>
-      <img src="<?=esc($user->get_icon())?>"
+      <a href="<?php echo esc($user->get_profile_url_string())?>"><?php echo esc($user->get_name())?></a>
+      <img src="<?php echo esc($user->get_icon())?>"
            alt=""
-           title="<?=esc($user->get_icon_name())?>" />
+           title="<?php echo esc($user->get_icon_name())?>" />
     </td>
-    <td align='right'><?=esc($user->n_postings)?></td>
+    <td align='right'><?php echo esc($user->n_postings)?></td>
   </tr>
 <?php } ?>
 </table>

@@ -4,8 +4,8 @@
 <table summary=''>
 <?php foreach ($poll->get_results() as $option_id => $votes) { ?>
   <tr>
-    <td><?=$poll->get_option($option_id)?>:</td>
-    <td><?=$votes?></td>
+    <td><?php echo $poll->get_option($option_id)?>:</td>
+    <td><?php echo $votes?></td>
   </tr>
 <?php } ?>
 </table>

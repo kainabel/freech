@@ -2,11 +2,11 @@
 <table id='breadcrumbs' width='100%' cellpadding='6' cellspacing='0' summary=''>
  <tr>
   <td align='left' valign='middle'>
-  &nbsp;<?=esc(_('You are here:'))?>
-  <?=html_menu('breadcrumb_links', $breadcrumbs, '→')?>
+  &nbsp;<?php echo esc(_('You are here:'))?>
+  <?php echo html_menu('breadcrumb_links', $breadcrumbs, '→')?>
   </td>
   <td align='right' valign='middle'>
-  <?=html_menu('search_links', $search_links)?>
+  <?php echo html_menu('search_links', $search_links)?>
   </td>
  </tr>
 </table>
@@ -16,7 +16,7 @@
   <table width='100%' cellpadding='5' cellspacing='0' summary=''>
    <tr>
     <td align='center'>
-    <?=html_menu('page_links', $page_links)?>
+    <?php echo html_menu('page_links', $page_links)?>
     </td>
    </tr>
   </table>

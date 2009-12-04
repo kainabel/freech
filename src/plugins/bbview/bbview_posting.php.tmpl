@@ -2,7 +2,7 @@
 <div class="bbview_post">
   <div class="bbview_post_status">
     <div class="bbview_post_time">
-      <?=$posting->get_created_time()?>
+      <?php echo $posting->get_created_time()?>
     </div>
   </div>
 
@@ -10,27 +10,27 @@
     <div class="bbview_post_info">
       <div class="bbview_post_user">
         <?php if ($posting->get_user_is_anonymous()) { ?>
-          <i><?=esc($posting->get_username())?></i>
+          <i><?php echo esc($posting->get_username())?></i>
         <?php } else { ?>
-          <?=$posting->get_user_profile_url_html()?>
+          <?php echo $posting->get_user_profile_url_html()?>
         <?php } ?>
         <?php if ($posting->get_user_is_special()) { ?>
-          <img src="<?=esc($posting->get_user_icon())?>"
+          <img src="<?php echo esc($posting->get_user_icon())?>"
                alt=""
-               title="<?=esc($posting->get_user_icon_name())?>" />
+               title="<?php echo esc($posting->get_user_icon_name())?>" />
         <?php } ?>
       </div>
       <div class="bbview_post_icons">
         <?php if ($posting->get_priority() > 0) { ?>
-          <img src='<?=$__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
+          <img src='<?php echo $__theme_dir?>/img/sticky.png' width="16" height="16" alt='!' />
         <?php } ?>
         <?php if ($posting->was_moved()) { ?>
-          <img src="<?=$__theme_dir?>/img/move.png" alt="" title="<?=esc(_('Moved'))?>" />
+          <img src="<?php echo $__theme_dir?>/img/move.png" alt="" title="<?php echo esc(_('Moved'))?>" />
         <?php } ?>
         <?php if ($posting->is_new()) { ?>
-          <img src="<?=$__theme_dir?>/img/new.gif" alt="" title="<?=esc(_('New'))?>" />
+          <img src="<?php echo $__theme_dir?>/img/new.gif" alt="" title="<?php echo esc(_('New'))?>" />
         <?php } else { ?>
-          <img src="<?=$__theme_dir?>/img/notnew.gif" alt="" />
+          <img src="<?php echo $__theme_dir?>/img/notnew.gif" alt="" />
         <?php } ?>
         <?php if ($__group->may('moderate')) { ?>
           <?php require "$template_dir/moderator_buttons.inc.php.tmpl" ?>
@@ -40,18 +40,18 @@
 
     <div class="bbview_post_text">
       <div class="bbview_post_subject">
-        <?=esc($posting->get_subject())?>
+        <?php echo esc($posting->get_subject())?>
       </div>
       <div class="bbview_post_body">
-        <?=$posting->get_body_html()?>
+        <?php echo $posting->get_body_html()?>
       </div>
       <div class="bbview_post_buttons">
         <ul class="page_links">
           <?php if ($may_write && $posting->is_active() && $posting->get_allow_answer()) { ?>
-            <li><?=$posting->get_respond_url_html()?></li>
+            <li><?php echo $posting->get_respond_url_html()?></li>
           <?php } ?>
           <?php if ($may_edit && $posting->is_editable() && $__user->get_id() == $posting->get_user_id()) { ?>
-            <li><?=$posting->get_edit_url_html()?></li>
+            <li><?php echo $posting->get_edit_url_html()?></li>
           <?php } ?>
         </ul>
       </div>

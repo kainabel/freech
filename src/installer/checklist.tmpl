@@ -3,7 +3,7 @@
 <table width="100%" cellpadding="0" summary=''>
 <?php foreach ($items as $item) { ?>
   <tr>
-    <td><?=esc($item->get_name())?></td>
+    <td><?php echo esc($item->get_name())?></td>
     <td>&nbsp;</td>
     <td align="right">
     <?php if ($item->result) { ?>
@@ -16,7 +16,7 @@
   <?php if ($item->hint) { ?>
   <tr>
     <td>
-      <span class="small"><?=esc($item->hint)?></span>
+      <span class="small"><?php echo esc($item->hint)?></span>
     </td>
     <td colspan="2">
     </td>

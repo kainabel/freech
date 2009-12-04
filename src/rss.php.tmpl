@@ -1,18 +1,18 @@
 <?php echo '<?xml version="1.0"?>' ?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title><?=esc($title)?></title>
-    <link><?=esc($link)?></link>
-    <language><?=esc($language)?></language>
-    <description><?=esc($description)?></description>
+    <title><?php echo esc($title)?></title>
+    <link><?php echo esc($link)?></link>
+    <language><?php echo esc($language)?></language>
+    <description><?php echo esc($description)?></description>
 <?php foreach ($postings as $posting) { ?>
     <item>
-      <title><?=esc($posting->get_subject())?></title>
-      <author><?=esc($posting->get_username())?></author>
-      <guid><?=esc($posting->get_url_string())?></guid>
-      <link><?=esc($posting->get_url_string())?></link>
-      <pubDate><?=strftime('%a, %d %b %Y %R:%S +0000', $posting->get_created_unixtime())?></pubDate>
-      <description><?=esc($posting->get_body_html())?></description>
+      <title><?php echo esc($posting->get_subject())?></title>
+      <author><?php echo esc($posting->get_username())?></author>
+      <guid><?php echo esc($posting->get_url_string())?></guid>
+      <link><?php echo esc($posting->get_url_string())?></link>
+      <pubDate><?php echo strftime('%a, %d %b %Y %R:%S +0000', $posting->get_created_unixtime())?></pubDate>
+      <description><?php echo esc($posting->get_body_html())?></description>
     </item>
 <?php } ?>
   </channel>

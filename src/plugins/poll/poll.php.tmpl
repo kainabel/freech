@@ -1,21 +1,21 @@
 <!-- plugin:poll -->
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
-<form action='<?=esc($action)?>' id='voteform' method='post' accept-charset='utf-8'>
+<form action='<?php echo esc($action)?>' id='voteform' method='post' accept-charset='utf-8'>
 <div>
 <input type='hidden' name='action'  value='poll_vote' />
-<input type='hidden' name='poll_id' value='<?=$poll->get_id()?>' />
+<input type='hidden' name='poll_id' value='<?php echo $poll->get_id()?>' />
 
 <div id='poll'>
 <?php if ($poll->get_allow_multiple()) { ?>
-  <?=html_checkboxes('options', $poll->get_option_map())?>
+  <?php echo html_checkboxes('options', $poll->get_option_map())?>
 <?php } else { ?>
-  <?=html_radios('options', $poll->get_option_map())?>
+  <?php echo html_radios('options', $poll->get_option_map())?>
 <?php } ?>
 
 <p>
-  <input type='submit' name='send' value='<?=esc(_('Vote'))?>' />
-  &nbsp;<a href="<?=esc($result_url)?>"><?=esc(_('View results'))?></a>
+  <input type='submit' name='send' value='<?php echo esc(_('Vote'))?>' />
+  &nbsp;<a href="<?php echo esc($result_url)?>"><?php echo esc(_('View results'))?></a>
 </p>
 </div>
 </div>

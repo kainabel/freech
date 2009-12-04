@@ -1,85 +1,85 @@
 <!-- user profile -->
 <h2>
-  <?=esc(sprintf(_('Profile of %s'), $user->get_name()))?>
+  <?php echo esc(sprintf(_('Profile of %s'), $user->get_name()))?>
 <?php if ($may_edit) { ?>
-  <?=$user->get_editor_url_html()?>
+  <?php echo $user->get_editor_url_html()?>
 <?php } ?>
 </h2>
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
 <table summary=''>
   <tr>
-    <td><?=esc(_('User group:'))?></td>
+    <td><?php echo esc(_('User group:'))?></td>
     <td>
-      <?=$group->get_profile_url_html()?>
-      <img src="<?=$group->get_icon()?>" title="<?=esc($group->get_name())?>" alt="" />
+      <?php echo $group->get_profile_url_html()?>
+      <img src="<?php echo $group->get_icon()?>" title="<?php echo esc($group->get_name())?>" alt="" />
     </td>
   </tr>
   <tr>
-    <td><?=esc(_('User ID:'))?></td>
-    <td><?=esc($user->get_id())?></td>
+    <td><?php echo esc(_('User ID:'))?></td>
+    <td><?php echo esc($user->get_id())?></td>
   </tr>
   <tr>
-    <td><?=esc(_('Username:'))?></td>
-    <td><?=esc($user->get_name())?></td>
+    <td><?php echo esc(_('Username:'))?></td>
+    <td><?php echo esc($user->get_name())?></td>
   </tr>
   <tr>
-    <td><?=esc(_('Account status:'))?></td>
-    <td><?=esc($user->get_status_name())?></td>
+    <td><?php echo esc(_('Account status:'))?></td>
+    <td><?php echo esc($user->get_status_name())?></td>
   </tr>
   <tr>
-    <td><?=esc(_('Member since:'))?></td>
-    <td><?=esc($user->get_created_time())?></td>
+    <td><?php echo esc(_('Member since:'))?></td>
+    <td><?php echo esc($user->get_created_time())?></td>
   </tr>
   <tr>
-    <td><?=esc(_('Forum postings:'))?></td>
+    <td><?php echo esc(_('Forum postings:'))?></td>
 <?php if ($may_edit) { ?>
-    <td><?=$user->get_postings_url_html($n_postings)?></td>
+    <td><?php echo $user->get_postings_url_html($n_postings)?></td>
 <?php } else { ?>
-    <td><?=$n_postings?></td>
+    <td><?php echo $n_postings?></td>
 <?php } ?>
   </tr>
   <tr>
-    <td><?=esc(_('Email:'))?></td>
+    <td><?php echo esc(_('Email:'))?></td>
 <?php if ($user->mail_is_public()) { ?>
-    <td><?=esc($user->get_mail())?></td>
+    <td><?php echo esc($user->get_mail())?></td>
 <?php } else { ?>
-    <td><i><?=esc(_('Not public'))?></i></td>
+    <td><i><?php echo esc(_('Not public'))?></i></td>
 <?php } ?>
   </tr>
   <tr>
-    <td><?=esc(_('Homepage:'))?></td>
+    <td><?php echo esc(_('Homepage:'))?></td>
     <td>
 <?php if ($user->get_homepage()) { ?>
-      <?=$user->get_homepage_url_html()?>
+      <?php echo $user->get_homepage_url_html()?>
 <?php } else { ?>
-      <i><?=esc(_('None'))?></i>
+      <i><?php echo esc(_('None'))?></i>
 <?php } ?>
     </td>
   </tr>
   <tr>
-    <td><?=esc(_('Instant messenger:'))?></td>
+    <td><?php echo esc(_('Instant messenger:'))?></td>
     <td>
 <?php if ($user->get_im()) { ?>
-      <?=esc($user->get_im())?>
+      <?php echo esc($user->get_im())?>
 <?php } else { ?>
-      <i><?=esc(_('None'))?></i>
+      <i><?php echo esc(_('None'))?></i>
 <?php } ?>
     </td>
   </tr>
 </table>
 
 <?php if ($is_self) { ?>
-<h3><?=esc(_('User Settings'))?></h3>
+<h3><?php echo esc(_('User Settings'))?></h3>
 
 <table summary=''>
   <tr>
-    <td><?=esc(_('Is (by default) notified of new responses by email:'))?></td>
+    <td><?php echo esc(_('Is (by default) notified of new responses by email:'))?></td>
     <td>
 <?php if ($user->get_do_notify()) { ?>
-      <?=esc(_('Yes'))?>
+      <?php echo esc(_('Yes'))?>
 <?php } else { ?>
-      <?=esc(_('No'))?>
+      <?php echo esc(_('No'))?>
 <?php } ?>
     </td>
   </tr>

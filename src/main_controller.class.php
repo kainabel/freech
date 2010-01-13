@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-define('FREECH_VERSION', '0.9.19');
+define('FREECH_VERSION', '0.9.20');
 ini_set('arg_separator.output', '&');
 error_reporting(E_ALL & ~E_NOTICE);
 
@@ -506,13 +506,18 @@ class MainController {
   function _send_mail(&$user, $subject, $body, $vars = NULL) {
     if (!$vars)
       $vars = array();
-    $head = 'From: '.cfg('mail_from');
     $vars['site_title'] = cfg('site_title');
     $vars['login']      = $user->get_name();
     $vars['firstname']  = $user->get_firstname();
     $vars['lastname']   = $user->get_lastname();
+    $head  = 'MIME-Version: 1.0'."\r\n"
+           . 'From: '.cfg('mail_from')."\r\n"
+           . 'Content-Type: text/plain; charset=UTF-8'."\r\n"
+           . 'Content-Transfer-Encoding: 8bit';
     $subject            = replace_vars($subject, $vars);
     $body               = replace_vars($body,    $vars);
+    // encode to UTF-8
+    $subject  = '=?UTF-8?B?'.base64_encode($subject).'?=';
     mail($user->get_mail(), $subject, $body, $head);
   }
 

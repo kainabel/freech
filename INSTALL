@@ -3,7 +3,7 @@ Prerequirements for Installation
 
  * A running MySQL database (5.0 or greater).
    The server *must* be configured to support InnoDB tables.
- * A webserver with PHP5 support.
+ * A webserver with PHP5 support. (PHP5 < PHP5.3)
  * PHP gettext support.
 
 
@@ -21,7 +21,7 @@ Installation Instructions
 
     allow_call_time_pass_reference On
     register_long_arrays On
-    short_open_tag On
+    <del>short_open_tag On</del> hopefully cleaned up since r793
 
 1. Copy the contents of the "src/" directory to your webserver, including all
    subdirectories.

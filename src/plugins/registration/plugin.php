@@ -136,7 +136,7 @@ function registration_mail_send(&$api, &$user) {
   $url      = cfg('site_url') . '?action=account_confirm'
             . "&username=$username&hash=$hash";
   $api->send_mail($user, $subject, $body, array('url' => $url));
-  include dirname(__FILE__).'/registration_controller.class.php';
+  include_once dirname(__FILE__).'/registration_controller.class.php';
   $controller = new RegistrationController($api);
   $controller->show_mail_sent($user);
 }

@@ -287,6 +287,16 @@ class Posting {
   }
 
 
+  // used in plugin mail
+  function get_url_text() {
+    global $cfg;
+    $url  = $cfg['site_url'].'?action=read'
+          . '&msg_id=' . $this->fields['id']
+          . '&forum_id=';
+    return $url;
+  }
+
+
   function get_thread_url() {
     $url = new FreechURL('', $this->get_subject());
     $url->set_var('action',    'read');

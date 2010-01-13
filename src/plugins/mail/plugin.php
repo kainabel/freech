@@ -22,20 +22,24 @@ function mail_on_submit(&$api, &$parent_id, &$message) {
     return;
 
   // Find the user that requested the notification.
-  $user_id = $parent->get_user_id();
-  $user    = $api->userdb()->get_user_from_id($user_id);
+  $user_id  = $parent->get_user_id();
+  $forum_id = $parent->get_forum_id();
+  $user     = $api->userdb()->get_user_from_id($user_id);
   if (!$user)
     return;
 
   // Send the email notification.
   $subject = '[SITE_TITLE]: '.$message->get_subject();
+  $url     = $message->get_url_text() . $forum_id;
   $vars    = array('subject' => $parent->get_subject(),
                    'sender'  => $message->get_username(),
-                   'body'    => $message->get_body());
+                   'body'    => $message->get_body(),
+                   'url'     => $url);
   $body    = _("Hello [FIRSTNAME] [LASTNAME],\n"
              . "\n"
              . "Your posting \"[SUBJECT]\" has received the following"
              . " response from [SENDER].\n"
+             . "URL: [URL]\n"
              . "\n"
              . "*******************************************************\n"
              . "[BODY]"

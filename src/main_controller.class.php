@@ -510,10 +510,10 @@ class MainController {
     $vars['login']      = $user->get_name();
     $vars['firstname']  = $user->get_firstname();
     $vars['lastname']   = $user->get_lastname();
-    $head  = 'MIME-Version: 1.0'."\r\n"
-           . 'From: '.cfg('mail_from')."\r\n"
-           . 'Content-Type: text/plain; charset=UTF-8'."\r\n"
-           . 'Content-Transfer-Encoding: 8bit';
+    $head  = 'MIME-Version: 1.0'."\n"
+           . 'From: '.cfg('mail_from')."\n"
+           . 'Content-Type: text/plain; charset=UTF-8'."\n"
+           . 'Content-Transfer-Encoding: 8bit'."\n";
     $subject            = replace_vars($subject, $vars);
     $body               = replace_vars($body,    $vars);
     // encode to UTF-8

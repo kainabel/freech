@@ -13,202 +13,204 @@
   // The default language of the user interface elements.
   // For a list of supported languages please have a look
   // at the "language/" subdirectory.
-  $cfg[default_language] = 'en_EN';
+  $cfg['default_language'] = 'en_EN';
 
   // The country code of the language of the content on your site.
   // This is used in the RSS feed.
-  $cfg[content_language] = 'en';
+  $cfg['content_language'] = 'en';
 
   // The address used in the "from" field of any mail sent by the forum.
-  $cfg[mail_from] = 'noreply@debain.org';
+  $cfg['mail_from'] = 'noreply@localhost';
 
   // A human readable title for your forum.
-  $cfg[site_title] = 'Freech Forum';
+  $cfg['site_title'] = 'Freech Forum';
 
   // The descripton included in the RSS feed.
-  $cfg[rss_description] = 'Freech Discussion Forum';
+  $cfg['rss_description'] = 'Freech Discussion Forum';
 
   // *************************************************************
   // Forum appearance.
   // *************************************************************
   // For a list of available themes please have a look into the 'themes/'
   // subdirectory.
-  $cfg[theme] = 'heise';
+  $cfg['theme'] = 'heise';
 
   // The default display type. Allowed values depend on the installed
   // plugins, by default 'list', 'thread', or 'bbview'.
-  $cfg[default_view] = 'thread';
+  $cfg['default_view'] = 'thread';
 
   // If a default forum id is given then the corresponding forum is shown
   // in place of the homepage.
-  //$cfg[default_forum_id] = 1;
+  //$cfg['default_forum_id'] = 1;
 
   // Maximum number of threads shown per page. (when shown in thread order)
-  $cfg[tpp] = 16;
+  $cfg['tpp'] = 16;
 
   // Maximum number of postings shown per page. (when shown in time order)
-  $cfg[epp] = 30;
+  $cfg['epp'] = 30;
 
   // Maximum number of pages shown in the index before the [...] button
   // appears.
-  $cfg[ppi] = 5;
+  $cfg['ppi'] = 5;
 
   // Defines whether threads in thread view are folded by default.
   // Possible values are THREAD_STATE_FOLDED or THREAD_STATE_UNFOLDED.
-  $cfg[default_thread_state] = THREAD_STATE_UNFOLDED;
+  $cfg['default_thread_state'] = THREAD_STATE_UNFOLDED;
 
   // May users edit their postings?
-  $cfg[postings_editable] = TRUE;
+  $cfg['postings_editable'] = TRUE;
 
   // If TRUE, "Posting >>" points to the previous thread.
-  $cfg[posting_arrow_reverse] = FALSE;
+  $cfg['posting_arrow_reverse'] = FALSE;
 
   // If TRUE, "Thread >>" points to the previous thread.
-  $cfg[thread_arrow_reverse] = FALSE;
+  $cfg['thread_arrow_reverse'] = FALSE;
 
   // If TRUE, the current page in the index is remembered even when reading
   // a posting. This comes at the cost of less stable URLs.
-  $cfg[remember_page] = FALSE;
+  $cfg['remember_page'] = FALSE;
 
   // Specifies which URLs the linkify plugin converts to links.
-  $cfg[autolink_pattern] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
+  $cfg['autolink_pattern'] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
 
   // The time a posting is considered new (and highlighted). In seconds.
-  $cfg[new_post_time] = 60*60*24;
+  $cfg['new_post_time'] = 60*60*24;
 
   // Maximum length of the subject line.
-  $cfg[max_subjectlength] = 70;
+  $cfg['max_subjectlength'] = 70;
 
   // Maximum length of a message. If the length is exceeded the forum displays
   // an error message at the time a message is submitted.
-  $cfg[max_msglength] = 10000;
+  $cfg['max_msglength'] = 10000;
 
   // Number of characters before a line in a message wraps.
-  $cfg[max_linelength] = 80;
+  $cfg['max_linelength'] = 80;
 
   // The default number of entries in your RSS file (if the 'len' attribute
   // is not passed as a GET variable).
-  $cfg[rss_items] = 10;
+  $cfg['rss_items'] = 10;
 
   // The maximum number of entries in your RSS file.
-  $cfg[rss_maxitems] = 20;
+  $cfg['rss_maxitems'] = 20;
 
   // The following options define which values are allowed in the user
   // profile.
-  $cfg[min_usernamelength]    = 3;
-  $cfg[max_usernamelength]    = 30;
-  $cfg[username_pattern]      = '/^[a-z0-9 _\-\.]+$/i';
-  $cfg[min_passwordlength]    = 5;
-  $cfg[max_passwordlength]    = 20;
-  $cfg[min_firstnamelength]   = 3;
-  $cfg[max_firstnamelength]   = 30;
-  $cfg[min_lastnamelength]    = 3;
-  $cfg[max_lastnamelength]    = 30;
-  $cfg[max_maillength]        = 100;
-  $cfg[max_homepageurllength] = 100;
-  $cfg[max_imlength]          = 100;
+  $cfg['min_usernamelength']    = 3;
+  $cfg['max_usernamelength']    = 30;
+  $cfg['username_pattern']      = '/^[a-z0-9 _\-\.]+$/i';
+  $cfg['min_passwordlength']    = 5;
+  $cfg['max_passwordlength']    = 20;
+  $cfg['min_firstnamelength']   = 3;
+  $cfg['max_firstnamelength']   = 30;
+  $cfg['min_lastnamelength']    = 3;
+  $cfg['max_lastnamelength']    = 30;
+  $cfg['max_maillength']        = 100;
+  $cfg['max_homepageurllength'] = 100;
+  $cfg['max_imlength']          = 100;
 
   // Maximum number of moderation log entries per page.
-  $cfg[modlog_epp] = 50;
+  $cfg['modlog_epp'] = 50;
 
   // Number of items shown in the recent activity lists on the homepage.
-  $cfg[homepage_n_entries] = 8;
+  $cfg['homepage_n_entries'] = 8;
 
   // The format of the date/time.
-  $cfg[dateformat] = '%x %X';
+  $cfg['dateformat'] = '%x %X';
 
   // *************************************************************
   // Advanced settings.
   // *************************************************************
   // Active plugins.
-  $cfg[plugins] = array('bbview'       => TRUE,
-                        'linkify'      => TRUE,
-                        'listview'     => TRUE,
-                        'message'      => TRUE,
-                        'poll'         => TRUE,
-                        'registration' => TRUE,
-                        'search'       => TRUE,
-                        'spamhash'     => TRUE,
-                        'statistics'   => TRUE,
-                        'threadview'   => TRUE,
-                        'mail'         => TRUE,
-                        'top_users'    => TRUE);
+  $cfg['plugins'] = array(
+    'bbview'       => TRUE,
+    'linkify'      => TRUE,
+    'listview'     => TRUE,
+    'message'      => TRUE,
+    'poll'         => TRUE,
+    'registration' => TRUE,
+    'search'       => TRUE,
+    'spamhash'     => TRUE,
+    'statistics'   => TRUE,
+    'threadview'   => TRUE,
+    'mail'         => TRUE,
+    'top_users'    => TRUE,
+  );
 
   // Allows for adding a prefix to your database table names.
   // Note that you will have to rename the tables yourself.
   // If unsure, leave this setting unchanged.
-  $cfg[db_tablebase] = 'freech_';
+  $cfg['db_tablebase'] = 'freech_';
 
   // When embedding the forum into your own websites it may be useful to carry
   // along additional variables in the forum. Every key/value pair in this
   // array is automatically added to all URLs created by the forum.
-  $cfg[urlvars] = array(
-    'sid' => $_GET[sid]
+  $cfg['urlvars'] = array(
+    'sid' => $_GET['sid']
   );
 
   // Defines the time a user stays logged in when the "remember password"
   // flag is set below the login form. Note that your PHP configuration must
   // allow long session timeouts for this to work.
-  $cfg[login_time] = 60*60*24*120;
+  $cfg['login_time'] = 60*60*24*120;
 
   // Defines the time at which cookies set by the forum expire.
   // For example, setting this to
-  //   $cfg[cookie_expire_time] = time() + 60*60*24*30;
+  //   $cfg['cookie_expire_time'] = time() + 60*60*24*30;
   // will cause cookies to expire in 30 days.
   // If this value is 0, cookies are deleted at the end of the session.
-  $cfg[cookie_expire_time] = 0;
+  $cfg['cookie_expire_time'] = 0;
 
   // Newly registered users are added into the group with the given ID.
-  $cfg[default_group_id] = 3;
+  $cfg['default_group_id'] = 3;
 
   // Anonymous users are automatically logged into the forum as the user/group
   // with the given id.
-  $cfg[anonymous_user_id]  = 1;
-  $cfg[anonymous_group_id] = 2;
+  $cfg['anonymous_user_id']  = 1;
+  $cfg['anonymous_group_id'] = 2;
 
   // When TRUE, the total rendering time is shown below the footer.
-  $cfg[show_total_render_time] = FALSE;
+  $cfg['show_total_render_time'] = FALSE;
 
   // The number of days back to show in the forum statistics.
-  $cfg[statistics_timespan] = 30;
+  $cfg['statistics_timespan'] = 30;
 
   // To plot traffic data in the forum statistics you may
   // add a CSV file with data here. The CVS file should contain two
   // columns in the following format:
   //  2008-01-22,1234
   // where "1234" is the traffic on that specific day, in bytes.
-  $cfg[statistics_traffic_data] = '';
+  $cfg['statistics_traffic_data'] = '';
 
   // Similar to the traffic data above, you may also display an additional
   // posting plot. The CVS file should contain two
   // columns in the following format:
   //  2008-01-22,1234
   // where "1234" is the number of postings on that specific day.
-  $cfg[statistics_extra_data] = '';
-  $cfg[statistics_extra_label] = 'Extra';
+  $cfg['statistics_extra_data'] = '';
+  $cfg['statistics_extra_label'] = 'Extra';
 
   // This is a flood blocker: You may specify the maximum number of
   // postings per n seconds.
-  $cfg[max_postings] = 5;
-  $cfg[max_postings_time] = 60*3;
+  $cfg['max_postings'] = 5;
+  $cfg['max_postings_time'] = 60*3;
 
   // Maximum number of polls per n seconds.
-  $cfg[max_polls] = 3;
-  $cfg[max_polls_time] = 60*60*24;
+  $cfg['max_polls'] = 3;
+  $cfg['max_polls_time'] = 60*60*24;
 
   // *************************************************************
   // Developer's settings.
   // *************************************************************
   // Whether to log trace() statements.
-  $cfg[trace_calls] = FALSE;
-  $cfg[trace_log] = dirname(__FILE__) . '/data/trace.log';
+  $cfg['trace_calls'] = FALSE;
+  $cfg['trace_log'] = dirname(__FILE__) . '/data/trace.log';
 
   // Do not change this.
   $urlvars_str = http_build_query($cfg['urlvars']);
-  $cfg[urlvars_str] = $urlvars_str ? $urlvars_str . '&amp;' : '';
+  $cfg['urlvars_str'] = $urlvars_str ? $urlvars_str . '&amp;' : '';
 
   // Do not change this.
-  $cfg[new_post_time_abs] = time() - $cfg[new_post_time];
+  $cfg['new_post_time_abs'] = time() - $cfg['new_post_time'];
 
   // *************************************************************
   // Performance tweaks.
@@ -216,7 +218,7 @@
   // Whether to check templates for changes. Setting this to FALSE
   // will significantly enhance performance at the cost of changed
   // templates getting out of date.
-  $cfg[check_cache] = TRUE;
+  $cfg['check_cache'] = TRUE;
 
   // Whether to use persistent DB connections. This must be allowed
   // in your php.ini to work.
@@ -224,24 +226,24 @@
   // number of concurrent database connections and more memory, so
   // this may be a bad idea on hosts that have a large number of
   // concurrent visitors.
-  $cfg[persistent_db_connection] = FALSE;
+  $cfg['persistent_db_connection'] = FALSE;
 
   // Disable the visitor counter that is shown above the forum. Note that
   // disabling the counter provides a significant performance gain.
-  $cfg[disable_visitor_counter] = FALSE;
+  $cfg['disable_visitor_counter'] = FALSE;
 
   // Disable the posting counter that is shown on the homepage. Note that
   // disabling the counter provides a significant performance gain.
-  $cfg[disable_posting_counter] = FALSE;
+  $cfg['disable_posting_counter'] = FALSE;
 
   // If the following is set to FALSE, the permissions set for anonymous
   // users in the DB are ignored. Instead, the forum will use a default
   // set of permissions.
   // Setting this to TRUE has a negative performance impact because the
   // database needs to be contacted to determine the user permissions.
-  $cfg[manage_anonymous_users] = TRUE;
+  $cfg['manage_anonymous_users'] = TRUE;
 
   // If manage_anonymous_users is FALSE, the default anonymous user uses
   // the following name.
-  $cfg[anonymous_group_name] = 'anonymous';
+  $cfg['anonymous_group_name'] = 'anonymous';
 ?>

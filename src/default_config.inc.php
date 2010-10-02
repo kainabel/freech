@@ -124,7 +124,7 @@
   $cfg['plugins'] = array(
     'bbview'       => TRUE,
     'linkify'      => TRUE,
-    'listview'     => TRUE,
+    'listview'     => (bool) (PHP_VERSION < '5.3'), // TODO: broken in PHP5.3+
     'message'      => TRUE,
     'poll'         => TRUE,
     'registration' => TRUE,

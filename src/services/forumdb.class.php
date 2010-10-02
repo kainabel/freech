@@ -459,7 +459,7 @@
       $numrows = $_res->RecordCount();
       while (!$_res->EOF) {
         $posting = $this->_get_posting_from_assoc($_res->fields);
-        call_user_func($_func, $posting, $_data);
+        call_user_func($_func, &$posting, &$_data);
         $_res->MoveNext();
       }
       return $numrows;

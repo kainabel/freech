@@ -19,9 +19,12 @@ Installation Instructions
 
 0. Configure your PHP installation. The following options are required:
 
-    allow_call_time_pass_reference On
-    register_long_arrays On
-    <del>short_open_tag On</del> hopefully cleaned up since r793
+    allow_call_time_pass_reference = On
+    short_open_tag = Off
+
+    Please also setup your default timezone.
+    http://php.net/date.timezone
+    e.g. date.timezone = "Europe/Berlin"
 
 1. Copy the contents of the "src/" directory to your webserver, including all
    subdirectories.

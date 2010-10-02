@@ -1321,7 +1321,7 @@ class MainController {
     // first to allow plugins for overriding the default handler.
     if ($this->actions[$action]) {
       trace('plugin action started');
-      call_user_func($this->actions[$action], $this->api);
+      call_user_func($this->actions[$action], &$this->api);
       trace('plugin action completed');
       $this->_print_footer();
       $this->content = ob_get_contents();

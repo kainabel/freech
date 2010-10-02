@@ -30,6 +30,6 @@ function trace() {
     return;
   $args = func_get_args();
   global $tracer;
-  call_user_func_array(array(&$tracer, 'trace'), $args);
+  call_user_func_array(array(&$tracer, 'trace'), &$args);
 }
 ?>

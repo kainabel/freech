@@ -28,8 +28,8 @@ include 'functions/trace.inc.php';
 trace('Start');
 
 $ADODB_INCLUDED_CSV = TRUE;
-require 'adodb/adodb.inc.php';
-trace('Adodb imported');
+require 'adodb5/adodb.inc.php';
+trace('Adodb5 imported');
 
 include 'libuseful/string.inc.php';
 include 'services/trackable.class.php';

@@ -24,8 +24,9 @@
  * as the page on which a posting is shown.
  */
 class ListView extends View {
+
   function ListView(&$_forum) {
-    $this->View($_forum);
+    parent::__construct($_forum);
     $this->postings    = array();
     $this->posting_map = array();
   }

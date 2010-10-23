@@ -3,14 +3,15 @@
 <h3><?php echo esc(sprintf(_('Postings and traffic of the last %s days'), $days))?></h3>
 
 <div id="placeholder" style="width:600px;height:300px;"></div>
-<!--[if IE]>
+
+<!--[if lt IE 9]>
   <script type="text/javascript" src="<?php echo $plugin_dir?>/excanvas.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="<?php echo $plugin_dir?>/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo $plugin_dir?>/jquery.flot.min.js"></script>
 <script type="text/javascript" src="<?php echo $plugin_dir?>/jquery.flot.crosshair.js"></script>
 <script type="text/javascript">
-//<![CDATA[
+<!--//--><![CDATA[//><!--
 function day_formatter(val, axis) {
   var now  = Math.round(new Date().getTime()/1000.0);
   var time = new Date((now - (<?php echo $days?> - val) * <?php echo $resolution?>) * 1000);
@@ -60,6 +61,6 @@ $(function () {
     }
   });
 });
-//]]>
+//--><!]]>
 </script>
 <!-- end statistics -->

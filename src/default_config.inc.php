@@ -71,7 +71,7 @@
   $cfg['remember_page'] = FALSE;
 
   // Specifies which URLs the linkify plugin converts to links.
-  $cfg['autolink_pattern'] = '(ht|f)tp:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
+  $cfg['autolink_pattern'] = '(ht|f)tps?:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
 
   // The time a posting is considered new (and highlighted). In seconds.
   $cfg['new_post_time'] = 60*60*24;

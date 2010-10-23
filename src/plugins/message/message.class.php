@@ -39,7 +39,7 @@ class Message extends PostingDecorator {
       $body = preg_replace('/^(&gt; [^\r\n]*)/m',
                            "<span class='quote'>$1</span>",
                            $body);
-      $body = preg_replace('/  /', '&nbsp;&nbsp;', $body);
+      $body = preg_replace('/  /', ' &nbsp;', $body);
       $body = nl2br($body);
       $this->set_body_html($body);
 

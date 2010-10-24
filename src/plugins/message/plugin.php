@@ -23,6 +23,15 @@ function message_init(&$api) {
 
 
 function message_on_run(&$api) {
+
+  if (cfg('set_read_only')) {
+    $api->group()->permissions['write'] = FALSE;
+    $api->unregister_action('write');
+    $api->unregister_action('respond');
+    $api->unregister_action('edit');
+    return;
+  }
+
   if (!$api->group()->may('write'))
     return;
 

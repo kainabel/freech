@@ -223,6 +223,11 @@ class Freech {
   }
 
 
+  function unregister_action($_action) {
+    return $this->controller->register_action($_action, NULL);
+  }
+
+
   function register_view($_name, $_view, $_caption, $_priority) {
     return $this->controller->register_view($_name,
                                             $_view,

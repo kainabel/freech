@@ -75,7 +75,7 @@ class Poll extends PostingDecorator {
       return $controller->get_poll_result($poll);
     }
 
-    if ($_GET['result'])
+    if ($_GET['result'] or cfg('set_read_only'))
       return $controller->get_poll_result($poll);
 
     if ($_GET['accept'])

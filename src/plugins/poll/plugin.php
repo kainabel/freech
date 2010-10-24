@@ -27,6 +27,15 @@ function poll_init(&$api) {
 
 
 function poll_on_run(&$api) {
+
+  if (cfg('set_read_only')) {
+    $api->group()->permissions['write'] = FALSE;
+    $api->unregister_action('poll_add');
+    $api->unregister_action('poll_on_submit');
+    $api->unregister_action('poll_vote');
+    return;
+  }
+
   if (!$api->group()->may('write'))
     return;
 

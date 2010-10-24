@@ -29,6 +29,16 @@
   $cfg['rss_description'] = 'Freech Discussion Forum';
 
   // *************************************************************
+  // Panic option. ;-)
+  // *************************************************************
+  // Revokes all write permissions for messages and polls for ALL user groups.
+  // (The rights in the database table freech_permission will not be altered.)
+  // All other actions e.g. user registrations, moderating and administration
+  // of the forums are still permitted.
+
+  $cfg['set_read_only'] = FALSE;
+
+  // *************************************************************
   // Forum appearance.
   // *************************************************************
   // For a list of available themes please have a look into the 'themes/'

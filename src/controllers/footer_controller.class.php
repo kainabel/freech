@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003 Samuel Abels
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,6 +36,12 @@
               . '&nbsp;' . $url->get_html()
               . '</span>';
         $this->api->links('footer')->add_html($html, 200);
+      }
+
+      if (cfg('goto_top_enabled')) {
+        $top_link = "<a id='goto_top' href='#top'>"
+                  . esc(_('Go to top')) . "</a>";
+        $this->api->links('footer')->add_html($top_link, 300);
       }
 
       // Render the resulting template.

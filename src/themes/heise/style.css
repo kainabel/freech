@@ -249,6 +249,18 @@ input {
   padding: 0;
 }
 
+#footer li.separator {
+  padding-left: .25em;
+  padding-right: .25em;
+}
+
+#goto_top,
+#goto_top:link,
+#goto_top:visited,
+#goto_top:active {
+  color:#039;
+}
+
 #rss img {
   border: 0;
 }

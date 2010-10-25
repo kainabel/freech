@@ -189,6 +189,9 @@
   $cfg['anonymous_user_id']  = 1;
   $cfg['anonymous_group_id'] = 2;
 
+  // When TRUE, top link is shown in the footer.
+  $cfg['goto_top_enabled'] = TRUE;
+
   // When TRUE, the total rendering time is shown below the footer.
   $cfg['show_total_render_time'] = FALSE;
 

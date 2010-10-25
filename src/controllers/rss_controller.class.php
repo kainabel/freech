@@ -71,7 +71,7 @@
 
       if ($_n_entries < 1)
         $_n_entries = cfg('rss_items');
-      $n_entries = min(cfg('rss_maxitems'), $_n_entries);
+      $n_entries = min(cfg('rss_max_items'), $_n_entries);
 
       $this->forumdb->foreach_latest_posting((int)$_forum_id,
                                              (int)$_off,
@@ -84,10 +84,12 @@
       $this->clear_all_assign();
       $this->assign_by_ref('title',       $this->title);
       $this->assign_by_ref('link',        $this->url);
+      $this->assign_by_ref('site',        cfg('site_url'));
+      $this->assign_by_ref('show_message',cfg('rss_show_message'));
       $this->assign_by_ref('language',    $this->countrycode);
       $this->assign_by_ref('description', $this->descr);
       $this->assign_by_ref('postings',    $this->postings);
-      $this->render_php('../rss.php.tmpl');
+      $this->render_php('rss.php.tmpl');
     }
   }
 ?>

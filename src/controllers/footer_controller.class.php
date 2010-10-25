@@ -23,18 +23,20 @@
     function show($_forum_id) {
       $url = new FreechURL('http://code.google.com/p/freech/',
                            'Powered by Freech '.FREECH_VERSION);
-      $this->api->links('footer')->add_link($url);
+      $this->api->links('footer')->add_link($url, 100);
 
-      $url = new FreechURL('rss.php', _('RSS feed'));
-      $url->set_var('forum_id', (int)$_forum_id);
+      if (cfg('rss_enabled')) {
+        $url = new FreechURL('rss.php', _('RSS feed'));
+        $url->set_var('forum_id', (int)$_forum_id);
 
-      $html = '<span id="rss">'
-            . '<a href="' . $url->get_string(TRUE) . '">'
-            . '<img src="themes/' . cfg('theme') . '/img/rss.png" alt="" />'
-            . '</a>'
-            . '&nbsp;' . $url->get_html()
-            . '</span>';
-      $this->api->links('footer')->add_html($html);
+        $html = '<span id="rss">'
+              . '<a href="' . $url->get_string(TRUE) . '">'
+              . '<img src="themes/' . cfg('theme') . '/img/rss.png" alt="" />'
+              . '</a>'
+              . '&nbsp;' . $url->get_html()
+              . '</span>';
+        $this->api->links('footer')->add_html($html, 200);
+      }
 
       // Render the resulting template.
       $this->clear_all_assign();

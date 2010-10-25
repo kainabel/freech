@@ -430,12 +430,12 @@ class Posting {
 
 
   function set_created_unixtime($_time) {
-    $this->fields[created] = (int)$_time;
+    $this->fields['created'] = (int)$_time;
   }
 
 
   function get_created_unixtime() {
-    return $this->fields[created];
+    return $this->fields['created'];
   }
 
 
@@ -469,12 +469,12 @@ class Posting {
 
 
   function set_updated_unixtime($_time) {
-    $this->fields[updated] = (int)$_time;
+    $this->fields['updated'] = (int)$_time;
   }
 
 
   function get_updated_unixtime() {
-    return $this->fields[updated];
+    return $this->fields['updated'];
   }
 
 
@@ -487,7 +487,7 @@ class Posting {
 
 
   function get_thread_updated_unixtime() {
-    return $this->fields[threadupdate];
+    return $this->fields['threadupdate'];
   }
 
 
@@ -532,12 +532,12 @@ class Posting {
 
 
   function set_relation($_relation) {
-    $this->fields[relation] = $_relation;
+    $this->fields['relation'] = $_relation;
   }
 
 
   function get_relation() {
-    return $this->fields[relation];
+    return $this->fields['relation'];
   }
 
 
@@ -547,22 +547,22 @@ class Posting {
 
 
   function set_status($_status) {
-    $this->fields[status] = (int)$_status;
+    $this->fields['status'] = (int)$_status;
   }
 
 
   function get_status() {
-    return $this->fields[status];
+    return $this->fields['status'];
   }
 
 
   function set_force_stub($_force_stub = TRUE) {
-    $this->fields[force_stub] = (bool)$_force_stub;
+    $this->fields['force_stub'] = (bool)$_force_stub;
   }
 
 
   function get_force_stub() {
-    return $this->fields[force_stub];
+    return $this->fields['force_stub'];
   }
 
 

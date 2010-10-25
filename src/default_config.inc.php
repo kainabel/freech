@@ -25,8 +25,26 @@
   // A human readable title for your forum.
   $cfg['site_title'] = 'Freech Forum';
 
+  // *************************************************************
+  // RSS 2.0 feed settings.
+  // *************************************************************
+  // The request of a RSS client will be answered with a HTTP 410 response,
+  // if switched off.
+  $cfg['rss_enabled'] = TRUE;
+
   // The descripton included in the RSS feed.
   $cfg['rss_description'] = 'Freech Discussion Forum';
+
+  // Deliver whole message with the RSS feed or only the URL to the message.
+  $cfg['rss_show_message'] = FALSE;
+
+  // The default number of entries in your RSS file (if the 'len' attribute
+  // is not passed as a GET variable).
+  $cfg['rss_items'] = 10;
+
+  // The maximum number of entries in your RSS file.
+  $cfg['rss_max_items'] = 20;
+
 
   // *************************************************************
   // Panic option. ;-)
@@ -95,13 +113,6 @@
 
   // Number of characters before a line in a message wraps.
   $cfg['max_linelength'] = 80;
-
-  // The default number of entries in your RSS file (if the 'len' attribute
-  // is not passed as a GET variable).
-  $cfg['rss_items'] = 10;
-
-  // The maximum number of entries in your RSS file.
-  $cfg['rss_maxitems'] = 20;
 
   // The following options define which values are allowed in the user
   // profile.

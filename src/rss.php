@@ -1,8 +1,8 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
-  
+  Copyright (C) 2003 Samuel Abels
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -19,14 +19,20 @@
   */
 ?>
 <?php
+
   include 'freech.class.php';
+
+  if (!cfg('rss_enabled')) {
+    header("HTTP/1.0 410 Gone");
+    die();
+  }
 
   $freech = new Freech;
   header('Content-Type: text/xml; charset=utf-8');
   $freech->print_rss($_GET[forum_id],
                      cfg('site_title'),
                      cfg('rss_description'),
-                     $_GET[hs],
-                     $_GET[len]);
+                     $_GET['hs'],
+                     $_GET['len']);
   $freech->destroy();
 ?>

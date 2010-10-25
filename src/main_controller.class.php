@@ -1286,7 +1286,11 @@ class MainController {
     $this->content = '';
     $rss = new RSSController($this->api);
     $rss->set_base_url(cfg('site_url'));
-    $rss->set_title($_title);
+    if (isset($_forum_id)) {
+      $rss->set_title($_title.' - '.$this->get_current_forum()->get_name());
+    } else {
+      $rss->set_title($_title);
+    }
     $rss->set_description($_descr);
     $rss->set_language(cfg('content_language'));
     $rss->show((int)$_forum_id, (int)$_off, (int)$_n_entries);

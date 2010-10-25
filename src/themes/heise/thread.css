@@ -128,14 +128,14 @@ table#thread_view tr:hover a {
   width: 80%;
 }
 
-#moderator_buttons {
+.moderator_buttons {
   list-style: none;
   text-align: center;
   margin: 0px;
   padding: 0;
 }
 
-#moderator_buttons li {
+.moderator_buttons li {
   display: inline;
   padding: 0;
   margin: 0;

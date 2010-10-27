@@ -76,6 +76,9 @@ input {
   border: 1px solid #4eee00;
 }
 
+.read_only {
+  border-bottom: 1px dashed #f60;
+}
 
 /**
  * Series of links provided by the forum.

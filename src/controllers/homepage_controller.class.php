@@ -48,7 +48,8 @@ class HomepageController extends Controller {
     if ($may_edit)
       $forums = $this->forumdb->get_forums();
     else
-      $forums = $this->forumdb->get_forums(FORUM_STATUS_ACTIVE);
+      // do not show inactive forums
+      $forums = $this->forumdb->get_not_forums(FORUM_STATUS_INACTIVE);
     if (!cfg('disable_posting_counter')) {
       foreach ($forums as $forum) {
         $search     = array('forum_id' => $forum->get_id());

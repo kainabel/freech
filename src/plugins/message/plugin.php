@@ -24,6 +24,13 @@ function message_init(&$api) {
 
 function message_on_run(&$api) {
 
+  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
+
+  // go away in the absence of write permission
+  if (!$api->group()->may('write'))
+    return;
+
+  // 'panic' switch in config file was set
   if (cfg('set_read_only')) {
     $api->group()->permissions['write'] = FALSE;
     $api->unregister_action('write');
@@ -32,12 +39,19 @@ function message_on_run(&$api) {
     return;
   }
 
-  if (!$api->group()->may('write'))
+  // permission to write on read only forums?
+  // moderator actions are still permitted
+  if ( isset($forum_id) && $api->forum()->is_readonly()
+       && !$api->group()->may('write_ro') ) {
+    $api->group()->permissions['write'] = FALSE;
+    $api->unregister_action('write');
+    $api->unregister_action('respond');
+    $api->unregister_action('edit');
     return;
+  }
 
   // Add 'new message' button to the index bar.
-  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
-  $url      = new FreechURL('', _('Start a New Topic'));
+  $url = new FreechURL('', _('Start a New Topic'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action',   'write');
   $api->links('page')->add_link($url, 200);

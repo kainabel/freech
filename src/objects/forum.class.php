@@ -21,6 +21,7 @@
 <?php
   define('FORUM_STATUS_INACTIVE', 0);
   define('FORUM_STATUS_ACTIVE',   1);
+  define('FORUM_STATUS_READONLY', 2);
 
   class Forum {
     function Forum(&$_row = '') {
@@ -117,14 +118,18 @@
 
 
     function is_active() {
-      return $this->fields['status'] == FORUM_STATUS_ACTIVE;
+      return $this->fields['status'] != FORUM_STATUS_INACTIVE;
     }
 
+    function is_readonly() {
+      return $this->fields['status'] == FORUM_STATUS_READONLY;
+    }
 
     function get_status_names($_status = -1) {
       $list = array(
         FORUM_STATUS_INACTIVE => _('Inactive'),
-        FORUM_STATUS_ACTIVE   => _('Active')
+        FORUM_STATUS_ACTIVE   => _('Active'),
+        FORUM_STATUS_READONLY => _('Read Only')
       );
       if ($_status >= 0)
         return $list[$_status];

@@ -1135,5 +1135,30 @@
       }
       return $forums;
     }
+
+
+    /* Returns a list of all forums with the NOT given status.
+     * If $_status is -1 all forums are returned.
+     */
+    function get_not_forums($_status = -1, $_limit = -1, $_offset = 0) {
+      $sql = "SELECT * FROM {t_forum}";
+      if ($_status > -1)
+        $sql .= " WHERE status != {status}"; //NOTE: invertation
+      $sql  .= " ORDER BY priority DESC, id";
+      $query = new FreechSqlQuery($sql);
+      $query->set_int('status', $_status);
+      $res = $this->db->SelectLimit($query->sql(),
+                                    (int)$_limit,
+                                    (int)$_offset)
+                          or die('ForumDB::get_forums()');
+      $forums = array();
+      while (!$res->EOF) {
+        $forum = new Forum($res->fields);
+        array_push($forums, $forum);
+        $res->MoveNext();
+      }
+      return $forums;
+    }
+
   }
 ?>

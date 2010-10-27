@@ -28,6 +28,13 @@ function poll_init(&$api) {
 
 function poll_on_run(&$api) {
 
+  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
+
+  // go away in the absence of write permission
+  if (!$api->group()->may('write'))
+    return;
+
+  // 'panic' switch in config file was set
   if (cfg('set_read_only')) {
     $api->group()->permissions['write'] = FALSE;
     $api->unregister_action('poll_add');
@@ -36,11 +43,15 @@ function poll_on_run(&$api) {
     return;
   }
 
-  if (!$api->group()->may('write'))
+  // permission to add a poll on read only forums
+  // actions 'poll_vote' and 'poll_on_submit' are still permitted
+  if ( isset($forum_id) && $api->forum()->is_readonly()
+       && !$api->group()->may('write_ro') ) {
+    $api->unregister_action('poll_add');
     return;
+  }
 
   // Add a link to the poll button in the index bar.
-  $forum_id = $api->forum() ? $api->forum()->get_id() : NULL;
   $url      = new FreechURL('', _('Start a Poll'));
   $url->set_var('forum_id', $forum_id);
   $url->set_var('action'  , 'poll_add');

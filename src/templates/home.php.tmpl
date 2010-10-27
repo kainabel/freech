@@ -8,6 +8,9 @@
   <p>
 <?php if ($forum->is_active()) { ?>
     <span class="forum_link"><?php echo $forum->get_url_html()?></span>
+  <?php if ($forum->is_readonly()) { ?>
+      <span class="read_only">(read only)</span>
+  <?php } ?>
 <?php } else { ?>
     <span class="forum_link_inactive"><?php echo $forum->get_url_html()?></span>
 <?php } ?>

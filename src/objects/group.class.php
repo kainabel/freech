@@ -176,6 +176,7 @@ define('GROUP_STATUS_ACTIVE',  1);
     }
 
 
+    // the call of invalid or missing $actions returns per default FALSE
     function may($_permission) {
       return $this->permissions[$_permission] == TRUE;
     }
@@ -188,10 +189,14 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function get_permission_list() {
-      $actions     = array('write',
-                           'administer',
-                           'moderate',
-                           'delete');
+      $actions = array('write',      // write permissions
+                       'administer', // member of group admin
+                       'moderate',   // member of group moderators
+                       'delete',     // lock posts
+                       'bypass',     // show locked posts
+                       'unlock',     // unlock locked posts
+                       'write_ro',   // write on read only forums
+                       );
       $permissions = array();
       foreach ($actions as $action)
         $permissions[$action] = $this->may($action);

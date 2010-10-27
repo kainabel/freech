@@ -1,21 +1,23 @@
 <!-- moderator_buttons -->
 <ul class="moderator_buttons">
-<li>
 <?php if ($posting->is_active()) { ?>
+<li><!-- look -->
   <a href="<?php echo esc($posting->get_lock_url_string())?>">
   <img class='icon' src='<?php echo $__theme_dir?>/img/unlock.png' title='<?php echo esc(_('Lock posting'))?>' alt='[L]' />
   <span class='moderator_button_text'><?php echo esc(_('Lock posting'))?></span>
   </a>
-<?php } else { ?>
+</li>
+<?php } elseif ($may_unlock) { ?>
+<li><!-- unlock -->
   <a href="<?php echo esc($posting->get_unlock_url_string())?>">
   <img class='icon' src='<?php echo $__theme_dir?>/img/lock.png' title='<?php echo esc(_('Unlock posting'))?>' alt='[l]' />
   <span class='moderator_button_text'><?php echo esc(_('Unlock posting'))?></span>
   </a>
-<?php } ?>
 </li>
+<?php } ?>
 
 <?php if ($posting->is_parent()) { ?>
-<li>
+<li><!-- sticky -->
   <?php if ($posting->get_priority() == 0) { ?>
     <a href="<?php echo esc($posting->get_prioritize_url_string(1))?>">
     <img class='icon' src='<?php echo $__theme_dir?>/img/sticky.png' title='<?php echo esc(_('Make sticky'))?>' alt='[S]' />
@@ -29,7 +31,7 @@
   <?php } ?>
 </li>
 
-<li>
+<li><!-- move -->
   <a href="<?php echo esc($posting->get_move_url_string(1))?>">
   <img class='icon' src='<?php echo $__theme_dir?>/img/move.png' title='<?php echo esc(_('Move to a different forum'))?>' alt='[M]' />
   <span class='moderator_button_text'><?php echo esc(_('Move to a different forum'))?></span>
@@ -37,8 +39,8 @@
 </li>
 <?php } ?>
 
-<li>
-  <?php if ($posting->get_force_stub()) { ?>
+<li><!-- responses -->
+<?php if ($posting->get_force_stub()) { ?>
     <a href="<?php echo esc($posting->get_unstub_url_string())?>">
     <img class='icon' src='<?php echo $__theme_dir?>/img/stub.png' title='<?php echo esc(_('Allow responses'))?>' alt='[R]' />
     <span class='moderator_button_text'><?php echo esc(_('Allow responses'))?></span>
@@ -48,7 +50,7 @@
     <img class='icon' src='<?php echo $__theme_dir?>/img/unstub.png' title='<?php echo esc(_('Prevent responses'))?>' alt='[r]' />
     <span class='moderator_button_text'><?php echo esc(_('Prevent responses'))?></span>
     </a>
-  <?php } ?>
+<?php } ?>
 </li>
 </ul>
 <!-- moderator_buttons end -->

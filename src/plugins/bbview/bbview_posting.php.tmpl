@@ -32,7 +32,7 @@
         <?php } else { ?>
           <img src="<?php echo $__theme_dir?>/img/notnew.gif" alt="" />
         <?php } ?>
-        <?php if ($__group->may('moderate')) { ?>
+        <?php if ($__group->may('moderate')) { $may_unlock = $__group->may('unlock'); ?>
           <?php require "$template_dir/moderator_buttons.inc.php.tmpl" ?>
         <?php } ?>
       </div>

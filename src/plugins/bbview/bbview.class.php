@@ -82,7 +82,9 @@ class BBView extends View {
     $indexbar = new BBViewIndexBarReadPosting($_posting, $args);
 
     foreach ($postings as $posting) {
-      $posting->apply_block();
+      if (!$group->may('bypass')) {
+        $posting->apply_block();
+      }
       /* Plugin hook: on_message_read_print
        *   Called before the HTML for the posting is produced.
        *   Args: posting: The posting that is about to be shown.

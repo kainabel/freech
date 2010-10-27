@@ -327,6 +327,8 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'write',      1
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'administer', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'moderate',   1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'delete',     1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'bypass',     1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'unlock',     1);
 
 -- Create anonymous group.
 INSERT INTO freech_group (id, name, is_special, status, created)
@@ -347,6 +349,8 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'read',     1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'write',    1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'moderate', 1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'delete',   1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'bypass',   1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (4, 'unlock',   1);
 
 -- Create default users.
 INSERT INTO freech_user (id, group_id, status, name, password, firstname, lastname, created)

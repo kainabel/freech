@@ -709,9 +709,11 @@ class MainController {
     $this->eventbus->emit('on_message_read_print', $this->api, $posting);
 
     // Hide subject and body if the message is locked.
-    if ($posting)
-      $posting->apply_block();
-    else {
+    if ($posting) {
+      if (!$this->current_group->permissions['bypass']) {
+        $posting->apply_block();
+      }
+    } else {
       $posting = new Posting;
       $posting->set_subject(_('No Such Message'));
       $posting->set_body(_('A message with the given ID does not exist.'));

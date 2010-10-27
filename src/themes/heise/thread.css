@@ -188,6 +188,7 @@ table .rating_box .rating_100 {
 #empty_forum_message {
   margin: 5px;
   font-style: italic;
+  text-align: center;
 }
 
 

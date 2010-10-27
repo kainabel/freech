@@ -83,9 +83,11 @@ function util_execute_sql($_dbn, $_sql) {
   $db = ADONewConnection($_dbn);
   if (!$db)
     return new Result($caption, FALSE, 'Database connection failed.');
-
+  // $db->debug = TRUE;
+  $db->StartTrans();
   // Run.
   $res = $db->execute($_sql);
+  $db->CompleteTrans();
   $err = $db->ErrorMsg();
   if ($res)
     return new Result($caption, TRUE);

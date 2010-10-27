@@ -61,8 +61,7 @@ if ($prev_step_id >= 0) {
     $step = new $step_cls($step_id, $state);
     $step->show();
   }
-}
-else {
+} else {
   $step = new $step_cls($step_id, $state);
   $step->show();
 }

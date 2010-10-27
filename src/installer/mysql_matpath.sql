@@ -329,6 +329,7 @@ INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'moderate',   1
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'delete',     1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'bypass',     1);
 INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'unlock',     1);
+INSERT INTO freech_permission (group_id, name, allow) VALUES (1, 'write_ro',   1);
 
 -- Create anonymous group.
 INSERT INTO freech_group (id, name, is_special, status, created)

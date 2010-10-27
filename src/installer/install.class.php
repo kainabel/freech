@@ -20,7 +20,12 @@
 ?>
 <?php
 class Install extends Step {
+
   function Install($_id, $_state) {
+
+    if (isset($_GET['bypass']))
+      return;
+
     $this->Step($_id, $_state);
     $this->results = array();
     $this->failed  = FALSE;

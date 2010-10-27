@@ -96,6 +96,8 @@ CREATE TABLE IF NOT EXISTS `freech_posting` (
   `force_stub` tinyint(1) unsigned default '0',
   `notify_author` tinyint(1) unsigned default '0',
   `ip_hash` varchar(40) collate latin1_general_ci NOT NULL,
+  `rating` tinyint(4),
+  `rating_count` int(11) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `forum_id_2` (`forum_id`,`priority`,`id`),
   UNIQUE KEY `forum_special2` (`forum_id`,`status`,`id`),
@@ -157,6 +159,20 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
   UNIQUE KEY `name` (`name`),
   KEY `soundexname` (`soundexname`),
   KEY `group_id` (`group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `freech_user_rating`
+--
+
+CREATE TABLE IF NOT EXISTS freech_user_rating (
+  `forum_id` int(11) unsigned NOT NULL,
+  `posting_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `rating` tinyint NOT NULL,
+  PRIMARY KEY (`forum_id`, `posting_id`, `user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------

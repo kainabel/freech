@@ -1,5 +1,5 @@
 <?php
-  require_once 'adodb/adodb.inc.php';
+  require_once 'adodb5/adodb.inc.php';
   include_once 'functions/config.inc.php';
   $db = ADONewConnection(cfg('db_dbn'))
         or die('FreechForum::FreechForum(): Error: Can\'t connect.'

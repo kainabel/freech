@@ -92,6 +92,95 @@ table#thread_view tr:hover a {
   text-decoration: underline;
 }
 
+/**
+ * Plugin rating :: rating results in threadview
+ **/
+
+table .rating_box {
+    width: 40px;
+    height: 14px;
+    border: 0px solid black;
+    float: right;
+    background-color: #eeeeee;
+}
+
+table .rating_box .rating_0 {
+    margin-left: 0px;
+    width: 20px;
+    height: 14px;
+    background-color: #cc0000;
+}
+
+table .rating_box .rating_10 {
+    margin-left: 4px;
+    width: 16px;
+    height: 14px;
+    background-color: #cc0000;
+}
+
+table .rating_box .rating_20 {
+    margin-left: 8px;
+    width: 12px;
+    height: 14px;
+    background-color: #cc0000;
+}
+
+table .rating_box .rating_30 {
+    margin-left: 12px;
+    width: 8px;
+    height: 14px;
+    background-color: #cc0000;
+}
+
+table .rating_box .rating_40 {
+    margin-left: 16px;
+    width: 4px;
+    height: 14px;
+    background-color: #cc0000;
+}
+
+table .rating_box .rating_50 {
+    margin-left: 19px;
+    width: 2px;
+    height: 14px;
+    background-color: grey;
+}
+
+table .rating_box .rating_60 {
+    margin-left: 20px;
+    width: 4px;
+    height: 14px;
+    background-color: #009900;
+}
+
+table .rating_box .rating_70 {
+    margin-left: 20px;
+    width: 8px;
+    height: 14px;
+    background-color: #009900;
+}
+
+table .rating_box .rating_80 {
+    margin-left: 20px;
+    width: 12px;
+    height: 14px;
+    background-color: #009900;
+}
+
+table .rating_box .rating_90 {
+    margin-left: 20px;
+    width: 16px;
+    height: 14px;
+    background-color: #009900;
+}
+
+table .rating_box .rating_100 {
+    margin-left: 20px;
+    width: 20px;
+    height: 14px;
+    background-color: #009900;
+}
+
 .selected {
   color: #008000;
 }

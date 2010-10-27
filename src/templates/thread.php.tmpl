@@ -1,3 +1,17 @@
+<?php
+	function posting_rating_to_css($rating) {
+		$ret = "";
+		if(!is_null($rating)) {
+			$tooltip = ($rating - 50)*2;
+			$ret .= '<div class="rating_box" title="' . $tooltip .'%">';
+			$rating = round($rating, -1);
+			$ret .= '<div class="rating_' . $rating . '"></div>';
+			$ret .= '</div>';
+		}
+
+		return $ret;
+	}
+?>
 <!-- thread -->
 <table id='thread_view' summary=''>
 <?php
@@ -6,6 +20,8 @@
       foreach ($thread->get_postings() as $posting) {
         $selected = $posting->is_selected();
         $relation = $posting->get_relation();
+
+   		$show_rating = $posting->get_rating_count() >= cfg("minimum_rating_count");
 ?>
 <!-- thread_row -->
 <tr class='posting'>
@@ -67,11 +83,16 @@
   <img class='icon' src="<?php echo $__theme_dir?>/img/move.png" alt="[m]" title="<?php echo _('Moved')?>" />&nbsp;
 <?php } ?>
   </td>
+  <td class='posting_rating'>
+  <?php if($show_rating): ?>
+  	<?php echo posting_rating_to_css($posting->get_rating()) ?>
+  <?php endif ?>
+  </td>
   <td class='thread_user'>
 <?php if ($selected) { ?>
     <span class='selected'><?php echo esc($posting->get_username())?></span>
 <?php } else { ?>
-    <?php echo esc($posting->get_username())?>
+	<?php echo esc($posting->get_username())?>
 <?php } ?>
 <?php if ($posting->get_user_is_special()) { ?>
     <img src='<?php echo esc($posting->get_user_icon())?>'

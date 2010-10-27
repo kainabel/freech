@@ -155,7 +155,11 @@
     'threadview'   => TRUE,
     'mail'         => TRUE,
     'top_users'    => TRUE,
+    'rating'       => TRUE,
   );
+
+  // Trigger for plugin rating
+  $cfg['minimum_rating_count'] = 5;
 
   // Allows for adding a prefix to your database table names.
   // Note that you will have to rename the tables yourself.

@@ -61,9 +61,18 @@ class Posting {
     $this->fields['allow_answer']  = TRUE;
     $this->fields['notify_author'] = FALSE;
     $this->fields['ip_hash']       = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
+    $this->fields['rating']        = null;
+    $this->fields['rating_count']  = 0;
     unset($this->fields['indent']);
   }
 
+  function get_rating() {
+  	return $this->fields['rating'];
+  }
+
+  function get_rating_count() {
+  	return $this->fields['rating_count'];
+  }
 
   function _ip_hash($_ip) {
     // Note that this needs to work with both, IPv4 and IPv6.

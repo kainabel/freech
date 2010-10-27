@@ -30,7 +30,8 @@ $table_keys = array (
   '{' . t_modlog           . '}',
   '{' . t_modlog_attribute . '}',
   '{' . t_poll_option      . '}',
-  '{' . t_poll_vote        . '}'
+  '{' . t_poll_vote        . '}',
+  '{' . t_user_rating      . '}'
 );
 $table_names = array (
   cfg('db_tablebase') . 'group',
@@ -43,7 +44,8 @@ $table_names = array (
   cfg('db_tablebase') . 'modlog',
   cfg('db_tablebase') . 'modlog_attribute',
   cfg('db_tablebase') . 'poll_option',
-  cfg('db_tablebase') . 'poll_vote'
+  cfg('db_tablebase') . 'poll_vote',
+  cfg('db_tablebase') . 'user_rating'
 );
 
 /**

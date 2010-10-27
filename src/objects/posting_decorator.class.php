@@ -35,6 +35,13 @@ class PostingDecorator extends Trackable {
     return $this->posting->get_thread_id();
   }
 
+  function get_rating() {
+  	return $this->posting->get_rating();
+  }
+
+  function get_rating_count() {
+  	return $this->posting->get_rating_count();
+  }
 
   function _get_path() {
     return $this->posting->_get_path();

@@ -129,4 +129,15 @@
       $_string = str_replace('['.strtoupper($key).']', $value, $_string);
     return $_string;
   }
+
+  // Check: Is the plugin $name enabled?
+  // e.g.: is_plugin_enabled('listview')
+  function is_plugin_enabled($name = NULL) {
+    global $cfg;
+    if (array_key_exists($name, $cfg['plugins']) && $cfg['plugins'][$name]) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
 ?>

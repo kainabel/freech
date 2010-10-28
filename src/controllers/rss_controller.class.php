@@ -53,6 +53,13 @@
 
 
     function _append_row(&$_posting, $_data) {
+
+      // don't show postings from inactive forums
+      if ( array_search($_posting->get_forum_id(), $this->api->bad_id_list)
+           !== FALSE )
+        return;
+
+      // don't show blocked/inactive postings from active forums
       if (!$_posting->is_active())
         return;
 

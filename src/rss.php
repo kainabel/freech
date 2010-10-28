@@ -28,8 +28,38 @@
   }
 
   $freech = new Freech;
+
+  // get forum_id's from disabled forums
+  $freech->bad_id_list = array();
+  foreach($freech->forumdb()->get_forums(0) as $forum) {
+    $freech->bad_id_list[] = $forum->fields['id'];
+  }
+
+  if (isset($_GET['forum_id'])) {
+    $forum_id = (string) $_GET['forum_id'];
+
+    // blocking requests on inactive forums
+    if ( array_search($_GET['forum_id'], $freech->bad_id_list) !== FALSE ) {
+      header("HTTP/1.0 410 Gone");
+      $freech->destroy();
+      die();
+    }
+
+    // sorting out invalid forum_id's
+    $all = array();
+    foreach($freech->forumdb()->get_forums() as $forum) {
+      $all[] = $forum->fields['id'];
+    }
+    if ( array_search($forum_id, $all) !== TRUE ) {
+      header("HTTP/1.0 404 Not Found");
+      $freech->destroy();
+      die();
+    }
+    unset($all, $forum_id);
+  }
+
   header('Content-Type: text/xml; charset=utf-8');
-  $freech->print_rss($_GET[forum_id],
+  $freech->print_rss($_GET['forum_id'],
                      cfg('site_title'),
                      cfg('rss_description'),
                      $_GET['hs'],

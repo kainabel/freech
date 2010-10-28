@@ -60,8 +60,11 @@ class Poll extends PostingDecorator {
 
 
   function get_body_html() {
-    if (!$this->is_active())
+
+    // bypassed, if permitted
+    if (!$this->is_active() && !$this->api->group()->may('bypass'))
       return '';
+
     include_once dirname(__FILE__).'/poll_controller.class.php';
     // Fetch the poll from the database.
     $poll_id    = $this->posting->get_id();
@@ -86,7 +89,7 @@ class Poll extends PostingDecorator {
     return $controller->get_poll($poll);
   }
 
-
+  //TODO: unused function?
   function apply_block() {
     return $this->posting->apply_block();
   }

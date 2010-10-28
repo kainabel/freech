@@ -710,6 +710,7 @@ class MainController {
 
     // Hide subject and body if the message is locked.
     if ($posting) {
+      // bypassed in threadview or listview, if permitted
       if (!$this->current_group->permissions['bypass']) {
         $posting->apply_block();
       }

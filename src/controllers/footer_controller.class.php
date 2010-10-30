@@ -31,7 +31,7 @@
 
         $html = '<span id="rss">'
               . '<a href="' . $url->get_string(TRUE) . '">'
-              . '<img src="themes/' . cfg('theme') . '/img/rss.png" alt="" />'
+              . '<img src="themes/' . cfg('theme') . '/img/rss.png" alt="RSS 2.0" />'
               . '</a>'
               . '&nbsp;' . $url->get_html()
               . '</span>';

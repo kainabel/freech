@@ -39,25 +39,50 @@ class Poll extends PostingDecorator {
 
 
   function set_title($_title) {
-    $this->posting->set_body(sprintf(_('Poll: %s'), $_title));
     return $this->posting->set_subject($_title);
   }
-
 
   function get_title() {
     return $this->posting->get_subject();
   }
 
-
   function set_subject($_subject) {
     return $this->posting->set_subject($_subject);
   }
-
 
   function get_subject() {
     return $this->posting->get_subject();
   }
 
+  function set_body($_description) {
+    $body = $this->get_nice_body($_description);
+    return $this->posting->set_body($body);
+  }
+
+  function get_body() {
+    return $this->posting->get_body();
+  }
+
+
+  function has_description() {
+    return ((sprintf(_('Poll: %s'), $this->get_subject()))
+           != $this->get_body());
+  }
+
+  function get_description_html() {
+
+    $body = $this->get_body();
+    $body = $this->get_nice_body($body);
+
+    // Perform HTML generating formattings.
+    $body = esc($body);
+    $body = preg_replace('/  /', ' &nbsp;', $body);
+    $body = nl2br($body);
+
+    //TODO: connect to plugin linkify
+
+    return $body;
+  }
 
   function get_body_html() {
 
@@ -197,6 +222,10 @@ class Poll extends PostingDecorator {
     return FALSE;
   }
 
+  function get_nice_body($body) {
+    // input clean up
+    return preg_replace("~\n((?:[\s\n\xa0]+)\n){1,}~", "\n\n", $body);
+  }
 
   function check() {
     if ($this->get_title() == '')
@@ -213,6 +242,18 @@ class Poll extends PostingDecorator {
         return _('An option is too long.');
     if ($this->has_duplicate_options())
       return _('The poll has duplicate options.');
+    if (strlen($this->get_body()) > cfg('max_msglength'))
+      return sprintf(_('Your description exceeds the maximum length'
+                     . ' of %d characters.'),
+                     cfg('max_msglength'));
+    if (!is_utf8($this->get_subject())
+      || !is_utf8($this->get_body()))
+      return _('Your message contains invalid characters.');
+
+    // mark on submit/send as empty description
+    if ((ctype_space($this->get_body() . "\n")) && ($_POST['send'])) {
+      $this->set_body( sprintf(_('Poll: %s'), $this->get_subject()) );
+    }
     return NULL;
   }
 }

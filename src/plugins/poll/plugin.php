@@ -173,6 +173,7 @@ function _poll_get_from_post() {
   $posting   = new Posting;
   $poll      = new Poll($posting, new Forum);
   $poll->set_title($_POST['poll_title']);
+  $poll->set_body($_POST['poll_desc']);
   $poll->set_allow_multiple($_POST['allow_multiple'] == 'on');
   $poll->set_forum_id((int)$_POST['forum_id']);
   for ($i = 0; $i < $n_options; $i++) {

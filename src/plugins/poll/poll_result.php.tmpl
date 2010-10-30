@@ -1,6 +1,16 @@
 <!-- poll result -->
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
+<?php
+
+  if ($poll->has_description()) {
+    echo "<div id='poll_desc'>\n";
+    echo $poll->get_description_html();
+    echo "</div><br />\n";
+  }
+
+?>
+
 <table summary=''>
 <?php foreach ($poll->get_results() as $option_id => $votes) { ?>
   <tr>

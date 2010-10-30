@@ -412,6 +412,14 @@ input {
   font-weight: normal;
 }
 
+#poll_desc {
+  border-left: 1px solid #ccc;
+  padding-left: .5em;
+}
+
+#poll fieldset {
+  border: 0;
+}
 
 /**
  * The moderation log.

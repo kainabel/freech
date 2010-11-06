@@ -1,0 +1,44 @@
+<!-- database_setup -->
+<h2>Database Setup.</h2>
+
+<p>Please enter your database settings.</p>
+
+<?php
+  if ($errors) {
+    $items = $errors;
+    require "checklist.tmpl";
+  }
+?>
+<hr />
+
+<form method='post' action='?step=<?php echo $nextstep?>'>
+<fieldset lang='en'><legend title='Admin account'>Database settings</legend>
+<p><label for='db_host'>DB Hostname:</label><input type="text" id='db_host'
+name="db_host" value="<?php echo esc($db_host)?>" /></p>
+<p><label for='db_user'>DB User:</label><input type="text" id='db_user'
+name="db_user" value="<?php echo esc($db_user)?>" /></p>
+<p><label for='db_pass'>Password:</label><input type="password" id='db_pass'
+name="db_pass" value="<?php echo esc($db_pass)?>" /></p>
+<p><label for='db_name'>Database:</label><input type="text" id='db_name'
+name="db_name" value="<?php echo esc($db_name)?>" />
+</p>
+<p><label for='db_create'>Create if not exist:</label><input type="checkbox"
+id='db_create' name="db_create"
+<?php
+  if ($db_create == 'on') {
+    echo " checked='checked' />";
+  } else {
+    echo " />";
+  }
+?></p>
+<p><label for='db_base'>Table prefix:</label><input type='text' id='db_base'
+name='db_base' value='<?php echo esc($db_base)?>' /></p>
+</fieldset>
+<hr/>
+<?php if (isset($fatal)) { ?>
+  <p class='color_fail'>Fatal error: the database does not support transactions
+  or the DB type <b>'InnoDB'</b> is turned off. I will break here.</p>
+<?php } else { ?>
+  <p class="right"><input type='submit' value='Continue'/></p>
+<?php } ?>
+</form>

@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `freech_user` (
 -- Table structure for table `freech_user_rating`
 --
 
-CREATE TABLE IF NOT EXISTS freech_user_rating (
+CREATE TABLE IF NOT EXISTS `freech_user_rating` (
   `forum_id` int(11) unsigned NOT NULL,
   `posting_id` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,

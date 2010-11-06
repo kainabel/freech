@@ -35,6 +35,11 @@ input {
   width: 15em;
   margin-left: 1em;
 }
+label {
+	width: 10em;
+	display: inline-block;
+	font-weight: normal;
+}
 p.right {
   text-align: right;
   padding: 0;

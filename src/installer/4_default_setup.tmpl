@@ -1,0 +1,52 @@
+<!-- default_setup -->
+<h2>Activating The Admin User.</h2>
+
+<p>Please enter a password for your administrator account.</p>
+
+<?php
+  if ($errors) {
+    $items = $errors;
+    require "checklist.tmpl";
+    echo '<hr />';
+  }
+?>
+
+<form method='post' action='?step=<?php echo $nextstep?>' summary=''>
+<p class='hint'>All fields are required.<p>
+<input type="hidden" name='skip' />
+<fieldset lang='en'><legend title='Admin account'>Admin account</legend>
+<p><label for='user'>Username:</label><input id='user' name='user'
+type='text' value='<?php echo esc($user)?>' /></p>
+<p><label for='pass1'>Password:</label><input id='pass1' name='pass1'
+type='password' value='<?php echo esc($pass1)?>' /></p>
+<p><label for='pass2'>Repeat:</label><input id='pass2' name='pass2'
+type='password' value='<?php echo esc($pass2)?>' /></p>
+<p><label for='salt'>Salt:</label><input id='salt' name='salt'
+type='text' value='<?php echo esc($salt)?>' /></p>
+<p><label for='firstname'>Firstname:</label><input id='firstname'
+name='firstname' type='text' value='<?php echo esc($firstname)?>' /></p>
+<p><label for='lastname'>Lastname:</label><input id='lastname'
+name='lastname' type='lastname' value='<?php echo esc($lastname)?>' /></p>
+<p><label for='email'>Email:</label><input id='email' name='email'
+type='text' value='<?php echo esc($email)?>' /></p>
+</fieldset>
+<p></p>
+<fieldset lang='en'><legend title='Site options'>Site options</legend>
+<p><label for='domain'>Domain:</label><input id='domain' name='domain'
+type='text' value='<?php echo esc($domain)?>' /></p>
+<p><label for='site'>Site title:</label><input id='site' name='site'
+type='text' value='<?php echo esc($site)?>' /></p>
+<p><label for='lang'>Default language:</label><select id='lang' name='lang'
+size='1'><option
+value='en' <?php if ($lang == 'en') echo "selected='selected'"; ?>
+>en</option><option
+value='de' <?php if ($lang == 'de') echo "selected='selected'"; ?>
+>de</option></select></p>
+<p><label for='rss'>RSS enabled:</label><input id='rss' name='rss'
+type='checkbox' <?php if ($rss == 'on') echo "checked='checked'"; ?> /></p>
+<p><label for='desc'>RSS description:</label><input id='desc' name='desc'
+type='text' value='<?php echo esc($desc)?>' /></p>
+</fieldset>
+<hr/>
+<p class="right"><input type='submit' value='Continue'/></p>
+</form>

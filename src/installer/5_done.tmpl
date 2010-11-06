@@ -1,11 +1,17 @@
 <!-- done -->
 <h2>Congratulations, the installation is complete.</h2>
 
-<p>
-  <em>
+<?php
+  if ($errors) {
+    $items = $errors;
+    require "checklist.tmpl";
+    echo '<hr />';
+  }
+?>
+
+<p><em>
   Out of security reasons, make sure to delete the installer/ directory now!
-  </em>
-</p>
+</em></p>
 
 <form method='get' action='<?php echo esc($site_url)?>'>
   <hr/>

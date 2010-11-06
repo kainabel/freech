@@ -1,7 +1,9 @@
 <!-- checklist -->
 <hr />
 <table width="100%" cellpadding="0" summary=''>
-<?php foreach ($items as $item) { ?>
+<?php
+  foreach ($items as $item) {
+?>
   <tr>
     <td><?php echo esc($item->get_name())?></td>
     <td>&nbsp;</td>

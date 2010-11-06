@@ -1,7 +1,7 @@
 <!-- install -->
 <h2>Creating the database setup.</h2>
 
-Installing required database tables and creating the default installation.
+<p>Installing required database tables and creating the default installation.</p>
 
 <?php
   $items = $results;
@@ -10,7 +10,8 @@ Installing required database tables and creating the default installation.
 
 <hr/>
 <?php if ($success) { ?>
-<form method='post' action='?step=<?php echo $nextstep?>&amp;bypass'>
+<form method='post' action='?step=<?php echo $nextstep?>'>
+<input type='hidden' name='db_install' value='passed' />
 <p class="right"><input type='submit' value='Continue'/></p>
 </form>
 <?php } ?>

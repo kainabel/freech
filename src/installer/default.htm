@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- header -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />  
+  <link rel="stylesheet" type="text/css" href="../themes/heise/style.css" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <title>Freech Installer</title>
+
+<style type="text/css">
+form p label span {
+	float: left;
+	width: 9em;
+	clear: both;
+	padding-right: 1em;
+/*	background: #456;*/
+	line-height: 1.4em;
+	vertical-align: bottom;
+	font-weight: normal;
+}
+form p label {
+	width: 40em;
+	display: block;
+	margin-left: 10em;
+	height: 1.4em;
+
+}
+form p input[type=text],
+form p input[type=password]
+{
+/*	border: 1px solid;*/
+	border: 1px solid #353fa8;
+	background: #bce;
+	margin-left: 0;
+	width: 15em;
+	height: 1.4em;
+}
+</style>  
+</head>
+<body>
+<div id='header'>
+  <div id='header1'>
+    <a href='.'><img id='logo' src='../themes/heise/img/logo.png' alt='Logo' /></a>
+  </div>
+
+  <div id='header2'>
+    <a href='.'><span id='title'>Freech Installer</span></a>
+  </div>
+</div>
+<div id='center'>
+  <div id='main'>
+<!-- /header -->
+<!-- database_setup -->
+<h2>Database Setup.</h2>
+
+<p>Please enter your database settings.</p>
+
+<!-- checklist -->
+<hr />
+<table width="100%" cellpadding="0" summary=''>
+<tr>
+    <td>Checking Hostname.</td>
+    <td>&nbsp;</td>
+    <td align="right">
+          <span class="color_fail">Failed</span>
+        </td>
+  </tr>
+    <tr>
+    <td>
+      <span class="small">Hostname is empty.</span>
+    </td>
+    <td colspan="2">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3"><br /></td>
+  </tr>
+  </table>
+<!-- /checklist -->
+
+<hr />
+
+<form method='post' action='?step=3'>
+
+<p><label><span>DB Hostname:</span>
+<input type="text" name="db_host" value="" />
+</label></p>
+<p><label><span>DB User:</span>
+<input type="text" name="db_user" value="user" />
+</label></p>
+<p><label><span>Password:</span>
+<input type="password" name="db_password" value="" />
+</label></p>
+<p><label><span>Database:</span>
+<input type="text" name="db_name" value="freech" />
+</label></p>
+<p><label><span>Create if not exist:</span>
+<input class='setup' type="checkbox" name="db_create" /></label></p>
+<p><label><span>Table prefix:</span>
+<input type="text" name="db_tablebase" value="freech_" />
+</label></p>
+
+<hr/>
+<p class="right"><input type='submit' value='Continue'/></p>
+
+</form>
+<!-- footer -->
+  </div>
+</div>
+  <div id='footer'>Powered by Freech 0.9.21.</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003-2008 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003-2008 Samuel Abels
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,13 +19,14 @@
   */
 ?>
 <?php
-class Result {
-  function Result($_name, $_result, $_hint = '') {
-    $this->name   = $_name;
-    $this->result = $_result;
-    $this->hint   = $_hint;
-  }
 
+class Result {
+
+  function __construct($_name, $_result, $_hint = '') {
+    $this->name = $_name;
+    $this->result = $_result;
+    $this->hint = $_hint;
+  }
 
   function get_name() {
     return $this->name;

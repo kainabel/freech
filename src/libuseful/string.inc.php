@@ -1,6 +1,6 @@
 <?php
   /*
-  Copyright (C) 2005 Samuel Abels, <http://debain.org>
+  Copyright (C) 2005 Samuel Abels
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,6 +20,11 @@
 <?php
   function esc(&$_string) {
     return htmlentities($_string, ENT_QUOTES, 'UTF-8');
+  }
+
+
+  function unesc(&$_string) {
+    return html_entity_decode($_string, ENT_QUOTES, 'UTF-8');
   }
 
 
@@ -108,6 +113,14 @@
         $html .= '<li class="text">' . $item->get_text(TRUE) . '</li>';
     }
     return $html . "</ul>\n";
+  }
+
+
+  function html_get_homebutton() {
+    $html = "<form id='home_button' action='/' method='post'>"
+          . "<input type='submit' value='" . esc(_('Welcome page'))
+          . "' /></form>\n";
+    return $html;
   }
 
 

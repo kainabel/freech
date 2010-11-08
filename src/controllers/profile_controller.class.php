@@ -97,6 +97,9 @@
       $edit_sane = !$_user->is_anonymous();
       $mod_sane  = $edit_sane && ($_user->is_active() || $_user->is_locked());
       $may_edit  = $may_admin || ($mod_sane && ($is_self || $may_mod));
+      $is_user   = !$current->is_anonymous();
+      $may_write = $is_user && $_user->is_active() && !$is_self && $edit_sane;
+      $id_to     = $_user->get_id();
 
       // Load the threads (if they are to be displayed).
       $this->clear_all_assign();
@@ -109,6 +112,8 @@
       $this->assign_by_ref('group',    $group);
       $this->assign_by_ref('may_edit', $may_edit);
       $this->assign_by_ref('is_self',  $is_self);
+      $this->assign_by_ref('may_write',$may_write);
+      $this->assign_by_ref('id_to'    ,$id_to);
       $this->render_php('user_profile.php.tmpl');
       $this->api->set_title($_user->get_name());
     }

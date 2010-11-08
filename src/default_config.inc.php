@@ -156,10 +156,14 @@
     'mail'         => TRUE,
     'top_users'    => TRUE,
     'rating'       => TRUE,
+    'contact'      => TRUE,
   );
 
   // Trigger for plugin rating
   $cfg['minimum_rating_count'] = 5;
+
+  // Email heading prefix, used in the plug-in contact
+  $cfg['contact_subject_prefix'] = $cfg['site_title'] . ' (PN): ';
 
   // Allows for adding a prefix to your database table names.
   // Note that you will have to rename the tables yourself.

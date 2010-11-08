@@ -182,6 +182,23 @@ define('USER_STATUS_BLOCKED',     3);
     }
 
 
+    function get_nice_mail($_realname = FALSE) {
+      if ($_realname) {
+        // $var from config.inc.php or use the fall back version
+        $format = cfg('email_name_format', '[FIRSTNAME] [LASTNAME]');
+      } else {
+        $format = '[NAME]';
+      }
+      $format .= ' <[MAIL]>';
+      $arr = array();
+      $arr['firstname'] = $this->get_firstname();
+      $arr['lastname']  = $this->get_lastname();
+      $arr['name']      = $this->get_name();
+      $arr['mail']      = $this->get_mail();
+      return replace_vars($format, $arr);
+    }
+
+
     function set_do_notify($_do_notify = TRUE) {
       $this->fields[do_notify] = (bool)$_do_notify;
     }

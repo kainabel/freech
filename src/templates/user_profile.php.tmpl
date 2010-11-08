@@ -85,4 +85,51 @@
   </tr>
 </table>
 <?php } ?>
+
+<?php if (is_plugin_enabled('contact') && $may_write) {
+  $max_pn_subject_len = (78 - strlen(cfg('contact_subject_prefix')));
+?>
+<h3><?php echo esc(_('Write private message'))?></h3>
+
+<p class="intro">
+  <?php
+  echo esc(_("This message contains, for the purpose of a direct answer by"
+           . " the receiver, your e-mail address, even if they have expressed"
+           . " themselves in the profile against a publication."));
+  ?>
+</p>
+
+<form action='?action=contact_user' method='post' accept-charset='utf-8'>
+<div>
+<input type='hidden' name='action' value='contact_user' />
+<input type='hidden' name='id_to'  value='<?php echo $id_to ?>' />
+
+<p>
+  <label for='subject'><?php echo esc(_('Subject:'))?></label>
+  <i><?php echo esc(_('(required)'))?></i><br />
+  <input type='text'
+         size='80'
+         name='subject'
+         id='subject'
+         value=''
+         maxlength='<?php echo $max_pn_subject_len; ?>' />
+</p>
+
+<p>
+  <label for='message'><?php echo esc(_('Message:'))?></label>
+  <i><?php echo esc(_('(required)'))?></i><br />
+  <textarea id='message' name='body' cols='70' rows='10'></textarea>
+</p>
+
+<p>
+  <label for='realname'><?php echo esc(_('Insert real name:'))?></label>
+  <input type="checkbox" id='realname' name="realname" value="yes" />
+  <span style="padding-left:8em">&nbsp;</span>
+  <input type="submit" value='<?php echo esc(_('Send Message'))?>' />
+</p>
+</div>
+</form>
+
+<?php } ?>
+
 <!-- end user profile -->

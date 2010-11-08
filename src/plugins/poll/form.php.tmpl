@@ -9,31 +9,33 @@
 <input type='hidden' name='n_options' value='<?php echo $poll->n_options()?>' />
 
 <p>
-  <label><?php echo esc(_('Poll title:'))?>
+  <label for='poll_title'><?php echo esc(_('Poll title:'))?></label>
   <i><?php echo esc(_('(required)'))?></i><br />
   <input type='text' size='<?php echo cfg('max_subjectlength') ?>'
-        name='poll_title' maxlength='<?php echo cfg('max_subjectlength') ?>'
-        value='<?php echo esc($poll->get_title())?>' /></label><br/>
-  <label><?php echo esc(_('Allow for checking multiple boxes:'))?>
-  <input type='checkbox' name="allow_multiple"
+        id='poll_title' name='poll_title'
+        maxlength='<?php echo cfg('max_subjectlength') ?>'
+        value='<?php echo esc($poll->get_title())?>' /><br/>
+  <label class='normal' for='allow_multiple'><?php echo esc(_('Allow for checking multiple boxes:'))?></label>
+  <input type='checkbox' id='allow_multiple' name="allow_multiple"
         <?php if ($poll->get_allow_multiple()) { ?>checked='checked'<?php } ?>
-  /></label>
+  />
 </p>
 
 <p>
-  <label class='normal'><?php echo esc(_('Description: (optional)'))?><br />
+  <label for='description'><?php echo esc(_('Optional description:'))?></label><br />
   <textarea id='description' cols='70' rows='8'
     name='poll_desc'><?php echo esc($poll->get_body()) ?></textarea>
-  </label><br/>
+  <br/>
 </p>
 
 <?php $i = 0; foreach ($poll->get_options() as $option) { ?>
 <p>
-  <label><?php echo esc(sprintf(_('Option %d:'), $i + 1))?><br />
-  <input type='text' name='poll_option<?php echo $i++ ?>'
+  <label for='poll_option<?php echo $i ?>'><?php echo esc(sprintf(_('Option %d:'), $i + 1))?></label><br />
+  <input type='text' name='poll_option<?php echo $i ?>'
+        id='poll_option<?php echo $i ?>'
         size='<?php echo cfg('max_subjectlength') ?>'
         maxlength='<?php echo cfg('max_subjectlength') ?>'
-        value='<?php echo esc($option)?>' /></label><br />
+        value='<?php echo esc($option); $i++ ?>' /><br />
 </p>
 <?php } ?>
 

@@ -24,8 +24,8 @@ function search_init(&$api) {
         . "<input type='hidden' name='action' value='search' />";
   if ($forum_id)
     $html .= "<input type='hidden' name='forum_id' value='$forum_id' />\n";
-  $html .= htmlentities(_('Find in this forum:'), ENT_QUOTES, 'UTF-8');
-  $html .= "&nbsp;<input type='text' name='q' value='' />\n";
+  $html .= "<label class='normal' for='search_field'>" . esc(_('Find in this forum:')) . "</label>";
+  $html .= "&nbsp;<input id='search_field' type='text' name='q' value='' />\n";
   $html .= "</div>\n";
   $html .= "</form>\n";
   $api->links('search')->add_html($html);

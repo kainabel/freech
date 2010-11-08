@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-13 13:43+0100\n"
+"POT-Creation-Date: 2010-11-08 07:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,12 +22,15 @@ msgstr ""
 #: src/plugins/bbview/bbview.php.tmpl:15
 #: src/plugins/bbview/bbview_posting.php.tmpl:28
 #: src/templates/latest.php.tmpl:17 src/templates/thread.php.tmpl:67
+#: src/templates/thread.php.tmpl:83
 msgid "Moved"
 msgstr ""
 
 #: po/templates.c:5 po/templates.c:257 src/templates/home.php.tmpl:41
 #: src/templates/latest.php.tmpl:64 src/templates/thread.php.tmpl:113
 #: src/templates/latest.php.tmpl:53 src/templates/thread.php.tmpl:107
+#: src/templates/home.php.tmpl:44 src/templates/thread.php.tmpl:128
+#: src/plugins/bbview/bbview.php.tmpl:48
 msgid "(No postings found)"
 msgstr ""
 
@@ -211,14 +214,17 @@ msgid "Please select a forum from the list."
 msgstr ""
 
 #: po/templates.c:143 src/templates/home.php.tmpl:30
+#: src/templates/home.php.tmpl:33
 msgid "Recent Forum Activity"
 msgstr ""
 
 #: po/templates.c:146 src/templates/home.php.tmpl:47
+#: src/templates/home.php.tmpl:50
 msgid "Forum Information"
 msgstr ""
 
 #: po/templates.c:149 src/templates/home.php.tmpl:62
+#: src/templates/home.php.tmpl:65
 msgid "Recently Registered Users"
 msgstr ""
 
@@ -232,36 +238,48 @@ msgstr ""
 #: po/templates.c:158 po/templates.c:161
 #: src/templates/moderator_buttons.inc.php.tmpl:11
 #: src/templates/moderator_buttons.inc.php.tmpl:12
+#: src/templates/moderator_buttons.inc.php.tmpl:13
+#: src/templates/moderator_buttons.inc.php.tmpl:14
 msgid "Unlock posting"
 msgstr ""
 
 #: po/templates.c:164 po/templates.c:167
 #: src/templates/moderator_buttons.inc.php.tmpl:21
 #: src/templates/moderator_buttons.inc.php.tmpl:22
+#: src/templates/moderator_buttons.inc.php.tmpl:23
+#: src/templates/moderator_buttons.inc.php.tmpl:24
 msgid "Make sticky"
 msgstr ""
 
 #: po/templates.c:170 po/templates.c:173
 #: src/templates/moderator_buttons.inc.php.tmpl:26
 #: src/templates/moderator_buttons.inc.php.tmpl:27
+#: src/templates/moderator_buttons.inc.php.tmpl:28
+#: src/templates/moderator_buttons.inc.php.tmpl:29
 msgid "Remove sticky"
 msgstr ""
 
 #: po/templates.c:176 po/templates.c:179
 #: src/templates/moderator_buttons.inc.php.tmpl:34
 #: src/templates/moderator_buttons.inc.php.tmpl:35
+#: src/templates/moderator_buttons.inc.php.tmpl:36
+#: src/templates/moderator_buttons.inc.php.tmpl:37
 msgid "Move to a different forum"
 msgstr ""
 
 #: po/templates.c:182 po/templates.c:185
 #: src/templates/moderator_buttons.inc.php.tmpl:43
 #: src/templates/moderator_buttons.inc.php.tmpl:44
+#: src/templates/moderator_buttons.inc.php.tmpl:45
+#: src/templates/moderator_buttons.inc.php.tmpl:46
 msgid "Allow responses"
 msgstr ""
 
 #: po/templates.c:188 po/templates.c:191
 #: src/templates/moderator_buttons.inc.php.tmpl:48
 #: src/templates/moderator_buttons.inc.php.tmpl:49
+#: src/templates/moderator_buttons.inc.php.tmpl:50
+#: src/templates/moderator_buttons.inc.php.tmpl:51
 msgid "Prevent responses"
 msgstr ""
 
@@ -300,6 +318,7 @@ msgstr ""
 #: po/templates.c:227 src/main_controller.class.php:1178
 #: src/main_controller.class.php:1209 src/templates/forum_editor.php.tmpl:2
 #: src/main_controller.class.php:1206 src/main_controller.class.php:1211
+#: src/main_controller.class.php:1214
 msgid "Edit a Forum"
 msgstr ""
 
@@ -325,7 +344,7 @@ msgstr ""
 #: src/main_controller.class.php:1219 src/main_controller.class.php:210
 #: src/main_controller.class.php:1252 src/templates/modlog.php.tmpl:2
 #: src/main_controller.class.php:207 src/main_controller.class.php:1249
-#: src/main_controller.class.php:1254
+#: src/main_controller.class.php:1254 src/main_controller.class.php:1257
 msgid "Moderation Log"
 msgstr ""
 
@@ -398,6 +417,7 @@ msgstr ""
 #: po/templates.c:320 po/templates.c:437
 #: src/templates/posting_lock.php.tmpl:31
 #: src/plugins/message/compose.php.tmpl:31
+#: src/templates/user_profile.php.tmpl:108
 msgid "Subject:"
 msgstr ""
 
@@ -491,10 +511,12 @@ msgstr ""
 #: po/templates.c:389 po/templates.c:407
 #: src/plugins/statistics/statistics.php.tmpl:30
 #: src/plugins/top_users/score_list.inc.php.tmpl:12
+#: src/plugins/statistics/statistics.php.tmpl:36
 msgid "Postings"
 msgstr ""
 
 #: po/templates.c:392 src/plugins/statistics/statistics.php.tmpl:35
+#: src/plugins/statistics/statistics.php.tmpl:41
 msgid "Traffic"
 msgstr ""
 
@@ -538,10 +560,13 @@ msgstr ""
 #: src/plugins/message/compose.php.tmpl:19
 #: src/plugins/message/compose.php.tmpl:32
 #: src/plugins/message/compose.php.tmpl:42 src/plugins/poll/form.php.tmpl:13
+#: src/templates/user_profile.php.tmpl:109
+#: src/templates/user_profile.php.tmpl:120
 msgid "(required)"
 msgstr ""
 
 #: po/templates.c:443 src/plugins/message/compose.php.tmpl:41
+#: src/templates/user_profile.php.tmpl:119
 msgid "Message:"
 msgstr ""
 
@@ -551,13 +576,14 @@ msgstr ""
 
 #: po/templates.c:452 src/plugins/message/message_controller.class.php:98
 #: src/plugins/message/plugin.php:155 src/plugins/message/plugin.php:154
-#: src/plugins/message/compose.php.tmpl:52
+#: src/plugins/message/compose.php.tmpl:52 src/plugins/message/plugin.php:177
 msgid "Preview"
 msgstr ""
 
 #: po/templates.c:455 po/templates.c:461
 #: src/plugins/message/compose.php.tmpl:53
 #: src/plugins/message/preview.php.tmpl:24
+#: src/templates/user_profile.php.tmpl:128
 msgid "Send Message"
 msgstr ""
 
@@ -566,16 +592,19 @@ msgid "Edit Message"
 msgstr ""
 
 #: po/templates.c:464 src/plugins/poll/poll.php.tmpl:17
+#: src/plugins/poll/poll.php.tmpl:28
 msgid "Vote"
 msgstr ""
 
 #: po/templates.c:467 src/plugins/poll/poll.php.tmpl:18
+#: src/plugins/poll/poll.php.tmpl:29
 msgid "View results"
 msgstr ""
 
 #: po/templates.c:470 src/plugins/poll/plugin.php:36
 #: src/plugins/poll/plugin.php:50 src/plugins/poll/plugin.php:35
 #: src/plugins/poll/plugin.php:49 src/plugins/poll/form.php.tmpl:2
+#: src/plugins/poll/plugin.php:55 src/plugins/poll/plugin.php:69
 msgid "Start a Poll"
 msgstr ""
 
@@ -592,10 +621,12 @@ msgid "Option %1:"
 msgstr ""
 
 #: po/templates.c:485 src/plugins/poll/form.php.tmpl:34
+#: src/plugins/poll/form.php.tmpl:41
 msgid "Add Another Option"
 msgstr ""
 
 #: po/templates.c:488 src/plugins/poll/form.php.tmpl:35
+#: src/plugins/poll/form.php.tmpl:42
 msgid "Submit Poll"
 msgstr ""
 
@@ -637,53 +668,61 @@ msgstr ""
 #: src/objects/user.class.php:287 src/objects/forum.class.php:94
 #: src/objects/group.class.php:157 src/plugins/message/plugin.php:79
 #: src/objects/user.class.php:294 src/objects/forum.class.php:97
-#: src/objects/posting.class.php:312
+#: src/objects/posting.class.php:312 src/plugins/message/plugin.php:102
+#: src/objects/posting.class.php:321 src/objects/user.class.php:311
 msgid "Edit"
 msgstr ""
 
 #: src/objects/posting.class.php:325 src/plugins/message/plugin.php:59
 #: src/objects/posting.class.php:307 src/plugins/message/plugin.php:57
-#: src/objects/posting.class.php:317
+#: src/objects/posting.class.php:317 src/plugins/message/plugin.php:80
+#: src/objects/posting.class.php:326
 msgid "Reply"
 msgstr ""
 
 #: src/objects/posting.class.php:643 src/main_controller.class.php:660
 #: src/objects/posting.class.php:589 src/main_controller.class.php:663
 #: src/objects/posting.class.php:582 src/objects/posting.class.php:592
-#: src/main_controller.class.php:665
+#: src/main_controller.class.php:665 src/objects/posting.class.php:601
 msgid "Locked Message"
 msgstr ""
 
 #: src/objects/posting.class.php:699 src/objects/posting.class.php:645
 #: src/objects/posting.class.php:646 src/objects/posting.class.php:656
+#: src/objects/posting.class.php:665
 msgid "Warning! Your message is incomplete."
 msgstr ""
 
 #: src/objects/posting.class.php:702 src/objects/posting.class.php:648
 #: src/objects/posting.class.php:649 src/objects/posting.class.php:659
+#: src/objects/posting.class.php:668
 #, php-format
 msgid "Please enter a name with at most %d characters."
 msgstr ""
 
 #: src/objects/posting.class.php:705 src/objects/posting.class.php:651
 #: src/objects/posting.class.php:652 src/objects/posting.class.php:662
+#: src/objects/posting.class.php:671
 msgid "Your login name contains invalid characters."
 msgstr ""
 
 #: src/objects/posting.class.php:709 src/objects/posting.class.php:655
 #: src/objects/posting.class.php:656 src/objects/posting.class.php:666
+#: src/objects/posting.class.php:675
 #, php-format
 msgid "Please enter a subject with at most %d characters."
 msgstr ""
 
 #: src/objects/posting.class.php:713 src/objects/posting.class.php:659
 #: src/objects/posting.class.php:660 src/objects/posting.class.php:670
+#: src/objects/posting.class.php:679
 #, php-format
 msgid "Your message exceeds the maximum length of %d characters."
 msgstr ""
 
 #: src/objects/posting.class.php:720 src/objects/posting.class.php:666
 #: src/objects/posting.class.php:667 src/objects/posting.class.php:677
+#: src/plugins/poll/poll.class.php:251 src/objects/posting.class.php:686
 msgid "Your message contains invalid characters."
 msgstr ""
 
@@ -700,12 +739,12 @@ msgid "Please choose a password with at most %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:210 src/objects/user.class.php:192
-#: src/objects/user.class.php:199
+#: src/objects/user.class.php:199 src/objects/user.class.php:216
 msgid "Please enter a valid email address."
 msgstr ""
 
 #: src/objects/user.class.php:212 src/objects/user.class.php:194
-#: src/objects/user.class.php:201
+#: src/objects/user.class.php:201 src/objects/user.class.php:218
 #, php-format
 msgid "Please enter an email address with at most %d characters."
 msgstr ""
@@ -713,18 +752,20 @@ msgstr ""
 #: src/objects/user.class.php:308 src/objects/user.class.php:300
 #: src/templates/user_profile.php.tmpl:3
 #: src/templates/group_profile.php.tmpl:3 src/objects/user.class.php:307
+#: src/objects/user.class.php:324
 #, php-format
 msgid "Profile of %s"
 msgstr ""
 
 #: src/objects/user.class.php:327 src/objects/user.class.php:319
 #: src/templates/user_postings.php.tmpl:3 src/objects/user.class.php:326
+#: src/objects/user.class.php:343
 #, php-format
 msgid "Postings of %s"
 msgstr ""
 
 #: src/objects/user.class.php:387 src/objects/user.class.php:379
-#: src/objects/user.class.php:381
+#: src/objects/user.class.php:381 src/objects/user.class.php:398
 msgid "Deleted"
 msgstr ""
 
@@ -732,93 +773,94 @@ msgstr ""
 #: src/objects/group.class.php:115 src/objects/user.class.php:380
 #: src/objects/forum.class.php:124 src/objects/group.class.php:106
 #: src/objects/user.class.php:382 src/objects/forum.class.php:127
+#: src/objects/forum.class.php:131 src/objects/user.class.php:399
 msgid "Active"
 msgstr ""
 
 #: src/objects/user.class.php:389 src/objects/user.class.php:381
-#: src/objects/user.class.php:383
+#: src/objects/user.class.php:383 src/objects/user.class.php:400
 msgid "Unconfirmed"
 msgstr ""
 
 #: src/objects/user.class.php:390 src/objects/user.class.php:382
-#: src/objects/user.class.php:384
+#: src/objects/user.class.php:384 src/objects/user.class.php:401
 msgid "Locked"
 msgstr ""
 
 #: src/objects/user.class.php:420 src/objects/user.class.php:412
-#: src/objects/user.class.php:414
+#: src/objects/user.class.php:414 src/objects/user.class.php:431
 msgid "Please enter a username."
 msgstr ""
 
 #: src/objects/user.class.php:423 src/objects/user.class.php:415
-#: src/objects/user.class.php:417
+#: src/objects/user.class.php:417 src/objects/user.class.php:434
 #, php-format
 msgid "Your login name is too short. Please enter at least %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:429 src/objects/user.class.php:421
-#: src/objects/user.class.php:423
+#: src/objects/user.class.php:423 src/objects/user.class.php:440
 #, php-format
 msgid "Your login name is too long. Please enter at most %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:435 src/objects/user.class.php:427
-#: src/objects/user.class.php:429
+#: src/objects/user.class.php:429 src/objects/user.class.php:446
 msgid "Your username contains invalid characters."
 msgstr ""
 
 #: src/objects/user.class.php:438 src/objects/user.class.php:430
-#: src/objects/user.class.php:432
+#: src/objects/user.class.php:432 src/objects/user.class.php:449
 msgid "Please enter a password."
 msgstr ""
 
 #: src/objects/user.class.php:441 src/objects/user.class.php:433
-#: src/objects/user.class.php:435
+#: src/objects/user.class.php:435 src/objects/user.class.php:452
 msgid "Please enter a firstname."
 msgstr ""
 
 #: src/objects/user.class.php:444 src/objects/user.class.php:436
-#: src/objects/user.class.php:438
+#: src/objects/user.class.php:438 src/objects/user.class.php:455
 #, php-format
 msgid "Your firstname is too short. Please enter at least %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:450 src/objects/user.class.php:442
-#: src/objects/user.class.php:444
+#: src/objects/user.class.php:444 src/objects/user.class.php:461
 #, php-format
 msgid "Your firstname is too long. Please enter at most %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:456 src/objects/user.class.php:448
-#: src/objects/user.class.php:450
+#: src/objects/user.class.php:450 src/objects/user.class.php:467
 msgid "Please enter a lastname."
 msgstr ""
 
 #: src/objects/user.class.php:459 src/objects/user.class.php:451
-#: src/objects/user.class.php:453
+#: src/objects/user.class.php:453 src/objects/user.class.php:470
 #, php-format
 msgid "Your lastname is too short. Please enter at least %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:465 src/objects/user.class.php:457
-#: src/objects/user.class.php:459
+#: src/objects/user.class.php:459 src/objects/user.class.php:476
 #, php-format
 msgid "Your lastname is too long. Please enter at most %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:474 src/objects/user.class.php:466
-#: src/objects/user.class.php:468
+#: src/objects/user.class.php:468 src/objects/user.class.php:485
 msgid "Please enter a valid homepage URL."
 msgstr ""
 
 #: src/objects/user.class.php:477 src/objects/user.class.php:469
-#: src/objects/user.class.php:471
+#: src/objects/user.class.php:471 src/objects/user.class.php:488
 #, php-format
 msgid "Your homepage URL is too long. Please enter at most %d characters."
 msgstr ""
 
 #: src/objects/user.class.php:484 src/objects/user.class.php:476
-#: src/objects/user.class.php:478
+#: src/objects/user.class.php:478 src/objects/user.class.php:495
 #, php-format
 msgid ""
 "Your instant messenger address is too long. Please enter at most %d "
@@ -827,17 +869,17 @@ msgstr ""
 
 #: src/objects/forum.class.php:127 src/objects/group.class.php:117
 #: src/objects/forum.class.php:123 src/objects/group.class.php:108
-#: src/objects/forum.class.php:126
+#: src/objects/forum.class.php:126 src/objects/forum.class.php:130
 msgid "Inactive"
 msgstr ""
 
 #: src/objects/forum.class.php:155 src/objects/forum.class.php:151
-#: src/objects/forum.class.php:154
+#: src/objects/forum.class.php:154 src/objects/forum.class.php:159
 msgid "Please enter a valid name."
 msgstr ""
 
 #: src/objects/forum.class.php:157 src/objects/forum.class.php:153
-#: src/objects/forum.class.php:156
+#: src/objects/forum.class.php:156 src/objects/forum.class.php:161
 msgid "Please enter a summary."
 msgstr ""
 
@@ -959,27 +1001,29 @@ msgstr ""
 #: src/main_controller.class.php:658 src/main_controller.class.php:710
 #: src/main_controller.class.php:661 src/main_controller.class.php:714
 #: src/main_controller.class.php:711 src/main_controller.class.php:663
-#: src/main_controller.class.php:716
+#: src/main_controller.class.php:716 src/main_controller.class.php:719
 msgid "No Such Message"
 msgstr ""
 
 #: src/main_controller.class.php:711 src/main_controller.class.php:715
 #: src/main_controller.class.php:712 src/main_controller.class.php:717
+#: src/main_controller.class.php:720
 msgid "A message with the given ID does not exist."
 msgstr ""
 
 #: src/main_controller.class.php:728 src/main_controller.class.php:731
-#: src/main_controller.class.php:733
+#: src/main_controller.class.php:733 src/main_controller.class.php:736
 msgid "Move"
 msgstr ""
 
 #: src/main_controller.class.php:771 src/main_controller.class.php:773
 #: src/main_controller.class.php:770 src/main_controller.class.php:775
+#: src/main_controller.class.php:778
 msgid "Lock"
 msgstr ""
 
 #: src/main_controller.class.php:791 src/main_controller.class.php:794
-#: src/main_controller.class.php:796
+#: src/main_controller.class.php:796 src/main_controller.class.php:799
 msgid "Please enter a reason."
 msgstr ""
 
@@ -988,6 +1032,7 @@ msgstr ""
 #: src/main_controller.class.php:1098 src/plugins/registration/plugin.php:49
 #: src/main_controller.class.php:966 src/main_controller.class.php:1095
 #: src/main_controller.class.php:971 src/main_controller.class.php:1100
+#: src/main_controller.class.php:974 src/main_controller.class.php:1103
 msgid "Error: Passwords do not match."
 msgstr ""
 
@@ -996,43 +1041,50 @@ msgstr ""
 #: src/main_controller.class.php:1112 src/plugins/registration/plugin.php:72
 #: src/main_controller.class.php:976 src/main_controller.class.php:1109
 #: src/main_controller.class.php:981 src/main_controller.class.php:1114
+#: src/main_controller.class.php:984 src/main_controller.class.php:1117
 msgid "Failed to save the user."
 msgstr ""
 
 #: src/main_controller.class.php:974 src/main_controller.class.php:986
 #: src/main_controller.class.php:983 src/main_controller.class.php:988
+#: src/main_controller.class.php:991
 msgid "Your data has been saved."
 msgstr ""
 
 #: src/main_controller.class.php:1026 src/main_controller.class.php:1042
 #: src/main_controller.class.php:1039 src/main_controller.class.php:1044
+#: src/main_controller.class.php:1047
 msgid "Failed to save the group."
 msgstr ""
 
 #: src/main_controller.class.php:1031 src/main_controller.class.php:1047
 #: src/main_controller.class.php:1044 src/main_controller.class.php:1049
+#: src/main_controller.class.php:1052
 msgid "Your changes have been saved."
 msgstr ""
 
 #: src/main_controller.class.php:1122 src/main_controller.class.php:1148
 #: src/main_controller.class.php:1145 src/main_controller.class.php:1150
+#: src/main_controller.class.php:1153
 msgid "The given email address was not found."
 msgstr ""
 
 #: src/main_controller.class.php:1137 src/main_controller.class.php:1163
 #: src/main_controller.class.php:1160 src/main_controller.class.php:1165
+#: src/main_controller.class.php:1168
 msgid "Your account is locked."
 msgstr ""
 
 #: src/main_controller.class.php:1168
 #: src/controllers/homepage_controller.class.php:44
 #: src/main_controller.class.php:1199 src/main_controller.class.php:1196
-#: src/main_controller.class.php:1201
+#: src/main_controller.class.php:1201 src/main_controller.class.php:1204
 msgid "Add a New Forum"
 msgstr ""
 
 #: src/main_controller.class.php:1209 src/main_controller.class.php:1241
 #: src/main_controller.class.php:1238 src/main_controller.class.php:1243
+#: src/main_controller.class.php:1246
 msgid "The changes have been saved."
 msgstr ""
 
@@ -1047,12 +1099,14 @@ msgstr ""
 #: src/plugins/listview/listview.class.php:110
 #: src/plugins/listview/listview.class.php:112
 #: src/plugins/listview/listview.class.php:118
+#: src/plugins/listview/listview.class.php:119
 msgid "Show Posting List"
 msgstr ""
 
 #: src/plugins/listview/listview.class.php:114
 #: src/plugins/listview/listview.class.php:116
 #: src/plugins/listview/listview.class.php:122
+#: src/plugins/listview/listview.class.php:123
 msgid "Hide Posting List"
 msgstr ""
 
@@ -1072,6 +1126,7 @@ msgstr ""
 
 #: src/plugins/registration/plugin.php:55 src/plugins/message/plugin.php:142
 #: src/plugins/message/plugin.php:203 src/plugins/registration/plugin.php:56
+#: src/plugins/message/plugin.php:165 src/plugins/message/plugin.php:226
 msgid "The entered username is not available."
 msgstr ""
 
@@ -1133,67 +1188,79 @@ msgstr ""
 
 #: src/plugins/message/plugin.php:32 src/plugins/message/plugin.php:41
 #: src/plugins/message/plugin.php:31 src/plugins/message/plugin.php:40
+#: src/plugins/message/plugin.php:54 src/plugins/message/plugin.php:63
 msgid "Start a New Topic"
 msgstr ""
 
-#: src/plugins/message/plugin.php:217
+#: src/plugins/message/plugin.php:217 src/plugins/message/plugin.php:240
 #, php-format
 msgid ""
 "You have sent too many messages. %d seconds until your message may be sent."
 msgstr ""
 
-#: src/plugins/message/plugin.php:226
+#: src/plugins/message/plugin.php:226 src/plugins/message/plugin.php:249
 msgid "Message rejected by spamblocker."
 msgstr ""
 
 #: src/plugins/message/plugin.php:237 src/plugins/message/plugin.php:255
+#: src/plugins/message/plugin.php:278
 msgid "Failed to save the posting."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:42 src/plugins/poll/plugin.php:167
-#: src/plugins/poll/plugin.php:168
+#: src/plugins/poll/plugin.php:168 src/plugins/poll/poll.class.php:68
+#: src/plugins/poll/poll.class.php:255 src/plugins/poll/plugin.php:189
 #, php-format
 msgid "Poll: %s"
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:73 src/plugins/poll/poll.class.php:74
+#: src/plugins/poll/poll.class.php:102
 msgid "Please log in to cast your vote."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:81 src/plugins/poll/poll.class.php:82
+#: src/plugins/poll/poll.class.php:110
 msgid "Thank You for your vote."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:199 src/plugins/poll/poll.class.php:200
+#: src/plugins/poll/poll.class.php:232
 msgid "Please enter a title."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:201 src/plugins/poll/poll.class.php:202
+#: src/plugins/poll/poll.class.php:234
 msgid "The poll title is too long."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:204 src/plugins/poll/poll.class.php:205
+#: src/plugins/poll/poll.class.php:237
 msgid "Please add more options."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:206 src/plugins/poll/plugin.php:72
-#: src/plugins/poll/poll.class.php:207
+#: src/plugins/poll/poll.class.php:207 src/plugins/poll/poll.class.php:239
+#: src/plugins/poll/plugin.php:92
 msgid "Too many options."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:209 src/plugins/poll/poll.class.php:210
+#: src/plugins/poll/poll.class.php:242
 msgid "An option is too long."
 msgstr ""
 
 #: src/plugins/poll/poll.class.php:211 src/plugins/poll/poll.class.php:212
+#: src/plugins/poll/poll.class.php:244
 msgid "The poll has duplicate options."
 msgstr ""
 
 #: src/plugins/poll/plugin.php:57 src/plugins/poll/plugin.php:56
+#: src/plugins/poll/plugin.php:76
 msgid "You have reached your poll limit. Sorry."
 msgstr ""
 
-#: src/plugins/poll/plugin.php:90
+#: src/plugins/poll/plugin.php:90 src/plugins/poll/plugin.php:110
 msgid "Failed to save poll."
 msgstr ""
 
@@ -1208,6 +1275,7 @@ msgid "Find in this forum:"
 msgstr ""
 
 #: src/controllers/homepage_controller.class.php:58
+#: src/controllers/homepage_controller.class.php:59
 #, php-format
 msgid "%d postings, %d new"
 msgstr ""
@@ -1230,7 +1298,7 @@ msgstr ""
 msgid "(last edited %s)"
 msgstr ""
 
-#: src/templates/posting.php.tmpl:35
+#: src/templates/posting.php.tmpl:35 src/templates/posting.php.tmpl:37
 #, php-format
 msgid "(IP hash: %s)"
 msgstr ""
@@ -1263,6 +1331,7 @@ msgid "Member since: %s"
 msgstr ""
 
 #: src/templates/header.php.tmpl:42 src/templates/header.php.tmpl:40
+#: src/templates/header.php.tmpl:41
 #, php-format
 msgid "%d user online"
 msgid_plural "%d users online"
@@ -1270,7 +1339,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/templates/thread.php.tmpl:90 src/templates/latest.php.tmpl:37
-#: src/templates/thread.php.tmpl:87
+#: src/templates/thread.php.tmpl:87 src/templates/thread.php.tmpl:108
 msgid "Edited"
 msgstr ""
 
@@ -1319,7 +1388,7 @@ msgstr ""
 msgid "on %s"
 msgstr ""
 
-#: src/plugins/poll/form.php.tmpl:25
+#: src/plugins/poll/form.php.tmpl:25 src/plugins/poll/form.php.tmpl:32
 #, php-format
 msgid "Option %d:"
 msgstr ""
@@ -1365,4 +1434,86 @@ msgid ""
 "\n"
 "*******************************************************\n"
 "[BODY]\n"
+msgstr ""
+
+#: src/templates/user_profile.php.tmpl:92
+msgid "Write private message"
+msgstr ""
+
+#: src/templates/user_profile.php.tmpl:96
+msgid ""
+"This message contains, for the purpose of a direct answer by the receiver, "
+"your e-mail address, even if they have expressed themselves in the profile "
+"against a publication."
+msgstr ""
+
+#: src/templates/user_profile.php.tmpl:125
+msgid "Insert real name:"
+msgstr ""
+
+#: src/plugins/contact/plugin.php:66
+msgid "Status: private message"
+msgstr ""
+
+#: src/plugins/contact/plugin.php:67
+msgid "The message was rejected, because not all fields were filled."
+msgstr ""
+
+#: src/plugins/contact/plugin.php:69
+msgid "The email has been sent. A blind carbon copy was delivered to you."
+msgstr ""
+
+#: src/plugins/contact/plugin.php:85
+msgid ""
+"This email was dispatched with the address [NOREPLY] to make sure under all "
+"circumstances that the sender receives your email address not without your "
+"explicit consent."
+msgstr ""
+
+#: src/plugins/contact/plugin.php:88
+msgid ""
+"Your answer to user [USERNAME] should be forwarded to following address:"
+msgstr ""
+
+#: src/plugins/contact/plugin.php:91
+msgid ""
+"If your mail client does not show this address, you have to put it in "
+"manually."
+msgstr ""
+
+#: src/plugins/contact/plugin.php:93
+msgid "All answers to [NOREPLY] will be deleted automatically."
+msgstr ""
+
+#: src/plugins/contact/plugin.php:94
+msgid "The forum operator is not responsible for the contents of the message."
+msgstr ""
+
+#: src/plugins/contact/plugin.php:97
+msgid "[USERNAME] wrote:"
+msgstr ""
+
+#: src/plugins/poll/form.php.tmpl:17
+msgid "Allow for checking multiple boxes:"
+msgstr ""
+
+#: src/plugins/poll/form.php.tmpl:24
+msgid "Optional description:"
+msgstr ""
+
+#: src/plugins/poll/poll.class.php:246
+#, php-format
+msgid "Your description exceeds the maximum length of %d characters."
+msgstr ""
+
+#: src/controllers/footer_controller.class.php:43
+msgid "Go to top"
+msgstr ""
+
+#: src/objects/forum.class.php:132
+msgid "Read Only"
+msgstr ""
+
+#: src/libuseful/string.inc.php:121
+msgid "Welcome page"
 msgstr ""

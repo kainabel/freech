@@ -65,8 +65,7 @@ class Poll extends PostingDecorator {
 
 
   function has_description() {
-    return ((sprintf(_('Poll: %s'), $this->get_subject()))
-           != $this->get_body());
+    return ($this->get_subject() != $this->get_body());
   }
 
   function get_description_html() {

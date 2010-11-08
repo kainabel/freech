@@ -71,6 +71,10 @@ input {
   border: 1px solid #ffd605;
 }
 
+.normal {
+  font-weight: normal;
+}
+
 .ack {
   background: #84ff86;
   border: 1px solid #4eee00;

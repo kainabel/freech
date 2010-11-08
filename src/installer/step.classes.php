@@ -149,15 +149,20 @@ class DatabaseSetup extends Step {
     $this->state->set('db_create', (string)trim($_POST['db_create']));
 
     // A few improvements to the table prefix.
-    $db_base = preg_replace('~[^a-z_]~', '', trim($_POST['db_base']));
+    $db_base = preg_replace('~[^a-z0-9_]~', '', trim($_POST['db_base']));
     if ((substr($db_base, -1)) != '_') $db_base.= '_';
     $this->state->set('db_base', $db_base);
+
+    if ($db_base != trim($_POST['db_base'])) {
+      $vars['errors'][] = new Result('Table prefix changed!', FALSE,
+        'Only small letters, digits and the underscore are permitted.');
+    }
 
     $vars = $this->state->get_attributes();
     $vars['errors'] = array();
     $name = 'Verify form input.';
 
-    // Check the syntax.
+    // Check the form input.
     if ($this->state->get('db_host') == '') {
       $vars['errors'][] = new Result($name, FALSE,
         'Database hostname was not specified.');

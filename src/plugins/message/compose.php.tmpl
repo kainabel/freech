@@ -15,10 +15,11 @@
 <input type='hidden' name='may_quote' value='<?php echo esc($may_quote)?>' />
 <?php if ($__user->is_anonymous()) { ?>
 <p>
-  <label><?php echo esc(_('Username:'))?></label>
+  <label for='username'><?php echo esc(_('Username:'))?></label>
   <i><?php echo esc(_('(required)'))?></i><br />
   <input type='text'
          size='80'
+         id='username'
          name='username'
          value='<?php echo esc($message->get_username())?>'
          maxlength='<?php echo $max_usernamelength?>' />
@@ -28,21 +29,22 @@
 <?php } ?>
 
 <p>
-  <label><?php echo esc(_('Subject:'))?></label>
+  <label for='subject'><?php echo esc(_('Subject:'))?></label>
   <i><?php echo esc(_('(required)'))?></i><br />
   <input type='text'
          size='80'
+         id='subject'
          name='subject'
          value='<?php echo esc($message->get_subject())?>'
          maxlength='<?php echo $max_subjectlength?>' />
 </p>
 
 <p>
-  <label><?php echo esc(_('Message:'))?></label>
+  <label for='body'><?php echo esc(_('Message:'))?></label>
   <i><?php echo esc(_('(required)'))?></i><br />
-  
-  <textarea name='body' cols='90' rows='20'><?php echo esc($message->get_body())?></textarea>
-  
+
+  <textarea name='body' id='body' cols='90' rows='20'><?php echo esc($message->get_body())?></textarea>
+
 </p>
 
 <p>

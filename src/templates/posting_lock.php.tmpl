@@ -3,6 +3,7 @@
 <?php require "$template_dir/error.inc.php.tmpl" ?>
 
 <script type="text/javascript">
+<!--//--><![CDATA[//><!--
 function change () {
   if (document.getElementById('spam_checkbox').checked == true) {
     document.getElementById('reason').disabled = true;
@@ -10,6 +11,7 @@ function change () {
     document.getElementById('reason').disabled = false;
   }
 }
+//--><!]]>
 </script>
 
 <form action="<?php echo esc($action)?>"

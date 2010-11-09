@@ -153,16 +153,15 @@ class DatabaseSetup extends Step {
     if ((substr($db_base, -1)) != '_') $db_base.= '_';
     $this->state->set('db_base', $db_base);
 
-    if ($db_base != trim($_POST['db_base'])) {
-      $vars['errors'][] = new Result('Table prefix changed!', FALSE,
-        'Only small letters, digits and the underscore are permitted.');
-    }
-
     $vars = $this->state->get_attributes();
     $vars['errors'] = array();
     $name = 'Verify form input.';
 
     // Check the form input.
+    if ($db_base != trim($_POST['db_base'])) {
+      $vars['errors'][] = new Result('Table prefix changed!', FALSE,
+        'Only small letters, digits and the underscore are permitted.');
+    }
     if ($this->state->get('db_host') == '') {
       $vars['errors'][] = new Result($name, FALSE,
         'Database hostname was not specified.');

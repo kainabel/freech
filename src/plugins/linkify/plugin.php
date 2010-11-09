@@ -73,15 +73,16 @@ function linkify_try_youtube_url($url, $in_quotes) {
                   $url,
                   $matches))
     return '';
-  $video_id = $matches[1];
+  $video_id  = $matches[1];
+  $video_id .= '&amp;hl=en&amp;fs=1&amp;border=1&amp;rel=0&amp;showsearch=0';
   return "<!-- plugin linkify -->
   <div style='margin: 10px; width: 650px; text-align: center' class='video'>
     <object width='615'
             height='494'
             type='application/x-shockwave-flash'
-            data='http://www.youtube.com/v/$video_id&amp;hl=en&amp;fs=1&amp;border=1'>
+            data='http://www.youtube.com/v/$video_id'>
       <param name='movie'
-             value='http://www.youtube.com/v/$video_id&amp;hl=en&amp;fs=1' />
+            value='http://www.youtube.com/v/$video_id' />
       <param name='allowFullScreen' value='true' />
       <param name='allowscriptaccess' value='always' />
       <img class='noflash'

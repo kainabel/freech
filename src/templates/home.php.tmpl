@@ -35,7 +35,7 @@
   <?php if ($postings) { ?>
     <?php foreach ($postings as $posting) { ?>
       <?php if ($posting->is_active()) { ?>
-        <li><?php echo $posting->get_url_html()?></li>
+        <li><?php echo $posting->get_url_html_plus()?></li>
       <?php } else { ?>
         <li><?php echo esc($posting->get_subject())?></li>
       <?php } ?>

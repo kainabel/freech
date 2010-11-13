@@ -61,7 +61,7 @@ class Posting {
     $this->fields['allow_answer']  = TRUE;
     $this->fields['notify_author'] = FALSE;
     $this->fields['ip_hash']       = $this->_ip_hash($_SERVER['REMOTE_ADDR']);
-    $this->fields['rating']        = null;
+    $this->fields['rating']        = NULL;
     $this->fields['rating_count']  = 0;
     unset($this->fields['indent']);
   }
@@ -293,6 +293,22 @@ class Posting {
       $url .= '&amp;hs=' . (int)$_GET['hs'];
     $label = htmlentities($this->fields['subject'], ENT_QUOTES, 'UTF-8');
     return "<a href='?$url'>$label</a>";
+  }
+
+
+  // Adds title when subject longer as $param
+  function get_url_html_plus($title_after = 40) {
+    global $cfg;
+    $url .= $cfg['urlvars_str'] . 'action=read'
+          . '&amp;msg_id='   . $this->fields['id']
+          . '&amp;forum_id=' . $this->fields['forum_id'];
+    if ($cfg['remember_page'])
+      $url .= '&amp;hs=' . (int)$_GET['hs'];
+    $label = htmlentities($this->fields['subject'], ENT_QUOTES, 'UTF-8');
+    if ($title_after <= strlen($label))
+      return "<a href='?$url' title='$label'>$label</a>";
+    else
+      return "<a href='?$url'>$label</a>";
   }
 
 

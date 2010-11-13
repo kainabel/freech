@@ -173,6 +173,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_url_html_plus($title_after = 40) {
+    return $this->posting->get_url_html_plus($title_after);
+  }
+
+
   function get_url_string() {
     return $this->posting->get_url()->get_string();
   }

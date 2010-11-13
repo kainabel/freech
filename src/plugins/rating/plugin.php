@@ -26,9 +26,16 @@ function rating_on_read(&$api,&$message) {
   if($posting->get_renderer() != "message")
     return;
 
-    // don't apply on locked messages
+  // don't apply on locked messages
   if ($posting->is_active() != TRUE)
     return;
+
+  // 'panic' switch in config file was set
+  if (cfg('set_read_only')) {
+    $api->group()->permissions['write'] = FALSE;
+    $api->unregister_action('set_rating');
+    return;
+  }
 
   $rating_body = "";
 

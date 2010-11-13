@@ -8,7 +8,8 @@
 <?php } ?>
 <?php if ($posting->is_selected()) { ?>
   <span class='selected'><?php echo esc($posting->get_subject())?></span>
-<?php } elseif ($posting->is_active()) { ?>
+<?php } elseif ($posting->is_active()
+                || $this->api->controller->get_current_group()->may('bypass')) { ?>
   <?php echo $posting->get_url_html()?>
 <?php } else { ?>
   <?php echo esc($posting->get_subject())?>

@@ -157,7 +157,7 @@ class ThreadView extends View {
       $state      = new ThreadState(THREAD_STATE_UNFOLDED, '');
       $func       = array(&$this, '_format_posting');
       $thread_ids = array($_posting->get_thread_id());
-      $threads    = $this->forumdb->get_threads_from_id($thread_ids, FALSE);
+      $threads    = $this->forumdb->get_threads_from_id($thread_ids, TRUE);
       trace('thread loaded');
       $threads[0]->foreach_posting($func);
       trace('thread formatted');

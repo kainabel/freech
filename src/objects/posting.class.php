@@ -607,16 +607,16 @@ class Posting {
 
 
   function is_editable() {
-    return TRUE;
+    return $this->fields['status'] == POSTING_STATUS_ACTIVE;
   }
 
 
   function apply_block() {
     if ($this->is_active())
       return;
+    $this->set_body(_('Locked Message'));
     $this->set_subject(_('Locked Message'));
     $this->set_username('------');
-    $this->set_body('');
   }
 
 

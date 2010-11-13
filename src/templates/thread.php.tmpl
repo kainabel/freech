@@ -71,16 +71,12 @@
 <?php } ?>
 <?php if ($selected) { ?>
     <span class='selected'><?php echo esc($posting->get_subject())?></span>
-<?php }
-  elseif (!$posting->is_active()) {
-    if (!$this->api->controller->get_current_group()->may('bypass')) {
-      echo esc($posting->get_subject());
-    } else {
-      echo $posting->get_url_html();
-    }
-  } else {
-      echo $posting->get_url_html();
-} ?>
+<?php } elseif ($posting->is_active()
+                || $this->api->controller->get_current_group()->may('bypass')) { ?>
+  <?php echo $posting->get_url_html()?>
+<?php } else { ?>
+  <?php echo esc($posting->get_subject())?>
+<?php } ?>
 <?php if ($relation == POSTING_RELATION_PARENT_FOLDED) { ?>
   &nbsp;(<?php echo $thread->get_n_children();?>)
 <?php } ?>

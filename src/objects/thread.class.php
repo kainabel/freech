@@ -69,6 +69,9 @@ class Thread {
     $posting->_set_path(substr($_path, 8) . '00');
     $posting->set_status(POSTING_STATUS_LOCKED);
     $posting->apply_block();
+    // faked timestamp against the time bug in ThreadView
+    $posting->set_created_unixtime(1118786400);
+    $posting->set_updated_unixtime(1118786400);
     $posting = $this->api->_decorate_posting($posting);
     $this->_add_posting($posting);
     return $posting;

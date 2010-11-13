@@ -13,8 +13,11 @@
  <tr>
   <td colspan='2'></td>
   <td align='left' class='modlog_reason'>
-    <?php echo esc(sprintf(_('Reason: %s'), $item->get_reason_fmt()))?>
-  </td>
+    <?php echo esc(sprintf(_('Reason: %s'), $item->get_reason_fmt()));
+    if ($may_bypass) {
+     echo '<br />' . esc(_('Subject:')). ' ' . esc($item->attributes['subject']);
+    }
+    ?></td>
  </tr>
  <?php } ?>
 <?php } ?>

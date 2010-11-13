@@ -22,13 +22,15 @@
   class ModLogController extends Controller {
     function show($_offset = 0) {
       $modlogdb = $this->api->modlogdb();
+      $group    = $this->api->group();
       $query    = array();
       $items    = $modlogdb->get_items_from_query($query,
                                                   cfg('modlog_epp'),
                                                   (int)$_offset);
       $this->clear_all_assign();
+      $this->assign_by_ref('may_bypass', $group->may('bypass'));
       $this->assign_by_ref('n_rows', count($items));
-      $this->assign_by_ref('items',  $items);
+      $this->assign_by_ref('items', $items);
       $this->render_php('modlog.php.tmpl');
     }
 

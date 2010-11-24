@@ -1,7 +1,7 @@
 <?php
   /*
   Freech.
-  Copyright (C) 2003 Samuel Abels, <http://debain.org>
+  Copyright (C) 2003 Samuel Abels
   
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

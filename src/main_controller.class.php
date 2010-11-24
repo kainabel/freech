@@ -78,8 +78,8 @@ class MainController {
   function init() {
     trace('Enter');
     // Select a supported language.
-    if ($_SERVER[HTTP_ACCEPT_LANGUAGE]) {
-      $langs = explode(',', $_SERVER[HTTP_ACCEPT_LANGUAGE]);
+    if ($_SERVER['HTTP_ACCEPT_LANGUAGE']) {
+      $langs = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
       foreach ($langs as $current) {
         if (strstr($current, '-')) {
           $both    = explode('-', $current);

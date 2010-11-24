@@ -38,11 +38,11 @@ class BBView extends View {
 
     $group     = $this->api->group();
     $n_threads = $this->forumdb->get_n_threads((int)$_forum_id);
-    $args      = array(forum_id           => (int)$_forum_id,
-                       n_threads          => (int)$n_threads,
-                       n_threads_per_page => cfg('epp'),
-                       n_offset           => (int)$_offset,
-                       n_pages_per_index  => cfg('ppi'));
+    $args      = array('forum_id'           => (int)$_forum_id,
+                       'n_threads'          => (int)$n_threads,
+                       'n_threads_per_page' => cfg('epp'),
+                       'n_offset'           => (int)$_offset,
+                       'n_pages_per_index'  => cfg('ppi'));
 
     include dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarBBView($args);
@@ -73,10 +73,10 @@ class BBView extends View {
 
     // Create the indexbar.
     $n_postings = $this->forumdb->get_n_postings($args);
-    $args       = array(n_postings          => (int)$n_postings,
-                        n_postings_per_page => cfg('epp'),
-                        n_offset            => (int)$_GET['hs'],
-                        n_pages_per_index   => cfg('ppi'));
+    $args       = array('n_postings'          => (int)$n_postings,
+                        'n_postings_per_page' => cfg('epp'),
+                        'n_offset'            => (int)$_GET['hs'],
+                        'n_pages_per_index'   => cfg('ppi'));
 
     include dirname(__FILE__).'/indexbar_read_posting.class.php';
     $indexbar = new BBViewIndexBarReadPosting($_posting, $args);

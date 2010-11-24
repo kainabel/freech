@@ -83,7 +83,7 @@
 
   // Defines whether threads in thread view are folded by default.
   // Possible values are THREAD_STATE_FOLDED or THREAD_STATE_UNFOLDED.
-  $cfg['default_thread_state'] = THREAD_STATE_UNFOLDED;
+  $cfg['default_thread_state'] = 'THREAD_STATE_UNFOLDED';
 
   // May users edit their postings?
   $cfg['postings_editable'] = TRUE;

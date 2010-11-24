@@ -62,13 +62,13 @@
       $search    = array('userid' => $_user->get_id());
       $n_entries = $this->forumdb->get_n_postings($search);
       $action    = $this->api->action();
-      $args      = array(action              => $action,
-                         user                => $_user,
-                         n_postings          => $n_entries,
-                         n_postings_per_page => cfg('epp'),
-                         n_offset            => $_offset,
-                         n_pages_per_index   => cfg('ppi'),
-                         thread_state        => $thread_state);
+      $args      = array('action'              => $action,
+                         'user'                => $_user,
+                         'n_postings'          => $n_entries,
+                         'n_postings_per_page' => cfg('epp'),
+                         'n_offset'            => $_offset,
+                         'n_pages_per_index'   => cfg('ppi'),
+                         'thread_state'        => $thread_state);
 
       include 'objects/indexbar_user_postings.class.php';
       $indexbar = new IndexBarUserPostings($args);

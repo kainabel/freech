@@ -42,26 +42,26 @@ define('USER_STATUS_BLOCKED',     3);
     /// Resets all values.
     function clear() {
       $this->fields = array();
-      $this->fields[group_id]    = -1;
-      $this->fields[name]        = '';
-      $this->fields[firstname]   = '';
-      $this->fields[lastname]    = '';
-      $this->fields[status]      = USER_STATUS_UNCONFIRMED;
-      $this->fields[public_mail] = FALSE;
-      $this->fields[do_notify]   = FALSE;
-      $this->fields[created]     = time();
-      $this->fields[lastlogin]   = time();
+      $this->fields['group_id']    = -1;
+      $this->fields['name']        = '';
+      $this->fields['firstname']   = '';
+      $this->fields['lastname']    = '';
+      $this->fields['status']      = USER_STATUS_UNCONFIRMED;
+      $this->fields['public_mail'] = FALSE;
+      $this->fields['do_notify']   = FALSE;
+      $this->fields['created']     = time();
+      $this->fields['lastlogin']   = time();
     }
 
 
     /// Set a unique id for the user.
     function set_id($_id) {
-      $this->fields[id] = (int)$_id;
+      $this->fields['id'] = (int)$_id;
     }
 
 
     function get_id() {
-      return $this->fields[id];
+      return $this->fields['id'];
     }
 
 
@@ -71,29 +71,29 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function set_group_id($_group_id) {
-      $this->fields[group_id] = (int)$_group_id;
+      $this->fields['group_id'] = (int)$_group_id;
     }
 
 
     function get_group_id() {
-      return $this->fields[group_id];
+      return $this->fields['group_id'];
     }
 
 
     function set_name($_name) {
-      $this->fields[name] = preg_replace('/\s+/', ' ', trim($_name));
+      $this->fields['name'] = preg_replace('/\s+/', ' ', trim($_name));
     }
 
 
     function get_name() {
-      return $this->fields[name];
+      return $this->fields['name'];
     }
 
 
     function get_normalized_name() {
       $src  = array(".", "_", "-", "0", "1", "5", "6", "8");
       $dst  = array(" ", " ", " ", "O", "I", "S", "G", "B");
-      $norm = str_replace($src, $dst, $this->fields[name]);
+      $norm = str_replace($src, $dst, $this->fields['name']);
       $src  = array("ü",  "ä",  "ö",  "ß");
       $dst  = array("ue", "ae", "oe", "ss");
       $norm = str_replace($src, $dst, $norm);
@@ -152,33 +152,33 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function set_firstname($_firstname) {
-      $this->fields[firstname] = preg_replace('/\s+/', ' ', trim($_firstname));
+      $this->fields['firstname'] = preg_replace('/\s+/', ' ', trim($_firstname));
     }
 
 
     function get_firstname() {
-      return $this->fields[firstname];
+      return $this->fields['firstname'];
     }
 
 
     function set_lastname($_lastname) {
-      $this->fields[lastname] = preg_replace("/\s+/", " ", trim($_lastname));
+      $this->fields['lastname'] = preg_replace("/\s+/", " ", trim($_lastname));
     }
 
 
     function get_lastname() {
-      return $this->fields[lastname];
+      return $this->fields['lastname'];
     }
 
 
     function set_mail($_mail, $_mail_is_public = FALSE) {
-      $this->fields[mail]        = strtolower(trim($_mail));
-      $this->fields[public_mail] = $_mail_is_public;
+      $this->fields['mail']        = strtolower(trim($_mail));
+      $this->fields['public_mail'] = $_mail_is_public;
     }
 
 
     function get_mail() {
-      return $this->fields[mail];
+      return $this->fields['mail'];
     }
 
 
@@ -200,21 +200,21 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function set_do_notify($_do_notify = TRUE) {
-      $this->fields[do_notify] = (bool)$_do_notify;
+      $this->fields['do_notify'] = (bool)$_do_notify;
     }
 
 
     function get_do_notify() {
-      return $this->fields[do_notify];
+      return $this->fields['do_notify'];
     }
 
 
     function check_mail() {
       //FIXME: make a much better check.
       if (!preg_match('/^[a-z0-9\-\._]+@[a-z0-9\-\._]+\.[a-z]+$/',
-                      $this->fields[mail]))
+                      $this->fields['mail']))
         return _('Please enter a valid email address.');
-      if (strlen($this->fields[mail]) > cfg('max_maillength'))
+      if (strlen($this->fields['mail']) > cfg('max_maillength'))
         return sprintf(_('Please enter an email address with at most %d'
                        . ' characters.'),
                        cfg('max_maillength'));
@@ -223,7 +223,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function mail_is_public() {
-      return $this->fields[public_mail];
+      return $this->fields['public_mail'];
     }
 
 
@@ -231,17 +231,17 @@ define('USER_STATUS_BLOCKED',     3);
       $_homepage = trim($_homepage);
       if ($_homepage && !preg_match("/^http/i", $_homepage))
         $_homepage = "http://" . $_homepage;
-      $this->fields[homepage] = $_homepage;
+      $this->fields['homepage'] = $_homepage;
     }
 
 
     function get_homepage() {
-      return $this->fields[homepage];
+      return $this->fields['homepage'];
     }
 
 
     function get_homepage_url() {
-      return new FreechURL($this->fields[homepage]);
+      return new FreechURL($this->fields['homepage']);
     }
 
 
@@ -252,12 +252,12 @@ define('USER_STATUS_BLOCKED',     3);
 
     /// Instant messenger address.
     function set_im($_im) {
-      $this->fields[im] = trim($_im);
+      $this->fields['im'] = trim($_im);
     }
 
 
     function get_im() {
-      return $this->fields[im];
+      return $this->fields['im'];
     }
 
 
@@ -272,7 +272,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_created_unixtime() {
-      return $this->fields[created];
+      return $this->fields['created'];
     }
 
 
@@ -280,12 +280,12 @@ define('USER_STATUS_BLOCKED',     3);
     function get_created_time($_format = '') {
       if (!$_format)
         $_format = cfg('dateformat');
-      return strftime($_format, $this->fields[created]);
+      return strftime($_format, $this->fields['created']);
     }
 
 
     function get_updated_unixtime() {
-      return $this->fields[updated];
+      return $this->fields['updated'];
     }
 
 
@@ -293,17 +293,17 @@ define('USER_STATUS_BLOCKED',     3);
     function get_updated_time($_format = '') {
       if (!$_format)
         $_format = cfg('dateformat');
-      return strftime($_format, $this->fields[updated]);
+      return strftime($_format, $this->fields['updated']);
     }
 
 
     function set_last_login_time($_lastlogin) {
-      $this->fields[lastlogin] = (int)$_lastlogin;
+      $this->fields['lastlogin'] = (int)$_lastlogin;
     }
 
 
     function get_last_login_unixtime() {
-      return $this->fields[lastlogin];
+      return $this->fields['lastlogin'];
     }
 
 
@@ -364,17 +364,17 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function set_status($_status) {
-      $this->fields[status] = (int)$_status;
+      $this->fields['status'] = (int)$_status;
     }
 
 
     function get_status() {
-      return $this->fields[status];
+      return $this->fields['status'];
     }
 
 
     function is_active() {
-      return $this->fields[status] == USER_STATUS_ACTIVE;
+      return $this->fields['status'] == USER_STATUS_ACTIVE;
     }
 
 
@@ -384,12 +384,12 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function is_confirmed() {
-      return $this->fields[status] != USER_STATUS_UNCONFIRMED;
+      return $this->fields['status'] != USER_STATUS_UNCONFIRMED;
     }
 
 
     function is_locked() {
-      return $this->fields[status] == USER_STATUS_BLOCKED;
+      return $this->fields['status'] == USER_STATUS_BLOCKED;
     }
 
 
@@ -407,7 +407,7 @@ define('USER_STATUS_BLOCKED',     3);
 
 
     function get_status_name() {
-      return $this->get_status_names($this->fields[status]);
+      return $this->get_status_names($this->fields['status']);
     }
 
 
@@ -427,71 +427,71 @@ define('USER_STATUS_BLOCKED',     3);
 
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
-      if (ctype_space($this->fields[name]))
+      if (ctype_space($this->fields['name']))
         return _('Please enter a username.');
 
-      if (strlen($this->fields[name]) < cfg('min_usernamelength')) {
+      if (strlen($this->fields['name']) < cfg('min_usernamelength')) {
         $err = _('Your login name is too short. Please enter at least'
                . ' %d characters.');
         return sprintf($err, cfg('min_usernamelength'));
       }
 
-      if (strlen($this->fields[name]) > cfg('max_usernamelength')) {
+      if (strlen($this->fields['name']) > cfg('max_usernamelength')) {
         $err = _('Your login name is too long. Please enter at most'
                . ' %d characters.');
         return sprintf($err, cfg('max_usernamelength'));
       }
 
-      if (!preg_match(cfg('username_pattern'), $this->fields[name]))
+      if (!preg_match(cfg('username_pattern'), $this->fields['name']))
         return _('Your username contains invalid characters.');
 
       if (ctype_space($this->fields['password']))
         return _('Please enter a password.');
 
-      if (ctype_space($this->fields[firstname]))
+      if (ctype_space($this->fields['firstname']))
         return _('Please enter a firstname.');
 
-      if (strlen($this->fields[firstname]) < cfg('min_firstnamelength')) {
+      if (strlen($this->fields['firstname']) < cfg('min_firstnamelength')) {
         $err = _('Your firstname is too short. Please enter at least'
                . ' %d characters.');
         return sprintf($err, cfg('min_firstnamelength'));
       }
 
-      if (strlen($this->fields[firstname]) > cfg('max_firstnamelength')) {
+      if (strlen($this->fields['firstname']) > cfg('max_firstnamelength')) {
         $err = _('Your firstname is too long. Please enter at most'
                . ' %d characters.');
         return sprintf($err, cfg('max_firstnamelength'));
       }
 
-      if (ctype_space($this->fields[lastname]))
+      if (ctype_space($this->fields['lastname']))
         return _('Please enter a lastname.');
 
-      if (strlen($this->fields[lastname]) < cfg('min_lastnamelength')) {
+      if (strlen($this->fields['lastname']) < cfg('min_lastnamelength')) {
         $err = _('Your lastname is too short. Please enter at least'
                . ' %d characters.');
         return sprintf($err, cfg('min_lastnamelength'));
       }
 
-      if (strlen($this->fields[lastname]) > cfg('max_lastnamelength')) {
+      if (strlen($this->fields['lastname']) > cfg('max_lastnamelength')) {
         $err = _('Your lastname is too long. Please enter at most'
                . ' %d characters.');
         return sprintf($err, cfg('max_lastnamelength'));
       }
 
       //FIXME: make a much better check.
-      if ($this->fields[homepage]) {
+      if ($this->fields['homepage']) {
         if (!preg_match('/^http:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+$/i',
-                        $this->fields[homepage]))
+                        $this->fields['homepage']))
           return _('Please enter a valid homepage URL.');
 
-        if (strlen($this->fields[homepage]) > cfg('max_homepageurllength')) {
+        if (strlen($this->fields['homepage']) > cfg('max_homepageurllength')) {
           $err = _('Your homepage URL is too long. Please enter at most'
                  . ' %d characters.');
           return sprintf($err, cfg('max_homepageurllength'));
         }
       }
 
-      if (strlen($this->fields[im]) > cfg('max_imlength')) {
+      if (strlen($this->fields['im']) > cfg('max_imlength')) {
         $err = _('Your instant messenger address is too long. Please enter at'
                . ' most %d characters.');
         return sprintf($err, cfg('max_imlength'));

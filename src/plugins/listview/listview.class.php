@@ -57,11 +57,11 @@ class ListView extends View {
     $group     = $this->api->group();
     $search    = array('forum_id' => (int)$_forum_id);
     $n_entries = $this->forumdb->get_n_postings($search);
-    $args      = array(forum_id            => (int)$_forum_id,
-                       n_postings          => (int)$n_entries,
-                       n_postings_per_page => cfg('epp'),
-                       n_offset            => (int)$_offset,
-                       n_pages_per_index   => cfg('ppi'));
+    $args      = array('forum_id'            => (int)$_forum_id,
+                       'n_postings'          => (int)$n_entries,
+                       'n_postings_per_page' => cfg('epp'),
+                       'n_offset'            => (int)$_offset,
+                       'n_pages_per_index'   => cfg('ppi'));
 
     include dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarByTime($args);
@@ -84,7 +84,7 @@ class ListView extends View {
     $group     = $this->api->group();
     $db        = $this->forumdb;
     $msg_uid   = $_posting ? $_posting->get_user_id() : -1;
-    $showlist  = $_posting && $_COOKIE[thread] != 'hide'; //FIXME: rename "thread" cookie
+    $showlist  = $_posting && $_COOKIE['thread'] != 'hide'; //FIXME: rename "thread" cookie
     $may_write = $group->may('write');
     $may_edit  = $may_write
               && cfg('postings_editable')

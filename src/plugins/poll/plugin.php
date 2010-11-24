@@ -249,7 +249,7 @@ function _get_poll_from_id(&$api, $poll_id) {
   $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
 
   while ($row = $res->FetchRow($res)) {
-    $option = new PollOption($row[name], $row[id]);
+    $option = new PollOption($row['name'], $row['id']);
     $poll->add_option($option);
   }
 
@@ -263,7 +263,7 @@ function _get_poll_from_id(&$api, $poll_id) {
   $query->set_int('poll_id', $poll_id);
   $res = $db->Execute($query->sql()) or die('_get_poll_from_id()');
   while ($row = $res->FetchRow())
-    $poll->add_result($row[id], $row[votes]);
+    $poll->add_result($row['id'], $row['votes']);
   return $poll;
 }
 

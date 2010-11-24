@@ -52,7 +52,7 @@ class Posting {
   function clear() {
     $this->fields = array();
     $this->fields['created']       = time();
-    $this->fields['updated']       = $this->fields[created];
+    $this->fields['updated']       = $this->fields['created'];
     $this->fields['relation']      = POSTING_RELATION_UNKNOWN;
     $this->fields['renderer']      = 'message';
     $this->fields['status']        = POSTING_STATUS_ACTIVE;
@@ -87,23 +87,23 @@ class Posting {
 
 
   function _set_path($_path) {
-    $this->fields[path] = $_path;
+    $this->fields['path'] = $_path;
   }
 
 
   function _get_path() {
-    return $this->fields[path];
+    return $this->fields['path'];
   }
 
 
   // Set a unique id for the posting.
   function set_id($_id) {
-    $this->fields[id] = $_id * 1;
+    $this->fields['id'] = $_id * 1;
   }
 
 
   function get_id() {
-    return $this->fields[id];
+    return $this->fields['id'];
   }
 
 
@@ -113,7 +113,7 @@ class Posting {
 
 
   function get_forum_id() {
-    return $this->fields[forum_id];
+    return $this->fields['forum_id'];
   }
 
 
@@ -133,17 +133,17 @@ class Posting {
 
 
   function get_priority() {
-    return $this->fields[priority];
+    return $this->fields['priority'];
   }
 
 
   function set_user_id($_user_id) {
-    $this->fields[user_id] = $_user_id;
+    $this->fields['user_id'] = $_user_id;
   }
 
 
   function get_user_id() {
-    return $this->fields[user_id];
+    return $this->fields['user_id'];
   }
 
 
@@ -197,17 +197,17 @@ class Posting {
 
 
   function set_username($_username) {
-    $this->fields[username] = preg_replace("/\s+/", " ", trim($_username));
+    $this->fields['username'] = preg_replace("/\s+/", " ", trim($_username));
   }
 
 
   function get_username() {
-    return $this->fields[username];
+    return $this->fields['username'];
   }
 
 
   function set_subject($_subject) {
-    $this->fields[subject] = preg_replace("/\s+/", " ", trim($_subject));
+    $this->fields['subject'] = preg_replace("/\s+/", " ", trim($_subject));
   }
 
 
@@ -217,12 +217,12 @@ class Posting {
 
 
   function set_body($_body) {
-    $this->fields[body] = $_body;
+    $this->fields['body'] = $_body;
   }
 
 
   function get_body() {
-    return $this->fields[body];
+    return $this->fields['body'];
   }
 
 
@@ -260,12 +260,12 @@ class Posting {
 
 
   function set_renderer($_name) {
-    $this->fields[renderer] = trim($_name);
+    $this->fields['renderer'] = trim($_name);
   }
 
 
   function get_renderer() {
-    return $this->fields[renderer];
+    return $this->fields['renderer'];
   }
 
 
@@ -468,7 +468,7 @@ class Posting {
   function get_created_time($_format = '') {
     if (!$_format)
       $_format = cfg('dateformat');
-    return strftime($_format, $this->fields[created]);
+    return strftime($_format, $this->fields['created']);
   }
 
 
@@ -507,7 +507,7 @@ class Posting {
   function get_updated_time($_format = '') {
     if (!$_format)
       $_format = cfg('dateformat');
-    return strftime($_format, $this->fields[updated]);
+    return strftime($_format, $this->fields['updated']);
   }
 
 
@@ -520,7 +520,7 @@ class Posting {
   function get_thread_updated_time($_format = '') {
     if (!$_format)
       $_format = cfg('dateformat');
-    return strftime($_format, $this->fields[threadupdate]);
+    return strftime($_format, $this->fields['threadupdate']);
   }
 
 
@@ -675,30 +675,30 @@ class Posting {
   function check_complete() {
     // The appended "\n" on the following three lines is a workaround for a bug in PHP.
     // http://bugs.php.net/bug.php?id=30945
-    if (ctype_space($this->fields[username] . "\n")
-     || ctype_space($this->fields[subject]  . "\n")
-     || ctype_space($this->fields[body]     . "\n"))
+    if (ctype_space($this->fields['username'] . "\n")
+     || ctype_space($this->fields['subject']  . "\n")
+     || ctype_space($this->fields['body']     . "\n"))
       return _('Warning! Your message is incomplete.');
 
-    if (strlen($this->fields[username]) > cfg('max_usernamelength'))
+    if (strlen($this->fields['username']) > cfg('max_usernamelength'))
       return sprintf(_('Please enter a name with at most %d characters.'),
                      cfg('max_usernamelength'));
-    if (!preg_match(cfg('username_pattern'), $this->fields[username]))
+    if (!preg_match(cfg('username_pattern'), $this->fields['username']))
       return _('Your login name contains invalid characters.');
 
 
-    if (strlen($this->fields[subject]) > cfg('max_subjectlength'))
+    if (strlen($this->fields['subject']) > cfg('max_subjectlength'))
       return sprintf(_('Please enter a subject with at most %d characters.'),
                      cfg('max_subjectlength'));
 
-    if (strlen($this->fields[body]) > cfg('max_msglength'))
+    if (strlen($this->fields['body']) > cfg('max_msglength'))
       return sprintf(_('Your message exceeds the maximum length'
                      . ' of %d characters.'),
                      cfg('max_msglength'));
 
-    if (!is_utf8($this->fields[username])
-      || !is_utf8($this->fields[subject])
-      || !is_utf8($this->fields[body]))
+    if (!is_utf8($this->fields['username'])
+      || !is_utf8($this->fields['subject'])
+      || !is_utf8($this->fields['body']))
       return _('Your message contains invalid characters.');
   }
 }

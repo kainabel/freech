@@ -40,19 +40,19 @@ define('GROUP_STATUS_ACTIVE',  1);
     /// Resets all values.
     function clear() {
       $this->fields          = array();
-      $this->fields[created] = time();
+      $this->fields['created'] = time();
       $this->permissions     = array();
     }
 
 
     /// Set a unique id for the user.
     function set_id($_id) {
-      $this->fields[id] = (int)$_id;
+      $this->fields['id'] = (int)$_id;
     }
 
 
     function get_id() {
-      return $this->fields[id];
+      return $this->fields['id'];
     }
 
 
@@ -62,42 +62,42 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function set_name($_name) {
-      $this->fields[name] = trim($_name);
+      $this->fields['name'] = trim($_name);
     }
 
 
     function get_name() {
-      return $this->fields[name];
+      return $this->fields['name'];
     }
 
 
     function get_icon() {
-      return 'data/group_icons/'.$this->fields[id].'.png';
+      return 'data/group_icons/'.$this->fields['id'].'.png';
     }
 
 
     function set_special($_special = TRUE) {
-      $this->fields[is_special] = (bool)$_special;
+      $this->fields['is_special'] = (bool)$_special;
     }
 
 
     function is_special() {
-      return $this->fields[is_special];
+      return $this->fields['is_special'];
     }
 
 
     function set_status($_status) {
-      $this->fields[status] = (int)$_status;
+      $this->fields['status'] = (int)$_status;
     }
 
 
     function get_status() {
-      return $this->fields[status];
+      return $this->fields['status'];
     }
 
 
     function is_active() {
-      return $this->fields[status] == GROUP_STATUS_ACTIVE;
+      return $this->fields['status'] == GROUP_STATUS_ACTIVE;
     }
 
 
@@ -110,7 +110,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
 
     function get_created_unixtime() {
-      return $this->fields[created];
+      return $this->fields['created'];
     }
 
 
@@ -118,12 +118,12 @@ define('GROUP_STATUS_ACTIVE',  1);
     function get_created_time($_format = '') {
       if (!$_format)
         $_format = cfg('dateformat');
-      return strftime($_format, $this->fields[created]);
+      return strftime($_format, $this->fields['created']);
     }
 
 
     function get_updated_unixtime() {
-      return $this->fields[updated];
+      return $this->fields['updated'];
     }
 
 
@@ -131,7 +131,7 @@ define('GROUP_STATUS_ACTIVE',  1);
     function get_updated_time($_format = '') {
       if (!$_format)
         $_format = cfg('dateformat');
-      return strftime($_format, $this->fields[updated]);
+      return strftime($_format, $this->fields['updated']);
     }
 
 
@@ -206,7 +206,7 @@ define('GROUP_STATUS_ACTIVE',  1);
 
     /// Returns an error code if any of the required fields is not filled.
     function check_complete() {
-      if (ctype_space($this->fields[name]))
+      if (ctype_space($this->fields['name']))
         return _('Error: Please enter a group name.');
       return 0;
     }

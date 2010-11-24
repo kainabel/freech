@@ -33,7 +33,7 @@
     /// Resets all values.
     function clear() {
       $this->fields          = array();
-      $this->fields[created] = time();
+      $this->fields['created'] = time();
       $this->attributes      = array();
     }
 
@@ -43,14 +43,14 @@
       if (!is_object($_db_row))
         die('ModLogItem:set_from_db(): Non-object.');
       $this->clear();
-      $this->fields[id]                   = $_db_row->id;
-      $this->fields[moderator_id]         = $_db_row->moderator_id;
-      $this->fields[moderator_name]       = $_db_row->moderator_name;
-      $this->fields[moderator_group_name] = $_db_row->moderator_group_name;
-      $this->fields[moderator_icon]       = $_db_row->moderator_icon;
-      $this->fields[action]               = $_db_row->action;
-      $this->fields[reason]               = $_db_row->reason;
-      $this->fields[created]              = $_db_row->created;
+      $this->fields['id']                   = $_db_row->id;
+      $this->fields['moderator_id']         = $_db_row->moderator_id;
+      $this->fields['moderator_name']       = $_db_row->moderator_name;
+      $this->fields['moderator_group_name'] = $_db_row->moderator_group_name;
+      $this->fields['moderator_icon']       = $_db_row->moderator_icon;
+      $this->fields['action']               = $_db_row->action;
+      $this->fields['reason']               = $_db_row->reason;
+      $this->fields['created']              = $_db_row->created;
     }
 
 
@@ -82,81 +82,81 @@
 
 
     function set_from_user(&$_user) {
-      $this->fields[moderator_id]   = $_user->get_id();
-      $this->fields[moderator_name] = $_user->get_name();
+      $this->fields['moderator_id']   = $_user->get_id();
+      $this->fields['moderator_name'] = $_user->get_name();
     }
 
 
     function set_from_moderator_group(&$_group) {
-      $this->fields[moderator_group_name] = $_group->get_name();
-      $this->fields[moderator_icon]       = $_group->get_icon();
+      $this->fields['moderator_group_name'] = $_group->get_name();
+      $this->fields['moderator_icon']       = $_group->get_icon();
     }
 
 
     /// Set a unique id for the item.
     function set_id($_id) {
-      $this->fields[id] = (int)$_id;
+      $this->fields['id'] = (int)$_id;
     }
 
 
     function get_id() {
-      return $this->fields[id];
+      return $this->fields['id'];
     }
 
 
     function get_moderator_id() {
-      return $this->fields[moderator_id];
+      return $this->fields['moderator_id'];
     }
 
 
     function get_moderator_name() {
-      return $this->fields[moderator_name];
+      return $this->fields['moderator_name'];
     }
 
 
     function get_moderator_group_name() {
-      return $this->fields[moderator_group_name];
+      return $this->fields['moderator_group_name'];
     }
 
 
     function get_moderator_icon() {
-      return $this->fields[moderator_icon];
+      return $this->fields['moderator_icon'];
     }
 
 
     function set_action($_action) {
-      $this->fields[action] = $_action;
+      $this->fields['action'] = $_action;
     }
 
 
     function get_action() {
-      return $this->fields[action];
+      return $this->fields['action'];
     }
 
 
     function set_reason($_reason) {
-      $this->fields[reason] = $_reason;
+      $this->fields['reason'] = $_reason;
     }
 
 
     function get_reason() {
-      return $this->fields[reason];
+      return $this->fields['reason'];
     }
 
 
     function get_reason_fmt() {
       $args = array('is_spam' => _('Posting is spam'));
-      return replace_vars($this->fields[reason], $args);
+      return replace_vars($this->fields['reason'], $args);
     }
 
 
     function has_reason() {
-      return $this->fields[reason] != '';
+      return $this->fields['reason'] != '';
     }
 
 
     function get_created_unixtime() {
-      return $this->fields[created];
+      return $this->fields['created'];
     }
 
 
@@ -164,7 +164,7 @@
     function get_created_time($_format = '') {
       if (!$_format)
         $_format = cfg('dateformat');
-      return strftime($_format, $this->fields[created]);
+      return strftime($_format, $this->fields['created']);
     }
 
 

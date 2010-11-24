@@ -32,19 +32,19 @@
 
       // Prints the index (pagination).
       $url = new FreechURL;
-      $url->set_var('action',   $_args[action]);
-      $url->set_var('username', $_args[user]->get_name());
+      $url->set_var('action',   $_args['action']);
+      $url->set_var('username', $_args['user']->get_name());
       $url->set_var('hs',     0);
       $this->add_index($url,
-                       $_args[n_postings],
-                       $_args[n_postings_per_page],
-                       $_args[n_pages_per_index],
-                       $_args[n_offset]);
+                       $_args['n_postings'],
+                       $_args['n_postings_per_page'],
+                       $_args['n_pages_per_index'],
+                       $_args['n_offset']);
 
       // Prepare thread state links.
-      $fold = $_args[thread_state]->get_default();
-      $swap = $_args[thread_state]->get_string_swap();
-      $url->set_var('hs',       $_args[n_offset]);
+      $fold = $_args['thread_state']->get_default();
+      $swap = $_args['thread_state']->get_string_swap();
+      $url->set_var('hs',       $_args['n_offset']);
       $url->set_var('refer_to', $_SERVER['REQUEST_URI']);
 
       // "Unfold all" link.

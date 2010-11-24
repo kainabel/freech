@@ -20,18 +20,18 @@
 ?>
 <?php
 $table_keys = array (
-  '{' . t_group            . '}',
-  '{' . t_user             . '}',
-  '{' . t_permission       . '}',
-  '{' . t_forum            . '}',
-  '{' . t_thread           . '}',
-  '{' . t_posting          . '}',
-  '{' . t_visitor          . '}',
-  '{' . t_modlog           . '}',
-  '{' . t_modlog_attribute . '}',
-  '{' . t_poll_option      . '}',
-  '{' . t_poll_vote        . '}',
-  '{' . t_user_rating      . '}'
+  '{' . 't_group'            . '}',
+  '{' . 't_user'             . '}',
+  '{' . 't_permission'       . '}',
+  '{' . 't_forum'            . '}',
+  '{' . 't_thread'           . '}',
+  '{' . 't_posting'          . '}',
+  '{' . 't_visitor'          . '}',
+  '{' . 't_modlog'           . '}',
+  '{' . 't_modlog_attribute' . '}',
+  '{' . 't_poll_option'      . '}',
+  '{' . 't_poll_vote'        . '}',
+  '{' . 't_user_rating'      . '}'
 );
 $table_names = array (
   cfg('db_tablebase') . 'group',

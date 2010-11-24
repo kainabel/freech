@@ -57,12 +57,12 @@ class ThreadView extends View {
     // Create the index bar.
     $group     = $this->api->group();
     $n_threads = $this->forumdb->get_n_threads($_forum_id);
-    $args      = array(forum_id           => (int)$_forum_id,
-                       n_threads          => $n_threads,
-                       n_threads_per_page => cfg('tpp'),
-                       n_offset           => $_offset,
-                       n_pages_per_index  => cfg('ppi'),
-                       thread_state       => $thread_state);
+    $args      = array('forum_id'           => (int)$_forum_id,
+                       'n_threads'          => $n_threads,
+                       'n_threads_per_page' => cfg('tpp'),
+                       'n_offset'           => $_offset,
+                       'n_pages_per_index'  => cfg('ppi'),
+                       'thread_state'       => $thread_state);
 
     include dirname(__FILE__).'/indexbar.class.php';
     $indexbar = new IndexBarByThread($args);

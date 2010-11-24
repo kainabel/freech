@@ -84,7 +84,7 @@ span span.edit_marker {
 
 table#list_view tr:hover,
 table#thread_view tr:hover {
-  background-color: #eeeeee;
+  background-color: #eee;
 }
 
 table#list_view tr:hover a,
@@ -99,86 +99,86 @@ table#thread_view tr:hover a {
 table .rating_box {
     width: 40px;
     height: 14px;
-    border: 0px solid black;
+    border: 0px solid #000;
     float: right;
-    background-color: #eeeeee;
+    background-color: #eee;
 }
 
 table .rating_box .rating_0 {
     margin-left: 0px;
     width: 20px;
     height: 14px;
-    background-color: #cc0000;
+    background-color: #c00;
 }
 
 table .rating_box .rating_10 {
     margin-left: 4px;
     width: 16px;
     height: 14px;
-    background-color: #cc0000;
+    background-color: #c00;
 }
 
 table .rating_box .rating_20 {
     margin-left: 8px;
     width: 12px;
     height: 14px;
-    background-color: #cc0000;
+    background-color: #c00;
 }
 
 table .rating_box .rating_30 {
     margin-left: 12px;
     width: 8px;
     height: 14px;
-    background-color: #cc0000;
+    background-color: #c00;
 }
 
 table .rating_box .rating_40 {
     margin-left: 16px;
     width: 4px;
     height: 14px;
-    background-color: #cc0000;
+    background-color: #c00;
 }
 
 table .rating_box .rating_50 {
     margin-left: 19px;
     width: 2px;
     height: 14px;
-    background-color: grey;
+    background-color: #888;
 }
 
 table .rating_box .rating_60 {
     margin-left: 20px;
     width: 4px;
     height: 14px;
-    background-color: #009900;
+    background-color: #090;
 }
 
 table .rating_box .rating_70 {
     margin-left: 20px;
     width: 8px;
     height: 14px;
-    background-color: #009900;
+    background-color: #090;
 }
 
 table .rating_box .rating_80 {
     margin-left: 20px;
     width: 12px;
     height: 14px;
-    background-color: #009900;
+    background-color: #090;
 }
 
 table .rating_box .rating_90 {
     margin-left: 20px;
     width: 16px;
     height: 14px;
-    background-color: #009900;
+    background-color: #090;
 }
 
 table .rating_box .rating_100 {
     margin-left: 20px;
     width: 20px;
     height: 14px;
-    background-color: #009900;
+    background-color: #090;
 }
 
 .selected {
@@ -200,17 +200,17 @@ table .rating_box .rating_100 {
 }
 
 .quote {
-  color: #990000;
+  color: #900;
 }
 
 /* The date field in a posting. */
 .date {
-  color: #555555;
+  color: #555;
 }
 
 /* The "last edit" field in a posting. */
 .edited {
-  color: #ff0000;
+  color: #f00;
 }
 
 #posting {
@@ -221,7 +221,7 @@ table .rating_box .rating_100 {
 .moderator_buttons {
   list-style: none;
   text-align: center;
-  margin: 0px;
+  margin: 0;
   padding: 0;
 }
 

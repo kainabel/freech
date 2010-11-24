@@ -4,8 +4,8 @@
 body {
   margin: 0em;
   font: .95em Arial, Tahoma, Verdana, Helvetica, sans-serif;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #fff;
+  color: #000;
 }
 
 table {
@@ -26,15 +26,15 @@ a:hover {
 }
 
 a:link {
-  color:#003399;
+  color:#039;
 }
 
 a:visited {
-  color:#666666;
+  color:#666;
 }
 
 a:active {
-  color:#3366cc;
+  color:#36c;
 }
 
 input {
@@ -80,33 +80,29 @@ input {
   border: 1px solid #4eee00;
 }
 
-.read_only {
-  border-bottom: 1px dashed #f60;
-}
-
 /**
  * Series of links provided by the forum.
  **/
 .index {
   background-color: #353fa8;
-  color: #ffffff;
+  color: #fff;
   font-weight: bold;
 }
 
 .index a {
-  color: #ffffff;
+  color: #fff;
   text-decoration: underline;
 }
 
 .index a:visited {
-  color: #cccccc;
+  color: #ccc;
 }
 
 #account_links {
   display: inline;
   list-style: none;
   vertical-align: top;
-  color: #ffffff;
+  color: #fff;
   background-color: #353fa8;
   white-space: nowrap;
   padding-bottom: 2em;
@@ -114,24 +110,24 @@ input {
 
 #account_links li {
   font-size: .9em;
-  margin: 0 0px 0px 5px;
+  margin: 0 0 0 5px;
   display: inline;
 }
 
 #account_links a {
-  color: #ffffff;
+  color: #fff;
 }
 
 #breadcrumbs {
   height: 20px;
-  color: black;
+  color: #000;
   background-color: #f4f4f4;
 }
 
 #breadcrumb_links {
   display: inline;
   list-style: none;
-  margin: 0px;
+  margin: 0;
   padding: 0;
 }
 
@@ -148,7 +144,7 @@ input {
 #page_links {
   display: inline;
   list-style: none;
-  margin: 0px;
+  margin: 0;
   padding: 0;
   color: #bbb;
 }
@@ -206,7 +202,7 @@ input {
 }
 
 #title {
-  color: #ffffff;
+  color: #fff;
   font-size: 1.9em;
 }
 
@@ -215,7 +211,7 @@ input {
   bottom: 0;
   right: 0;
   font-size: .9em;
-  color: #ffffff;
+  color: #fff;
   margin-bottom: 3px;
 }
 
@@ -238,7 +234,7 @@ input {
 
 #footer {
   clear: both;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 5px;
 }
 
@@ -265,7 +261,7 @@ input {
 #goto_top:link,
 #goto_top:visited,
 #goto_top:active {
-  color:#039;
+  color: #039;
 }
 
 #rss img {
@@ -299,100 +295,109 @@ input {
 .forum_description {
 }
 
+.read_only {
+  border-bottom: 1px dashed #f60;
+}
+
+#forum_home {
+  margin-left: 1em;
+}
+
 .section {
   margin: 0;
   padding: 0;
-  width: 33.33%;
+  width: 33.329%;
   text-align: left;
-  overflow: hidden;
+  display: block;
+  height: auto;
+  float: left;
   white-space: nowrap;
 }
 
 .section h3 {
   text-align: center;
-  padding: 5px;
-  margin: 0px;
+  padding: .312em;
+  overflow: hidden;
+  margin: 0;
   font-size: 1.1em;
   background: #353fa8;
   border: 1px solid black;
-  color: white;
+  color: #fff;
   font-weight: normal;
 }
 
 .section ul {
-  list-style-type: none;
-  margin: 0;
-  margin-top: 5px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-#forum_home {
-  margin-left: 15px;
-}
-
-#home_activity {
-  float: left;
+  margin: .312em 0 0 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 #home_activity h3 {
-  margin-right: 5px;
+  margin-right: .312em;
 }
 
 #home_activity ul {
+  padding-left: .5em;
+  margin-right: .812em; /* .312em */
   list-style-position: inside;
   list-style-image: url("img/pen.png");
 }
 
-#home_forum_links {
-  float: left;
-}
-
 #home_forum_links h3 {
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: .312em;
+  margin-right: .312em;
 }
 
-#home_new_users {
-  float: right;
+#home_forum_links ul {
+  list-style: none;
+  padding-left: 1em;
+  margin-left: .312em;
+  margin-right: .312em;
+}
+
+#home_forum_links li a {
+  line-height: 20px;
 }
 
 #home_new_users h3 {
-  margin-left: 5px;
+  margin-left: .312em;
 }
 
 #home_new_users ul {
+  padding-left: .5em;
+  margin-left: .312em;
   list-style-position: inside;
   list-style-image: url("img/person.png");
 }
 
 /* alternative 50:25:25 */
-
+/*
 #home_new_users ul {
-	list-style-position: outside;
-	direction: rtl;
-	text-align: right;
+  list-style-position: outside;
+  direction: rtl;
+  text-align: right;
 }
 
 #home_new_users li {
-	margin-right: 1.5em;
+  margin-right: 2em;
 }
 
 #home_activity {
-	width: 50%
+  width: 50%
 }
 
 #home_new_users,
 #home_forum_links {
-	width: 25%
+  width: 25%
 }
+*/
 
 /**
  * Search related styles.
  **/
 #quicksearch {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 #quicksearch input {
@@ -408,7 +413,7 @@ input {
 #search_links {
   display: inline;
   list-style: none;
-  margin: 0px;
+  margin: 0;
   padding: 0;
 }
 
@@ -425,8 +430,8 @@ input {
 }
 
 #spam input {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -480,71 +485,71 @@ input {
  **/
 
 .rating_bar {
-    margin-top: 30px;
+  margin-top: 30px;
 /*   border-top: 1px black solid; */
 }
 
 .negative_rating {
-    display: block;
-    width: 20px;
-    height: 15px;
-    border: 1px #cc0000 solid;
-    margin: 2px;
-    float: right;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
+  display: block;
+  width: 20px;
+  height: 15px;
+  border: 1px #c00 solid;
+  margin: 2px;
+  float: right;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .positive_rating {
-    display: block;
-    width: 20px;
-    height: 15px;
-    border: 1px #009900 solid;
-    margin: 2px;
-    background-color: #009900;
-    text-align: center;
-    font-weight: bold;
+  display: block;
+  width: 20px;
+  height: 15px;
+  border: 1px #090 solid;
+  margin: 2px;
+  background-color: #090;
+  text-align: center;
+  font-weight: bold;
 }
 
 a.negative_rating {
-    background-color: transparent;
-    color: #cc0000;
-    text-decoration: none;
-    float: right;
+  background-color: transparent;
+  color: #c00;
+  text-decoration: none;
+  float: right;
 }
 
 a.negative_rating:hover {
-    background-color: #cc0000;
-    color: black;
-    text-decoration: none;
-    float: right;
+  background-color: #c00;
+  color: #000;
+  text-decoration: none;
+  float: right;
 }
 
 a.positive_rating {
-    background-color: transparent;
-    color: #009900;
-    text-decoration: none;
-    float: right;
+  background-color: transparent;
+  color: #090;
+  text-decoration: none;
+  float: right;
 }
 
 a.positive_rating:hover {
-    background-color: #009900;
-    color: black;
-    text-decoration: none;
-    float: right;
+  background-color: #090;
+  color: #000;
+  text-decoration: none;
+  float: right;
 }
 
 span.negative_rating {
-    background-color: red;
-    color: black;
-    text-decoration: none;
-    float: right;
+  background-color: red;
+  color: #000;
+  text-decoration: none;
+  float: right;
 }
 
 span.positive_rating {
-    background-color: #009900;
-    color: black;
-    text-decoration: none;
-    float: right;
+  background-color: #090;
+  color: #000;
+  text-decoration: none;
+  float: right;
 }

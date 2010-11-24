@@ -84,7 +84,7 @@
         $sql .= " AND is_parent={is_parent}";
         $_query->set_bool('is_parent', $_search_values['is_parent']);
       }
-      if ($_search_values['status']) {
+      if (isset($_search_values['status'])) {
         $sql .= " AND status={status}";
         $_query->set_int('status', $_search_values['status']);
       }

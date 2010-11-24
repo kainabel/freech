@@ -370,28 +370,6 @@ input {
   list-style-image: url("img/person.png");
 }
 
-/* alternative 50:25:25 */
-/*
-#home_new_users ul {
-  list-style-position: outside;
-  direction: rtl;
-  text-align: right;
-}
-
-#home_new_users li {
-  margin-right: 2em;
-}
-
-#home_activity {
-  width: 50%
-}
-
-#home_new_users,
-#home_forum_links {
-  width: 25%
-}
-*/
-
 /**
  * Search related styles.
  **/

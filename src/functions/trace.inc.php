@@ -19,17 +19,26 @@
   */
 ?>
 <?php
+
+/*
+  If activated in config a strace compatible protocol file is provided.
+  A graph can be created via 'plot-timeline.py trace.log -o file.png'.
+*/
+
 unset($tracer);
+
 if (cfg('trace_calls')) {
   require_once dirname(__FILE__).'/../services/call_tracer.class.php';
   $tracer = new CallTracer(cfg('trace_log'));
+
+  function trace() {
+    $args = func_get_args();
+    global $tracer;
+    call_user_func_array(array(&$tracer, 'trace'), &$args);
+  }
+
+} else {
+  function trace() {return;}
 }
 
-function trace() {
-  if (!cfg('trace_calls'))
-    return;
-  $args = func_get_args();
-  global $tracer;
-  call_user_func_array(array(&$tracer, 'trace'), &$args);
-}
 ?>

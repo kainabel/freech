@@ -59,7 +59,7 @@
       $renderer = $this->renderers[$_posting->get_renderer()];
       if ($renderer)
         return new $renderer($_posting, $this->api);
-      include_once '../objects/unknown_posting.class.php';
+      include_once 'objects/unknown_posting.class.php';
       return new UnknownPosting($_posting, $this->api);
     }
 

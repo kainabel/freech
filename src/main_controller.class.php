@@ -152,6 +152,8 @@ class MainController {
     $this->db = ADONewConnection($dbn)
       or die('FreechForum::FreechForum(): Error: Can\'t connect.'
            . ' Please check username, password and hostname.');
+    if (cfg('db_debug', FALSE)) // enable AdoDB debug mode
+      $this->db->debug = true;
     global $ADODB_FETCH_MODE;
     $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
     trace('DB connection opened');
@@ -623,8 +625,11 @@ class MainController {
       $view_name  = cfg('default_view');
       $view_class = $this->views[$view_name];
     }
-    if (!$view_class)
-      die('Plugin for default view is not installed (or active).');
+    if (!$view_class) {
+      $msg = cfg('default_view');
+      die("Plugin '".cfg('default_view') ."' for default view"
+        . " is not installed (or active).");
+    }
     return $view_class;
   }
 

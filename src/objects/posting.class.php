@@ -74,6 +74,18 @@ class Posting {
   	return $this->fields['rating_count'];
   }
 
+  function get_rating_html() {
+		if($this->fields['rating_count'] >= cfg('minimum_rating_count')) {
+			$tooltip = ($rating - 50)*2;
+			$rating = round($rating, -1);
+			return sprintf("<div class='rating_box' title='%d%%'><div class='"
+          . "rating_%d'></div></div>",
+            ($this->fields['rating'] - 50)*2,
+            round($this->fields['rating'], -1));
+		}
+    return NULL;
+  }
+
   function _ip_hash($_ip) {
     // Note that this needs to work with both, IPv4 and IPv6.
     $ip_net = preg_replace('/[\d\w]+$/', '', $_ip);

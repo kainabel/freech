@@ -18,6 +18,7 @@
   <img class='icon' src='<?php echo $__theme_dir?>/img/move.png' alt='[m]' title='<?php echo esc(_('Moved'))?>' />
 <?php } ?>
   </td>
+  <td class='posting_rating'><?php echo $posting->get_rating_html() ?></td>
   <td class='thread_user'>
 <?php if ($posting->is_selected()) { ?>
     <span class='selected'><?php echo esc($posting->get_username())?></span>

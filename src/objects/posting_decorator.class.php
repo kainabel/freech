@@ -378,6 +378,11 @@ class PostingDecorator extends Trackable {
   }
 
 
+  function get_rating_html() {
+    return $this->posting->get_rating_html();
+  }
+
+
   function is_folded() {
     return $this->posting->is_folded();
   }

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin:      Rating
-Version:     0.1
+Version:     0.2
 Author:      Nico Gau
 Description: adds Rating functions
 */
@@ -22,12 +22,12 @@ function rating_init(&$api) {
 function rating_on_read(&$api,&$message) {
   $posting = $message->posting;
 
-  // HACK: activate ratings only on ordinary messages
+  // activate rating actions only on ordinary messages
   if($posting->get_renderer() != "message")
     return;
 
-  // don't apply on locked messages
-  if ($posting->is_active() != TRUE)
+  // don't apply on locked messages or anonymous users
+  if (($posting->is_active() != TRUE) || $api->user()->is_anonymous())
     return;
 
   // 'panic' switch in config file was set
@@ -37,35 +37,28 @@ function rating_on_read(&$api,&$message) {
     return;
   }
 
-  $rating_body = "";
-
-  if(!$api->user()->is_anonymous() &&
-       $api->user()->get_id() != $posting->get_user_id()) {
-    $rating = get_user_rating($api, $message->posting);
-    $rating_body .= '<div class="rating-bar">';
-
-      if($rating == null) {
-        $minus_minus = get_rating_url($api, $posting, RATING_TYPE_MINUS_MINUS);
-        $minus = 			 get_rating_url($api, $posting, RATING_TYPE_MINUS);
-        $plus = 			 get_rating_url($api, $posting, RATING_TYPE_PLUS);
-        $plus_plus = 	 get_rating_url($api, $posting, RATING_TYPE_PLUS_PLUS);
-
-        $rating_body .= rating_type_to_action_link($api, $posting, RATING_TYPE_PLUS_PLUS);
-        $rating_body .= rating_type_to_action_link($api, $posting, RATING_TYPE_PLUS);
-        $rating_body .= rating_type_to_action_link($api, $posting, RATING_TYPE_MINUS);
-        $rating_body .= rating_type_to_action_link($api, $posting, RATING_TYPE_MINUS_MINUS);
-
-       } else {
-        $css = rating_type_to_css_class($rating);
-        $text = rating_type_to_text($rating);
-
-        $rating_body .= '<span class="' . $css . '">' . $text . '</span>';
-      }
-      $rating_body .= '</div>';
+  if (!isset($api->rating_proto)) {
+    list($api->rating_proto, $api->rating_array) = _init_rating_body($message);
   }
 
-  $body = $message->get_body_html();
-  $body .= $rating_body;
+  $_user_id = $api->user()->get_id();
+  if($_user_id != $posting->get_user_id()) {
+
+    // caching rating votes by current user an thread
+    $rating = _get_rating_vote($api, $_user_id, $message->posting);
+
+      if($rating == null) {
+        $msg_id = $message->posting->get_id();
+        $rating_insert = str_replace('ID', (int) $msg_id, $api->rating_proto);
+       } else {
+        $text = $api->rating_array[$rating]['text'];
+        $css  = $api->rating_array[$rating]['css'];
+        $rating_insert = "<span class='{$css}'>{$text}</span>";
+      }
+      $rating_body = "<div class='rating_bar'>{$rating_insert}</div>";
+  }
+
+  $body = $message->get_body_html() . $rating_body;
   $message->set_body_html($body);
 }
 
@@ -91,85 +84,106 @@ function is_rating_valid($rating) {
          $rating == RATING_TYPE_PLUS_PLUS;
 }
 
-function rating_type_to_css_class($type) {
+/***********************************************
+ * Utilities.
+ ***********************************************/
 
-  switch($type) {
-    case RATING_TYPE_MINUS_MINUS:
-    case RATING_TYPE_MINUS:
-      return "negative_rating";
+function _init_rating_body($_msg) {
 
-    case RATING_TYPE_PLUS:
-    case RATING_TYPE_PLUS_PLUS:
-      return "positive_rating";
+  $types = array (
+    RATING_TYPE_MINUS_MINUS => array('css' => 'negative_rating', 'text' => '--'),
+    RATING_TYPE_MINUS       => array('css' => 'negative_rating', 'text' => '-'),
+    RATING_TYPE_PLUS        => array('css' => 'positive_rating', 'text' => '+'),
+    RATING_TYPE_PLUS_PLUS   => array('css' => 'positive_rating', 'text' => '++'),
+  );
 
-    default:
-      return "??";
+  $url = new FreechURL('', 'set rating');
+  $url->set_var('action', 'set_rating');
+  $url->set_var('thread_id', $_msg->get_thread_id());
+  $url->set_var('msg_id', 'ID');
+  $url->set_var('rating', 'TYPE');
+  $url_proto = $url->get_string();
+
+  $rating_body = array();
+  foreach ($types as $key => $type) {
+    $vote = str_replace('TYPE', (int) $key, $url_proto);
+    $text = $type['text'];
+    $css  = $type['css'];
+    $rating_body[] = "<a class='{$css}' href='" . esc($vote) . "'>{$text}</a>";
   }
+  return array(implode("&nbsp;",$rating_body), $types);
 }
 
-function rating_type_to_text($type) {
+function _get_rating_vote(&$api, $_user_id, $_msg) {
 
-  switch($type) {
-    case RATING_TYPE_MINUS_MINUS:
-      return "--";
+  $_msg_id = $_msg->get_id();
+  if (!isset($api->votings)) {
+    $api->votings = array();
 
-    case RATING_TYPE_MINUS:
-      return "-";
+    $sql  = 'SELECT * FROM {t_rating_vote}';
+    $sql .= ' WHERE user_id={user_id}';
+    $sql .= " AND thread_id={thread_id}";
 
-    case RATING_TYPE_PLUS:
-      return "+";
+    $query = new FreechSqlQuery($sql);
+    $query->set_int('user_id', $_user_id);
+    $query->set_int('thread_id', $_msg->get_thread_id());
 
-    case RATING_TYPE_PLUS_PLUS:
-      return "++";
-
-    default:
-      return "??";
+    $db  = $api->db();
+    $res = $api->db()->_Execute($query->sql()) or die('Rating::get_user_rating()');
+    $arr = $res->GetArray();
+    foreach ($arr as $result) {
+      $posting_id = $result['posting_id'];
+      $api->votings[$posting_id] = $result['rating'];
+    }
   }
+
+  return isset($api->votings[$_msg_id]) ? $api->votings[$_msg_id] : NULL;
 }
 
-function rating_type_to_action_link(&$api, $posting, $type) {
+function set_user_rating(&$api, $_msg, $rating) {
 
-  $url  = get_rating_url($api, $posting, $type);
-  $text = rating_type_to_text($type);
-  $css  = rating_type_to_css_class($type);
+  $_forum_id = $_msg->get_forum_id();
+  $_posting_id = $_msg->get_id();
+  $_thread_id = $_msg->get_thread_id();
+  $_user_id = $api->user()->get_id();
+  $_rating = $rating;
 
-  return '<a href="' . esc($url) . '" class="' . $css . '">' . $text . '</a>';
-}
+  $db = $api->db();
+  $db->StartTrans();
 
-function get_user_rating(&$api, $posting) {
-
-  $sql  = 'SELECT * FROM {t_user_rating} ';
-  $sql .= ' WHERE user_id={user_id}';
-  $sql .= " AND forum_id={forum_id}";
-  $sql .= " AND posting_id={posting_id}";
+  // first insert new user rating
+  $sql  = "INSERT {t_rating_vote}";
+  $sql .= " (posting_id, thread_id, user_id, rating)";
+  $sql .= " VALUES ({posting_id}, {thread_id}, {user_id}, {rating})";
 
   $query = new FreechSqlQuery($sql);
-  $query->set_int('user_id',    $api->user()->get_id());
-  $query->set_int('forum_id',   $api->forum()->get_id());
-  $query->set_int('posting_id', $posting->get_id());
-  $res = $api->db()->_Execute($query->sql()) or die('Rating::get_user_rating()');
+  $query->set_int('posting_id', $_posting_id);
+  $query->set_int('thread_id',  $_thread_id);
+  $query->set_int('user_id',    $_user_id);
+  $query->set_int('rating',     $_rating);
+  $db->_Execute($query->sql()) or die('ForumDB::save_rating(): user_rating');
 
-  return $res->EOF ? null : $res->fields["rating"];
-}
+  // then select all existing ratings to compute new average rating
+  $sql  = "SELECT posting_id as id, count(rating) as count,";
+  $sql .= " AVG(rating) as avg_rating FROM {t_rating_vote}";
+  $sql .= " WHERE posting_id={posting_id} GROUP BY thread_id";
 
-function set_user_rating(&$api, $posting, $rating) {
+  $query = new FreechSqlQuery($sql);
+  $query->set_int('posting_id', $_posting_id);
+  $res = $db->_Execute($query->sql()) or die('ForumDB::save_rating(): query');
 
-  $user_id    = $api->user()->get_id();
-  $forum_id   = $api->forum()->get_id();
-  $posting_id = $posting->get_id();
+  // save average rating into table
+   $sql  = "UPDATE {t_posting}";
+   $sql .= " SET rating={rating}, rating_count={count}";
+   $sql .= " WHERE id={posting_id}";
 
-  $api->forumdb()->save_rating($forum_id, $posting_id, $user_id, $rating);
-}
+   $query = new FreechSqlQuery($sql);
+   $query->set_int('posting_id', $res->fields['id']);
+   $query->set_int('rating',     $res->fields['avg_rating']);
+   $query->set_int('count',      $res->fields['count']);
 
-function get_rating_url(&$api, $posting, $type) {
-
-  $url      = new FreechURL('', _('set rating'));
-  $url->set_var('forum_id', $api->forum()->get_id());
-  $url->set_var('msg_id'  , $posting->get_id());
-  $url->set_var('action'  , 'set_rating');
-  $url->set_var('rating'  , $type);
-
-  return $url->get_string();
+   $db->_Execute($query->sql()) or die('ForumDB::save_rating(): rating');
+   $db->CompleteTrans();
 }
 
 ?>

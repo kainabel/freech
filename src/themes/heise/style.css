@@ -463,71 +463,51 @@ input {
  **/
 
 .rating_bar {
-  margin-top: 30px;
-/*   border-top: 1px black solid; */
-}
-
-.negative_rating {
+  margin: 1em;
+  clear: both;
+  width: auto;
+  height: 14px;
   display: block;
-  width: 20px;
-  height: 15px;
-  border: 1px #c00 solid;
-  margin: 2px;
-  float: right;
-  text-align: center;
-  text-decoration: none;
-  font-weight: bold;
 }
 
+span.negative_rating,
+span.positive_rating,
+.negative_rating,
 .positive_rating {
   display: block;
-  width: 20px;
-  height: 15px;
-  border: 1px #090 solid;
-  margin: 2px;
-  background-color: #090;
+  width: 25px;
+  height: 14px;
+  line-height: 14px;
+  margin-left: .5em;
   text-align: center;
-  font-weight: bold;
+  text-decoration: none;
+  float: right;
+  font: normal normal bold normal monospace;
+  background-color: transparent;
+  color: #000;
 }
 
 a.negative_rating {
-  background-color: transparent;
+  border: 1px #c00 solid;
   color: #c00;
-  text-decoration: none;
-  float: right;
-}
-
-a.negative_rating:hover {
-  background-color: #c00;
-  color: #000;
-  text-decoration: none;
-  float: right;
 }
 
 a.positive_rating {
-  background-color: transparent;
+  border: 1px #090 solid;
   color: #090;
-  text-decoration: none;
-  float: right;
 }
 
+span.negative_rating,
+a.negative_rating:hover {
+  border: 1px #c00 solid;
+  background-color: #c00;
+  color: #000;
+}
+
+span.positive_rating,
 a.positive_rating:hover {
+  border: 1px #090 solid;
   background-color: #090;
   color: #000;
-  text-decoration: none;
-  float: right;
 }
 
-span.negative_rating {
-  background-color: red;
-  color: #000;
-  text-decoration: none;
-  float: right;
-}
-
-span.positive_rating {
-  background-color: #090;
-  color: #000;
-  text-decoration: none;
-  float: right;
-}

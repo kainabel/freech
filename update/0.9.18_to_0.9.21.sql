@@ -4,15 +4,17 @@
 ------------------------------------------------------------------------
 ------------------------------------------------------------------------
 
--- Add table for plugin rating
+-- Add table for plugin rating v2 (freech r840+)
 
-CREATE TABLE IF NOT EXISTS `freech_user_rating` (
- `forum_id` int(11) unsigned NOT NULL,
- `posting_id` int(11) unsigned NOT NULL,
- `user_id` int(11) unsigned NOT NULL,
- `rating` tinyint NOT NULL,
- PRIMARY KEY (`forum_id`, `posting_id`, `user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE TABLE `freech_rating_vote` (
+  `posting_id` int(11) unsigned NOT NULL,
+  `thread_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `rating` tinyint(4) NOT NULL,
+  PRIMARY KEY (`posting_id`,`user_id`),
+  KEY `thread_id` (`thread_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- Insert two cols in freech_posting
 

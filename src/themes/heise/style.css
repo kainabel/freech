@@ -482,7 +482,7 @@ span.positive_rating,
   text-align: center;
   text-decoration: none;
   float: right;
-  font: normal normal bold normal monospace;
+  font: normal normal bold normal/normal monospace;
   background-color: transparent;
   color: #000;
 }
@@ -499,6 +499,7 @@ a.positive_rating {
 
 span.negative_rating,
 a.negative_rating:hover {
+  text-decoration: none;
   border: 1px #c00 solid;
   background-color: #c00;
   color: #000;
@@ -506,6 +507,7 @@ a.negative_rating:hover {
 
 span.positive_rating,
 a.positive_rating:hover {
+  text-decoration: none;
   border: 1px #090 solid;
   background-color: #090;
   color: #000;

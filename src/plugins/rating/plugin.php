@@ -90,11 +90,11 @@ function is_rating_valid($rating) {
 
 function _init_rating_body($_msg) {
 
-  $types = array (
-    RATING_TYPE_MINUS_MINUS => array('css' => 'negative_rating', 'text' => '--'),
-    RATING_TYPE_MINUS       => array('css' => 'negative_rating', 'text' => '-'),
-    RATING_TYPE_PLUS        => array('css' => 'positive_rating', 'text' => '+'),
+  $types = array ( /* reversed order for css float */
     RATING_TYPE_PLUS_PLUS   => array('css' => 'positive_rating', 'text' => '++'),
+    RATING_TYPE_PLUS        => array('css' => 'positive_rating', 'text' => '+'),
+    RATING_TYPE_MINUS       => array('css' => 'negative_rating', 'text' => '-'),
+    RATING_TYPE_MINUS_MINUS => array('css' => 'negative_rating', 'text' => '--'),
   );
 
   $url = new FreechURL('', 'set rating');

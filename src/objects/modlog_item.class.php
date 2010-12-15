@@ -206,7 +206,7 @@
       $user_icon      = htmlentities($this->get_attribute('user_icon'));
       $user_groupname = htmlentities($this->get_attribute('user_groupname'));
       $user_icon_html = "<img src='$user_icon'"
-                      . " title='$user_groupname' alt='$mod_groupname' />";
+                      . " title='$user_groupname' alt='$user_groupname' />";
       if ($this->get_attribute('user_groupname') == 'anonymous')
         $user_html = $user_name.$user_icon_html;
       else

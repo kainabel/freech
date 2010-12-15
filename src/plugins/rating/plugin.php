@@ -73,7 +73,11 @@ function rating_on_set_rating(&$api) {
     set_user_rating($api, $posting, $rating);
   }
 
-  $api->refer_to_posting($posting);
+  $url = new FreechURL();
+  $url->set_var('action',   'read');
+  $url->set_var('msg_id',   $posting->get_id());
+  $url->set_var('forum_id', $posting->get_forum_id());
+  $api->refer_to($url->get_string());
 }
 
 function is_rating_valid($rating) {

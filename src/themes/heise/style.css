@@ -482,7 +482,7 @@ span.positive_rating,
   text-align: center;
   text-decoration: none;
   float: right;
-  font: normal normal bold normal/normal monospace;
+  font: normal normal bold 1em/1em monospace;
   background-color: transparent;
   color: #000;
 }

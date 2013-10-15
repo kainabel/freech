@@ -25,7 +25,7 @@
       $all_time = $userdb->get_top_users(20);
       $week     = $userdb->get_top_users(20, time() - 60*60*24*7);
       $this->clear_all_assign();
-      $this->assign_by_ref('plugin_dir', dirname(__FILE__));
+      $this->assign       ('plugin_dir', dirname(__FILE__));
       $this->assign_by_ref('all_time',   $all_time);
       $this->assign_by_ref('weekly',     $week);
       $this->render_php(dirname(__FILE__).'/top_users.php.tmpl');

@@ -35,8 +35,8 @@
 
       $this->clear_all_assign();
       $this->assign_by_ref('user',       $_user);
-      $this->assign_by_ref('refer_to',   urlencode($_refer_to));
-      $this->assign_by_ref('action',     $login_url->get_string());
+      $this->assign       ('refer_to',   urlencode($_refer_to));
+      $this->assign       ('action',     $login_url->get_string());
       $this->assign_by_ref('resend_url', $resend_url);
       $this->assign_by_ref('forgot_url', $forgot_url);
       $this->render_php('login.php.tmpl');
@@ -59,7 +59,7 @@
       $url = new FreechURL;
       $url->set_var('action', 'password_submit');
       $this->clear_all_assign();
-      $this->assign_by_ref('action', $url->get_string());
+      $this->assign       ('action', $url->get_string());
       $this->assign_by_ref('user',   $_user);
       $this->render_php('password_change.php.tmpl');
       $this->api->set_title(_('Password Change'));
@@ -71,7 +71,7 @@
       $url->set_var('action', 'password_mail_submit');
       $this->clear_all_assign();
       $this->assign_by_ref('user',   $_user);
-      $this->assign_by_ref('action', $url->get_string());
+      $this->assign       ('action', $url->get_string());
       $this->render_php('password_forgotten.php.tmpl');
     }
 

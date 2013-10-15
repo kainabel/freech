@@ -76,7 +76,7 @@ function contact_on_send(&$api) {
   }
 
   $vars['noreply']  =  cfg('mail_from');
-  $vars['username'] =  $vars['username'];
+  //FIXME: $vars['username'] =  $vars['username'];
 
   // Construction of disclaimer in the top of email.
   $head_seperator = str_pad('', $message_width , "=");

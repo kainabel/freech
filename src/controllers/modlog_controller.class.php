@@ -28,8 +28,8 @@
                                                   cfg('modlog_epp'),
                                                   (int)$_offset);
       $this->clear_all_assign();
-      $this->assign_by_ref('may_bypass', $group->may('bypass'));
-      $this->assign_by_ref('n_rows', count($items));
+      $this->assign       ('may_bypass', $group->may('bypass'));
+      $this->assign       ('n_rows', count($items));
       $this->assign_by_ref('items', $items);
       $this->render_php('modlog.php.tmpl');
     }
@@ -41,8 +41,8 @@
       $url->set_var('msg_id', $_posting->get_id());
 
       $this->clear_all_assign();
-      $this->assign_by_ref('action',   $url->get_string());
-      $this->assign_by_ref('refer_to', $_posting->get_url_string());
+      $this->assign       ('action',   $url->get_string());
+      $this->assign       ('refer_to', $_posting->get_url_string());
       $this->assign_by_ref('posting',  $_posting);
       $this->render_php('posting_lock.php.tmpl');
     }
@@ -61,7 +61,7 @@
       ksort($forum_map);
 
       $this->clear_all_assign();
-      $this->assign_by_ref('action',  $url->get_string());
+      $this->assign       ('action',  $url->get_string());
       $this->assign_by_ref('posting', $_posting);
       $this->assign_by_ref('forums',  $forum_map);
       $this->render_php('thread_move.php.tmpl');

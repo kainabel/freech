@@ -93,13 +93,13 @@ class BBView extends View {
     }
 
     $this->clear_all_assign();
-    $this->assign_by_ref('plugin_dir', dirname(__FILE__));
+    $this->assign       ('plugin_dir', dirname(__FILE__));
     $this->assign_by_ref('indexbar',   $indexbar);
     $this->assign_by_ref('postings',   $postings);
     $this->assign_by_ref('may_write',  $may_write);
     $this->assign_by_ref('may_edit',   $may_edit);
-    $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
-    $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
+    $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
+    $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));
     $this->render_php(dirname(__FILE__).'/bbview_read_thread.php.tmpl');
     $this->api->set_title($_posting->get_subject());
   }

@@ -62,28 +62,28 @@ function spamhash_check_hash() {
 
   case SPAMHASH_ERROR_REFERRER:
     die('Error: Invalid referrer - blocked due to spam protection.');
-    return FALSE;
+    // return FALSE;
 
   case SPAMHASH_ERROR_REMOTE_ADDRESS:
     die('Error: Invalid remote address - blocked due to spam protection.');
-    return FALSE;
+    // return FALSE;
 
   case SPAMHASH_ERROR_SESSION:
     die('Error: Invalid session ID - blocked due to spam protection.');
-    return FALSE;
+    // return FALSE;
 
   case SPAMHASH_ERROR_HASH_MISSING:
     die('Error: Missing hash - blocked due to spam protection.');
-    return FALSE;
+    // return FALSE;
 
   case SPAMHASH_ERROR_UNKNOWN:
     die('Error: Invalid hash - blocked due to spam protection.');
-    return FALSE;
+    // return FALSE;
 
   default:
     die("Hash check returned an unknown error code ($err)");
-    return FALSE;
+    // return FALSE;
   }
-  return TRUE;
+  return true;
 }
 ?>

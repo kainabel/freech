@@ -73,12 +73,12 @@
       include 'objects/indexbar_user_postings.class.php';
       $indexbar = new IndexBarUserPostings($args);
 
-      $this->assign_by_ref('n_rows',     count($threads));
+      $this->assign       ('n_rows',     count($threads));
       $this->assign_by_ref('n_postings', $n_entries);
       $this->assign_by_ref('threads',    $threads);
       $this->assign_by_ref('indexbar',   $indexbar);
-      $this->assign_by_ref('max_usernamelength', cfg('max_usernamelength'));
-      $this->assign_by_ref('max_subjectlength',  cfg('max_subjectlength'));
+      $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
+      $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));
     }
 
 
@@ -204,7 +204,7 @@
       $this->assign_by_ref('group',             $group);
       $this->assign_by_ref('groups',            $groups);
       $this->assign_by_ref('status',            $status);
-      $this->assign_by_ref('action',            $url->get_string());
+      $this->assign       ('action',            $url->get_string());
       $this->render_php('user_editor.php.tmpl');
       $this->api->set_title($_user->get_name());
     }
@@ -262,7 +262,7 @@
       // Render the template.
       $this->clear_all_assign();
       $this->assign_by_ref('group',  $_group);
-      $this->assign_by_ref('action', $url->get_string());
+      $this->assign       ('action', $url->get_string());
       $this->render_php('group_editor.php.tmpl');
       $this->api->set_title($_group->get_name());
     }

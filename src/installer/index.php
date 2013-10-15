@@ -19,18 +19,19 @@
 */
 ?>
 <?php
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+//error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE);
 
 // Debug switches.
 $_POST['do_not_act']   = (bool) 0; // Avoids creating tables, but not DB's.
 $_POST['adodb_debug']  = (bool) 0; // Shows SQL queries.
 $_POST['debug_ignore'] = (bool) 0; // Do NOT use on productive systems!
 
-define('ADODB_DRIVER', 'mysqli');
+define('ADODB_DRIVER', 'mysqlt');
 include_once '../main_controller.class.php';
 
 // Overrides the setting in main_controller.class.php
-// error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
 
 include_once 'result.class.php';
 include_once 'util.inc.php';

@@ -56,14 +56,15 @@
       for ($day_end = $start; $day_end <= $end; $day_end += $resolution) {
         $day_start         = $day_end - $resolution;
         $date              = strftime('%Y-%m-%d', $day_start);
+        $result            = (object) array();
         $result->pos       = (int)($day_end - $start) / $resolution;
-        $result->postings  = $this->forumdb->get_n_postings(NULL,
+        $result->postings  = (int)$this->forumdb->get_n_postings(NULL,
                                                             $day_start,
                                                             $day_end);
         $result->postings2 = (int)$postings2[$date];
         $result->traffic   = (int)$traffic[$date] / 1000000;
         array_push($results, $result);
-        $result = '';
+        $result = null;
       }
 
       $this->clear_all_assign();
@@ -73,7 +74,7 @@
       $this->assign_by_ref('days',            $days);
       $this->assign_by_ref('resolution',      $resolution);
       $this->assign_by_ref('data',            $results);
-      $this->assign_by_ref('postings2_label', cfg('statistics_extra_label'));
+      $this->assign       ('postings2_label', cfg('statistics_extra_label'));
       $this->render_php(dirname(__FILE__).'/statistics.php.tmpl');
       $this->api->set_title(_('Statistics'));
     }

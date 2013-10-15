@@ -150,8 +150,8 @@ class ListView extends View {
       $db->foreach_prev_posting($_posting, cfg('epp') / 2, $func);
       $db->foreach_next_posting($_posting, cfg('epp') / 2, $func);
       krsort($this->posting_map);
-      $this->assign_by_ref('n_rows',   count($this->posting_map));
-      $this->assign_by_ref('postings', array_values($this->posting_map));
+      $this->assign('n_rows',   count($this->posting_map));
+      $this->assign('postings', array_values($this->posting_map));
     }
 
     $this->assign_by_ref('indexbar', $indexbar);

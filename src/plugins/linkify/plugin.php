@@ -69,7 +69,7 @@ function linkify_try_youtube_url($url, $in_quotes) {
     return '';
   if ($in_quotes)
     return '';
-  if (!preg_match('~http://(?:\w+\.)?youtube.com/watch\?v=([\w\_\-]+)~i',
+  if (!preg_match('~https?://(?:\w+\.)?youtube.com/watch\?v=([\w\_\-]+)~i',
                   $url,
                   $matches))
     return '';

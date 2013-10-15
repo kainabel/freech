@@ -19,7 +19,7 @@
   */
 ?>
 <?php
-define('FREECH_VERSION', '0.9.20');
+define('FREECH_VERSION', '0.9.22');
 ini_set('arg_separator.output', '&');
 //error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE);

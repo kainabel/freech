@@ -117,7 +117,7 @@
 
 
   function html_get_homebutton() {
-    $html = "<form id='home_button' action='/' method='post'>"
+    $html = "<form id='home_button' action='./' method='post'>"
           . "<input type='submit' value='" . esc(_('Welcome page'))
           . "' /></form>\n";
     return $html;

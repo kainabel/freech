@@ -209,7 +209,7 @@ class Thread {
     if ($this->dirty)
       $this->_update_relations();
     foreach ($this->postings_list as $posting)
-      call_user_func($_func, &$posting);
+      call_user_func_array($_func, array(&$posting));
   }
 
 

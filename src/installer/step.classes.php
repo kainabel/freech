@@ -357,7 +357,7 @@ class DefaultSetup extends Step {
       return FALSE;
     }
     if (($this->state->get('account', 'FALSE')) != 'stored') {
-      $res = util_store_user(&$user, &$this);
+      $res = util_store_user($user, $this);
       if (!$res->result) {
         $arr['errors'][] = $res;
         $this->show($arr);
@@ -368,7 +368,7 @@ class DefaultSetup extends Step {
 
     // Updating or storing the version number of Freech.
     if (($this->state->get('version', 'FALSE')) != 'stored') {
-      $res = util_store_version(&$this);
+      $res = util_store_version($this);
       if (!$res->result) {
         $arr['errors'][] = $res;
         $this->show($arr);

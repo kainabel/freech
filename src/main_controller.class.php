@@ -21,7 +21,8 @@
 <?php
 define('FREECH_VERSION', '0.9.20');
 ini_set('arg_separator.output', '&');
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE);
 
 include 'functions/config.inc.php';
 include 'functions/trace.inc.php';
@@ -1333,7 +1334,7 @@ class MainController {
     // first to allow plugins for overriding the default handler.
     if ($this->actions[$action]) {
       trace('plugin action started');
-      call_user_func($this->actions[$action], &$this->api);
+      call_user_func_array($this->actions[$action], array(&$this->api));
       trace('plugin action completed');
       $this->_print_footer();
       $this->content = ob_get_contents();

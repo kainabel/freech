@@ -61,8 +61,16 @@ class Trackable {
     $registered = $this->callbacks[$event];
     if (!$registered)
       return;
+    
+    $wrapped = array();
+
+    // HACK: modify arguments to pass argument by reference
+    foreach ($args as $key => &$value) {
+      $wrapped[] = &$value;
+    }
+
     foreach ($registered as $id => $func)
-      call_user_func_array($func, &$args);
+      call_user_func_array($func, $wrapped);
   }
 }
 ?>

@@ -18,12 +18,12 @@
   */
 ?>
 <?php
-  function esc(&$_string) {
+  function esc($_string) {
     return htmlentities($_string, ENT_QUOTES, 'UTF-8');
   }
 
 
-  function unesc(&$_string) {
+  function unesc($_string) {
     return html_entity_decode($_string, ENT_QUOTES, 'UTF-8');
   }
 
@@ -91,7 +91,7 @@
   }
 
 
-  function html_menu($_name, &$_menu = '', $_separator = '', $_auto = TRUE) {
+  function html_menu($_name, $_menu = '', $_separator = '', $_auto = TRUE) {
     if ($_menu->length() == 0)
       return '';
 
@@ -125,7 +125,7 @@
 
 
   // Removes the escapings that were added by magic-quotes.
-  function stripslashes_deep(&$_value) {
+  function stripslashes_deep($_value) {
     return is_array($_value)
          ? array_map('stripslashes_deep', $_value)
          : stripslashes($_value);

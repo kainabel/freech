@@ -80,7 +80,7 @@ function util_check_db_supports_constraints($_dbn) {
   }
   if (!$db)
     return new Result($caption, FALSE, 'Database connection failed.');
-  $res = $db->execute('SHOW variables LIKE "have_innodb"');
+  $res = $db->execute('SHOW variables LIKE "%innodb%"');
   if (!$res)
     return new Result($caption, FALSE, $db->ErrorMsg());
   $supported = $res->FetchRow();
@@ -171,7 +171,7 @@ function util_get_attribute($_dbn, $_name, $_default = NULL) {
   return $row->value;
 }
 
-function util_store_user($_user, $_obj) {
+function util_store_user(&$_user, &$_obj) {
 
   $caption = 'Saving admin account data';
   $db_base = $_obj->state->get('db_base');
@@ -203,7 +203,7 @@ function util_store_user($_user, $_obj) {
   return new Result($caption, TRUE);
 }
 
-function util_store_version($_obj) {
+function util_store_version(&$_obj) {
 
   $caption = 'Saving Freech version number';
   $db_base = $_obj->state->get('db_base');
@@ -245,6 +245,7 @@ function util_write_config($_filename, $_config) {
     }
   }
   if (isset($_POST['debug_ignore']) && $_POST['debug_ignore'])
+    fwrite($fp, "\n// Do NOT use on productive systems!\n");
     fwrite($fp, "\$cfg['ignore_installer_dir'] = TRUE;\n");
 
   fwrite($fp, "\n?>\n");

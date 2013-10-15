@@ -92,11 +92,11 @@
 
       $this->clear_all_assign();
       $this->assign       ('parent_id',   (int)$_parent_id);
-      $this->assign_by_ref('onsubmit_js', $this->api->get_js('onsubmit'));
-      $this->assign_by_ref('form_html',   $this->api->get_html('form'));
-      $this->assign_by_ref('may_quote',   $_may_quote);
-      $this->assign_by_ref('pagetitle',   _('Preview'));
-      $this->assign_by_ref('action',      $url->get_string());
+      $this->assign       ('onsubmit_js', $this->api->get_js('onsubmit'));
+      $this->assign       ('form_html',   $this->api->get_html('form'));
+      $this->assign       ('may_quote',   $_may_quote);
+      $this->assign       ('pagetitle',   _('Preview'));
+      $this->assign       ('action',      $url->get_string());
       $this->assign_by_ref('message',     $_message);
       $this->render_php(dirname(__FILE__).'/preview.php.tmpl');
       $this->api->set_title($_message->get_subject());

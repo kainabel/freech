@@ -34,7 +34,15 @@ if (cfg('trace_calls')) {
   function trace() {
     $args = func_get_args();
     global $tracer;
-    call_user_func_array(array(&$tracer, 'trace'), &$args);
+    
+    $wrapped = array();
+
+    // HACK: modify arguments to pass argument by reference
+    foreach ($args as $key => &$value) {
+      $wrapped[] = &$value;
+    }
+
+    call_user_func_array(array($tracer, 'trace'), $wrapped);
   }
 
 } else {

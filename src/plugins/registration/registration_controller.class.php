@@ -25,9 +25,9 @@
       $url->set_var('action', 'account_create');
       
       $this->clear_all_assign();
-      $this->assign_by_ref('onsubmit_js', $this->api->get_js('onsubmit'));
-      $this->assign_by_ref('form_html',   $this->api->get_html('form'));
-      $this->assign_by_ref('action',      $url->get_string());
+      $this->assign       ('onsubmit_js', $this->api->get_js('onsubmit'));
+      $this->assign       ('form_html',   $this->api->get_html('form'));
+      $this->assign       ('action',      $url->get_string());
       $this->assign_by_ref('user',        $_user);
       $this->assign_by_ref('password',    $_POST['password']);
       $this->assign_by_ref('password2',   $_POST['password2']);

@@ -161,7 +161,7 @@
       $rows = $res->RecordCount();
       while (!$res->EOF) {
         $user = $this->_get_user_from_row($res->fields);
-        call_user_func($_func, &$user, &$_data);
+        call_user_func_array($_func, array(&$user, &$_data));
         $res->MoveNext();
       }
       return $rows;

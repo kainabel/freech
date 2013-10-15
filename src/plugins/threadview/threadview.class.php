@@ -71,7 +71,7 @@ class ThreadView extends View {
     // Render the template.
     $this->clear_all_assign();
     $this->assign_by_ref('indexbar',           $indexbar);
-    $this->assign_by_ref('n_rows',             count($threads));
+    $this->assign       ('n_rows',                    count($threads));
     $this->assign_by_ref('threads',            $threads);
     $this->assign       ('max_usernamelength', cfg('max_usernamelength'));
     $this->assign       ('max_subjectlength',  cfg('max_subjectlength'));

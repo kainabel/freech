@@ -30,13 +30,13 @@
   // *************************************************************
   // The request of a RSS client will be answered with a HTTP 410 response,
   // if switched off.
-  $cfg['rss_enabled'] = TRUE;
+  $cfg['rss_enabled'] = (bool) 1;
 
   // The descripton included in the RSS feed.
   $cfg['rss_description'] = 'Freech Discussion Forum';
 
   // Deliver whole message with the RSS feed or only the URL to the message.
-  $cfg['rss_show_message'] = FALSE;
+  $cfg['rss_show_message'] = (bool) 0;
 
   // The default number of entries in your RSS file (if the 'len' attribute
   // is not passed as a GET variable).
@@ -54,7 +54,7 @@
   // All other actions e.g. user registrations, moderating and administration
   // of the forums are still permitted.
 
-  $cfg['set_read_only'] = FALSE;
+  $cfg['set_read_only'] = (bool) 0;
 
   // *************************************************************
   // Forum appearance.
@@ -86,17 +86,17 @@
   $cfg['default_thread_state'] = 'THREAD_STATE_UNFOLDED';
 
   // May users edit their postings?
-  $cfg['postings_editable'] = TRUE;
+  $cfg['postings_editable'] = (bool) 1;
 
   // If TRUE, "Posting >>" points to the previous thread.
-  $cfg['posting_arrow_reverse'] = FALSE;
+  $cfg['posting_arrow_reverse'] = (bool) 0;
 
   // If TRUE, "Thread >>" points to the previous thread.
-  $cfg['thread_arrow_reverse'] = FALSE;
+  $cfg['thread_arrow_reverse'] = (bool) 0;
 
   // If TRUE, the current page in the index is remembered even when reading
   // a posting. This comes at the cost of less stable URLs.
-  $cfg['remember_page'] = FALSE;
+  $cfg['remember_page'] = (bool) 0;
 
   // Specifies which URLs the linkify plugin converts to links.
   $cfg['autolink_pattern'] = '(ht|f)tps?:\/\/[\w\._\-\/\?\&=\%#;,\+\(\)]+';
@@ -143,20 +143,20 @@
   // *************************************************************
   // Active plugins.
   $cfg['plugins'] = array(
-    'bbview'       => TRUE,
-    'linkify'      => TRUE,
-    'listview'     => TRUE,
-    'message'      => TRUE,
-    'poll'         => TRUE,
-    'registration' => TRUE,
-    'search'       => TRUE,
-    'spamhash'     => TRUE,
-    'statistics'   => TRUE,
-    'threadview'   => TRUE,
-    'mail'         => TRUE,
-    'top_users'    => TRUE,
-    'rating'       => TRUE,
-    'contact'      => TRUE,
+    'bbview'       => (bool) 1,
+    'linkify'      => (bool) 1,
+    'listview'     => (bool) 1,
+    'message'      => (bool) 1,
+    'poll'         => (bool) 1,
+    'registration' => (bool) 1,
+    'search'       => (bool) 1,
+    'spamhash'     => (bool) 1,
+    'statistics'   => (bool) 1,
+    'threadview'   => (bool) 1,
+    'mail'         => (bool) 1,
+    'top_users'    => (bool) 1,
+    'rating'       => (bool) 1,
+    'contact'      => (bool) 1,
   );
 
   // Trigger for plugin rating
@@ -189,19 +189,19 @@
   // If this value is 0, cookies are deleted at the end of the session.
   $cfg['cookie_expire_time'] = 0;
 
-  // Newly registered users are added into the group with the given ID.
-  $cfg['default_group_id'] = 3;
-
   // Anonymous users are automatically logged into the forum as the user/group
   // with the given id.
   $cfg['anonymous_user_id']  = 1;
   $cfg['anonymous_group_id'] = 2;
 
+  // Newly registered users are added into the group with the given ID.
+  $cfg['default_group_id'] = 3;
+
   // When TRUE, top link is shown in the footer.
-  $cfg['goto_top_enabled'] = TRUE;
+  $cfg['goto_top_enabled'] = (bool) 1;
 
   // When TRUE, the total rendering time is shown below the footer.
-  $cfg['show_total_render_time'] = FALSE;
+  $cfg['show_total_render_time'] = (bool) 1;
 
   // The number of days back to show in the forum statistics.
   $cfg['statistics_timespan'] = 30;
@@ -234,7 +234,7 @@
   // Developer's settings.
   // *************************************************************
   // Whether to log trace() statements.
-  $cfg['trace_calls'] = FALSE;
+  $cfg['trace_calls'] = (bool) 0;
   $cfg['trace_log'] = dirname(__FILE__) . '/data/trace.log';
 
   // Do not change this.
@@ -250,7 +250,7 @@
   // Whether to check templates for changes. Setting this to FALSE
   // will significantly enhance performance at the cost of changed
   // templates getting out of date.
-  $cfg['check_cache'] = TRUE;
+  $cfg['check_cache'] = (bool) 1;
 
   // Whether to use persistent DB connections. This must be allowed
   // in your php.ini to work.
@@ -258,22 +258,22 @@
   // number of concurrent database connections and more memory, so
   // this may be a bad idea on hosts that have a large number of
   // concurrent visitors.
-  $cfg['persistent_db_connection'] = FALSE;
+  $cfg['persistent_db_connection'] = (bool) 0;
 
   // Disable the visitor counter that is shown above the forum. Note that
   // disabling the counter provides a significant performance gain.
-  $cfg['disable_visitor_counter'] = FALSE;
+  $cfg['disable_visitor_counter'] = (bool) 0;
 
   // Disable the posting counter that is shown on the homepage. Note that
   // disabling the counter provides a significant performance gain.
-  $cfg['disable_posting_counter'] = FALSE;
+  $cfg['disable_posting_counter'] = (bool) 0;
 
   // If the following is set to FALSE, the permissions set for anonymous
   // users in the DB are ignored. Instead, the forum will use a default
   // set of permissions.
   // Setting this to TRUE has a negative performance impact because the
   // database needs to be contacted to determine the user permissions.
-  $cfg['manage_anonymous_users'] = TRUE;
+  $cfg['manage_anonymous_users'] = (bool) 1;
 
   // If manage_anonymous_users is FALSE, the default anonymous user uses
   // the following name.

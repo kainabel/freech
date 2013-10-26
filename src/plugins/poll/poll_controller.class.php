@@ -35,7 +35,7 @@ class PollController extends Controller {
       $_poll->add_option('');
 
     $this->clear_all_assign();
-    $this->assign_by_ref('action', $url->get_string());
+    $this->assign       ('action', $url->get_string());
     $this->assign_by_ref('poll',   $_poll);
     $this->render_php(dirname(__FILE__).'/form.php.tmpl');
   }
@@ -50,9 +50,9 @@ class PollController extends Controller {
     $result_url->set_var('result', 1);
 
     $this->clear_all_assign();
-    $this->assign_by_ref('action',     $url->get_string());
+    $this->assign       ('action',     $url->get_string());
+    $this->assign       ('result_url', $result_url->get_string());
     $this->assign_by_ref('poll',       $_poll);
-    $this->assign_by_ref('result_url', $result_url->get_string());
     $result = $this->fetch_php(dirname(__FILE__).'/poll.php.tmpl');
     return $result;
   }

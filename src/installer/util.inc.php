@@ -246,7 +246,7 @@ function util_write_config($_filename, $_config) {
   }
   if (isset($_POST['debug_ignore']) && $_POST['debug_ignore'])
     fwrite($fp, "\n// Do NOT use on productive systems!\n");
-    fwrite($fp, "\$cfg['ignore_installer_dir'] = TRUE;\n");
+    fwrite($fp, "\$cfg['ignore_installer_dir'] = (bool) 1;\n");
 
   fwrite($fp, "\n?>\n");
   return new Result($caption, TRUE);

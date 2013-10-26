@@ -76,7 +76,7 @@ function linkify_try_youtube_url($url, $in_quotes) {
   $video_id  = $matches[1];
   $video_id .= '&amp;hl=en&amp;fs=1&amp;border=1&amp;rel=0&amp;showsearch=0';
   return "<!-- plugin linkify -->
-  <div style='margin: 10px; width: 650px; text-align: center' class='video'>
+  <div style='margin: 10px; width: 650px; text-align: center;' class='video'>
     <object width='615'
             height='494'
             type='application/x-shockwave-flash'

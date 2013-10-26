@@ -21,49 +21,48 @@
 <?php
 define('FREECH_VERSION', '0.9.22');
 ini_set('arg_separator.output', '&');
-// error_reporting(E_ALL & ~E_NOTICE);
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE);
+error_reporting(E_ALL | E_STRICT & ~E_NOTICE);
 
-include 'functions/config.inc.php';
-include 'functions/trace.inc.php';
+require 'functions/config.inc.php';
+require 'functions/trace.inc.php';
 trace('Start');
 
 $ADODB_INCLUDED_CSV = TRUE;
 require 'adodb5/adodb.inc.php';
 trace('Adodb5 imported');
 
-include 'libuseful/string.inc.php';
-include 'services/trackable.class.php';
-include 'objects/thread_state.class.php';
+require 'libuseful/string.inc.php';
+require 'services/trackable.class.php';
+require 'objects/thread_state.class.php';
 
-include 'functions/forum.inc.php';
+require 'functions/forum.inc.php';
 trace('Function imports done');
 
-include 'objects/hint.class.php';
-include 'objects/error.class.php';
-include 'objects/ack.class.php';
-include 'objects/url.class.php';
-include 'objects/posting.class.php';
-include 'objects/forum.class.php';
-include 'objects/user.class.php';
-include 'objects/group.class.php';
-include 'objects/posting_decorator.class.php';
-include 'objects/thread.class.php';
-include 'objects/menu_item.class.php';
-include 'objects/menu.class.php';
+require 'objects/hint.class.php';
+require 'objects/error.class.php';
+require 'objects/ack.class.php';
+require 'objects/url.class.php';
+require 'objects/posting.class.php';
+require 'objects/forum.class.php';
+require 'objects/user.class.php';
+require 'objects/group.class.php';
+require 'objects/posting_decorator.class.php';
+require 'objects/thread.class.php';
+require 'objects/menu_item.class.php';
+require 'objects/menu.class.php';
 trace('Object imports done');
 
-include 'controllers/controller.class.php';
-include 'controllers/breadcrumbs_controller.class.php';
-include 'controllers/footer_controller.class.php';
-include 'controllers/view.class.php';
+require 'controllers/controller.class.php';
+require 'controllers/breadcrumbs_controller.class.php';
+require 'controllers/footer_controller.class.php';
+require 'controllers/view.class.php';
 trace('Controller imports done');
 
-include 'services/groupdb.class.php';
-include 'services/sql_query.class.php';
-include 'services/forumdb.class.php';
-include 'services/userdb.class.php';
-include 'services/plugin_registry.class.php';
+require 'services/groupdb.class.php';
+require 'services/sql_query.class.php';
+require 'services/forumdb.class.php';
+require 'services/userdb.class.php';
+require 'services/plugin_registry.class.php';
 trace('Service imports done');
 
 class MainController {
@@ -177,7 +176,7 @@ class MainController {
     // Initialize the visitordb after cookie handling to prevent useless
     // updates.
     if (!cfg('disable_visitor_counter')) {
-      include 'services/visitordb.class.php';
+      require 'services/visitordb.class.php';
       $this->visitordb = new VisitorDB($this->db);
       trace('VisitorDB initialized');
       $this->visitordb->count();
@@ -850,7 +849,7 @@ class MainController {
    * Action controllers for the user profile.
    *************************************************************/
   function _import_profile_controller() {
-    include_once 'controllers/profile_controller.class.php';
+    require_once 'controllers/profile_controller.class.php';
   }
 
 
@@ -1064,7 +1063,7 @@ class MainController {
    * Action controllers for login and password forms.
    *************************************************************/
   function _import_login() {
-    include_once 'controllers/login_controller.class.php';
+    require_once 'controllers/login_controller.class.php';
   }
 
 

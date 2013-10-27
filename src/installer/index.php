@@ -19,7 +19,7 @@
 */
 ?>
 <?php
-error_reporting(E_ALL | E_STRICT & ~E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE | E_STRICT);
 
 // Debug switches.
 $_POST['do_not_act']   = (bool) 0; // Avoids creating tables, but not DB's.

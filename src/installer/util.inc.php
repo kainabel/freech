@@ -129,7 +129,7 @@ function util_execute_sql($_dbn, $_sql) {
   $db->StartTrans();
 
   // Run.
-  $res = $db->execute($_sql);
+  $res = $db->Execute($_sql);
   $db->CompleteTrans();
   $err = $db->ErrorMsg();
   if ($res)
@@ -244,9 +244,10 @@ function util_write_config($_filename, $_config) {
       fwrite($fp, "\$cfg['$key'] = '$value';\n");
     }
   }
-  if (isset($_POST['debug_ignore']) && $_POST['debug_ignore'])
+  if (isset($_POST['debug_ignore']) && $_POST['debug_ignore']) {
     fwrite($fp, "\n// Do NOT use on productive systems!\n");
     fwrite($fp, "\$cfg['ignore_installer_dir'] = (bool) 1;\n");
+  }
 
   fwrite($fp, "\n?>\n");
   return new Result($caption, TRUE);
@@ -254,7 +255,16 @@ function util_write_config($_filename, $_config) {
 
 function util_get_random_string($length = '') {
   $code = md5(uniqid(rand(), TRUE));
-  if ($length) return substr($code, 0, $length);
+  $code[rand(0,31)] = chr(rand(65, 90));
+  $code[rand(0,31)] = chr(rand(65, 90));
+  $code[rand(0,31)] = chr(rand(65, 90));
+  if ($length) {
+    $code = substr($code, 0, $length);
+    $length--;
+    $code[rand(0,$length)] = chr(rand(33, 47));
+    $code[rand(0,$length)] = chr(rand(33, 47));
+    $code[rand(0,$length)] = chr(rand(33, 47));
+  }
   return $code;
 }
 ?>

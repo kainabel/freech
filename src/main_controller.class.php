@@ -21,7 +21,7 @@
 <?php
 define('FREECH_VERSION', '0.9.22');
 ini_set('arg_separator.output', '&');
-error_reporting(E_ALL | E_STRICT & ~E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE | E_STRICT);
 
 require 'functions/config.inc.php';
 require 'functions/trace.inc.php';

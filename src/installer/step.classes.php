@@ -281,7 +281,7 @@ class DefaultSetup extends Step {
 
   function show($_args = array()) {
     if (!isset($_args['salt'])) {
-      $_args['salt'] = util_get_random_string(10);
+      $_args['salt'] = util_get_random_string(16);
     }
     if (!isset($_args['domain'])) {
       $_args['domain'] = $_SERVER['SERVER_NAME'];
@@ -319,9 +319,12 @@ class DefaultSetup extends Step {
     $arr['errors'] = array();
     $min = cfg('min_usernamelength');
     $max = cfg('max_usernamelength');
-    if ($arr['salt'] == '') {
+    if (empty($arr['salt'])) {
       $arr['errors'][] = new Result('Checking the salt.', FALSE,
         'Salt string is empty.');
+    } elseif (strlen($arr['salt']) < 8) {
+      $arr['errors'][] = new Result('Checking the salt.', FALSE,
+        'Salt string is too short. Please enter at least 8 characters.');
     }
     if ($arr['pass1'] != $arr['pass2']) {
       $arr['errors'][] = new Result('Checking the password.', FALSE,

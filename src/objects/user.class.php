@@ -480,7 +480,7 @@ define('USER_STATUS_BLOCKED',     3);
 
       //FIXME: make a much better check.
       if ($this->fields['homepage']) {
-        if (!preg_match('/^http:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+$/i',
+        if (!preg_match('/^https?:\/\/[\w\._\-\/\?\&=\%;,\+\(\)]+$/i',
                         $this->fields['homepage']))
           return _('Please enter a valid homepage URL.');
 

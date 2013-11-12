@@ -633,6 +633,11 @@ class Posting {
 
 
   function get_allow_answer() {
+    // prohibits the answers due to technical limitations
+    // maximum depth of a thread is 64
+    if (strlen($this->fields['path']) / 2 > 252) {
+      return FALSE;
+    }
     return $this->fields['allow_answer'] && !$this->fields['force_stub'];
   }
 

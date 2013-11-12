@@ -1714,7 +1714,7 @@ class MainController {
 
     trace('printed header');
 
-    /* Plugin hook: on_header_print_before
+    /* Plugin hook: on_header_print_after
      *   Called after the HTML header was sent.
      *   Args: none
      */

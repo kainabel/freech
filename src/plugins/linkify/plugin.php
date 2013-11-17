@@ -61,7 +61,7 @@ function linkify_on_hide_videos(&$api) {
   $api->refer_to($_GET['refer_to']);
 }
 
-
+// RegEx pattern ripped from: http://goo.gl/Yv62qW
 function linkify_try_youtube_url($url, $in_quotes) {
   if ($_GET['preview'] or $_POST['preview'])
     return '';
@@ -69,29 +69,23 @@ function linkify_try_youtube_url($url, $in_quotes) {
     return '';
   if ($in_quotes)
     return '';
-  if (!preg_match('~https?://(?:\w+\.)?youtube.com/watch\?v=([\w\_\-]+)~i',
-                  $url,
-                  $matches))
+  $pattern = '~(?P<scheme>https?)(?::\/\/|)(?:www.|)(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/ytscreeningroom\?v=|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*[^\w\-\s]))(?P<video_id>[\w\-]{11})[a-z0-9;:@?&%=+\/\$_.-]*~i';
+  if (!preg_match($pattern, $url, $matches)) {
     return '';
-  $video_id  = $matches[1];
-  $video_id .= '&amp;hl=en&amp;fs=1&amp;border=1&amp;rel=0&amp;showsearch=0';
+  }
+  $url_short = $matches['scheme']."://www.youtube.com/v/".$matches['video_id'];
+  $video_id  = $url_short.'&amp;hl=en&amp;fs=1&amp;border=0&amp;rel=0&amp;showsearch=0';
   return "<!-- plugin linkify -->
-  <div style='margin: 10px; width: 650px; text-align: center;' class='video'>
-    <object width='615'
-            height='494'
-            type='application/x-shockwave-flash'
-            data='http://www.youtube.com/v/$video_id'>
-      <param name='movie'
-            value='http://www.youtube.com/v/$video_id' />
+  <div class='video'>
+    <object type='application/x-shockwave-flash' data='$video_id'>
+      <param name='movie' value='$video_id' />
       <param name='allowFullScreen' value='true' />
       <param name='allowscriptaccess' value='always' />
-      <img class='noflash'
-           src='#'
-           alt='flash plug-in is missing or disabled'
-           title='no flash plug-in found' />
+      <img class='noflash' title='no flash plug-in found' src='#'
+           alt='flash plug-in is missing or disabled' />
     </object>
     <br/>
-    <a href='$url'>$url</a>
+    <a class='extern' href='$url' title='$url'>$url_short</a>
   </div>";
 }
 

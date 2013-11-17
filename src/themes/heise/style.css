@@ -80,6 +80,25 @@ input {
   border: 1px solid #4eee00;
 }
 
+a[href^="http:"].extern:before {
+  content:url("img/http.png");
+}
+
+a[href^="https:"].extern:before {
+  content:url("img/https.png");
+}
+
+.video {
+  border: 0;
+  padding: 1em;
+}
+
+.video object {
+  width: 600px;
+  height: 450px;
+  border: 0;
+}
+
 /**
  * Series of links provided by the forum.
  **/

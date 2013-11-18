@@ -629,6 +629,10 @@ class Posting {
     $this->set_body(_('Locked Message'));
     $this->set_subject(_('Locked Message'));
     $this->set_username('------');
+    //FIXME: ugly hack to hide some information
+    $this->fields['user_icon_name'] = NULL;
+    $this->fields['user_icon'] = NULL;
+    $this->fields['current_username'] = 'anonymous';
   }
 
 

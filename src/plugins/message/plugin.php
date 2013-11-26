@@ -198,10 +198,22 @@ function message_on_send(&$api) {
   // Fetch the posting from the database (when editing an existing one) or
   // create a new one from the POST data.
   if ($_POST['msg_id']) {
-    $posting = $forumdb->get_posting_from_id($_POST['msg_id']);
+    $posting  = $forumdb->get_posting_from_id($_POST['msg_id']);
+    $old_hash = $posting->get_hash();
     $posting->set_subject($_POST['subject']);
     $posting->set_body($_POST['body']);
-    $posting->set_updated_unixtime(time());
+    $new_hash = $posting->get_hash();
+    // Was the content changed?
+    if ($old_hash === $new_hash) {
+      $api->refer_to_posting($posting);
+    } else {
+      // Processing without labeling as modified after creation for xx seconds.
+      $marker_delay = (int) cfg('posting_marker_delay', 10);
+      $created_on   = (int) $posting->get_created_unixtime();
+      $updated_on = time();
+      if (($created_on + $marker_delay) < $updated_on)
+        $posting->set_updated_unixtime($updated_on);
+    }
   }
   else {
     $posting = message_get_new_posting($api);

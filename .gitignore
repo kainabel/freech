@@ -1,3 +1,5 @@
 CVS
 .svn
 po/*.mo
+.fslckout
+_FOSSIL_

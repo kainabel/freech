@@ -678,7 +678,8 @@ class MainController {
     $this->_prepare_modlog();
     $change = new ModLogItem($_action);
     $change->set_reason($_reason);
-    $change->set_from_user($this->get_current_user());
+    $this_user = $this->get_current_user();
+    $change->set_from_user($this_user);
     $change->set_from_moderator_group($this->get_current_group());
     $change->set_attribute('forum_id',       $_posting->get_forum_id());
     $change->set_attribute('id',             $_posting->get_id());

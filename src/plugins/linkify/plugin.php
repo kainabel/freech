@@ -93,6 +93,14 @@ function linkify_try_youtube_url($url, $in_quotes) {
 function linkify_url2link($match) {
   $prefix    = $match[1].$match[2];
   $url       = $match[3];
+  $whitelist = cfg('autolink_whitelist', '');
+  // matching against a pipe separated whitelist of domain names
+  // e.g: $cfg['autolink_whitelist'] = 'localhost|domian.xz|foo.baz|youtube.com|youtu.be';
+  if (!empty($whitelist)) {
+      if (!preg_match('~'.$whitelist.'~i',$url,$arr)) {
+          return $prefix.$url;
+      }
+  }
   $quote_pfx = "<span class='quote'"; //NOTE: string was used in message.class.php
   $in_quotes = substr($match[2], 0, strlen($quote_pfx)) == $quote_pfx;
   if ($newurl = linkify_try_youtube_url($url, $in_quotes))

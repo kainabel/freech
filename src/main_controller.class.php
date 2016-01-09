@@ -21,7 +21,6 @@
 <?php
 define('FREECH_VERSION', '0.9.22');
 ini_set('arg_separator.output', '&');
-error_reporting(E_ALL ^ E_NOTICE | E_STRICT);
 
 require 'functions/config.inc.php';
 require 'functions/trace.inc.php';
@@ -30,6 +29,8 @@ trace('Start');
 $ADODB_INCLUDED_CSV = TRUE;
 require 'adodb5/adodb.inc.php';
 trace('Adodb5 imported');
+
+error_reporting((E_ALL | E_STRICT) & ~E_NOTICE);  // wanted error_level 0x7ff7
 
 require 'libuseful/string.inc.php';
 require 'services/trackable.class.php';

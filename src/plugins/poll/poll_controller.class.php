@@ -22,7 +22,7 @@
 class PollController extends Controller {
   function show_error($_error) {
     $this->clear_all_assign();
-    $this->add_hint(new Error($_error));
+    $this->add_hint(new \hint\Error($_error));
     $this->render_php('error.inc.php.tmpl');
   }
 

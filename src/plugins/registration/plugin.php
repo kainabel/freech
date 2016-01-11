@@ -44,9 +44,9 @@ function registration_on_create(&$api) {
   // Check the data for completeness.
   $err = $user->check_complete();
   if ($err)
-    $registration->add_hint(new Error($err));
+    $registration->add_hint(new \hint\Error($err));
   if ($_POST['password'] !== $_POST['password2'])
-    $registration->add_hint(new Error(_('Error: Passwords do not match.')));
+    $registration->add_hint(new \hint\Error(_('Error: Passwords do not match.')));
 
   if ($registration->has_errors())
     return $registration->show($user);
@@ -54,13 +54,13 @@ function registration_on_create(&$api) {
   // Make sure that the name is available.
   if (!$api->userdb()->username_is_available($user->get_name())) {
     $err = _('The entered username is not available.');
-    $registration->add_hint(new Error($err));
+    $registration->add_hint(new \hint\Error($err));
   }
 
   // Make sure that the email address is available.
   if ($api->userdb()->get_user_from_mail($user->get_mail())) {
     $err = _('The given email address already exists in our database.');
-    $registration->add_hint(new Error($err));
+    $registration->add_hint(new \hint\Error($err));
   }
 
   if ($registration->has_errors())
@@ -69,7 +69,7 @@ function registration_on_create(&$api) {
   // Create the user.
   $user->set_group_id(cfg('default_group_id'));
   if (!$api->userdb()->save_user($user)) {
-    $registration->add_hint(new Error(_('Failed to save the user.')));
+    $registration->add_hint(new \hint\Error(_('Failed to save the user.')));
     return $registration->show($user);
   }
 

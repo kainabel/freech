@@ -98,7 +98,7 @@ class Poll extends PostingDecorator {
     $controller = new PollController($this->api);
 
     if ($user->is_anonymous()) {
-      $controller->add_hint(new Hint(_('Please log in to cast your vote.')));
+      $controller->add_hint(new \hint\Hint(_('Please log in to cast your vote.')));
       return $controller->get_poll_result($poll);
     }
 
@@ -106,7 +106,7 @@ class Poll extends PostingDecorator {
       return $controller->get_poll_result($poll);
 
     if ($_GET['accept'])
-      $controller->add_hint(new Hint(_('Thank You for your vote.')));
+      $controller->add_hint(new \hint\Hint(_('Thank You for your vote.')));
 
     if (_poll_did_vote($db, $user, $poll_id))
       return $controller->get_poll_result($poll);

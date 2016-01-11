@@ -18,9 +18,11 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   */
 ?>
-<?php
+<?php namespace hint;
+
 class Hint {
-  function Hint($_msg) {
+
+  function __construct($_msg) {
     $this->msg = $_msg;
   }
 

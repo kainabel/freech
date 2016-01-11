@@ -155,7 +155,7 @@ function message_on_preview(&$api) {
   // Check the posting for completeness.
   $err = $message->check_complete();
   if ($err) {
-    $controller->add_hint(new Error($err));
+    $controller->add_hint(new \hint\Error($err));
     return $controller->show_compose($message, $parent_id, $may_quote);
   }
 
@@ -163,7 +163,7 @@ function message_on_preview(&$api) {
   if ($user->is_anonymous()
    && !$api->userdb()->username_is_available($message->get_username())) {
     $err = _('The entered username is not available.');
-    $controller->add_hint(new Error($err));
+    $controller->add_hint(new \hint\Error($err));
     return $controller->show_compose($message, $parent_id, $may_quote);
   }
 
@@ -228,7 +228,7 @@ function message_on_send(&$api) {
   // Check the posting for completeness.
   $err = $posting->check_complete();
   if ($err) {
-    $controller->add_hint(new Error($err));
+    $controller->add_hint(new \hint\Error($err));
     return $controller->show_compose($posting, $parent_id, $may_quote);
   }
 
@@ -236,7 +236,7 @@ function message_on_send(&$api) {
   if ($user->is_anonymous()
    && !$api->userdb()->username_is_available($posting->get_username())) {
     $err = _('The entered username is not available.');
-    $controller->add_hint(new Error($err));
+    $controller->add_hint(new \hint\Error($err));
     return $controller->show_compose($posting, $parent_id, $may_quote);
   }
 
@@ -252,13 +252,13 @@ function message_on_send(&$api) {
       $err  = sprintf(_('You have sent too many messages.'
                       . ' %d seconds until your message may be sent.'),
                       $blocked_until - time());
-      $controller->add_hint(new Error($err));
+      $controller->add_hint(new \hint\Error($err));
       return $controller->show_compose($posting, $parent_id, $may_quote);
     }
 
     // Check whether the user or IP is spam-locked.
     if ($api->forumdb()->is_spam($posting)) {
-      $controller->add_hint(new Error(_('Message rejected by spamblocker.')));
+      $controller->add_hint(new \hint\Error(_('Message rejected by spamblocker.')));
       return $controller->show_compose($posting, $parent_id, $may_quote);
     }
   }
@@ -287,7 +287,7 @@ function message_on_send(&$api) {
   }
 
   if (!$posting->get_id()) {
-    $controller->add_hint(new Error(_('Failed to save the posting.')));
+    $controller->add_hint(new \hint\Error(_('Failed to save the posting.')));
     return $controller->show_compose($posting, $parent_id, $may_quote);
   }
 

@@ -803,7 +803,7 @@ class MainController {
 
     if (!$reason) {
       $controller = new ModLogController($this->api);
-      $controller->add_hint(new Error(_('Please enter a reason.')));
+      $controller->add_hint(new \hint\Error(_('Please enter a reason.')));
       return $controller->show_lock_posting($posting);
     }
 
@@ -972,13 +972,13 @@ class MainController {
       // Else make sure that the data is complete and valid.
       $err = $user->check_complete();
       if ($err) {
-        $profile->add_hint(new Error($err));
+        $profile->add_hint(new \hint\Error($err));
         return $profile->show_user_editor($user);
       }
 
       // Make sure that the passwords match.
       if ($_POST['password'] !== $_POST['password2']) {
-        $profile->add_hint(new Hint(_('Error: Passwords do not match.')));
+        $profile->add_hint(new \hint\Hint(_('Error: Passwords do not match.')));
         return $profile->show_user_editor($user);
       }
 
@@ -988,14 +988,14 @@ class MainController {
 
     // Save the user.
     if (!$this->get_userdb()->save_user($user)) {
-      $profile->add_hint(new Error(_('Failed to save the user.')));
+      $profile->add_hint(new \hint\Error(_('Failed to save the user.')));
       return $profile->show_user_editor($user);
     }
 
     // Done.
     if ($user->is_deleted() && $is_self)
       return $this->_refer_to($this->get_url('logout')->get_string());
-    $profile->add_hint(new Ack(_('Your data has been saved.')));
+    $profile->add_hint(new \hint\Ack(_('Your data has been saved.')));
     $profile->show_user_editor($user);
   }
 
@@ -1045,18 +1045,18 @@ class MainController {
     // Make sure that the data is complete and valid.
     $err = $group->check_complete();
     if ($err) {
-      $profile->add_hint(new Error($err));
+      $profile->add_hint(new \hint\Error($err));
       return $profile->show_group_editor($group);
     }
 
     // Save the group.
     if (!$this->_get_groupdb()->save_group($group)) {
-      $profile->add_hint(new Error(_('Failed to save the group.')));
+      $profile->add_hint(new \hint\Error(_('Failed to save the group.')));
       return $profile->show_group_editor($group);
     }
 
     // Done.
-    $profile->add_hint(new Ack(_('Your changes have been saved.')));
+    $profile->add_hint(new \hint\Ack(_('Your changes have been saved.')));
     $profile->show_group_editor($group);
   }
 
@@ -1075,7 +1075,7 @@ class MainController {
     $login    = new LoginController($this->api);
     $refer_to = $this->_get_login_refer_url();
     if ($this->login_error)
-      $login->add_hint(new Hint($this->login_error));
+      $login->add_hint(new \hint\Hint($this->login_error));
     $login->show($user, $refer_to);
   }
 
@@ -1107,21 +1107,21 @@ class MainController {
 
     // Make sure that the passwords match.
     if ($_POST['password'] !== $_POST['password2']) {
-      $controller->add_hint(new Error(_('Error: Passwords do not match.')));
+      $controller->add_hint(new \hint\Error(_('Error: Passwords do not match.')));
       return $controller->show_password_change($user);
     }
 
     // Make sure that the password is valid.
     $err = $user->set_password($_POST['password']);
     if ($err) {
-      $controller->add_hint(new Error($err));
+      $controller->add_hint(new \hint\Error($err));
       return $controller->show_password_change($user);
     }
 
     // Save the password.
     $user->set_status(USER_STATUS_ACTIVE);
     if (!$userdb->save_user($user)) {
-      $controller->add_hint(new Error(_('Failed to save the user.')));
+      $controller->add_hint(new \hint\Error(_('Failed to save the user.')));
       return $controller->show_password_change($user);
     }
 
@@ -1148,7 +1148,7 @@ class MainController {
     // Make sure that the email address is valid.
     $err = $user->check_mail();
     if ($err) {
-      $controller->add_hint(new Error($err));
+      $controller->add_hint(new \hint\Error($err));
       return $controller->show_password_forgotten($user);
     }
 
@@ -1158,7 +1158,7 @@ class MainController {
     if (!$user) {
       $user = init_user_from_post_data();
       $msg  = _('The given email address was not found.');
-      $controller->add_hint(new Error($msg));
+      $controller->add_hint(new \hint\Error($msg));
       return $controller->show_password_forgotten($user);
     }
 
@@ -1172,7 +1172,7 @@ class MainController {
     elseif ($user->is_active())
       $this->_send_password_reset_mail($user);
     elseif ($user->is_locked()) {
-      $controller->add_hint(new Error(_('Your account is locked.')));
+      $controller->add_hint(new \hint\Error(_('Your account is locked.')));
       return $controller->show_password_forgotten($user);
     }
     else
@@ -1244,13 +1244,13 @@ class MainController {
 
     // Check syntax.
     if ($err = $forum->check()) {
-      $controller->add_hint(new Error($err));
+      $controller->add_hint(new \hint\Error($err));
       return $controller->show($forum);
     }
 
     // Save the data.
     $this->forumdb->save_forum($forum);
-    $controller->add_hint(new Ack(_('The changes have been saved.')));
+    $controller->add_hint(new \hint\Ack(_('The changes have been saved.')));
     $controller->show($forum);
   }
 

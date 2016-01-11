@@ -174,7 +174,7 @@
   // along additional variables in the forum. Every key/value pair in this
   // array is automatically added to all URLs created by the forum.
   $cfg['urlvars'] = array(
-    'sid' => $_GET['sid']
+    'sid' => @$_GET['sid']
   );
 
   // Defines the time a user stays logged in when the "remember password"

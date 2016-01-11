@@ -1,4 +1,4 @@
-ADOdb V5.19 23 Apr 2014
-Source: https://github.com/ADOdb/ADOdb
+ADOdb V5.20.3 01 Jan 2016
+Source: https://github.com/ADOdb/ADOdb/tree/v5.20.3
 Location:  http://adodb.sourceforge.net/
-Changelog: http://adodb.sourceforge.net/docs-adodb.htm#changelog
+Changelog: https://github.com/ADOdb/ADOdb/blob/v5.20.3/docs/changelog.md

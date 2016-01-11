@@ -1,5 +1,6 @@
 CVS
 .svn
 po/*.mo
+src/.shadiff/*
 .fslckout
 _FOSSIL_

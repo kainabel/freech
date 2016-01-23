@@ -40,7 +40,7 @@ class BBView extends View {
     $n_threads = $this->forumdb->get_n_threads((int)$_forum_id);
     $args      = array('forum_id'           => (int)$_forum_id,
                        'n_threads'          => (int)$n_threads,
-                       'n_threads_per_page' => cfg('epp'),
+                       'n_threads_per_page' => cfg('tpp'),
                        'n_offset'           => (int)$_offset,
                        'n_pages_per_index'  => cfg('ppi'));
 

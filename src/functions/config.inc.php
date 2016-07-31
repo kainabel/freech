@@ -28,7 +28,16 @@
   if (is_readable('../data/user_config.inc.php'))
     include_once '../data/user_config.inc.php';
   chdir($oldwd);
-  
+
+  // changing URL protocol in $cfg['site_url'] by an incoming https request
+  // Note: This only works with SSL port: 443!
+  $proto_cfg = explode(':', cfg('site_url'), 2);
+  if ($_SERVER['SERVER_PORT'] == '443') {
+      $proto_cfg[0] = 'https';
+      $cfg['site_url'] = implode(':', $proto_cfg);
+  }
+  unset($proto_cfg);
+
   function cfg($_key, $_default = NULL) {
     global $cfg;
     if (!$_key)

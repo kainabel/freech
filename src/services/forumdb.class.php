@@ -515,7 +515,7 @@
       return $postings;
     }
 
-
+    // Used (only) by plugin search after passing the query builder
     function foreach_posting_from_query(&$_search_query,
                                         $_offset,
                                         $_limit,
@@ -541,7 +541,7 @@
       $query->set_int('status', POSTING_STATUS_ACTIVE);
       $_search_query->add_where_expression($query);
       $sql  = $query->sql();
-      $sql .= " ORDER BY subject_matches DESC,body_matches DESC,created DESC";
+      $sql .= " ORDER BY updated DESC";
       $query->set_sql($sql);
       $res = $this->db->SelectLimit($query->sql(), $limit, $offset)
                             or die('ForumDB::foreach_posting_from_query()');
